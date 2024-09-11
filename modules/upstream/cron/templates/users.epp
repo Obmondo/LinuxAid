@@ -1,0 +1,7 @@
+<% | Array[Cron::User] $users | %>
+
+# Managed by Puppet
+
+<% $users.each | $user | { -%>
+<%= $user %>
+<% } -%>

@@ -1,0 +1,13 @@
+---
+common::network::firewall::enable: false
+
+common::system::authentication::sssd::_available_services:
+  - 'autofs'
+  - 'ifp'
+  - 'nss'
+  - 'pac'
+  - 'pam'
+  - 'pam-priv'
+  - 'secrets'
+  - 'ssh'
+  - 'sudo'

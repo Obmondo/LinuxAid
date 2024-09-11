@@ -1,0 +1,22 @@
+---
+eit_haproxy::https: true
+eit_haproxy::http: false
+eit_haproxy::mode: 'http'
+eit_haproxy::listen_on: '0.0.0.0'
+eit_haproxy::encryption_ciphers: 'Modern'
+
+# Install
+eit_haproxy::install::package_name: 'haproxy'
+
+# Service
+eit_haproxy::service_ensure: true
+eit_haproxy::service_enable: true
+eit_haproxy::service_name: 'haproxy'
+
+eit_haproxy::restart_command:
+
+# Sane default for auto config
+eit_haproxy::auto_config::extra_settings:
+  - 'http-request add-header X-Forwarded-Proto https if { ssl_fc }'
+  - 'http-request set-header X-Forwarded-Port %[dst_port]'
+  - 'http-response set-header Strict-Transport-Security include_subdomains;\ preload;\ max-age=31536000; if { ssl_fc }'

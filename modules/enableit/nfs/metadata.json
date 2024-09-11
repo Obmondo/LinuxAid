@@ -1,0 +1,57 @@
+{
+  "name": "enableit-nfs",
+  "version": "0.3.0",
+  "author": "EnableIT",
+  "summary": "NFS Client and Server",
+  "license": "Apache-2.0",
+  "source": "-",
+  "project_page": "-",
+  "issues_url": "-",
+  "description": "This module installs an NFS client and server and configures the exports. Based on jbeard6-nfs.",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0",
+        "7.1",
+        "7.2"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7.0",
+        "8.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04",
+        "16.04"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "enableit/functions"
+    },
+    {
+      "name": "jbeard/portmap",
+      "version_requirement": ">= 0.1.11 < 0.2.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": "2.x"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": "4.x.x"
+    },
+    {
+      "name": "enableit/eit_types"
+    }
+  ]
+}

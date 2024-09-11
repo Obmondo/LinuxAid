@@ -1,0 +1,14 @@
+---
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+hierarchy:
+  # Used for Solaris
+  - name: "osfamily/kernelrelease"
+    path: "os/%{facts.os.family}/%{facts.kernelrelease}.yaml"
+  - name: "osfamily/major_release"
+    path: "os/%{facts.os.family}/%{facts.os.release.major}.yaml"
+  # Used to distinguish between Debian and Ubuntu
+  - name: "osname/major_release"
+    path: "os/%{facts.os.name}/%{facts.os.release.major}.yaml"

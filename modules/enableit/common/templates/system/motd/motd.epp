@@ -1,0 +1,35 @@
+<%- if $header { -%>
+<%= $header %>
+<%- } -%>
+<%= $facts.dig('fqdn') %> (<%= $stats['ip'] %>)
+<%- if $obmondo_customer { %>
+<%- $_company = $obmondo_customer.dig('company')
+if $_company { -%>
+Company: <%= $_company %>
+<%- } -%>
+<%- $_environment = $obmondo_customer.dig('environment')
+if $_environment { -%>
+Environment: <%= $_environment %>
+<%- } -%>
+<%- $_city = $obmondo_customer.dig('city')
+if $_city { -%>
+Location: <%= $_city %>, <%= $obmondo_customer.dig('country') %> (<%= $obmondo_customer.dig('region') %>)
+<%- } -%>
+<%- $_zone = $obmondo_customer.dig('zone')
+if $_zone { -%>
+Zone: <%= $_zone %>
+<%- } -%>
+<%- $_group = $obmondo_customer.dig('group')
+if $_group { -%>
+Update group: <%= $obmondo_customer.dig('group') %>
+<%- } -%>
+<%- } -%>
+
+Model:         <%= $stats['vendor'] %> <%= $stats['product'] %>
+CPU:           <%= $stats['cpu']['count'] %>x <%= $stats['cpu']['model'] %>
+Cores/threads: <%= $stats['cpu']['cores'] %>C/<%= $stats['cpu']['threads'] %>T (SMT <%= if $stats['cpu']['smt_enabled'] { 'enabled' } else { 'disabled' } %>)
+Memory:        <%= $stats['memory']['system']['total'] %>
+<%- if $footer { -%>
+
+<%= $footer %>
+<%- } -%>

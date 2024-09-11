@@ -1,0 +1,11 @@
+[Unit]
+Description=Riemann dash server
+After=network.target
+Requires=riemann.service
+
+[Service]
+# User=riemann-dash
+ExecStart=/usr/local/bin/riemann-dash
+
+[Install]
+WantedBy=multi-user.target

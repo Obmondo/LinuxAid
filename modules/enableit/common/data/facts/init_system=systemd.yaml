@@ -1,0 +1,48 @@
+---
+common::system::systemd::manage_journal: true
+common::system::time::ntp::ntp_client: 'systemd-timesyncd'
+common::monitor::exporter::node::systemd: true
+
+common::logging::rsyslog::enable: true
+common::logging::rsyslog::purge_rsyslog_d: false
+common::logging::rsyslog::log_remote: false
+common::logging::rsyslog::log_local: true
+common::logging::rsyslog::log_auth: true
+common::logging::rsyslog::system_log: false
+
+common::monitor::exporter::mtail::logs:
+  - '/var/log/auth.log'
+
+common::system::nsswitch::passwd:
+  - 'systemd'
+common::system::nsswitch::group:
+  - 'systemd'
+common::system::nsswitch::shadow:
+  - 'systemd'
+common::system::nsswitch::gshadow:
+  - 'systemd'
+
+common::system::systemd::journald_settings:
+  Storage: persistent
+  Compress: 'yes'
+  Seal: 'yes'
+  SplitMode: uid
+  RateLimitIntervalSec: 30s
+  RateLimitBurst: 1000
+  SystemMaxUse: 2G
+  SystemKeepFree: 2G
+  SystemMaxFileSize: 250M
+  SystemMaxFiles: 100
+  RuntimeMaxUse: 1G
+  RuntimeKeepFree: 1G
+  RuntimeMaxFileSize: 100M
+  RuntimeMaxFiles: 100
+  ForwardToSyslog: 'yes'
+  ForwardToKMsg: 'no'
+  ForwardToConsole: 'no'
+  ForwardToWall: 'yes'
+  MaxLevelStore: debug
+  MaxLevelSyslog: debug
+  MaxLevelKMsg: notice
+  MaxLevelConsole: info
+  MaxLevelWall: emerg

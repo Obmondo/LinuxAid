@@ -1,0 +1,33 @@
+[ldap]
+ldap_uri = ldap://localhost:389
+supported_controls = 0,2,3
+base_dn = dc=<%= @kolab_domain_part00 %>,dc=<%= @kolab_domain_part01 %>
+bind_dn = cn=Directory Manager
+bind_pw = <%= @ldap_directory_manager_password %>
+service_bind_dn = uid=kolab-service,ou=Special Users,dc=<%= @kolab_domain_part00 %>,dc=<%= @kolab_domain_part01 %>
+service_bind_pw = <%= @ldap_service_password %>
+user_base_dn = ou=People,%(base_dn)s
+user_scope = sub
+user_filter = (objectclass=inetorgperson)
+kolab_user_base_dn = ou=People,%(base_dn)s
+kolab_user_filter = (objectclass=kolabinetorgperson)
+group_base_dn = ou=Groups,%(base_dn)s
+group_filter = (|(objectclass=groupofuniquenames)(objectclass=groupofurls))
+group_scope = sub
+kolab_group_filter = (|(objectclass=kolabgroupofuniquenames)(objectclass=kolabgroupofurls))
+sharedfolder_base_dn = ou=Shared Folders,%(base_dn)s
+sharedfolder_filter = (objectclass=kolabsharedfolder)
+sharedfolder_acl_entry_attribute = acl
+resource_base_dn = ou=Resources,%(base_dn)s
+resource_filter = (|%(group_filter)s(objectclass=kolabsharedfolder))
+domain_base_dn = cn=kolab,cn=config
+domain_filter = (&(associatedDomain=*))
+domain_name_attribute = associateddomain
+domain_rootdn_attribute = inetdomainbasedn
+quota_attribute = mailquota
+modifytimestamp_format = %Y%m%d%H%M%SZ
+unique_attribute = nsuniqueid
+mail_attributes = mail, alias
+mailserver_attribute = mailhost
+auth_attributes = mail, alias, uid
+

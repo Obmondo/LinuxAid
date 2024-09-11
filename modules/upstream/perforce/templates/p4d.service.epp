@@ -1,0 +1,47 @@
+<%- |
+      String               $user,
+      Stdlib::AbsolutePath $pidfile,
+      Stdlib::AbsolutePath $install_root,
+| -%>
+# MANAGED BY PUPPET; CHANGES WILL BE LOST
+#
+# Based on example Perforce systemd file (p4d.service):
+#
+# This service file will start Perforce at boot, and
+# provide everything needed to use systemctl to control
+# the Perforce server process.
+
+[Unit]
+# Note that descriptions are limited to 80 characters:
+Description=Perforce Server
+
+# Starts Perforce only after the network services are
+# ready:
+After=network.target
+
+[Service]
+# Environment variables
+EnvironmentFile=/opt/perforce/.p4config
+
+# The type should always be set to "forking" to support
+# multiple Perforce processes:
+Type=forking
+
+# Set the system user used to launch this process (usually
+# 'perforce':
+User=<%= $user %>
+
+# The command used to start Perforce:
+ExecStart=<%= $install_root %>/sbin/p4d $P4OPTIONS
+
+# PID file for stopping/starting service
+PIDFile=<%= $pidfile %>
+
+[Install]
+# Describes the target for this service -- this will always
+# be 'multi-user.target':
+WantedBy=multi-user.target
+
+# Local Variables:
+# mode: systemd
+# End:

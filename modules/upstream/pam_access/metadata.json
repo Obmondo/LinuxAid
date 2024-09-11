@@ -1,0 +1,48 @@
+{
+  "name": "MiamiOH-pam_access",
+  "version": "1.0.1",
+  "author": "Harvard University Information Technology, Miami University Information Technology",
+  "summary": "Manage access.conf entries with Augeas",
+  "license": "MIT",
+  "source": "https://github.com/MiamiOH/puppet-pam_access.git",
+  "project_page": "https://github.com/MiamiOH/puppet-pam_access",
+  "issues_url": "https://github.com/MiamiOH/puppet-pam_access/issues",
+  "tags": ["pam", "access"],
+  "description": "The pam_access module allows access control based on username, groupname, network address, and process name.  This module allows Puppet to manage entries in the access.conf file.",
+  "dependencies": [
+    {"name": "puppetlabs/stdlib", "version_requirement": ">= 4.1.0 < 5.0.0"},
+    {"name": "herculesteam/augeasproviders_pam", "version_requirement": ">= 2.1.0 < 3.0.0"}
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["5", "6", "7"]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": ["5", "6", "7"]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": ["5", "6", "7"]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": ["7", "8"]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": ["12.04", "14.04"]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.0.0 < 5.0.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.0.0 < 5.0.0"
+    }
+  ]
+}

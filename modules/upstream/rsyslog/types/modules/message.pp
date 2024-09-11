@@ -1,0 +1,16 @@
+type Rsyslog::Modules::Message = Enum[
+  'mmanon',
+  'mmcount',
+  'mmdblookup',
+  'mmexternal',
+  'mmfields',
+  'mmjsonparse',
+  'mmkubernetes',
+  'mmnormalize',
+  'mmpstructdata',
+  'mmrfc5424addhmac',
+  'mmrm1stspace',
+  'mmsequence',
+  'mmsnmptrapd',
+  'mmutf8fix',
+]

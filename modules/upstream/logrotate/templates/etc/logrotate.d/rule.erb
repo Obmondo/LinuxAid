@@ -1,0 +1,85 @@
+# THIS FILE IS AUTOMATICALLY DISTRIBUTED BY PUPPET.  ANY CHANGES WILL BE
+# OVERWRITTEN.
+
+<%
+  opts = []
+
+  if @path.kind_of?(Array)
+    rpath = @path.join(' ')
+  else
+    rpath = @path
+  end
+
+  if @create
+    opts << ['create', @create_mode, @create_owner, @create_group].reject { |r|
+      r == nil
+    }.join(' ')
+  elsif @create == false
+    opts << 'nocreate'
+  end
+
+  %w(compress copy copytruncate delaycompress
+  dateext missingok sharedscripts shred dateyesterday).each do |bool_opt|
+    if (scope.to_hash.has_key?(bool_opt) && scope.to_hash[bool_opt] != nil)
+      opts << (scope.to_hash[bool_opt] == true ? '' : 'no') + bool_opt
+    end
+  end
+
+  if (scope.to_hash.has_key?('ifempty') && scope.to_hash['ifempty'] != nil)
+    opts << (scope.to_hash['ifempty'] == true ? '' : 'not') + 'ifempty'
+  end
+
+  %w(_mail _olddir mail_when _rotate_every).each do |param|
+    opts << scope.to_hash[param] if scope.to_hash.has_key?(param)
+  end
+
+  %w(compresscmd compressext compressoptions dateformat extension maxage minsize maxsize rotate size shredcycles start uncompresscmd).each do |key|
+    value = scope.to_hash[key]
+    opts << "#{key} #{value}" if value != nil
+  end
+  opts.sort!
+-%>
+<%= rpath %> {
+<% opts.each do |opt| -%>
+  <%= opt %>
+<% end -%>
+<% if @su == true -%>
+  su <%= @su_user %> <%= @su_group %>
+<% end -%>
+<% if @postrotate != nil -%>
+  postrotate
+<%- @postrotate = [@postrotate] unless @postrotate.is_a?(Array) -%>
+    <%- @postrotate.each do |val| -%>
+    <%= val %>
+    <%- end -%>
+  endscript
+<% end -%>
+<% if @prerotate != nil -%>
+  prerotate
+<%- @prerotate = [@prerotate] unless @prerotate.is_a?(Array) -%>
+  <%- @prerotate.each do |val| -%>
+    <%= val %>
+  <%- end -%>
+  endscript
+<% end -%>
+<% if @firstaction != nil -%>
+  firstaction
+  <%- @firstaction = [@firstaction] unless @firstaction.is_a?(Array) -%>
+  <%- @firstaction.each do |val| -%>
+    <%= val %>
+  <%- end -%>
+  endscript
+<% end -%>
+<% if @lastaction != nil -%>
+  lastaction
+  <%-
+    @lastaction = [@lastaction] unless @lastaction.is_a?(Array)
+    @lastaction.each do |val| -%>
+    <%= val %>
+  <%- end -%>
+  endscript
+<% end -%>
+<% @custom_cfg.each do |cfg| -%>
+  <%= cfg %>
+<% end -%>
+}

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# This file is managed by Puppet
+
+#
+# This script will put the given Drupal site into maintenance mode, run all outstanding upgrade tasks and finally
+# remove the maintenance mode. The site will be left in maintenance mode if the update failed.
+#
+# Note: make sure the script is invoked as user running the site (e.g. sudo -u www-data <script> <drupal-root> <site-uri>).
+#
+
+set -e
+
+DRUSH=<%= scope.lookupvar('::drupal::drush_path') %>
+ROOT=$1
+URI=$2
+
+if [ -z "${ROOT}" ]
+then
+  echo "usage: $0 <drupal-root-directory> <drupal-site-uri>\n" 1>&2
+  exit 1
+elif [ -z "${URI}" ]
+then
+  echo "usage: $0 <drupal-root-directory> <drupal-site-uri>\n" 1>&2
+  exit 1
+elif [ ! -d "${ROOT}" ]
+then
+  echo "Directory not found: ${ROOT}" 1>&2
+  exit 2
+fi
+
+ARGS="--verbose --root=${ROOT} --uri=${URI}"
+
+# enable maintenance mode
+$DRUSH vset site_offline 1 $ARGS
+
+# apply outstanding update tasks
+$DRUSH updatedb --yes $ARGS
+
+$DRUSH cron $ARGS || true
+
+# disable maintenance mode
+$DRUSH vset site_offline 0 $ARGS

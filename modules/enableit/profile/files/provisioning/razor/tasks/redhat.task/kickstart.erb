@@ -1,0 +1,72 @@
+#!/bin/bash
+# Kickstart for RHEL/CentOS 6
+# see: http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Installation_Guide/s1-kickstart2-options.html
+
+install
+url --url=<%= repo_url %>
+cmdline
+lang en_US.UTF-8
+keyboard us
+# rootpw <%= node.metadata['root_password'] || node.root_password %>
+rootpw secretpassword
+network --hostname <%= node.metadata['hostname'] || node.hostname %>
+firewall --enabled --ssh
+authconfig --enableshadow --passalgo=sha512 --enablefingerprint
+timezone --utc <%= node.metadata['timezone'] || 'America/Los_Angeles' %>
+%post
+rhel_username="<%= node.metadata['rhn_username'] %>"
+rhel_password="<%= node.metadata['rhn_password'] %>"
+rhel_activationkey="<%= node.metadata['rhn_activationkey'] %>"
+# If either username or password exist, run the command
+if [ "$rhel_username" != "" -o "$rhel_password" != "" ]; then
+    if [ -z "$rhel_activationkey" ] ; then
+        subscription-manager register \
+            --username $rhel_username --password $rhel_password --auto-attach
+    else
+        subscription-manager register \
+            --username $rhel_username --password $rhel_password --activationkey $rhel_activationkey
+    fi
+fi
+%end
+# Avoid having 'rhgb quiet' on the boot line
+# bootloader --location=mbr --append="crashkernel=auto xdriver=vesa nomodeset acpi=no"
+bootloader --location=mbr --append="crashkernel=auto hpsa.hpsa_allow_any=1"
+# The following is the partition information you requested
+# Note that any partitions you deleted are not expressed
+# here so unless you clear all partitions first, this is
+# not guaranteed to work
+zerombr
+clearpart --all --initlabel
+autopart
+# reboot automatically
+reboot
+
+# following is MINIMAL https://partner-bugzilla.redhat.com/show_bug.cgi?id=593309
+#
+# Select argument based on task label. See
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-packageselection
+# and
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax#sect-kickstart
+packages
+%packages <%= task.label.match(/^(centos|redhat)-8/) ? '--default' : '--nobase' %>
+@core
+
+%end
+
+%post --log=/var/log/razor.log
+echo Kickstart post
+curl -s -o /root/razor_postinstall.sh <%= file_url("post_install") %>
+
+# Run razor_postinstall.sh on next boot via rc.local
+if [ ! -f /etc/rc.d/rc.local ]; then
+  # On systems using systemd /etc/rc.d/rc.local does not exist at all
+  # though systemd is set up to run the file if it exists
+  echo '#!/bin/bash' > /etc/rc.d/rc.local
+fi
+chmod a+x /etc/rc.d/rc.local
+echo bash /root/razor_postinstall.sh >> /etc/rc.d/rc.local
+chmod +x /root/razor_postinstall.sh
+
+curl -s <%= stage_done_url("kickstart") %>
+%end
+############

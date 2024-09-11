@@ -1,0 +1,15 @@
+default:
+  delivery_method: :smtp
+  smtp_settings:
+      address: <%= scope.lookupvar('redmine::smtp_server') %>
+      port: <%= scope.lookupvar('redmine::smtp_port') %>
+      domain: <%= scope.lookupvar('redmine::smtp_domain') %>
+<% if scope.lookupvar('redmine::smtp_authentication') == true -%>
+      authentication: :login
+      user_name: <%= scope.lookupvar('redmine::smtp_username') %>
+      password: <%= scope.lookupvar('redmine::smtp_password') %>
+<% end -%>
+
+<% scope.lookupvar('redmine::override_options').keys.sort.each do |key| -%>
+  <%= key %>: <%= scope.lookupvar('redmine::override_options')[key] %>
+<% end -%>

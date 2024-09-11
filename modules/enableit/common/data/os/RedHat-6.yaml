@@ -1,0 +1,94 @@
+---
+common::system::authentication::ignore_expired_root_password: true
+
+# Since we don't have a postfix-stats init script for non-systemd we may as well
+# disable this
+common::monitor::postfix::enable_stats: false
+
+common::system::sshd::kexalgorithms:
+  - 'diffie-hellman-group-exchange-sha256'
+  - 'diffie-hellman-group-exchange-sha1'
+  - 'diffie-hellman-group14-sha1'
+  - 'diffie-hellman-group1-sha1'
+
+common::system::sshd::ciphers:
+  - 'aes128-ctr'
+  - 'aes192-ctr'
+  - 'aes256-ctr'
+  - 'arcfour256'
+  - 'arcfour128'
+  - 'aes128-cbc'
+  - '3des-cbc'
+  - 'blowfish-cbc'
+  - 'cast128-cbc'
+  - 'aes192-cbc'
+  - 'aes256-cbc'
+  - 'arcfour'
+  - 'rijndael-cbc@lysator.liu.se'
+
+common::system::sshd::hostkeys:
+  - '/etc/ssh/ssh_host_rsa_key'
+
+common::system::sshd::macs:
+  - 'hmac-md5'
+  - 'hmac-sha1'
+  - 'umac-64@openssh.com'
+  - 'hmac-ripemd160'
+  - 'hmac-sha1-96'
+  - 'hmac-md5-96'
+  - 'hmac-sha2-256'
+  - 'hmac-sha2-512'
+  - 'hmac-ripemd160@openssh.com'
+
+common::system::kernel::modules:
+  blacklist:
+    - 'power_meter'
+
+common::logging::logrotate::su: false
+
+common::repo::source_protocol: 'http'
+
+common::system::nsswitch::passwd:
+  - 'files'
+common::system::nsswitch::shadow:
+  - 'files'
+common::system::nsswitch::group:
+  - 'files'
+common::system::nsswitch::hosts:
+  - 'files'
+  - 'dns'
+common::system::nsswitch::bootparams:
+  - '[NOTFOUND=return]'
+  - 'files'
+common::system::nsswitch::ethers:
+  - 'files'
+common::system::nsswitch::netmasks:
+  - 'files'
+common::system::nsswitch::networks:
+  - 'files'
+common::system::nsswitch::protocols:
+  - 'files'
+common::system::nsswitch::rpc:
+  - 'files'
+common::system::nsswitch::services:
+  - 'files'
+common::system::nsswitch::automount:
+  - 'files'
+common::system::nsswitch::aliases:
+  - 'files'
+
+common::system::dns::resolver: 'resolv'
+
+common::monitor::exporter::enable: false
+common::monitor::exporter::blackbox::enable: false
+common::monitor::exporter::cadvisor::enable: false
+common::monitor::exporter::dns::enable: false
+common::monitor::exporter::elasticsearch::enable: false
+common::monitor::exporter::haproxy::enable: false
+common::monitor::exporter::iptables::enable: false
+common::monitor::exporter::mysql::enable: false
+common::monitor::exporter::node::enable: false
+common::monitor::exporter::pushprox::enable: false
+common::monitor::exporter::ssl::enable: false
+
+common::system::time::ntp::ntp_client: 'ntpd'

@@ -1,0 +1,18 @@
+[Unit]
+Description=Sentry Beat
+After=network.target
+
+[Service]
+User=<%= @user %>
+Group=<%= @group %>
+Type=simple
+PIDFile=<%= @path %>/sentry-beat.pid
+Environment=VIRTUAL_ENV="<%= @path %>"
+Environment=PATH="$VIRTUAL_ENV/bin:$PATH"
+WorkingDirectory=<%= @path %>
+ExecStart=<%= @path %>/bin/sentry --config=<%= @path %> celery beat -f /var/log/sentry/sentry-beat.log --pidfile=<%= @path %>/sentry-beat.pid
+ExecStop=/bin/kill -KILL $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

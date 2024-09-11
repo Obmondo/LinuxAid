@@ -1,0 +1,69 @@
+{
+  "name": "puppet-trusted_ca",
+  "version": "5.0.0",
+  "author": "Vox Pupuli",
+  "license": "Apache-2.0",
+  "summary": "Manages trusted_ca",
+  "source": "https://github.com/voxpupuli/puppet-trusted_ca",
+  "project_page": "https://github.com/voxpupuli/puppet-trusted_ca",
+  "issues_url": "https://github.com/voxpupuli/puppet-trusted_ca/issues",
+  "tags": [
+    "trusted_ca",
+    "ssl"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "OpenSuSE",
+      "operatingsystemrelease": [
+        "15.0"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 9.0.0 < 10.0.0"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ]
+}

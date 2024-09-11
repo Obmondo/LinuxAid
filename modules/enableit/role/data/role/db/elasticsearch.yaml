@@ -1,0 +1,7 @@
+---
+role::db::elasticsearch::kibana::enabled: true
+role::db::elasticsearch::kibana::expose: false
+role::db::elasticsearch::kibana::ssl: false
+
+common::system::kernel::sysctl:
+  'vm.max_map_count': 262144

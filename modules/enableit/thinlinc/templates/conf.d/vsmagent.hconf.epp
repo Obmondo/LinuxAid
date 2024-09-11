@@ -1,0 +1,105 @@
+#  -*- mode: conf-unix; -*-
+
+#
+# Hiveconf configuration file - VSM agent
+#
+[/vsmagent]
+
+# The font path to use
+#
+# RHEL 6 server/desktop:
+#          catalogue:/etc/X11/fontpath.d
+# RHEL 5
+#    /usr/share/X11/fonts/misc, /usr/share/X11/fonts/75dpi, /usr/share/X11/fonts/100dpi
+#    /usr/share/X11/fonts/Type1, /usr/share/X11/fonts/TTF, /usr/share/fonts/default/Type1
+# Ubuntu:
+#          /usr/share/fonts/X11/misc, /usr/share/fonts/X11/Type1
+# SLED:
+#          /usr/share/fonts/misc, /usr/share/fonts/75dpi, /usr/share/fonts/100dpi,
+#          /usr/share/fonts/Type1, /usr/share/fonts/URW, /usr/share/fonts/Speedo,
+#          /usr/share/fonts/cyrillic, /usr/share/fonts/truetype, /usr/share/fonts/misc,
+#
+fontpath=catalogue:/etc/X11/fontpath.d,/usr/share/X11/fonts/misc,/usr/share/X11/fonts/75dpi,/usr/share/X11/fonts/100dpi,/usr/share/X11/fonts/Type1,/usr/share/X11/fonts/TTF,/usr/share/fonts/default/Type1,/usr/share/fonts/X11/misc,/usr/share/fonts/X11/Type1,/usr/share/fonts/misc,/usr/share/fonts/75dpi,/usr/share/fonts/100dpi,/usr/share/fonts/Type1,/usr/share/fonts/URW,/usr/share/fonts/Speedo,/usr/share/fonts/cyrillic,/usr/share/fonts/truetype,/usr/share/fonts/misc
+
+# The host that runs the VSM server (master machine)
+master_hostname=<%= $thinlinc::vsmagent::master_hostname %>
+
+# Only allow connections from the VSM servers in this space-separated list.
+# localhost, hostname, IP and master_hostname are always allowed. NOTE: Do not
+# change this parameter unless you know what you are doing.
+allowed_clients=<%= $thinlinc::vsmagent::allowed_clients.join_ %>
+
+# Automatically create the users home directory, if it doesn't exist?
+make_homedir=<%= $thinlinc::vsmagent::make_homedir.bool %>
+# The file mode for the newly created home directory
+make_homedir_mode=<%= $thinlinc::vsmagent::make_homedir_mode %>
+
+# The default geometry, if the client doesn't request anything.
+default_geometry=<%= $thinlinc::vsmagent::default_geometry %>
+
+# Save password for future logins?
+single_signon=<%= $thinlinc::vsmagent::single_signon.bool %>
+
+# Extra arguments to pass to the Xserver Xvnc, for example:
+# xserver_args=-MaxIdleTime 60
+xserver_args=<%= $thinlinc::vsmagent::xserver_args.join_ %>
+
+# The location of the Xauthority file, either homedir or sessiondir
+xauthority_location=<%= $thinlinc::vsmagent::xauthority_location %>
+
+# Public hostname; the hostname that clients are redirected to. If not
+# defined, the agent will use the computer's IP address.
+agent_hostname=<%= $thinlinc::vsmagent::agent_hostname %>
+
+# The maximum port used for VNC and tunnel ports for displays
+# display_min to display_max. This number may not be higher than
+# lowest_user_port
+max_session_port=<%= $thinlinc::vsmagent::max_session_port %>
+
+# The lowest port to be used for user programs needing TCP/UDP ports.
+# This must be higher than max_session_port.
+lowest_user_port=<%= $thinlinc::vsmagent::lowest_user_port %>
+
+# Where to start allocating display numbers.
+display_min=<%= $thinlinc::vsmagent::display_min %>
+
+# Timeout in tenths of seconds, for starting new sessions
+xvnc_start_timeout=<%= $thinlinc::vsmagent::xvnc_start_timeout %>
+
+# The maximum display number to use on this VSM agent host.
+# display_max - display_min is the maximum number of ThinLinc users
+# allowed on this host. Default is 2000.
+display_max=<%= $thinlinc::vsmagent::display_max %>
+
+# Port to listen on
+# This should normally be the same as /vsm/vsm_agent_port, but under
+# some special circumstances, it might be set to another value.
+listen_port=<%= $thinlinc::vsmagent::listen_port %>
+
+# Environment variables to add to users environment, before running
+# xstartup. Note: Since xstartup is run through /bin/bash --login,
+# files in /etc/profile.d/ will be sourced and may override values in
+# default_environment.
+# Note: TOWN is just an example.
+
+[/vsmagent/default_environment]
+<%= $thinlinc::vsmagent::default_environment.map |$k, $v| { "${k}=${v}" }.join("\n") %>
+
+[/vsmagent/logging]
+log_to_file=<%= $thinlinc::vsmagent::log_to_file.bool %>
+logfile=<%= $thinlinc::vsmagent::log_dir %>/vsmagent.log
+
+log_to_syslog=<%= $thinlinc::vsmagent::log_to_syslog.bool %>
+syslog_facility=<%= $thinlinc::vsmagent::syslog_facility %>
+syslog_socket=<%= $thinlinc::vsmagent::syslog_socket %>
+syslog_host=<%= $thinlinc::vsmagent::syslog_host %>
+
+defaultlevel=<%= $thinlinc::vsmagent::default_log_level %>
+
+[/vsmagent/logging/levels]
+# Execution of external commands
+vsmagent.extcmd=<%= $thinlinc::vsmagent::extcmd_log_level %>
+# Info about sessions
+vsmagent.session=<%= $thinlinc::vsmagent::session_log_level %>
+# XMLRPC debugging.
+vsmagent.xmlrpc=<%= $thinlinc::vsmagent::xmlrpc_log_level %>

@@ -1,0 +1,25 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+#
+
+# allow only the groups listed
+<%
+entries = scope.lookupvar('pam::allowed_users')
+-%>
+<% if entries.is_a? Hash -%>
+<% entries.keys.sort.each do |key| -%>
+<% value = entries[key] -%>
++:<%= key %>:<% if value.is_a? Array -%><%= value.join(' ') %><% elsif value.is_a? String -%><%= value %><% else -%>ALL<% end %>
+<% end -%>
+<% elsif entries.is_a? Array -%>
+<% entries.each do |key| -%>
++:<%= key %>:ALL
+<% end -%>
+<% elsif entries.is_a? String -%>
++:<%= entries %>:ALL
+<% else -%>
++:root:ALL
+<% end -%>
+
+# default deny
+-:ALL:ALL

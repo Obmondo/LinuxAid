@@ -1,0 +1,74 @@
+# An "In-Memory Queue" is created for remote logging.
+$WorkDirectory <%= scope.lookupvar('saz_rsyslog::spool_dir') -%>    # where to place spool files
+$ActionQueueFileName queue      # unique name prefix for spool files
+$ActionQueueMaxDiskSpace <%= scope.lookupvar('saz_rsyslog::client::spool_size') -%>     # spool space limit (use as much as possible)
+$ActionQueueSaveOnShutdown on   # save messages to disk on shutdown
+<% if scope.lookupvar('saz_rsyslog::client::spool_timeoutenqueue') -%>
+$ActionQueueTimeoutEnqueue <%= scope.lookupvar('saz_rsyslog::client::spool_timeoutenqueue') -%>   # time to wait before discarding on full spool
+<% end -%>
+$ActionQueueType LinkedList     # run asynchronously
+$ActionResumeRetryCount -1      # infinety retries if host is down
+<% if scope.lookupvar('saz_rsyslog::client::log_templates') and ! scope.lookupvar('saz_rsyslog::client::log_templates').empty?-%>
+
+# Define custom logging templates
+<% scope.lookupvar('saz_rsyslog::client::log_templates').flatten.compact.each do |log_template| -%>
+$template <%= log_template['name'] %>,"<%= log_template['template'] %>"
+<% end -%>
+<% end -%>
+<% if scope.lookupvar('saz_rsyslog::client::log_filters') -%>
+
+# Define custom if/then log conditions
+<% scope.lookupvar('saz_rsyslog::client::log_filters').each do |log_filter| -%>
+if <%= log_filter['expression'] %> then <%= log_filter['action'] %>
+<% end -%>
+<% end -%>
+<% if scope.lookupvar('saz_rsyslog::client::actionfiletemplate_cust') and scope.lookupvar('saz_rsyslog::client::actionfiletemplate') -%>
+
+# Setting custom action file formatting
+$template <%= scope.lookupvar('saz_rsyslog::client::actionfiletemplate') %>, <%= scope.lookupvar('saz_rsyslog::client::actionfiletemplate_cust') %>
+<% end -%>
+<% if scope.lookupvar('saz_rsyslog::client::actionfiletemplate') -%>
+
+# Using specified format for default logging format:
+$ActionFileDefaultTemplate <%= scope.lookupvar('saz_rsyslog::client::actionfiletemplate') %>
+<% else -%>
+
+<% if scope.lookupvar('saz_rsyslog::client::high_precision_timestamps') == false -%>
+# Use default format
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+<% else -%>
+# Use high precision timestamp format.
+$ActionFileDefaultTemplate RSYSLOG_FileFormat
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::client::listen_localhost') -%>
+# Provides UDP syslog reception
+$ModLoad imudp
+$UDPServerAddress 127.0.0.1
+$UDPServerRun 514
+<% end %>
+
+<% if scope.lookupvar('saz_rsyslog::client::ssl') -%>
+# Setup SSL connection.
+# CA/Cert
+$DefaultNetStreamDriverCAFile <%= scope.lookupvar('saz_rsyslog::client::ssl_ca') %>
+<% if scope.lookupvar('saz_rsyslog::client::ssl_cert') -%>
+$DefaultNetstreamDriverCertFile <%= scope.lookupvar('saz_rsyslog::client::ssl_cert') %>
+$DefaultNetstreamDriverKeyFile <%= scope.lookupvar('saz_rsyslog::client::ssl_key') %>
+<% end -%>
+
+# Connection settings.
+$DefaultNetstreamDriver gtls
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode <%= scope.lookupvar('saz_rsyslog::client::ssl_auth_mode') %>
+<% if @ssl_permitted_peer -%>
+$ActionSendStreamDriverPermittedPeer <%= scope.lookupvar('saz_rsyslog::client::ssl_permitted_peer') %>
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::client::remote_type') == 'relp' -%>
+# Load RELP module.
+$ModLoad omrelp
+<% end -%>
+

@@ -1,0 +1,72 @@
+#!/usr/bin/sh
+# -*- mode: sh; sh-shell: sh; -*-
+#
+# Set user effective group. As AD users typically have the same effective group
+# we can easily make a mess of files and permissions, since they'll all be owned
+# by the same group.
+#
+# With this script we have an ordered list of preferred effective groups and
+# loop over them until we find one we can use.
+
+# Check that we're running bash and ensure we're not root or obmondo-admin -- if
+# the script fails these users still need access.
+#
+if [ "$USER" != 'root' ] &&
+     [ "$USER" != 'obmondo-admin' ]; then
+
+  # Set a variable we can look for to avoid running multiple times
+  if ! [ "${OBMONDO_PROFILE_DEFAULT_GROUP}" ]; then
+    export OBMONDO_PROFILE_DEFAULT_GROUP=1
+
+    # Set effective group. Takes a pipe-separated string of group names and will
+    # use the first group possible.
+    set_effective_group() {
+      # Since we can't use arrays (because POSIX) we can use this nifty trick to
+      # allow us to use arrays anyway.
+      groups=$(grep -Po "(?<=^${user_effective_group}=).+" "${1}")
+
+      oldifs="${IFS}"
+      # We do this on purpose to allow us to use $@ as an array, shellcheck begone!
+      #
+      # shellcheck disable=SC2086
+      IFS="|"; set -- ${groups}
+      IFS="${oldifs}"
+
+      while [ $# -gt 0 ]; do
+        group="${1}"
+        if [ "${user_effective_group}" != "${group}" ]; then
+          if member_of "${group}"; then
+            exec newgrp "${group}"
+          fi
+        fi
+        shift
+      done
+    }
+
+    # check if a user is a member of a given group
+    member_of() {
+      echo "${user_groups}" | grep -qE "^${1}$"
+    }
+
+    set_effective_group_from_file() {
+      config="$1"
+
+      if [ -f "${config}" ]; then
+        # shellcheck disable=SC1090
+        set_effective_group "${config}"
+      fi
+    }
+
+    user_effective_group="$(id -gn)"
+
+    # all the groups a user is a member of
+    user_groups=$(id | tr ',()' '\n  ' | tail -n+2 | grep -Po '[0-9]+\s+\K\S.*\S')
+
+    # current effective group
+    user_effective_group="$(id -gn)"
+
+    set_effective_group_from_file "${HOME}/.config/effective_group"
+    set_effective_group_from_file /etc/default/effective_group
+
+  fi
+fi

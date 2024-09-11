@@ -1,0 +1,27 @@
+resource <%= @name %> {
+
+  protocol  <%= @protocol %>;
+  device    <%= @device %>;
+  disk      <%= @disk %>;
+  meta-disk internal;
+
+  net {
+    cram-hmac-alg sha1;
+<% if @secret -%>
+    shared-secret "<%= @secret %>";
+<% end -%>
+    #allow-two-primaries;
+<% if @net_parameters -%>
+<% @net_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+<% end -%>
+  }
+
+  syncer {
+    verify-alg <%= @verify_alg %>;
+<% if @rate -%>
+    rate <%= @rate %>;
+<% end -%>
+  }
+

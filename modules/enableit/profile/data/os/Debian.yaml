@@ -1,0 +1,37 @@
+---
+# Java
+profile::java::version: 7
+profile::java::edition: 'openjdk'
+profile::java::package_name: "openjdk-7-jre-headless"
+
+# PHP
+profile::php::default_modules:
+  !xhprof: {}
+
+# SSSD
+profile::system::authentication::sssd::extra_packages:
+  - 'sssd-ad'
+  - 'sssd-ad-common'
+  - 'sssd-common'
+  - 'sssd-ipa'
+  - 'sssd-krb5'
+  - 'sssd-krb5-common'
+  - 'sssd-ldap'
+  - 'sssd-proxy'
+  - 'sssd-dbus'
+  - 'oddjob'
+  - 'oddjob-mkhomedir'
+
+profile::system::nscd::use_socket_activation: false
+
+profile::nodejs::__package_allow_virtual: false
+profile::software::cloudamize::__packages:
+  - 'cloudamize-agent'
+
+profile::system::cloud_init::services:
+  - 'cloud-config.service'
+  - 'cloud-final.service'
+  - 'cloud-config.target'
+  - 'cloud-init.service'
+  - 'cloud-init-local.service'
+  - 'cloud-init.target'

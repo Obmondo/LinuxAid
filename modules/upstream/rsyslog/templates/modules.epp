@@ -1,0 +1,29 @@
+<%- |
+  String $config_item,
+  String $type,
+  Optional[Hash] $config
+| -%>
+<% if $type == 'external' and empty($config) == true  { -%>
+module(load="<%=$config_item -%>")
+<% } -%>
+<% elsif $type == 'external' and empty($config) == false { -%>
+module(load="<%= $config_item -%>" 
+     <% $config.each |$key, $value| {-%>
+     <%- if $value =~ Array { -%>
+     <%= $key %>=<%= to_json($value) -%>
+     <%- } else { -%>
+     <%= $key %>="<%= $value -%>"
+     <%- } -%>
+     <% } %>
+)
+<% } -%>
+<% elsif $type == 'builtin' and empty($config) == true  { -%>
+module(load="builtin:<%= $config_item -%>" )
+<% } -%>
+<% elsif $type == 'builtin' and empty($config) == false { -%>
+module(load="builtin:<%= $config_item -%>" 
+     <% $config.each |$key, $value| {-%> 
+     <%= $key %>="<%= $value -%>"
+     <% } %>
+)
+<%}-%>

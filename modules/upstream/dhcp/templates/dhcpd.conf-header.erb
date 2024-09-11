@@ -1,0 +1,50 @@
+# BEGIN DHCP Header
+# ----------
+# dhcpd.conf
+# ----------
+<% if @authoritative -%>
+authoritative;
+<% else -%>
+not authoritative;
+<% end -%>
+<% if @omapi_port -%>
+omapi-port <%= @omapi_port %>;
+<% if @omapi_name && @omapi_key -%>
+key <%= @omapi_name %> {
+  algorithm <%= @omapi_algorithm %>;
+  secret <%= @omapi_key %>;
+}
+omapi-key <%= @omapi_name %>;
+<% end -%>
+<% end -%>
+default-lease-time <%= @default_lease_time %>;
+max-lease-time <%= @max_lease_time %>;
+log-facility <%= @logfacility %>;
+
+# ----------
+# Options
+# ----------
+option domain-name "<%= @dnsdomain_real.first %>";
+<% if @nameservers && !@nameservers.empty? -%>
+option domain-name-servers <%= @nameservers.join(', ') %>;
+<% end -%>
+<% if @nameservers_ipv6 && !@nameservers_ipv6.empty? -%>
+option dhcp6.name-servers <%= @nameservers_ipv6.join(', ') %>;
+<% end -%>
+<% if @dnssearchdomains && !@dnssearchdomains.empty? -%>
+option domain-search "<%= @dnssearchdomains.join('", "') %>";
+<% end -%>
+option fqdn.no-client-update on;  # set the "O" and "S" flag bits
+option fqdn.rcode2 255;
+option <%= @option_code150_label -%> code 150 = <%= @option_code150_value -%>;
+<% if @globaloptions.is_a? Array -%>
+<%   @globaloptions.each do |opt| -%>
+option <%= opt %>;
+<%   end -%>
+<% elsif @globaloptions != '' -%>
+option <%= @globaloptions %>;
+<% end -%>
+<% if has_variable?( 'mtu' ) && @mtu -%>
+option interface-mtu <%= @mtu %>;
+<% end -%>
+# END DHCP Header

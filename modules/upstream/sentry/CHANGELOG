@@ -1,0 +1,20 @@
+* Thu Jun 02 2016 Scott Merrill <smerrill@covermymeds.com> - 3.0.0
+- add new sentry::config and sentry::setup classes
+- make all sub-classes private
+- better manage class containment and ordering (Closes #22)
+- restart background services after upgrade (Closes #21)
+- better bootstrap on very first install
+- make default team the same name as the default organization
+- only support Sentry versions 8.4.0 and up, due to changes to Sentry code
+- initial spec test
+* Fri Feb 26 2016 Dan Sajner <dsajner@covermymeds.com) - 2.0.0
+- BREAKING CHANGE - Add support for creating custom teams
+- BREAKING CHANGE - Require Puppet >= 4
+* Mon Jan 04 2016 Scott Merrill <smerrill@covermymeds.com> - 1.0.2
+- trace_enable is a string
+- change 'tag' to 'env'
+- use 'w' instead of 'a' in dsn_mapper.py
+* Mon Oct 26 2015 Scott Merrill <smerrill@covermymeds.com> - 1.0.1
+- update metadata.json
+* Mon Oct 26 2015 Scott Merrill <smerrill@covermymeds.com> - 1.0.0
+- Initial release!

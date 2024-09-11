@@ -1,0 +1,3 @@
+---
+
+profile::logging::logrotate::__scheduling_method: 'service'

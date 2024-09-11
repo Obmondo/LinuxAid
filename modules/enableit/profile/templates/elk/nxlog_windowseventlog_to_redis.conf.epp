@@ -1,0 +1,19 @@
+# -*- mode: logstash-conf -*-
+# MANAGED BY PUPPET; DO NOT CHANGE
+input {
+    tcp {
+        port  => 5140
+        type  => "WindowsEventLog"
+        tags  => ["windows", "nxlog", "unencrypted"]
+        codec => "line"
+    }
+}
+
+output {
+    redis {
+        host      => '127.0.0.1'
+        port      => <%= $profile::elk::redis_default_port %>
+        data_type => 'list'
+        key       => 'logstash'
+    }
+}

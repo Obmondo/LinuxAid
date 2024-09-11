@@ -1,0 +1,36 @@
+<% if $_sort_options_alphabetic == true { -%>
+<% $option_order = {} -%>
+<% } else { -%>
+<% $option_order = {
+  'acl' => -1,
+  'tcp-request' => 2,
+  'block' => 3,
+  'http-request' => 4,
+  'reqallow' => 5,
+  'reqdel' => 5,
+  'reqdeny' => 5,
+  'reqidel' => 5,
+  'reqideny' => 5,
+  'reqipass' => 5,
+  'reqirep' => 5,
+  'reqitarpit' => 5,
+  'reqpass' => 5,
+  'reqrep' => 5,
+  'reqtarpit' => 5,
+  'reqadd' => 6,
+  'redirect' => 7,
+  'use_backend' => 8,
+  'default_backend' => 9,
+  'use-server' => 9,
+  'option' => 10,
+  'http-check' => 11,
+  'server' => 100,
+} -%>
+<% } -%>
+<% if String(type($options, 'generalized')).index('Array') == 0 { -%>
+<% $options.each |$option|  { -%>
+<%= epp('haproxy/haproxy_options_sorting.epp', { 'options' => $option, 'option_order' => $option_order }) -%>
+<% } -%>
+<% } elsif String(type($options, 'generalized')).index('Hash') == 0 { -%>
+<%= epp('haproxy/haproxy_options_sorting.epp', { 'options' => $options, 'option_order' => $option_order }) -%>
+<% } -%>

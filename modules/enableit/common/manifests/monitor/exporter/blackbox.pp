@@ -1,0 +1,97 @@
+# Prometheus Blackbox Exporter
+class common::monitor::exporter::blackbox (
+  Boolean              $enable,
+  Stdlib::Port         $listen_port,
+  Array[String]        $targets     = [],
+  Boolean[false]       $noop_value  = false,
+  Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
+) {
+
+  $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }
+  $customer_id = $facts.dig('obmondo', 'customerid')
+
+  Exec {
+    noop => $noop_value,
+  }
+
+  File {
+    noop => $noop_value,
+  }
+
+  include common::monitor::prom
+
+  class { 'prometheus::blackbox_exporter':
+    package_name      => 'obmondo-blackbox-exporter',
+    package_ensure    => ensure_latest($enable),
+    init_style        => if !$enable {'none'},
+    user              => 'blackbox_exporter',
+    group             => 'blackbox_exporter',
+    service_enable    => $enable,
+    service_ensure    => ensure_service($enable),
+    manage_service    => $enable,
+    restart_on_change => $enable,
+    scrape_host       => $trusted['certname'],
+    scrape_port       => $listen_port,
+    extra_options     => "--web.listen-address='127.254.254.254:${listen_port}'",
+    config_file       => $config_file,
+    tag               => $::trusted['certname'],
+    export_scrape_job => $enable,
+    modules           => {
+      'http_2xx'    => {
+        'prober'  => 'http',
+        'timeout' => '10s',
+        'http'    => {
+          'fail_if_not_ssl'       => true,
+          'preferred_ip_protocol' => 'ip4',
+        },
+      },
+    }
+  }
+
+  # The upstream module does not have support for removing the unit file
+  # will rase the PR for that later will remove from this resources file
+  if !$enable {
+    File { '/etc/systemd/system/blackbox_exporter.service':
+      ensure => absent,
+    }
+  }
+
+  @@monitor::alert { 'monitor::domains::cert_expiry':
+    enable => $enable,
+    tag    => $::trusted['certname'],
+  }
+
+  if $targets.size > 0 {
+    @@prometheus::scrape_job { "blackbox_${trusted['certname']}_customs" :
+      job_name    => 'probe_domains_blackbox',
+      tag         => [
+        $trusted['certname'],
+        $customer_id,
+      ],
+      targets     => $targets,
+      labels      => { 'certname' => $trusted['certname'] },
+      collect_dir => '/etc/prometheus/file_sd_config.d',
+    }
+
+    $targets.each |$domain| {
+      monitor::domains::expiry { $domain:
+        enable => $enable,
+      }
+    }
+  }
+
+  # Collect all the resource only on the node where blackbox is enabled.
+  # and collect resource only for their specific customer nodes
+  if $blackbox_node == $trusted['certname'] {
+
+    # Handle file resource under prometheus::scrape_job, so it can be created in noop mode
+    # https://www.puppet.com/docs/puppet/7/lang_resources.html#lang_resource_syntax-adding-or-modifying-attributes
+    File <| tag == 'prometheus::scrape_job' |> {
+      noop => $noop_value,
+    }
+
+    Prometheus::Scrape_job <<| job_name == 'probe_domains_blackbox' and tag == $customer_id |>> {
+      notify => Class['prometheus::service_reload'],
+    }
+  }
+}

@@ -1,0 +1,438 @@
+---
+lookup_options:
+  common::repo::repos:
+    merge: 'unique'
+  common::system::authentication::allowed_users:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+  common::system::grub::parameters:
+    merge: 'deep'
+  common::system::authentication::protected_users:
+    merge: 'unique'
+  common::system::ssh_authorized_keys:
+    merge: 'deep'
+  common::services::disabled_services:
+    merge: 'unique'
+  common::package::manage:
+    merge: 'deep'
+  common::network::firewall::rules:
+    merge: 'hash'
+  common::network::interfaces:
+    merge: 'hash'
+  common::package::default_packages:
+    merge: 'unique'
+  common::system::authentication::sudo::sudoers:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+  common::system::files:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+  common::system::users:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!'
+  common::system::user_groups:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!'
+  common::system::authentication::sssd::domains:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!'
+  common::storage::mounts:
+    merge:
+      strategy: 'hash'
+  common::system::kernel::sysctl:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+  common::storage::samba::shares:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::account_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::auth_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::password_account_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::password_auth_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::password_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::password_password_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::password_session_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::session_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::sshd_account_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::sshd_auth_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::sshd_password_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::authentication::pam::sshd_session_lines:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::services:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!!'
+
+  common::system::nsswitch::passwd:
+    merge: 'unique'
+  common::system::nsswitch::group:
+    merge: 'unique'
+  common::system::nsswitch::shadow:
+    merge: 'unique'
+  common::system::nsswitch::gshadow:
+    merge: 'unique'
+  common::monitor::exporter::mtail::logs:
+    merge: 'unique'
+
+## Global settings for common class
+common::full_host_management: true
+common::repo::manage: true
+common::logging::manage: false
+common::backup::manage: true
+common::cron::purge_unmanaged: false
+common::network::manage: false
+common::services::manage: true
+common::security::manage: true
+common::monitoring::manage: true
+common::extras::manage: false
+common::mail::manage: false
+
+## System Settings
+common::system::systemd::manage_journald: false
+common::system::systemd::manage_resolved: false
+
+### Authentication
+common::system::authentication::manage: false
+common::system::authentication::allowed_users:
+  'root':
+    - 'ALL'
+  '(obmondo)':
+    - '109.238.49.194'
+    - '109.238.49.196'
+    - '144.76.69.71'
+    - '95.216.10.96'
+    - '95.216.10.103'
+    - 'localhost'
+  'obmondo-admin':
+    - 'ALL'
+  'ALL':
+    - 'cron'
+    - 'crond'
+common::system::authentication::manage_nis: false
+common::system::authentication::manage_pam: false
+common::system::authentication::manage_sssd: false
+common::system::authentication::ignore_expired_root_password: false
+common::system::authentication::purge_ubuntu_user: false
+common::system::authentication::purge_user: false
+
+common::system::authentication::sudo::purge: false
+
+### DNS
+common::system::dns::manage: false
+common::system::dns::dnssec: false
+common::system::dns::dns_over_tls: false
+common::system::dns::nameservers: []
+common::system::dns::searchpath: []
+
+### Kernel Modules
+common::system::kernel::modules:
+  blacklist:
+    - 'floppy'
+
+### Keepalived Failover
+common::system::failover::enable: false
+
+### Hardware
+common::system::hardware::manage_multipath: false
+
+### Limits
+common::system::limits::manage: false
+common::system::limits::purge: false
+
+## Guix
+common::system::package_management::guix::manage: false
+
+### Motd
+common::system::motd::enable: true
+
+### Nsswitch
+common::system::nsswitch::manage: false
+common::system::nsswitch::sudoers:
+  - 'files'
+
+### SSHD
+common::system::sshd::manage: false
+common::system::sshd::kexalgorithms:
+  - 'curve25519-sha256@libssh.org'
+  - 'ecdh-sha2-nistp521'
+  - 'ecdh-sha2-nistp384'
+  - 'ecdh-sha2-nistp256'
+  - 'diffie-hellman-group-exchange-sha256'
+common::system::sshd::ciphers:
+  - 'chacha20-poly1305@openssh.com'
+  - 'aes256-gcm@openssh.com'
+  - 'aes128-gcm@openssh.com'
+  - 'aes256-ctr'
+  - 'aes192-ctr'
+  - 'aes128-ctr'
+common::system::sshd::macs:
+  - 'hmac-sha2-512-etm@openssh.com'
+  - 'hmac-sha2-256-etm@openssh.com'
+  - 'umac-128-etm@openssh.com'
+  - 'hmac-sha2-512'
+  - 'hmac-sha2-256'
+  - 'umac-128@openssh.com'
+
+### NTP
+common::system::time::manage_timezone: true
+common::system::time::manage_ntp: false
+common::system::time::ntp::servers:
+  - '0.dk.pool.ntp.org'
+  - 'tix.ns.tele.dk'
+  - '1.dk.pool.ntp.org'
+  - 'ntp.inet.tele.dk'
+
+### Cloud Init
+common::system::cloud_init::manage: false
+
+### Selinux
+common::system::selinux::enable: false
+
+common::settings::custom_config_dir: '/opt/custom'
+common::settings::pgp_keyserver: 'pgp.mit.edu'
+common::package::install_default_packages: true
+common::package::default_packages:
+  - 'bash-completion'
+  - 'curl'
+  - 'less'
+  - 'lsof'
+  - 'mailx'
+  - 'netcat'
+  - 'rsync'
+  - 'socat'
+  - 'strace'
+  - 'tcpdump'
+  - 'tmux'
+  - 'net-tools'
+
+common::setup::__conf_dir: '/etc/obmondo'
+
+common::mail::stats_daemon_port: 63777
+
+common::services::disabled_services:
+  - 'smartd'
+  - 'rpc-svcgssd'
+
+# Puppet
+common::puppet::version: 'latest'
+common::puppet::configure_agent: true
+common::puppet::setup_agent: true
+
+# KeepAlived
+common::keepalived::global_defs:
+  notification_email: 'info@obmondo.com'
+  notification_email_from: 'keepalived@enableit.dk'
+  smtp_server: '127.0.0.1'
+  smtp_connect_timeout: 30
+
+common::certs::__base_dir: '/etc/ssl/private/static-certs'
+common::certs::letsencrypt::deploy_hook_command: '/opt/obmondo/bin/letsencrypt_deploy_hook.sh'
+
+common::monitor::exporter::enable: true
+common::monitor::exporter::ssl::enable: false
+common::monitor::exporter::blackbox::enable: false
+common::monitor::exporter::blackbox::listen_port: 63315
+
+common::monitor::prom::noop_value: false
+common::monitor::prom::install_method: package
+common::monitor::prom::bin_dir: '/opt/obmondo/bin'
+common::monitor::prom::usershell: '/usr/sbin/nologin'
+
+common::monitor::prom::server::version: 2.48.1
+common::monitor::prom::server::listen_address: 127.254.254.254:63400
+common::monitor::prom::server::config_dir: '/etc/prometheus'
+common::monitor::prom::server::collect_scrape_jobs:
+  - job_name: node
+  - job_name: blackbox
+  - job_name: probe_domains_blackbox
+    scrape_interval: 12h
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: domain
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.254.254.254:63315
+  - job_name: systemd
+  - job_name: process
+  - job_name: mtail
+  - job_name: filestat
+  - job_name: dns
+  - job_name: iptables
+  - job_name: tcpshaker
+  - job_name: haproxy
+  - job_name: wireguard
+  - job_name: dellhw
+  - job_name: cadvisor
+  - job_name: security
+
+common::monitor::exporter::node::lib_directory: '/var/lib/node_exporter'
+common::monitor::exporter::node::textfile_directory: '/var/lib/node_exporter/textfile_collector'
+common::monitor::exporter::node::listen_address: 127.254.254.254:63385
+common::monitor::exporter::node::enable: true
+common::monitor::exporter::node::noop_value: false
+common::monitor::exporter::node::buddyinfo: false
+common::monitor::exporter::node::cgroups: false
+common::monitor::exporter::node::drbd: false
+common::monitor::exporter::node::drm: false
+common::monitor::exporter::node::ethtool: false
+common::monitor::exporter::node::interrupts: false
+common::monitor::exporter::node::ksmd: false
+common::monitor::exporter::node::lnstat: false
+common::monitor::exporter::node::logind: false
+common::monitor::exporter::node::meminfo_numa: false
+common::monitor::exporter::node::mountstats: true
+common::monitor::exporter::node::network_route: false
+common::monitor::exporter::node::ntp: false
+common::monitor::exporter::node::perf: false
+common::monitor::exporter::node::processes: false
+common::monitor::exporter::node::qdisc: false
+common::monitor::exporter::node::runit: false
+common::monitor::exporter::node::slabinfo: false
+common::monitor::exporter::node::supervisord: false
+common::monitor::exporter::node::sysctl: false
+common::monitor::exporter::node::systemd: false
+common::monitor::exporter::node::tcpstat: false
+common::monitor::exporter::node::thermal_zone: false
+common::monitor::exporter::node::wifi: false
+common::monitor::exporter::node::zoneinfo: false
+common::monitor::exporter::node::ssacli::enable: false
+common::monitor::exporter::node::smartmon::enable: false
+
+common::monitor::exporter::dellhw::enable: false
+
+common::monitoring::atop::install: false
+common::monitoring::atop::daemon: false
+
+common::hosts::entries:
+  127.254.254.254:
+    - "%{trusted.certname}"
+
+# Storage
+common::storage::zfs::enable: false
+common::storage::nfs::enable: false
+common::storage::nfs::server::enable: false
+common::storage::samba::enable: false
+common::storage::quota::quotas: {}
+
+# Software
+common::software::dependencyagent::manage: false
+common::software::cloudamize::manage: false
+common::software::fwupd::manage: false
+common::software::microsoft_mde::manage: false
+common::software::nvidia_driver::manage: false
+common::software::oms_agent::manage: false
+common::software::rubrik::manage: false
+common::software::teleport::manage: false
+common::software::vscode::manage: false
+common::software::insights::manage: false
+
+# Logging
+common::logging::logrotate::manage: true
+common::logging::log_dir_group: 'syslog'
+common::logging::rsyslog::manage: true
+common::logging::rsyslog::log_local: false
+common::logging::journal::manage: true
+
+# Backup
+common::backup::netbackup::enable: false
+common::backup::gitea::enable: false
+common::backup::db::enable: false
+
+## Borg
+common::backup::borg::__dir: '/opt/obmondo/borgbackup'
+
+## PGSQL Backup
+common::backup::db::pgsql::backup_user: 'postgres'
+common::backup::db::pgsql::backup_hour: 3
+common::backup::db::pgsql::ignore_tables: []
+common::backup::db::pgsql::backup_retention: 30
+
+# Network
+common::network::firewall::enable: false
+common::network::wireguard::enable: false
+
+common::network::netbird::enable: false
+common::network::netbird::setup_key: lol
+
+common::network::tcpshaker::enable: false
+common::network::tcpshaker::listen_port: 8785
+common::network::tcpshaker::check_interval: 15
+common::network::tcpshaker::requests_per_check: 50
+common::network::tcpshaker::concurrency: 50
+
+common::network::vrrp::enable: false
+
+## Monitoring
+common::monitoring::splunk::forwarder::enable: false
+common::monitoring::scom::enable: false
+
+## Security
+common::security::auditd::enable: false
+
+## System Updates
+common::system::updates::enable: true
+
+prometheus::bin_dir: /opt/obmondo/bin
+prometheus::install_method: package

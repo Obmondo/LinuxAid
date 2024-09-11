@@ -1,0 +1,89 @@
+{
+  "name": "bodgit-zfs",
+  "version": "3.0.0",
+  "author": "bodgit",
+  "summary": "Puppet Module for managing ZFS",
+  "license": "Apache-2.0",
+  "source": "https://github.com/bodgit/puppet-zfs",
+  "project_page": "https://github.com/bodgit/puppet-zfs",
+  "issues_url": "https://github.com/bodgit/puppet-zfs/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.13.0 <8.0.0"
+    },
+    {
+      "name": "puppet/kmod",
+      "version_requirement": ">=3.0.0 <4.0.0"
+    },
+    {
+      "name": "puppetlabs/yumrepo_core",
+      "version_requirement": ">=1.0.2 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/cron_core",
+      "version_requirement": ">=1.0.0 <2.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=5.5.10 <8.0.0"
+    }
+  ],
+  "tags": [
+    "zfs",
+    "zpool",
+    "zed"
+  ],
+  "pdk-version": "2.1.0",
+  "template-url": "https://github.com/bodgit/pdk-templates#bodgit",
+  "template-ref": "remotes/origin/bodgit-0-g022387a"
+}

@@ -1,0 +1,3 @@
+---
+common::storage::zfs::enable: true
+common::monitor::exporter::node::zfs: true

@@ -1,0 +1,7 @@
+# THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+run_address: ":<%= $listen_port %>"
+check_interval: <%= $check_interval %>
+tcp_addresses:
+  <% $tcp_addresses.each |$addr| { -%>
+  - <%= $addr %>
+  <% } -%>

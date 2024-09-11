@@ -1,0 +1,71 @@
+#! /bin/sh
+#
+# Start/Stop riemann
+#
+# chkconfig: 345 99 99
+# description: Riemann
+# processname: riemann
+
+riemann_bin="/opt/riemann/bin/riemann"
+riemann_conf="<%= @config_file %>"
+riemann_log="/var/log/riemann/riemann.log"
+NICE_LEVEL="-n 19"
+
+find_riemann_process () {
+    PIDTEMP=`ps ux | grep riemann | grep java | awk '{ print $2 }'`
+    # Pid not found
+    if [ "x$PIDTEMP" = "x" ]; then
+        PID=-1
+    else
+        PID=$PIDTEMP
+    fi
+}
+
+start () {
+    LOG_DIR=`dirname ${riemann_log}`
+    if [ ! -d $LOG_DIR ]; then
+      echo "Log dir ${LOG_DIR} doesn't exist. Creating"
+      mkdir $LOG_DIR
+    fi
+    nohup su --login <%= @user %> nice ${NICE_LEVEL} ${riemann_bin} ${riemann_conf} >  ${riemann_log} &
+}
+
+stop () {
+    find_riemann_process
+    if [ $PID -ne -1 ]; then
+        kill $PID
+    fi
+}
+
+case $1 in
+start)
+        start
+        ;;
+stop)
+        stop
+        exit 0
+        ;;
+reload)
+        stop
+        start
+        ;;
+restart)
+        stop
+        start
+        ;;
+status)
+        find_riemann_process
+    if [ $PID -gt 0 ]; then
+        echo "Riemann running"
+            exit 0
+        else
+        echo "Riemann not running"
+            exit 1
+    fi
+        ;;
+*)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        RETVAL=1
+esac
+exit 0
+

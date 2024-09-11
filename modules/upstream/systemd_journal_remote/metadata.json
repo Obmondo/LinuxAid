@@ -1,0 +1,86 @@
+{
+  "name": "genv-systemd_journal_remote",
+  "version": "1.1.0",
+  "author": "gibbs",
+  "summary": "Installs, configures, and manages the systemd journal remote service",
+  "license": "MIT",
+  "source": "https://github.com/gibbs/puppet-systemd_journal_remote",
+  "project_page": "https://github.com/gibbs/puppet-systemd_journal_remote",
+  "issues_url": "https://github.com/gibbs/puppet-systemd_journal_remote/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 < 9.0.0"
+    },
+    {
+      "name": "puppet-systemd",
+      "version_requirement": ">= 3.1.0 < 4.0.0"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">= 1.6.0 < 6.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "22.04",
+        "20.04",
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.21.0 < 8.0.0"
+    }
+  ],
+  "tags": [
+    "journald",
+    "journal",
+    "journal-remote",
+    "journald-remote",
+    "systemd",
+    "systemd-journal-remote"
+  ],
+  "pdk-version": "2.4.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#2.4.0",
+  "template-ref": "tags/2.4.0-0-gfa6b6d2"
+}

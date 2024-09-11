@@ -1,0 +1,14 @@
+[Unit]
+Description=ANSYS Interconnect License Service Monitor
+After=ansys-interconnect.service
+Requires=ansys-interconnect.service
+
+[Service]
+Type=simple
+WorkingDirectory=/ansys_inc/shared_files/licensing
+ExecStart=/bin/bash -c '/ansys_inc/shared_files/licensing/linx64/ansysli_monitor -monitor $(pidof ansysli_server) -restart_port_timeout 15'
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

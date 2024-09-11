@@ -1,0 +1,134 @@
+---
+name: MongoDB
+description: |
+  MongoDB (from humongous) is a free and open-source cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with schemas. MongoDB is developed by [MongoDB Inc.](https://en.wikipedia.org/wiki/MongoDB_Inc.) and is free and open-source, published under a combination of the GNU Affero General Public License and the Apache License.
+attribution: 'https://en.wikipedia.org/w/index.php?title=MongoDB&oldid=763023126'
+
+parameters:
+  version:
+    name: MongoDB version
+    description:
+
+  use_upstream_repo:
+    name: Use upstream 10gen/MongoDB repository
+    description: |
+      Use the upstream [MongoDB repository](https://docs.mongodb.com/manual/administration/install-on-linux/).
+
+  db_dir:
+    name: Database directory
+    description:
+
+  listen_ip:
+    name: Listen IPs
+    description:
+
+  use_ipv6:
+    name: Enable IPv6
+    description:
+
+  port:
+    name: Port
+    description: Port to listen on
+
+  journal:
+    name: Enable journaling
+    description: Enable journaling to ensure write durability and data consistency.
+
+  smallfiles:
+    name: Enable smaller default data size
+    description: Reduce the initial size for data files, while limiting them to 512 MB.
+
+  remote_user_auth:
+    name: Database authentication for remote users
+    description:
+
+  disable_auth:
+    name: Disable authentication
+    description:
+
+  verbosity:
+    name: Log verbosity
+    description:
+
+  object_check:
+    name: Check objects
+    description: |
+      Force MongoDB to validate all requests to ensure no invalid documents are inserted.
+
+  quota:
+    name: Quota
+    description: |
+      Set a maximum limit of data files per database, or leave unset to use defaults.
+
+  directory_per_db:
+    name: Directory per DB
+    description: |
+      Enable to store each database's files in a distinct folder.
+
+  max_connections:
+    name: Max connections
+    description: Set a maximum number of connections.
+
+  http_interface:
+    name: Enable HTTP interface
+    description:
+
+  disable_scripting:
+    name: Disable scripting
+    description:
+
+  disable_tablescan:
+    name: Disable tablescan
+    description: Forbid operations that require a table scan.
+
+  disable_prealloc:
+    name: Disable preallocation of data files
+    description:
+
+  default_namespace_file_size:
+    name: Default namespace file size
+    description:
+
+  enable_rest_api:
+    name: Enable REST API
+    description:
+
+  storage_engine:
+    name: Select storage engine
+    description:
+
+  extra_server_options:
+    name: Additional server options
+    description: |
+      Set additional configuration parameters to the MongoDB server.
+
+  restart_on_change:
+    name: Restart on change
+    description: |
+      Automatically restart MongoDB after changes to the configuration.
+
+  create_admin:
+    name: Create admin user
+    description:
+
+  admin_username:
+    name: Admin username
+    description:
+
+  admin_password:
+    name: Admin password
+    description:
+
+  admin_roles:
+    name: Admin roles
+    description:
+
+  admin_store_credentials:
+    name: Store administrator credentials
+    description: |
+      If enabled, administrator credentials will be saved in the mongorc.js file.
+
+  log_file:
+    name: Log file
+    description: |
+      If set MongoDB will fork and write logs to the path provided with this option. In unset, the process will fork and journalctl will capture the output.

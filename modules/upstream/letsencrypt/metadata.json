@@ -1,0 +1,100 @@
+{
+  "name": "puppet-letsencrypt",
+  "version": "11.0.0",
+  "author": "Vox Pupuli",
+  "summary": "Manages lets-encrypt and certbot + related certs",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-letsencrypt",
+  "project_page": "https://github.com/voxpupuli/puppet-letsencrypt",
+  "issues_url": "https://github.com/voxpupuli/puppet-letsencrypt/issues",
+  "tags": [
+    "letsencrypt",
+    "let's encrypt",
+    "certbot",
+    "acme"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": [
+        "39"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "OpenBSD",
+      "operatingsystemrelease": [
+        "6.2"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "12",
+        "13"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 < 10.0.0"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">= 2.5.0 < 7.0.0"
+    },
+    {
+      "name": "puppet/epel",
+      "version_requirement": ">= 3.0.1 < 6.0.0"
+    }
+  ]
+}

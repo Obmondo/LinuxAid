@@ -1,0 +1,10 @@
+#!/bin/bash
+echo Razor policy successfully applied > /tmp/razor_complete.log
+echo Installed using <%= task.label %> installer >> /tmp/razor_complete.log
+echo Repo: <%= repo_url %> >> /tmp/razor_complete.log
+echo Node: <%= node_url %> >> /tmp/razor_complete.log
+
+curl <%= broker_install_url %> | bash
+if [ $? -ne 0 ]; then
+    echo "Broker run failed; see /var/log/razor.log for more details" >> /tmp/razor_complete.log
+fi

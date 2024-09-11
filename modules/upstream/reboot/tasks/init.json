@@ -1,0 +1,24 @@
+{
+  "description": "Reboots a machine",
+  "supports_noop": false,
+  "input_method": "stdin",
+  "parameters": {
+    "timeout": {
+      "description": "Timeout before shutdown (seconds); enforces a minimum of 3s",
+      "type": "Optional[Variant[Pattern[/^[0-9]*$/],Integer]]"
+    },
+    "message": {
+      "description": "Shutdown message for systems that support it",
+      "type": "Optional[Pattern[/^[^|&]*$/]]"
+    },
+    "shutdown_only": {
+      "description": "Only shut the machine down, do not reboot",
+      "type": "Optional[Boolean]"
+    }
+  },
+  "implementations": [
+    { "name": "init.rb", "requirements": ["puppet-agent"] },
+    { "name": "nix.sh", "requirements": ["shell"], "input_method": "environment" },
+    { "name": "win.ps1", "requirements": ["powershell"], "input_method": "powershell" }
+  ]
+}

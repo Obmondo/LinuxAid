@@ -1,0 +1,30 @@
+#  -*- mode: conf-unix; -*-
+
+[/utils/tl-ldap-certalias]
+
+# Specify the Schema Type in use on the target LDAP server.
+# Choices are rfc2307, AD
+ldap_schema=rfc2307
+
+# Set this to yes ONLY if you wish to let users log in with REVOKED,
+# EXPIRED or otherwise INVALID certificates.
+allow_invalid_certificates=no
+
+# In the case of certificates being stored separate from the user
+# objects, how should tl-ldap-certalias match certificates to users?
+# Choices are sameobject, novell_certificate_subjectname
+certificate_user_match=sameobject
+
+[/utils/tl-ldap-certalias/users]
+uri=ldap://ldap.example.com
+base=ou=People,dc=example,dc=com
+binddn=cn=userreader,dc=example,dc=com
+bindpw=secret
+
+# If certificate_user_match is not sameobject, the following section
+# is used for finding the certificates.
+[/utils/tl-ldap-certalias/certs]
+uri=ldap://ldap.example.com
+base=ou=Certificates,dc=example,dc=com
+binddn=cn=certreader,dc=example,dc=com
+bindpw=secret

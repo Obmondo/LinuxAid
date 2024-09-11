@@ -1,0 +1,15 @@
+<%- |
+$input_name,
+$type,
+$config
+| -%>
+# <%= $input_name %>
+input(type="<%= $type %>"
+<% $config.each |$k, $v| { -%>
+  <%- if $v =~ Array { -%>
+  <%= $k %>=[ <%= $v.map |$i| { "\"${i}\"" }.join(', ') %> ]
+  <%- } else { -%>
+  <%= $k %>="<%= $v %>"
+  <%- } -%>
+<%}-%>
+)

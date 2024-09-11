@@ -1,0 +1,24 @@
+
+resolvers <%= $section_name %>
+<% $nameservers.each |$id, $nameserver| { -%>
+  nameserver <%= $id %> <%= $nameserver %>
+<% } -%>
+<% if $parse_resolv_conf { -%>
+  <%= parse-resolv-conf %>
+<% } -%>
+<% if $resolve_retries { -%>
+  resolve_retries <%= $resolve_retries %>
+<% } -%>
+<% if $timeout { -%>
+  <%- $timeout.each |$event, $time| { -%>
+  timeout <%= $event %> <%= $time %>
+  <%- } -%>
+<% } -%>
+<% if $hold { -%>
+  <%- $hold.each |$status, $period| { -%>
+  hold <%= $status %> <%= $period %>
+  <%- } -%>
+<% } -%>
+<% if $accepted_payload_size { -%>
+  accepted_payload_size <%= $accepted_payload_size %>
+<% } -%>

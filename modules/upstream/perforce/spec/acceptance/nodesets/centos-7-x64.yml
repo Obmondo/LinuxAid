@@ -1,0 +1,16 @@
+HOSTS:
+  centos-7-x64:
+    roles:
+      - agent
+      - default
+    platform: el-7-x86_64
+    hypervisor: vagrant
+    box: centos/7
+    forwarded_ports:
+      p4d:
+        from: 1666
+        to: 1666
+CONFIG:
+  type: foss
+  preserve_hosts: onfail
+  trace_limit: 200

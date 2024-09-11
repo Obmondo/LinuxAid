@@ -1,0 +1,8 @@
+---
+
+os_version: jammy
+label: Ubuntu 22.04 jammy jellyfish
+description: Ubuntu 22.04 (jammy jellyfish) installer
+boot_sequence:
+  1: boot_install
+  default: boot_local

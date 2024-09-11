@@ -1,0 +1,21 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+# Auth
+<% @pam_auth_lines.each do |auth_line| -%>
+<%= auth_line %>
+<% end -%>
+
+# Account
+<% @pam_account_lines.each do |account_line| -%>
+<%= account_line %>
+<% end -%>
+
+# Password
+<% @pam_password_lines.each do |password_line| -%>
+<%= password_line %>
+<% end -%>
+
+# Session
+<% @pam_session_lines.each do |session_line| -%>
+<%= session_line %>
+<% end -%>

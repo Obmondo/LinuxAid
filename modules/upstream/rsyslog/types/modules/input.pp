@@ -1,0 +1,17 @@
+type Rsyslog::Modules::Input = Enum[
+  'im3195',
+  'imfile',
+  'imgssapi',
+  'imjournal',
+  'imkafka',
+  'imklog',
+  'imkmsg',
+  'immark',
+  'impstats',
+  'imptcp',
+  'imrelp',
+  'imsolaris',
+  'imtcp',
+  'imupd',
+  'imuxsock',
+]

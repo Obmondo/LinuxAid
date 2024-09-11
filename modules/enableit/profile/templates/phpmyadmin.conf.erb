@@ -1,0 +1,61 @@
+Alias /phpMyAdmin <%= @doc_path %>
+Alias /phpmyadmin <%= @doc_path %>
+
+<Directory <%= @doc_path %>/>
+   <IfModule mod_authz_core.c>
+     # Apache 2.4
+     Require all granted
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+     # Apache 2.2
+     Order Deny,Allow
+     Allow from All
+     Allow from ::1
+   </IfModule>
+</Directory>
+
+<Directory <%= @doc_path %>/setup/>
+   <IfModule mod_authz_core.c>
+     # Apache 2.4
+     Require all granted
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+     # Apache 2.2
+     Order Deny,Allow
+     Allow from All
+     Allow from ::1
+   </IfModule>
+</Directory>
+
+<Directory <%= @doc_path %>/libraries/>
+   <IfModule mod_authz_core.c>
+        Require all denied
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from All
+        Allow from None   
+   </IfModule>
+</Directory>
+
+<Directory <%= @doc_path %>/setup/lib/>
+   <IfModule mod_authz_core.c>
+        Require all denied
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from All
+        Allow from None
+   </IfModule>
+</Directory>
+
+<Directory <%= @doc_path %>/setup/frames/>
+   <IfModule mod_authz_core.c>
+        Require all denied
+   </IfModule>
+   <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from All
+        Allow from None
+   </IfModule>
+</Directory>

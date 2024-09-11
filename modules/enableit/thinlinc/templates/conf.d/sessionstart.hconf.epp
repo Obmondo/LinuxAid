@@ -1,0 +1,26 @@
+#  -*- mode: conf-unix; -*-
+
+[/sessionstart]
+
+# Initial background color for the session in the format
+# #rrggbb where each component is in hexadecimal.
+#
+# Example:
+#
+#   #ff0000 : red
+#   #0000ff : blue
+#   #ffff00 : yellow
+
+background_color=<%= $thinlinc::session::background_color %>
+
+# Initial background image. The image will be scaled to cover the
+# entire screen and may contain transparency.
+
+background_image=<%= $thinlinc::session::background_image %>
+
+# Default keyboard layout. This will be the layout used by Xvnc on
+# startup, but may be changed by the user. For a list of possible
+# keyboard layouts, run the command:
+#    man /opt/thinlinc/share/man/man7/xkeyboard-config.7
+
+keyboard_layout=<%= $thinlinc::session::keyboard_layout %>

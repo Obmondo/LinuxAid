@@ -1,0 +1,4 @@
+---
+nodesets:
+  - 'trusty'
+  - 'centos7'

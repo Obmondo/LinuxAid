@@ -1,0 +1,6 @@
+---
+sssd::extra_packages:
+  - 'authconfig'
+  - 'oddjob-mkhomedir'
+
+sssd::manage_oddjobd: true

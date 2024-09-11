@@ -1,0 +1,59 @@
+{
+  "name": "puppet-dhcp",
+  "version": "3.3.0",
+  "author": "Vox Pupuli",
+  "summary": "Manage the ISC dhcp daemon",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppetlabs-dhcp",
+  "project_page": "https://github.com/voxpupuli/puppet-dhcp",
+  "issues_url": "https://github.com/voxpupuli/puppet-dhcp/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.16.0 < 6.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 2.1.0 < 6.0.0"
+    }
+  ],
+  "data_provider": null,
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04",
+        "16.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8.0"
+      ]
+    },
+    {
+      "operatingsystem": "Archlinux"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 6.0.0"
+    }
+  ]
+}

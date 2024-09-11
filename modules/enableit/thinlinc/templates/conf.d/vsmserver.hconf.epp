@@ -1,0 +1,107 @@
+#  -*- mode: conf-unix; -*-
+
+# Hiveconf configuration file - VSM server
+#
+[/vsmserver]
+
+# Administrators email
+admin_email=<%= $thinlinc::vsmserver::admin_email %>
+
+#
+# Terminal servers. A space-separated list of agent server hostnames. These will
+# be used for communication between the server and the agent. The names reported
+# to clients are fetched from the agent itself; names in terminalservers are not
+# reported directly to clients.
+#
+terminalservers=<%= $thinlinc::vsmserver::terminal_servers.join_ %>
+
+# Load balance finetuning
+ram_per_user=<%= $thinlinc::vsmserver::ram_per_user_mb %>
+bogomips_per_user=<%= $thinlinc::vsmserver::bogomips_per_user %>
+existing_users_weight=<%= $thinlinc::vsmserver::existing_users_weight %>
+load_update_cycle=<%= $thinlinc::vsmserver::load_update_cycle %>
+
+# The maximum number of sessions per user. 0 means no limit.
+max_sessions_per_user=<%= $thinlinc::vsmserver::max_session_per_user %>
+
+# Only allow connections from clients in this space-separated list for priv
+# operations localhost and hostname IP are always allowed.
+allowed_clients=<%= $thinlinc::vsmserver::allowed_clients.join_ %>
+
+# ThinLinc access can be limited to certain groups. If the allowed_groups
+# space-separated list is empty, all users are accepted. Otherwise, the user
+# must be a member of the groups listed below, to be able to use ThinLinc.
+# Example: allowed_groups=students teachers
+allowed_groups=<%= $thinlinc::vsmserver::allowed_groups.join_ %>
+
+# If true, processes occupying the users interval of forwarded ports
+# will be killed.
+unbind_ports_at_login=<%= $thinlinc::vsmserver::unbind_ports_at_login %>
+
+# A space-separated list of candidate:agenthost pairs that can be used to force
+# sessions for specific users or groups to be created on specific agent hosts.
+# Note that only one server can be specified per candidate. No load
+# balancing is in use for servers selected this way.
+#
+# If the specific server is down, no session will be created.
+#
+# If a server specified here is also listed in terminalservers,
+# sessions will also be created for users or groups not listed here.
+# Use of this parameter is recommended only for special circumstances,
+# for example when testing new operating systems.
+#
+# Groupnames should be prepended by a '+'. Example:
+# explicit_agentselection=+agentoneusers:agentone
+explicit_agentselection=<%= $thinlinc::vsmserver::explicit_agent_selection.join_ %>
+
+# Port to listen on
+# This should normally be the same as /vsm/vsm_server_port, but under
+# some special circumstances, it might be set to another value.
+listen_port=<%= $thinlinc::vsmserver::listen_port %>
+
+<% unless $thinlinc::vsmserver::subcluster_agents == Undef { -%>
+[/vsmserver/subclusters/default]
+agents=<%= $thinlinc::vsmserver::subcluster_agents.join_ %>
+<% } -%>
+
+[/vsmserver/HA]
+# Enable HA operations by setting this to 1.
+enabled=<%= $thinlinc::vsmserver::enable_ha.bool %>
+
+# A space-separated list of the nodes in the cluster
+nodes=<%= $thinlinc::vsmserver::ha_nodes.join_ %>
+
+[/vsmserver/logging]
+log_to_file=<%= $thinlinc::vsmserver::log_to_file.bool %>
+logfile=<%= $thinlinc::vsmserver::log_dir %>/vsmserver.log
+
+log_to_syslog=<%= $thinlinc::vsmserver::log_to_syslog.bool %>
+syslog_facility=<%= $thinlinc::vsmserver::syslog_facility %>
+syslog_socket=<%= $thinlinc::vsmserver::syslog_socket %>
+syslog_host=<%= $thinlinc::vsmserver::syslog_host %>
+
+# Default level of logging.
+defaultlevel=<%= $thinlinc::vsmserver::default_log_level %>
+
+[/vsmserver/logging/levels]
+
+# Execution of external commands.
+vsmserver.extcmd=<%= $thinlinc::vsmserver::extcmd_log_level %>
+
+# Session-related information
+vsmserver.session=<%= $thinlinc::vsmserver::session_log_level %>
+
+# Information about sessions being shadowed.
+vsmserver.shadow=<%= $thinlinc::vsmserver::shadow_log_level %>
+
+# Load-balancing info.
+vsmserver.loadinfo=<%= $thinlinc::vsmserver::loadinfo_log_level %>
+
+# License-related messages.
+vsmserver.license=<%= $thinlinc::vsmserver::license_log_level %>
+
+# XMLRPC-debugging.
+vsmserver.xmlrpc=<%= $thinlinc::vsmserver::xmlrpc_log_level %>
+
+# HA debugging
+vsmserver.HA=<%= $thinlinc::vsmserver::ha_log_level %>

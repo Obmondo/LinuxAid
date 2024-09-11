@@ -1,0 +1,5 @@
+<%- if scope['passenger::passenger_provider'] == 'gem' -%>
+LoadModule passenger_module <%= scope['passenger::gems::mod_passenger'] -%>
+<% else %>
+LoadModule passenger_module <%= scope['passenger::params::mod_passenger'] -%>
+<% end %>

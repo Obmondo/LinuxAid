@@ -1,0 +1,40 @@
+{
+  "name": "enableit-samba",
+  "version": "1.0.0",
+  "author": "Matthias Saou",
+  "license": "Apache-2.0",
+  "summary": "Samba module",
+  "source": "git://github.com/Obmondo/puppet-samba",
+  "project_page": "https://github.com/Obmondo/puppet-samba",
+  "issues_url": "https://github.com/Obmondo/puppet-samba/issues",
+  "tags": [ "samba3", "smb", "smbd", "nmdb" ],
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "RedHat",
+    "operatingsystemrelease": [ "6", "7" ]
+    },
+    {
+    "operatingsystem": "CentOS",
+    "operatingsystemrelease": [ "6", "7" ]
+    },
+    {
+    "operatingsystem": "Debian",
+    "operatingsystemrelease": [ "7", "8" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "14" ]
+    }
+  ],
+  "requirements": [
+    {
+    "name": "pe",
+    "version_requirement": "3.x"
+    },
+    {
+    "name": "puppet",
+    "version_requirement": ">=2.7.20 <4.1.0"
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,295 @@
+#!/bin/bash
+set -euo nounset
+# Obmondo.com install script.
+#
+# Installs and sets up an Obmondo.com client. Supports Debian and RHEL-based
+# distributions.
+#
+# Version: $Id: 35577ec208f1cd910ef2275e619f2e1f0b216b6f $
+
+CUSTOMER=<%= $customerid %>
+HOSTNAME="<%%= node.hostname %%>"
+# Use short hostname as first part of certname
+HOST="$(cut -d. -f1 <<< "${HOSTNAME}")"
+CERTNAME="${HOST}.${CUSTOMER}"
+
+# Sleep a bit to ensure that we have network when we start installing;
+# timedatectl seems to fail if run too fast.
+sleep 60
+
+# Ensure that SELinux doesn't interfere
+setenforce 0
+# Set timezone; doesn't matter a lot (as long as time is correct anyway), but it
+# makes it a bit easier to compare timestamps
+timedatectl set-timezone Europe/Copenhagen || true
+
+function log.debug {
+  /usr/bin/logger -s -t "$0[$$]" -p syslog.debug $@
+}
+
+function log.info {
+  /usr/bin/logger -s -t "$0[$$]" -p syslog.info $@
+}
+
+function log.err {
+  /usr/bin/logger -s -t "$0[$$]" -p syslog.err $@
+}
+
+function log.crit {
+  # The first argument should be the exit code, any other is the error
+  # message.
+  ERR=${1}
+
+  # If the first argument doesn't look like an exit code, it's probably
+  # not... Instead we use all of the arguments as arguments to logger and exit
+  # with unspecified error.
+  if [[ $ERR =~ -?[0-9]+ ]]; then
+    shift
+  else
+    ERR=$ERR_UNSPECIFIED
+  fi
+
+  /usr/bin/logger -s -t "$0[$$]" -p syslog.crit $@
+
+  exit $ERR
+}
+
+puppet_disabled () {
+  test -e $(puppet agent --configprint agent_disabled_lockfile)
+  ret=$?
+  return $ret
+}
+
+puppet_disabled_new_install () {
+  grep -q 'Disabled by default on new or unconfigured old installations' $(puppet agent --configprint agent_disabled_lockfile)
+  ret=$?
+  return $ret
+}
+
+if [[ ! -v CUSTOMER || ! ${#CUSTOMER} -ge 7 ]]; then
+  log.crit 2 'Customer ID not set or too short. Please set the environment variable CUSTOMER to your customer ID and re-run the script.'
+fi
+
+while getopts "hvdnly" opt
+do
+  case "${opt}" in
+    -)
+      case "${optlong}" in
+        no-remote-logging)
+          REMOTE_LOGGING=0
+          ;;
+        noop)
+          NOOP=0
+          ;;
+        *)
+          echo "Unknown option --${OPTARG}"
+          exit 2
+          ;;
+      esac
+      ;;
+    h)
+      echo "Usage: $0 [-v] [-d] [-h]"
+      exit 0
+      ;;
+    v)
+      DEBUGLEVEL=1
+      ;;
+    d)
+      DEBUGLEVEL=2
+      ;;
+    *)
+      echo "Invalid option -${OPTARG}" >&2
+      exit 2
+      ;;
+  esac
+done
+
+MAILTO=info@enableit.dk
+DEBUGLEVEL=${DEBUGLEVEL:-0}
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/opt/puppetlabs/puppet/bin
+PUPPET_CONF='/etc/puppetlabs/puppet/puppet.conf'
+
+## Create temporary directory for logs
+TMPDIR=${TMPDIR:-"/tmp"}
+REAL_TMPDIR=$(mktemp -d "${TMPDIR}/obmondo-$(date +"%F_%T").XXXX")
+
+# Make sure that mktemp ran ok before overwriting TMPDIR
+if [[ -d "${REAL_TMPDIR}" ]]; then
+  TMPDIR="${REAL_TMPDIR}"
+fi
+
+function clean_hosts_file() {
+  # Delete any existing entries found in hosts file
+  sed --in-place --expression "/109\.238\.49\.205|${CUSTOMER}\.puppet\.enableit\.dk/d" /etc/hosts
+  # Insert new line
+  echo "109.238.49.205 ${CUSTOMER}.puppet.enableit.dk puppet" >> /etc/hosts
+}
+
+function detect_debian() {
+  if [ ! -e /etc/lsb-release ]; then
+    return
+  fi
+
+  log.debug "Detecting Ubuntu/Debian..."
+
+  DISTRIBUTION=$(grep -iE "DISTRIB_ID=(.+)" /etc/lsb-release | cut -d "=" -f 2)
+  CODENAME=$(grep -E "DISTRIB_CODENAME=(.+)" /etc/lsb-release | cut -d "=" -f 2)
+
+  log.info "Distribution is Debian-based (${CODENAME})"
+}
+
+function detect_redhat() {
+  if [ ! -e /etc/redhat-release ]; then
+    return
+  fi
+
+  log.debug "Detecting RedHat..."
+
+  DISTRIBUTION=$(grep -oE 'CentOS|Red Hat' /etc/redhat-release)
+  RELEASE=$(grep -oE 'release [0-9]' /etc/redhat-release | grep -oE '[0-9]')
+
+  log.info "Distribution is RedHat-based (${DISTRIBUTION}, release ${RELEASE})"
+}
+
+function install_prequisites_debian() {
+  log.debug 'Upgrading OS'
+  apt-get update
+  apt-get upgrade -y
+
+  log.debug 'Installing https transport for apt'
+  apt-get install wget apt-transport-https ca-certificates -y
+
+  log.debug "Downloading puppet"
+  PUPPET_DEB="${TMPDIR}/puppet.deb"
+  wget --quiet \
+       -O "${PUPPET_DEB}" \
+       "https://apt.puppetlabs.com/puppetlabs-release-pc1-${CODENAME}.deb" \
+    || log.crit 1 "Downloading Puppet failed"
+
+  log.debug "Installing puppetlabs repositories"
+  dpkg -i "${PUPPET_DEB}" \
+    || log.crit 2 "Puppetlabs repository installation failed."
+
+  rm "${PUPPET_DEB}"
+
+  log.debug "Adding Obmondo GPG key to apt"
+  wget --quiet -O - \
+       "https://repos.obmondo.com/packagesign/public/apt/pubkey.gpg" |
+    apt-key add -
+
+  log.debug "Adding Obmondo repos apt"
+  echo "deb https://repos.obmondo.com/packagesign/public/apt ${CODENAME} main" \
+       > /etc/apt/sources.list.d/obmondo.list
+
+  log.debug "Running apt-get update"
+  apt-get -q update
+
+  log.debug "Installing puppet and tools"
+  apt-get -q -y install puppet-agent iptables
+
+  log.debug "Running apt-get update"
+  apt-get -q update
+}
+
+function install_prequisites_redhat() {
+  log.debug 'Upgrading OS'
+  yum update -y
+
+  # Red Hat needs to have the 'optional' channel enabled:
+  # https://docs.puppetlabs.com/guides/install_puppet/install_el.html
+  if [ ${DISTRIBUTION} == 'Red Hat' ]; then
+    log.crit 3 "Distribution not supported."
+  fi
+
+  log.debug "Installing EPEL and utilities"
+  if ! rpm --quiet -q epel-release wget; then
+    yum -y install epel-release wget >/dev/null
+  fi
+
+  log.debug "Installing Puppetlabs repositories"
+  if ! rpm --quiet -q puppetlabs-release-pc1; then
+    rpm -ivh "https://yum.puppetlabs.com/puppetlabs-release-pc1-el-${RELEASE}.noarch.rpm"
+  fi
+
+  # Install puppet agent software
+  log.debug "Installing puppet and tools"
+  yum -y install puppet-agent iptables ||
+    log.crit 4 "Unable to install puppet."
+
+}
+
+function configure_puppet() {
+  log.debug "Setting up puppet"
+  cat > "${PUPPET_CONF}" <<EOF
+[main]
+    server = ${CUSTOMER}.puppet.enableit.dk
+    certname = ${CERTNAME}
+    stringify_facts = false
+    masterport = 443
+
+[agent]
+    report = true
+    pluginsync = true
+    noop = true
+EOF
+
+  log.debug "Disabling puppet service"
+  puppet resource service puppet ensure=stopped enable=false
+
+  # Check to see if Puppet is disabled because it's a new installation -- we
+  # don't want to enable Puppet if it's disabled by someone else.
+  if puppet_disabled; then
+    if puppet_disabled_new_install; then
+      puppet agent --enable
+    else
+      log.error 'The puppet agent has been disabled on the system; to continue the setup, please re-enable the puppet agent and run the setup script again.'
+    fi
+  fi
+}
+function puppet_agent() {
+  puppet agent -t \
+         --server=${CUSTOMER}.puppet.enableit.dk \
+         --masterport=443 \
+         --certname="${CERTNAME}" \
+         --no-noop
+}
+
+function run_puppet() {
+  # Avoid killing script if Puppet returns anything but 0
+  set +e
+
+  log.debug "Contacting obmondo.com..."
+  puppet_agent
+
+  # Puppet returns 0 on no changes, 1 on failures, 2 on successful run with
+  # changes, and 4 or 6 if the run failed wholly or partially
+  if [[ $? == 1 || $? == 4 || $? == 6 ]]; then
+    log.crit 5 "Client install failed with code ${?}. Contact EnableIT - ${MAILTO}"
+  fi
+
+  # To avoid any potential ordering conflicts we'll run the client twice...
+  puppet_agent
+
+  log.info "Installation succeeded. Please head to https://obmondo.com/server/${CERTNAME} to continue configuration."
+}
+
+detect_debian
+detect_redhat
+
+case $DISTRIBUTION in
+  Debian|Ubuntu)
+    install_prequisites_debian
+    ;;
+  CentOS|RedHat)
+    install_prequisites_redhat
+    ;;
+  *)
+    log.crit 1 'Unable to detect distribution; exiting.'
+    ;;
+esac
+
+configure_puppet
+run_puppet
+
+# Log that the broker is finished.
+wget -qO- "<%%= stage_done_url %%>" || fail "wget failed to log broker completion" &> /dev/null

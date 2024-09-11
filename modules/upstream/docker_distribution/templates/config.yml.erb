@@ -1,0 +1,178 @@
+version: 0.1
+log:
+  level: <%= scope['docker_distribution::log_level'] %>
+  formatter: <%= scope['docker_distribution::log_formatter'] %>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::log_fields']) -%>
+  fields:
+<% scope['docker_distribution::log_fields'].sort.each do |key,value| -%>
+    <%= key -%>: <%= value %>
+<% end -%>
+<% end -%>
+  hooks:
+    - type: mail
+      disabled: <%= scope['docker_distribution::log_hooks_mail_disabled'] %>
+<% unless scope['docker_distribution::log_hooks_mail_disabled'] then -%>
+      levels:
+<% Array(scope['docker_distribution::log_hooks_mail_levels']).sort.each do |value| -%>
+        - <%= value %>
+<% end -%>
+      options:
+        smtp:
+          addr: <%= scope['docker_distribution::log_hooks_mail_smtp_addr'] %>
+<% unless ([nil, :undefined, :undef, ''].include?(scope['docker_distribution::log_hooks_mail_smtp_username']) &&
+ [nil, :undefined, :undef, ''].include?(scope['docker_distribution::log_hooks_mail_smtp_password'])) -%>
+          username: <%= scope['docker_distribution::log_hooks_mail_smtp_username'] %>
+          password: <%= scope['docker_distribution::log_hooks_mail_smtp_password'] %>
+<% end -%>
+          insecure: <%= scope['docker_distribution::log_hooks_mail_smtp_insecure'] %>
+        from: <%= scope['docker_distribution::log_hooks_mail_from'] %>
+        to:
+<% Array(scope['docker_distribution::log_hooks_mail_to']).sort.each do |value| -%>
+          - <%= value %>
+<% end -%>
+<% end -%>
+
+storage:
+<% if scope['docker_distribution::storage_type'] == 'filesystem' then -%>
+  filesystem:
+    rootdirectory: <%= scope['docker_distribution::filesystem_rootdirectory'] %>
+<% elsif scope['docker_distribution::storage_type'] == 'azure' then -%>
+  azure:
+    accountname: <%= scope['docker_distribution::azure_accountname'] %>
+    accountkey: <%= scope['docker_distribution::azure_accountkey'] %>
+    container: <%= scope['docker_distribution::azure_container'] %>
+    realm: <%= scope['docker_distribution::azure_realm'] %>
+<% elsif scope['docker_distribution::storage_type'] == 'gcs' then -%>
+  gcs:
+    bucket: <%= scope['docker_distribution::gcs_bucket'] %>
+    keyfile: <%= scope['docker_distribution::gcs_keyfile'] %>
+    rootdirectory: <%= scope['docker_distribution::gcs_rootdirectory'] %>
+<% elsif scope['docker_distribution::storage_type'] == 's3' then -%>
+  s3:
+    accesskey: <%= scope['docker_distribution::s3_accesskey'] %>
+    secretkey: <%= scope['docker_distribution::s3_secretkey'] %>
+    region: <%= scope['docker_distribution::s3_region'] %>
+    bucket: <%= scope['docker_distribution::s3_bucket'] %>
+    encrypt: <%= scope['docker_distribution::s3_encrypt'] %>
+    secure: <%= scope['docker_distribution::s3_secure'] %>
+    v4auth: <%= scope['docker_distribution::s3_v4auth'] %>
+    chunksize: <%= scope['docker_distribution::s3_chunksize'] %>
+    rootdirectory: <%= scope['docker_distribution::s3_rootdirectory'] %>
+<% elsif scope['docker_distribution::storage_type'] == 'rados' then -%>
+  rados:
+    poolname: <%= scope['docker_distribution::rados_poolname'] %>
+    username: <%= scope['docker_distribution::rados_username'] %>
+    chunksize: <%= scope['docker_distribution::rados_chunksize'] %>
+<% elsif scope['docker_distribution::storage_type'] == 'swift' then -%>
+  swift:
+    username: <%= scope['docker_distribution::swift_username'] %>
+    password: <%= scope['docker_distribution::swift_password'] %>
+    authurl: <%= scope['docker_distribution::swift_authurl'] %>
+    tenant: <%= scope['docker_distribution::swift_tenant'] %>
+    tenantid: <%= scope['docker_distribution::swift_tenantid'] %>
+    domain: <%= scope['docker_distribution::swift_domain'] %>
+    domainid: <%= scope['docker_distribution::swift_domainid'] %>
+    insecureskipverify: <%= scope['docker_distribution::swift_insecureskipverify'] %>
+    region: <%= scope['docker_distribution::swift_region'] %>
+    container: <%= scope['docker_distribution::swift_container'] %>
+    rootdirectory: <%= scope['docker_distribution::swift_rootdirectory'] %>
+    trustid: <%= scope['docker_distribution::swift_trustid'] %>
+    chunksize: <%= scope['docker_distribution::swift_chunksize'] %>
+<% end -%>
+  delete:
+    enabled: <%= scope['docker_distribution::storage_delete'] %>
+<% unless scope['docker_distribution::storage_redirect'].nil? then -%>
+  redirect:
+    disable: <%= scope['docker_distribution::storage_redirect'] %>
+<% end -%>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::storage_cache_blobdescriptor']) -%>
+  cache:
+    blobdescriptor: <%= scope['docker_distribution::storage_cache_blobdescriptor'] %>
+<% end -%>
+
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::auth_type']) -%>
+auth:
+<% if scope['docker_distribution::auth_type'] == 'token' then -%>
+  token:
+    realm: <%= scope['docker_distribution::auth_token_realm'] %>
+    service: <%= scope['docker_distribution::auth_token_service'] %>
+    issuer: <%= scope['docker_distribution::auth_token_issuer'] %>
+    rootcertbundle: <%= scope['docker_distribution::auth_token_rootcertbundle'] %>
+<% elsif scope['docker_distribution::auth_type'] == 'htpasswd' then -%>
+  htpasswd:
+    realm: <%= scope['docker_distribution::auth_htpasswd_realm'] %>
+    path: <%= scope['docker_distribution::auth_htpasswd_path'] %>
+<% end -%>
+<% end -%>
+
+http:
+  addr: <%= scope['docker_distribution::http_addr'] %>
+  net: <%= scope['docker_distribution::http_net'] %>
+  prefix: <%= scope['docker_distribution::http_prefix'] %>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_host']) -%>
+  host: <%= scope['docker_distribution::http_host'] %>
+<% end -%>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_secret']) -%>
+  secret: <%= scope['docker_distribution::http_secret'] %>
+<% end -%>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_tls']) -%>
+  tls:
+    certificate: <%= scope['docker_distribution::http_tls_certificate'] %>
+    key: <%= scope['docker_distribution::http_tls_key'] %>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_tls_clientcas']) -%>
+    clientcas:
+<% Array(scope['docker_distribution::http_tls_clientcas']).sort.each do |value| -%>
+      - <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_debug_addr']) -%>
+  debug:
+    addr: <%= scope['docker_distribution::http_debug_addr'] %>
+<% end -%>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::http_headers']) -%>
+  headers:
+<% scope['docker_distribution::http_headers'].sort.each do |key,value| -%>
+    <%= key -%>: <%= value %>
+<% end -%>
+<% end -%>
+
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::notifications_url']) -%>
+notifications:
+  endpoints:
+    - name: <%= scope['docker_distribution::notifications_name'] %>
+      disabled: <%= scope['docker_distribution::notifications_disabled'] %>
+      url: <%= scope['docker_distribution::notifications_url'] %>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::notifications_headers']) -%>
+      headers: <%= scope['docker_distribution::notifications_headers'] %>
+<% end -%>
+      timeout: <%= scope['docker_distribution::notifications_timeout'] %>
+      threshold: <%= scope['docker_distribution::notifications_threshold'] %>
+      backoff: <%= scope['docker_distribution::notifications_backoff'] %>
+<% end -%>
+
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::redis_addr']) -%>
+redis:
+  addr: <%= scope['docker_distribution::redis_addr'] %>
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::redis_password']) -%>
+  password: <%= scope['docker_distribution::redis_password'] %>
+<% end -%>
+  db: <%= scope['docker_distribution::redis_db'] %>
+  dialtimeout: <%= scope['docker_distribution::redis_dialtimeout'] %>
+  readtimeout: <%= scope['docker_distribution::redis_readtimeout'] %>
+  writetimeout: <%= scope['docker_distribution::redis_writetimeout'] %>
+  pool:
+    maxidle: <%= scope['docker_distribution::redis_pool_maxidle'] %>
+    maxactive: <%= scope['docker_distribution::redis_pool_maxactive'] %>
+    idletimeout: <%= scope['docker_distribution::redis_pool_idletimeout'] %>
+<% end -%>
+
+<% unless [nil, :undefined, :undef, ''].include?(scope['docker_distribution::proxy_remoteurl']) -%>
+proxy:
+  remoteurl: <%= scope['docker_distribution::proxy_remoteurl'] %>
+<% unless ([nil, :undefined, :undef, ''].include?(scope['docker_distribution::proxy_username']) &&
+  [nil, :undefined, :undef, ''].include?(scope['docker_distribution::proxy_password'])) -%>
+  username: <%= scope['docker_distribution::proxy_username'] %>
+  password: <%= scope['docker_distribution::proxy_password'] %>
+<% end -%>
+<% end -%>

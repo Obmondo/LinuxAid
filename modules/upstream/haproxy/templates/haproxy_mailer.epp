@@ -1,0 +1,3 @@
+<% zip(Array($ipaddresses.flatten), Array($server_names.flatten)).each |$values| { -%>
+  mailer <%= $values[1] %> <%= $values[0] %>:<%= $port %>
+<% } -%>

@@ -1,0 +1,4 @@
+---
+
+profile::puppet::package_version_suffix: '-1bionic'
+profile::logging::logrotate::__scheduling_method: 'cron'

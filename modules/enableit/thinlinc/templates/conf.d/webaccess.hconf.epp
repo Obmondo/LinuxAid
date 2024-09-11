@@ -1,0 +1,36 @@
+#  -*- mode: conf-unix; -*-
+
+#
+# Hiveconf configuration file - ThinLinc webaccess service
+#
+[/webaccess]
+
+# Path to the SSL/TLS certificate and corresponding private key.
+# Both must be in PEM format. Required certificate chains should be
+# included in the certificate file.
+cert=<%= $thinlinc::webaccess::cert %>
+certkey=<%= $thinlinc::webaccess::cert_key %>
+
+# The url to the login page.
+# Example: https://thinlinc.example.com:300/
+login_page=<%= $thinlinc::webaccess::login_page %>
+
+# The port on which to run the webserver
+listen_port=<%= $thinlinc::webaccess::listen_port %>
+
+# This parameter controls the order and availability of TLS ciphers
+# and handshake options for GnuTLS, also called a GnuTLS priority
+# string.
+gnutls_priority=<%= $thinlinc::webaccess::gnutls_priority %>
+
+[/webaccess/logging]
+log_to_file=<%= $thinlinc::webaccess::log_to_file.bool %>
+logfile=<%= $thinlinc::webaccess::log_dir %>/webaccess.log
+
+log_to_syslog=<%= $thinlinc::webaccess::log_to_syslog.bool %>
+syslog_facility=<%= $thinlinc::webaccess::syslog_facility %>
+syslog_socket=<%= $thinlinc::webaccess::syslog_socket %>
+syslog_host=<%= $thinlinc::webaccess::syslog_host %>
+
+# Default level of logging.
+defaultlevel=<%= $thinlinc::webaccess::default_log_level %>

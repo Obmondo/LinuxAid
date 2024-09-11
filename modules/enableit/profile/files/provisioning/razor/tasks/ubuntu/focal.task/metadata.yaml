@@ -1,0 +1,8 @@
+---
+
+os_version: focal
+label: Ubuntu 20.04 Focal Fossa
+description: Ubuntu 20.04 (Focal Fossa) installer
+boot_sequence:
+  1: boot_install
+  default: boot_local

@@ -1,0 +1,33 @@
+---
+rsyslog::confdir: /etc/rsyslog.d
+rsyslog::package_name: rsyslog
+rsyslog::package_version: installed
+rsyslog::manage_package: true
+rsyslog::manage_confdir: true
+rsyslog::purge_config_files: true
+rsyslog::override_default_config: true
+rsyslog::config_file: /etc/rsyslog.conf
+rsyslog::manage_service: true
+rsyslog::service_name: rsyslog
+rsyslog::service_status: running
+rsyslog::service_enabled: true
+rsyslog::external_service: false
+rsyslog::use_upstream_repo: false
+
+## This can be an array of extra "feature" packages to install for rsyslog
+rsyslog::feature_packages: []
+
+## Default object type priorities (can be overridden)
+rsyslog::global_config_priority: 10
+rsyslog::module_load_priority: 20
+rsyslog::input_priority: 30
+rsyslog::main_queue_priority: 40
+rsyslog::parser_priority: 45
+rsyslog::template_priority: 50
+rsyslog::filter_priority: 55
+rsyslog::action_priority: 60
+rsyslog::ruleset_priority: 65
+rsyslog::lookup_table_priority: 70
+rsyslog::legacy_config_priority: 80
+rsyslog::custom_priority: 90
+rsyslog::target_file: 50_rsyslog.conf

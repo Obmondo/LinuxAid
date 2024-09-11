@@ -1,0 +1,35 @@
+<%- |
+  Hash[String, Variant[String, Undef]] $settings = {}
+| -%>
+#
+# This file managed by Puppet - DO NOT EDIT
+#
+
+# Default settings for VNC servers started by the vncserver service
+# are parsed in the following order:
+#
+#  /etc/tigervnc/vncserver-config-defaults
+#  ~/.vnc/config
+#  /etc/tigervnc/vncserver-config-mandatory
+#
+# The settings in the default config can be changed in ~/.vnc/config
+# To see what settings your VNC server honors run, `vncconfig -list`
+# in your VNC session.
+#
+# Folks using the default start scripts will always get the options
+# set in /etc/tigervnc/vncserver-config-mandatory
+# However, nothing stops users from using their own start scripts
+# and bypassing it. User's *SHOULD NOT* do this as it will messup
+# their loginctl session accounting.
+#
+# See the following manpages for more details: vncserver(1) Xvnc(1)
+#
+<% $settings.keys.sort.each | $key | { -%>
+<% if $settings[$key] == nil { -%>
+<%= $key %>
+<% } elsif "${settings[$key]}" == '' { -%>
+<%= $key %>
+<% } else { -%>
+<%= $key %>=<%= $settings[$key] %>
+<% } -%>
+<% } -%>

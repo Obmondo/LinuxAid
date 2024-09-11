@@ -1,0 +1,16 @@
+---
+version: '3'
+
+services:
+  s3:
+    hostname: <%= $endpoint %>
+    image: <%= $image %>
+    volumes:
+      - <%= $data_dir %>:/usr/src/app/localData
+      - <%= $conf_dir %>:/usr/src/app/conf
+      - <%= $metadata_dir %>:/usr/src/app/localMetadata
+    environment:
+      - REMOTE_MANAGEMENT_DISABLE=1
+      - ENDPOINT=<%= $endpoint %>
+    ports:
+      - '127.0.0.1:8000:8000'

@@ -1,0 +1,162 @@
+---
+common::mail::maildrop_perms: 'o=rwx,g=wx'
+
+common::logging::log_dir_group: 'root'
+
+common::system::selinux::enable: true
+
+common::system::sshd::subsystems:
+  sftp:
+    '/usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO'
+
+common::network::service_name: 'network'
+common::network::ipaddress_package: 'rubygem-ipaddress'
+common::network::ipaddress_provider: 'zypper'
+
+common::software::oms_agent::__linux_azure_package: 'WALinuxAgent'
+common::software::oms_agent::__linux_azure_service: 'waagent'
+
+common::system::authentication::pam::auth_lines:
+  - - 10
+    - 'required      pam_env.so'
+  - - 20
+    - 'required      pam_faildelay.so delay=2000000'
+  - - 30
+    - '[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet'
+  - - 40
+    - '[default=ignore ignore=ignore success=ok] pam_localuser.so'
+  - - 50
+    - 'sufficient    pam_unix.so nullok try_first_pass'
+  - - 60
+    - 'requisite     pam_succeed_if.so uid >= 1000 quiet_success'
+  - - 70
+    - 'sufficient    pam_sss.so forward_pass'
+  - - 99
+    - 'required      pam_deny.so'
+
+
+common::system::authentication::pam::account_lines:
+  - - 10
+    - 'required      pam_unix.so'
+  - - 20
+    - 'sufficient    pam_localuser.so'
+  - - 30
+    - 'sufficient    pam_succeed_if.so uid < 1000 quiet'
+  - - 40
+    - '[default=bad success=ok user_unknown=ignore] pam_sss.so'
+  - - 99
+    - 'required      pam_permit.so'
+
+common::system::authentication::pam::password_lines:
+  - - 10
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
+  - - 20
+    - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+  - - 30
+    - 'sufficient    pam_sss.so use_authtok'
+  - - 99
+    - 'required      pam_deny.so'
+
+
+common::system::authentication::pam::session_lines:
+  - - 10
+    - 'optional      pam_keyinit.so revoke'
+  - - 20
+    - 'required      pam_limits.so'
+  - - 30
+    - 'optional      pam_systemd.so'
+  - - 50
+    - '[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+  - - 60
+    - 'required      pam_unix.so'
+  - - 99
+    - 'optional      pam_sss.so'
+
+common::system::authentication::pam::password_auth_lines:
+  - - 10
+    - 'required      pam_env.so'
+  - - 20
+    - 'required      pam_faildelay.so delay=2000000'
+  - - 30
+    - '[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet'
+  - - 40
+    - '[default=ignore ignore=ignore success=ok] pam_localuser.so'
+  - - 50
+    - 'sufficient    pam_unix.so nullok try_first_pass'
+  - - 60
+    - 'requisite     pam_succeed_if.so uid >= 1000 quiet_success'
+  - - 70
+    - 'sufficient    pam_sss.so forward_pass'
+  - - 99
+    - 'required      pam_deny.so'
+
+common::system::authentication::pam::sshd_auth_lines:
+  - - 10
+    - 'required      pam_sepermit.so'
+  - - 99
+    - 'include       common-auth'
+
+common::system::authentication::pam::sshd_account_lines:
+  - - 10
+    - 'required      pam_access.so listsep=,'
+  - - 30
+    - 'required      pam_nologin.so'
+  - - 99
+    - 'include       common-auth'
+
+common::system::authentication::pam::sshd_password_lines:
+  - - 10
+    - 'include       common-auth'
+
+common::system::authentication::pam::sshd_session_lines:
+  - - 10
+    - 'required      pam_selinux.so close'
+  - - 20
+    - 'required      pam_loginuid.so'
+  - - 30
+    - 'required      pam_selinux.so open env_params'
+  - - 40
+    - 'optional      pam_keyinit.so force revoke'
+  - - 99
+    - 'include       common-session'
+
+common::system::authentication::pam::password_account_lines:
+  - - 10
+    - 'required      pam_unix.so'
+  - - 20
+    - 'sufficient    pam_localuser.so'
+  - - 30
+    - 'sufficient    pam_succeed_if.so uid < 1000 quiet'
+  - - 40
+    - '[default=bad success=ok user_unknown=ignore] pam_sss.so'
+  - - 99
+    - 'required      pam_permit.so'
+
+common::system::authentication::pam::password_password_lines:
+  - - 20
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
+  - - 30
+    - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+  - - 40
+    - 'sufficient    pam_sss.so use_authtok'
+  - - 99
+    - 'required      pam_deny.so'
+
+common::system::authentication::pam::password_session_lines:
+  - - 10
+    - 'optional      pam_keyinit.so revoke'
+  - - 20
+    - 'required      pam_limits.so'
+  - - 30
+    - 'optional      pam_systemd.so'
+  - - 50
+    - '[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+  - - 60
+    - 'required      pam_unix.so'
+  - - 99
+    - 'optional      pam_sss.so'
+
+
+common::monitor::exporter::mtail::enable: false
+common::monitor::prom::env_file_path: '/etc/default'
+common::monitor::prom::usershell: '/usr/sbin/nologin'

@@ -1,0 +1,78 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          riemann-health
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:
+# Default-Stop:      0 1 6
+# Short-Description: Riemann health stats collector
+# chkconfig: - 80 15
+# Description: Riemann health stats collector
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+SVC_USER=<%= @health_user %>
+
+DAEMON=<%= @gem_path %>riemann-health
+NAME=riemann-health
+PID_FILE=${PIDFILE:-/var/run/${NAME}.pid}
+LOCK_FILE=${LOCKFILE:-/var/lock/subsys/${NAME}}
+NFILES=${NFILES:-32768}
+
+DAEMON_OPTS=""
+
+start() {
+    echo -n $"Starting ${NAME}: "
+    ulimit -n $NFILES
+    daemonize -u $SVC_USER -p $PID_FILE -l $LOCK_FILE $DAEMON $DAEMON_OPTS
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $LOCK_FILE
+    return $RETVAL
+}
+
+reload() {
+    echo -n $"Reloading ${NAME}: "
+    killproc -p ${PID_FILE} $DAEMON -1
+    RETVAL=$?
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping ${NAME}: "
+    killproc -p ${PID_FILE} -d 10 $DAEMON
+    RETVAL=$?
+    echo
+    [ $RETVAL = 0 ] && rm -f ${LOCK_FILE} ${PID_FILE}
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status -p ${PID_FILE} $DAEMON
+        RETVAL=$?
+        ;;
+    reload|force-reload)
+        reload
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        N=/etc/init.d/${NAME}
+        echo "Usage: $N {start|stop|status|restart|force-reload}" >&2
+        RETVAL=2
+        ;;
+esac
+
+exit $RETVAL

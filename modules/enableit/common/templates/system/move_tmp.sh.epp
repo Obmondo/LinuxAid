@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#We want to change the temp directory location to /local/tmp
+#so that whenever any simulations are run it uses /local/tmp instead of /tmp
+#since the size of /local is bigger.
+
+#This script creates /local/tmp when /local and / are different devices and
+#if both the devices are same we create symlink
+
+pathname=$(dirname "<%= $relocate_to %>")
+
+check_mountpoint () {
+	findmnt --noheadings --output=SOURCE --target="$1"
+}
+
+if [ -d "$pathname" ] && [ "$(check_mountpoint "$pathname")" != "$(check_mountpoint "/")" ]
+then
+    mkdir -p "<%= $relocate_to %>"
+elif [ ! -d "$pathname" ] || [ "$(check_mountpoint "$pathname")" == "$(check_mountpoint "/")" ]
+then
+    mkdir -p "$pathname"
+    chmod 1777 "$pathname"
+    ln -s /tmp "<%= $relocate_to %>"
+fi

@@ -1,0 +1,24 @@
+---
+name: Apache
+description: Apache setup
+
+parameters:
+  http:
+    name: HTTP
+    description: Whether you want to enable HTTP or not
+
+  https:
+    name: HTTPS
+    description: Whether you want to enable HTTPS or not.
+
+  manage_haproxy:
+    name: Manage haproxy
+    description: Whether you want to manage your own haproxy or not
+
+  ciphers:
+    name: Ciphers
+    description: Apache Ciphers suite
+
+  vhosts:
+    name: Virtual Hosts
+    description: Configures a default virtual host

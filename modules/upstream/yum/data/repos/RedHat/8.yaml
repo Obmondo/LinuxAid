@@ -1,0 +1,57 @@
+---
+# This file contains miscellaneous, non-distro repositories.
+yum::repos:
+  # EPEL
+  epel-modular:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - $basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-modular-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/epel-modular.repo'
+
+  epel-modular-debuginfo:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - $basearch - Debug"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-modular-debug-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-modular.repo'
+
+  epel-modular-source:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - $basearch - Source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-modular-source-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-modular.repo'
+
+  epel-testing-modular:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - Testing - $basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-modular-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/epel-testing-modular.repo'
+
+  epel-testing-modular-debuginfo:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - Testing -$basearch - Debug"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-modular-debug-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-testing-modular.repo'
+
+  epel-testing-modular-source:
+    descr: "Extra Packages for Enterprise Linux Modular $releasever - Testing -$basearch - Source"
+    mirrorlist: absent
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-modular-source-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-testing-modular.repo'

@@ -1,0 +1,26 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+#
+dir = <%= @dir %>
+<% if @audit_enabled -%>
+audit
+<% end -%>
+<% if @silent -%>
+silent
+<% end -%>
+<% if @no_log_info -%>
+no_log_info
+<% end -%>
+<% if @local_users_only -%>
+local_users_only
+<% end -%>
+deny = <%= @deny %>
+fail_interval = <%= @fail_interval %>
+unlock_time = <%= @unlock_time %>
+<% if @even_deny_root -%>
+even_deny_root
+<% end -%>
+root_unlock_time = <%= @root_unlock_time %>
+<% if @admin_group -%>
+admin_group = <%= @admin_group %>
+<% end -%>

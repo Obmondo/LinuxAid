@@ -1,0 +1,23 @@
+---
+
+extends: default
+
+ignore: |
+  # These files are typically managed by Puppet PDK or modulesync, so we ignore
+  # all of them
+  **/appveyor.yml
+  **/.fixtures.yml
+  **/.rubocop.yml
+  **/.travis.yml
+  modules/upstream
+
+rules:
+  line-length: disable
+  # SnakeYAML will write wrongly indented YAML, and there's no easy fix for it.
+  # See https://bitbucket.org/asomov/snakeyaml/issues/358/dump-with-block-setindicatorindent-2-makes
+  indentation:
+    ignore: |
+      modules/include/**
+# Local Variables:
+# mode: yaml
+# End:

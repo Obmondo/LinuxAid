@@ -1,0 +1,6 @@
+---
+samba::server::services:
+  - 'smbd'
+  - 'nmbd'
+
+samba::server::secretstdb: '/var/lib/samba/private/secrets.tdb'

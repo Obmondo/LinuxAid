@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [[ $USER != 'obmondo-admin' ]] && [[ $USER != 'root' ]]; then
+  exit 1
+fi
+
+certname='<%= $trusted['certname'] %>'
+environment='<%= $facts.dig('obmondo_customer', 'environment') %>'
+
+puppet_env=$( grep environment: <%= $facts['puppet_vardir'] %>/state/last_run_report.yaml \
+                | cut -d' ' -f 2 )
+
+if [ -z $puppet_env ]; then
+  puppet_env='unknown'
+fi
+
+fg_color=colour0
+case $environment in
+  prod|production)
+    fg_color=colour255
+    bg_color=colour1
+    ;;
+  test|testing)
+    bg_color=colour3
+    ;;
+  dev|development)
+    bg_color=colour4
+    ;;
+  *)
+    bg_color=colour6
+    ;;
+esac
+msg="#[fg=$fg_color,bg=$bg_color] ${certname}"
+
+if [[ $puppet_env != 'production' ]]; then
+  msg="${msg} #[fg=default,bg=colour164] (${puppet_env})"
+fi
+
+echo "${msg} #[fg=default]#[bg=default]"

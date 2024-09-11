@@ -1,0 +1,14 @@
+description "start and stop riemann"
+author "Gareth Rushgrove"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+<% if scope.function_versioncmp([@lsbmajdistrelease.to_s, '10']) == 1 then -%>
+setuid <%= @user %>
+<% end -%>
+
+respawn
+respawn limit 5 20
+
+exec /opt/riemann/bin/riemann <%= @config_file %>

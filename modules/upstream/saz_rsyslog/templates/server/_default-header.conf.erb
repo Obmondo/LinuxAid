@@ -1,0 +1,70 @@
+<% if scope.lookupvar('saz_rsyslog::server::enable_udp') -%>
+# Load UDP module
+$ModLoad imudp
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::enable_tcp') -%>
+# Load TCP module
+$ModLoad imtcp
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::enable_relp') -%>
+<% if (@rsyslog_version and (scope.function_versioncmp([@rsyslog_version, '6.3.6']) >= 0)) -%>
+# Load RELP module
+$ModLoad imrelp
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::log_templates') and ! scope.lookupvar('saz_rsyslog::server::log_templates').empty?-%>
+
+# Define custom logging templates
+<% scope.lookupvar('saz_rsyslog::server::log_templates').flatten.compact.each do |log_template| -%>
+$template <%= log_template['name'] %>,"<%= log_template['template'] %>"
+<% end -%>
+<% end -%>
+<% if scope.lookupvar('saz_rsyslog::server::log_filters') -%>
+
+# Define custom if/then log conditions
+<% scope.lookupvar('saz_rsyslog::server::log_filters').each do |log_filter| -%>
+if <%= log_filter['expression'] %> then <%= log_filter['action'] %>
+<% end -%>
+<% end -%>
+<% if scope.lookupvar('saz_rsyslog::server::actionfiletemplate') -%>
+
+# Using specified format for default logging format:
+$ActionFileDefaultTemplate <%= scope.lookupvar('saz_rsyslog::server::actionfiletemplate') %>
+<% else -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::high_precision_timestamps') == false -%>
+#
+# Use traditional timestamp format.
+#
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+<% else -%>
+#
+# Use high precision timestamp format.
+#
+$ActionFileDefaultTemplate RSYSLOG_FileFormat
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::ssl') -%>
+# Server side SSL.
+$DefaultNetstreamDriver gtls
+
+# Cert files.
+$DefaultNetstreamDriverCAFile <%= scope.lookupvar('saz_rsyslog::server::ssl_ca') %>
+$DefaultNetstreamDriverCertFile <%= scope.lookupvar('saz_rsyslog::server::ssl_cert') %>
+$DefaultNetstreamDriverKeyFile <%= scope.lookupvar('saz_rsyslog::server::ssl_key') %>
+
+$InputTCPServerStreamDriverMode 1
+$InputTCPServerStreamDriverAuthMode <%= scope.lookupvar('saz_rsyslog::server::ssl_auth_mode') %>
+<% if @ssl_permitted_peer -%>
+$ActionSendStreamDriverPermittedPeer <%= scope.lookupvar('saz_rsyslog::server::ssl_permitted_peer') %>
+<% end -%>
+<% end -%>
+
+<% if scope.lookupvar('saz_rsyslog::server::relay_server') == false -%>
+# Switch to remote ruleset
+$RuleSet remote
+<% end -%>

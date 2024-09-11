@@ -1,0 +1,36 @@
+#  -*- mode: conf-unix; -*-
+#
+# Hiveconf configuration file - ThinLinc application server groups
+#
+
+#
+# Windows application servers
+#
+[/appservergroups/rdp/default]
+# A space-separated list of RDP server host names
+servers=wts1.example.com
+description=Sales department Windows Server with Remote Desktop Services
+domain=mydomain
+# RDP keyboard layout (leave empty for auto)
+keyboard_layout=
+# Sound system
+sound=auto
+# Extra rdesktop arguments, like -n <name>
+rdesktop_args=
+# True if printers should automatically be redirected
+redirect_printers=true
+# Improved novell compatibility
+novell=false
+
+#
+# UNIX application servers
+#
+[/appservergroups/x11/default]
+# A space-separated list of external UNIX servers. Note that load balancing is
+# not currently supported, so only the first server will be used.
+servers=unixserver1.example.com
+description=IT department development server
+# True if X11 traffic should be encrypted via SSH
+use_ssh_encryption=true
+# The path to xauth on the remote server
+xauth_path=/usr/bin/X11/xauth

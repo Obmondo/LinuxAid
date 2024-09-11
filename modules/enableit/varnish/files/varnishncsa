@@ -1,0 +1,1 @@
+DAEMON_OPTS="-F '%t %r %s %b %{Varnish:time_firstbyte}x %{Varnish:handling}x %{X-Forwarded-For}i' -a -w $logfile -D -P $pidfile"

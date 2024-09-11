@@ -1,0 +1,35 @@
+---
+require: rubocop-rspec
+AllCops:
+  Exclude:
+    - bin/*
+    - ".vendor/**/*"
+    - "**/Gemfile"
+    - spec/fixtures/**/*
+    - mdtoc.rb
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+Layout/HashAlignment:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/RegexpLiteral:
+  Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/DescribeClass:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/ImplicitSubject:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false

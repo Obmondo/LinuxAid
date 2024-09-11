@@ -1,0 +1,37 @@
+---
+".gitlab-ci.yml":
+  delete: true
+".rubocop.yml":
+  include_todos: true
+appveyor.yml:
+  delete: true
+
+Gemfile:
+  optional:
+    ":development":
+    - gem: ruby-pwsh
+    - gem: mocha
+      version: '< 1.2.0'
+    ":system_tests":
+    - gem: rspec-retry
+Rakefile:
+  changelog_since_tag: 3.5.0
+spec/spec_helper.rb:
+  unmanaged: true
+  coverage_report: true
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
+.github/workflows/auto_release.yml:
+  unmanaged: false
+.github/workflows/ci.yml:
+  unmanaged: true
+.github/workflows/nightly.yml:
+  unmanaged: true
+.github/workflows/release.yml:
+  unmanaged: false
+.travis.yml:
+  delete: true
+.devcontainer/Dockerfile:
+  unmanaged: true

@@ -1,0 +1,40 @@
+---
+lookup_options:
+  monitor::system::service::down::blacklist:
+    merge: unique
+
+monitor::system::disk::exclude_type:
+  - 'cgroup'
+  - 'cifs'
+  - 'configfs'
+  - 'devfs'
+  - 'devtmpfs'
+  - 'fuse.gvfsd-fuse'
+  - 'fuse'
+  - 'iso9660'
+  - 'mtmfs'
+  - 'nfs'
+  - 'nfs4'
+  - 'none'
+  - 'nsfs'
+  - 'overlay'
+  - 'proc'
+  - 'squashfs'
+  - 'sysfs'
+  - 'tmpfs'
+  - 'tracefs'
+  - 'zfs'
+monitor::system::disk::partitions_excluded:
+  - '/proc'
+  - '/sys'
+  - '/dev'
+  - '/run'
+  - '/var/run/user'
+
+monitor::system::service::down::blacklist:
+  - 'run-puppet.service'
+
+monitor::service::enable: true
+
+monitor::noop_value: false
+monitor::domains::enable: true

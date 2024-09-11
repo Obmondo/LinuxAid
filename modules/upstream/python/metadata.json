@@ -1,0 +1,81 @@
+{
+  "name": "puppet-python",
+  "version": "6.1.0",
+  "author": "Vox Pupuli",
+  "summary": "Python Module",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-python.git",
+  "project_page": "https://github.com/voxpupuli/puppet-python",
+  "issues_url": "https://github.com/voxpupuli/puppet-python/issues",
+  "description": "Puppet module for Python",
+  "tags": [
+    "python",
+    "pip",
+    "virtualenv",
+    "gunicorn"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "AIX",
+      "operatingsystemrelease": [
+        "6100-09-11-1810",
+        "7100-05-03-1837"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "13"
+      ]
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11.3"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.1.0 < 8.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.19.0 < 8.0.0"
+    },
+    {
+      "name": "puppet/epel",
+      "version_requirement": ">= 3.0.0 < 4.0.0"
+    }
+  ]
+}

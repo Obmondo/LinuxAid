@@ -1,0 +1,43 @@
+{
+  "name": "cirrax-borgbackup",
+  "version": "1.1.4",
+  "author": "Cirrax GmbH",
+  "license": "GPL-3.0",
+  "summary": "A module to configure borgbackup",
+  "source": "https://github.com/cirrax/puppet-borgbackup",
+  "project_page": "https://github.com/cirrax/puppet-borgbackup",
+  "issues_url": "https://github.com/cirrax/puppet-borgbackup/issues",
+  "tags": [
+    "borg",
+    "backup",
+    "restore"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=4.0.0 < 6.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 3.2.0 < 5.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 2.0.0 < 3.0.0"
+    }
+  ]
+}

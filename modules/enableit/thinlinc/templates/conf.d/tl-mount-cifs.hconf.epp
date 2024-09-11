@@ -1,0 +1,4 @@
+#  -*- mode: conf-unix; -*-
+
+[/utils/tl-mount-cifs]
+cifsmount_args=-o dir_mode=0700

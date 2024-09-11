@@ -1,0 +1,31 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  server-el8:
+    roles:
+      - server
+      - default
+      - master
+      - simp_server
+    platform:   el-8-x86_64
+    box:        generic/rhel8
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
+        gpgkeys:
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+
+CONFIG:
+  validate: false
+  log_level: verbose
+  type: aio
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>
+

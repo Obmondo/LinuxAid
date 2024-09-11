@@ -1,0 +1,7 @@
+---
+name: Ruby
+description: Ruby web server
+
+parameters:
+  variant:
+    name: Variant

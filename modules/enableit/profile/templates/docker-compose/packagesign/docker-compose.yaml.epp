@@ -1,0 +1,35 @@
+services:
+  <% if $provider != "gitea" { %>
+  server:
+    image:  <%= $registry_path %>/packagesign-server:<%= $packagesign_tag %>
+    ports:
+      - 10090:8080
+    depends_on:
+      - script
+    environment:
+      - TOKEN=${TOKEN}
+      - BASEDIR=/var/lib/packagesign/repos/incoming
+      - BASEURL=<%= $baseurl %>
+    volumes:
+      - /dev/log:/dev/log
+      <%- $volumes.each |$vol| { %>
+      - <%= $vol -%>
+      <% } %>
+  <% } -%>
+
+  script:
+    image: <%= $registry_path %>/packagesign-script:<%= $packagesign_tag %>
+    environment:
+      - PASS=${PASS}
+    volumes:
+      - /dev/log:/dev/log
+      <%- $volumes.each |$vol| { %>
+      - <%= $vol -%>
+      <% } %>
+
+  nginx:
+    image: <%= $registry_path %>/nginx:<%= $nginx_tag %>
+    ports:
+      - 127.0.0.1:10080:80
+    volumes:
+      - <%= $basedir -%>:/var/cache/packagesign

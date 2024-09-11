@@ -1,0 +1,29 @@
+# BEGIN ddns (Dynamic DNS Updates)
+<% if @dnsupdatekey -%>
+# ----------
+# Dynamic DNS Updates
+# ----------
+ddns-updates on;
+ddns-update-style <%= @ddns_update_style %>;
+update-static-leases <%= @ddns_update_static %>;
+update-optimization <%= @ddns_update_optimize %>;
+use-host-decl-names on;
+<%= @ddns_client_updates %> client-updates;
+
+# Key from bind
+include "<%= @dnsupdatekey %>";
+<% @dnsdomain_real.each do |dom| -%>
+zone <%= dom %>. {
+<% if @nameservers && !@nameservers.empty? -%>
+  primary <%= @nameservers.first %>;
+<% end -%>
+<% if @nameservers_ipv6 && !@nameservers_ipv6.empty? -%>
+  primary6 <%= @nameservers_ipv6.first %>;
+<% end -%>
+  key <%= @_dnskeyname %>;
+}
+<% end -%>
+<% else -%>
+ddns-update-style none;
+<% end -%>
+# END ddns (Dynamic DNS Updates)

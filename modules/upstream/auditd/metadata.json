@@ -1,0 +1,69 @@
+{
+  "name": "simp-auditd",
+  "version": "8.5.0",
+  "author": "SIMP Team",
+  "summary": "A SIMP puppet module for managing auditd and audispd",
+  "license": "Apache-2.0",
+  "source": "https://github.com/simp/pupmod-simp-auditd",
+  "project_page": "https://github.com/simp/pupmod-simp-auditd",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "auditd",
+    "audispd"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 < 7.0.0"
+    },
+    {
+      "name": "simp/simplib",
+      "version_requirement": ">= 3.6.0 < 5.0.0"
+    },
+    {
+      "name": "herculesteam/augeasproviders_grub",
+      "version_requirement": ">= 2.4.0 < 4.0.0"
+    }
+  ],
+  "simp": {
+    "optional_dependencies": [
+      {
+        "name": "simp/rsyslog",
+        "version_requirement": ">= 7.2.1 < 8.0.0"
+      }
+    ]
+  },
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.0.0 < 7.0.0"
+    }
+  ]
+}

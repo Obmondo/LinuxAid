@@ -1,0 +1,9 @@
+---
+fixtures:
+  repositories:
+    stdlib:
+      repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    nsswitch:
+      repo: 'https://github.com/voxpupuli/puppet-nsswitch.git'
+  symlinks:
+    pam: "#{source_dir}"

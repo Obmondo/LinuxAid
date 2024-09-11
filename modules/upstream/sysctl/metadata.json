@@ -1,0 +1,41 @@
+{
+  "name": "tpdownes-sysctl",
+  "version": "2.0.1",
+  "author": "Matthias Saou w/Puppet 4 modifications by Thomas Downes",
+  "license": "Apache-2.0",
+  "summary": "Puppet 4 module for managing kernel settings with sysctl",
+  "source": "git://github.com/tpdownes/puppet-sysctl.git",
+  "project_page": "https://github.com/tpdownes/puppet-sysctl",
+  "issues_url": "https://github.com/tpdownes/puppet-sysctl/issues",
+  "tags": [ "sysctl", "os" ],
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "RedHat",
+    "operatingsystemrelease": [ "5", "6", "7" ]
+    },
+    {
+    "operatingsystem": "CentOS",
+    "operatingsystemrelease": [ "5", "6", "7" ]
+    },
+    {
+    "operatingsystem": "Debian",
+    "operatingsystemrelease": [ "6", "7", "8" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "12", "14" ]
+    }
+  ],
+  "requirements": [
+    {
+    "name": "pe",
+    "version_requirement": "4.x"
+    },
+    {
+    "name": "puppet",
+    "version_requirement": "4.x"
+    }
+  ],
+  "dependencies": [],
+  "data_provider": "hiera"
+}

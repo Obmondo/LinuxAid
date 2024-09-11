@@ -1,0 +1,23 @@
+# -*- mode: sh; -*-
+
+source_if_exists() {
+  if [ -f "$1" ]; then
+    . "$1"
+  fi
+}
+
+export GUIX_PROFILE_BASE="/var/guix/profiles/per-user"
+export GUIX_PROFILE="${GUIX_PROFILE_BASE}/$USER/guix-profile"
+export GUIX_ROOT_PROFILE="${GUIX_PROFILE_BASE}/root/guix-profile"
+export GUIX_DAEMON_SOCKET="<%= $daemon_socket %>"
+
+if [ -z "$GUIX_LOCPATH" ]; then
+  export GUIX_LOCPATH="${GUIX_PROFILE}/lib/locale"
+
+  # default to locales of the root user if own user locpath doesn't exist
+  test -d "$GUIX_LOCPATH" || \
+    export GUIX_LOCPATH="${GUIX_ROOT_PROFILE}/lib/locale"
+fi
+
+source_if_exists "${GUIX_PROFILE}/etc/profile"
+source_if_exists "${GUIX_ROOT_PROFILE}/etc/bash_completion.d/guix"

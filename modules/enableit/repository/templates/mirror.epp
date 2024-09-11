@@ -1,0 +1,18 @@
+# -*- mode: sh; -*-
+# Identifier
+IDENTIFIER='<%= $identifier %>'
+# File destination
+DESTINATION_DIR='<%= $destination_dir %>'
+# Complete mirror URL
+MIRROR_URL='<%= $mirror_url %>'
+# Package manager, e.g. deb or rpm
+PACKAGE_FORMAT='<%= $package_format %>'
+<% if $package_format == 'deb' { -%>
+SYNC_TYPE='<%= $sync_type %>'
+<% } -%>
+EXCLUDE=(<%= $exclude.join(' ') %>)
+SECTIONS='<%= $sections.join(',') %>'
+ARCHITECTURES='<%= $architectures.join(',') %>'
+DISTS='<%= $dists.join(',') %>'
+JOB_USER='<%= $user %>'
+SYNC='<%= $sync %>'

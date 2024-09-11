@@ -1,0 +1,34 @@
+{
+  "name": "obmondo-lxd",
+  "version": "0.1.0",
+  "author": "EnableIT ApS",
+  "summary": "LXD provider",
+  "license": "GPL-3.0",
+  "source": "https://gitlab.enableit.dk/obmondo/puppet-lxd",
+  "issues": "https://gitlab.enableit.dk/obmondo/puppet-lxd/issues",
+  "dependencies": [
+    {
+      "name": "enableit/eit_types"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">= 1.5.x"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.x"
+    },
+    {
+      "name": "enableit/package"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "17.10"
+      ]
+    }
+  ]
+}

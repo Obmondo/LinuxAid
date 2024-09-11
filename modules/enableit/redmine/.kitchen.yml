@@ -1,0 +1,20 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: puppet_apply
+  manifests_path: manifests
+  modules_path: modules
+  hiera_data_path: hiera
+
+platforms:
+  - name: ubuntu-14.04
+  - name: ubuntu-12.04
+  - name: centos-6.6
+  - name: debian-7.7
+
+suites:
+  - name: default
+    provisioner:
+      manifest: test_site.pp

@@ -1,0 +1,12 @@
+# MANAGED BY PUPPET; CAVEAT LECTOR
+
+[Unit]
+Description=Start or stop the ThinLinc Web Administration
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+Restart=always
+TimeoutSec=30s
+ExecStart=<%= $exec_start %>

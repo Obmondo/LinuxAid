@@ -1,0 +1,416 @@
+# THIS FILE IS MANAGED BY PUPPET.
+# ANY MODIFICATIONS WILL BE OVERWRITTEN!!!
+
+<% if @one_process_model != nil -%>
+one_process_model=<%= scope.call_function('vsftpd::bool2vsftpd', [@one_process_model]) %>
+<% end -%>
+<% if @run_as_launching_user != nil -%>
+run_as_launching_user=<%= scope.call_function('vsftpd::bool2vsftpd', [@run_as_launching_user]) %>
+<% end -%>
+<% if @virtual_use_local_privs != nil -%>
+virtual_use_local_privs=<%= scope.call_function('vsftpd::bool2vsftpd', [@virtual_use_local_privs]) %>
+<% end -%>
+<% if @session_support != nil -%>
+session_support=<%= scope.call_function('vsftpd::bool2vsftpd', [@session_support]) %>
+<% end -%>
+<% if @setproctitle_enable != nil -%>
+setproctitle_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@setproctitle_enable]) %>
+<% end -%>
+<% if @background != nil -%>
+background=<%= scope.call_function('vsftpd::bool2vsftpd', [@background]) %>
+<% end -%>
+<% if @address_space_limit != nil -%>
+address_space_limit=<%= @address_space_limit %>
+<% end -%>
+<% if @trans_chunk_size != nil -%>
+trans_chunk_size=<%= @trans_chunk_size %>
+<% end -%>
+<% if @check_shell != nil -%>
+check_shell=<%= scope.call_function('vsftpd::bool2vsftpd', [@check_shell]) %>
+<% end -%>
+<% if @force_dot_files != nil -%>
+force_dot_files=<%= scope.call_function('vsftpd::bool2vsftpd', [@force_dot_files]) %>
+<% end -%>
+<% if @ls_recurse_enable != nil -%>
+ls_recurse_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@ls_recurse_enable]) %>
+<% end -%>
+<% if @mdtm_write != nil -%>
+mdtm_write=<%= scope.call_function('vsftpd::bool2vsftpd', [@mdtm_write]) %>
+<% end -%>
+<% if @deny_email_enable != nil -%>
+deny_email_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@deny_email_enable]) %>
+<% end -%>
+<% if @secure_email_list_enable != nil -%>
+secure_email_list_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@secure_email_list_enable]) %>
+<% end -%>
+<% if @banned_email_file != nil -%>
+banned_email_file=<%= @banned_email_file %>
+<% end -%>
+<% if @email_password_file != nil -%>
+email_password_file=<%= @email_password_file %>
+<% end -%>
+<% if @dirlist_enable != nil -%>
+dirlist_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@dirlist_enable]) %>
+<% end -%>
+<% if @local_enable != nil -%>
+local_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@local_enable]) %>
+<% end -%>
+<% if @local_root != nil -%>
+local_root=<%= @local_root %>
+<% end -%>
+<% if @user_sub_token != nil -%>
+user_sub_token=<%= @user_sub_token %>
+<% end -%>
+<% if @chmod_enable != nil -%>
+chmod_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@chmod_enable]) %>
+<% end -%>
+<% if @download_enable != nil -%>
+download_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@download_enable]) %>
+<% end -%>
+<% if @write_enable != nil -%>
+write_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@write_enable]) %>
+<% end -%>
+<% if @max_login_fails != nil -%>
+max_login_fails=<%= @max_login_fails %>
+<% end -%>
+<% if @delay_failed_login != nil -%>
+delay_failed_login=<%= @delay_failed_login %>
+<% end -%>
+<% if @delay_successful_login != nil -%>
+delay_successful_login=<%= @delay_successful_login %>
+<% end -%>
+<% if @port_enable != nil -%>
+port_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@port_enable]) %>
+<% end -%>
+<% if @port_promiscuous != nil -%>
+port_promiscuous=<%= scope.call_function('vsftpd::bool2vsftpd', [@port_promiscuous]) %>
+<% end -%>
+<% if @local_umask != nil -%>
+local_umask=<%= @local_umask %>
+<% end -%>
+<% if @local_max_rate != nil -%>
+local_max_rate=<%= @local_max_rate %>
+<% end -%>
+<% if @anonymous_enable != nil -%>
+anonymous_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@anonymous_enable]) %>
+<% end -%>
+<% if @anon_mkdir_write_enable != nil -%>
+anon_mkdir_write_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@anon_mkdir_write_enable]) %>
+<% end -%>
+<% if @anon_other_write_enable != nil -%>
+anon_other_write_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@anon_other_write_enable]) %>
+<% end -%>
+<% if @anon_upload_enable != nil -%>
+anon_upload_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@anon_upload_enable]) %>
+<% end -%>
+<% if @anon_world_readable_only != nil -%>
+anon_world_readable_only=<%= scope.call_function('vsftpd::bool2vsftpd', [@anon_world_readable_only]) %>
+<% end -%>
+<% if @anon_umask != nil -%>
+anon_umask=<%= @anon_umask %>
+<% end -%>
+<% if @anon_root != nil -%>
+anon_root=<%= @anon_root %>
+<% end -%>
+<% if @anon_max_rate != nil -%>
+anon_max_rate=<%= @anon_max_rate %>
+<% end -%>
+<% if @no_anon_password != nil -%>
+no_anon_password=<%= scope.call_function('vsftpd::bool2vsftpd', [@no_anon_password]) %>
+<% end -%>
+<% if @ftp_username != nil -%>
+ftp_username=<%= @ftp_username %>
+<% end -%>
+<% if @guest_enable != nil -%>
+guest_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@guest_enable]) %>
+<% end -%>
+<% if @guest_username != nil -%>
+guest_username=<%= @guest_username %>
+<% end -%>
+<% if @dirmessage_enable != nil -%>
+dirmessage_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@dirmessage_enable]) %>
+<% end -%>
+<% if @message_file != nil -%>
+message_file=<%= @message_file %>
+<% end -%>
+<% if @connect_from_port_20 != nil -%>
+connect_from_port_20=<%= scope.call_function('vsftpd::bool2vsftpd', [@connect_from_port_20]) %>
+<% end -%>
+<% if @chown_uploads != nil -%>
+chown_uploads=<%= scope.call_function('vsftpd::bool2vsftpd', [@chown_uploads]) %>
+<% end -%>
+<% if @chown_username != nil -%>
+chown_username=<%= @chown_username %>
+<% end -%>
+<% if @chown_upload_mode != nil -%>
+chown_upload_mode=<%= @chown_upload_mode %>
+<% end -%>
+<% if @delete_failed_uploads != nil -%>
+delete_failed_uploads=<%= scope.call_function('vsftpd::bool2vsftpd', [@delete_failed_uploads]) %>
+<% end -%>
+<% if @lock_upload_files != nil -%>
+lock_upload_files=<%= scope.call_function('vsftpd::bool2vsftpd', [@lock_upload_files]) %>
+<% end -%>
+<% if @idle_session_timeout != nil -%>
+idle_session_timeout=<%= @idle_session_timeout %>
+<% end -%>
+<% if @data_connection_timeout != nil -%>
+data_connection_timeout=<%= @data_connection_timeout %>
+<% end -%>
+<% if @nopriv_user != nil -%>
+nopriv_user=<%= @nopriv_user %>
+<% end -%>
+<% if @async_abor_enable != nil -%>
+async_abor_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@async_abor_enable]) %>
+<% end -%>
+<% if @ascii_download_enable != nil -%>
+ascii_download_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@ascii_download_enable]) %>
+<% end -%>
+<% if @ascii_upload_enable != nil -%>
+ascii_upload_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@ascii_upload_enable]) %>
+<% end -%>
+<% if @ftpd_banner != nil -%>
+ftpd_banner=<%= @ftpd_banner %>
+<% end -%>
+<% if @banner_file != nil -%>
+banner_file=<%= @banner_file %>
+<% end -%>
+<% if @file_open_mode != nil -%>
+file_open_mode=<%= @file_open_mode %>
+<% end -%>
+<% if @ftp_data_port != nil -%>
+ftp_data_port=<%= @ftp_data_port %>
+<% end -%>
+<% if @listen != nil -%>
+listen=<%= scope.call_function('vsftpd::bool2vsftpd', [@listen]) %>
+<% end -%>
+<% if @listen_ipv6 != nil -%>
+listen_ipv6=<%= scope.call_function('vsftpd::bool2vsftpd', [@listen_ipv6]) %>
+<% end -%>
+<% if @listen_address != nil -%>
+listen_address=<%= @listen_address %>
+<% end -%>
+<% if @listen_address6 != nil -%>
+listen_address6=<%= @listen_address6 %>
+<% end -%>
+<% if @listen_port != nil -%>
+listen_port=<%= @listen_port %>
+<% end -%>
+<% if @pam_service_name != nil -%>
+pam_service_name=<%= @pam_service_name %>
+<% end -%>
+<% if @userlist_deny != nil -%>
+userlist_deny=<%= scope.call_function('vsftpd::bool2vsftpd', [@userlist_deny]) %>
+<% end -%>
+<% if @userlist_enable != nil -%>
+userlist_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@userlist_enable]) %>
+<% end -%>
+<% if @userlist_file != nil -%>
+userlist_file=<%= @userlist_file %>
+<% end -%>
+<% if @user_config_dir != nil -%>
+user_config_dir=<%= @user_config_dir %>
+<% end -%>
+<% if @tcp_wrappers != nil -%>
+tcp_wrappers=<%= scope.call_function('vsftpd::bool2vsftpd', [@tcp_wrappers]) %>
+<% end -%>
+<% if @use_localtime != nil -%>
+use_localtime=<%= scope.call_function('vsftpd::bool2vsftpd', [@use_localtime]) %>
+<% end -%>
+<% if @use_sendfile != nil -%>
+use_sendfile=<%= scope.call_function('vsftpd::bool2vsftpd', [@use_sendfile]) %>
+<% end -%>
+<% if @secure_chroot_dir != nil -%>
+secure_chroot_dir=<%= @secure_chroot_dir %>
+<% end -%>
+<% if @chroot_local_user != nil -%>
+chroot_local_user=<%= scope.call_function('vsftpd::bool2vsftpd', [@chroot_local_user]) %>
+<% end -%>
+<% if @passwd_chroot_enable != nil -%>
+passwd_chroot_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@passwd_chroot_enable]) %>
+<% end -%>
+<% if @chroot_list_enable != nil -%>
+chroot_list_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@chroot_list_enable]) %>
+<% end -%>
+<% if @chroot_list_file != nil -%>
+chroot_list_file=<%= @chroot_list_file %>
+<% end -%>
+<% if @allow_writeable_chroot != nil -%>
+allow_writeable_chroot=<%= scope.call_function('vsftpd::bool2vsftpd', [@allow_writeable_chroot]) %>
+<% end -%>
+<% if @allow_root_squashed_chroot != nil -%>
+allow_root_squashed_chroot=<%= scope.call_function('vsftpd::bool2vsftpd', [@allow_root_squashed_chroot]) %>
+<% end -%>
+<% if @cmds_allowed != nil -%>
+cmds_allowed=<%- @cmds_allowed.each_with_index do |cmd, index| -%>
+<%- if index == 0 -%>
+<%= cmd -%>
+<%- else -%>
+,<%= cmd -%>
+<%- end -%>
+<%- end -%>
+<%- end -%>
+<% if @cmds_denied != nil -%>
+cmds_denied=<%- @cmds_denied.each_with_index do |cmd, index| -%>
+<%- if index == 0 -%>
+<%= cmd -%>
+<%- else -%>
+,<%= cmd -%>
+<%- end -%>
+<%- end -%>
+<% end -%>
+<% if @deny_file != nil -%>
+deny_file={<%- @deny_file.each_with_index do |match, index| -%>
+<%- if index == 0 -%>
+<%= match -%>
+<%- else -%>
+,<%= match -%>
+<%- end -%>
+<%- end -%>
+}
+<% end -%>
+<% if @hide_file != nil -%>
+hide_file={<%- @hide_file.each_with_index do |match, index| -%>
+<%- if index == 0 -%>
+<%= match -%>
+<%- else -%>
+,<%= match -%>
+<%- end -%>
+<%- end -%>
+}
+<% end -%>
+<% if @hide_ids != nil -%>
+hide_ids=<%= scope.call_function('vsftpd::bool2vsftpd', [@hide_ids]) %>
+<% end -%>
+<% if @text_userdb_names != nil -%>
+text_userdb_names=<%= scope.call_function('vsftpd::bool2vsftpd', [@text_userdb_names]) %>
+<% end -%>
+<% if @tilde_user_enable != nil -%>
+tilde_user_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@tilde_user_enable]) %>
+<% end -%>
+<% if @syslog_enable != nil -%>
+syslog_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@syslog_enable]) %>
+<% end -%>
+<% if @dual_log_enable != nil -%>
+dual_log_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@dual_log_enable]) %>
+<% end -%>
+<% if @log_ftp_protocol != nil -%>
+log_ftp_protocol=<%= scope.call_function('vsftpd::bool2vsftpd', [@log_ftp_protocol]) %>
+<% end -%>
+<% if @no_log_lock != nil -%>
+no_log_lock=<%= scope.call_function('vsftpd::bool2vsftpd', [@no_log_lock]) %>
+<% end -%>
+<% if @vsftpd_log_file != nil -%>
+vsftpd_log_file=<%= @vsftpd_log_file %>
+<% end -%>
+<% if @xferlog_enable != nil -%>
+xferlog_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@xferlog_enable]) %>
+<% end -%>
+<% if @xferlog_file != nil -%>
+xferlog_file=<%= @xferlog_file %>
+<% end -%>
+<% if @xferlog_std_format != nil -%>
+xferlog_std_format=<%= scope.call_function('vsftpd::bool2vsftpd', [@xferlog_std_format]) %>
+<% end -%>
+<% if @max_clients != nil -%>
+max_clients=<%= @max_clients %>
+<% end -%>
+<% if @max_per_ip != nil -%>
+max_per_ip=<%= @max_per_ip %>
+<% end -%>
+<% if @pasv_enable != nil -%>
+pasv_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@pasv_enable]) %>
+<% end -%>
+<% if @pasv_addr_resolve != nil -%>
+pasv_addr_resolve=<%= scope.call_function('vsftpd::bool2vsftpd', [@pasv_addr_resolve]) %>
+<% end -%>
+<% if @pasv_address != nil -%>
+pasv_address=<%= @pasv_address %>
+<% end -%>
+<% if @pasv_promiscuous != nil -%>
+pasv_promiscuous=<%= scope.call_function('vsftpd::bool2vsftpd', [@pasv_promiscuous]) %>
+<% end -%>
+<% if @pasv_min_port != nil -%>
+pasv_min_port=<%= @pasv_min_port %>
+<% end -%>
+<% if @pasv_max_port != nil -%>
+pasv_max_port=<%= @pasv_max_port %>
+<% end -%>
+<% if @accept_timeout != nil -%>
+accept_timeout=<%= @accept_timeout %>
+<% end -%>
+<% if @connect_timeout != nil -%>
+connect_timeout=<%= @connect_timeout %>
+<% end -%>
+<% if @data_connect_timeout != nil -%>
+data_connect_timeout=<%= @data_connect_timeout %>
+<% end -%>
+<% if @ssl_enable != nil -%>
+ssl_enable=<%= scope.call_function('vsftpd::bool2vsftpd', [@ssl_enable]) %>
+<% end -%>
+<% if @ssl_ciphers != nil -%>
+ssl_ciphers=<%= @ssl_ciphers %>
+<% end -%>
+<% if @ssl_sslv2 != nil -%>
+ssl_sslv2=<%= scope.call_function('vsftpd::bool2vsftpd', [@ssl_sslv2]) %>
+<% end -%>
+<% if @ssl_sslv3 != nil -%>
+ssl_sslv3=<%= scope.call_function('vsftpd::bool2vsftpd', [@ssl_sslv3]) %>
+<% end -%>
+<% if @ssl_tlsv1 != nil -%>
+ssl_tlsv1=<%= scope.call_function('vsftpd::bool2vsftpd', [@ssl_tlsv1]) %>
+<% end -%>
+<% if @debug_ssl != nil -%>
+debug_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@debug_ssl]) %>
+<% end -%>
+<% if @allow_anon_ssl != nil -%>
+allow_anon_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@allow_anon_ssl]) %>
+<% end -%>
+<% if @force_anon_data_ssl != nil -%>
+force_anon_data_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@force_anon_data_ssl]) %>
+<% end -%>
+<% if @force_anon_logins_ssl != nil -%>
+force_anon_logins_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@force_anon_logins_ssl]) %>
+<% end -%>
+<% if @force_local_data_ssl != nil -%>
+force_local_data_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@force_local_data_ssl]) %>
+<% end -%>
+<% if @force_local_logins_ssl != nil -%>
+force_local_logins_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@force_local_logins_ssl]) %>
+<% end -%>
+<% if @implicit_ssl != nil -%>
+implicit_ssl=<%= scope.call_function('vsftpd::bool2vsftpd', [@implicit_ssl]) %>
+<% end -%>
+<% if @require_ssl_reuse != nil -%>
+require_ssl_reuse=<%= scope.call_function('vsftpd::bool2vsftpd', [@require_ssl_reuse]) %>
+<% end -%>
+<% if @strict_ssl_read_eof != nil -%>
+strict_ssl_read_eof=<%= scope.call_function('vsftpd::bool2vsftpd', [@strict_ssl_read_eof]) %>
+<% end -%>
+<% if @strict_ssl_write_shutdown != nil -%>
+strict_ssl_write_shutdown=<%= scope.call_function('vsftpd::bool2vsftpd', [@strict_ssl_write_shutdown]) %>
+<% end -%>
+<% if @require_cert != nil -%>
+require_cert=<%= scope.call_function('vsftpd::bool2vsftpd', [@require_cert]) %>
+<% end -%>
+<% if @validate_cert != nil -%>
+validate_cert=<%= scope.call_function('vsftpd::bool2vsftpd', [@validate_cert]) %>
+<% end -%>
+<% if @ssl_request_cert != nil -%>
+ssl_request_cert=<%= scope.call_function('vsftpd::bool2vsftpd', [@ssl_request_cert]) %>
+<% end -%>
+<% if @rsa_cert_file != nil -%>
+rsa_cert_file=<%= @rsa_cert_file %>
+<% end -%>
+<% if @rsa_private_key_file != nil -%>
+rsa_private_key_file=<%= @rsa_private_key_file %>
+<% end -%>
+<% if @dsa_cert_file != nil -%>
+dsa_cert_file=<%= @dsa_cert_file %>
+<% end -%>
+<% if @dsa_private_key_file != nil -%>
+dsa_private_key_file=<%= @dsa_private_key_file %>
+<% end -%>
+<% if @ca_certs_file != nil -%>
+ca_certs_file=<%= @ca_certs_file %>
+<% end -%>

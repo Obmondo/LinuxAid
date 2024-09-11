@@ -1,0 +1,95 @@
+# -*- mode: yaml; -*-
+# Time-stamp: <Fri 2019-02-01 16:02 svarrette>
+################################################################################
+# Complementary configuration for Vagrant
+# You can overwrite here the default settings defined in ../../Vagrantfile and
+# rework the SLURM configuration and VM deployed (i.e. the characteristics of
+# the virtual cluster deployed)
+
+#___________________________________________
+# Complete / re-define the default boxes below
+# Format:
+#   :<os><version>: <username>/<box> # see https://vagrantcloud.com
+# :boxes:
+#   :windows2012: 'opentable/win-2012r2-standard-amd64-nocm'
+#   :freebsd12:   'freebsd/FreeBSD-12.0-RELEASE'
+#   :centos7:     'centos/7',
+#   :debian8:     'debian/contrib-jessie64',
+#   :ubuntu14:    'ubuntu/trusty64'
+
+#_________________________________________________
+# Default settings (in particular number of nodes)
+# :defaults:
+#   :os: :centos7         # Default OS from the above box definition
+#   :ram: 512             # Default RAM
+#   :vcpus: 2             # Default number of virtual CPUs
+#   :vbguest_auto_update: 1  # check/update box guest additions
+#   :nnodes: 2            # Number of computing nodes to deploy in the cluster
+#
+#____________________
+# Network settings
+# :network:
+#   :domain: 'vagrant.dev'      # network domain to use
+#   :range: '10.10.1.0/24'      # IP range to use
+#
+#_______________________________________________________________________
+# Default setting for the simulated compute nodes of the virtual cluster
+# :nodes:
+#   :cpus: 2
+#   :sockets: 1
+#   :ram: 512
+#   :realmemory: 400       # this has to be reported to Slurm
+#   :cores_per_socket: 2
+#   :thread_per_core: 1
+#   :state: UNKNOWN
+#
+#_______________________________________________________________________
+# Main characteristics of the Slurm configuration (i.e. clustername and
+# partitions) which will be used to create the hiera config
+# hieradata/locals.yaml
+# :slurm:
+#   :clustername: thor
+#   #  Partition Format -- associated QOS will be named 'qos-<name>'
+#   # '<name>':
+#   #     :nodes: n           # Number of nodes
+#   #     :priority: n        # Job Scheduling Priority for the QOS
+#   #     :content: [...]     # content/flags config expected for the partition
+#   :partitions:
+#     DEFAULT:
+#       :content: 'State=UP AllowGroups=clusterusers AllowAccounts=ALL DisableRootJobs=YES OverSubscribe=NO'
+#     admin:
+#       :priority: 100
+#       :content: 'Hidden=YES DefaultTime=0-10:00:00 MaxTime=5-00:00:00 MaxNodes=UNLIMITED  AllowQos=qos-admin'
+#     interactive:
+#       :nodes: 1
+#       :priority: 20
+#       :content: 'DefaultTime=0-1:00:00  MaxTime=0-4:00:00  AllowQos=qos-besteffort,qos-interactive'
+#     batch:
+#       :nodes: 2
+#       :priority: 20
+#       :content: 'DefaultTime=0-2:00:00  MaxTime=5-00:00:00 MaxNodes=UNLIMITED Default=YES'
+#         AllowQos=qos-besteffort,qos-batch
+
+#_____________________________________________________________
+# VMs / Vagrant boxes to deploy (APART from the compute nodes)
+# Format:
+# <name>:
+#   :hostname: <hostname>
+#   :desc: <VM-description>
+#   :os: <os>
+#   :ram: <ram>
+#   :vcpus: <vcpus>
+#   :role: <role>
+#
+# :vms:
+#   slurm-master:
+#     :ram: 2048
+#     :vcpus: 2
+#     :desc: 'Slurm Controller #1 (primary)'
+#     :role: controller
+#   access:
+#     :hostname: access
+#     :ram: 1024
+#     :vcpus: 1
+#     :desc: Cluster frontend
+#     :role: login

@@ -1,0 +1,3 @@
+<% @keys.each do | key | -%>
+command="<% @env_vars.each do |key, val| -%>export <%= key %>=<%= val %>;<% end %><%= @borg_cmd %>",<%= @restricts.join(',') %> <%= key %>
+<% end -%>

@@ -1,0 +1,2 @@
+# Managed by Puppet; caveat emptor.
+%mount conf.d/*.hconf

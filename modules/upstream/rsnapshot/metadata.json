@@ -1,0 +1,38 @@
+{
+  "name": "loomsen-rsnapshot",
+  "version": "1.1.1",
+  "author": "loomsen",
+  "summary": "Configures rsnapshot.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/loomsen/puppet-rsnapshot",
+  "project_page": "https://github.com/loomsen/puppet-rsnapshot",
+  "issues_url": "https://github.com/loomsen/puppet-rsnapshot/issues",
+  "tags": [
+    "rsnapshot",
+    "backup",
+    "rsync"
+  ],
+  "dependencies": [
+    { "name": "puppetlabs-stdlib","version_requirement": ">= 1.0.0" },
+    { "name": "stahnma-epel","version_requirement": ">= 1.0.0" },
+    { "name": "puppetlabs-concat","version_requirement": ">= 2.0.0 < 3.0.0" }
+  ],
+  "operatingsystem_support": [
+    {
+    "operatingsystem":"CentOS",
+    "operatingsystemrelease":[ "5", "6", "7" ]
+    },
+    {
+    "operatingsystem":"Debian",
+    "operatingsystemrelease":[ "6", "7", "8" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "12.04", "10.04", "14.04" ]
+    },
+    {
+    "operatingsystem": "Fedora",
+    "operatingsystemrelease": [ "17", "18", "19", "20", "21", "22", "23", "24" ]
+    }
+  ]
+}

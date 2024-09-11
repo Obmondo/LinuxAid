@@ -1,0 +1,51 @@
+# File is managed by puppet
+
+<% # Common header across all templates -%>
+<%= scope.function_template(['rsyslog/server/_default-header.conf.erb']) %>
+
+<% if scope.lookupvar('saz_rsyslog::server::relay_server') == false -%>
+# Log files are stored in directories matching the hostname
+<% if scope.lookupvar('saz_rsyslog::server::enable_onefile') == false -%>
+
+# Templates
+$Template dynAuthLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>auth.log"
+$Template dynSyslog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>syslog"
+$Template dynCronLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>cron.log"
+$Template dynDaemonLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>daemon.log"
+$Template dynKernLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>kern.log"
+$Template dynUserLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>user.log"
+$Template dynMailLog,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>mail.log"
+$Template dynDebug,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>debug"
+$Template dynMessages,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>messages"
+
+# Rules
+<% if scope.lookupvar('saz_rsyslog::server::rules') and scope.lookupvar('saz_rsyslog::server::rules') != :undef -%>
+<% scope.lookupvar('saz_rsyslog::server::rules').flatten.compact.each do |rules| -%>
+<% if rules['selector'] and rules['selector'] != '' and rules['action'] and rules['action'] != '' -%>
+<%= rules['selector'] %> <%= rules['action'] %>
+<% end -%>
+<% end -%>
+<% else -%>
+auth,authpriv.*         ?dynAuthLog
+*.*;auth,authpriv.none,mail.none,cron.none      -?dynSyslog
+cron.*              ?dynCronLog
+daemon.*            -?dynDaemonLog
+kern.*              -?dynKernLog
+mail.*              -?dynMailLog
+user.*              -?dynUserLog
+*.=info;*.=notice;*.=warn;\
+    auth.none,authpriv.none;\
+    cron.none,daemon.none;\
+    mail.none,news.none     -?dynMessages
+<% end -%>
+<% else -%>
+# Template
+$Template dynAllMessages,"<%= scope.lookupvar('saz_rsyslog::server::server_dir') -%>%hostname%<%= scope.lookupvar('saz_rsyslog::server::logpath') -%>messages"
+
+# Rules
+*.*                 -?dynAllMessages
+<% end -%>
+<% end -%>
+
+<% # Common footer across all templates -%>
+<%= scope.function_template(['rsyslog/server/_default-footer.conf.erb']) %>

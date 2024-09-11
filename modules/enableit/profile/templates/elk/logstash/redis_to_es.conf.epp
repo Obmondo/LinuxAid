@@ -1,0 +1,65 @@
+# -*- mode: logstash-conf -*-
+# MANAGED BY PUPPET; DO NOT CHANGE
+input {
+    redis {
+        host      => '127.0.0.1'
+        port      => <%= $redis_port %>
+        # Remember that type does NOT overwrite trype from shipper!
+        type      => 'redis-input'
+        # these settings should match the output of the agent
+        data_type => 'list'
+        key       => 'logstash'
+    }
+}
+
+filter {
+    if [type] == "WindowsEventLog" {
+        json {
+            source => "message"
+        }
+
+        if [SourceModuleName] == "eventlog" {
+            mutate {
+                replace => [ "message", "%{Message}" ]
+            }
+            mutate {
+                remove_field => [ "Message" ]
+            }
+        }
+
+        # Extract the first line of the message into a MessageHeader field. We
+        # already have this information in the form of event ids, but they're a
+        # bit arcane...
+        grok {
+            match => { "Message" => "^(?<MessageHeader>[^\n]+)" }
+        }
+
+        mutate {
+            rename => [ "ServiceName", "service" ]
+            rename => [ "message", "_message" ]
+            rename => [ "Message", "MessageFull" ]
+            rename => [ "MessageHeader", "message" ]
+        }
+
+        date {
+            locale    => "en"
+            match     => ["EventTime", "YYYY-MM-dd HH:mm:ss"]
+            timezone  => "Europe/Copenhagen"
+            target    => "@timestamp"
+            add_field => { "debug" => "timestampMatched"}
+        }
+    }
+
+    if [type] == 'json' {
+        json {
+            source => "message"
+        }
+    }
+}
+
+output {
+    elasticsearch {
+        hosts => ['127.0.0.1:9200']
+        index => "logstash-%{+YYYY.MM}"
+    }
+}

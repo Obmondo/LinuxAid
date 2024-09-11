@@ -1,0 +1,3 @@
+---
+riemann::install::libxml_package: libxml2-devel
+riemann::install::libxslt_package: libxslt-devel

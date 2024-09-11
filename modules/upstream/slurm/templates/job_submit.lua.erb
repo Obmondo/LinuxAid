@@ -1,0 +1,224 @@
+-- -*- mode: lua; -*-
+-- Time-stamp: <Tue 2017-08-29 18:26 svarrette>
+--[[
+
+   Copyright (c) 2017 UL HPC Team <hpc-sysadmins@uni.lu>
+   .             https://hpc.uni.lu
+
+   -------------------------------------------------------------
+   SLURM job submission rules/filter for the '<%= scope['slurm::clustername'] %>' cluster
+   -------------------------------------------------------------
+   This program automatically analyzes properties of submitted jobs and selects
+   the best partition and QOS to route jobs.
+
+   __Changelog__
+   2017-07-28 - Initial version, by V. Plugaru <valentin.plugaru@uni.lu>
+   2017-08-18 - code reworked and extended, by S.Varrette <sebastien.varrette@uni.lu>
+
+   __Resources:__
+   - Sample job_submit.lua:
+   https://github.com/SchedMD/slurm/blob/master/contribs/lua/job_submit.lua
+   - Job Submit Plugin API: https://slurm.schedmd.com/job_submit_plugins.html
+   - Slurm C Header:
+   * https://github.com/SchedMD/slurm/blob/master/slurm/slurm.h.in
+   * https://github.com/SchedMD/slurm/blob/master/slurm/slurm_errno.h
+   - LLNL Slurm job_submit plugins, adapted by EDF/HPC Team
+   https://github.com/edf-hpc/slurm-llnl-misc-plugins/blob/master/job_submit/job_submit.lua
+   - Other sample code:
+   * https://gist.github.com/treydock/9320af1c966a972692d2
+
+   -----------------------------------------------------------------------
+   For use, this script should be copied into a file name "job_submit.lua"
+   in the same directory as the SLURM configuration file, slurm.conf.
+   -----------------------------------------------------------------------
+   LUA style guide: http://lua-users.org/wiki/LuaStyleGuide
+--]]
+
+--########################################################################
+-- Default parameters (they can be overwritten in conf_file)
+--########################################################################
+DEBUG = false
+SCRIPTDIR   = debug.getinfo(1).source:match("@?(.*/)")
+--CONFIG_FILE = '/etc/slurm/job_submit.conf'
+
+-- constant list of admission rules, with their priority, description, and function
+ALL_RULES = {
+   ["part"] = { priority = 0,  desc = "Default partition", rule = 'rule_default_partition' },
+}
+
+--[[
+   ########################################################################
+   Helpers functions
+   ########################################################################
+--]]
+function info(...)
+   slurm.log_info(...)
+end
+
+------------------------------------------------------------------------------------
+-- print the formatted string depending on the value of the DEBUG constant
+------------------------------------------------------------------------------------
+function debug(...)
+   if DEBUG then
+      slurm.log_info(...)
+   else
+      slurm.log_debug(...)
+   end
+end
+
+------------------------------------------------------------------------------------
+-- Log the application of a given rule to slurm with a pre-formatted style
+-- @param name (IN) short name of the rule, it SHOULD match an entry in ALL_RULES
+-- @param fmt, ... (IN) format string, as expected from slurm.log_info
+------------------------------------------------------------------------------------
+function log_rule_info(name, fmt, ...)
+   local str = "[Rule %u/%s] %s - " .. fmt
+   info(str, ALL_RULES[name].priority, name, ALL_RULES[name].desc, ...)
+end
+function log_rule_debug(name, fmt, ...)
+   local str = "[Rule %u/%s] %s - " .. fmt
+   debug(str, ALL_RULES[name].priority, name, ALL_RULES[name].desc, ...)
+end
+
+
+-- See https://stackoverflow.com/questions/132397/get-back-the-output-of-os-execute-in-lua
+-----------------------------------------
+-- Return the output of a system command
+-- @param cmd (IN) command to be executed
+-----------------------------------------
+function os.capture(cmd)
+   local f = assert(io.popen(cmd, 'r'))
+   local s = assert(f:read('*a'))
+   f:close()
+   s = string.gsub(s, '^%s+', '')
+   s = string.gsub(s, '%s+$', '')
+   s = string.gsub(s, '[\n\r]+', ' ')
+   return s
+end
+
+
+-- See http://lua-users.org/wiki/SplitJoin
+-------------------------------------------------------------------------------------
+-- Split separates a string containing a delimiter into the list of substrings
+-- between that delimiter
+-- @param str (IN) string to split
+-- @param sep (IN) separator
+-------------------------------------------------------------------------------------
+function split(str, sep)
+   local t = {}  -- NOTE: use {n = 0} in Lua-5.0
+   local fsep = "(.-)" .. sep
+   local last_end = 1
+   local s, e, cap = str:find(fsep, 1)
+   while s do
+      if s ~= 1 or cap ~= "" then
+         table.insert(t,cap)
+      end
+      last_end = e+1
+      s, e, cap = str:find(fsep, last_end)
+   end
+   if last_end <= #str then
+      cap = str:sub(last_end)
+      table.insert(t, cap)
+   end
+   return t
+end
+
+-----------------------------------------
+-- Return the username based on POSIX UID
+-- @param submit_uid (IN) UID to check
+-----------------------------------------
+function get_username(uid)
+   local cmd = "id -nu " .. uid
+   return os.capture(cmd)
+end
+
+-------------------------------------------------------------------------------------
+-- Return the job's partition, using the following heuristics (whatever comes first):
+-- * as set by the user, or
+-- * as discovered as default partition
+-- Otherwise, nil is returned
+-- @param job_desc  (IN) the job allocation request specifications
+-- see C structure:
+--    https://github.com/SchedMD/slurm/blob/master/slurm/slurm.h.in#L1374
+-- @param part_list (IN) List of pointer to partitions which this user is
+-- authorized to use.
+-- FIXME: need to check what happens with multiple partitions specified by user
+-------------------------------------------------------------------------------------
+function get_job_partition(job_desc, part_list)
+   local res = job_desc.partition
+   if res == nil then
+      for name, info in pairs(part_list) do
+         if info.flag_default == 1 then
+            res = info.name
+            break
+         end
+      end
+   end
+   return res
+end
+
+
+--[[
+   ########################################################################
+   <%= scope['slurm::clustername'].upcase %> Job Submissions Rules
+   ########################################################################
+--]]
+----------------------------------------------------------------------------------
+-- Set job's partition, using the following heuristics (whatever comes first):
+-- * as set by the user, or
+-- * as discovered as default partition
+-- @param job_desc  (IN/OUT) the job allocation request specifications
+-- see C structure:
+--    https://github.com/SchedMD/slurm/blob/master/slurm/slurm.h.in#L1374
+-- @param part_list (IN) List of pointer to partitions which this user is
+-- authorized to use.
+-----------------------------------------------------------------------------------
+function rule_default_partition(job_desc, part_list)
+   if job_desc.partition == nil then
+      local new_partition = tostring(get_job_partition(job_desc, part_list))
+      log_rule_info('part', "job from uid %u(%s), setting default partition to '%s'",
+                    job_desc.user_id, get_username(job_desc.user_id), new_partition)
+      job_desc.partition = new_partition
+   end
+end
+
+--[[
+   ########################################################################
+   -- SLURM job_submit/lua interface
+
+   See https://slurm.schedmd.com/job_submit_plugins.html
+   ########################################################################
+--]]
+
+----------------------------------------------------------------------------------
+-- This function is called by the slurmctld daemon with job submission parameters
+-- supplied by the salloc, sbatch or srun command. It can be used to log and/or
+-- modify the job parameters supplied by the user as desired. Note that this
+-- function has access to the slurmctld's global data structures, for example to
+-- examine the available partitions, reservations, etc.
+-- @param job_desc   (IN/OUT) the job allocation request specifications.
+-- @param part_list  (IN) List of pointer to partitions which this user is
+-- authorized to use.
+-- @param submit_uid (IN) user ID initiating the request.
+-- @return 0 on success, or an errno on failure. Slurm specific error numbers
+-- from slurm/slurm_errno.h may be used. On failure, the request will be
+-- rejected and the user will have an appropriate error message printed for that
+-- errno.
+----------------------------------------------------------------------------------
+function slurm_job_submit(job_desc, part_list, submit_uid)
+   -- <%= scope['slurm::clustername'].upcase %> rules for job submission, sorted by priority
+   table.sort(ALL_RULES, function (e1,e2) return e1.priority < e2.priority end)
+   for name, v in pairs(ALL_RULES) do
+      debug("Applying %s rule %s with priority %u", name, v.desc, v.priority)
+      -- see https://stackoverflow.com/questions/1791234/lua-call-function-from-a-string-with-function-name
+      _G[v.rule](job_desc, part_list, submit_uid)
+   end
+   return slurm.SUCCESS
+end
+
+function slurm_job_modify(job_desc, job_rec, part_list, modify_uid)
+   return slurm.SUCCESS
+end
+
+-- slurm.log_info("initialized")
+return slurm.SUCCESS

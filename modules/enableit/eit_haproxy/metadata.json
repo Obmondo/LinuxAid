@@ -1,0 +1,49 @@
+{
+  "name": "enableit-eit_haproxy",
+  "version": "0.1.0",
+  "author": "enableit",
+  "summary": "Haproxy Module",
+  "license": "Proprietary",
+  "source": "nil",
+  "dependencies": [
+    {
+      "name": "enableit/eit_types",
+      "version_requirement": ">= 0.0.1"
+    },
+    {
+      "name": "enableit/functions",
+      "version_requirement": ">= 0.0.1"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.x"
+    },
+    {
+      "name": "enableit/package"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7.0",
+        "7.1",
+        "7.2"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7.0",
+        "8.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04",
+        "16.04"
+      ]
+    }
+  ]
+}

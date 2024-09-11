@@ -1,0 +1,14 @@
+[Unit]
+Description=HAProxy-<%= $title %> Load Balancer
+After=syslog.target network.target
+
+[Service]
+<% if $title == "haproxy" { -%>
+  ExecStart=<%= $wrapper %> -f /etc/haproxy/haproxy.cfg -p /run/haproxy.pid
+<% } else { -%>
+  ExecStart=<%= $wrapper %> -f /etc/haproxy-<%= $title %>/haproxy-<%= $title %>.cfg -p /run/haproxy-<%= $title %>.pid
+<% } -%>
+ExecReload=/bin/kill -USR2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

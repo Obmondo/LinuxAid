@@ -1,0 +1,15 @@
+# VIRTUAL(5)                                                          VIRTUAL(5)
+#
+# NAME
+#        virtual - Postfix virtual alias table format
+#
+# SYNOPSIS
+#        postmap /etc/postfix/virtual
+#
+#        postmap -q "string" /etc/postfix/virtual
+#
+#        postmap -q - /etc/postfix/virtual <inputfile
+<% if @virtual != nil -%>
+<%@virtual.each do |key,value| -%>
+<%= key -%>     <%= value %>
+<% end end -%>

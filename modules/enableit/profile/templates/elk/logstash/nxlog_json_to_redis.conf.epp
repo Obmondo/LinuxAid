@@ -1,0 +1,19 @@
+# -*- mode: logstash-conf -*-
+# MANAGED BY PUPPET; DO NOT CHANGE
+input {
+    tcp {
+        port  => <%= $input_port %>
+        type  => "json"
+        tags  => ["windows", "nxlog", "unencrypted"]
+        codec => "line"
+    }
+}
+
+output {
+    redis {
+        host      => '127.0.0.1'
+        port      => <%= $redis_port %>
+        data_type => 'list'
+        key       => 'logstash'
+    }
+}

@@ -1,0 +1,4 @@
+validate for puppet 3 => impossible, misses the .each function
+
+
+only create exclude and/or include files if actually exclude/include are given

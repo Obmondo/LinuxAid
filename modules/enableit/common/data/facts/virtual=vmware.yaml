@@ -1,0 +1,3 @@
+---
+common::virtualization::vmware::openvmtools::ensure: true
+common::system::hardware::enable_multipath: false

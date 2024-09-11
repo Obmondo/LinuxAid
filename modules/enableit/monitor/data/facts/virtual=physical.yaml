@@ -1,0 +1,3 @@
+---
+monitor::system::service::smartmon::enable: true
+monitor::system::cpu::enable_temp: true

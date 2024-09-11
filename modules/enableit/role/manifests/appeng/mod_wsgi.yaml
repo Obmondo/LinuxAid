@@ -1,0 +1,34 @@
+---
+name: Python webserver
+description: Apache with mod_wsgi for running python applications.
+
+features:
+  - Monitoring
+  - Time
+  - Security
+  - Logging
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  pip_modules:
+    name: Python modules
+    description: List of python libraries to install
+
+  url:
+    name: URL
+    description: What domains do you want to point to this webserver (f.ex. example.org and www.example.org)
+
+  http_server:
+    name: HTTP server
+    enum:
+      apache:
+        name: Apache
+
+  ssl:
+    description: Enables HTTPS support
+    name: SSL

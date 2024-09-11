@@ -1,0 +1,156 @@
+---
+name: Kubernetes
+description: Kubernetes Setup
+
+parameters:
+  role:
+    name: Role
+    description: RBAC roles for Kubernetes
+
+  discovery_token_hash:
+    name: Discovery Token Hash
+    description: A string to validate to the root CA public key when joining a cluster. Created by kubetool
+
+  token:
+    name: Token
+    description: A string to use when joining nodes to the cluster.
+
+  controller_address:
+    name: Controller address
+    description: The IP address and Port of the controller that worker node will join. eg 172.17.10.101:6443
+
+  install_dashboard:
+    name: Install dashboard
+    description: This is a bool that determines if the kubernetes dashboard is installed
+
+  version:
+    name: Version
+    description: The version of Kubernetes containers you want to install
+
+  pod_cidr:
+    name: Pod CIDR
+    description: The overlay (internal) network range to use
+
+  expose_https_on_master:
+    name: Expose https on master
+    description: This is a bool that determines if you want to expose https on kube master
+
+  expose_http_on_master:
+    name: Expose http on master
+    description: This is a bool that determines if you want to expose http on kube master
+
+  apiserver_extra_args:
+    name: Apiserver Extra arguments
+    description: A string array of extra arguments to be passed to the api server
+
+  extra_public_ports:
+    name: Extra public Ports
+    description:
+
+  etcd_initial_cluster:
+    name: etcd initial cluster
+    description: This will tell etcd how many nodes will be in the cluster and is passed as a string. For eg etcd-kube-control-plane=http://172.17.10.101:2380,etcd-kube-replica-control-plane-01=http://172.17.10.210:2380,etcd-kube-replica-control-plane-02=http://172.17.10.220:2380
+
+  etcd_peers:
+    name: etcd peers
+    description: This will tell etcd how the list of peers to connect to into the cluster
+
+  worker_peers:
+    name: Worker peers
+    description: Worker nodes within the Kubernetes cluster are used to run containerized applications and handle networking
+
+  allow_k8s_api:
+    name: Allow k8s API
+    description: Whether you want to allow k8s api or not
+
+  keycloak_oidc_domain:
+    name: keycloak OIDC domain
+    description: Your keycloak OIDC domain
+
+  keycloak_oidc_client_id:
+    name: keycloak OIDC client ID
+    description: Your keycloak OIDC client ID
+
+  keycloak_oidc_groups_claim:
+    name: keycloak OIDC group claim
+    description: If You want to enable keycloak OIDC group claim
+
+  etcdserver_crt:
+    name: etcd server certificate
+    description: This is the server certificate data for the etcd cluster . This must be passed as string not as a file
+
+  etcdserver_key:
+    name: etcd server certificate key
+    description: This is the server certificate key data for the etcd cluster. This must be passed as string not as a file.
+
+  etcdpeer_crt:
+    name: etcd peer certificate
+    description: This is the peer certificate data for the etcd cluster. This must be passed as string not as a file.
+
+  etcdpeer_key:
+    name: etcd peer certificate key
+    description: This is the peer certificate key data for the etcd cluster. This must be passed as string not as a file.
+
+  etcd_ca_crt:
+    name: etcd ca certificate
+    description: This is the ca certificate data for the etcd cluster. This must be passed as string not as a file.
+
+  etcd_ca_key:
+    name: etcd ca certificate key
+    description: This is the ca certificate data for the etcd cluster. This must be passed as string not as a file.
+
+  etcdclient_crt:
+    name: etcd client certificate
+    description: This is the client certificate data for the etcd cluster. This must be passed as string not as a file.
+
+  etcdclient_key:
+    name: etcd client key
+    description: This is the client certificate key for the etcd cluster. This must be passed as string not as a file.
+
+  kubernetes_ca_crt:
+    name: Kubernetes CA certificate
+    description: The clusters ca certificate. Must be passed as a string not a file.
+
+  kubernetes_ca_key:
+    name: Kubernetes CA key
+    description: The clusters ca key. Must be passed as a string not a file.
+
+  sa_pub:
+    name: Service account public key
+    description: The service account public key. Must be passed as cert not a file.
+
+  sa_key:
+    name: Service account key
+    description: The service account key. Must be passed as string not a file.
+
+  apiserver_cert_extra_sans:
+    name: Apiserver certificate extra SANS
+    description: The service account public key. Must be passed as cert not a file.
+
+  front_proxy_ca_crt:
+    name: Front Proxy CA certificate
+    description: The clusters front-proxy ca certificate. Must be passed as a string not a file.
+
+  front_proxy_ca_key:
+    name: Front Proxy CA key
+    description: The clusters front-proxy ca key. Must be passed as a string not a file.
+
+  docker_storage_driver:
+    name: Docker Storage Driver
+    description: Storage Driver to be added to /etc/docker/daemon.json
+
+  containerd_version:
+    name: Containerd version
+    description: This is the version of the containerd runtime the module will install.
+
+  image_repository:
+    name: Image repository
+    description: The container registry to pull control plane images from
+
+  containerd_install_method:
+    name: Containerd Install Method
+    description: Whether to install containerd via archive or package.
+
+  containerd_snapshotter:
+    name: Containerd snapshotter
+    description: The default snapshotter to use with containerd

@@ -1,0 +1,39 @@
+---
+# Java
+profile::java::version: 7
+profile::java::edition: 'openjdk'
+profile::java::package_name: "java-1.7.0-openjdk"
+
+profile::php::default_modules:
+  mbstring: {}
+  soap: {}
+  xml: {}
+  xhprof: {}
+  curl: {}
+  xmlrpc: {}
+  gd: {}
+  ldap: {}
+  mcrypt: {}
+  intl: {}
+
+# SSSD
+profile::system::authentication::sssd::extra_packages:
+  - 'sssd-ad'
+  - 'sssd-krb5'
+  - 'sssd-krb5-common'
+  - 'sssd-ldap'
+  - 'sssd-tools'
+  - 'sssd-common'
+  - 'sssd-ipa'
+  - 'sssd-dbus'
+  - 'sssd-client'
+  - 'sssd-proxy'
+
+profile::software::cloudamize::__packages:
+  - 'cloudamize_agent'
+
+profile::system::cloud_init::services:
+  - 'cloud-config.service'
+  - 'cloud-final.service'
+  - 'cloud-init.service'
+  - 'cloud-init-local.service'

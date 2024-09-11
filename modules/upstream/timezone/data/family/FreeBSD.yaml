@@ -1,0 +1,2 @@
+timezone::zoneinfo_dir: /usr/share/zoneinfo
+timezone::localtime_file: /etc/localtime

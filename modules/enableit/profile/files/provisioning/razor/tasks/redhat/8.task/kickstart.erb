@@ -1,0 +1,74 @@
+#!/bin/bash
+# Kickstart for RHEL/CentOS 8
+#
+# Reference: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user
+
+lang en_US.UTF-8
+keyboard us
+timezone --utc <%= node.metadata['timezone'] || 'America/Los_Angeles' %>
+rootpw "<%= node.metadata['root_password'] || node.root_password %>"
+
+reboot
+text
+
+url --url=<%= repo_url %>
+
+# Avoid having 'rhgb quiet' on the boot line
+bootloader --location=mbr --append="crashkernel=auto hpsa.hpsa_allow_any=1"
+
+zerombr
+clearpart --all --initlabel
+autopart
+
+auth --enableshadow --passalgo=sha512
+firewall --enabled --ssh
+skipx
+
+firstboot --disable
+
+repo --name=appstream --baseurl=<%= repo_url %>/AppStream
+
+network --hostname <%= node.metadata['hostname'] || node.hostname %>
+
+cmdline
+
+%packages
+@standard
+-fprintd-pam
+-pinfo
+-plymouth
+-cockpit
+-dos2unix
+-kmod-kvdo
+-mailcap
+-mlocate
+-nano
+-realmd
+-rng-tools
+-sos
+-sssd
+-subscription-manager-cockpit
+-subscription-manager-plugin-container
+-usbutils
+-vdo
+-words
+-insights-client
+%end
+
+%post --log=/var/log/razor.log
+echo Kickstart post
+curl -s -o /root/razor_postinstall.sh <%= file_url("post_install") %>
+
+# Run razor_postinstall.sh on next boot via rc.local
+if [ ! -f /etc/rc.d/rc.local ]; then
+  # On systems using systemd /etc/rc.d/rc.local does not exist at all
+  # though systemd is set up to run the file if it exists
+  echo '#!/bin/bash' > /etc/rc.d/rc.local
+fi
+chmod a+x /etc/rc.d/rc.local
+echo bash /root/razor_postinstall.sh >> /etc/rc.d/rc.local
+chmod +x /root/razor_postinstall.sh
+
+curl -s <%= stage_done_url("kickstart") %>
+%end
+############

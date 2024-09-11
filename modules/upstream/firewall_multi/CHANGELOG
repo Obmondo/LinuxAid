@@ -1,0 +1,177 @@
+2024-03-23 - Version 8.0.1
+- A dummy release to align versions to upstream firewall v8.0.1.
+- No other changes were required here.
+
+2024-03-23 - Version 8.0.0
+- A dummy release to align versions to upstream firewall v8.0.0.
+- No other changes were required here.
+
+2023-10-08 - Version 7.0.3
+- Issue #39 - update supported operating systems.
+
+2023-09-26 - Version 7.0.2
+- Further corrections to gen_params.sh and bugfix from it.
+
+2023-09-26 - Version 7.0.1
+- Bugfix to remove name param (@robertc99)
+
+2023-09-25 - Version 7.0.0
+- Update to support changes in firewall 7.0.0 (thanks @robertc99)
+- Also support 7.0.1 and 7.0.2
+- Update gen_params.sh
+
+2023-05-26 - Version 6.0.0
+- Update to support changes in firewall 6.0.0 (Issue #36, thanks @robertc99)
+- Update docs to support bundle config set specific_platform true
+
+2023-05-26 - Version 5.0.0
+- No changes, releasing only to align versions.
+
+2023-05-26 - Version 4.0.1
+- Update to support changes in firewall 4.0.1.
+
+2023-05-26 - Version 4.0.0
+- No changes, releasing only to align versions.
+
+2022-09-02 - Version 3.5.0
+- Update to support changes in firewall 3.5.0.
+- Remove Puppet version constrain (Issue #32).
+
+2022-09-02 - Version 3.4.0
+- Update to support changes in firewall 3.4.0.
+
+2022-02-05 - Version 3.0.0
+- Increment version to align arbitrarily with firewall 3.x.
+- Migrate from Travis CI to GitHub Actions.
+
+2021-01-18 - Version 1.20.0
+- Update to support changes in firewall 2.8.0.
+
+2020-08-10 - Version 1.19.0
+- Update to support changes in firewall 2.5.0.
+
+2020-06-09 - Version 1.18.0
+- Update to support changes in firewall 2.4.0.
+
+2020-04-13 - Version 1.17.0
+- Update to support changes in firewall 2.3.0.
+
+2019-12-29 - Version 1.16.0
+- Bump version to support firewall 2.2.0.
+
+2019-09-29 - Version 1.15.0
+- Support zone parameter and firewall 2.1.0.
+
+2019-09-16 - Version 1.14.1
+- Remove problematic .git dir in Forge copy (Issue #22).
+
+2019-05-29 - Version 1.14.0
+- No real change other than to update version for firewall 2.0.0.
+
+2019-04-21 - Version 1.13.2
+- Bugfix in metadata.json.
+
+2019-04-21 - Version 1.13.1
+- Fix metadata.json to specify exact required version.
+- Add tests enforcing this.
+- Add troubleshooting section for Issue #19.
+- Remove code coverage from spec helper.
+- Corrections to Beaker to fix tests.
+
+2019-04-06 - Version 1.13.0
+- Update to support changes in firewall 1.15.2 (which added a
+new feature) and 1.15.3.
+- Add a test to ensure README is synced from the ERB.
+
+2019-02-03 - Version 1.12.0
+- Update to support changes in firewall 1.15.0.
+- Minor changes to automated tests.
+
+2018-11-19 - Version 1.11.0
+- Drop Puppet 3 support.
+- Add auto-generated docs using ERB and Puppet Strings.
+- Bugfix for Issue #14.
+
+2018-06-09 - Version 1.10.1
+- Update to note Puppet 5 support to correct Forge quality scores.
+
+2017-11-16 - Version 1.10.0
+- Update to support changes in firewall 1.10.0.
+
+2017-10-01 - Version 1.9.0
+- Update to support changes in firewall 1.9.0.
+
+2017-10-01 - Version 1.8.0
+- Update to support changes in firewall 1.8.2.
+
+2017-10-01 - Version 1.7.0 (1.6.0 appears to have been skipped in error).
+- Add some missing properties for firewall 1.8.0.
+- Add the gen_params.sh script.
+- Add compatibility matrix in docs.
+- Other minor documentation changes.
+
+2017-02-17 - Version 1.5.0
+- Add feature providers (Issue #12)
+
+2016-06-12 - Version 1.4.1
+- Improved documentation (Issue #8)
+- Workaround to Nokogiri install issue (Issue #9)
+- Updated Gemfile config
+
+2016-04-20 - Version 1.4.0
+- Add feature for arrays of protocols (Mark McKinstry).
+
+2016-04-10 - Version 1.3.1
+- Add Beaker tests and nodesets for CentOS 7, 6, Ubuntu 14.04 and
+  Debian 7 & 8.
+
+2016-03-27 - Version 1.3.0
+- (Issue 5) Add 4.x version of the custom function.
+- Improvements to documentation.
+- Travis CI integration added (Mark McKinstry).
+
+2016-03-26 - Version 1.2.1
+- Fix regression for Puppet 3.x.
+  * workaround for https://tickets.puppetlabs.com/browse/PUP-2523
+  * workaround for
+https://ask.puppetlabs.com/question/15677/custom-recursive-function-fails/
+
+2016-03-24 - Version 1.2.0
+- (Issue 3) Complete rewrite.
+
+Using a custom function plus create_resources it was possible to
+vastly simplify the logic.
+
+2016-03-18 - Version 1.1.3
+- (Issue 2) Bugfix for undefined variable warning.
+
+2016-03-16 - Version 1.1.2
+- Clean up code
+- Add unpack function
+- add unit tests for functions.
+
+2016-03-15 - Version 1.1.1
+- Fix typos in README.md.
+
+2016-03-15 - Version 1.1.0
+- (Issue 1) Add feature supporting arrays of ICMP types.
+- Improved design
+  * source and destination now default to undef
+  * if passed undef, there is no 'from 0.0.0.0/0' added in the title.
+
+2016-03-11 - Version 1.0.5
+- Add PE support to metadata.json.
+
+2016-03-09 - Version 1.0.4
+- Clarify that only puppetlabs/firewall 1.8.0 and later is supported.
+
+2016-03-08 - Version 1.0.3
+- Ok, satisfy Forge's lint rather than my preferred lint config.
+
+2016-03-07 - Version 1.0.2
+- Fix up styling to satisfy lint
+- Modify lint config
+- Updates documentation
+
+2016-03-07 - Version 1.0.1
+- Initial public release

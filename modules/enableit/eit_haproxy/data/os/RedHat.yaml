@@ -1,0 +1,4 @@
+---
+eit_haproxy::defaults_file_path: "/etc/sysconfig"
+eit_haproxy::service_options:
+  OPTIONS: '""'

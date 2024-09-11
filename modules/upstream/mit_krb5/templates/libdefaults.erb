@@ -1,0 +1,53 @@
+<% fields = [
+  'default_realm',
+  'default_keytab_name',
+  'default_ccache_name',
+  'default_tgs_enctypes',
+  'default_tkt_enctypes',
+  'permitted_enctypes',
+  'allow_weak_crypto',
+  'clockskew',
+  'ignore_acceptor_hostname',
+  'k5login_authoritative',
+  'k5login_directory',
+  'kdc_timesync',
+  'kdc_req_checksum_type',
+  'ap_req_checksum_type',
+  'safe_checksum_type',
+  'preferred_preauth_types',
+  'ccache_type',
+  'canonicalize',
+  'dns_canonicalize_hostname',
+  'dns_lookup_kdc',
+  'dns_lookup_realm',
+  'dns_fallback',
+  'realm_try_domains',
+  'extra_addresses',
+  'udp_preference_limit',
+  'verify_ap_req_nofail',
+  'ticket_lifetime',
+  'renew_lifetime',
+  'noaddresses',
+  'forwardable',
+  'proxiable',
+  'rdns',
+  'plugin_base_dir',
+]
+output = []
+scope_hash = scope.to_hash
+fields.each do |key|
+  next if not scope_hash.include?(key)
+  value = scope_hash[key]
+  if value.respond_to?('join')
+    # Use space delimiting for array-type values
+    value = value.flatten.join(' ')
+  else
+    value = value.to_s
+  end
+  output.push("#{key} = #{value}") if not value.empty?
+end
+-%>
+[libdefaults]
+<% if not output.empty? -%>
+    <%= output.join("\n    ") %>
+<% end %>

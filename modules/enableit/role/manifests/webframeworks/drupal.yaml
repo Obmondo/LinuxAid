@@ -1,0 +1,44 @@
+---
+name: Drupal CMS
+description: Optimized Drupal server setup including Latest stable Drupal version
+
+features:
+  - monitoring
+  - time
+  - security
+  - logging
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  url:
+    name: URL
+    type: url
+    description: url to your website.
+
+  php:
+    name: PHP Engine
+    description: Select php engine.
+
+  memcached:
+    name: Memcached
+    description: Install local Memcached and enable caching to it in Drupal
+
+  db:
+    name: Database Engine
+    description: Select Database engine.
+
+  http_server:
+    name: HTTP server
+
+  password:
+    name: Drupal Mysql user password
+    description: Drupal mysql user to login into database
+
+  reverse_cache:
+    name: Enable webserver caching
+    description: Install a reverse cache to speedup Drupal

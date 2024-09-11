@@ -1,0 +1,8 @@
+---
+version: 2.0.0
+profiles:
+  nist_800_53:rev4:
+    controls:
+      nist_800_53:rev4: true
+controls:
+  nist_800_53:rev4: {}

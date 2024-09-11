@@ -1,0 +1,9 @@
+#!ipxe
+echo Razor <%= task.label %> task boot_call
+echo Installation node: <%= node_url  %>
+echo Installation repo: <%= repo_url %>
+sleep 3
+
+kernel <%= repo_url("/vmlinuz") %> ip=dhcp url=<%= repo_url("/ubuntu-22.04.1-live-server-amd64.iso") %> autoinstall ds=nocloud-net;s=<%= file_url("") %>
+initrd <%= repo_url("/initrd") %>
+boot

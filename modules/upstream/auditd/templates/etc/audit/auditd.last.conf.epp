@@ -1,0 +1,3 @@
+# This entry must be after verify_email if verify_email is to work
+# Note: verify_email is only an auditd version 3 option
+action_mail_acct = <%= $auditd::action_mail_acct %>

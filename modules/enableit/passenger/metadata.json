@@ -1,0 +1,24 @@
+{
+  "name": "ashish-passenger",
+  "version": "0.1.0",
+  "author": "Ashish Jaiswal",
+  "summary": "Setup Passenger with apache or with nginx",
+  "license": "Apache 2.0",
+  "source": "",
+  "project_page": "https://www.phusionpassenger.com",
+  "issues_url": null,
+  "dependencies": [
+    {
+      "version_requirement": ">= 1.0.0",
+      "name": "puppetlabs-stdlib"
+    },
+    {
+      "name": "enableit/functions",
+      "version_requirement": ">= 0.0.1"
+    },
+    {
+      "name": "enableit/eit_repos",
+      "version_requirement": ">= 0.0.1"
+    }
+  ]
+}

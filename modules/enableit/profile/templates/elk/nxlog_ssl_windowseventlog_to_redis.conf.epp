@@ -1,0 +1,22 @@
+# MANAGED BY PUPPET; DO NOT CHANGE
+input {
+    tcp {
+        port       => <%= $input_port %>
+        type       => "WindowsEventLog"
+        tags       => ["windows", "nxlog"]
+        codec      => "line"
+        ssl_enable => true
+        ssl_cacert => "/etc/pki/tls/certs/nxlog-ca.crt"
+        ssl_cert   => "/etc/pki/tls/certs/nxlog.crt"
+        ssl_key    => "/etc/pki/tls/private/nxlog.key"
+    }
+}
+
+output {
+    redis {
+        host      => '127.0.0.1'
+        port      => <%= $profile::elk::redis_default_port %>
+        data_type => 'list'
+        key       => 'logstash'
+    }
+}

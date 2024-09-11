@@ -1,0 +1,300 @@
+---
+yum::os_default_repos:
+- appstream
+- appstream-debuginfo
+- appstream-source
+- plus
+- plus-debuginfo
+- plus-source
+- saphana
+- saphana-debuginfo
+- saphana-source
+- crb
+- crb-debuginfo
+- crb-source
+- baseos
+- baseos-debuginfo
+- baseos-source
+- highavailability
+- highavailability-debuginfo
+- highavailability-source
+- extras
+- extras-debuginfo
+- extras-source
+- nfv
+- nfv-debuginfo
+- nfv-source
+- resilientstorage
+- resilientstorage-debuginfo
+- resilientstorage-source
+- rt
+- rt-debuginfo
+- rt-source
+- sap
+- sap-debuginfo
+- sap-source
+yum::repos:
+  appstream-debuginfo:
+    descr: AlmaLinux $releasever - AppStream - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-debug
+    target: "/etc/yum.repos.d/almalinux-appstream.repo"
+  appstream-source:
+    descr: AlmaLinux $releasever - AppStream - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-source
+    target: "/etc/yum.repos.d/almalinux-appstream.repo"
+  appstream:
+    descr: AlmaLinux $releasever - AppStream
+    enabled: true
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/appstream
+    target: "/etc/yum.repos.d/almalinux-appstream.repo"
+  baseos-debuginfo:
+    descr: AlmaLinux $releasever - BaseOS - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-debug
+    target: "/etc/yum.repos.d/almalinux-baseos.repo"
+  baseos-source:
+    descr: AlmaLinux $releasever - BaseOS - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-source
+    target: "/etc/yum.repos.d/almalinux-baseos.repo"
+  baseos:
+    descr: AlmaLinux $releasever - BaseOS
+    enabled: true
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/baseos
+    target: "/etc/yum.repos.d/almalinux-baseos.repo"
+  crb-debuginfo:
+    descr: AlmaLinux $releasever - CRB - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/crb-debug
+    target: "/etc/yum.repos.d/almalinux-crb.repo"
+  crb-source:
+    descr: AlmaLinux $releasever - CRB - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/crb-source
+    target: "/etc/yum.repos.d/almalinux-crb.repo"
+  crb:
+    descr: AlmaLinux $releasever - CRB
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/crb
+    target: "/etc/yum.repos.d/almalinux-crb.repo"
+  extras-debuginfo:
+    descr: AlmaLinux $releasever - Extras - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/extras-debug
+    target: "/etc/yum.repos.d/almalinux-extras.repo"
+  extras-source:
+    descr: AlmaLinux $releasever - Extras - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/extras-source
+    target: "/etc/yum.repos.d/almalinux-extras.repo"
+  extras:
+    descr: AlmaLinux $releasever - Extras
+    enabled: true
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/extras
+    target: "/etc/yum.repos.d/almalinux-extras.repo"
+  highavailability-debuginfo:
+    descr: AlmaLinux $releasever - HighAvailability - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/highavailability-debug
+    target: "/etc/yum.repos.d/almalinux-highavailability.repo"
+  highavailability-source:
+    descr: AlmaLinux $releasever - HighAvailability - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/highavailability-source
+    target: "/etc/yum.repos.d/almalinux-highavailability.repo"
+  highavailability:
+    descr: AlmaLinux $releasever - HighAvailability
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/highavailability
+    target: "/etc/yum.repos.d/almalinux-highavailability.repo"
+  nfv-debuginfo:
+    descr: AlmaLinux $releasever - NFV - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/nfv-debug
+    target: "/etc/yum.repos.d/almalinux-nfv.repo"
+  nfv-source:
+    descr: AlmaLinux $releasever - NFV - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/nfv-source
+    target: "/etc/yum.repos.d/almalinux-nfv.repo"
+  nfv:
+    descr: AlmaLinux $releasever - NFV
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/nfv
+    target: "/etc/yum.repos.d/almalinux-nfv.repo"
+  plus-debuginfo:
+    descr: AlmaLinux $releasever - Plus - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/plus-debug
+    target: "/etc/yum.repos.d/almalinux-plus.repo"
+  plus-source:
+    descr: AlmaLinux $releasever - Plus - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/plus-source
+    target: "/etc/yum.repos.d/almalinux-plus.repo"
+  plus:
+    descr: AlmaLinux $releasever - Plus
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/plus
+    target: "/etc/yum.repos.d/almalinux-plus.repo"
+  resilientstorage-debuginfo:
+    descr: AlmaLinux $releasever - ResilientStorage - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage-debug
+    target: "/etc/yum.repos.d/almalinux-resilientstorage.repo"
+  resilientstorage-source:
+    descr: AlmaLinux $releasever - ResilientStorage - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage-source
+    target: "/etc/yum.repos.d/almalinux-resilientstorage.repo"
+  resilientstorage:
+    descr: AlmaLinux $releasever - ResilientStorage
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage
+    target: "/etc/yum.repos.d/almalinux-resilientstorage.repo"
+  rt-debuginfo:
+    descr: AlmaLinux $releasever - RT - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/rt-debug
+    target: "/etc/yum.repos.d/almalinux-rt.repo"
+  rt-source:
+    descr: AlmaLinux $releasever - RT - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/rt-source
+    target: "/etc/yum.repos.d/almalinux-rt.repo"
+  rt:
+    descr: AlmaLinux $releasever - RT
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/rt
+    target: "/etc/yum.repos.d/almalinux-rt.repo"
+  sap-debuginfo:
+    descr: AlmaLinux $releasever - SAP - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/sap-debug
+    target: "/etc/yum.repos.d/almalinux-sap.repo"
+  sap-source:
+    descr: AlmaLinux $releasever - SAP - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/sap-source
+    target: "/etc/yum.repos.d/almalinux-sap.repo"
+  sap:
+    descr: AlmaLinux $releasever - SAP
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/sap
+    target: "/etc/yum.repos.d/almalinux-sap.repo"
+  saphana-debuginfo:
+    descr: AlmaLinux $releasever - SAPHANA - Debug
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/saphana-debug
+    target: "/etc/yum.repos.d/almalinux-saphana.repo"
+  saphana-source:
+    descr: AlmaLinux $releasever - SAPHANA - Source
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/saphana-source
+    target: "/etc/yum.repos.d/almalinux-saphana.repo"
+  saphana:
+    descr: AlmaLinux $releasever - SAPHANA
+    enabled: false
+    gpgcheck: true
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux-9
+    metadata_expire: 86400
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/saphana
+    target: "/etc/yum.repos.d/almalinux-saphana.repo"

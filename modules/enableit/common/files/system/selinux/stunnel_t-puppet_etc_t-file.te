@@ -1,0 +1,11 @@
+module stunnel_t-puppet_etc_t-file 1.0;
+
+require {
+        type stunnel_t;
+        type puppet_etc_t;
+        class file { getattr open read };
+}
+
+#============= stunnel_t ==============
+
+allow stunnel_t puppet_etc_t:file { getattr open read };

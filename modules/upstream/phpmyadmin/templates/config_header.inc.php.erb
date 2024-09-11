@@ -1,0 +1,30 @@
+<?php
+/* File managed by Puppet */
+
+/* vim: set expandtab sw=4 ts=4 sts=4: */
+/**
+ * phpMyAdmin sample configuration, you can use it as base for
+ * manual configuration. For easier setup you can use setup/
+ *
+ * All directives are explained in Documentation.html and on phpMyAdmin
+ * wiki <http://wiki.phpmyadmin.net>.
+ *
+ * @package PhpMyAdmin
+ */
+
+/*
+ * This is needed for cookie based authentication to encrypt password in
+ * cookie
+ */
+$cfg['blowfish_secret'] = '<%= @blowfish_key %>'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+
+$cfg['PropertiesIconic'] = <%= @properties_iconic %>;
+
+/*
+ * Servers configuration
+ */
+$i = 0;
+
+/*
+ * First server
+ */

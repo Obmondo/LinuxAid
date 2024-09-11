@@ -1,0 +1,4 @@
+# Ldap
+class kolab::ldap {
+
+}

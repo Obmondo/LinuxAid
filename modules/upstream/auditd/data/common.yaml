@@ -1,0 +1,120 @@
+---
+lookup_options:
+  auditd::config::audit_profiles::simp::audit_auditd_cmds_list:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+  auditd::config::audit_profiles::simp::basic_root_audit_syscalls:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+  auditd::config::audit_profiles::simp::aggressive_root_audit_syscalls:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+  auditd::config::audit_profiles::simp::insane_root_audit_syscalls:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+  auditd::config::audit_profiles::simp::audit_suspicious_apps_list:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+
+auditd::q_depth: 160
+auditd::overflow_action: 'SYSLOG'
+auditd::priority_boost: 4
+auditd::max_restarts: 10
+auditd::name_format: 'USER'
+
+auditd::config::audisp::q_depth: "%{alias('auditd::q_depth')}"
+auditd::config::audisp::overflow_action: "%{alias('auditd::overflow_action')}"
+auditd::config::audisp::priority_boost: "%{alias('auditd::priority_boost')}"
+auditd::config::audisp::max_restarts: "%{alias('auditd::max_restarts')}"
+auditd::config::audisp::name_format: "%{alias('auditd::name_format')}"
+
+auditd::config::audisp::syslog::type: 'builtin'
+auditd::config::audisp::syslog::syslog_path: 'builtin_syslog'
+
+auditd::config::audit_profiles::simp::basic_root_audit_syscalls:
+  - 'capset'
+  - 'mknod'
+  - 'mknodat'
+  - 'pivot_root'
+  - 'quotactl'
+  - 'setsid'
+  - 'adjtimex'
+  - 'settimeofday'
+  - 'setuid'
+  - 'swapoff'
+  - 'swapon'
+
+auditd::config::audit_profiles::simp::aggressive_root_audit_syscalls:
+  - 'capset'
+  - 'mknod'
+  - 'mknodat'
+  - 'pivot_root'
+  - 'quotactl'
+  - 'setsid'
+  - 'adjtimex'
+  - 'settimeofday'
+  - 'setuid'
+  - 'swapoff'
+  - 'swapon'
+  - 'execve'
+  - 'rename'
+  - 'renameat'
+  - 'rmdir'
+  - 'unlink'
+  - 'unlinkat'
+
+auditd::config::audit_profiles::simp::insane_root_audit_syscalls:
+  - 'capset'
+  - 'mknod'
+  - 'mknodat'
+  - 'pivot_root'
+  - 'quotactl'
+  - 'setsid'
+  - 'adjtimex'
+  - 'settimeofday'
+  - 'setuid'
+  - 'swapoff'
+  - 'swapon'
+  - 'execve'
+  - 'rename'
+  - 'renameat'
+  - 'rmdir'
+  - 'unlink'
+  - 'unlinkat'
+  - 'write'
+  - 'chown'
+  - 'fchown'
+  - 'fchownat'
+  - 'lchown'
+  - 'creat'
+  - 'fork'
+  - 'vfork'
+  - 'link'
+  - 'linkat'
+  - 'symlink'
+  - 'symlinkat'
+  - 'mkdir'
+  - 'mkdirat'
+
+auditd::config::audit_profiles::simp::audit_suspicious_apps_list:
+  - '/usr/bin/nc'
+  - '/usr/bin/ncat'
+  - '/usr/bin/nmap'
+  - '/usr/bin/rawshark'
+  - '/usr/bin/socat'
+  - '/usr/bin/wireshark'
+  - '/usr/sbin/tcpdump'
+  - '/usr/sbin/traceroute'
+  - '/usr/sbin/traceroute6'
+
+auditd::config::audit_profiles::simp::audit_auditd_cmds_list:
+  - '/usr/sbin/aulast'
+  - '/usr/sbin/aulastlogin'
+  - '/usr/sbin/aureport'
+  - '/usr/sbin/ausearch'
+  - '/usr/sbin/auvirt'

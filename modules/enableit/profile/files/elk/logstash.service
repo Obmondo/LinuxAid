@@ -1,0 +1,14 @@
+[Unit]
+Description=logstash daemon
+After=network-online.target remote-fs.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+User=logstash
+Environment="LS_HOME=/var/lib/logstash" "LS_JAVA_OPTS=-Djava.io.tmpdir=/var/lib/logstash"
+ExecStart=/opt/logstash/bin/logstash agent --config /etc/logstash/conf.d
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=16384

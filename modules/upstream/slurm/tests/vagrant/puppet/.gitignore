@@ -1,0 +1,4 @@
+*.lock
+metadata.json
+.librarian/
+.tmp/

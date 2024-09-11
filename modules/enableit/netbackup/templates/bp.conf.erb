@@ -1,0 +1,8 @@
+SERVER = <%= @masterserver %>
+<% if @mediaservers -%>
+<% @mediaservers.each do |server| -%>
+SERVER = <%= server %>
+<% end -%>
+<% end -%>
+CLIENT_NAME = <%= @clientname %>
+CONNECT_OPTIONS = localhost 1 0 2

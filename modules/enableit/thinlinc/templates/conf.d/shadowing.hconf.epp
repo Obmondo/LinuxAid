@@ -1,0 +1,11 @@
+#  -*- mode: conf-unix; -*-
+
+[/shadowing]
+# Specify the shadowing mode for the cluster. This configuration is read
+# on the agent server. Possible values are; 'silent', 'notify' 'ask' and 'reject'
+#
+shadowing_mode=<%= $thinlinc::shadowing::shadow_mode %>
+
+# A space-separated list of users that are allowed to shadow other users.
+# Example: allowed_shadowers=root
+allowed_shadowers=<%= $thinlinc::shadowing::allowed_shadowers.join_ %>

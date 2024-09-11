@@ -1,0 +1,7 @@
+---
+name: Basic setup servers
+description: |
+  Basic role will manage
+  System updates
+  OS Repo
+  Monitoring

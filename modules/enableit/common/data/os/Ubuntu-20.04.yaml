@@ -1,0 +1,4 @@
+---
+common::monitor::exporter::enable: true
+common::network::service_name: 'systemd-networkd'
+common::monitor::exporter::security::enable: true

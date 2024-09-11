@@ -1,0 +1,25 @@
+<% if $bind { -%>
+  <%- haproxy::sort_bind($bind).map |$address_port_bind_params| { -%>
+  bind <%= $address_port_bind_params[0] %> <%= Array($address_port_bind_params[1].flatten).join(" ") %>
+  <%- } -%>  
+<% } else { -%>
+  <%- Array($ipaddress.flatten).unique.each |$virtual_ip| { -%>
+    <%- if String(type($ports, 'generalized')).index('Array') == 0 { -%>
+      <%- $ports_as_array = $ports -%>
+    <%- } elsif String(type($ports, 'generalized')).index('String') == 0 { -%>
+      <%- $ports_as_array = Array($ports.split(",")) -%>
+    <%- } else { -%>
+      <%- $ports_as_array = [] -%>
+    <%- } -%>
+    <%- $ports_as_array.each |$port| { -%>
+      <%- $valid_ip = haproxy::validate_ip_addr($virtual_ip) -%>
+      <%- if !$valid_ip and !String($virtual_ip).match(/^[A-Za-z][A-Za-z0-9\.-]+$/) and $virtual_ip != '*' and $virtual_ip != "::" { -%>
+        <%- haproxy::generate_error_message("Invalid IP address or hostname [${virtual_ip}]") -%>
+      <%- } -%>
+      <%- if $port.convert_to(Integer) < 1 or $port.convert_to(Integer) > 65535 { -%>
+        <%- haproxy::generate_error_message("Port [${port}] is outside of range 1-65535") -%>
+      <%- } -%>
+  bind <%= $virtual_ip -%>:<%= $port -%> <% if $bind_options { %><%= " ${Array($bind_options.flatten).join(' ')}" %><%} else { %><%= " " %><% } %>
+    <%- } -%>
+  <%- } -%>
+<%- } -%>

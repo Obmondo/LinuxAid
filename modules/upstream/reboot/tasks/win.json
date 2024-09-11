@@ -1,0 +1,19 @@
+{
+  "description": "Reboots a machine",
+  "private": true,
+  "supports_noop": false,
+  "parameters": {
+    "timeout": {
+      "description": "Timeout before shutdown (seconds)",
+      "type": "Optional[Integer[3]]"
+    },
+    "message": {
+      "description": "Shutdown message for systems that support it",
+      "type": "Optional[Pattern[/^[^|&]*$/]]"
+    },
+    "shutdown_only": {
+      "description": "Only shut the machine down, do not reboot",
+      "type": "Optional[Boolean]"
+    }
+  }
+}

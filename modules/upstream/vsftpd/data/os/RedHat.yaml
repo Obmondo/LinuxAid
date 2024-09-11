@@ -1,0 +1,2 @@
+---
+vsftpd::config_path: /etc/vsftpd/vsftpd.conf

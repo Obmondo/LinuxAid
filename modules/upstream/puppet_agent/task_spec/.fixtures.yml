@@ -1,0 +1,7 @@
+fixtures:
+  forge_modules:
+    facts:
+      repo: "puppetlabs/facts"
+      ref: "0.6.0"
+  symlinks:
+    puppet_agent: "#{File.absolute_path(File.join(source_dir, '..'))}"

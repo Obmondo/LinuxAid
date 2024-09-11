@@ -1,0 +1,8 @@
+---
+common::logging::log_dir_group: 'adm'
+
+common::system::dns::resolver: 'resolv'
+common::system::dns::dnssec: 'allow-downgrade'
+common::system::dns::dns_over_tls: false
+common::system::time::ntp::ntp_client: 'chrony'
+common::monitor::exporter::enable: true

@@ -1,0 +1,109 @@
+#!/bin/bash
+
+## ================================================
+## CONSTANTS
+## ================================================
+BACKUP_DIR='<%= @backup_dir %>'
+BACKUP_RETENTION='<%= @backup_retention %>'
+MYSQL_USER='<%= @mysql_user %>'
+MYSQL_PASS='<%= @mysql_pass %>'
+USE_INNOBACKUPX='<%= @use_innobackupx %>'
+PRUNE_BACKUPS='<%= @prune_backups %>'
+XTRABACKUP_OPTIONS='<%= @xtrabackup_options %>'
+INNOBACKUPX_OPTIONS='<%= @innobackupx_otions %>'
+LOGFILE='<%= @logfile %>'
+BACKUP_LOCATION="${BACKUP_DIR}/`date +%F`"
+<% unless @last_borgbackup.nil? -%>
+TEMP_LAST_BORGBACKUP="<%= @last_borgbackup %>"
+<% end -%>
+
+## ================================================
+## FUNCTIONS
+## ================================================
+
+exit_with_error ()
+{
+  log "ERROR: $*"
+  log "ERROR: There was a problem with the xtrabackup run. See the logfile: ${LOGFILE}"
+  exit 1
+}
+
+log () {
+  LOGSTRING="[ `date +%Y/%m/%d:%H:%M:%S` ] : $*"
+  echo ${LOGSTRING} >> ${LOGFILE}
+}
+
+check_status () {
+  if [ $? -ne 0 ]; then
+    exit_with_error "$1 Something went wrong with the backup. View the log file for more info."
+    exit 1
+  fi
+}
+
+prepare_env() {
+  mkdir -p ${BACKUP_LOCATION}
+}
+
+run_xtrabackup() {
+  log "INFO: Starting backup process"
+  xtrabackup ${XTRABACKUP_OPTIONS} --backup --user ${MYSQL_USER} --password ${MYSQL_PASS} --target-dir=${BACKUP_LOCATION} >> ${LOGFILE} 2>&1
+  check_status
+  log "INFO: Preparing backup files phase 1"
+  xtrabackup --prepare --target-dir=${BACKUP_LOCATION} >> ${LOGFILE} 2>&1
+  check_status
+  log "INFO: Preparing backup files phase 2"
+  xtrabackup --prepare --target-dir=${BACKUP_LOCATION} >> ${LOGFILE} 2>&1
+  check_status
+  log "INFO: Backup Process Complete"
+}
+
+run_innobackupx() {
+  log "INFO: Starting backup process"
+  innobackupex ${INNOBACKUPX_OPTIONS} ${BACKUP_LOCATION} >> $LOGFILE 2>&1
+  check_status
+  log "INFO: Preparing backup files"
+  INNOBACKUP_LOCATION=$(find ${BACKUP_LOCATION}/* -type d -print -quit)
+  innobackupex --apply-log $INNOBACKUP_LOCATION >> $LOGFILE 2>&1
+  check_status
+  log "INFO: Backup Process Complete"
+}
+
+run_prune_backups() {
+  log "INFO: Clearing backups older than ${BACKUP_RETENTION} days"
+  find ${BACKUP_DIR}/* -type d -ctime +${BACKUP_RETENTION} -exec rm -rf {} + >> ${LOGFILE} 2>&1
+  check_status
+}
+
+
+## ================================================
+## MAIN
+## ================================================
+prepare_env
+
+if [ ${USE_INNOBACKUPX} == true ]; then
+  run_innobackupx
+else
+  run_xtrabackup
+fi
+
+if [ ${PRUNE_BACKUPS} == true ]; then
+  <% unless @last_borgbackup.nil? -%>
+  if [ -f "${TEMP_LAST_BORGBACKUP}" ]; then
+    if test $(find "${TEMP_LAST_BORGBACKUP}" -mmin +1440)
+    then
+      log "The borg check has failed to touch the tmpfile, run borg check command to findout"
+      exit 1
+    fi
+    if test $(cat "${TEMP_LAST_BORGBACKUP}") -ne 0
+    then
+      log "The borg check command didnt ended up with exit code 0, so something is wrong. Start with borg list"
+      exit 1
+    fi
+  else
+   log "There is no temp file created from borg backup, so check borg timer"
+    exit 1
+  fi
+  <% end -%>
+
+  run_prune_backups
+fi

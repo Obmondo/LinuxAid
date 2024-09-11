@@ -1,0 +1,5 @@
+---
+stunnel::conf_dir: '/etc/stunnel'
+stunnel::log_dir: '/var/log/stunnel'
+stunnel::package: 'stunnel'
+stunnel::service: 'stunnel'

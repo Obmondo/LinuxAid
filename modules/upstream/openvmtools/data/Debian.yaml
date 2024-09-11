@@ -1,0 +1,5 @@
+---
+
+openvmtools::desktop_package_name: 'open-vm-toolbox'
+openvmtools::service_name: 'open-vm-tools'
+openvmtools::service_hasstatus: false

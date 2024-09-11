@@ -1,0 +1,14 @@
+[Unit]
+Description=ANSYS FlexLM License Service
+After=network-online.target
+
+[Service]
+Type=forking
+User=root
+WorkingDirectory=/ansys_inc/shared_files/licensing
+ExecStart=/ansys_inc/shared_files/licensing/linx64/lmgrd -l +/ansys_inc/shared_files/licensing/license.log -c /ansys_inc/shared_files/licensing/license_files
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

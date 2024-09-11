@@ -1,0 +1,7 @@
+{
+  "description": "Gets the last boot time of a Linux or Windows system",
+  "implementations": [
+    {"name": "last_boot_time_nix.sh", "requirements": ["shell"]},
+    {"name": "last_boot_time_win.ps1", "requirements": ["powershell"]}
+  ]
+}

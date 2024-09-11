@@ -1,0 +1,7 @@
+---
+
+sssd::service_dependencies:
+  - 'messagebus'
+
+sssd::extra_packages:
+  - 'authconfig'

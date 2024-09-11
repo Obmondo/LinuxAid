@@ -1,0 +1,9 @@
+---
+systemd::resolved_package: 'systemd-resolved'
+systemd::nspawn_package: ~
+
+systemd::accounting:
+  DefaultCPUAccounting: 'yes'
+  DefaultBlockIOAccounting: 'yes'
+  DefaultMemoryAccounting: 'yes'
+  DefaultTasksAccounting: 'yes'

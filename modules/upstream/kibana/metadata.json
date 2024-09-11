@@ -1,0 +1,65 @@
+{
+  "name": "puppet-kibana",
+  "version": "8.0.0",
+  "author": "Vox Pupuli",
+  "summary": "Module for installing, configuring, and managing Kibana.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-kibana",
+  "project_page": "https://github.com/voxpupuli/puppet-kibana",
+  "issues_url": "https://github.com/voxpupuli/puppet-kibana/issues",
+  "dependencies": [
+    {
+      "name": "puppet/elastic_stack",
+      "version_requirement": ">= 6.1.0 < 10.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": [
+        "34",
+        "35"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2017.03"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ]
+}

@@ -1,0 +1,1858 @@
+---
+version: 2.0.0
+checks:
+  oval:com.puppet.forge.simp.auditd.admin_space_left:
+    settings:
+      parameter: auditd::admin_space_left
+      value: 50
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-5:b: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-5:b
+      - AU-11
+  oval:com.puppet.forge.simp.auditd.admin_space_left_action:
+    settings:
+      parameter: auditd::admin_space_left_action
+      value: SUSPEND
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-5:b: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-5:b
+      - AU-11
+    oval-ids:
+    - auditd_data_retention_admin_space_left_action
+  oval:com.puppet.forge.simp.auditd.at_boot:
+    settings:
+      parameter: auditd::at_boot
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-14:1: true
+      nist_800_53:rev4:AU-1:b: true
+      nist_800_53:rev4:AU-2:a: true
+      nist_800_53:rev4:AU-2:c: true
+      nist_800_53:rev4:AU-2:d: true
+      nist_800_53:rev4:AU-10: true
+      disa_stig: true
+      RHEL-07-030310: true
+      RHEL-07-030020: true
+      SRG-OS-000327-GPOS-00127: true
+      SRG-OS-000042-GPOS-00020: true
+      cci:CCI-002234: true
+      cci:CCI-000135: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-14:1
+      - AU-1:b
+      - AU-2:a
+      - AU-2:c
+      - AU-2:d
+      - AU-10
+      disa_stig:
+      - RHEL-07-030310
+      - RHEL-07-030020
+      - SRG-OS-000327-GPOS-00127
+      - SRG-OS-000042-GPOS-00020
+      - CCI-002234
+      - CCI-000135
+    oval-ids:
+    - bootloader_audit_argument
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_attr:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_attr
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_removexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_setxattr
+    - audit_rules_dac_modification_fremovexattr
+    - audit_rules_dac_modification_fsetxattr
+    - audit_rules_dac_modification_lremovexattr
+    - audit_rules_dac_modification_lsetxattr
+    - audit_rules_dac_modification_removexattr
+    - audit_rules_dac_modification_setxattr
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_cron:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_cron
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_pam:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_pam
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_security:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_security
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_services:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_services
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_shell:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_shell
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_sys:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_sys
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_cfg_xinetd:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_xinetd
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_chmod:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_chmod
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmodat
+    - audit_rules_dac_modification_chmod
+    - audit_rules_dac_modification_fchmod
+    - audit_rules_dac_modification_fchmodat
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_chown:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_chown
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchownat
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lchown
+    - audit_rules_dac_modification_chown
+    - audit_rules_dac_modification_fchown
+    - audit_rules_dac_modification_fchownat
+    - audit_rules_dac_modification_lchown
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_grub:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_grub
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_kernel_modules:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_kernel_modules
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_local_account:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_local_account
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_locale:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_locale
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_login_files:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_login_files
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_mount:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_mount
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_personality:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_personality
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_ptrace:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_ptrace
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_selinux_policy:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_selinux_policy
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_session_files:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_session_files
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_su_root_activity:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_su_root_activity
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_sudoers:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_sudoers
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_suid_sgid:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_suid_sgid
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_time:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_time
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_umask:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_umask
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_unsuccessful_file_operations:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_yum:
+    settings:
+      parameter: auditd::config::audit_profiles::simp::audit_yum
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.ignore_anonymous:
+    settings:
+      parameter: auditd::ignore_anonymous
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.ignore_errors:
+    settings:
+      parameter: auditd::ignore_errors
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.ignore_system_services:
+    settings:
+      parameter: auditd::ignore_system_services
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2
+  oval:com.puppet.forge.simp.auditd.disk_error_action:
+    settings:
+      parameter: auditd::disk_error_action
+      value: SUSPEND
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-5:b: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-5:b
+      - AU-11
+  oval:com.puppet.forge.simp.auditd.disk_full_action:
+    settings:
+      parameter: auditd::disk_full_action
+      value: SUSPEND
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-5:b: true
+      nist_800_53:rev4:AU-11: true
+      disa_stig: true
+      RHEL-07-030340: true
+      SRG-OS-000342-GPOS-00133: true
+      cci:CCI-001851: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-5:b
+      - AU-11
+      disa_stig:
+      - RHEL-07-030340
+      - SRG-OS-000342-GPOS-00133
+      - CCI-001851
+  oval:com.puppet.forge.simp.auditd.enable:
+    settings:
+      parameter: auditd::enable
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-8:b: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:b: true
+      nist_800_53:rev4:AU-12:c: true
+      nist_800_53:rev4:AU-12:2: true
+      disa_stig: true
+      RHEL-07-030000: true
+      SRG-OS-000038-GPOS-00016: true
+      SRG-OS-000039-GPOS-00017: true
+      SRG-OS-000042-GPOS-00021: true
+      SRG-OS-000254-GPOS-00095: true
+      SRG-OS-000255-GPOS-00096: true
+      cci:CCI-000126: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-8:b
+      - AU-12:a
+      - AU-12:b
+      - AU-12:c
+      - AU-12:2
+      disa_stig:
+      - RHEL-07-030000
+      - SRG-OS-000038-GPOS-00016
+      - SRG-OS-000039-GPOS-00017
+      - SRG-OS-000042-GPOS-00021
+      - SRG-OS-000254-GPOS-00095
+      - SRG-OS-000255-GPOS-00096
+      - CCI-000126
+    oval-ids:
+    - service_auditd_enabled
+  oval:com.puppet.forge.simp.auditd.failure_mode:
+    settings:
+      parameter: auditd::failure_mode
+      value: 2
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-5:b: true
+      disa_stig: true
+      RHEL-07-030010: true
+      SRG-OS-000046-GPOS-00022: true
+      SRG-OS-000047-GPOS-00023: true
+      'CCI: CCI-000139': true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-5:b
+      disa_stig:
+      - RHEL-07-030010
+      - SRG-OS-000046-GPOS-00022
+      - SRG-OS-000047-GPOS-00023
+      - 'CCI: CCI-000139'
+  oval:com.puppet.forge.simp.auditd.max_log_file:
+    settings:
+      parameter: auditd::max_log_file
+      value: 24
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-11
+    oval-ids:
+    - auditd_data_retention_max_log_file
+  oval:com.puppet.forge.simp.auditd.num_logs:
+    settings:
+      parameter: auditd::num_logs
+      value: 5
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-11
+    oval-ids:
+    - auditd_data_retention_space_left_action
+  oval:com.puppet.forge.simp.auditd.package_name:
+    settings:
+      parameter: auditd::package_name
+      value: audit
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-3: true
+      nist_800_53:rev4:AU-8:b: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:b: true
+      nist_800_53:rev4:AU-12:c: true
+      nist_800_53:rev4:AU-12:2: true
+      disa_stig: true
+      RHEL-07-030200: true
+      SRG-OS-000205-GPOS-00083: true
+      cci:CCI-001312: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-3
+      - AU-8:b
+      - AU-12:a
+      - AU-12:b
+      - AU-12:c
+      - AU-12:2
+      disa_stig:
+      - RHEL-07-030200
+      - SRG-OS-000205-GPOS-00083
+      - CCI-001312
+  oval:com.puppet.forge.simp.auditd.root_audit_level:
+    settings:
+      parameter: auditd::root_audit_level
+      value: basic
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AC-6:9: true
+      nist_800_53:rev4:AU-2:a: true
+      nist_800_53:rev4:AU-2:b: true
+      nist_800_53:rev4:AU-2:c: true
+      nist_800_53:rev4:AU-2:d: true
+      nist_800_53:rev4:AU-2:4: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:c: true
+      disa_stig: true
+      RHEL-07-030310: true
+      RHEL-07-030020: true
+      SRG-OS-000327-GPOS-00127: true
+      SRG-OS-000042-GPOS-00020: true
+      cci:CCI-002234: true
+      cci:CCI-000135: true
+    identifiers:
+      nist_800_53:rev4:
+      - AC-6:9
+      - AU-2:a
+      - AU-2:b
+      - AU-2:c
+      - AU-2:d
+      - AU-2:4
+      - AU-12:a
+      - AU-12:c
+      disa_stig:
+      - RHEL-07-030310
+      - RHEL-07-030020
+      - SRG-OS-000327-GPOS-00127
+      - SRG-OS-000042-GPOS-00020
+      - CCI-002234
+      - CCI-000135
+  oval:com.puppet.forge.simp.auditd.service_name:
+    settings:
+      parameter: auditd::service_name
+      value: auditd
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-8:b: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:b: true
+      nist_800_53:rev4:AU-12:c: true
+      nist_800_53:rev4:AU-12:2: true
+      disa_stig: true
+      RHEL-07-030010: true
+      SRG-OS-000038-GPOS-00016: true
+      SRG-OS-000039-GPOS-00017: true
+      SRG-OS-000042-GPOS-00021: true
+      cci:CCI-000131: true
+      cci:CCI-000126: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-8:b
+      - AU-12:a
+      - AU-12:b
+      - AU-12:c
+      - AU-12:2
+      disa_stig:
+      - RHEL-07-030010
+      - SRG-OS-000038-GPOS-00016
+      - SRG-OS-000039-GPOS-00017
+      - SRG-OS-000042-GPOS-00021
+      - CCI-000131
+      - CCI-000126
+  oval:com.puppet.forge.simp.auditd.default_audit_profile:
+    settings:
+      parameter: auditd::default_audit_profile
+      value: simp
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2:a: true
+      nist_800_53:rev4:AU-2:c: true
+      nist_800_53:rev4:AU-2:d: true
+      nist_800_53:rev4:AC-6:9: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:c: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2:a
+      - AU-2:c
+      - AU-2:d
+      - AC-6:9
+      - AU-12:a
+      - AU-12:c
+    confine:
+      osfamily: RedHat
+  oval:com.puppet.forge.simp.auditd.action_mail_acct:
+    settings:
+      parameter: auditd::action_mail_acct
+      value: root
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      RHEL-07-030350: true
+      SRG-OS-000343-GPOS-00134: true
+      cci:CCI-001855: true
+    identifiers:
+      disa_stig:
+      - RHEL-07-030350
+      - SRG-OS-000343-GPOS-00134
+      - CCI-001855
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - auditd_data_retention_action_mail_acct
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_attr:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_attr
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      RHEL-07-030440: true
+      RHEL-07-030450: true
+      RHEL-07-030460: true
+      RHEL-07-030470: true
+      RHEL-07-030480: true
+      RHEL-07-030490: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - RHEL-07-030440
+      - RHEL-07-030450
+      - RHEL-07-030460
+      - RHEL-07-030470
+      - RHEL-07-030480
+      - RHEL-07-030490
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_removexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_setxattr
+    - audit_rules_dac_modification_fremovexattr
+    - audit_rules_dac_modification_fsetxattr
+    - audit_rules_dac_modification_lremovexattr
+    - audit_rules_dac_modification_lsetxattr
+    - audit_rules_dac_modification_removexattr
+    - audit_rules_dac_modification_setxattr
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_attr_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_attr_tag
+      value: perm_mod
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      RHEL-07-030440: true
+      RHEL-07-030450: true
+      RHEL-07-030460: true
+      RHEL-07-030470: true
+      RHEL-07-030480: true
+      RHEL-07-030490: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - RHEL-07-030440
+      - RHEL-07-030450
+      - RHEL-07-030460
+      - RHEL-07-030470
+      - RHEL-07-030480
+      - RHEL-07-030490
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lremovexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lsetxattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_removexattr
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_setxattr
+    - audit_rules_dac_modification_fremovexattr
+    - audit_rules_dac_modification_fsetxattr
+    - audit_rules_dac_modification_lremovexattr
+    - audit_rules_dac_modification_lsetxattr
+    - audit_rules_dac_modification_removexattr
+    - audit_rules_dac_modification_setxattr
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_cfg_sudoers:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_cfg_sudoers
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000037-GPOS-00015: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000462-GPOS-00206: true
+      SRG-OS-000471-GPOS-00215: true
+      RHEL-07-030700: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000037-GPOS-00015
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000462-GPOS-00206
+      - SRG-OS-000471-GPOS-00215
+      - RHEL-07-030700
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - audit_rules_sysadmin_actions
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_cfg_sudoers_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_cfg_sudoers_tag
+      value: privileged-actions
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000037-GPOS-00015: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000462-GPOS-00206: true
+      SRG-OS-000471-GPOS-00215: true
+      RHEL-07-030700: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000037-GPOS-00015
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000462-GPOS-00206
+      - SRG-OS-000471-GPOS-00215
+      - RHEL-07-030700
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_chmod:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_chmod
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      RHEL-07-030410: true
+      RHEL-07-030420: true
+      RHEL-07-030430: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - RHEL-07-030410
+      - RHEL-07-030420
+      - RHEL-07-030430
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmodat
+    - audit_rules_dac_modification_chmod
+    - audit_rules_dac_modification_fchmod
+    - audit_rules_dac_modification_fchmodat
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_chmod_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_chmod_tag
+      value: perm_mod
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      RHEL-07-030410: true
+      RHEL-07-030420: true
+      RHEL-07-030430: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - RHEL-07-030410
+      - RHEL-07-030420
+      - RHEL-07-030430
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmod
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmodat
+    - audit_rules_dac_modification_chmod
+    - audit_rules_dac_modification_fchmod
+    - audit_rules_dac_modification_fchmodat
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_chown:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_chown
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      SRG-OS-000474-GPOS-00219: true
+      RHEL-07-030370: true
+      RHEL-07-030380: true
+      RHEL-07-030390: true
+      RHEL-07-030400: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - SRG-OS-000474-GPOS-00219
+      - RHEL-07-030370
+      - RHEL-07-030380
+      - RHEL-07-030390
+      - RHEL-07-030400
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchownat
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lchown
+    - audit_rules_dac_modification_chown
+    - audit_rules_dac_modification_fchown
+    - audit_rules_dac_modification_fchownat
+    - audit_rules_dac_modification_lchown
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_chown_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_chown_tag
+      value: perm_mod
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      SRG-OS-000474-GPOS-00219: true
+      RHEL-07-030370: true
+      RHEL-07-030380: true
+      RHEL-07-030390: true
+      RHEL-07-030400: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - SRG-OS-000474-GPOS-00219
+      - RHEL-07-030370
+      - RHEL-07-030380
+      - RHEL-07-030390
+      - RHEL-07-030400
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchown
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchownat
+    - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_lchown
+    - audit_rules_dac_modification_chown
+    - audit_rules_dac_modification_fchown
+    - audit_rules_dac_modification_fchownat
+    - audit_rules_dac_modification_lchown
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_crontab_cmd:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_crontab_cmd
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030800: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030800
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_crontab_cmd_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_crontab_cmd_tag
+      value: privileged-cron
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030800: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030800
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_kernel_modules:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_kernel_modules
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000471-GPOS-00216: true
+      SRG-OS-000477-GPOS-00222: true
+      RHEL-07-030819: true
+      RHEL-07-030820: true
+      RHEL-07-030821: true
+      RHEL-07-030830: true
+      RHEL-07-030840: true
+      RHEL-07-030850: true
+      RHEL-07-030860: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000471-GPOS-00216
+      - SRG-OS-000477-GPOS-00222
+      - RHEL-07-030819
+      - RHEL-07-030820
+      - RHEL-07-030821
+      - RHEL-07-030830
+      - RHEL-07-030840
+      - RHEL-07-030850
+      - RHEL-07-030860
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - audit_rules_kernel_module_loading
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_kernel_modules_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_kernel_modules_tag
+      value: module-change
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000471-GPOS-00216: true
+      SRG-OS-000477-GPOS-00222: true
+      RHEL-07-030819: true
+      RHEL-07-030820: true
+      RHEL-07-030821: true
+      RHEL-07-030830: true
+      RHEL-07-030840: true
+      RHEL-07-030850: true
+      RHEL-07-030860: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000471-GPOS-00216
+      - SRG-OS-000477-GPOS-00222
+      - RHEL-07-030819
+      - RHEL-07-030820
+      - RHEL-07-030821
+      - RHEL-07-030830
+      - RHEL-07-030840
+      - RHEL-07-030850
+      - RHEL-07-030860
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_local_account:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_local_account
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG–OS–000004–GPOS–00004: true
+      SRG–OS–000239–GPOS–00089: true
+      SRG–OS–000241–GPOS–00090: true
+      SRG–OS–000241–GPOS–00091: true
+      SRG–OS–000303–GPOS–00120: true
+      SRG–OS–000476–GPOS–00221: true
+      RHEL-07-030870: true
+      RHEL-07-030871: true
+      RHEL-07-030872: true
+      RHEL-07-030873: true
+      RHEL-07-030874: true
+    identifiers:
+      disa_stig:
+      - SRG–OS–000004–GPOS–00004
+      - SRG–OS–000239–GPOS–00089
+      - SRG–OS–000241–GPOS–00090
+      - SRG–OS–000241–GPOS–00091
+      - SRG–OS–000303–GPOS–00120
+      - SRG–OS–000476–GPOS–00221
+      - RHEL-07-030870
+      - RHEL-07-030871
+      - RHEL-07-030872
+      - RHEL-07-030873
+      - RHEL-07-030874
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_local_account_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_local_account_tag
+      value: identity
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG–OS–000004–GPOS–00004: true
+      SRG–OS–000239–GPOS–00089: true
+      SRG–OS–000241–GPOS–00090: true
+      SRG–OS–000241–GPOS–00091: true
+      SRG–OS–000303–GPOS–00120: true
+      SRG–OS–000476–GPOS–00221: true
+      RHEL-07-030870: true
+      RHEL-07-030871: true
+      RHEL-07-030872: true
+      RHEL-07-030873: true
+      RHEL-07-030874: true
+    identifiers:
+      disa_stig:
+      - SRG–OS–000004–GPOS–00004
+      - SRG–OS–000239–GPOS–00089
+      - SRG–OS–000241–GPOS–00090
+      - SRG–OS–000241–GPOS–00091
+      - SRG–OS–000303–GPOS–00120
+      - SRG–OS–000476–GPOS–00221
+      - RHEL-07-030870
+      - RHEL-07-030871
+      - RHEL-07-030872
+      - RHEL-07-030873
+      - RHEL-07-030874
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_login_files:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_login_files
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000470-GPOS-00214: true
+      SRG-OS-000473-GPOS-00218: true
+      RHEL-07-030600: true
+      RHEL-07-030610: true
+      RHEL-07-030620: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000470-GPOS-00214
+      - SRG-OS-000473-GPOS-00218
+      - RHEL-07-030600
+      - RHEL-07-030610
+      - RHEL-07-030620
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_login_events_faillock
+    - xccdf_org:ssgproject:content_rule_audit_rules_login_events_tallylog
+    - audit_rules_login_events_faillock
+    - audit_rules_login_events_tallylog
+    - audit_rules_login_events
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_login_files_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_login_files_tag
+      value: logins
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000470-GPOS-00214: true
+      SRG-OS-000473-GPOS-00218: true
+      RHEL-07-030600: true
+      RHEL-07-030610: true
+      RHEL-07-030620: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000470-GPOS-00214
+      - SRG-OS-000473-GPOS-00218
+      - RHEL-07-030600
+      - RHEL-07-030610
+      - RHEL-07-030620
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_login_events_faillock
+    - xccdf_org:ssgproject:content_rule_audit_rules_login_events_tallylog
+    - audit_rules_login_events_faillock
+    - audit_rules_login_events_tallylog
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_mount:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_mount
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      RHEL-07-030740: true
+      RHEL-07-030750: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - RHEL-07-030740
+      - RHEL-07-030750
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - audit_rules_media_export
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_mount_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_mount_tag
+      value: privileged-mount
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      RHEL-07-030740: true
+      RHEL-07-030750: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - RHEL-07-030740
+      - RHEL-07-030750
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_pam_timestamp_check_cmd:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000172: true
+      RHEL-07-030810: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000172
+      - RHEL-07-030810
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_pam_timestamp_check_cmd_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag
+      value: privileged-pam
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000172: true
+      RHEL-07-030810: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000172
+      - RHEL-07-030810
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_passwd_cmds:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_passwd_cmds
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030630: true
+      RHEL-07-030640: true
+      RHEL-07-030650: true
+      RHEL-07-030660: true
+      RHEL-07-030670: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030630
+      - RHEL-07-030640
+      - RHEL-07-030650
+      - RHEL-07-030660
+      - RHEL-07-030670
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_passwd_cmds_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_passwd_cmds_tag
+      value: privileged-passwd
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030630: true
+      RHEL-07-030640: true
+      RHEL-07-030650: true
+      RHEL-07-030660: true
+      RHEL-07-030670: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030630
+      - RHEL-07-030640
+      - RHEL-07-030650
+      - RHEL-07-030660
+      - RHEL-07-030670
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_postfix_cmds:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_postfix_cmds
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      cci:CCI-000135: true
+      RHEL-07-030760: true
+      RHEL-07-030770: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - CCI-000135
+      - RHEL-07-030760
+      - RHEL-07-030770
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_postfix_cmds_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_postfix_cmds_tag
+      value: privileged-postfix
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      cci:CCI-000135: true
+      RHEL-07-030760: true
+      RHEL-07-030770: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - CCI-000135
+      - RHEL-07-030760
+      - RHEL-07-030770
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_priv_cmds:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_priv_cmds
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000037-GPOS-00015: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000462-GPOS-00206: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000130: true
+      RHEL-07-030680: true
+      RHEL-07-030690: true
+      RHEL-07-030710: true
+      RHEL-07-030720: true
+      RHEL-07-030730: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000037-GPOS-00015
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000462-GPOS-00206
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000130
+      - RHEL-07-030680
+      - RHEL-07-030690
+      - RHEL-07-030710
+      - RHEL-07-030720
+      - RHEL-07-030730
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_priv_cmds_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_priv_cmds_tag
+      value: privileged-priv_change
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000037-GPOS-00015: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000462-GPOS-00206: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000130: true
+      RHEL-07-030680: true
+      RHEL-07-030690: true
+      RHEL-07-030710: true
+      RHEL-07-030720: true
+      RHEL-07-030730: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000037-GPOS-00015
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000462-GPOS-00206
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000130
+      - RHEL-07-030680
+      - RHEL-07-030690
+      - RHEL-07-030710
+      - RHEL-07-030720
+      - RHEL-07-030730
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_rename_remove:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_rename_remove
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000466-GPOS-00210: true
+      SRG-OS-000467-GPOS-00210: true
+      SRG-OS-000468-GPOS-00212: true
+      RHEL-07-030880: true
+      RHEL-07-030890: true
+      RHEL-07-030900: true
+      RHEL-07-030910: true
+      RHEL-07-030920: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000466-GPOS-00210
+      - SRG-OS-000467-GPOS-00210
+      - SRG-OS-000468-GPOS-00212
+      - RHEL-07-030880
+      - RHEL-07-030890
+      - RHEL-07-030900
+      - RHEL-07-030910
+      - RHEL-07-030920
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rmdir
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlink
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlinkat
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rename
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_renameat
+    - audit_rules_file_deletion_events_rmdir
+    - audit_rules_file_deletion_events_unlink
+    - audit_rules_file_deletion_events_unlinkat
+    - audit_rules_file_deletion_events_rename
+    - audit_rules_file_deletion_events_renameat
+    - audit_rules_file_deletion_events
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_rename_remove_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_rename_remove_tag
+      value: delete
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000466-GPOS-00210: true
+      SRG-OS-000467-GPOS-00210: true
+      SRG-OS-000468-GPOS-00212: true
+      RHEL-07-030880: true
+      RHEL-07-030890: true
+      RHEL-07-030900: true
+      RHEL-07-030910: true
+      RHEL-07-030920: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000466-GPOS-00210
+      - SRG-OS-000467-GPOS-00210
+      - SRG-OS-000468-GPOS-00212
+      - RHEL-07-030880
+      - RHEL-07-030890
+      - RHEL-07-030900
+      - RHEL-07-030910
+      - RHEL-07-030920
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rmdir
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlink
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlinkat
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rename
+    - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_renameat
+    - audit_rules_file_deletion_events_rmdir
+    - audit_rules_file_deletion_events_unlink
+    - audit_rules_file_deletion_events_unlinkat
+    - audit_rules_file_deletion_events_rename
+    - audit_rules_file_deletion_events_renameat
+    - audit_rules_file_deletion_events
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_selinux_cmds:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_selinux_cmds
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000463-GPOS-00207: true
+      SRG-OS-000465-GPOS-00209: true
+      RHEL-07-030560: true
+      RHEL-07-030570: true
+      RHEL-07-030580: true
+      RHEL-07-030590: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000463-GPOS-00207
+      - SRG-OS-000465-GPOS-00209
+      - RHEL-07-030560
+      - RHEL-07-030570
+      - RHEL-07-030580
+      - RHEL-07-030590
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_selinux_cmds_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_selinux_cmds_tag
+      value: privileged-priv_change
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000463-GPOS-00207: true
+      SRG-OS-000465-GPOS-00209: true
+      RHEL-07-030560: true
+      RHEL-07-030570: true
+      RHEL-07-030580: true
+      RHEL-07-030590: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000463-GPOS-00207
+      - SRG-OS-000465-GPOS-00209
+      - RHEL-07-030560
+      - RHEL-07-030570
+      - RHEL-07-030580
+      - RHEL-07-030590
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_ssh_keysign_cmd:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030780: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030780
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_ssh_keysign_cmd_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd_tag
+      value: privileged-ssh
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      AU-2: true
+      SRG-OS-000042-GPOS-00020: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000471-GPOS-00215: true
+      cci:CCI-000135: true
+      RHEL-07-030780: true
+    identifiers:
+      disa_stig:
+      - AU-2
+      - SRG-OS-000042-GPOS-00020
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000471-GPOS-00215
+      - CCI-000135
+      - RHEL-07-030780
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_suid_sgid:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_suid_sgid
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000327-GPOS-00127: true
+      RHEL-07-030360: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000327-GPOS-00127
+      - RHEL-07-030360
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_suid_sgid_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_suid_sgid_tag
+      value: setuid/setgid
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000327-GPOS-00127: true
+      RHEL-07-030360: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000327-GPOS-00127
+      - RHEL-07-030360
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - audit_rules_privileged_commands
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_unsuccessful_file_operations:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations
+      value: true
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      SRG-OS-000461-GPOS-00205: true
+      RHEL-07-030500: true
+      RHEL-07-030510: true
+      RHEL-07-030520: true
+      RHEL-07-030530: true
+      RHEL-07-030540: true
+      RHEL-07-030550: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - SRG-OS-000461-GPOS-00205
+      - RHEL-07-030500
+      - RHEL-07-030510
+      - RHEL-07-030520
+      - RHEL-07-030530
+      - RHEL-07-030540
+      - RHEL-07-030550
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_creat
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_openat
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open_by_handle_at
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_truncate
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_ftruncate
+    - audit_rules_unsuccessful_file_modification_creat
+    - audit_rules_unsuccessful_file_modification_open
+    - audit_rules_unsuccessful_file_modification_openat
+    - audit_rules_unsuccessful_file_modification_open_by_handle_at
+    - audit_rules_unsuccessful_file_modification_truncate
+    - audit_rules_unsuccessful_file_modification_ftruncate
+    - audit_rules_unsuccessful_file_modification
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_unsuccessful_file_operations_tag:
+    settings:
+      parameter: auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag
+      value: access
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000392-GPOS-00172: true
+      SRG-OS-000458-GPOS-00203: true
+      SRG-OS-000461-GPOS-00205: true
+      RHEL-07-030500: true
+      RHEL-07-030510: true
+      RHEL-07-030520: true
+      RHEL-07-030530: true
+      RHEL-07-030540: true
+      RHEL-07-030550: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000392-GPOS-00172
+      - SRG-OS-000458-GPOS-00203
+      - SRG-OS-000461-GPOS-00205
+      - RHEL-07-030500
+      - RHEL-07-030510
+      - RHEL-07-030520
+      - RHEL-07-030530
+      - RHEL-07-030540
+      - RHEL-07-030550
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_creat
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_openat
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open_by_handle_at
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_truncate
+    - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_ftruncate
+    - audit_rules_unsuccessful_file_modification_creat
+    - audit_rules_unsuccessful_file_modification_open
+    - audit_rules_unsuccessful_file_modification_openat
+    - audit_rules_unsuccessful_file_modification_open_by_handle_at
+    - audit_rules_unsuccessful_file_modification_truncate
+    - audit_rules_unsuccessful_file_modification_ftruncate
+    - audit_rules_unsuccessful_file_modification
+  oval:com.puppet.forge.simp.auditd.default_audit_profile:
+    settings:
+      parameter: auditd::default_audit_profile
+      value: 
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+    identifiers:
+      disa_stig: []
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.default_audit_profiles:
+    settings:
+      parameter: auditd::default_audit_profiles
+      value:
+      - stig
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000239-GPOS-00089: true
+      SRG-OS-000241-GPOS-00090: true
+      SRG-OS-000241-GPOS-00091: true
+      cci:CCI-001403: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000239-GPOS-00089
+      - SRG-OS-000241-GPOS-00090
+      - SRG-OS-000241-GPOS-00091
+      - CCI-001403
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+  oval:com.puppet.forge.simp.auditd.space_left_action:
+    settings:
+      parameter: auditd::space_left_action
+      value: EMAIL
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      RHEL-07-030350: true
+      SRG-OS-000343-GPOS-00134: true
+      cci:CCI-001855: true
+    identifiers:
+      disa_stig:
+      - RHEL-07-030350
+      - SRG-OS-000343-GPOS-00134
+      - CCI-001855
+    confine:
+      osfamily: RedHat
+      operatingsystemmajrelease: '7'
+    oval-ids:
+    - auditd_data_retention_space_left_action
+  oval:com.puppet.forge.simp.auditd.space_left_action:
+    settings:
+      parameter: auditd::space_left_action
+      value: SYSLOG
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-5:a: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-5:a
+      - AU-11
+    confine:
+      osfamily: RedHat
+    oval-ids:
+    - auditd_data_retention_space_left_action

@@ -1,0 +1,17 @@
+{
+  "name": "puppetlabs-motd",
+  "version": "1.2.0",
+  "author": "puppetlabs",
+  "summary": "A simple module to demonstrate managing /etc/motd as a template",
+  "license": "Apache License, Version 2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-motd",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-motd",
+  "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
+  "types": [
+  
+  ],
+  "description": "This module simply manages /etc/motd as a template, showing interpolation of system attributes",
+  "dependencies": [
+  
+  ]
+}

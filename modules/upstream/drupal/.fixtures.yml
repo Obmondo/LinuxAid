@@ -1,0 +1,10 @@
+fixtures:
+  repositories:
+    archive:
+      repo: "https://github.com/camptocamp/puppet-archive.git"
+      ref: "0.8.1"
+    stdlib:
+      repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+      ref: "4.11.0"
+  symlinks:
+    drupal: "#{source_dir}"

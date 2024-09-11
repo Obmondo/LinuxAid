@@ -1,0 +1,9 @@
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: /var/lib/hiera
+:hierarchy:
+  - "%{::osfamily}-%{::operatingsystemrelease}"
+  - "%{::operatingsystem}-%{::operatingsystemrelease}"
+  - common

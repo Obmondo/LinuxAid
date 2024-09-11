@@ -1,0 +1,20 @@
+<%- |
+  Hash $vnc_sessions = {},
+  Stdlib::Absolutepath $novnc_location = '/novnc',
+| -%>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>NOVNC Session List</title>
+<meta charset="UTF-8" />
+</head>
+<body>
+<h1>List of NOVNC Sessions known to this host</h1>
+<ul>
+<% $vnc_sessions.keys.sort.each | $session | { -%>
+<li><a href="<%= $novnc_location %>/vnc.html?resize=remote&path=<%= $novnc_location %>/websockify?token=<%= $vnc_sessions[$session]['token'] %>"><%= $session %></a></li>
+<% } -%>
+</ul>
+</body>
+</html>
+

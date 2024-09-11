@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# MySQL Backup Script
+#  Dumps mysql databases to a file for another backup tool to pick up.
+#
+# MySQL code:
+# GRANT SELECT, RELOAD, LOCK TABLES ON *.* TO 'user'@'localhost'
+# IDENTIFIED BY 'password';
+# FLUSH PRIVILEGES;
+#
+########## START CONFIG ##########
+
+USER=<%= $backup_user %>
+PASS='<%= $backup_user_password %>'
+HOST=<%= $host %>
+MAX_ALLOWED_PACKET=1M
+DIR=<%= $dump_dir %>
+ROOT_PASS='<%= $root_password %>'
+ROTATE=<%= $backup_retention %>
+
+########## GRANT access to obmondo_backup user ##########
+TMPFILE1=`mktemp /tmp/backup.XXXXXX` || exit 1
+echo -e "[client]\nhost=$HOST\npassword=$ROOT_PASS\nuser=root" > $TMPFILE1
+
+mysql --defaults-extra-file=$TMPFILE1 -e "GRANT SELECT, PROCESS, REPLICATION CLIENT, RELOAD, LOCK TABLES on *.* to $USER@'%' IDENTIFIED BY '$PASS'"
+
+########## Temp config file ##########
+TMPFILE2=`mktemp /tmp/backup.XXXXXX` || exit 1
+echo -e "[client]\nhost=$HOST\npassword=$PASS\nuser=$USER\nmax_allowed_packet=$MAX_ALLOWED_PACKET" > $TMPFILE2
+
+########## Ensure backup directory exist ##########
+mkdir -p $DIR
+
+PREFIX=mysql_backup_
+<%# Only include routines or triggers if we are doing a file per database -%>
+<%# backup. This happens if we named databases, or if we explicitly set -%>
+<%# file per database mode -%>
+
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --add-drop-database"
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --comments"
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --routines"
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --triggers"
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --flush-privileges"
+ADDITIONAL_OPTIONS="$ADDITIONAL_OPTIONS --quick"
+
+########## STOP CONFIG ##########
+PATH='/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin'
+
+set -euo pipefail
+
+cleanup()
+{
+    find "${DIR}/" -maxdepth 1 -type f -name "${PREFIX}*.sql*" -mtime +${ROTATE} -print0 | xargs -0 -r rm -f
+}
+
+cleanup
+
+########## Taking the required DB backups ########## 
+
+for dbname in `mysql --defaults-extra-file=$TMPFILE1 -e "SHOW DATABASES" | tr -d "| " | grep -v Database |grep -v information_schema|grep -v performance_schema | grep -v sys`
+do
+        mysqldump --defaults-extra-file=$TMPFILE2 --opt --flush-logs --single-transaction ${ADDITIONAL_OPTIONS} ${dbname} | gzip > ${DIR}/${PREFIX}${dbname}_`date +%Y%m%d-%H%M%S`.sql.gz
+done
+
+########## Remove temporary file ##########
+rm -f $TMPFILE1 $TMPFILE2

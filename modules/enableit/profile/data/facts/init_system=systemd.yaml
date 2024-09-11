@@ -1,0 +1,3 @@
+---
+profile::system::nscd::use_socket_activation: true
+profile::logging::logrotate::__scheduling_method: 'service'

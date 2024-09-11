@@ -1,0 +1,15 @@
+# -*- mode: sh -*-
+#
+# load Obmondo bashrc if USER or SUDO_USER is obmondo-admin
+
+if [ "$BASH_VERSION" ]; then
+  if [ "${USER}" == 'obmondo-admin' ] || \
+       [ "${USER}" == root ] || \
+       [ "${SUDO_USER}" == 'obmondo-admin' ]; then
+    obmondo_bashrc=/opt/obmondo/share/bash/bashrc
+    if [ -f "$obmondo_bashrc" ]; then
+      # shellcheck disable=SC1090
+      . "$obmondo_bashrc"
+    fi
+  fi
+fi

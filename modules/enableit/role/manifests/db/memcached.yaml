@@ -1,0 +1,13 @@
+---
+name: Memcached database
+description: Memcache database installation and configuration
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  ensure:
+    name: Ensure FIXME

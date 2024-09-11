@@ -1,0 +1,32 @@
+info "Pruning repository"
+
+# Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+# archives of THIS machine. The '{hostname}-' prefix is very important to
+# limit prune's operation to this machine's archives and not apply to
+# other machines' archives also:
+
+borg prune                          \
+    --prefix '{hostname}-<%= @archive_name %>'  \
+<% @prune_options.each do |opt| -%>
+    --<%= opt -%>            \
+<% end -%>
+<% if @keep_last != '' -%>
+    --keep-last <%= @keep_last %>  \
+<% end -%>
+<% if @keep_hourly != '' -%>
+    --keep-hourly <%= @keep_hourly %>  \
+<% end -%>
+<% if @keep_daily != '' -%>
+    --keep-daily <%= @keep_daily %>  \
+<% end -%>
+<% if @keep_weekly != '' -%>
+    --keep-weekly <%= @keep_weekly %>  \
+<% end -%>
+<% if @keep_monthly != '' -%>
+    --keep-monthly <%= @keep_monthly %>  \
+<% end -%>
+<% if @keep_yearly != '' -%>
+    --keep-yearly <%= @keep_yearly %>  \
+<% end -%>
+
+prune_exit=$?

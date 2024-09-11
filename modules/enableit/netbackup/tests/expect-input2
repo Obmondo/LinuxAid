@@ -1,0 +1,94 @@
+Veritas Installation Script
+Copyright (c) 2018 Veritas Technologies LLC. All rights reserved.
+
+
+        Installing NetBackup Client Software
+
+
+Please review the VERITAS SOFTWARE LICENSE AGREEMENT located on
+the installation media before proceeding. The agreement includes
+details on the NetBackup Product Improvement Program.
+
+For NetBackup installation and upgrade information specific to your
+platform and to find out if your installed EEBs or hot fixes are
+contained in this release, check the Installation and Upgrade checklists
+and the Hot Fix and EEB Release Auditor, both available on the Veritas
+Services and Operations Readiness Tools (SORT) page:
+https://sort.veritas.com/netbackup.
+
+Do you wish to continue? [y,n] (y)
+
+
+Checking for required system conditions...
+
+ok unsupported_platform: Passed checks for unsupported platforms.
+ok be_nb_same_host: inapplicable on linux: skipping
+
+Checking for recommended system conditions...
+
+ok hotfix_auditor: NetBackup is not installed or there is no hotfix or EEB data present. Skipping HF/EEB Auditor check.
+ok ephemeral_port_range: The ephemeral port range does not include ports used by NetBackup services.
+
+Do you want to install the NetBackup client software for this client? [y,n] (y)
+
+This package will install Linux/RedHat2.6.18 client.
+
+NetBackup client is currently at release level 8.1.1.
+
+This package will install NetBackup client 8.1.1.
+
+
+Successfully unpacked /tools/netbackup/8.1.1/NBClients/anb/Clients/usr/openv/netbackup/client/Linux/RedHat2.6.18/certcmdTool_for_UNIX.tar.gz.
+
+Checking for local CA certificate
+A CA certificate was found, so certificate deployment was skipped. If communication
+issues exist after installation, refer to https://www.veritas.com/support/en_US/article.000127129.
+
+Client binaries are located in /tools/netbackup/8.1.1/NBClients/anb/Clients/usr/openv/netbackup/client/Linux/RedHat2.6.18.
+
+Starting NetBackup Deduplication installer
+testing: /tmp/pdde_pkg_dir_14546
+Checking for SYMCpddea package...
+Checking for VRTSpddea package...
+   Package VRTSpddea found.
+
+NetBackup Deduplication software is installed.
+
+NetBackup Deduplication is not yet configured.
+NetBackup Deduplication preinstall check passed
+
+Terminating NetBackup and/or Media Manager processes.
+
+Installing VRTSnbpck ...
+Installation of VRTSnbpck was successful. Check /tmp/install_VRTSnbpck.rpm_trace.14530 for details.
+Installing VRTSpbx ...
+Installation of VRTSpbx was successful. Check /tmp/install_VRTSpbx.rpm_trace.14530 for details.
+Installing VRTSnbclt ...
+Installation of VRTSnbclt was successful. Check /tmp/install_VRTSnbclt.rpm_trace.14530 for details.
+
+Terminating NetBackup and/or Media Manager processes.
+
+Installing NB-Java.
+Installing VRTSnbjre ...
+
+Installation of VRTSnbjre was successful.
+More details regarding VRTSnbjre can be found in file
+/tmp/install_VRTSnbjre.rpm_trace.19335 on client.example.org.
+Installing VRTSnbjava ...
+
+Installation of VRTSnbjava was successful.
+More details regarding VRTSnbjava can be found in file
+/tmp/install_VRTSnbjava.rpm_trace.19335 on client.example.org.
+
+Migrating log files in /usr/openv/logs
+Migration of log files complete.
+
+No [x]inetd process found.
+Installing VRTSpddea.rpm ...
+Installation of VRTSpddea.rpm was successful. Check /tmp/install_VRTSpddea.rpm_trace.14530 for details.
+Installing VRTSnbcfg.rpm ...
+Installation of VRTSnbcfg.rpm was successful. Check /tmp/install_VRTSnbcfg.rpm_trace.14530 for details.
+
+
+File /usr/openv/tmp/install_trace.14154 contains a trace of this install.
+That file can be deleted after you are sure the install was successful.

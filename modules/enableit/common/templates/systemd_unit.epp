@@ -1,0 +1,33 @@
+# THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+<% if size($unit) > 0 { -%>
+[Unit]
+<%= anything_to_ini($unit) %>
+<% } -%>
+<% if size($service) > 0 { -%>
+[Service]
+<%= anything_to_ini($service) %>
+<% } -%>
+<% if size($mount) > 0 { -%>
+[Mount]
+<%= anything_to_ini($mount) %>
+<% } -%>
+<% if size($automount) > 0 { -%>
+[Automount]
+<%= anything_to_ini($automount) %>
+<% } -%>
+<% if size($install) > 0 { -%>
+[Install]
+<%= anything_to_ini($install) %>
+<% } -%>
+<% if size($path) > 0 { -%>
+[Path]
+<%= anything_to_ini($path) %>
+<% } -%>
+<% if size($timer) > 0 { -%>
+[Timer]
+<%= anything_to_ini($timer) %>
+<% } -%>
+<% if size($slice) > 0 { -%>
+[Slice]
+<%= anything_to_ini($slice) %>
+<% } -%>

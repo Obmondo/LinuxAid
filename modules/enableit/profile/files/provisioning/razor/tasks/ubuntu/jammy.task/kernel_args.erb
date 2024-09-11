@@ -1,0 +1,1 @@
+BOOTIF=01-${netX/mac} autoinstall ds=nocloud-net;s=<%= file_url("user-data") %> netcfg/no_default_route=true netcfg/choose_interface=auto netcfg/get_hostname=<%= (node.metadata['hostname'] || node.hostname).split('.').first %> netcfg/get_domain=<%= (node.metadata['hostname'] || node.hostname).split('.').drop(1).join('.') %> priority=critical

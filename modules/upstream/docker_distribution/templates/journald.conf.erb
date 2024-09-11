@@ -1,0 +1,6 @@
+[Service]
+Type=simple
+ExecStart=
+ExecStart=-/bin/sh -c "/usr/bin/registry serve /etc/docker-distribution/registry/config.yml 2>&1 | /usr/bin/forward-journald -tag registry"
+StandardOutput=null
+StandardError=null

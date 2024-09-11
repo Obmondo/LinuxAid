@@ -1,0 +1,38 @@
+# Firewall type
+type Eit_types::Firewall = Hash[
+  Pattern[/^[0-9]{3}.{0,253}$/],
+  Struct[{
+    'action'      => Optional[String],
+    'chain'       => Optional[String],
+    'dport'       => Optional[Eit_types::Firewall::Ports],
+    'iniface'     => Optional[String],
+    'jump'        => Optional[String],
+    'proto'       => Optional[Array[Enum[
+      'ip',
+      'tcp',
+      'udp',
+      'icmp',
+      'ipv4',
+      'ipv6',
+      'ipv6-icmp',
+      'esp',
+      'ah',
+      'vrrp',
+      'igmp',
+      'ipencap',
+      'ospf',
+      'gre',
+      'pim',
+      'all' ]]],
+    'sport'       => Optional[Eit_types::Firewall::Ports],
+    'table'       => Optional[String],
+    'todest'      => Optional[String],
+    'tosource'    => Optional[String],
+    'destination' => Optional[Array[String]],
+    'source'      => Optional[Array[String]],
+    'outiface'    => Optional[String],
+    'ctstate'     => Optional[Array],
+    'log_level'   => Optional[Integer[1,7]],
+    'log_prefix'  => Optional[String[1,29]],
+  }]
+]

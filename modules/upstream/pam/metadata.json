@@ -1,0 +1,101 @@
+{
+  "name": "ghoneycutt-pam",
+  "version": "5.1.0",
+  "author": "ghoneycutt",
+  "summary": "Manage PAM",
+  "license": "Apache-2.0",
+  "source": "git://github.com/ghoneycutt/puppet-module-pam.git",
+  "project_page": "https://github.com/ghoneycutt/puppet-module-pam",
+  "issues_url": "https://github.com/ghoneycutt/puppet-module-pam/issues",
+  "dependencies": [
+    {
+      "name": "puppet/nsswitch",
+      "version_requirement": ">= 3.0.0 < 4.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 8.5.0 < 10.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "9",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "SLED",
+      "operatingsystemrelease": [
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "description": "Manages PAM, including specifying users and groups in access.conf, limits.conf, and limits fragments",
+  "pdk-version": "3.0.0",
+  "template-url": "https://github.com/tailored-automation/pdk-templates#main",
+  "template-ref": "heads/main-0-g8e0611a"
+}

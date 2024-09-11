@@ -1,0 +1,14 @@
+{
+  "CHANGELOG.md": "f02e33df6c7b5a8940ed705f0c872b58",
+  "Gemfile": "50bb91771c691356df9b076320b9bcad",
+  "LICENSE": "3b4400c20f0a67afa21cbb537391cf1e",
+  "README.md": "04e75ec72df2642c2a6ed40c99b5c116",
+  "Rakefile": "66d6afc49e2d5663f7e539d19efe9456",
+  "lib/puppet/type/purge.rb": "d8cd409247a6f53fd2b3bec3ce567b99",
+  "manifests/init.pp": "37c62ef8ea58fcd62c5f46a679c8308a",
+  "metadata.json": "24b6579ba1d53f919e6091460b39bee3",
+  "spec/classes/init_spec.rb": "52fa615eba7a216e90a0c728508295a5",
+  "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
+  "spec/unit/type/purge_spec.rb": "0638872de12a82d887708c70d45d5311",
+  "tests/init.pp": "b986318e1538af588d81b85e26086e17"
+}

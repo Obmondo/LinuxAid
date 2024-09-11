@@ -1,0 +1,9 @@
+HOSTS:
+  debian-73-x64-virtualbox-puppet:
+    roles:
+      - master
+    platform: debian-7-amd64
+    box : debian-73-x64-virtualbox-puppet
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/debian-73-x64-virtualbox-puppet.box
+    hypervisor : vagrant
+    distmoduledir: /etc/puppet/modules

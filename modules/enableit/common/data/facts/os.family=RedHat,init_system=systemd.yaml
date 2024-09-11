@@ -1,0 +1,3 @@
+---
+# Turns out RedHat/CentOS compiles systemd without timesyncd...
+common::system::time::ntp::ntp_client: 'chrony'

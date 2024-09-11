@@ -1,0 +1,3 @@
+---
+eit_repos::source_protocol: 'http'
+eit_repos::yum::ni_visa::ensure: false

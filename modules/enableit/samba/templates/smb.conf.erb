@@ -1,0 +1,99 @@
+# This is the main Samba configuration file. You should read the
+# smb.conf(5) manual page in order to understand the options listed
+# here. Samba has a huge number of configurable options (perhaps too
+# many!) most of which are not shown in this example
+#
+# This file is managed by the samba puppet module.
+# *** DO NOT EDIT LOCALLY, CHANGE PARAMETERS ON THE PUPPET MASTER ***
+#
+
+[global]
+  workgroup = <%= @workgroup %>
+  server string = <%= @server_string %>
+<% if !@netbios_name.empty? -%>
+  netbios name = <%= @netbios_name %>
+<% end -%>
+<% if !@interfaces.empty? -%>
+  interfaces = <%= @interfaces.join(' ') %>
+<% end -%>
+<% if !@hosts_allow.empty? -%>
+  hosts allow = <%= @hosts_allow.join(' ') %>
+<% end -%>
+  log file = <%= @log_file %>
+  max log size = <%= @max_log_size_kilobytes %>
+  security = <%= @security %>
+<% if @map_to_guest -%>
+  map to guest = <%= @map_to_guest %>
+<% end -%>
+<% if @guest_account -%>
+  guest account = <%= @guest_account %>
+<% end -%>
+<% if @passdb_backend == 'ldapsam' -%>
+  passdb backend = ldapsam:"<%= @ldap_url %>"
+  ldap ssl = <%= @ldap_ssl %>
+  ldap suffix = <%= @ldap_suffix %>
+  <% if @ldap_admin_dn -%>
+    ldap admin dn = <%= @ldap_admin_dn %>
+  <% end -%>
+  <% if @ldap_user_suffix -%>
+    ldap user suffix = <%= @ldap_user_suffix %>
+  <% end -%>
+  <% if @ldap_group_suffix -%>
+    ldap group suffix = <%= @ldap_group_suffix %>
+  <% end -%>
+  <% if @ldap_machine_suffix -%>
+    ldap machine suffix = <%= @ldap_machine_suffix %>
+  <% end -%>
+<% else -%>
+  passdb backend = <%= @passdb_backend %>
+<% end -%>
+<% if @realm -%>
+  realm = <%= @realm %>
+<% end -%>
+<% unless @load_printers.nil? -%>
+  load printers = <%= @load_printers ? 'yes' : 'no' %>
+<% end -%>
+<% if @printcap -%>
+  printcap = <%= @printcap%>
+<% end -%>
+<% if @disable_spoolss -%>
+  disable spoolss = <%= @disable_spoolss ? 'yes' : 'no' %>
+<% end -%>
+<% if @domain_master -%>
+  domain master = yes
+<% end -%>
+<% if @domain_logons -%>
+  domain logons = yes
+<% end -%>
+<% unless @local_master.nil? -%>
+  local master = <%= @local_master ? 'yes' : 'no' %>
+<% end -%>
+<% if @os_level -%>
+  os level = <%= @os_level %>
+<% end -%>
+<% unless @preferred_master.nil? -%>
+  preferred master = <%= @local_master ? 'yes' : 'no' %>
+<% end -%>
+<% @global_options.each do |k, v| -%>
+  <%= k %> = <%= v %>
+<% end -%>
+<% if @idmap_config
+  @idmap_config.each do |conf|
+    conf.each do |realm, values|
+      values.each do |key, value|
+-%>
+  idmap config <%= realm %> : <%= key %> = <%= value %>
+<%
+      end
+    end
+  end
+end
+-%>
+
+<% @shares.sort_by {|key, value| key}.each do |key,value| -%>
+[<%= key %>]
+<% value.each do |line| -%>
+  <%= line %>
+<% end -%>
+
+<% end -%>

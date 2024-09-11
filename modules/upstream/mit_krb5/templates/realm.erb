@@ -1,0 +1,57 @@
+<%- fields = [
+    'database_module',
+    'default_domain',
+    'v4_instance_convert',
+    'v4_realm',
+    'auth_to_local_names',
+    'auth_to_local',
+    'kpasswd_server',
+    'admin_server',
+    'kdc',
+    'master_kdc',
+    'v4_realm_convert',
+    'pkinit_anchors',
+    'pkinit_pool',
+]
+server_fields = ['kdc', 'admin_server']
+array_fields = server_fields + ['auth_to_local']
+output = []
+scope_hash = scope.to_hash
+fields.each do |k|
+  if scope_hash.include?(k)
+    value = scope_hash[k]
+    unless k == "v4_realm_convert"
+        if array_fields.include? k and value.respond_to?('each')
+      # Allow multiple servers via array
+        value.flatten! if value.respond_to?('flatten')
+        if server_fields.include? k and scope_hash['rotate_servers']
+          value = scope.call_function('fqdn_rotate', [value])
+        end
+        value.each do |v|
+            output.push("#{k} = #{v}")
+        end
+        elsif not value.empty?
+        output.push("#{k} = #{value}")
+        end
+    end
+  end
+end
+-%>
+<%- if @title == "default" -%>
+<%= output.insert(0, "    ").join("\n    ") -%>
+<%- else -%>
+    <%= @title -%> = {
+        <%= output.join("\n        ") -%>
+    <% if @v4_realm_convert.length > 0 %>
+        v4_name_convert = {
+        <%- v4_realm_convert.each do |key , array| -%>
+            <%=  key -%> = {
+            <%- array.each do |value| -%>
+                <%= value %>
+            <%- end -%>
+            }
+        <%- end -%>
+        }<%- end %>
+    }
+<%- end -%>
+

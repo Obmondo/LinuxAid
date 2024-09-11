@@ -1,0 +1,31 @@
+global
+<% sort($_global_options.convert_to(Array)).each |$values| { -%>
+  <%# Skip options whose value is undef or nil -%>
+  <%- if $values[1] != undef and $values[1] != nil { -%>
+    <%- if String(type($values[1], 'generalized')).index('Array') == 0 { -%>
+      <%- $values[1].each |$item| { -%>
+  <%= $values[0] %>  <%= $item %>
+      <%- } -%>
+    <%- } else { -%>
+  <%= $values[0] %>  <%= $values[1] %>
+    <%- } -%>
+  <%- } -%>
+<% } -%>
+
+defaults
+<% sort($_defaults_options.convert_to(Array)).each |$values| { -%>
+  <%# Skip options whose value is undef or nil -%>
+  <%- if $values[1] != undef and $values[1] != nil { -%>
+    <%- if String(type($values[1], 'generalized')).index('Array') == 0 { -%>
+      <%- $values[1].each |$item| { -%>
+  <%= $values[0] %>  <%= $item %>
+      <%- } -%>
+    <%- } else { -%>
+  <%= $values[0] %>  <%= $values[1] %>
+    <%- } -%>
+  <%- } -%>
+<% } -%>
+<% if $custom_fragment { -%>
+
+  <%= $custom_fragment %>
+<% } -%>

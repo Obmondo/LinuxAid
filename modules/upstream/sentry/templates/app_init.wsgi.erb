@@ -1,0 +1,30 @@
+#
+# This is the init script used by mod_wsgi to run Sentry
+#
+from __future__ import absolute_import
+import os, os.path, sys
+
+# Add the project to the python path
+activate_this = '<%= @path %>/bin/activate_this.py'
+execfile(activate_this, dict(__file__=activate_this))
+os.environ['SENTRY_CONF'] = '<%= @path %>'
+
+# Configure the application (Logan)
+from sentry.utils.runner import configure
+configure()
+
+# Build the wsgi app
+import django.core.handlers.wsgi
+
+from django.conf import settings
+from raven.contrib.django.middleware.wsgi import Sentry
+
+if settings.SESSION_FILE_PATH and not os.path.exists(settings.SESSION_FILE_PATH):
+    try:
+        os.makedirs(settings.SESSION_FILE_PATH)
+    except OSError:
+        pass
+
+# Run WSGI handler for the application
+application = Sentry(django.core.handlers.wsgi.WSGIHandler())
+

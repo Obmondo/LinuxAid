@@ -1,0 +1,48 @@
+#  -*- mode: conf-unix; -*-
+
+#
+# Hiveconf configuration file - Global VSM settings
+#
+[/vsm]
+setup_completed=<%= $formatted_version %>
+
+#
+# VSM server communication
+#
+vsm_server_port=<%= $thinlinc::vsm::server_port %>
+
+#
+# VSM agent communication. Not encrypted.
+#
+vsm_agent_port=<%= $thinlinc::vsm::agent_port %>
+
+# VNC communication
+#
+# VNC port base for sessions 1-99 (inclusive). Ports vnc_port_base+1
+# to vnc_port_base+99 (inclusive) will be used for the Xvnc processes
+# for the first 99 sessions on each VSM Agent host.
+#
+# VNC ports for sessions 100-2000 (inclusive) will be allocated based on
+# the value of /vsmagent/max_session_port
+
+vnc_port_base=<%= $thinlinc::vsm::vnc_port_base %>
+
+# Tunnel ports
+#
+# Tunnel bind base for sessions 1-99 (inclusive). Ports
+# tunnel_bind_base+999 (inclusive) will be used on each VSM Agent host
+# to access client resources (audio, serial port, local drives, etc.)
+tunnel_bind_base=<%= $thinlinc::vsm::tunnel_bind_base %>
+
+# The number of tunnel ports to allocate per session. Must be at least
+# the number of services defined under /vsm/tunnelservices. The
+# default is 10, which is less then the current number of defined
+# tunnelservices.  However, preallocating some ports now means that
+# live upgrades of ThinLinc will be easier in the future.
+
+tunnelslots_per_session=<%= $thinlinc::vsm::tunnel_slots_per_session %>
+
+# Tunnel slots used by different services. Don't change this unless
+# you really know what you are doing.
+[/vsm/tunnelservices]
+<%= $thinlinc::vsm::tunnel_services.map |$vs| { "${vs[0]}=${vs[1]}" }.join("\n") %>

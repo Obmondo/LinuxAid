@@ -1,0 +1,150 @@
+#  -*- mode: conf-unix; -*-
+
+[/utils/tl-desktop-customizer]
+
+# A space-separated list of locations to look for .desktop files
+# (applications and directories).
+# Note: /opt/thinlinc/desktops/xdg_data_dir will be added automatically.
+xdg_data_dirs=/usr/local/share /usr/share /opt/kde3/share /opt/gnome/share
+
+# The extra languages (in addition to the default) that should be
+# available in the Web GUI when editing menus and applications.
+# The default name of menus/applications is used if the locale is
+# english.
+# This is a space-separated list of ISO language codes.
+desktop_languages=sv
+
+[/utils/tl-desktop-customizer/menus]
+
+# This folder MUST be here
+[/utils/tl-desktop-customizer/_thinlinc_internal_]
+
+[/utils/tl-desktop-customizer/menus/hidden]
+desktopfile=hidden.directory
+
+[/utils/tl-desktop-customizer/menus/AudioVideo]
+desktopfile=AudioVideo.directory
+
+[/utils/tl-desktop-customizer/menus/Development]
+desktopfile=Development.directory
+
+[/utils/tl-desktop-customizer/menus/Education]
+desktopfile=Education.directory
+
+[/utils/tl-desktop-customizer/menus/Game]
+desktopfile=Game.directory
+
+[/utils/tl-desktop-customizer/menus/Graphics]
+desktopfile=Graphics.directory
+
+[/utils/tl-desktop-customizer/menus/Network]
+desktopfile=Network.directory
+
+[/utils/tl-desktop-customizer/menus/Office]
+desktopfile=Office.directory
+
+[/utils/tl-desktop-customizer/menus/System-Tools]
+desktopfile=System-Tools.directory
+
+[/utils/tl-desktop-customizer/menus/Utilities]
+desktopfile=Utilities.directory
+
+
+[/utils/tl-desktop-customizer/groups/Standard]
+activation_command=
+menu_location=/
+thinlinc_profiles=gnome kde
+users=
+usergroups=
+desktop_applications=
+menu_applications=thinlinc-tl-disconnect.desktop
+
+[/utils/tl-desktop-customizer/groups/Hidden]
+activation_command=
+menu_location=/hidden
+thinlinc_profiles=kde
+users=
+usergroups=
+desktop_applications=
+menu_applications=kde-kfmclient_dir.desktop kde-kfmclient_sysinfo.desktop
+
+[/utils/tl-desktop-customizer/groups/Sound & Video]
+activation_command=
+menu_location=/AudioVideo
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Programming]
+activation_command=
+menu_location=/Development
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Education]
+activation_command=
+menu_location=/Education
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Games]
+activation_command=
+menu_location=/Game
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Graphics]
+activation_command=
+menu_location=/Graphics
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Internet]
+activation_command=
+menu_location=/Network
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Office]
+activation_command=
+menu_location=/Office
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/System Tools]
+activation_command=
+menu_location=/System-Tools
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=
+
+[/utils/tl-desktop-customizer/groups/Utilities]
+activation_command=
+menu_location=/Utilities
+thinlinc_profiles=
+users=
+usergroups=
+desktop_applications=
+menu_applications=

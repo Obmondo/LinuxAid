@@ -1,0 +1,4 @@
+---
+resolv_conf::config_file: '/etc/resolv.conf'
+resolv_conf::config_template: 'resolv.conf_sol11.erb'
+resolv_conf::update_cmd: '/usr/sbin/nscfg import -f dns/client'

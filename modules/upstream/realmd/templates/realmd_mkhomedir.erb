@@ -1,0 +1,6 @@
+Name: Make home directory for new logins
+Default: yes
+Priority: 900
+Session-Type: Additional
+Session:
+        required                        pam_mkhomedir.so umask=<%= @_realmd_home_umask %> skel=/etc/skel

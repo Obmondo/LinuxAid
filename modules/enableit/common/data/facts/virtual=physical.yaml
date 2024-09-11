@@ -1,0 +1,4 @@
+---
+common::monitor::exporter::node::smartmon::enable: true
+common::software::fwupd::enable: true
+common::software::fwupd::noop_value: false

@@ -1,0 +1,17 @@
+# These values can be overridden by editing ~/.spamassassin/user_prefs.cf 
+# (see spamassassin(1) for details)
+
+required_hits <%= @sa_required_hits %>
+report_safe <%= @sa_report_safe %>
+<% @sa_rewrite_header.each do |rule| -%>
+rewrite_header <%= rule %>
+<% end -%>
+trusted_networks <%= @sa_trusted_networks %>
+skip_rbl_checks <%= @sa_skip_rbl_checks %>
+<% @sa_loadplugin.each do |plugin| -%>
+loadplugin <%= plugin %>
+<% end -%>
+<% @sa_score.each do |rule| -%>
+score <%= rule %>
+<% end -%>
+

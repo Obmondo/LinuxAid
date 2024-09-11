@@ -1,0 +1,9 @@
+REMOVE_CONFIGURATION = 1
+SERVER_NAME = $server_name$
+LOGIN_NAME = $login_name$
+PASSWORD = $password$
+AUTOLOGIN = $autologin$
+START_PROGRAM_ENABLED = $start_program_enabled$
+START_PROGRAM_COMMAND = $start_program_command$
+SHADOWING_ENABLED = $shadowing_enabled$
+SHADOW_NAME = $shadow_name$

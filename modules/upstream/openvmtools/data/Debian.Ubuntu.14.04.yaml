@@ -1,0 +1,3 @@
+---
+
+openvmtools::service_pattern: 'vmtoolsd'

@@ -1,0 +1,23 @@
+---
+pam::common_files_create_links: false
+pam::common_files_suffix:       ~
+pam::common_files:
+  - other
+
+pam::pam_d_login_template: pam/login.suse9.erb
+pam::pam_d_sshd_template: pam/sshd.suse9.erb
+pam::package_name:
+  - pam
+  - pam-modules
+pam::pam_auth_lines:
+  - 'auth  required  pam_warn.so'
+  - 'auth  required  pam_unix2.so'
+pam::pam_account_lines:
+  - 'account  required  pam_warn.so'
+  - 'account  required  pam_unix2.so'
+pam::pam_password_lines:
+  - 'password  required  pam_warn.so'
+  - 'password  required  pam_pwcheck.so use_cracklib'
+pam::pam_session_lines:
+  - 'session  required  pam_warn.so'
+  - 'session  required  pam_unix2.so debug'

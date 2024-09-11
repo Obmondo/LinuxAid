@@ -1,0 +1,5 @@
+---
+textfile_directory: /var/lib/prometheus-dropzone
+environments:
+  - production
+stale_time: 5

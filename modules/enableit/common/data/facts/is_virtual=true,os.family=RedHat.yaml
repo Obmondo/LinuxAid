@@ -1,0 +1,3 @@
+---
+common::services::disabled_services:
+  - 'lm_sensors'

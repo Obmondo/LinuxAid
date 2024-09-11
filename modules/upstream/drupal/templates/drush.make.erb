@@ -1,0 +1,45 @@
+<%-
+  def render(carried_prefix, key, value)
+    combined_prefix = "#{carried_prefix}[#{key}]"
+    if value.is_a?(Hash)
+      value.sort.inject([]) { |result, (hash_key, hash_value)| result + render(combined_prefix, hash_key, hash_value) }
+    elsif value.is_a?(Array)
+      value.sort.collect { |array_value| render(combined_prefix, '', array_value) }
+    else
+      [ "#{combined_prefix} = #{value.to_s}" ]
+    end
+  end
+
+  # normalize the hashes and unwrap the shorthand notions
+  normalized_modules = @modules.inject({}) do |result, (key, value)|
+    result[key] = value.is_a?(String) ? { 'version' => value } : value
+    result[key]['type'] = 'module'
+    result
+  end
+  normalized_themes = @themes.inject({}) do |result, (key, value)|
+    result[key] = value.is_a?(String) ? { 'version' => value } : value
+    result[key]['type'] = 'theme'
+    result
+  end
+  normalized_libraries = @libraries.inject({}) do |result, (key, value)|
+    result[key] = value.is_a?(String) ? { 'version' => value } : value
+    result
+  end
+-%>
+; Managed by Puppet
+
+; API
+api = 2
+
+; Core
+core = <%= @core_major_version %>.x
+projects[drupal][version] = <%= @core_version %>
+
+; Modules
+<%= normalized_modules.sort.inject([]) { |result, (k, v)| result + render('projects', k, v) }.join("\n") %>
+
+; Themes
+<%= normalized_themes.sort.inject([]) { |result, (k, v)| result + render('projects', k, v) }.join("\n") %>
+
+; Libraries
+<%= normalized_libraries.sort.inject([]) { |result, (k, v)| result + render('libraries', k, v) }.join("\n") %>

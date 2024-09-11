@@ -1,0 +1,79 @@
+---
+version: 5
+
+defaults:
+  # relative path as per puppetserver on k8s, defaulting to main branch
+  datadir: ../../hiera-data/%{facts.obmondo.customerid}_main
+  data_hash: yaml_data
+
+hierarchy:
+  - name: 'obmondo data'
+    lookup_key: eyaml_lookup_key
+    paths:
+      # certname is the most unique identifier, so this has precedence over the
+      # other entries in the list
+      - "agents/%{trusted.certname}.yaml"
+
+      # DRBD primary
+      - 'agents/facts/drbd=%{facts.drbdlocalstate1}.yaml'
+      # Zone -> Company -> Country
+      - 'agents/facts/obmondo_customer.zone=%{facts.obmondo_customer.zone}/obmondo_customer.company=%{facts.obmondo_customer.company}/obmondo_customer.country=%{facts.obmondo_customer.country}.yaml'
+      # Zone -> Company -> Region
+      - 'agents/facts/obmondo_customer.zone=%{facts.obmondo_customer.zone}/obmondo_customer.company=%{facts.obmondo_customer.company}/obmondo_customer.region=%{facts.obmondo_customer.region}.yaml'
+      # Country
+      - 'agents/facts/obmondo_customer.country=%{facts.obmondo_customer.country}.yaml'
+      # Company -> Region -> Country
+      - 'agents/facts/obmondo_customer.company=%{facts.obmondo_customer.company}/obmondo_customer.region=%{facts.obmondo_customer.region}/obmondo_customer.country=%{facts.obmondo_customer.country}.yaml'
+      # Company -> Region
+      - 'agents/facts/obmondo_customer.company=%{facts.obmondo_customer.company}/obmondo_customer.region=%{facts.obmondo_customer.region}.yaml'
+      # Company -> Country -> City
+      - 'agents/facts/obmondo_customer.country=%{facts.obmondo_customer.country}/obmondo_customer.city=%{facts.obmondo_customer.city}.yaml'
+      # Company -> Cloud
+      - 'agents/facts/obmondo_customer.company=%{facts.obmondo_customer.company}/cloud.provider=%{facts.cloud.provider}.yaml'
+      # Company -> Country
+      - 'agents/facts/obmondo_customer.company=%{facts.obmondo_customer.company}/obmondo_customer.country=%{facts.obmondo_customer.country}.yaml'
+      # Company
+      - 'agents/facts/obmondo_customer.company=%{facts.obmondo_customer.company}.yaml'
+      # City
+      - 'agents/facts/obmondo_customer.location=%{facts.obmondo_system.location}.yaml'
+      # Cloud/onprem
+      - 'agents/facts/cloud.provider=%{facts.cloud.provider}.yaml'
+      # Group
+      - 'agents/facts/obmondo_customer.group=%{facts.obmondo_customer.group}.yaml'
+      # OS
+      - 'agents/facts/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major},os.release.minor=%{facts.os.release.minor}.yaml'
+      - 'agents/facts/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml'
+      - "agents/facts/%{facts.os.family}-%{facts.os.release.major}.yaml"
+      - "agents/facts/%{facts.os.name}-%{facts.os.release.major}.yaml"
+      - "agents/facts/os.family=%{facts.os.family}.yaml"
+      # Tags -> OS  -> Major
+      - "agents/tags/%{obmondo_tag_0}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_1}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_2}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_3}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_4}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_5}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_6}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_7}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_8}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_9}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+
+      # `obmondo_tag_XX` should be from low to high, meaning that the tags are
+      # applied in reverse order (like PATH environment variable). I.e.
+      # `obmondo_tag_0` overwrites `obmondo_tag_1`, etc.
+      # Meaning: bottom to top is how hiera reads the data, top is the final selection
+      - "agents/tags/%{obmondo_tag_0}.yaml"
+      - "agents/tags/%{obmondo_tag_1}.yaml"
+      - "agents/tags/%{obmondo_tag_2}.yaml"
+      - "agents/tags/%{obmondo_tag_3}.yaml"
+      - "agents/tags/%{obmondo_tag_4}.yaml"
+      - "agents/tags/%{obmondo_tag_5}.yaml"
+      - "agents/tags/%{obmondo_tag_6}.yaml"
+      - "agents/tags/%{obmondo_tag_7}.yaml"
+      - "agents/tags/%{obmondo_tag_8}.yaml"
+      - "agents/tags/%{obmondo_tag_9}.yaml"
+      - "global.yaml"
+      - "common.yaml"
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem
+      pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem

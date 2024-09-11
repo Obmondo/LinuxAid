@@ -1,0 +1,10 @@
+Copyright 2013-2012 Joseph Beard <joseph@josephbeard.net>.
+Licensed under Apache v2 license. The license text is included in LICENSE.txt.
+
+Thanks for contributions from:
+  * Michael Speth
+  * Tom Purl
+  * Daniel Silverman
+  * Niklaus Giger
+  * treyormsbee (https://github.com/treyormsbee)
+  * Matt Hyclak (https://github.com/hyclak)

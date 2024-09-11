@@ -1,0 +1,26 @@
+{
+  "name": "bfraser-grafana",
+  "version": "1.0.1",
+  "author": "bfraser",
+  "summary": "This module provides Grafana, a dashboard and graph editor for Graphite and InfluxDB.",
+  "license": "Apache-2.0",
+  "source": "git://github.com/bfraser/puppet-grafana.git",
+  "project_page": "https://github.com/bfraser/puppet-grafana",
+  "issues_url": "https://github.com/bfraser/puppet-grafana/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem":"RedHat",
+      "operatingsystmrelease":[ "6.0" ]
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "camptocamp/archive",
+      "version_requirement": ">= 0.3.2 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=3.2.0 <5.0.0"
+    }
+  ]
+}

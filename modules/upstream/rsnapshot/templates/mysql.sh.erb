@@ -1,0 +1,29 @@
+#!/bin/bash
+# This file is managed by puppet
+# written by Norbert Varzariu <loomsen@gmail.com>
+# This Script is triggered by rsnapshot and dumps the specified dbs on the configured host.
+#
+host=<%=@host%>
+user=<%=@dbbackup_user%>
+
+<% if (@dbbackup_user == 'root' && @dbbackup_password == '') -%>
+dbs=( 
+      $(ssh -l <%=@backup_user-%> "$host" "mysql -e 'show databases' | sed '1d;<%@ignore_dbs.to_a.each do |db|-%>/<%=db-%>/d;<%end-%>'" ) 
+    )
+<%else-%>
+dbs=( 
+      $(ssh -l <%=@backup_user-%> "$host" "mysql -u <%=@dbbackup_user-%> -p'<%=@dbbackup_password-%>' -e 'show databases' | sed '1d;<%@ignore_dbs.each do |db|-%>/<%=db-%>/d;<%end-%>'" )
+    )
+<%end-%>
+for db in "${dbs[@]}"; do
+<% if (@dbbackup_user == 'root' && @dbbackup_password == '' )-%>
+  ssh -l <%=@backup_user-%> "$host" "<%=@dumper-%> <%=@dump_flags-%> ${db}" > "$db".sql
+<%else-%>
+  ssh -l <%=@backup_user-%> "$host" "<%=@dumper-%>  --user=<%=@dbbackup_user-%> --password='<%=@dbbackup_password-%>' <%=@dump_flags-%> ${db}" > "$db".sql
+<%end-%>
+  wait
+<% if @compress != '' -%>
+  <%=@compress-%> "$db".sql
+<%end-%>
+done
+

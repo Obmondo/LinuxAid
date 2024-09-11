@@ -1,0 +1,3 @@
+---
+yum::plugin::versionlock::path: /etc/dnf/plugins/versionlock.list
+yum::settings::mainconf:        /etc/dnf/dnf.conf

@@ -1,0 +1,31 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+#
+difok = <%= @difok %>
+minlen = <%= @minlen %>
+dcredit = <%= @dcredit %>
+ucredit = <%= @ucredit %>
+lcredit = <%= @lcredit %>
+ocredit = <%= @ocredit %>
+minclass = <%= @minclass %>
+maxrepeat = <%= @maxrepeat %>
+maxsequence = <%= @maxsequence %>
+maxclassrepeat = <%= @maxclassrepeat %>
+gecoscheck = <%= @gecoscheck %>
+dictcheck = <%= @dictcheck %>
+usercheck = <%= @usercheck %>
+usersubstr = <%= @usersubstr %>
+enforcing = <%= @enforcing %>
+<% if @badwords -%>
+badwords = <%= @badwords.join(' ') %>
+<% end -%>
+<% if @dictpath -%>
+dictpath = <%= @dictpath %>
+<% end -%>
+retry = <%= @retry %>
+<% if @enforce_for_root -%>
+enforce_for_root
+<% end -%>
+<% if @local_users_only -%>
+local_users_only
+<% end -%>

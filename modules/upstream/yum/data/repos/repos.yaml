@@ -1,0 +1,74 @@
+---
+# This file contains miscellaneous, non-distro repositories.
+yum::repos:
+  # EPEL
+  epel:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - $basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/epel.repo'
+
+  epel-debuginfo:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - $basearch - Debug"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-debug-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel.repo'
+
+  epel-source:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - $basearch - Source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-source-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel.repo'
+
+  epel-testing:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - Testing - $basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/epel-testing.repo'
+
+  epel-testing-debuginfo:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - Testing - $basearch - Debug"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-debug-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-testing.repo'
+
+  epel-testing-source:
+    descr: "Extra Packages for Enterprise Linux %{facts.os.release.major} - Testing - $basearch - Source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=testing-source-epel$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-testing.repo'
+
+  # RPMFusion
+  rpmfusion-free-updates:
+    descr: "RPM Fusion for EL %{facts.os.release.major} - Free - Updates"
+    metalink: "http://mirrors.rpmfusion.org/metalink?repo=free-el-updates-released-%{facts.os.release.major}&arch=$basearch"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/rpmfusion-free-updates.repo'
+  rpmfusion-free-updates-debuginfo:
+    descr: "RPM Fusion for EL %{facts.os.release.major} - Free - Updates Debug"
+    metalink: "http://mirrors.rpmfusion.org/metalink?repo=free-el-updates-released-debug-%{facts.os.release.major}&arch=$basearch"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/rpmfusion-free-updates.repo'
+  rpmfusion-free-updates-source:
+    descr: "RPM Fusion for EL %{facts.os.release.major} - Free - Updates Source"
+    metalink: "http://mirrors.rpmfusion.org/metalink?repo=free-el-updates-released-source-%{facts.os.release.major}&arch=$basearch"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/rpmfusion-free-updates.repo'

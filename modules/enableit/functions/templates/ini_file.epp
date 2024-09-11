@@ -1,0 +1,9 @@
+# THIS FILE IS MANAGED BY PUPPET; ANY CHANGES WILL BE EATEN BY A GRUE.
+
+<%=
+hash_to_ini($settings, {
+  'skip_undef' => false,
+  'separator'  => '=',
+  'escape'     => false,
+  'quote'      => undef,
+}) %>

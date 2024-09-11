@@ -1,0 +1,14 @@
+auto <%= @iname %>
+iface <%= @iname %> inet <% if @dhcp %>dhcp<% else %>static<% end %>
+  bridge_ports <% if @ports %><%= @ports %><% else %>none<% end %>
+  bridge_fd <%= @fd %>
+  bridge_maxwait <%= @maxwait %>
+<%- if @address -%>
+  address <%= @address %>
+  netmask <%= @netmask %>
+<%- end -%>
+<%- if not @ports -%>
+  # it seems that Debian does not always honor the `bridge_ports none`
+  # directive, and will happily bridge the interface with eth0
+  up brctl delif <%= @iname %> eth0
+<%- end %>

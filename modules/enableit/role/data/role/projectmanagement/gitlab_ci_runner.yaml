@@ -1,0 +1,2 @@
+---
+role::projectmanagement::gitlab_ci_runner::__blendable: true

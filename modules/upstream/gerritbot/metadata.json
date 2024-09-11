@@ -1,0 +1,12 @@
+{
+  "name": "openstackinfra-gerritbot",
+  "version": "0.0.1",
+  "author": "Openstack CI",
+  "summary": "Puppet module for Gerritbot",
+  "license": "Apache 2.0",
+  "source": "git://git.openstack.org/openstack-infra/puppet-gerritbot.git",
+  "project_page": "http://docs.openstack.org/infra/system-config/",
+  "issues_url": "https://storyboard.openstack.org/#!/project/717",
+  "dependencies": [
+  ]
+}

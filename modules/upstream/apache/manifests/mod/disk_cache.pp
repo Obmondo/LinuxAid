@@ -1,0 +1,60 @@
+# @summary
+#   Installs and configures `mod_disk_cache`.
+# 
+# @param cache_root
+#   Defines the name of the directory on the disk to contain cache files.
+#   Default depends on the Apache version and operating system:
+#   - Debian: /var/cache/apache2/mod_cache_disk
+#   - FreeBSD: /var/cache/mod_cache_disk
+#   - Red Hat: /var/cache/httpd/proxy
+#
+# @param cache_ignore_headers
+#   Specifies HTTP header(s) that should not be stored in the cache.
+#
+# @param default_cache_enable
+#   Default value is true, which enables "CacheEnable disk /" in disk_cache.conf for the webserver. This would cache
+#   every request to apache by default for every vhost. If set to false the default cache all behaviour is supressed.
+#   You can then control this behaviour in individual vhosts by explicitly defining CacheEnable.
+#
+# @note
+#   On Apache 2.4, mod_cache_disk installed.
+#
+# @see https://httpd.apache.org/docs/2.4/mod/mod_cache_disk.html for additional documentation.
+#
+class apache::mod::disk_cache (
+  Optional[Stdlib::Absolutepath] $cache_root = undef,
+  Optional[String] $cache_ignore_headers     = undef,
+  Boolean $default_cache_enable              = true,
+) {
+  include apache
+  if $cache_root {
+    $_cache_root = $cache_root
+  } else {
+    $_cache_root = $facts['os']['family'] ? {
+      'Debian'  => '/var/cache/apache2/mod_cache_disk',
+      'RedHat'  => '/var/cache/httpd/proxy',
+      'FreeBSD' => '/var/cache/mod_cache_disk',
+    }
+  }
+
+  apache::mod { 'cache_disk': }
+
+  Class['apache::mod::cache'] -> Class['apache::mod::disk_cache']
+
+  $parameters = {
+    'default_cache_enable'  => $default_cache_enable,
+    '_cache_root'           => $_cache_root,
+    'cache_ignore_headers'  => $cache_ignore_headers,
+  }
+
+  # Template uses $_cache_root
+  file { 'disk_cache.conf':
+    ensure  => file,
+    path    => "${apache::mod_dir}/disk_cache.conf",
+    mode    => $apache::file_mode,
+    content => epp('apache/mod/disk_cache.conf.epp', $parameters),
+    require => Exec["mkdir ${apache::mod_dir}"],
+    before  => File[$apache::mod_dir],
+    notify  => Class['apache::service'],
+  }
+}

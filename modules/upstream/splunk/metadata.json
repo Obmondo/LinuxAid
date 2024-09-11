@@ -1,0 +1,83 @@
+{
+  "name": "puppet-splunk",
+  "version": "8.0.0",
+  "author": "Vox Pupuli",
+  "summary": "Manage and deploy Splunk servers and forwarders",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-splunk",
+  "project_page": "https://github.com/voxpupuli/puppet-splunk",
+  "issues_url": "https://github.com/voxpupuli/puppet-splunk/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04"
+      ]
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "Windows",
+      "operatingsystemrelease": [
+        "2008",
+        "2008R2",
+        "2012",
+        "2012R2",
+        "2016",
+        "7",
+        "8",
+        "10"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.5.8 < 7.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.25.0 < 7.0.0"
+    },
+    {
+      "name": "puppetlabs-inifile",
+      "version_requirement": ">= 1.4.1 < 5.0.0"
+    },
+    {
+      "name": "puppetlabs-concat",
+      "version_requirement": ">= 4.2.1 < 7.0.0"
+    },
+    {
+      "name": "puppet-archive",
+      "version_requirement": ">= 2.0.0 < 5.0.0"
+    }
+  ]
+}

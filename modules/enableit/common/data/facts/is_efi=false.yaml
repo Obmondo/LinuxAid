@@ -1,0 +1,4 @@
+---
+common::system::grub::parameters:
+  nopat:
+    ensure: true

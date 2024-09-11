@@ -1,0 +1,46 @@
+{
+  "name": "tohuwabohu-drupal",
+  "version": "3.0.1",
+  "author": "Martin Meinhold",
+  "license": "Apache-2.0",
+  "summary": "Install and manage Drupal including modules and sites.",
+  "source": "https://github.com/tohuwabohu/puppet-drupal.git",
+  "project_page": "https://github.com/tohuwabohu/puppet-drupal",
+  "issues_url": "https://github.com/tohuwabohu/puppet-drupal/issues",
+  "tags": [
+    "drupal",
+    "drush"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=3.0.0 <5.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "camptocamp/archive",
+      "version_requirement": "0.x"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": "4.x"
+    }
+  ]
+}

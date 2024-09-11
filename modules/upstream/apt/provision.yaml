@@ -1,0 +1,37 @@
+---
+default:
+  provisioner: docker
+  images:
+  - litmusimage/debian:9
+vagrant:
+  provisioner: vagrant
+  images:
+  - centos/7
+  - generic/ubuntu1804
+docker_deb:
+  provisioner: docker
+  images:
+  - litmusimage/debian:9
+  - litmusimage/debian:10
+docker_ub_6:
+  provisioner: docker
+  images:
+  - litmusimage/ubuntu:18.04
+  - litmusimage/ubuntu:20.04
+docker_el7:
+  provisioner: docker
+  images: []
+release_checks_6:
+  provisioner: abs
+  images:
+  - debian-9-x86_64
+  - debian-10-x86_64
+  - ubuntu-1804-x86_64
+  - ubuntu-2004-x86_64
+release_checks_7:
+  provisioner: abs
+  images:
+  - debian-9-x86_64
+  - debian-10-x86_64
+  - ubuntu-1804-x86_64
+  - ubuntu-2004-x86_64

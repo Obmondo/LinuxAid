@@ -1,0 +1,6 @@
+---
+
+openvmtools::desktop_package_conflicts: true
+openvmtools::desktop_package_name: 'open-vm-tools'
+openvmtools::package_name: 'open-vm-tools-nox11'
+openvmtools::service_name: 'vmware_guestd'

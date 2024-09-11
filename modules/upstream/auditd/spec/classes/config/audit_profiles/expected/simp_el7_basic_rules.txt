@@ -1,0 +1,239 @@
+#### auditd::config::audit_profiles::simp Audit Rules ####
+# 64-bit systems should generally never call the 32-bit API. 32-bit syscalls
+# may be a sign of someone exploiting a hole in the API.
+-a exit,always -F arch=b32 -S all -F key=32bit-api
+-a exit,always -F arch=b64 -S accept -F a0=2 -F key=ipv4_in
+-a exit,always -F arch=b64 -S accept -F a0=10 -F key=ipv6_in
+
+## Audit unsuccessful file operations
+-a exit,always -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k access
+-a exit,always -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k access
+-a exit,always -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k access
+-a exit,always -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k access
+
+-a exit,always -F perm=a -F exit=-EACCES -k access
+-a exit,always -F perm=a -F exit=-EPERM -k access
+
+## Audit the execution of password commands
+-a exit,always -F path=/usr/bin/passwd -F perm=x -k privileged-passwd
+-a exit,always -F path=/bin/passwd -F perm=x -k privileged-passwd
+
+-a exit,always -F path=/usr/sbin/unix_chkpwd -F perm=x -k privileged-passwd
+-a exit,always -F path=/sbin/unix_chkpwd -F perm=x -k privileged-passwd
+
+-a exit,always -F path=/usr/bin/gpasswd -F perm=x -k privileged-passwd
+-a exit,always -F path=/bin/gpasswd -F perm=x -k privileged-passwd
+
+-a exit,always -F path=/usr/bin/chage -F perm=x -k privileged-passwd
+-a exit,always -F path=/bin/chage -F perm=x -k privileged-passwd
+
+-a exit,always -F path=/usr/sbin/userhelper -F perm=x -k privileged-passwd
+-a exit,always -F path=/sbin/userhelper -F perm=x -k privileged-passwd
+
+## Audit the execution of privilege-related commands
+-a exit,always -F path=/usr/bin/su -F perm=x -k privileged-priv_change
+-a exit,always -F path=/bin/su -F perm=x -k privileged-priv_change
+
+-a exit,always -F path=/usr/bin/sudo -F perm=x -k privileged-priv_change
+-a exit,always -F path=/bin/sudo -F perm=x -k privileged-priv_change
+
+-a exit,always -F path=/usr/bin/newgrp -F perm=x -k privileged-priv_change
+-a exit,always -F path=/bin/newgrp -F perm=x -k privileged-priv_change
+
+-a exit,always -F path=/usr/bin/chsh -F perm=x -k privileged-priv_change
+-a exit,always -F path=/bin/chsh -F perm=x -k privileged-priv_change
+
+-a exit,always -F path=/usr/bin/sudoedit -F perm=x -k privileged-priv_change
+-a exit,always -F path=/bin/sudoedit -F perm=x -k privileged-priv_change
+
+## Audit the execution of postfix-related commands
+-a exit,always -F path=/usr/sbin/postdrop -F perm=x -k privileged-postfix
+-a exit,always -F path=/sbin/postdrop -F perm=x -k privileged-postfix
+
+-a exit,always -F path=/usr/sbin/postqueue -F perm=x -k privileged-postfix
+-a exit,always -F path=/sbin/postqueue -F perm=x -k privileged-postfix
+
+## Audit the execution of the ssh-keysign command
+-a exit,always -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -k privileged-ssh
+
+## Audit the execution of the crontab command
+-a exit,always -F path=/usr/bin/crontab -F perm=x -k privileged-cron
+-a exit,always -F path=/bin/crontab -F perm=x -k privileged-cron
+
+## Audit the execution of the pam_timestamp_check command
+-a exit,always -F path=/usr/sbin/pam_timestamp_check -F perm=x -k privileged-pam
+-a exit,always -F path=/sbin/pam_timestamp_check -F perm=x -k privileged-pam
+
+## Permissions auditing separated by chown, chmod, and attr
+
+-a exit,always -F arch=b64 -S chown,fchown,fchownat,lchown -k chown
+-a exit,always -F arch=b32 -S chown,fchown,fchownat,lchown -k chown
+
+-a exit,always -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k attr
+-a exit,always -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k attr
+
+## Audit useful items that someone does when su'ing to root.
+-a exit,always -F arch=b64 -F auid!=0 -F uid=0 -S capset,mknod,mknodat,pivot_root,quotactl,setsid,adjtimex,settimeofday,setuid,swapoff,swapon -k su-root-activity
+-a exit,always -F arch=b32 -F auid!=0 -F uid=0 -S capset,mknod,mknodat,pivot_root,quotactl,setsid,adjtimex,settimeofday,setuid,swapoff,swapon -k su-root-activity
+
+## Audit the execution of suid and sgid binaries.
+-a exit,always -F arch=b64 -F euid=0 -F uid!=0 -S execve -k suid-root-exec
+-a exit,always -F arch=b32 -F euid=0 -F uid!=0 -S execve -k suid-root-exec
+
+## Audit the loading and unloading of kernel modules.
+-w /usr/bin/kmod -p x -k modules
+-w /bin/kmod -p x -k modules
+-w /usr/sbin/insmod -p x -k modules
+-w /sbin/insmod -p x -k modules
+-w /usr/sbin/rmmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /usr/sbin/modprobe -p x -k modules
+-w /sbin/modprobe -p x -k modules
+
+-a exit,always -F arch=b64 -S create_module,init_module,finit_module,delete_module -k modules
+-a exit,always -F arch=b32 -S create_module,init_module,finit_module,delete_module -k modules
+
+## Audit things that could affect time
+-a exit,always -F arch=b64 -S adjtimex,settimeofday -k audit_time_rules
+-a exit,always -F arch=b64 -S clock_settime -F a0=0x0 -k audit_time_rules
+-a exit,always -F arch=b32 -S adjtimex,stime,settimeofday -k audit_time_rules
+-a exit,always -F arch=b32 -S clock_settime -F a0=0x0 -k audit_time_rules
+
+-w /etc/localtime -p wa -k audit_time_rules
+
+## Audit things that could affect system locale
+-a exit,always -F arch=b64 -S sethostname,setdomainname -k audit_network_modifications
+-a exit,always -F arch=b32 -S sethostname,setdomainname -k audit_network_modifications
+
+-w /etc/issue -p wa -k audit_network_modifications
+-w /etc/issue.net -p wa -k audit_network_modifications
+-w /etc/hosts -p wa -k audit_network_modifications
+-w /etc/hostname -p wa -k audit_network_modifications
+-w /etc/sysconfig/network -p wa -k audit_network_modifications
+-a exit,always -F dir=/etc/NetworkManager/ -F perm=wa -k audit_network_modifications
+
+## Audit mount operations
+-a exit,always -F arch=b64 -S mount,umount2 -k mount
+-a exit,always -F arch=b32 -S mount,umount,umount2 -k mount
+
+-a exit,always -F arch=b64 -F path=/usr/bin/mount -k mount
+-a exit,always -F arch=b64 -F path=/bin/mount -k mount
+-a exit,always -F arch=b32 -F path=/usr/bin/mount -k mount
+-a exit,always -F arch=b32 -F path=/bin/mount -k mount
+-a exit,always -F path=/usr/bin/umount -F perm=x -k mount
+-a exit,always -F path=/bin/umount -F perm=x -k mount
+
+## Audit local accounts
+-w /etc/passwd -p wa -k audit_account_changes
+-w /etc/group -p wa -k audit_account_changes
+-w /etc/gshadow -p wa -k audit_account_changes
+-w /etc/shadow -p wa -k audit_account_changes
+-w /etc/security/opasswd -p wa -k audit_account_changes
+-w /etc/passwd- -p wa -k audit_account_changes
+-w /etc/group- -p wa -k audit_account_changes
+-w /etc/shadow- -p wa -k audit_account_changes
+
+## Audit selinux policy
+-w /etc/selinux/ -p wa -k MAC-policy
+-w /usr/share/selinux/ -p wa -k MAC-policy
+
+## Audit login files
+-w /var/log/tallylog -p wa -k logins
+-w /var/run/faillock -p wa -k logins
+-w /var/log/lastlog -p wa -k logins
+-w /var/log/faillog -p wa -k logins
+
+## Audit session files
+-w /var/run/utmp -p wa -k session
+-w /var/log/btmp -p wa -k session
+-w /var/log/wtmp -p wa -k session
+
+## Audit sudoers configuration files
+-w /etc/sudoers -p wa -k CFG_sys
+-w /etc/sudoers.d/ -p wa -k CFG_sys
+
+## Audit accesses to the audit trail
+-w /usr/sbin/aulast -p x -k access-audit-trail
+-w /usr/sbin/aulastlogin -p x -k access-audit-trail
+-w /usr/sbin/aureport -p x -k access-audit-trail
+-w /usr/sbin/ausearch -p x -k access-audit-trail
+-w /usr/sbin/auvirt -p x -k access-audit-trail
+
+## Audit systemd components
+-w /bin/systemctl -p x -k systemd
+-w /usr/bin/systemctl -p x -k systemd
+-w /etc/systemd/ -p wa -k systemd
+
+## Audit suspicious applications
+-w /usr/bin/nc -p x -k suspicious_apps
+-w /usr/bin/ncat -p x -k suspicious_apps
+-w /usr/bin/nmap -p x -k suspicious_apps
+-w /usr/bin/rawshark -p x -k suspicious_apps
+-w /usr/bin/socat -p x -k suspicious_apps
+-w /usr/bin/wireshark -p x -k suspicious_apps
+-w /usr/sbin/tcpdump -p x -k suspicious_apps
+-w /usr/sbin/traceroute -p x -k suspicious_apps
+-w /usr/sbin/traceroute6 -p x -k suspicious_apps
+
+## Generally good things to audit.
+-w /etc/grub.d -p wa -k CFG_grub
+-w /etc/default -p wa -k CFG_sys
+-w /etc/exports -p wa -k CFG_sys
+-w /etc/fstab -p wa -k CFG_sys
+-w /etc/host.conf -p wa -k CFG_sys
+-w /etc/hosts.allow -p wa -k CFG_sys
+-w /etc/hosts.deny -p wa -k CFG_sys
+-w /etc/initlog.conf -p wa -k CFG_sys
+-w /etc/inittab -p wa -k CFG_sys
+-w /etc/krb5.conf -p wa -k CFG_sys
+-w /etc/ld.so.conf -p wa -k CFG_sys
+-w /etc/ld.so.conf.d -p wa -k CFG_sys
+-w /etc/login.defs -p wa -k CFG_sys
+-w /etc/modprobe.conf.d -p wa -k CFG_sys
+-w /etc/modprobe.d/00_simp_blacklist.conf -p wa -k CFG_sys
+-w /etc/nsswitch.conf -p wa -k CFG_sys
+-w /etc/aliases -p wa -k CFG_sys
+-w /etc/at.deny -p wa -k CFG_sys
+-w /etc/rc.d/init.d -p wa -k CFG_sys
+-w /etc/rc.local -p wa -k CFG_sys
+-w /etc/rc.sysinit -p wa -k CFG_sys
+-w /etc/resolv.conf -p wa -k CFG_sys
+-w /etc/securetty -p wa -k CFG_sys
+-w /etc/snmp/snmpd.conf -p wa -k CFG_sys
+-w /etc/ssh/sshd_config -p wa -k CFG_sys
+-w /etc/sysconfig -p wa -k CFG_sys
+-w /etc/sysctl.conf -p wa -k CFG_sys
+-w /lib/firmware/microcode.dat -p wa -k CFG_sys
+-w /var/spool/at -p wa -k CFG_sys
+-w /etc/cron.d -p wa -k CFG_cron
+-w /etc/anacrontab -p wa -k CFG_cron
+-w /etc/cron.daily -p wa -k CFG_cron
+-w /etc/cron.deny -p wa -k CFG_cron
+-w /etc/cron.hourly -p wa -k CFG_cron
+-w /etc/cron.monthly -p wa -k CFG_cron
+-w /etc/cron.weekly -p wa -k CFG_cron
+-w /etc/crontab -p wa -k CFG_cron
+-w /etc/csh.cshrc -p wa -k CFG_shell
+-w /etc/bashrc -p wa -k CFG_shell
+-w /etc/csh.login -p wa -k CFG_shell
+-w /etc/profile -p wa -k CFG_shell
+-w /etc/shells -p wa -k CFG_shell
+-w /etc/pam.d -p wa -k CFG_pam
+-w /etc/pam_smb.conf -p wa -k CFG_pam
+-w /etc/security -p wa -k CFG_security
+-w /etc/services -p wa -k CFG_services
+-w /etc/xinetd.conf -p wa -k CFG_xinetd
+-w /etc/xinetd.d -p wa -k CFG_xinetd
+-w /etc/yum -p wa -k yum-config
+-w /etc/yum.conf -p wa -k yum-config
+-w /etc/yum.repos.d -p wa -k yum-config
+-a exit,always -F arch=b64 -S ptrace -F a0=0x4 -k paranoid_code_injection
+-a exit,always -F arch=b64 -S ptrace -F a0=0x5 -k paranoid_data_injection
+-a exit,always -F arch=b64 -S ptrace -F a0=0x6 -k paranoid_register_injection
+-a exit,always -F arch=b64 -S ptrace -k paranoid
+-a exit,always -F arch=b32 -S ptrace -F a0=0x4 -k paranoid_code_injection
+-a exit,always -F arch=b32 -S ptrace -F a0=0x5 -k paranoid_data_injection
+-a exit,always -F arch=b32 -S ptrace -F a0=0x6 -k paranoid_register_injection
+-a exit,always -F arch=b32 -S ptrace -k paranoid
+-a exit,always -F arch=b64 -S personality -k paranoid
+-a exit,always -F arch=b32 -S personality -k paranoid

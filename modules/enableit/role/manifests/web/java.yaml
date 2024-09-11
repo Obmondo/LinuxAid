@@ -1,0 +1,31 @@
+---
+name: Java
+description: Java setup
+
+parameters:
+  version:
+    name: Version
+    description: Java version to install
+    enum:
+      6:
+        name: Java 6
+      7:
+        name: Java 7
+
+  edition:
+    name: Edition
+    description: Java edition to install for eg openJDK, Oracle Java
+    enum:
+      openjdk:
+        name: OpenJDK
+        description: Open-source implementation of Java
+      oracle:
+        name: Oracle Java
+
+  variant:
+    name: Variant
+    description: Generic OLE mechanism for passing data of different types via a common interface.
+
+  http_server:
+    name: HTTP server
+    description: The HTTP server to configure

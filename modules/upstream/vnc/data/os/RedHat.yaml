@@ -1,0 +1,10 @@
+---
+vnc::server::packages:
+  - tigervnc-server
+  - tigervnc-server-module
+vnc::client::gui::packages:
+  - tigervnc
+vnc::client::novnc::packages:
+  - novnc
+  - python3-websockify
+...

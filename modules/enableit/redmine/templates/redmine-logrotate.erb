@@ -1,0 +1,13 @@
+# THIS FILE IS AUTOMATICALLY DISTRIBUTED BY PUPPET.
+# ANY CHANGES WILL BE OVERWRITTEN.
+
+<%= scope.lookupvar('redmine::install_dir')%>/log/*.log
+{
+  rotate 30
+  daily
+  missingok
+  nodateext
+  compress
+  delaycompress
+  copytruncate
+}

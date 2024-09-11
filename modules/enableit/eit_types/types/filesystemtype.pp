@@ -1,0 +1,31 @@
+# Filesystem Type
+type Eit_types::FilesystemType = Variant[
+  Enum[
+    'none',
+    'tmpfs',
+    'sysfs',
+    'proc',
+    'devtmpfs',
+    'devfs',
+    'mtmfs',
+    'tracefs',
+    'cgroup',
+    'fuse.gvfsd-fuse',
+    'configfs',
+    'ext2',
+    'ext3',
+    'ext4',
+    'vfat',
+    'xfs',
+    'brtfs',
+    'securityfs',
+    'cgroup2',
+    'autofs',
+    'mqueue',
+    'hugetablefs',
+    'zfs',
+    'fuse.lxcfs',
+    'nfs',
+  ],
+  Eit_types::SimpleString
+]

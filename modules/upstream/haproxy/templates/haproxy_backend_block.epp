@@ -1,0 +1,5 @@
+
+backend <%= $section_name %>
+<%= epp('haproxy/fragments/_mode.epp', { 'mode' => $mode }) -%>
+<%= epp('haproxy/fragments/_description.epp', { 'description' => $description }) -%>
+<%= epp('haproxy/fragments/_options.epp', { 'options' => $options, '_sort_options_alphabetic' => $_sort_options_alphabetic }) -%>

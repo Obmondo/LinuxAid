@@ -1,0 +1,9 @@
+Name: <%= @incoming_name %>
+IncomingDir: <%= @incoming_dir %>
+TempDir: <%= @incoming_tmpdir %>
+<% if @incoming_allow != "" -%>
+Allow: <%= @incoming_allow %>
+<% end -%>
+Multiple: Yes
+Cleanup: on_deny on_error
+

@@ -1,0 +1,44 @@
+---
+name: Borg
+description: Sets up borg and installs necessary packages
+
+paramaters:
+  __dir:
+    name: Directory
+    description: Location to set up borg
+  prune_keep:
+    name: Prune keep
+    description: Using this parameter will prune your backups at the rate set by the daily, weekly, monthly and yearly values
+  timespec:
+    name: Timespec
+    description: System timespec`
+  randomized_delay:
+    name: Randomized delay
+    description:
+  remote_user:
+    name: Remote user
+    description: The user to run the backup as
+  remote_ip:
+    name: Remote IP
+    description: The remote IP where backup is kept
+  remote_backup_root:
+    name: Remote backup root
+    description: The remote backup location
+  backup_root:
+    name: Backup root
+    description: The local backup dump directory location
+  repos:
+    name: Repos
+    description: Repos to be backed up
+  archives:
+    name: Archives
+    description: Path to the borg archive to backup to. Can either be a local path or an ssh remote path
+  authorized_keys:
+    name: Authorized keys
+    description: The authorized keys
+  server:
+    name: Server
+    description: Do you want to take backup at server?
+  last_borgbackup:
+    name: Last borgbackup
+    description: The last borg backup location

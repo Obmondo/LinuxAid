@@ -1,0 +1,10 @@
+module stunnel_t-puppet_etc_t-dir 1.0;
+
+require {
+        type stunnel_t;
+        type puppet_etc_t;
+        class dir search;
+}
+
+#============= stunnel_t ==============
+allow stunnel_t puppet_etc_t:dir search;

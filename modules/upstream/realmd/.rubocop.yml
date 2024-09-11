@@ -1,0 +1,78 @@
+---
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: '2.1'
+  Include:
+  - "./**/*.rb"
+  Exclude:
+  - bin/*
+  - ".vendor/**/*"
+  - "**/Gemfile"
+  - "**/Rakefile"
+  - pkg/**/*
+  - spec/fixtures/**/*
+  - vendor/**/*
+  - "**/Puppetfile"
+  - "**/Vagrantfile"
+  - "**/Guardfile"
+Metrics/LineLength:
+  Max: 200
+Metrics/BlockLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+Style/EmptyElse:
+  EnforcedStyle: empty
+Style/FormatString:
+  EnforcedStyle: percent
+Style/FormatStringToken:
+  EnforcedStyle: template
+Style/Lambda:
+  EnforcedStyle: literal
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Style/SymbolArray:
+  EnforcedStyle: brackets
+Style/Documentation:
+  Exclude:
+  - lib/puppet/parser/functions/**/*
+Style/WordArray:
+  EnforcedStyle: brackets
+Style/SymbolProc:
+  Enabled: false
+Style/CollectionMethods:
+  Enabled: true
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+Style/AsciiComments:
+  Enabled: false
+Style/StringMethods:
+  Enabled: true
+Style/IfUnlessModifier:
+  Enabled: false
+Layout/EndOfLine:
+  Enabled: false

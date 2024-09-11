@@ -1,0 +1,7 @@
+---
+ignore_expired_root_password:
+  name: Ignore expired root password
+  description: |
+    By default some distributions do not allow the root account to be used for any purpose, even non-interactive purposes like cron jobs, if the account has an expired password. Enabling this setting allows use of the root account by resetting the password expiry timer for the root account if the password has expired, along with disabling the user for regular (password) logins.
+
+    This is especially useful for virtualized/containerized systems where the root password may be set to a random value and is never used for system access.

@@ -1,0 +1,7 @@
+#  -*- mode: conf-unix; -*-
+#
+# Hiveconf configuration file - Nearest printer settings
+#
+
+# Empty dummy folder - keep this to make sure printer settings end up in this file!
+[/printing/nearest]

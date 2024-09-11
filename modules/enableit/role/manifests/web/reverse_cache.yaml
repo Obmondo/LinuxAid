@@ -1,0 +1,43 @@
+---
+name: Reverse cache
+description: Varnish HTTP reverse proxy that works by caching frequently requested web pages.
+
+features:
+  - monitoring
+  - time
+  - security
+  - logging
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  backendip:
+    name: Backend IP
+    description: FIXME
+
+  backendport:
+    name: Backend service port
+    description: FIXME
+
+  variant:
+    name: Variant
+    description: FIXME
+
+  adminacl:
+    name: Varnish Admin Accesslist
+    description: IPs that are allowed to access varnish admin port
+
+  purgers:
+    name: Purgers
+    description: IPs that are allowed to purge the cache
+
+  secret:
+    name: A secret
+    description: FIXME
+
+  adminlistens:
+    name: Management interface address/ports

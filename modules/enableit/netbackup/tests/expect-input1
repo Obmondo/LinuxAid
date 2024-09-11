@@ -1,0 +1,129 @@
+Veritas Installation Script
+Copyright (c) 2018 Veritas Technologies LLC. All rights reserved.
+
+
+        Installing NetBackup Client Software
+
+
+Please review the VERITAS SOFTWARE LICENSE AGREEMENT located on
+the installation media before proceeding. The agreement includes
+details on the NetBackup Product Improvement Program.
+
+For NetBackup installation and upgrade information specific to your
+platform and to find out if your installed EEBs or hot fixes are
+contained in this release, check the Installation and Upgrade checklists
+and the Hot Fix and EEB Release Auditor, both available on the Veritas
+Services and Operations Readiness Tools (SORT) page:
+https://sort.veritas.com/netbackup.
+
+Do you wish to continue? [y,n] (y)
+
+
+Checking for required system conditions...
+
+ok unsupported_platform: Passed checks for unsupported platforms.
+ok be_nb_same_host: inapplicable on linux: skipping
+
+Checking for recommended system conditions...
+
+ok hotfix_auditor: NetBackup is not installed or there is no hotfix or EEB data present. Skipping HF/EEB Auditor check.
+ok ephemeral_port_range: The ephemeral port range does not include ports used by NetBackup services.
+
+Do you want to install the NetBackup client software for this client? [y,n] (y)
+
+This package will install Linux/RedHat2.6.18 client.
+
+This package will install NetBackup client 8.1.1.
+
+Enter the name of the NetBackup master server : master.example.org
+
+
+Would you like to use "client.example.org" as the configured
+name of the NetBackup client? [y,n] (y)
+
+Successfully unpacked /tools/netbackup/8.1.1/NBClients/anb/Clients/usr/openv/netbackup/client/Linux/RedHat2.6.18/certcmdTool_for_UNIX.tar.gz.
+
+Checking connectivity to the master server.
+NOTE: Depending on the network, this action may take a few minutes.
+      To continue without setting up secure communication, press Ctrl+C.
+Connectivity established.
+
+Checking for local CA certificate
+Local CA certificate is not found on host. Proceeding with installation.
+
+Getting CA certificate details.
+NOTE: Depending on the network, this action may take a few minutes.
+      To continue without setting up secure communication, press Ctrl+C.
+
+CA Certificate received successfully from server master.example.org.
+
+         Subject Name : /CN=nbatd/OU=root@master.example.org/O=vx
+           Start Date : May 14 09:12:10 2014 GMT
+          Expiry Date : May 09 10:27:10 2034 GMT
+     SHA1 Fingerprint : AB:46:8C:85:0A:FF:E4:DD:EE:BB:99:42:AA:BB:CC:57:CE:07:89:EB
+ CA Certificate State : Not Trusted
+
+Master server [master.example.org/O=vx] reports CA Certificate fingerprint
+[AB:46:8C:85:0A:FF:E4:DD:EE:BB:99:42:AA:BB:CC:57:CE:07:89:EB].
+
+Is this correct? [y,n] y
+
+Storing CA certificate.
+NOTE: Depending on the network, this action may take a few minutes.
+      To continue without setting up secure communication, press Ctrl+C.
+The validation of root certificate fingerprint is successful.
+CA certificate stored successfully from server master.example.org.
+
+Getting host certificate for hostname client.example.org.
+NOTE: Depending on the network, this action may take a few minutes.
+      To continue without setting up secure communication, press Ctrl+C.
+
+An authorization token is required in order to get the host certificate for this
+host.  At the prompt, enter the authorization token or q to skip the question.
+NOTE: The answer entered will not be displayed to the terminal.
+
+Enter the authorization token for master.example.org or q to skip:
+
+Getting host certificate with token for hostname dkcphperforce03.hearing.corp-ad.com.
+NOTE: Depending on the network, this action may take a few minutes.
+      To continue without setting up secure communication, press Ctrl+C.
+Host certificate and certificate revocation list received successfully from server dkcphnbma01.hearing.corp-ad.com.
+
+Client binaries are located in /tools/netbackup/8.1.1/NBClients/anb/Clients/usr/openv/netbackup/client/Linux/RedHat2.6.18.
+
+Starting NetBackup Deduplication installer
+testing: /tmp/pdde_pkg_dir_24150
+NetBackup Deduplication preinstall check passed
+Installing VRTSnbpck ...
+Installation of VRTSnbpck was successful. Check /tmp/install_VRTSnbpck.rpm_trace.24134 for details.
+Installing VRTSpbx ...
+Installation of VRTSpbx was successful. Check /tmp/install_VRTSpbx.rpm_trace.24134 for details.
+Installing VRTSnbclt ...
+Installation of VRTSnbclt was successful. Check /tmp/install_VRTSnbclt.rpm_trace.24134 for details.
+
+Terminating NetBackup and/or Media Manager processes.
+
+Installing NB-Java.
+Installing VRTSnbjre ...
+
+Installation of VRTSnbjre was successful.
+More details regarding VRTSnbjre can be found in file
+/tmp/install_VRTSnbjre.rpm_trace.28450 on dkcphperforce03.hearing.corp-ad.com.
+Installing VRTSnbjava ...
+
+Installation of VRTSnbjava was successful.
+More details regarding VRTSnbjava can be found in file
+/tmp/install_VRTSnbjava.rpm_trace.28450 on dkcphperforce03.hearing.corp-ad.com.
+
+Migrating log files in /usr/openv/logs
+Migration of log files complete.
+
+No [x]inetd process found.
+Installing VRTSpddea.rpm ...
+Installation of VRTSpddea.rpm was successful. Check /tmp/install_VRTSpddea.rpm_trace.24134 for details.
+Installing VRTSnbcfg.rpm ...
+Installation of VRTSnbcfg.rpm was successful. Check /tmp/install_VRTSnbcfg.rpm_trace.24134 for details.
+
+
+File /usr/openv/tmp/install_trace.11489 contains a trace of this install.
+That file can be deleted after you are sure the install was successful.

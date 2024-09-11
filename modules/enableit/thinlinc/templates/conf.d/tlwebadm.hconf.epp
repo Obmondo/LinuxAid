@@ -1,0 +1,38 @@
+#  -*- mode: conf-unix; -*-
+
+#
+# Hiveconf configuration file - tlwebadm service
+#
+[/tlwebadm]
+
+# The username to use for access
+username=<%= $thinlinc::tlwebadm::username %>
+
+# Password for admin user - this must be created with
+# the tool /opt/thinlinc/sbin/tl-gen-auth.
+password=<%= $thinlinc::tlwebadm::password %>
+
+# Path to the SSL/TLS certificate and corresponding private key.
+# Both must be in PEM format. Required certificate chains should be
+# included in the certificate file.
+cert=<%= $thinlinc::tlwebadm::cert %>
+certkey=<%= $thinlinc::tlwebadm::cert_key %>
+
+# The port on which to run the webserver
+listen_port=<%= $thinlinc::tlwebadm::listen_port %>
+
+# This parameter controls the order and availability of TLS ciphers
+# and handshake options for GnuTLS, also called a GnuTLS priority
+# string.
+gnutls_priority=<%= $thinlinc::tlwebadm::gnutls_priority %>
+
+[/tlwebadm/logging]
+log_to_file=<%= $thinlinc::tlwebadm::log_to_file.bool %>
+logfile=<%= $thinlinc::tlwebadm::log_dir %>/tlwebadm.log
+
+log_to_syslog=<%= $thinlinc::tlwebadm::log_to_syslog.bool %>
+syslog_facility=<%= $thinlinc::tlwebadm::syslog_facility %>
+syslog_socket=<%= $thinlinc::tlwebadm::syslog_socket %>
+syslog_host=<%= $thinlinc::tlwebadm::syslog_host %>
+
+defaultlevel=<%= $thinlinc::tlwebadm::default_log_level %>

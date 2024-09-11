@@ -1,0 +1,37 @@
+{
+  "name": "johanek-redmine",
+  "version": "2.3.0",
+  "author": "Johan van den Dorpe",
+  "license": "Apache-2.0",
+  "summary": "Module to install redmine",
+  "source": "https://github.com/johanek/johanek-redmine",
+  "project_page": "https://github.com/johanek/johanek-redmine",
+  "issues_url": "https://github.com/johanek/johanek-redmine/issues",
+  "tags": ["redmine", "project management"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem":"RedHat",
+    "operatingsystemmajrelease":[ "6" ]
+    },
+    {
+    "operatingsystem":"CentOS",
+    "operatingsystemmajrelease":[ "6" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "12.04", "14.04", "16.04" ]
+    },
+    {
+    "operatingsystem": "Debian",
+    "operatingsystemrelease": [ "7" ]
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=3.2.0 < 5.0.0" },
+    { "name": "puppetlabs/mysql", "version_requirement": ">= 2.0.0 < 3.0.0" },
+    { "name": "puppetlabs/postgresql", "version_requirement": ">= 3.3.0 < 5.0.0" },
+    { "name": "puppetlabs/apache", "version_requirement": ">= 1.0.0 < 2.0.0" },
+    { "name": "puppetlabs/concat", "version_requirement": ">= 1.0.0 < 2.0.0" },
+    { "name": "puppetlabs/vcsrepo", "version_requirement": ">= 1.0.0 < 2.0.0" }
+  ]
+}

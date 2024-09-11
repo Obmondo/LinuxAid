@@ -1,0 +1,4 @@
+---
+common::system::authentication::allowed_users:
+  'git':
+    - 'ALL'

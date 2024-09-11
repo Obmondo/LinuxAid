@@ -1,0 +1,12 @@
+# -*- mode: yaml -*-
+# Time-stamp: <Fri 2019-02-01 14:59 svarrette>
+###########################################################################
+# Puppet hiera settings for a SLURM Compute nodes
+---
+
+# Profiles key may be used to include profile classes
+profiles:
+- '::profiles::slurm'
+- '::profiles::slurm::slurmd'
+
+slurm::with_slurmd: true

@@ -1,0 +1,418 @@
+#!/bin/bash
+# EnableIT MySQL backup script using LVM snapshots
+
+set -o nounset
+set -o errexit
+
+# Make sure we run cleanup on forced exit
+trap 'cleanup' SIGINT ERR
+declare UNCLEAN=
+
+ERR_EXISTING_SNAPSHOT=1
+ERR_MISSING_LUKS_PARAM=2
+ERR_MISSING_VG_NAME=3
+ERR_LUKS=4
+ERR_UMOUNT=5
+ERR_UNLOCK=6
+ERR_DATA_ON_ROOT=7
+ERR_NOT_ENOUGH_EXTENTS=8
+ERR_LOCK=9
+ERR_FLUSH=10
+ERR_MYSQLDUMP=11
+ERR_UNSPECIFIED=255
+
+KEEP_DAYS=3
+
+function log.debug {
+    /usr/bin/logger --stderr --tag "$0[$$]" --priority syslog.debug "$1"
+}
+
+function log.info {
+    /usr/bin/logger --stderr --tag "$0[$$]" --priority syslog.info "$1"
+}
+
+function log.err {
+    /usr/bin/logger --stderr --tag "$0[$$]" --priority syslog.err "$1"
+}
+
+function log.crit {
+    /usr/bin/logger --stderr --tag "$0[$$]" --priority syslog.crit "$1"
+    ERR=${2:-$ERR_UNSPECIFIED}
+    exit $ERR
+}
+
+function _umount() {
+    umount "${SNAPSHOT_MOUNT_POINT}"
+    if [[ $? -ne 0 ]]; then
+        log.crit "unmounting failed with $?; exiting" ERR_UMOUNT
+    fi
+}
+
+function prune_backups() {
+    cd $DUMP_DIR
+
+    # Extract the date stamps
+    local -a NAMES
+    for offset in $(seq 0 $(( $KEEP_DAYS-1 ))); do
+        NAMES+=("${SNAPSHOT_NAME_BASE_LONG}-$(date +%Y%m%d --date="${offset} days ago")")
+    done
+
+    # create regex so we can remove any files that match
+    local REGEX=$(IFS='|'; echo "${NAMES[*]}")
+
+    # find files older than $KEEP_DAYS, except those that match the regex
+    local FILES=$(find . -type f -ctime +$(($KEEP_DAYS-1)) -name '*.sql.bz2' | grep -Ev "${REGEX}")
+
+    # remove
+    for f in $FILES; do
+        log.info "Removing old backup '$f'"
+        rm $f
+    done
+}
+
+function cleanup() {
+    # Unclean exit; don't do any cleanup, just bail
+    if [[ $UNCLEAN == 1 ]]; then
+        # clear trap
+        trap - SIGINT ERR
+        exit
+    fi
+
+    # Don't crash so much
+    set +o errexit
+
+    # Make sure we don't quit from trying to shut down mysql
+    mysqladmin --socket "${SOCKET_FILE}" shutdown
+
+    TIME_LEFT_SECONDS=$WAIT_MAX_SECONDS
+    while (echo 'select 1;' | mysql --socket="${SOCKET_FILE}" >/dev/null 2>&1) || [[ $TIME_LEFT_SECONDS -le 0 ]]; do
+        sleep 1
+        echo $(( TIME_LEFT_SECONDS-- )) > /dev/null
+    done
+
+    # If mysqld is still running, kill it forcefully
+    if [[ -n $MYSQLD_PID ]]; then
+        MYSQLD_RUNNING=$(ps -q $MYSQLD_PID >/dev/null 2>/dev/null; echo $?)
+        if [[ $MYSQLD_RUNNING == 0 ]]; then
+            log.err "mysqld still running after ${WAIT_MAX_SECONDS}; killing"
+            $(kill -9 $MYSQLD_PID >/dev/null 2>/dev/null || :)
+        fi
+    fi
+
+    umount "${SNAPSHOT_MOUNT_POINT}"
+    rm -f "${SNAPSHOT_MOUNT_POINT}"
+
+    if [[ "$LUKS" == 1 ]]; then
+        if [[ -n "${LUKSPASS}" ]]; then
+            # Re-intizaling the variable here
+            SNAPSHOT_CRYPT_LV_NAME=$(cryptsetup status ${SNAPSHOT_NAME} |  awk '/device:/{print $2;}')
+
+            # Get the underlying lvname from crypsetup mounted dir
+            SNAPSHOT_DATA_DIR_DEVICE=$(lvs --noheadings -o lv_path ${SNAPSHOT_CRYPT_LV_NAME} | awk '{ print $1; }')
+
+            cryptsetup luksClose ${SNAPSHOT_NAME}
+            lvremove -f ${SNAPSHOT_DATA_DIR_DEVICE} >/dev/null
+
+        elif [[ -n "${LUKS_SERVICE_NAME}" ]]; then
+            # Close opened LUKS device using helper
+            LUKS_DEVICE=$LV_NAME LUKS_TARGET=$LUKS_TARGET LUKS_NAME=$VG_NAME $LUKS_SERVICE_COMMAND stop
+
+            # Remove snapshot
+            lvremove -f "/dev/data/${SNAPSHOT_NAME}" >/dev/null
+
+        else
+            log.crit "Unknown LUKS method; aborting" ERR_LUKS
+        fi
+    else
+        lvremove -f "${LV_NAME}" >/dev/null
+
+    fi
+}
+
+function trim() {
+    local var="$*"
+    var="${var#"${var%%[![:space:]]*}"}"   # remove leading whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"   # remove trailing whitespace characters
+    echo -n "$var"
+}
+
+PATH=/bin:/sbin/:/usr/bin:/usr/sbin
+DATE=$(date +%Y%m%d-%H%M)
+
+# Dir where MySQL stores its databases
+DATA_DIR="<%= $::role::db::mysql::datadir %>"
+
+# Dir where the snapshot should be stored after compression
+DUMP_DIR="<%= $common::backup::dump_dir %>"
+
+# Hostname
+HOSTNAME="<%= $::trustedcertname %>"
+
+# MySQL root user password
+ROOTPASS="<%= $::role::db::mysql::root_password %>"
+
+# Are we on LUKS setup, LUKS on LVM
+LUKS=<%= if $::common::backup::luks { 1 } else { 0 } %>
+
+# LUKS Password
+LUKSPASS=<%= $::common::backup::lukspass %>
+
+# LUKS service
+LUKS_SERVICE_NAME=<%= $::common::backup::luks_service_name %>
+
+# Base name of lvm snapshot; cannot start with 'snapshot'
+SNAPSHOT_NAME_BASE="mysql-snapshot"
+
+# Readable snapshot name
+SNAPSHOT_NAME_BASE_LONG="${SNAPSHOT_NAME_BASE}-${HOSTNAME}"
+
+# Readable snapshot name
+SNAPSHOT_NAME="${SNAPSHOT_NAME_BASE_LONG}-${DATE}"
+
+# Ignore tables
+IGNORE_TABLES="<%= $::common::backup::db::mysql::ignore_tables.map |$x| { "--ignore-table=${x} "}.join %>"
+
+# The minimum percentage of lvm extents required for this to work
+LVM_EXTENTS_MIN_REQUIRED_PCT="<%= $::common::backup::lvm_extents_min_required %>"
+
+VG_NAME="<%= $::common::backup::lvm_vg %>"
+
+# The max amount of time we wait be
+declare -r WAIT_MAX_SECONDS=20
+
+# Currently unused varaibles
+declare MYSQLD_PID=
+
+###############
+# Here we go! #
+###############
+
+# Discover the underlying logical volume used by luks
+if [[ "$LUKS" == 1 ]]; then
+    if [[ -z "${LUKSPASS}" && -z "${LUKS_SERVICE_NAME}" ]]; then
+        log.crit "If LUKS is enabled, a LUKS password or a LUKS service name is needed" ERR_MISSING_LUKS_PARAM
+    fi
+
+    # Re-intizaling the variable here
+    _DATA_DIR_DEVICE=$(df --output=source "${DATA_DIR}" | grep -v Filesystem)
+    CRYPT_LV_NAME=$(cryptsetup status $_DATA_DIR_DEVICE |  awk '/device:/{print $2;}')
+
+    # Get the underlying lvname from crypsetup mounted dir
+    DATA_DIR_DEVICE=$(lvs --noheadings -o lv_path ${CRYPT_LV_NAME} | awk '{ print $1; }')
+
+    # Get filesystem type
+    DATA_DIR_FS=$(mount | grep "$_DATA_DIR_DEVICE" | sed -r 's/.*? type (.+?) .*?/\1/')
+else
+    DATA_DIR_DEVICE=$(df --output=source "${DATA_DIR}" | grep -v Filesystem)
+
+    # Get filesystem type
+    DATA_DIR_FS=$(mount | grep "$DATA_DIR_DEVICE" | sed -r 's/.*? type (.+?) .*?/\1/')
+fi
+
+# Name of vg
+if [ -n "$VG_NAME" ]; then
+    LV_NAME="/dev/${VG_NAME}/${SNAPSHOT_NAME}"
+else
+    # Didn't get the vgname
+    log.crit "Error: Couldn't identify the vgname." ERR_MISSING_VG_NAME
+fi
+
+# Path of the volume group
+VG_PATH=$DATA_DIR_DEVICE
+
+# Any extra arguments needed for mounting the snapshot
+MOUNT_EXTRA_ARGS=''
+
+# Snapshot mount point
+SNAPSHOT_MOUNT_POINT="$(mktemp --tmpdir --directory obmondo_backup.XXXXXXXXX)"
+
+# Which database are we really running?
+RDBMS=$(mysql --version | grep -q 'MariaDB' && echo 'mariadb' || echo 'mysql')
+
+RUN_DIR="/run/${RDBMS}"
+SOCKET_FILE="${RUN_DIR}/mysqld-snapshot.sock"
+PID_FILE="${RUN_DIR}/mysqld-snapshot.pid"
+LOG_FILE="/var/log/${RDBMS}/${RDBMS}-snapshot.log"
+
+VG_MOUNT_POINT=$(df --output=target "${DATA_DIR}" | tail -n 1)
+RELATIVE_DATA_DIR="${DATA_DIR#${VG_MOUNT_POINT}}"
+SNAPSHOT_DATA_DIR="${SNAPSHOT_MOUNT_POINT}${RELATIVE_DATA_DIR}"
+
+DUMP_FILE="${DUMP_DIR}/${SNAPSHOT_NAME}.sql.bz2"
+
+case "${DATA_DIR_FS}" in
+    'xfs')
+        # XFS needs to be mounted with `-o nouuid` to avoid checking for double
+        # mounted file systems.
+        MOUNT_EXTRA_ARGS="${MOUNT_EXTRA_ARGS} -o nouuid"
+        ;;
+esac
+
+
+COMPRESSOR=${COMPRESSOR:-<%= safe('::common::backup::compressor', 'pbzip2') %>}
+
+function check_vg_dev_not_root() {
+    # Check that the device given as the device on which the MySQL data resides
+    # is different from the root device; we only want to back up MySQL.
+    vg_root=$(df -l --output=source / | tail -n +2)
+
+    if [[ "${VG_PATH}" == "${vg_root}" ]]; then
+        log.crit "Data dir is on the same volume group as root; needs to be different." $ERR_DATA_ON_ROOT
+    fi
+}
+
+function check_free_physical_extents() {
+    # Check that the amount of available physical extents is greater than or
+    # equal to the amount of extents required.
+    input=$(trim "$(vgs --noheadings --options vg_extent_count,vg_free_count --separator='|' ${VG_NAME})")
+    IFS='|' read total alloc <<< $input
+
+    enough_available=$(echo "scale=2; ((${total}-${alloc}) / ${total} * 100) >= $LVM_EXTENTS_MIN_REQUIRED_PCT" | bc)
+
+    if [[ $enough_available != '1' ]]; then
+        log.crit "Not enough extents available (${alloc} of ${total} allocated); need at least ${LVM_EXTENTS_MIN_REQUIRED_PCT}% free" $ERR_NOT_ENOUGH_EXTENTS
+    fi
+}
+
+function check_existing_snapshot() {
+    # Check if we have an existing snapshot - and complain if we do
+    SNAP="$(trim "$(lvscan | grep "${SNAPSHOT_NAME_BASE}")")"
+    if [ "$SNAP" != "" ]
+    then
+        log.crit "Existing snapshot data found: ${SNAP}" $ERR_EXISTING_SNAPSHOT
+    fi
+}
+
+check_vg_dev_not_root
+check_free_physical_extents
+check_existing_snapshot
+
+OK=0
+
+# Got this far, make sure that stderr is read as mysql gives errors here
+coproc MYSQL { stdbuf -oL -i0  mysql --user root --password="${ROOTPASS}" 2>&1; }
+start_time=$(date +%s.%N)
+printf '%s;\n' 'FLUSH TABLES WITH READ LOCK' >&"${MYSQL[1]}"
+printf '%s;\n' 'select SLEEP(1);' >&"${MYSQL[1]}"
+
+# wait for flush lock command to finish
+while read -t300 -u"${MYSQL[0]}"; do
+    # check for errors
+    if [[ "${REPLY}" =~ ^ERROR\  ]]; then
+        log.crit "Hit unexcepted error locking mysql tables: \"${REPLY}\"" $ERR_LOCK
+    fi
+
+    # loop and wait until the command AFTER flush tables finishes -- then we
+    # know the flush lock has the lock
+    if [[ "${REPLY}" == "SLEEP(1)" ]]; then
+        end_time=$(date +%s.%N)
+        OK=1
+        break
+    fi
+done
+
+if [ $OK -ne 1 ]
+then
+    log.crit "flush lock did NOT finish in time - check 'show processlist' in mysql for long running commands" $ERR_FLUSH
+fi
+
+time_used=$(echo "scale=4; (${end_time}-${start_time})*1000" | bc)
+log.info "flush lock took ${time_used}ms"
+
+set +o errexit
+# now we can take snapshot
+# using 100% is dangerous, but lvcreate understand it and reduce to the same
+# size of the existing lvm.
+REPLY=$(lvcreate -l100%FREE --snapshot --name "${SNAPSHOT_NAME}" "${VG_PATH}")
+if  [[ "${?}" != '0' ]]; then
+    log.err "failed creating snapshot, unlocking tables"
+    OK=0
+fi
+
+set -o errexit
+
+# release lock in mysql
+printf '%s;\n' 'UNLOCK TABLES' >"&${MYSQL[1]}"
+printf '%s\n' 'quit' >&"${MYSQL[1]}"
+
+if [ $OK -ne 1 ]; then
+    log.crit "unable to unlock table, exiting" ERR_UNLOCK
+fi
+
+# Open LUKS backup volume manually or by using a provided service
+if [[ "$LUKS" == 1 ]]; then
+    log.debug "Opening LUKS volume"
+    if [[ -n "${LUKSPASS}" ]]; then
+        log.info "Using discrete LUKS passphrase; unlocking with cryptsetup"
+        cryptsetup luksOpen ${LV_NAME} ${SNAPSHOT_NAME} <<< ${LUKSPASS}
+
+        LV_NAME="/dev/${VG_NAME}/${SNAPSHOT_NAME}"
+
+    elif [[ -n "${LUKS_SERVICE_NAME}" ]]; then
+        log.info "Using LUKS service for unlocking"
+        LUKS_TARGET="${SNAPSHOT_NAME}-unlocked"
+        # Extract the command from the systemd.service to avoid hardcoding
+        # anything here
+        LUKS_SERVICE_COMMAND=$(systemctl cat ${LUKS_SERVICE_NAME} | egrep '^ExecStart' | tail -n1 | sed -r 's/^ExecStart=//' | sed -r 's/ start$//')
+        # Unlock LUKS on the snapshot
+        LUKS_DEVICE=$LV_NAME LUKS_TARGET=$LUKS_TARGET LUKS_NAME=$VG_NAME $LUKS_SERVICE_COMMAND start
+        # Unlock LUKS on the backup disk
+        systemctl start $LUKS_SERVICE_NAME
+
+        LV_NAME="/dev/mapper/${LUKS_TARGET}"
+
+    else
+        log.crit "Unknown LUKS method; aborting" ERR_LUKS
+    fi
+
+    MOUNT_EXTRA_ARGS="${MOUNT_EXTRA_ARGS} -o barrier=0"
+
+    mount ${MOUNT_EXTRA_ARGS} "${LV_NAME}" "${SNAPSHOT_MOUNT_POINT}"
+fi
+
+# FIXME: Should we check available free memory to avoid swapping out?
+
+# Start seperate instance of mysql to take sql dump from snapshot (for full
+# portability of backup)
+log.info "Starting separate mysqld process"
+mysqld_safe --skip-grant-tables            \
+            --port=33307                   \
+            --socket="${SOCKET_FILE}"      \
+            --pid-file="${PID_FILE}"       \
+            --log-error="${LOG_FILE}"      \
+            --innodb_use_native_aio=0      \
+            --innodb_buffer_pool_size=128M \
+            --datadir="${SNAPSHOT_DATA_DIR}" >/dev/null &
+MYSQLD_PID=$!
+log.info "Started mysqld with pid ${MYSQLD_PID}"
+
+# If MySQL is >= 5.6 we can use the argument below and mount the snapshot RO.
+            # --innodb_read_only=1 \
+
+TIME_LEFT_SECONDS=$WAIT_MAX_SECONDS
+# FIXME: Extra error handling here?
+until (echo 'select 1;' | mysql --socket="${SOCKET_FILE}" >/dev/null 2>&1) || [[ $TIME_LEFT_SECONDS -le 0 ]]; do
+    sleep 1
+    echo $(( TIME_LEFT_SECONDS-- )) > /dev/null
+done
+
+# FIXME: should we add ionice/nice here?
+mysqldump --events                  \
+          --socket "${SOCKET_FILE}" \
+          --force                   \
+          ${IGNORE_TABLES}          \
+          --single-transaction      \
+          --routines                \
+          --triggers                \
+          --master-data=2           \
+          --all-databases | "${COMPRESSOR}" > "${DUMP_FILE}"
+
+if [[ $? -ne 0 ]]; then
+    log.crit "Failed MYSQL Backup on host $HOSTNAME - $DATE" $ERR_MYSQLDUMP
+fi
+
+prune_backups
+
+cleanup
+
+log.info "Completed MySQL backup on ${HOSTNAME} at ${DATE}: ${DUMP_FILE}"

@@ -1,0 +1,11 @@
+cve_api:
+  url: <%= $cve_api_url %>
+  endpoint: /rest/json/cves/2.0
+  timeout: 20
+  request_interval: 10
+
+cron_expression: "<%= $cron_expr %>"
+
+server:
+  host: <%= $server_host %>
+  port: <%= $server_port %>

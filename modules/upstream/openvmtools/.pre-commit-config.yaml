@@ -1,0 +1,56 @@
+---
+
+repos:
+  - repo: 'https://github.com/adrienverge/yamllint'
+    rev: v1.15.0
+    hooks:
+      - id: 'yamllint'
+  - repo: 'https://github.com/jumanjihouse/pre-commit-hooks'
+    rev: 1.11.0
+    hooks:
+      - id: 'bundler-audit'
+      - id: 'forbid-binary'
+      - id: 'git-check'                 # See .gitattributes
+      - id: 'git-dirty'                 # See .gitignore
+      - id: 'markdownlint'              # See .mdlrc
+        exclude: '^CHANGELOG\.md$'
+      - id: 'reek'
+      - id: 'rubocop'                   # See .rubocop.yml
+      - id: 'script-must-have-extension'
+      - id: 'script-must-not-have-extension'
+      - id: 'shellcheck'
+  - repo: 'https://github.com/Lucas-C/pre-commit-hooks'
+    rev: v1.1.6
+    hooks:
+      - id: 'forbid-crlf'
+      - id: 'forbid-tabs'
+  - repo: 'https://github.com/chriskuehl/puppet-pre-commit-hooks'
+    rev: v2.1.0
+    hooks:
+      - id: 'epp-validate'
+      - id: 'erb-validate'
+      - id: 'g10k-validate'
+      - id: 'puppet-validate'
+      - id: 'ruby-validate'
+  - repo: https://github.com/pre-commit/mirrors-puppet-lint
+    rev: v2.3.6-1
+    hooks:
+      - id: 'puppet-lint'               # See .puppet-lint.rc
+  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
+    rev: v2.2.3
+    hooks:
+      - id: 'check-added-large-files'
+      - id: 'check-executables-have-shebangs'
+      - id: 'check-json'
+      - id: 'check-merge-conflict'
+      - id: 'check-symlinks'
+      - id: 'check-xml'
+      - id: 'check-yaml'
+      - id: 'detect-private-key'
+      - id: 'end-of-file-fixer'
+      - id: 'mixed-line-ending'
+      - id: 'pretty-format-json'
+        args:
+          - '--autofix'
+      - id: 'sort-simple-yaml'
+      - id: 'trailing-whitespace'

@@ -1,0 +1,3 @@
+---
+stunnel::package: 'stunnel4'
+stunnel::service: 'stunnel4'

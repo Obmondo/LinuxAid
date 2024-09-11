@@ -1,0 +1,18 @@
+<%- |
+$filter_name,
+$cases
+| -%>
+# <%= $filter_name %>
+<%- $cases.each |$case, $options| { -%>
+  <%- if $case =~ /(default|else)/{ -%>
+<%= $case %> {
+  <%- } elsif $case =~ /(main|if)/ { -%>
+<%= "if ${options['expression']} then" %> {
+  <%- } else { -%>
+<%= "else if ${options['expression']} then" %> {
+  <%-}-%>
+<%- $options['tasks'].each |$task| { -%>
+<%= epp('rsyslog/tasks.epp', { 'tasks' => $task }) -%>
+<%-}-%>
+}
+<%}-%>

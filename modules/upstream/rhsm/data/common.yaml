@@ -1,0 +1,4 @@
+---
+lookup_options:
+  rhsm::enabled_repo_ids:
+    merge: 'unique'

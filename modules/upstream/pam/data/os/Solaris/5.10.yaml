@@ -1,0 +1,27 @@
+---
+pam::common_files_create_links: false
+pam::common_files_suffix:       ~
+pam::common_files:
+  - other
+
+pam::pam_auth_lines:
+  - 'login   auth requisite          pam_authtok_get.so.1'
+  - 'login   auth required           pam_dhkeys.so.1'
+  - 'login   auth required           pam_unix_cred.so.1'
+  - 'login   auth required           pam_unix_auth.so.1'
+  - 'login   auth required           pam_dial_auth.so.1'
+  - 'passwd  auth required           pam_passwd_auth.so.1'
+  - 'other   auth requisite          pam_authtok_get.so.1'
+  - 'other   auth required           pam_dhkeys.so.1'
+  - 'other   auth required           pam_unix_cred.so.1'
+  - 'other   auth required           pam_unix_auth.so.1'
+pam::pam_account_lines:
+  - 'other   account requisite       pam_roles.so.1'
+  - 'other   account required        pam_unix_account.so.1'
+pam::pam_password_lines:
+  - 'other   password required       pam_dhkeys.so.1'
+  - 'other   password requisite      pam_authtok_get.so.1'
+  - 'other   password requisite      pam_authtok_check.so.1'
+  - 'other   password required       pam_authtok_store.so.1'
+pam::pam_session_lines:
+  - 'other   session required        pam_unix_session.so.1'

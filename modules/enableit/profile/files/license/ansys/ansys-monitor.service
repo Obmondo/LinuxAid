@@ -1,0 +1,18 @@
+[Unit]
+Description=ANSYS Monitor
+After=ansys-flexlm.service
+Requires=ansys-flexlm.service
+
+[Service]
+Type=simple
+WorkingDirectory=/root
+ExecStart=/ansys_inc/shared_files/licensing/tools/java/linx64/bin/java -Djava.util.logging.config.file=/ansys_inc/shared_files/licensing/tools/tomcat/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -classpath /ansys_inc/shared_files/licensing/tools/tomcat/bin/bootstrap.jar:/ansys_inc/shared_files/licensing/tools/tomcat/bin/tomcat-juli.jar -Dcatalina.base=/ansys_inc/shared_files/licensing/tools/tomcat -Dcatalina.home=/ansys_inc/shared_files/licensing/tools/tomcat -Djava.io.tmpdir=/ansys_inc/shared_files/licensing/tools/tomcat/temp org.apache.catalina.startup.Bootstrap start
+Restart=always
+RestartSec=30
+Environment='CATALINA_HOME=/ansys_inc/shared_files/licensing/tools/tomcat'
+Environment='ANSYSLM_ROOT_DIR=/ansys_inc'
+Environment='JDK_JAVA_OPTIONS= --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED'
+Environment='JRE_HOME=/ansys_inc/shared_files/licensing/tools/java/linx64'
+
+[Install]
+WantedBy=multi-user.target

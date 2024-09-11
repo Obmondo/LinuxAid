@@ -1,0 +1,4 @@
+---
+vsftpd::package_name: vsftpd 
+vsftpd::service_name: vsftpd 
+vsftpd::config_path: /etc/vsftpd.conf

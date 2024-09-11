@@ -1,0 +1,9 @@
+fixtures:
+  symlinks:
+    sentry: "#{source_dir}"
+  forge_modules:
+    apache: "puppetlabs/apache"
+    concat: "puppetlabs/concat"
+    logrotate: "yo61/logrotate"
+    python: "stankevich/python"
+    stdlib: "puppetlabs/stdlib"

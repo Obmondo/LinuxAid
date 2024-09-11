@@ -1,0 +1,43 @@
+---
+<%
+driver = ENV.fetch('KITCHEN_DRIVER', 'vagrant')
+if driver == 'docker' %>
+driver:
+  name: docker
+  use_sudo: false
+  socket: <%= ENV.fetch('DOCKER_HOST', 'unix:///var/run/docker.sock') %>
+  dockerfile: .kitchen.dockerfile
+<% else %>
+driver:
+  name: vagrant
+<% end %>
+
+provisioner:
+  name: puppet_apply
+  puppet_version: 3.7.3
+  modules_path: nevermind
+  resolve_with_librarian_puppet: true
+  require_chef_for_busser: true
+
+<% if driver == 'docker' %>
+platforms:
+  - name: centos6
+    driver_config:
+      image: jlyheden/kitchen-puppet:centos6-test
+      platform: centos
+<% else %>
+platforms:
+  - name: centos-6.6-64-puppet
+    driver_plugin: vagrant
+    driver_config:
+      box: puppetlabs/centos-6.6-64-nocm
+  - name: ubuntu-14.04-64-puppet
+    driver_plugin: vagrant
+    driver_config:
+      box: puppetlabs/ubuntu-14.04-64-nocm
+<% end %>
+
+suites:
+<% Dir['test/integration/**/site.pp'].map { |site| site.split('/')[2] }.each do |s| %>
+  - name: <%= s %>
+<% end %>

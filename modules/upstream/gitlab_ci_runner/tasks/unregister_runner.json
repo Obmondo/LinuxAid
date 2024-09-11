@@ -1,0 +1,15 @@
+{
+  "description": "Unregisters a runner from a Gitlab instance.",
+  "files": ["ruby_task_helper/files/task_helper.rb"],
+  "input_method": "stdin",
+  "parameters": {
+    "url": {
+      "description": "The url to your Gitlab instance. Please provide the host part only! (e.g https://gitlab.com)",
+      "type": "String[1]"
+    },
+    "token": {
+      "description": "Runners authentication token.",
+      "type": "String[1]"
+    }
+  }
+}

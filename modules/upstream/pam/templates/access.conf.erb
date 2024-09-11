@@ -1,0 +1,11 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+#
+
+# allow only the groups listed
+<% @allowed_users_hash.sort.each do |user, origin| -%>
++:<%= user %>:<%= origin %>
+<% end -%>
+
+# default deny
+-:ALL:ALL

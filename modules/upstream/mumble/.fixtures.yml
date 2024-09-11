@@ -1,0 +1,4 @@
+---
+fixtures:
+  symlinks:
+    mumble: "#{source_dir}"

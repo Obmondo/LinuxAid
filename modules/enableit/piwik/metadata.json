@@ -1,0 +1,55 @@
+{
+  "name": "enableit-piwik",
+  "version": "0.5.0",
+  "author": "Rune Juhl Jacobsen",
+  "summary": "Puppet Piwik Module",
+  "license": "GPL-3.0",
+  "source": "",
+  "project_page": "",
+  "issues_url": "",
+  "description": "Install and configure Piwik",
+  "tags": [
+    "piwik"
+  ],
+  "data_provider": "hiera",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04",
+        "16.04"
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.x"
+    },
+    {
+      "name": "puppetlabs/apache",
+      "version_requirement": ">=1.6.0 < 2.0.0"
+    }
+  ]
+}

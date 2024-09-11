@@ -1,0 +1,25 @@
+---
+common::system::kernel::modules:
+  blacklist:
+    - 'acpi_power_meter'
+
+# Allow us to use text-based iLO access using the `textcons` command
+common::system::grub::manage: true
+common::system::grub::parameters:
+  nofb:
+    ensure: true
+  splash:
+    ensure: true
+    value: quiet
+  crashkernel:
+    ensure: true
+    value: auto
+  rhgb:
+    ensure: true
+  quiet:
+    ensure: true
+  vga:
+    ensure: true
+    value: normal
+  nomodeset:
+    ensure: true

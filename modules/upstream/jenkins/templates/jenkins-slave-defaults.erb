@@ -1,0 +1,62 @@
+# defaults for jenkins slave swarm clients
+
+# XXX due to the use of conditional statements and variable interpolation,
+# this file can not be used in its current state as a systemd EnvironmentFile.
+
+# location of java
+JAVA=<%= @java_cmd %>
+
+# arguments to pass to java
+#JAVA_ARGS="-Xmx256m"
+#JAVA_ARGS="-Djava.net.preferIPv4Stack=true" # make jenkins listen on IPv4 address
+<% if @_real_java_args -%>
+JAVA_ARGS="<%= @_real_java_args -%>"
+<% end -%>
+
+# user id to be invoked as (otherwise will run as root; not wise!)
+JENKINS_SLAVE_USER=<%= @slave_user -%>
+
+# location of the jenkins war file
+JENKINS_SLAVE_JAR="<%= @slave_home -%>/<%= @client_jar -%>"
+
+# log location.  this may be a syslog facility.priority
+JENKINS_SLAVE_LOG=/var/log/jenkins-slave/jenkins-slave.log
+
+# slave mode, can be either 'normal' (utilize this slave as much as possible)
+# or 'exclusive' (leave this machine for tied jobs only).
+JENKINS_SLAVE_MODE=<%= @slave_mode -%>
+
+# OS LIMITS SETUP
+#   comment this out to observe /etc/security/limits.conf
+#   this is on by default because http://github.com/jenkinsci/jenkins/commit/2fb288474e980d0e7ff9c4a3b768874835a3e92e
+#   reported that Ubuntu's PAM configuration doesn't include pam_limits.so, and as a result the # of file
+#   descriptors are forced to 1024 regardless of /etc/security/limits.conf
+MAXOPENFILES=8192
+
+MASTER_URL="<%= @masterurl -%>"
+AUTO_DISCOVERY_ADDRESS="<%= @autodiscoveryaddress -%>"
+LABELS="<%= @_real_labels -%>"
+
+EXECUTORS=<%= @executors -%>
+
+CLIENT_NAME="<%= @slave_name -%>"
+
+FSROOT="<%= @slave_home -%>"
+
+DESCRIPTION="<%= @description -%>"
+
+TUNNEL="<%= @tunnel -%>"
+
+# credentials should be single quoted
+JENKINS_USERNAME=<%= @quoted_ui_user %>
+JENKINS_PASSWORD=<%= @quoted_ui_pass %>
+
+OTHER_ARGS="<%= @_real_swarm_client_args %>"
+
+# boolean; any value but 'true' is considered false
+DISABLE_CLIENTS_UNIQUE_ID="<%= 'true' if @disable_clients_unique_id -%>"
+DISABLE_SSL_VERIFICATION="<%= 'true' if @disable_ssl_verification -%>"
+DELETE_EXISTING_CLIENTS="<%= 'true' if @delete_existing_clients -%>"
+
+# "<name>=<path> [<name>=<path> ...]"
+TOOL_LOCATIONS="<%= @_real_tool_locations %>"

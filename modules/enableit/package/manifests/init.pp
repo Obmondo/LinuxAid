@@ -1,0 +1,3 @@
+# Package class
+class package {
+}

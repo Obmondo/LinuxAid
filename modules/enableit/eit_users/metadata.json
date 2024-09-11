@@ -1,0 +1,46 @@
+{
+  "name": "enableit-eit_users",
+  "version": "0.1.0",
+  "author": "enableit",
+  "summary": "Common settings",
+  "license": "Proprietary",
+  "source": "nil",
+  "dependencies": [
+    {
+      "name": "enableit/eit_types"
+    },
+    {
+      "name": "enableit/functions"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.x"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0",
+        "7.1",
+        "7.2"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7.0",
+        "8.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04",
+        "16.04"
+      ]
+    }
+  ]
+}

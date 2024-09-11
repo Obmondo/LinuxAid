@@ -1,0 +1,8 @@
+{
+  "description": "Gets the last boot time of a Linux system",
+  "private": true,
+  "supports_noop": false,
+  "input_method": "environment",
+  "parameters": {
+  }
+}

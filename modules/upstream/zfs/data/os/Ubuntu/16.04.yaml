@@ -1,0 +1,12 @@
+---
+zfs::zed::service_name: 'zed'
+zfs::zed::zedlet_dir: '/usr/lib/zfs-linux/zfs/zed.d'
+zfs::zed::zedlets:
+  all-syslog.sh: {}
+  checksum-notify.sh: {}
+  checksum-spare.sh: {}
+  data-notify.sh: {}
+  io-notify.sh: {}
+  io-spare.sh: {}
+  resilver.finish-notify.sh: {}
+  scrub.finish-notify.sh: {}

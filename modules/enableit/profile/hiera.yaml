@@ -1,0 +1,30 @@
+---
+version: 5
+
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "OS Name and release"
+    path: "os/%{facts.os.name}-%{facts.os.release.major}.yaml"
+
+  - name: "OS family and release"
+    path: "os/%{facts.os.family}-%{facts.os.release.major}.yaml"
+
+  - name: "OS family"
+    path: "os/%{facts.os.family}.yaml"
+
+  - name: 'Facts'
+    paths:
+      - "facts/init_system=%{facts.init_system}.yaml"
+
+  - name: "Manufacturer"
+    path: "%{facts.manufacturer}.yaml"
+
+  - name: "common"
+    path: "common.yaml"
+    lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem
+      pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem

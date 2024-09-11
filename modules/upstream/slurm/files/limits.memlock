@@ -1,0 +1,12 @@
+# -*- mode: conf -*-
+################################################################################
+# SLURM limits (on memlock)
+# Time-stamp: <Mon 2017-08-21 13:59 svarrette>
+#
+# Copyright (c) 2017 UL HPC Team <hpc-sysadmins@uni.lu>
+################################################################################
+# Configure MEMLOCK limits to unlimited, needed by MPI
+#
+
+*   hard   memlock   unlimited
+*   soft   memlock   unlimited

@@ -1,0 +1,37 @@
+{
+  "name": "enableit-monitor",
+  "version": "0.1.0",
+  "author": "EnableIT ApS",
+  "summary": "EnableIT Monitoring Setup",
+  "license": "Proprietary",
+  "source": "-",
+  "project_page": "-",
+  "issues_url": "-",
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.x"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "enableit/eit_types"
+    },
+    {
+      "name": "enableit/functions"
+    },
+    {
+      "name": "enableit/package"
+    },
+    {
+      "name": "enableit/common"
+    },
+    {
+      "name": "enableit/ops"
+    }
+  ]
+}

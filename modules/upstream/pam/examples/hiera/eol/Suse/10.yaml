@@ -1,0 +1,23 @@
+---
+pam::common_files_create_links: false
+pam::common_files_suffix:       ~
+pam::common_files:
+  - common_account
+  - common_auth
+  - common_password
+  - common_session
+
+pam::pam_d_login_template: pam/login.suse10.erb
+pam::pam_d_sshd_template: pam/sshd.suse10.erb
+pam::package_name: pam
+pam::pam_auth_lines:
+  - 'auth  required  pam_env.so'
+  - 'auth  required  pam_unix2.so'
+pam::pam_account_lines:
+  - 'account  required  pam_unix2.so'
+pam::pam_password_lines:
+  - 'password  required  pam_pwcheck.so nullok'
+  - 'password  required  pam_unix2.so nullok use_authtok'
+pam::pam_session_lines:
+  - 'session  required  pam_limits.so'
+  - 'session  required  pam_unix2.so'

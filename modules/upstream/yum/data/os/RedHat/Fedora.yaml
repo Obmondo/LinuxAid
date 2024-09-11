@@ -1,0 +1,104 @@
+---
+yum::os_default_repos:
+  - fedora
+  - fedora-debuginfo
+  - fedora-source
+  - fedora-cisco-openh264
+  - fedora-cisco-openh264-debuginfo
+  - updates
+  - updates-debuginfo
+  - updates-source
+  - updates-testing
+  - updates-testing-debuginfo
+  - updates-testing-source
+
+yum::repos:
+  fedora:
+    descr: 'Fedora $releasever - $basearch'
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora.repo'
+
+  fedora-debuginfo:
+    descr: 'Fedora $releasever - $basearch - Debug'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=fedora-debug-$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora.repo'
+
+  fedora-source:
+    descr: 'Fedora $releasever - Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=fedora-source-$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora.repo'
+
+  fedora-cisco-openh264:
+    descr: 'Fedora $releasever openh264 (From Cisco) - $basearch'
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-cisco-openh264.repo'
+
+  fedora-cisco-openh264-debuginfo:
+    descr: 'Fedora $releasever openh264 (From Cisco) - $basearch - Debug'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=fedora-cisco-openh264-debug-$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-cisco-openh264.repo'
+
+  updates:
+    descr: 'Fedora $releasever - $basearch - Updates'
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates.repo'
+
+  updates-debuginfo:
+    descr: 'Fedora $releasever - $basearch - Updates - Debug'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-released-debug-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates.repo'
+
+  updates-source:
+    descr: 'Fedora $releasever - Updates Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-released-source-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates.repo'
+
+  updates-testing:
+    descr: 'Fedora $releasever - $basearch - Test Updates'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-testing-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates-testing.repo'
+
+  updates-testing-debuginfo:
+    descr: 'Fedora $releasever - $basearch - Test Updates Debug'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-testing-debug-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates-testing.repo'
+
+  updates-testing-source:
+    descr: 'Fedora $releasever - Test Updates Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch'
+    metalink: 'https://mirrors.fedoraproject.org/metalink?repo=updates-testing-source-f$releasever&arch=$basearch'
+    target: '/etc/yum.repos.d/fedora-updates-testing.repo'
+
+yum::utils_package_name: "dnf-utils"

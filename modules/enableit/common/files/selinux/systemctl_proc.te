@@ -1,0 +1,10 @@
+module systemd_proc 1.0;
+
+require {
+        type unconfined_t;
+        type init_t;
+        class service enable;
+}
+
+#============= unconfined_t ==============
+allow unconfined_t init_t:service enable;

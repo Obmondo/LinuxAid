@@ -1,0 +1,66 @@
+{
+  "name": "puppetlabs-augeas_core",
+  "version": "1.1.1",
+  "author": "puppetlabs",
+  "summary": "Manage files using Augeas",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-augeas_core",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-augeas_core",
+  "issues_url": "https://tickets.puppetlabs.com/projects/MODULES",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04"
+      ]
+    },
+    {
+      "operatingsystem": "Fedora",
+      "operatingsystemrelease": [
+        "25"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.14.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#1.14.0",
+  "template-ref": "1.14.0-0-g1bf3a4e"
+}

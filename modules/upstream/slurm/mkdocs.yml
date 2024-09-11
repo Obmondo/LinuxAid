@@ -1,0 +1,13 @@
+site_name: Slurm Puppet Module
+pages:
+- Home: 'index.md'
+- Overview:  'overview.md'
+- Tests with Vagrant: 'vagrant.md'
+- Contributing:
+  - Overview: 'contributing/index.md'
+  - Directory Layout: 'contributing/layout.md'
+  - Repository Setup and Developments: 'contributing/setup.md'
+  - Module Versioning: 'contributing/versioning.md'
+- Documentation/RTFD: 'rtfd.md'
+- Contacts: 'contacts.md'
+theme: readthedocs

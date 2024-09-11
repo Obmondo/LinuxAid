@@ -1,0 +1,11 @@
+---
+name: Python
+description: Python web server
+
+parameters:
+  url:
+    name: URL
+    description: url to your website.
+
+  variant:
+    name: Variant

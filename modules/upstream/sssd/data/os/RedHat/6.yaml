@@ -1,0 +1,10 @@
+---
+
+sssd::service_dependencies:
+ - 'messagebus'
+
+sssd::extra_packages:
+  - 'authconfig'
+  - 'oddjob-mkhomedir'
+
+sssd::manage_oddjobd: true

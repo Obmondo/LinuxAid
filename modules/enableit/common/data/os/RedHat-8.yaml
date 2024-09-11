@@ -1,0 +1,45 @@
+---
+common::network::__required_packages:
+  - 'network-scripts'
+
+common::system::nsswitch::passwd:
+  - 'sss'
+  - 'files'
+  - 'systemd'
+common::system::nsswitch::shadow:
+  - 'sss'
+  - 'files'
+common::system::nsswitch::group:
+  - 'sss'
+  - 'files'
+  - 'systemd'
+common::system::nsswitch::hosts:
+  - 'files'
+  - 'dns'
+  - 'myhostname'
+common::system::nsswitch::bootparams:
+  - 'files'
+common::system::nsswitch::ethers:
+  - 'files'
+common::system::nsswitch::netmasks:
+  - 'files'
+common::system::nsswitch::networks:
+  - 'files'
+common::system::nsswitch::protocols:
+  - 'files'
+common::system::nsswitch::rpc:
+  - 'files'
+common::system::nsswitch::services:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::netgroup:
+  - 'sss'
+common::system::nsswitch::publickey:
+  - 'files'
+common::system::nsswitch::automount:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::aliases:
+  - 'files'
+
+common::system::dns::resolver: 'resolv'

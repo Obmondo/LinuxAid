@@ -1,0 +1,6 @@
+rvm: 2.0.0
+notifications:
+  email:
+    - grimbeaj+travisci@gmail.com
+env:
+  - PUPPET_VERSION=3.7.3

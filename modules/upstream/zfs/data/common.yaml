@@ -1,0 +1,25 @@
+---
+zfs::conf_dir: '/etc/zfs'
+zfs::kmod_type: 'dkms'
+zfs::service_manage: true
+zfs::zfs_arc_max: ~
+zfs::zfs_arc_min: ~
+
+zfs::zed::conf_dir: '/etc/zfs/zed.d'
+zfs::zed::debug_log: ~
+zfs::zed::email_addrs: ~
+zfs::zed::email_opts: ~
+zfs::zed::email_prog: ~
+zfs::zed::lock_dir: ~
+zfs::zed::notify_interval_secs: ~
+zfs::zed::notify_verbose: ~
+zfs::zed::pushbullet_access_token: ~
+zfs::zed::pushbullet_channel_tag: ~
+zfs::zed::run_dir: ~
+zfs::zed::service_manage: true
+zfs::zed::service_name: 'zfs-zed'
+zfs::zed::spare_on_checksum_errors: ~
+zfs::zed::spare_on_io_errors: ~
+zfs::zed::syslog_priority: ~
+zfs::zed::syslog_tag: ~
+zfs::zed::use_enclosure_leds: ~

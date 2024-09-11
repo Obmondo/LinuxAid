@@ -1,0 +1,37 @@
+{
+  "name": "cwood-uwsgi",
+  "version": "0.2.3",
+  "author": "cwood",
+  "summary": "Manage uwsgi through emporer mode",
+  "license": "MIT",
+  "source": "https://github.com/cwood/puppet-uwsgi",
+  "project_page": "https://github.com/cwood/puppet-uwsgi",
+  "issues_url": "https://github.com/cwood/puppet-uwsgi/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "stankevich-python",
+      "version_requirement": ">= 1.10.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    }
+  ]
+}

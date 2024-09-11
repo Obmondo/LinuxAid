@@ -1,0 +1,14 @@
+---
+common::full_host_management: false
+common::repo::manage: false
+
+common::system::updates::enable: false
+common::system::kernel::modules: {}
+common::system::grub::parameters: {}
+common::system::motd::enable: false
+common::system::time::manage_timezone: false
+common::system::time::manage_ntp: false
+common::system::selinux::manage: false
+common::system::hardware::enable_multipath: false
+common::system::systemd::manage_journald: false
+common::system::purge_root_ssh_keys: false

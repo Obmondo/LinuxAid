@@ -1,0 +1,204 @@
+---
+yum::os_default_repos:
+  - 'baseos'
+  - 'appstream'
+  - 'powertools'
+  - 'extras'
+  - 'ha'
+  - 'plus'
+  - 'resilientstorage'
+  - 'baseos-source'
+  - 'appstream-source'
+  - 'powertools-source'
+  - 'extras-source'
+  - 'ha-source'
+  - 'plus-source'
+  - 'resilientstorage-source'
+  - 'baseos-debuginfo'
+  - 'appstream-debuginfo'
+  - 'powertools-debuginfo'
+  - 'extras-debuginfo'
+  - 'ha-debuginfo'
+  - 'plus-debuginfo'
+  - 'resilientstorage-debuginfo'
+
+yum::repos:
+  baseos:
+    descr: 'AlmaLinux-$releasever - BaseOS'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  appstream:
+    descr: 'AlmaLinux $releasever - AppStream'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux"
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  powertools:
+    descr: 'AlmaLinux $releasever - PowerTools'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-powertools.repo'
+
+  extras:
+    descr: 'AlmaLinux $releasever - Extras'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/$basearch/os/
+    enabled: true
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  ha:
+    descr: 'AlmaLinux $releasever - HighAvailability'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/ha'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-ha.repo'
+
+  plus:
+    descr: 'AlmaLinux $releasever - Plus'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/plus'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-plus.repo'
+
+  resilientstorage:
+    descr: AlmaLinux $releasever - ResilientStorage
+    mirrorlist: https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-resilientstorage.repo'
+
+  baseos-source:
+    descr: 'AlmaLinux $releasever - BaseOS Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  appstream-source:
+    descr: 'AlmaLinux $releasever - AppStream Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  powertools-source:
+    descr: 'AlmaLinux $releasever - PowerTools Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-powertools.repo'
+
+  extras-source:
+    descr: 'AlmaLinux $releasever - Extras Source'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras-source'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/Source/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  ha-source:
+    descr: 'AlmaLinux $releasever - HighAvailability Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/ha-source'
+    target: '/etc/yum.repos.d/almalinux-ha.repo'
+
+  plus-source:
+    descr: 'AlmaLinux $releasever - Plus Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/plus-source'
+    target: '/etc/yum.repos.d/almalinux-plus.repo'
+
+  resilientstorage-source:
+    descr: 'AlmaLinux $releasever - ResilientStorage Source'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage-source'
+    target: '/etc/yum.repos.d/almalinux-resilientstorage.repo'
+
+  baseos-debuginfo:
+    descr: 'AlmaLinux $releasever - BaseOS debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/BaseOS/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  appstream-debuginfo:
+    descr: 'AlmaLinux $releasever - AppStream debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/appstream-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/AppStream/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  powertools-debuginfo:
+    descr: 'AlmaLinux $releasever - PowerTools debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/powertools-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/PowerTools/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux-powertools.repo'
+
+  extras-debuginfo:
+    descr: 'AlmaLinux $releasever - Extras debuginfo'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/extras-debuginfo'
+    # baseurl: https://repo.almalinux.org/almalinux/$releasever/extras/debug/$basearch/
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    target: '/etc/yum.repos.d/almalinux.repo'
+
+  ha-debuginfo:
+    descr: 'AlmaLinux $releasever - HighAvailability debuginfo'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/ha-debuginfo'
+    target: '/etc/yum.repos.d/almalinux-ha.repo'
+
+  plus-debuginfo:
+    descr: 'AlmaLinux $releasever - Plus debuginfo'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/plus-debuginfo'
+    target: '/etc/yum.repos.d/almalinux-plus.repo'
+
+  resilientstorage-debuginfo:
+    descr: 'AlmaLinux $releasever - ResilientStorage debuginfo'
+    enabled: false
+    gpgcheck: true
+    gpgkey: 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux'
+    mirrorlist: 'https://mirrors.almalinux.org/mirrorlist/$releasever/resilientstorage-debuginfo'
+    target: '/etc/yum.repos.d/almalinux-resilientstorage.repo'

@@ -1,0 +1,27 @@
+---
+name: Wordpress
+description: Wordpress setup
+
+parameters:
+  php:
+    name: PHP
+
+  url:
+    name: URL
+    description: URL to your website.
+
+  db:
+    name: Database Engine
+    description: Select Database engine.
+
+  memcached:
+    name: Memcached
+    description: Install local Memcached and enable caching to it in Drupal
+
+  http_server:
+    name: HTTP server
+
+  force_https:
+    name: Proxy terminates SSL
+    description: |
+      If Wordpress is placed behind a proxy that terminates SSL, e.g. haproxy, Wordpress will not work unless this option is enabled.

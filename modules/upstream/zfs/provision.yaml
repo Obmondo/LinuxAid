@@ -1,0 +1,12 @@
+---
+vagrant:
+  provisioner: vagrant
+  images:
+    - 'generic/centos6'
+    - 'generic/centos7'
+    - 'generic/centos8'
+    - 'generic/debian9'
+    - 'generic/debian10'
+    - 'generic/ubuntu1604'
+    - 'generic/ubuntu1804'
+    - 'generic/ubuntu2004'

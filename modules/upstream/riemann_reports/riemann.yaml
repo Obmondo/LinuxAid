@@ -1,0 +1,3 @@
+---
+:riemann_server: 'localhost'
+:riemann_port: 5555

@@ -1,0 +1,49 @@
+---
+pam::common_files_create_links: true
+pam::common_files_suffix:       '_ac'
+pam::common_files:
+  - password_auth
+  - system_auth
+
+pam::pam_d_login_template: pam/login.el6.erb
+pam::pam_d_sshd_template: pam/sshd.el6.erb
+pam::package_name: pam
+pam::pam_auth_lines:
+  - 'auth        required      pam_env.so'
+  - 'auth        sufficient    pam_fprintd.so'
+  - 'auth        sufficient    pam_unix.so nullok try_first_pass'
+  - 'auth        requisite     pam_succeed_if.so uid >= 500 quiet'
+  - 'auth        required      pam_deny.so'
+pam::pam_password_auth_lines:
+  - 'auth        required      pam_env.so'
+  - 'auth        sufficient    pam_unix.so nullok try_first_pass'
+  - 'auth        requisite     pam_succeed_if.so uid >= 500 quiet'
+  - 'auth        required      pam_deny.so'
+pam::pam_account_lines:
+  - 'account     required      pam_unix.so'
+  - 'account     sufficient    pam_localuser.so'
+  - 'account     sufficient    pam_succeed_if.so uid < 500 quiet'
+  - 'account     required      pam_permit.so'
+pam::pam_password_lines:
+  - 'password    requisite     pam_cracklib.so try_first_pass retry=3 type='
+  - 'password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+  - 'password    required      pam_deny.so'
+pam::pam_session_lines:
+  - 'session     optional      pam_keyinit.so revoke'
+  - 'session     required      pam_limits.so'
+  - 'session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+  - 'session     required      pam_unix.so'
+pam::pam_password_account_lines:
+  - 'account     required      pam_unix.so'
+  - 'account     sufficient    pam_localuser.so'
+  - 'account     sufficient    pam_succeed_if.so uid < 500 quiet'
+  - 'account     required      pam_permit.so'
+pam::pam_password_password_lines:
+  - 'password    requisite     pam_cracklib.so try_first_pass retry=3 type='
+  - 'password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+  - 'password    required      pam_deny.so'
+pam::pam_password_session_lines:
+  - 'session     optional      pam_keyinit.so revoke'
+  - 'session     required      pam_limits.so'
+  - 'session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+  - 'session     required      pam_unix.so'

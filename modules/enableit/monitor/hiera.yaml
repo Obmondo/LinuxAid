@@ -1,0 +1,36 @@
+---
+version: 5
+
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "OS family and release"
+    path: "os/%{facts.os.family}-%{facts.os.release.major}.yaml"
+
+  - name: "OS name"
+    path: "os/name/%{facts.os.name}.yaml"
+
+  - name: "OS family"
+    path: "os/%{facts.os.family}.yaml"
+
+  - name: "Init system"
+    path: "init_system/%{init_system}.yaml"
+
+  - name: "OS kernel"
+    path: "%{kernel}.yaml"
+
+  - name: 'Facts'
+    paths:
+      - "facts/init_system=%{facts.init_system}.yaml"
+      - "facts/virtual=%{facts.virtual}.yaml"
+      - "facts/hardware.sys_vendor=%{facts.hardware.sys_vendor},os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "facts/hardware=%{facts.hardware.sys_vendor}.yaml"
+      - "facts/is_virtual=%{facts.is_virtual}.yaml"
+      - "facts/processors.count=%{facts.processors.count}.yaml"
+      - "facts/zfs_present=%{facts.zfs_present}.yaml"
+      - "facts/mdraid_present=%{facts.mdraid_present}.yaml"
+
+  - name: "common"
+    path: "common.yaml"

@@ -1,0 +1,10 @@
+{
+  "description": "Allows you to initiate the scrub of a zpool",
+  "input_method": "environment",
+  "parameters": {
+    "zpool": {
+      "description": "Name of the zpool",
+      "type": "String[1]"
+    }
+  }
+}

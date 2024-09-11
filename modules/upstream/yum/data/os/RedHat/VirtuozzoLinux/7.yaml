@@ -1,0 +1,162 @@
+# VirtuozzoLinux 7 default repos
+---
+# original comment regarding -factory repositories:
+#
+#   These -factory repositories are for internal use by developers only
+#   Enable them on your own risk!!!
+#
+yum::os_default_repos:
+  - 'virtuozzolinux-base'
+  - 'virtuozzolinux-updates'
+  - 'virtuozzolinux-base-debuginfo'
+  - 'virtuozzolinux-updates-debuginfo'
+  - 'virtuozzolinux-factory'
+  - 'virtuozzolinux-factory-debuginfo'
+  - 'virtuozzo-os'
+  - 'virtuozzo-updates'
+  - 'virtuozzo-os-debuginfo'
+  - 'virtuozzo-updates-debuginfo'
+  - 'virtuozzo-readykernel'
+  - 'obsoleted_tmpls'
+  - 'factory'
+  - 'factory-debuginfo'
+  - 'virtuozzolinux-vz-factory'
+  - 'virtuozzolinux-vz-factory-debuginfo'
+
+yum::repos:
+  virtuozzolinux-base:
+    descr: "VirtuozzoLinux Base"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-os"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/os/"
+    enabled: true
+    gpgcheck: true
+    priority: "90"
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzolinux-base.repo"
+  virtuozzolinux-updates:
+    descr: "VirtuozzoLinux Updates"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-updates"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/updates/"
+    enabled: true
+    gpgcheck: true
+    priority: "90"
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzolinux-updates.repo"
+  virtuozzolinux-base-debuginfo:
+    descr: "VirtuozzoLinux Base debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-os-debug"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/debug/"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzolinux-base-debuginfo.repo"
+  virtuozzolinux-updates-debuginfo:
+    descr: "VirtuozzoLinux Updates debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-updates-debug"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/updates-debug/"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzolinux-updates-debuginfo.repo"
+  virtuozzolinux-factory:
+    descr: "VirtuozzoLinux Factory"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-factory"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/factory/"
+    priority: "90"
+    enabled: false
+    gpgcheck: false
+    target: "/etc/yum.repos.d/virtuozzolinux-factory.repo"
+  virtuozzolinux-factory-debuginfo:
+    descr: "VirtuozzoLinux Factory debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-factory-debug"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/factory-debug/"
+    priority: "90"
+    enabled: false
+    gpgcheck: false
+    target: "/etc/yum.repos.d/virtuozzolinux-factory-debuginfo.repo"
+  virtuozzo-os:
+    descr: "Virtuozzo"
+    mirrorlist: "http://repo.virtuozzo.com/vz/mirrorlists/7.0/releases-os.mirrorlist"
+    #baseurl: "http://repo.virtuozzo.com/vz/releases/7.0/x86_64/os/"
+    enabled: true
+    gpgcheck: true
+    priority: "50"
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzo-os.repo"
+  virtuozzo-updates:
+    descr: "Virtuozzo Updates"
+    mirrorlist: "http://repo.virtuozzo.com/vz/mirrorlists/7.0/updates-os.mirrorlist"
+    #baseurl: "http://repo.virtuozzo.com/vz/updates/7.0/x86_64/os/"
+    enabled: true
+    gpgcheck: true
+    priority: "50"
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzo-updates.repo"
+  virtuozzo-os-debuginfo:
+    descr: "Virtuozzo os Debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vz/mirrorlists/7.0/releases-debug.mirrorlist"
+    #baseurl: "http://repo.virtuozzo.com/vz/releases/7.0/x86_64/debug/"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzo-os-debuginfo.repo"
+  virtuozzo-updates-debuginfo:
+    descr: "Virtuozzo updates Debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vz/mirrorlists/7.0/updates-debug.mirrorlist"
+    #baseurl: "http://repo.virtuozzo.com/vz/updates/7.0/x86_64/debug/"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzo-updates-debuginfo.repo"
+  virtuozzo-readykernel:
+    descr: "Virtuozzo ReadyKernel"
+    baseurl: "https://appcatalog.virtuozzo.com/repo/readykernel-vz7/"
+    enabled: true
+    gpgcheck: true
+    priority: "50"
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/virtuozzo-readykernel.repo"
+  obsoleted_tmpls:
+    descr: "Virtuozzo obsoleted EZ-templates"
+    mirrorlist: "http://repo.virtuozzo.com/vz/mirrorlists/7.0/obsoleted_tmpls.mirrorlist"
+    #baseurl: "http://repo.virtuozzo.com/vz/obsoleted_tmpls/7.0/x86_64/os/"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/obsoleted_tmpls.repo"
+  factory:
+    descr: "Build Factory packages for Containers"
+    mirrorlist: "http://download.openvz.org/virtuozzo/mirrorlists/7.0/factory-os.mirrorlist"
+    #baseurl: "http://download.openvz.org/virtuozzo/factory/x86_64/os/"
+    priority: "49"
+    enabled: false
+    gpgcheck: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/factory.repo"
+  factory-debuginfo:
+    descr: "Debug packages for Containers from Build Factory"
+    mirrorlist: "http://download.openvz.org/virtuozzo/mirrorlists/7.0/factory-debug.mirrorlist"
+    #baseurl: "http://download.openvz.org/virtuozzo/factory/x86_64/debug/"
+    priority: "49"
+    enabled: false
+    gpgcheck: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Virtuozzo-7"
+    target: "/etc/yum.repos.d/factory-debuginfo.repo"
+  virtuozzolinux-vz-factory:
+    descr: "VirtuozzoLinux Factory"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-factory"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/factory/"
+    priority: "90"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/VZLINUX_GPG_KEY"
+    target: "/etc/yum.repos.d/virtuozzolinux-vz-factory.repo"
+  virtuozzolinux-vz-factory-debuginfo:
+    descr: "VirtuozzoLinux Factory debug packages"
+    mirrorlist: "http://repo.virtuozzo.com/vzlinux/mirrorlist/mirrors-7-factory-debug"
+    #baseurl: "http://repo.virtuozzo.com/vzlinux/7/$basearch/factory-debug/"
+    priority: "90"
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/VZLINUX_GPG_KEY"
+    target: "/etc/yum.repos.d/virtuozzolinux-vz-factory-debuginfo.repo"

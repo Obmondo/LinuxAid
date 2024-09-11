@@ -1,0 +1,11 @@
+---
+name: PostgreSQL database
+description: PostgreSQL database installation and configuration
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+  - Ubuntu-16
+  - Ubuntu-16.04

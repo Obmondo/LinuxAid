@@ -1,0 +1,16 @@
+---
+# Journal Remote
+systemd_journal_remote::remote::command_path: /usr/lib/systemd/systemd-journal-remote
+systemd_journal_remote::remote::command_flags:
+  listen-http: '-3'
+  output: /var/log/journal/remote/
+
+# Journal Upload
+systemd_journal_remote::upload::command_path: /usr/lib/systemd/systemd-journal-upload
+systemd_journal_remote::upload::command_flags:
+  save-state: /var/lib/systemd/journal-upload/state
+  url: "http://0.0.0.0:19532"
+
+# Journal Gateway Daemon
+systemd_journal_remote::gatewayd::command_path: /usr/lib/systemd/systemd-journal-gatewayd
+systemd_journal_remote::gatewayd::command_flags: {}

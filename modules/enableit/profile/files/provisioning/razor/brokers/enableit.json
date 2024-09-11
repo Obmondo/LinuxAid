@@ -1,0 +1,11 @@
+{
+  "name": "enableit",
+  "configuration": {
+    "master_config": {
+      "server": "puppet.enableit.dk",
+      "environment": "production",
+      "masterport": 443
+    }
+  },
+  "broker_type": "enableit"
+}

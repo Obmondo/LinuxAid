@@ -1,0 +1,14 @@
+# /bin/bash
+# THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+
+declare RSYNC_OPTIONS="<%= $rsync_options %>"
+declare SSH_PUBKEY=<%= $ssh_pubkey %>
+declare SSH_LOCAL_USER=<%= $ssh_local_user %>
+declare SSH_REMOTE_USER=<%= $ssh_remote_user %>
+declare DOMAIN="<%= $domain %>"
+declare _TLD_DOMAIN="<%= $tld_domain %>"
+declare -a REMOTE_HOSTS=(
+<% $remote_hosts.each |$remote_host| { -%>
+ "<%= $remote_host -%>"
+<% } -%>
+)

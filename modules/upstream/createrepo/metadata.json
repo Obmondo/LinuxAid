@@ -1,0 +1,48 @@
+{
+  "name": "palli-createrepo",
+  "version": "3.0.0",
+  "author": "Pall Valmundsson",
+  "summary": "Manages creation of yum repositories",
+  "license": "GPL-3.0+",
+  "source": "https://github.com/pall-valmundsson/puppet-createrepo.git",
+  "project_page": "https://github.com/pall-valmundsson/puppet-createrepo",
+  "issues_url": "https://github.com/pall-valmundsson/puppet-createrepo/issues",
+  "tags": [
+    "repositories",
+    "repository",
+    "yum",
+    "createrepo"
+  ],
+  "requirements": [
+    {"name": "puppet", "version_requirement": ">= 3.8.0 < 6.0.0"}
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5.0",
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04"
+      ]
+    }
+  ],
+  "description": "Creates yum repositories and installs cron jobs to update metadata.",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.0.0"
+    }
+  ]
+}

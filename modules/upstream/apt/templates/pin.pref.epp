@@ -1,0 +1,26 @@
+<%- | $name, $pin_release, $release, $codename, $release_version, $component, $originator, $label, $version, $origin, $explanation, $packages_string, $priority | -%>
+<%-
+$pin =
+if $pin_release != '' {
+  $options = [
+    unless $release =~ Undef         { "a=${release}" },
+    unless $codename =~ Undef        { "n=${codename}" },
+    unless $release_version =~ Undef { "v=${release_version}"},
+    unless $component =~ Undef       { "c=${component}" },
+    unless $originator =~ Undef      { "o=${originator}" },
+    unless $label =~ Undef           { "l=${label}" },
+    ].filter |$x| { $x != undef }
+   "release ${options.join(', ')}" }
+
+elsif $version and "${version}".length > 0 {
+   "version ${version}" }
+elsif $origin and $origin.length > 0 {
+   "origin ${origin}" }
+else {
+  "release a=${name}" #Default value
+}
+-%>
+Explanation: <%= $explanation %>
+Package: <%= $packages_string %>
+Pin: <%= $pin %>
+Pin-Priority: <%= $priority %>

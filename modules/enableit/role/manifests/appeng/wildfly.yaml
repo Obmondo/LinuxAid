@@ -1,0 +1,30 @@
+---
+name: Wildfly
+description: Wildfly web server (previously known as JBoss), enabling you to run J2EE Java applets, as well as Java applets and servlets.
+logo: wildfly_icon_256px.png
+suggests:
+  - role::web::java
+
+features:
+  - Monitoring
+  - Time
+  - Security
+  - Logging
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  version:
+    name: WildFly version
+    enum:
+      8.2.0:
+        name: WildFly 8.2.0
+      9.0.0:
+        name: WildFly 9.0.0
+
+  http_server:
+    name: HTTP server

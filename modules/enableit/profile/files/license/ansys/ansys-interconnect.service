@@ -1,0 +1,16 @@
+[Unit]
+Description=ANSYS Interconnect License Service
+After=ansys-flexlm.service
+Requires=ansys-flexlm.service
+
+[Service]
+Type=simple
+WorkingDirectory=/ansys_inc/shared_files/licensing
+ExecStart=/ansys_inc/shared_files/licensing/linx64/ansysli_server -nodaemon -nomonitor -cacheflexlic -noflex -c ./license_files
+ExecStop=/ansys_inc/shared_files/licensing/linx64/ansysli_server -k stop 2325@%H
+ExecReload=/ansys_inc/shared_files/licensing/linx64/ansysli_server -k reread 2325@%H
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

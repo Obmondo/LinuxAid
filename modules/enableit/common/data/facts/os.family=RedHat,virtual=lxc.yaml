@@ -1,0 +1,4 @@
+---
+common::services::disabled_services:
+  - 'ntpd'
+  - 'rhel-dmesg'

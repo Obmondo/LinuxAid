@@ -1,0 +1,80 @@
+
+  ## Logging
+  ErrorLog /dev/null
+  CustomLog /dev/null combined
+
+  <Location /server-status>
+    SetHandler server-status
+    <IfModule mod_authz_core.c>
+      # Apache 2.4
+      Require ip <%= @ipaddress %>
+      Require ip 127.0.0.1
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+      # Apache 2.2
+      Order Deny,Allow
+      Deny from all
+
+      Allow from <%= @ipaddress %>
+      Allow from 127.0.0.1
+    </IfModule>
+  </Location>
+
+<% if @fastcgi == true -%>
+  <Location ^/(fpm_status|ping)>
+    <IfModule mod_authz_core.c>
+      # Apache 2.4
+      Require ip 10.0.3.102
+      Require ip 127.0.0.1
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+      # Apache 2.2
+      Order Deny,Allow
+      Deny from all
+
+      Allow from 10.0.3.102
+      Allow from 127.0.0.1
+    </IfModule>
+  </Location>
+
+  ## Proxy rules
+  ProxyRequests Off
+  ProxyPreserveHost Off
+
+  ProxyPassMatch ^/(fpm_status|ping) fcgi://127.0.0.1:9001/$1
+  ProxyPassReverse ^/(fpm_status|ping) fcgi://127.0.0.1:9001/$1
+<% end -%>
+<% if classes.include? "profile::tomcat" or classes.include? "profile::wildfly" -%>
+    ## Proxy rules
+    ProxyRequests Off
+    ProxyPass /manager/html ajp://localhost:8009 retry=0 timeout=600
+    <Location /manager/html>
+      <IfModule mod_authz_core.c>
+        # Apache 2.4
+        Require ip <%= @ipaddress %>
+        Require ip 127.0.0.1
+     </IfModule>
+     <IfModule !mod_authz_core.c>
+        # Apache 2.2
+        Order Deny,Allow
+        Deny from all
+
+        Allow from <%= @ipaddress %>
+        Allow from 127.0.0.1
+      </IfModule>
+      ProxyPassReverse ajp://localhost:8009
+    </Location>
+
+    ProxyIOBufferSize 19000
+    <Proxy *>
+     <IfModule mod_authz_core.c>
+       # Apache 2.4
+       Require all granted
+     </IfModule>
+     <IfModule !mod_authz_core.c>
+        # Apache 2.2
+        Order Deny,Allow
+        Allow from all
+      </IfModule>
+    </Proxy>
+<% end -%>

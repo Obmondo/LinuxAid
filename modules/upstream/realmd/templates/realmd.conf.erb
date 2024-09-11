@@ -1,0 +1,12 @@
+<% @_realmd_config.sort.map do |k,v|  -%>
+<%   if v.is_a?(Hash)                 -%>
+[<%=   k %>]
+<%     v.sort.map do |ki, vi|         -%>
+<%       if vi != :undef              -%>
+<%=        ki %> = <%= vi %>
+<%       end                          -%>
+<%     end                            -%>
+<%   else                             -%>
+[<%=   k %>]
+<%   end                              -%>
+<% end                                -%>

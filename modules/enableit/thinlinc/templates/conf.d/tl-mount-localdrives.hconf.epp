@@ -1,0 +1,4 @@
+#  -*- mode: conf-unix; -*-
+
+[/utils/tl-mount-localdrives]
+mount_args=-o soft,intr,actimeo=2,rsize=524288,wsize=524288,timeo=50,retrans=1

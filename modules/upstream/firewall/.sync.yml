@@ -1,0 +1,32 @@
+---
+".gitlab-ci.yml":
+  delete: true
+appveyor.yml:
+  delete: true
+Gemfile:
+  optional:
+    ":development":
+      - gem: 'puppet-resource_api'
+.rubocop.yml:
+  include_todos: true
+Rakefile:
+  changelog_user: puppetlabs
+  changelog_max_issues: 500
+spec/spec_helper.rb:
+  mock_with: ":rspec"
+  coverage_report: true
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
+.github/workflows/auto_release.yml:
+  unmanaged: false
+.github/workflows/ci.yml:
+  unmanaged: true
+.github/workflows/nightly.yml:
+  unmanaged: true
+.github/workflows/release.yml:
+  unmanaged: false
+.travis.yml:
+  delete: true
+changelog_since_tag: 'v3.0.0'

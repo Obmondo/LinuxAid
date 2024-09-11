@@ -1,0 +1,19 @@
+---
+version: '3.7'
+
+services:
+  foswiki:
+    image: gitlab.hearing.corp-ad.com:4567/it/foswiki:<%= $version %>
+    volumes:
+      - /var/www/twiki/data:/var/www/foswiki/data/
+      - /var/www/twiki/working:/var/www/foswiki/working/
+      - /var/www/twiki/pub:/var/www/foswiki/pub/
+      - /var/www/twiki/audio:/var/www/foswiki/audio/
+      - /var/www/twiki/lib/LocalSite.cfg:/var/www/foswiki/lib/LocalSite.cfg
+    ports:
+      - 127.0.0.1:8080:80/tcp
+    restart: always
+
+# Local Variables:
+# mode: yaml
+# End:

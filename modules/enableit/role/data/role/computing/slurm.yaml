@@ -1,0 +1,2 @@
+---
+role::computing::slurm::__blendable: true

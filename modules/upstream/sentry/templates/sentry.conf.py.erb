@@ -1,0 +1,201 @@
+
+# This file is just Python, with a touch of Django which means you
+# you can inherit and tweak settings to your hearts content.
+from sentry.conf.server import *
+
+import os.path
+
+CONF_ROOT = os.path.dirname(__file__)
+
+DATABASES = {
+    'default': {
+      'ENGINE': 'sentry.db.postgres',
+	    'NAME': '<%= @db_name %>',
+	    'USER': '<%= @db_user %>',
+	    'PASSWORD': '<%= @db_password %>',
+	    'HOST': '<%= @db_host %>',
+	    'PORT': '<%= @db_port %>',
+    }
+}
+
+# You should not change this setting after your database has been created
+# unless you have altered all schemas first
+SENTRY_USE_BIG_INTS = True
+
+#############
+## General ##
+#############
+
+# If you're expecting any kind of real traffic on Sentry, we highly recommend
+# configuring the CACHES and Redis settings
+
+##########
+## Redis #
+##########
+
+# Generic Redis configuration used as defaults for various things including:
+# Buffers, Quotas, TSDB
+
+# Redis details moved to config.yml
+# See https://docs.getsentry.com/on-premise/server/warnings/
+
+###########
+## CACHE ##
+###########
+
+# Sentry currently utilizes two separate mechanisms. While CACHES is not a
+# requirement, it will optimize several high throughput patterns.
+
+# If you wish to use memcached, install the dependencies and adjust the config
+# as shown:
+#
+#
+#   pip install python-memcached
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': ['127.0.0.1:11211'],
+#     }
+# }
+
+# A primary cache is required for things such as processing events
+SENTRY_CACHE = 'sentry.cache.redis.RedisCache'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+	      'LOCATION': ['<%= @memcached_host %>:<%= @memcached_port %>'],
+    }
+}
+
+
+###########
+## Queue ##
+###########
+
+# See http://sentry.readthedocs.org/en/latest/queue/index.html for more
+# information on configuring your queue broker and workers. Sentry relies
+# on a Python framework called Celery to manage queues.
+
+BROKER_URL = 'redis://<%= @redis_host%>:<%= @redis_port %>'
+
+##################
+### Rate Limits ##
+##################
+
+SENTRY_RATELIMITER = 'sentry.ratelimits.redis.RedisRateLimiter'
+
+#####################
+### Update Buffers ##
+#####################
+
+## Buffers (combined with queueing) act as an intermediate layer between the
+## database and the storage API. They will greatly improve efficiency on large
+## numbers of the same events being sent to the API in a short amount of time.
+## (read: if you send any kind of real data to Sentry, you should enable buffers)
+
+SENTRY_BUFFER = 'sentry.buffer.redis.RedisBuffer'
+
+#############
+### Quotas ##
+#############
+
+## Quotas allow you to rate limit individual projects or the Sentry install as
+## a whole.
+
+SENTRY_QUOTAS = 'sentry.quotas.redis.RedisQuota'
+
+###########
+### TSDB ##
+###########
+
+## The TSDB is used for building charts as well as making things like per-rate
+## alerts possible.
+
+SENTRY_TSDB = 'sentry.tsdb.redis.RedisTSDB'
+
+###########
+# Digests #
+###########
+
+# The digest backend powers notification summaries.
+
+SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
+
+################
+# File storage #
+################
+
+# Any Django storage backend is compatible with Sentry. For more solutions see
+# the django-storages package: https://django-storages.readthedocs.org/en/latest/
+
+SENTRY_FILESTORE = 'django.core.files.storage.FileSystemStorage'
+SENTRY_FILESTORE_OPTIONS = {
+    'location': '/tmp/sentry-files',
+}
+
+################
+## Web Server ##
+################
+
+# If you're using a reverse proxy, you should enable the X-Forwarded-Proto
+# and X-Forwarded-Host headers, and uncomment the following settings
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# USE_X_FORWARDED_HOST = True
+
+#SENTRY_WEB_HOST = '0.0.0.0'
+#SENTRY_WEB_PORT = 9000
+#SENTRY_WEB_OPTIONS = {
+#    'workers': 3,  # the number of gunicorn workers
+#    'limit_request_line': 0,  # required for raven-js
+#    'secure_scheme_headers': {'X-FORWARDED-PROTO': 'https'},
+#}
+
+<% if @ldap_host -%>
+#########################
+## LDAP Authentication ##
+#########################
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+
+ldap.set_option(ldap.OPT_REFERRALS,0)
+
+AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS + (
+  'sentry_ldap_auth.backend.SentryLdapBackend',
+)
+
+# ldap server settings
+AUTH_LDAP_SERVER_URI = "ldaps://<%= @ldap_host %>"
+AUTH_LDAP_BIND_DN = "<%= @ldap_user %>"
+AUTH_LDAP_BIND_PASSWORD = "<%= @ldap_password %>"
+AUTH_LDAP_USER_SEARCH = LDAPSearch('<%= @ldap_base_ou %>', ldap.SCOPE_SUBTREE, '(sAMAccountName=%(user)s)')
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch('<%= @ldap_group_base %>',ldap.SCOPE_SUBTREE, '(objectClass=groupOfNames)')
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
+AUTH_LDAP_REQUIRE_GROUP = '<%= @ldap_group_dn %>'
+AUTH_LDAP_USER_ATTR_MAP = { 'first_name': 'givenName', 'last_name': 'sn', 'email': 'mail' }
+AUTH_LDAP_FIND_GROUP_PERMS = False
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+AUTH_LDAP_DEFAULT_SENTRY_ORGANIZATION = '<%= @organization %>'
+AUTH_LDAP_SENTRY_ORGANIZATION_MEMBER_TYPE = '<%= @ldap_member_type %>'
+AUTH_LDAP_SENTRY_ORGANIZATION_GLOBAL_ACCESS = True
+<% end -%>
+<% if @custom_settings -%>
+<% @custom_settings.each do |conf| -%>
+<%= conf %>
+<% end -%>
+<% end -%>
+
+<% if @metrics_enable -%>
+#############
+## Metrics ##
+#############
+<% if @metrics_backend == 'statsd' -%>
+SENTRY_METRICS_BACKEND = 'sentry.metrics.statsd.StatsdMetricsBackend'
+SENTRY_METRICS_OPTIONS = {
+    'host': '<%= @statsd_host %>',
+    'port': <%= @statsd_port %>,
+}
+<% end -%>
+<% end -%>

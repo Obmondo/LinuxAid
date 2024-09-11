@@ -1,0 +1,19 @@
+# Auditd Version 3.0 or later specific options
+<% if defined('$auditd::local_events') { -%>
+local_events = <%= $auditd::local_events ? { false => 'no', default => 'yes' } %>
+<% } -%>
+<% if defined('$auditd::verify_email') { -%>
+verify_email = <%= $auditd::verify_email ? { false => 'no', default => 'yes' } %>
+<% } -%>
+<% if defined('$auditd::overflowaction') { -%>
+overflow_action = <%= $auditd::overflowaction %>
+<% } -%>
+<% if defined('$auditd::q_depth') { -%>
+q_depth = <%= $auditd::q_depth %>
+<% } -%>
+<% if defined('$auditd::max_restarts') { -%>
+max_restarts = <%= $auditd::max_restarts %>
+<% } -%>
+<% if defined('$auditd::plugin_dir') { -%>
+plugin_dir = <%= $auditd::plugin_dir %>
+<% } -%>

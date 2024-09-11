@@ -1,0 +1,100 @@
+{
+  "name": "saz-sudo",
+  "version": "8.0.0",
+  "author": "saz",
+  "license": "Apache-2.0",
+  "summary": "Manage sudo configuration via Puppet",
+  "source": "https://github.com/saz/puppet-sudo",
+  "project_page": "https://github.com/saz/puppet-sudo",
+  "issues_url": "https://github.com/saz/puppet-sudo/issues",
+  "tags": ["sudo"],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+	"10",
+	"11"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+	"20.04",
+	"22.04"
+      ]
+    },
+    {
+      "operatingsystem": "SmartOS"
+    },
+    {
+      "operatingsystem": "OmniOS"
+    },
+    {
+      "operatingsystem": "FreeBSD"
+    },
+    {
+      "operatingsystem": "OpenBSD"
+    },
+    {
+      "operatingsystem": "AIX"
+    },
+    {
+      "operatingsystem": "Darwin"
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "Amazon"
+    },
+    {
+      "operatingsystem": "Suse"
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "10",
+	"11"
+      ]
+    }
+  ],
+  "dependencies": [],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ]
+}

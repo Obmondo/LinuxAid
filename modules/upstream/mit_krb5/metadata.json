@@ -1,0 +1,74 @@
+{
+  "name": "ccin2p3-mit_krb5",
+  "version": "1.2.1",
+  "author": "Patrick Mooney <patrick.f.mooney@gmail.com>",
+  "summary": "Install and configure MIT Kerberos v5 client libraries",
+  "license": "Apache-2.0",
+  "source": "https://github.com/ccin2p3/puppet-mit_krb5.git",
+  "project_page": "https://github.com/ccin2p3/puppet-mit_krb5",
+  "issues_url": "https://github.com/ccin2p3/puppet-mit_krb5/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.13.0 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">=1.1.0 <6.0.0"
+    },
+    {
+      "name": "ccin2p3/etc_services",
+      "version_requirement": ">=1.1.1 <2.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04",
+        "15.04",
+        "16.04",
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 6.0.0"
+    }
+  ],
+  "description": "Install and configure MIT Kerberos v5 (initial version from Patrick Mooney)",
+  "tags": [
+    "kerberos",
+    "krb5",
+    "gssapi",
+    "mit",
+    "authentication"
+  ],
+  "pdk-version": "1.10.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git#1.10.0",
+  "template-ref": "1.10.0-0-gbba9ac3"
+}

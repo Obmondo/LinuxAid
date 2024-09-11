@@ -1,0 +1,6 @@
+---
+lookup_options:
+  samba::server::packages:
+    merge: unique
+  samba::server::services:
+    merge: unique

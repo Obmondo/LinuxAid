@@ -1,0 +1,36 @@
+<%- if scope['passenger::passenger_provider'] == 'gem' %>
+PassengerRoot <%= scope['passenger::gems::passenger_root'] %>
+  <%- if scope['passenger::passenger_version'] = 5 -%>
+    <%- if @osfamily == 'RedHat' -%>
+PassengerInstanceRegistryDir /var/run/passenger-instreg
+    <% end -%>
+  <% end -%>
+<% else -%>
+  <%- if scope['passenger::passenger_version'] == 5 -%>
+PassengerRoot <%= scope['passenger::params::passenger_root'] %>
+    <%- if @osfamily == 'RedHat' -%>
+PassengerInstanceRegistryDir /var/run/passenger-instreg
+    <% end -%>
+  <% elsif scope['passenger::passenger_version'] == 4 -%>
+PassengerRoot <%= scope['passenger::params::passenger_root'] %>
+  <% else %>
+PassengerRoot <%= scope['passenger::params::passenger_root'] %>passenger-<%= scope['passenger::passenger_version'] %>
+  <% end -%>
+<% end -%>
+PassengerRuby <%= scope['passenger::params::passenger_ruby'] -%>
+
+
+# you probably want to tune these settings
+# PassengerMaxRequests 1000
+PassengerHighPerformance on
+PassengerMaxPoolSize 12
+PassengerPoolIdleTime 1500
+PassengerStatThrottleRate 120
+<%
+major_version = scope['passenger::passenger_version']
+if major_version >= 4
+-%>
+PassengerEnabled on
+<% else -%>
+RailsAutoDetect On
+<% end -%>

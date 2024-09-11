@@ -1,0 +1,11 @@
+[Unit]
+Description=Wildfly Application Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/<%= scope.lookupvar('wildfly::service_name') %> start
+ExecStop=/etc/init.d/<%= scope.lookupvar('wildfly::service_name') %> stop
+
+[Install]
+WantedBy=multi-user.target

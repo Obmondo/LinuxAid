@@ -1,0 +1,4 @@
+---
+role::web::haproxy::defaults_file_path: "/etc/sysconfig"
+role::web::haproxy::service_options:
+  OPTIONS: '""'

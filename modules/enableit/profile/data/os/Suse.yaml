@@ -1,0 +1,15 @@
+---
+# SSSD
+profile::system::authentication::sssd::extra_packages:
+  - 'sssd-ad'
+  - 'sssd-krb5'
+  - 'sssd-krb5-common'
+  - 'sssd-ldap'
+  - 'sssd-tools'
+  - 'sssd-common'
+  - 'sssd-ipa'
+  - 'sssd-dbus'
+  - 'sssd-proxy'
+
+profile::software::cloudamize::__packages:
+  - 'cloudamize_agent'

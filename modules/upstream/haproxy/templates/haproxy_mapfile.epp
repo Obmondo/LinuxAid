@@ -1,0 +1,11 @@
+<% $mappings.each |$mapping| { -%>
+  <%- if String(type($mapping, 'generalized')).index('Hash') == 0 { -%>
+    <%- sort($mapping.convert_to(Array)).map |$values| { -%>
+<%= $values[0] %> <%= $values[1] %>
+    <%- } -%>
+  <%- } elsif type($mapping, 'generalized') == String { -%>
+<%= $mapping %>
+  <%- } else { -%>
+    <%- haproxy::generate_error_message("Haproxy::Mapfile[${mapfile_name}]: ${mappings} array must contain only Hashes or Strings") -%>
+  <%- } -%>
+<% } -%>

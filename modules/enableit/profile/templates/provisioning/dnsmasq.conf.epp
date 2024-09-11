@@ -1,0 +1,19 @@
+<%- | 
+  String $dhcp_range,
+  String $dhcp_router,
+  String $dhcp_dns_servers,
+  String $domain,
+  String $interface
+| -%>
+# DHCP range
+dhcp-range=<%= $dhcp_range %>
+
+# DHCP options
+dhcp-option=option:router,<%= $dhcp_router %>
+dhcp-option=option:dns-server,<%= $dhcp_dns_servers %>
+
+# Domain
+domain=<%= $domain %>
+
+# Interface
+interface=<%= $interface %>

@@ -1,0 +1,7 @@
+---
+common::system::dns::resolver: 'resolv'
+common::system::dns::dnssec: null
+common::system::dns::dns_over_tls: null
+
+common::monitor::exporter::enable: true
+common::monitor::exporter::security::enable: true

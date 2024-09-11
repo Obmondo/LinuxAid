@@ -1,0 +1,71 @@
+# THIS FILE IS AUTOMATICALLY DISTRIBUTED BY PUPPET.
+# ANY CHANGES WILL BE OVERWRITTEN.
+<%
+  opts = []
+
+  if @path.kind_of?(Array)
+    rpath = @path.join(' ')
+  else
+    rpath = @path
+  end
+
+  if @create
+    opts << ['create', @create_mode, @create_owner, @create_group].reject { |r|
+      r == nil
+    }.join(' ')
+  elsif @create == false
+    opts << 'nocreate'
+  end
+
+  %w(compress copy copytruncate delaycompress
+  dateext missingok sharedscripts shred dateyesterday).each do |bool_opt|
+    if (scope.to_hash.has_key?(bool_opt) && scope.to_hash[bool_opt] != nil)
+      opts << (scope.to_hash[bool_opt] == true ? '':'no') + bool_opt
+    end
+  end
+
+  if (scope.to_hash.has_key?('ifempty') && scope.to_hash['ifempty'] != nil)
+    opts << (scope.to_hash['ifempty'] == true ? '':'not') + 'ifempty'
+  end
+
+  %w(_mail _olddir mail_when _rotate_every).each do |param|
+    opts << scope.to_hash[param] if scope.to_hash.has_key?(param)
+  end
+
+  %w(compresscmd compressext compressoptions dateformat extension maxage maxsize minsize rotate size shredcycles start uncompresscmd).each do |key|
+    value = scope.to_hash[key]
+    opts << "#{key} #{value}" if value != nil
+  end
+
+  opts.sort!
+-%>
+
+<% opts.each do |opt| -%>
+<%= opt %>
+<% end -%>
+<% if @su == true -%>
+su <%= @su_user %> <%= @su_group %>
+<% end -%>
+<% if @postrotate != nil -%>
+postrotate
+  <%= @postrotate %>
+endscript
+<% end -%>
+<% if @prerotate != nil -%>
+prerotate
+  <%= @prerotate %>
+endscript
+<% end -%>
+<% if @firstaction != nil -%>
+firstaction
+  <%= @firstaction %>
+endscript
+<% end -%>
+<% if @lastaction != nil -%>
+lastaction
+  <%= @lastaction %>
+endscript
+<% end -%>
+
+# configurable file rotations
+include <%= @rules_configdir %>

@@ -1,0 +1,56 @@
+---
+lookup_options:
+  profile::php::default_modules:
+    merge:
+      strategy: 'deep'
+      knockout_prefix: '!'
+  profile::haproxy::manual:
+    merge: 'deep'
+
+# Apache
+profile::web::apache::monitor_port: 63080
+
+# Nginx
+profile::web::nginx::monitor_port: 63080
+
+# MySQL/MariaDB
+profile::mysql::mysql_monitor_username: 'obmondo-mon'
+profile::mysql::mysql_monitor_password: 'ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAACz/OEONN/4GoIBQeMpfLHzcsGlklyE279r2jEeIsLvBKoggO48GKfUj+CnSctMtmPlKAMaiNrSDuKi3Hm6JUvu9lsJzmUrmREnDnTZzcBM/0QS9NO0vtyvIBZzUPn211JwvHLBHiDkaB26uuuw+7CzW1lLgqk4vbWppx99sRHpQiwfWT5zXRo6hH6HLEJhH/P9Gd6KHC/uZ15tgVDT15pBjB92CLsiYcN3EW/rfXBX++vOkD+DsY1WoRIa8syexJJ7doHJekh8kEBqdn+Uj93ARgsAPN0xEkRohEiGU6vv0UF2Udyb4a27biYO5MT6CHQyCcJZu07ehrU6sgjdfDTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBBRO0EdUTNaCIb/05xlHNcYgBDLrqoYX4nIC2rC4N2TyC7U]'
+profile::mysql::mysql_monitor_hostname: 'localhost'
+profile::mysql::mysql_port: 3306
+
+# PostgreSQL
+profile::db::pgsql::monitor_username: 'obmondo-mon'
+profile::db::pgsql::monitor_password: 'ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAsvB3zpV1W95YFPX2Gz8EBBQ+eaXsqruPATjfYH9LMQMO69Ou/IcXZW53d12DhM2wVw+Z6tHGUhkBmoxxyO0iLcxNCFC8fZmsOdbgTuZfinnRvLoOek99TA2DRhqj0DDNlNCGL0/PPuyJeA+5AUT1nbd0H6+P+VRNBQLknvN0hJroL+uc8rAfCOwtKX73dbkihjXajclpr6N8+NSYM844xriYMFaa+6ksyPcitDCBCXdGx1AMFBTE5ym7kbywj4W51eECz47IcPUXtKsW3EmfOq/rBlOCXtL+dnFKN4k7t55tvTm4wT43wIWG9l69eGX42rq/0nR7elKoBNgkA9/B2zA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBDmr8Q5pn8l698rCiSF8KFbgBAVGtonDbPUHHPn/Atpwdkp]'
+
+# MongoDB
+profile::mongodb::monitor_user: 'obmondo-mon'
+profile::mongodb::monitor_password: 'ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAMX8F72xwRRWYOqXmnlYw2u3Y72v201qtQKcSVB5RPU2cgxJWYDXG5tg4JxHHxertC5kl7hKW0XjArJ9uQwZsq4EBGtlQh1BerHFrKYObM7+MoumweLGWFF+qrsBrLfLtdj8693A/Bp/F2lMoubsqKlfDHqWxYs85VnGrpcx7+PXEQwPWeKViwqccj0Pu5ph4H8hYCfksUrFRK1Dxvho77YBMxGeBMUnJcJzK+EmE+00jWjG1wWq2S6a5LYrFVM1Yj1a1SrNqtMvSIH58Zl4pp1wPyQ+uXQDVitadojiPBiyz+kIeruRWNH4kKxzD5IsO1an6J34ZuEtkMyfMVk8pHzA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBCgLDlUJYzV9lwnKyQGNI3cgBBo0HCrQ/7Jx6o543UcA4JM]'
+
+# LXC
+profile::virtualization::lxc::network: 10.0.3.0
+profile::virtualization::lxc::bridge: lxcbr0
+
+# PHP
+profile::php::default_modules:
+  json: {}
+  curl: {}
+  xmlrpc: {}
+  gd: {}
+  ldap: {}
+  mcrypt: {}
+  intl: {}
+  bcmath: {}
+  gmp: {}
+  mbstring: {}
+  soap: {}
+
+# Config
+profile::haproxy::manual:
+  config_path: "/etc/haproxy/haproxy.cfg"
+  config_ensure: 'present'
+  binary_path: "/usr/sbin/haproxy"
+  config_file: "haproxy.cfg"
+
+profile::virtualization::lxc::__blendable: true
+profile::enableit::haproxy::__blendable: true

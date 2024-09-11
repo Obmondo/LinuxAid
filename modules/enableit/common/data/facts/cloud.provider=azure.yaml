@@ -1,0 +1,2 @@
+---
+common::system::cloud_init::manage: true

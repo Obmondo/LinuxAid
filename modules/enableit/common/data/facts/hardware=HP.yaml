@@ -1,0 +1,2 @@
+---
+common::monitor::exporter::node::ssacli::enable: true

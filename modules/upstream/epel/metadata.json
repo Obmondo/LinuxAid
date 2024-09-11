@@ -1,0 +1,57 @@
+{
+  "name": "puppet-epel",
+  "version": "3.0.1",
+  "author": "Vox Pupuli",
+  "summary": "Setup the EPEL package repo",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-epel",
+  "project_page": "https://github.com/voxpupuli/puppet-epel",
+  "issues_url": "https://github.com/voxpupuli/puppet-epel/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.5.8 < 7.0.0"
+    }
+  ],
+  "description": "Setup the EPEL package repo on Centos/RHEL et al",
+  "dependencies": [
+
+  ]
+}

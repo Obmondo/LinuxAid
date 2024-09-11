@@ -1,0 +1,44 @@
+{
+  "name": "puppet-posix_acl",
+  "version": "0.1.2-rc0",
+  "author": "Vox Pupuli",
+  "summary": "Puppet ACL Module",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-posix_acl.git",
+  "project_page": "https://github.com/voxpupuli/puppet-posix_acl",
+  "issues_url": "https://github.com/voxpupuli/puppet-posix_acl/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.5.8 < 7.0.0"
+    }
+  ],
+  "description": "Manages posix 1e ACLs on files, provides base classes so additional ACL standards can be supported.",
+  "dependencies": []
+}

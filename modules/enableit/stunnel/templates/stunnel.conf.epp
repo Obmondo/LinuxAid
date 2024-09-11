@@ -1,0 +1,59 @@
+; This stunnel config is managed by Puppet.
+
+foreground = yes
+
+<% if $verify == 'default' { -%>
+verify = default
+<% } else { -%>
+<%- if $certificate { -%>
+cert = <%= $certificate %>
+<%- } -%>
+<%- if $private_key { -%>
+key = <%= $private_key %>
+<%- } -%>
+<%- if $ca_file { -%>
+CAfile = <%= $ca_file %>
+<%- } -%>
+<%- if $ca_path { -%>
+capath = <%= $ca_path %>
+<%- } -%>
+<%- if $crl_file { -%>
+CRLfile = <%= $crl_file %>
+<%- } -%>
+sslVersion = <%= $ssl_version %>
+<%- if $certificate { -%>
+verify = <%= $verify %>
+<%- } -%>
+<% } -%>
+
+<%- if $chroot { -%>
+chroot = <%= $chroot %>
+<%- } -%>
+<%- if $user { -%>
+setuid = <%= $user %>
+<%- } -%>
+<%- if $group { -%>
+setgid = <%= $group %>
+<%- } -%>
+<%- if $pid_file { -%>
+pid = <%= $pid_file %>
+<%- } -%>
+
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+
+debug = <%= $debug_level %>
+<%- if $log_dest { -%>
+output = <%= $log_dest %>
+<%- } -%>
+syslog = <%= $syslog %>
+
+client = <%= $client %>
+retry = <%= $retry %>
+failover = <%= $failover %>
+
+[<%= $name -%>]
+accept = <%= $accept %>
+<%- $connect.each |$_connect| { -%>
+connect = <%= $_connect %>
+<%- } -%>

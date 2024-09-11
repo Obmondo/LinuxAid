@@ -1,0 +1,11 @@
+---
+piwik::path: /var/www/piwik
+piwik::user: www-data
+
+piwik::install::version: latest
+piwik::install::source_repo: git://github.com/piwik/piwik.git
+piwik::install::source_repo_provider: git
+
+piwik::config::force_https: false
+piwik::config::use_forwarded_for: false
+piwik::config::use_forwarded_host: false

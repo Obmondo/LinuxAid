@@ -1,0 +1,3 @@
+---
+# systemd-timesynd doesn't expose NTP on port 123
+common::monitor::exporter::node::ntp: false

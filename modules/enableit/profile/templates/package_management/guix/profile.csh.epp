@@ -1,0 +1,20 @@
+# -*- mode: sh; sh-shell: tcsh; -*-
+#
+# based on https://lists.gnu.org/archive/html/bug-guix/2017-08/msg00128.html
+
+setenv GUIX_DAEMON_SOCKET "<%= $daemon_socket %>"
+
+set GUIX_PROFILE_BASE="/var/guix/profiles/per-user"
+
+setenv GUIX_PROFILE "${GUIX_PROFILE_BASE}/${USER}/guix-profile"
+setenv GUIX_LOCPATH "${GUIX_PROFILE}/lib/locale"
+
+# https://unix.stackexchange.com/questions/77661/preventing-duplicate-entried-in-path-cshrc
+set -f path=("${GUIX_PROFILE}/bin" "${GUIX_PROFILE}/sbin" $path:q)
+
+# make sure INFOPATH exists before we try to augment it
+if ( ! $?INFOPATH ) then
+  setenv INFOPATH ""
+endif
+
+setenv INFOPATH "${GUIX_PROFILE}/share/info:${INFOPATH}"

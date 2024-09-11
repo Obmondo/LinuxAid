@@ -1,0 +1,16 @@
+---
+nfs::client::packages:
+  - 'nfs-client'
+
+nfs::server::packages:
+  - 'nfs-kernel-server'
+nfs::server::service_name: 'nfs-server'
+nfs::server::config::defaults_path: '/etc/sysconfig/nfs'
+
+nfs::nobody_username: 'nobody'
+nfs::nobody_groupname: 'nobody'
+nfs::nobody_gecos: 'Anonymous NFS User'
+nfs::nobody_uid: 65533
+nfs::nobody_gid: 65534
+nfs::nobody_shell: '/sbin/nologin'
+nfs::nobody_home: '/var/lib/nobody'

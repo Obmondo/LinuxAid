@@ -1,0 +1,130 @@
+# -*- mode: sh; shell: bash -*-
+#
+# Awesome bashrc!
+#
+# /runejuhl
+
+export HISTCONTROL=ignoredups:ignorespace
+export HISTSIZE=1000000
+export HISTFILESIZE=2000000
+export HISTTIMEFORMAT="%F %T%z "
+# ignore tramp shell
+export HISTIGNORE="exec env ENV='' HISTFILE='' HISTFILESIZE=0 HISTSIZE=0 PROMPT_COMMAND='' PS1=\#\$\  PS2='' PS3='' /bin/sh:${HISTIGNORE}"
+# ignore yubikey presses
+export HISTIGNORE="cccccc*:${HISTIGNORE}"
+# ignore dangerous commands (including some suffixed with space, just like when
+# you tab-complete them)
+export HISTIGNORE="reboot:reboot :poweroff:poweroff :init 0:init 6:systemctl poweroff*:systemctl reboot*:${HISTIGNORE}"
+# make systemd default to wrapping long lines
+export SYSTEMD_LESS="FRXMK"
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# extra globbing for bash
+shopt -s extglob
+
+# don't execute substituted commands, just expand them
+shopt -s histverify
+
+# allow reediting failed history substitution
+shopt -s histreedit
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# we don't want to make things too weird for dumb terminals
+if [[ "$TERM" == 'dumb' && "$EMACS" != 't' ]]; then
+  return
+fi
+
+# for not too dumb terms
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/:\1/'
+}
+
+parse_git_status() {
+  git -c color.status=always status -s 2> /dev/null|sed -r 's/[ ]?(\x1b\[[0-9]{2}m)([^ ]+).*/\1\2\x1b\[m/'|sort -r|uniq -c|sed -r 's/[[:blank:]]+([0-9]+) (.*)/\1\2/'|tr -d '\n'|sed -r 's/(.*)/:\o033\[00m\1/'
+}
+
+parse_git_tag() {
+  (git describe --tags 2>/dev/null | sed -r 's/(.*)/:\1/') || :
+}
+
+function print_git() {
+  branch="$(parse_git_branch)"
+  [[ -z $branch ]] && return
+
+  echo -n "${branch}$(parse_git_tag)$(parse_git_status)"
+}
+
+# make a mark when the last command failed with exit != 0
+print_last_result() {
+  l=$?
+  [ $l -ne 0 ] && echo -en "\033[01;31m$l\033[00m "
+}
+
+if [ -z "$NO_COLOR" ]; then
+  case "$TERM" in
+    linux|screen|screen-256color|xterm-color|xterm-256color|eterm-color|tmux-256color)
+      color_prompt=yes
+      ;;
+  esac
+else
+  color_prompt=
+fi
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+if [[ $EMACS != 't' ]]; then
+  if [[ $USER == root ]]; then
+    function ps1_user_color() {
+      echo -en "\033[01;31m"
+    }
+  else
+    function ps1_user_color() {
+      echo -en "\033[01;32m"
+    }
+  fi
+
+  if command -v git >/dev/null 2>&1; then
+    PS1='$(print_last_result)\t ${debian_chroot:+($debian_chroot)}$(ps1_user_color)\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00;33m\]$(print_git)\[\033[00m\]\n\$ '
+  else
+    PS1='$(print_last_result)\t ${debian_chroot:+($debian_chroot)}$(ps1_user_color)\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\n\$ '
+  fi
+
+  unset color_prompt
+fi
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+  . /etc/bash_completion
+fi
+
+# always run mtr in terminal mode
+export MTR_OPTIONS='-t'
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'

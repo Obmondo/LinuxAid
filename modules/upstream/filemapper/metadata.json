@@ -1,0 +1,19 @@
+{
+  "name": "puppet-filemapper",
+  "version": "3.0.2",
+  "author": "Vox Pupuli",
+  "summary": "Developer extension for permitting complex manipulation of file contents as resources",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-filemapper",
+  "project_page": "https://github.com/voxpupuli/puppet-filemapper",
+  "issues_url": "https://github.com/voxpupuli/puppet-filemapper/issues",
+  "dependencies": [
+
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ]
+}

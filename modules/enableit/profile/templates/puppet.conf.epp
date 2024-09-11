@@ -1,0 +1,28 @@
+# MANAGED BY OBMONDO.COM
+
+[main]
+    server = <%= $server %>
+    certname = <%= $certname %>
+    masterport = <%= $masterport %>
+
+    stringify_facts = false
+    manage_internal_file_permissions = <%= $manage_internal_file_permissions %>
+    runtimeout = 20m
+<% unless $extra_main_settings =~ Undef { -%>
+<% $extra_main_settings.each |$setting, $value| { -%>
+    <%= $setting %> = <%= $value %>
+<% } -%>
+<% } -%>
+# https://puppet.com/docs/puppet/7/config_about_settings.html#configuring_locale_settings-disabling-internationalized-strings
+    disable_i18n = true
+    logdest = console
+
+[agent]
+    report = true
+    noop = <%= $noop %>
+    graph = <%= $graph %>
+    onetime = <%= $onetime %>
+    splaylimit = 60s
+    splay = <%= $splay %>
+    usecacheonfailure = <%= $usecacheonfailure %>
+    environment = <%= $environment %>

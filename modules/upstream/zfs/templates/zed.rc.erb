@@ -1,0 +1,46 @@
+# !!! Managed by Puppet !!!
+<% if @debug_log -%>
+ZED_DEBUG_LOG="<%= @debug_log %>"
+<% end -%>
+<% if @email_addrs -%>
+ZED_EMAIL_ADDR="<%= @email_addrs.join(' ') %>"
+<% end -%>
+<% if @email_prog -%>
+ZED_EMAIL_PROG="<%= @email_prog %>"
+<% end -%>
+<% if @email_opts -%>
+ZED_EMAIL_OPTS="<%= @email_opts %>"
+<% end -%>
+<% if @lock_dir -%>
+ZED_LOCKDIR="<%= @lock_dir %>"
+<% end -%>
+<% if @notify_interval_secs -%>
+ZED_NOTIFY_INTERVAL_SECS=<%= @notify_interval_secs %>
+<% end -%>
+<% unless @notify_verbose.nil? -%>
+ZED_NOTIFY_VERBOSE=<%= @notify_verbose ? 1 : 0 %>
+<% end -%>
+<% if @pushbullet_access_token -%>
+ZED_PUSHBULLET_ACCESS_TOKEN="<%= @pushbullet_access_token %>"
+<% end -%>
+<% if @pushbullet_channel_tag -%>
+ZED_PUSHBULLET_CHANNEL_TAG="<%= @pushbullet_channel_tag %>"
+<% end -%>
+<% if @run_dir -%>
+ZED_RUNDIR="<%= @run_dir %>"
+<% end -%>
+<% unless @use_enclosure_leds.nil? -%>
+ZED_USE_ENCLOSURE_LEDS=<%= @use_enclosure_leds ? 1 : 0 %>
+<% end -%>
+<% if @spare_on_checksum_errors -%>
+ZED_SPARE_ON_CHECKSUM_ERRORS=<%= @spare_on_checksum_errors %>
+<% end -%>
+<% if @spare_on_io_errors -%>
+ZED_SPARE_ON_IO_ERRORS=<%= @spare_on_io_errors %>
+<% end -%>
+<% if @syslog_priority -%>
+ZED_SYSLOG_PRIORITY="<%= @syslog_priority %>"
+<% end -%>
+<% if @syslog_tag -%>
+ZED_SYSLOG_TAG="<%= @syslog_tag %>"
+<% end -%>

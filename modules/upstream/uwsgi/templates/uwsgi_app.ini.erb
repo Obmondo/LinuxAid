@@ -1,0 +1,27 @@
+#
+# This file is managed by puppet class 'uwsgi::app'
+#
+# uwsgi app config for '<%= @name %>'
+#
+[uwsgi]
+<%- if @application_options -%>
+<%- @application_options.each do |key, value| -%>
+    <%- if value.is_a? Array -%>
+       <%- value.each do |v| -%>
+<%= key %> = <%= v %>
+       <%- end -%>
+    <%- else -%>
+<%= key %> = <%= value %>
+    <%- end -%>
+<% end -%>
+<% end -%>
+<%- if @environment_variables -%>
+<%- @environment_variables.each do |key, value| -%>
+env = <%= key %>=<%= value %>
+<%- end -%>
+<%- end -%>
+<%- if @environment_file -%>
+for-readline = <%= @environment_file %>
+  env = %(_)
+end-for =
+<%- end -%>

@@ -1,0 +1,15 @@
+---
+zfs::package_name: 'zfsutils-linux'
+
+zfs::zed::zedlet_dir: '/usr/lib/zfs-linux/zed.d'
+zfs::zed::zedlets:
+  all-syslog.sh: {}
+  data-notify.sh: {}
+  pool_import-led.sh: {}
+  resilver_finish-notify.sh: {}
+  resilver_finish-start-scrub.sh: {}
+  scrub_finish-notify.sh: {}
+  statechange-led.sh: {}
+  statechange-notify.sh: {}
+  vdev_attach-led.sh: {}
+  vdev_clear-led.sh: {}

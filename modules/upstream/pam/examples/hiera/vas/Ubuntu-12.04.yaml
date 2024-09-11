@@ -1,0 +1,25 @@
+pam::pam_auth_lines:
+  - 'auth        required    pam_env.so'
+  - 'auth        sufficient  pam_vas3.so show_lockout_msg get_nonvas_pass store_creds'
+  - 'auth        requisite   pam_vas3.so echo_return'
+  - 'auth        required    pam_unix.so use_first_pass'
+pam::pam_account_lines:
+  - 'account sufficient  pam_vas3.so'
+  - 'account requisite   pam_vas3.so echo_return'
+  - 'account [success=1 new_authtok_reqd=done default=ignore]  pam_unix.so'
+  - 'account requisite   pam_deny.so'
+  - 'account required    pam_permit.so'
+pam::pam_password_lines:
+  - 'password sufficient  pam_vas3.so'
+  - 'password  requisite pam_vas3.so echo_return'
+  - 'password  [success=1 default=ignore]  pam_unix.so obscure sha512'
+  - 'password  requisite pam_deny.so'
+  - 'password  required  pam_permit.so'
+pam::pam_session_lines:
+  - 'session  [default=1] pam_permit.so'
+  - 'session requisite pam_deny.so'
+  - 'session required  pam_permit.so'
+  - 'session optional  pam_umask.so'
+  - 'session required  pam_vas3.so create_homedir'
+  - 'session requisite pam_vas3.so echo_return'
+  - 'session required  pam_unix.so'

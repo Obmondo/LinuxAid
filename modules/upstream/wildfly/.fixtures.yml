@@ -1,0 +1,4 @@
+fixtures:
+  repositories:
+  symlinks:
+    'wildfly': '#{source_dir}'

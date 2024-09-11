@@ -1,0 +1,24 @@
+---
+name: haproxy
+description: High availability load balancer for TCP and HTTP
+
+parameters:
+  domains:
+    name: Domains
+    description: List of domains proxy server should handle
+  https:
+    name: HTTPS
+    description: Haproxy proxy would listen on port 443
+  http:
+    name: HTTP
+    description: Haproxy proxy would listen on port 80
+  mode:
+    name: Mode
+    description: Haproxy frontend mode
+  encryption_ciphers:
+    name: Ciphers
+    description: Haproxy encryption ciphers
+  listen_on:
+    name: Listen
+    description: Haproxy would listen on this address
+    lookup: '`facts["local_ips"]`'

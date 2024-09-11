@@ -1,0 +1,20 @@
+vrrp_script <%= @_name %> {
+  script    "<%= @script %>"
+  interval  <%= @interval %>
+  <%- unless @no_weight -%>
+  weight    <%= @weight_real %>
+  <%- end -%>
+  <%- if @fall -%>
+  fall      <%= @fall %>
+  <%- end -%>
+  <%- if @rise -%>
+  rise      <%= @rise %>
+  <%- end -%>
+  <%- if @timeout -%>
+  timeout   <%= @timeout %>
+  <%- end -%>
+  <%- if @user -%>
+  user      <%= @user %><% if @group %> <%= @group %><% end %>
+  <%- end -%>
+}
+

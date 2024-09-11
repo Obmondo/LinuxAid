@@ -1,0 +1,104 @@
+<% classes.each do |val| -%>
+<% if val == "profile::php" -%>
+  <html>
+    <head>
+      <title><%= scope.call_function('upcase', [$code]) %> Test</title>
+    </head>
+    <body>
+      You can put all your <%=@code%> code under "/var/www/html" and you are good to go <br>
+      You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost<br>
+      The below is a <%=@code%> code output <br>
+    <% if classes.include? "profile::php" -%>
+    <?php echo "Your <%=@code%> code runs "; echo "and it is working properly\n"; ?>
+    <% end -%>
+    <% if classes.include? "profile::appeng::phpfpm" -%>
+    <?php
+        $sapi_type = php_sapi_name();
+        echo "Your are using $sapi_type"
+      ?>
+    <% end -%>
+    </body>
+  </html>
+<% elsif val == "profile::perl" -%>
+#!/usr/bin/perl
+use strict;
+use warnings;
+<% if @handler == "cgi-script" -%>
+use CGI;
+
+my $q = CGI->new;
+print $q->header,
+ $q->start_html('<%= @codeupcase %> Test'),
+ $q->h1('Your <%= @code %> code is working fine. Instruction to setup a virtualhost is given below.'),
+ $q->h1('You can put all your <%= @code %> code under "/var/www/html" and you are good to go'),
+ $q->h1('You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost'),
+ $q->end_html;
+<% elsif @handler == "fcgid-script" -%>
+use FCGI;
+
+# Initialize the FCGI
+my $request = FCGI::Request();
+
+while($request->Accept() >= 0) {
+print qq(Content-type: text/html\n\n);
+
+print <<"EOF";
+  <html>
+    <head>
+      <title><%= @codeupcase %> Test</title>
+    </head>
+    <body>
+      Your <%=@code%> code is working fine. Instruction to setup a virtualhost is given below. <br>
+      You can put all your <%=@code%> code under "/var/www/html" and you are good to go <br>
+      You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost
+    </body>
+  </html>
+EOF
+}
+<% elsif @handler == "mod_perl" -%>
+print qq(Content-type: text/html\n\n);
+
+print <<"EOF";
+  <html>
+    <head>
+      <title><%= @codeupcase %> Test</title>
+    </head>
+    <body>
+      Your <%=@code%> code is working fine. Instruction to setup a virtualhost is given below. <br>
+      You can put all your <%=@code%> code under "/var/www/html" and you are good to go <br>
+      You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost
+    </body>
+  </html>
+EOF
+<% end %>
+<% elsif val == "profile::wsgi" -%>
+<% if @handler == "mod_wsgi" %>
+def application(environ, start_response):
+    status = '200 OK'
+    output = """Your <%= @code %> code is working fine. Instruction to setup a virtualhost is given below.
+You can put all your <%= @code %> code under "/var/www/html" and you are good to go.
+You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost"""
+
+    response_headers = [('Content-type', 'text/plain'),
+                        ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+
+    return [output]
+<% end  -%>
+<% if @handler == "uwsgi" -%>
+def application(env, start_response):
+    start_response('200 OK', [('Content-Type','text/html')])
+
+    html = """Your <%= @code %> code is working fine. Instruction to setup a virtualhost is given below.
+You can put all your <%= @code %> code under "/var/www/html" and you are good to go.
+You can create more virtualhost under "/opt/vhosts.d", for reference you can copy the existing virtualhost"""
+    html += "<table>\n"
+    for k in env:
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(k, env[k])
+    html += "</table>\n"
+
+    return html
+<% end -%>
+
+<% end -%>
+<% end -%>

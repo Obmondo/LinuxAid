@@ -1,0 +1,62 @@
+{
+  "name": "enableit-thinlinc",
+  "version": "0.1.0",
+  "author": "Rune Juhl Jacobsen <runejuhl@enableit.dk>",
+  "summary": "",
+  "license": "GPL-3.0-or-later",
+  "source": "",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/firewall",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.25.0"
+    },
+    {
+      "name": "voxpupuli/cron",
+      "version_requirement": ">= 1.0.0"
+    }
+
+  ],
+  "pdk-version": "1.8.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.8.0-0-g0d9da00",
+  "data_provider": "hiera"
+}

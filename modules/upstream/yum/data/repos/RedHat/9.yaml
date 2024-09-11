@@ -1,0 +1,30 @@
+---
+# This file contains miscellaneous, non-distro repositories.
+yum::repos:
+  # EPEL
+  epel-next:
+    descr: "Extra Packages for Enterprise Linux $releasever - Next - $basearch"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-next-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgcheck: true
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    target: '/etc/yum.repos.d/epel-next.repo'
+
+  epel-next-debuginfo:
+    descr: "Extra Packages for Enterprise Linux $releasever - Next - $basearch - Debug"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-next-debug-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-next.repo'
+
+  epel-next-source:
+    descr: "Extra Packages for Enterprise Linux $releasever - Next - $basearch - Source"
+    metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-next-source-$releasever&arch=$basearch&infra=$infra&content=$contentdir"
+    mirrorlist: absent
+    enabled: false
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-%{facts.os.release.major}"
+    gpgcheck: true
+    target: '/etc/yum.repos.d/epel-next.repo'

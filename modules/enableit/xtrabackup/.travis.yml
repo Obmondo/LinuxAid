@@ -1,0 +1,33 @@
+sudo: false
+language: ruby
+cache: bundler
+bundler_args: "--without system_tests"
+before_install: rm Gemfile.lock || true
+script:
+- bundle exec rake
+matrix:
+  fast_finish: true
+  include:
+  - rvm: 2.1.8
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
+  - rvm: 2.1.8
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER=yes
+  - rvm: 2.1.8
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+  - rvm: 2.2.4
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+  - rvm: 2.2.4
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+  - rvm: 2.3.0
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+notifications:
+  email: john@johnlawerance.com
+deploy:
+  provider: puppetforge
+  user: johnlawerance
+  password:
+    secure: "lakepmnNn2mpl9F9Bm285YlKAZnyC2n6ZR716j+lU4LBJ/bsdWnkZEQ2lBd/QeieMYtMdTiVUQ5ReS0GPDAr5av4VmEl21oArQ4JBdyQ1RpXRinRbtVejLGC6dTqU0IoCse/EUbgknljPfUxp/tUpGiKTJPOKsMHtGVeCQDQOMNJB1qLD20mlv1CTfpGGiqo4at51swfku7/VZL6k49ctSwGpqhsvjsZEzJVPbK39LukBYRwEE0KvBI55kSteRPnhYrPoLSTdzNmm4vsmeL8T5t4DZGJgE5ebXZWdSQEDoZZH6F0tCf0CN6Bwu1KeXzgBeGZdvW80WoJ8Z140kH8efxWNFBB3dw9g9sFDfzxhxbVk5OeMoV8gEVvwONiwZWbU+a34hqspbE21JQj4xzzxqieBp7vlCUfOyOQo9a2htWk3Sy/HBfKnEFjHnHtH1JvHhyevfZAUqRwwR4trXG38uRFFyP/ckH3dturzHLsunoc6vxZ+Y3Au6c19rBEGK5W9EDdhTyOet7xrlgh50mYwNLzr7jhW5zzK9/L6Uu8MGcKMeVTmT6njmC6oXWTSj6rpdNteUif8QKGxd2g41oWZKVPNMSXJ0oiYcclZOwcu4SOvXRIgJZqG6dDt+8A96nwmrp96lRaKxT34PpItRwviZKojZEqMgEb3//phop24RM="
+  on:
+    tags: true
+    all_branches: false
+    rvm: 2.1.8

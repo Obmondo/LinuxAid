@@ -1,0 +1,6 @@
+---
+
+sssd::extra_packages:
+  - 'libpam-runtime'
+  - 'libpam-sss'
+  - 'libnss-sss'

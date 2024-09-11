@@ -1,0 +1,3 @@
+---
+piwik::install::geoip_package: geoip-database-contrib
+piwik::install::geoip_city_path: /usr/share/GeoIP/GeoIPCity.dat

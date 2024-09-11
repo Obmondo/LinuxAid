@@ -1,0 +1,61 @@
+---
+common::system::authentication::ignore_expired_root_password: true
+common::logging::rsyslog::log_local: true
+common::services::disabled_services:
+  - 'abrtd'
+  - 'abrt-oops'
+  - 'kdump'
+  - 'libstoragemgmt'
+  - 'plymouth-start'
+
+common::system::nsswitch::passwd:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::shadow:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::group:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::hosts:
+  - 'files'
+  - 'dns'
+  - 'myhostname'
+common::system::nsswitch::bootparams:
+  - '[NOTFOUND=return]'
+  - 'files'
+common::system::nsswitch::ethers:
+  - 'files'
+common::system::nsswitch::netmasks:
+  - 'files'
+common::system::nsswitch::networks:
+  - 'files'
+common::system::nsswitch::protocols:
+  - 'files'
+common::system::nsswitch::rpc:
+  - 'files'
+common::system::nsswitch::services:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::netgroup:
+  - 'sss'
+common::system::nsswitch::automount:
+  - 'files'
+  - 'sss'
+common::system::nsswitch::aliases:
+  - 'files'
+
+common::system::dns::resolver: 'resolv'
+common::monitor::exporter::enable: true
+
+common::system::authentication::sssd::manage_oddjobd: false
+common::system::authentication::sssd::required_packages:
+  - 'realmd'
+  - 'samba-common-tools'
+common::system::authentication::pam::password_session_lines:
+  - - 40
+    - 'optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077'
+
+common::system::authentication::pam::session_lines:
+  - - 40
+    - 'optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077'

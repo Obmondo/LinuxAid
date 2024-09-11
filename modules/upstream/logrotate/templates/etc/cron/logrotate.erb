@@ -1,0 +1,15 @@
+#!/bin/sh
+# THIS FILE IS AUTOMATICALLY DISTRIBUTED BY PUPPET.  ANY CHANGES WILL BE
+# OVERWRITTEN.
+
+OUTPUT=$(<%= @logrotate_path -%> <%= @logrotate_args -%> 2>&1)
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+    /usr/bin/logger -t logrotate "ALERT exited abnormally with [$EXITVALUE]"
+    echo "${OUTPUT}"
+<% if @cron_always_output -%>
+else
+    echo "${OUTPUT}"
+<% end -%>
+fi
+exit $EXITVALUE

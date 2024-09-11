@@ -1,0 +1,10 @@
+---
+fixtures:
+  repositories:
+          "concat":
+                 repo:  "https://github.com/puppetlabs/puppetlabs-concat.git"
+                 branch: '2.1.x'
+          "stdlib":
+                 repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+  symlinks:
+          "borgbackup": "#{source_dir}"

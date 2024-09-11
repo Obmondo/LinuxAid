@@ -1,0 +1,4 @@
+
+
+defaults <%= $name %>
+<%= epp('haproxy/fragments/_options.epp', { 'options' => $options, '_sort_options_alphabetic' => $_sort_options_alphabetic }) -%>

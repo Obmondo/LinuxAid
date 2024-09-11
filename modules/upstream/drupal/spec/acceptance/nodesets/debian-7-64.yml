@@ -1,0 +1,16 @@
+HOSTS:
+  debian-7-64:
+    roles:
+      - master
+    platform: debian-7-amd64
+    hypervisor: docker
+    image: debian:7
+    docker_preserve_image: true
+    docker_image_commands:
+      - 'apt-get update'
+      - 'apt-get -qqy install wget'
+
+CONFIG:
+  type: foss
+  log_level: info
+  trace_limit: 100

@@ -1,0 +1,8 @@
+<%- | String $comment, Hash $includes, Hash $options, $location, String $components | -%>
+# <%= $comment %>
+<%- if $includes['deb'] { -%>
+deb <% if !$options.empty() { -%>[<%=  $options.map |$key, $value| { if !$value.empty() { "${key}=${value}" } }.join(" ") %>] <% } -%> <%= $location %> <%= $components %>
+<%- } -%>
+<%- if $includes['src'] { -%>
+deb-src <% if !$options.empty() { -%>[<%=  $options.map |$key, $value| { if !$value.empty() { "${key}=${value}" } }.join(" ") %>] <% } -%> <%= $location %> <%= $components %>
+<%- } -%>

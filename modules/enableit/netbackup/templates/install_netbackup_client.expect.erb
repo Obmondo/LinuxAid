@@ -1,0 +1,32 @@
+#!/usr/bin/expect -d
+set timeout -1
+
+spawn <%= @installer %>
+
+expect "Do you wish to continue?"
+send "y\n"
+
+expect "Do you want to install the NetBackup client software for this client?"
+send "y\n"
+
+expect "Enter the name of the NetBackup master server"
+send "<%= @masterserver %>\n"
+
+expect "name of the NetBackup client?"
+send "n\n"
+
+expect "Enter the name of this NetBackup client"
+send "<%= @clientname %>\n"
+
+expect {
+# "Master server \[dkcphnbma01.hearing.corp-ad.com\] reports CA Certificate fingerprint"
+-re "(?n)\[AB:46:8C:85:0A:AD:E4:2D:71:4B:95:F0:66:B1:99:57:CE:07:89:EB\]."
+}
+expect {
+-re "(?n)Is this correct"
+}
+
+send "y\n"
+
+
+expect eof

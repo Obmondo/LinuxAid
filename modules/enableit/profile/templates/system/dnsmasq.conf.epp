@@ -1,0 +1,10 @@
+# MANAGED BY PUPPET; CAVEAT LECTOR
+
+port=<%= $port %>
+<%- if $domain_needed { %>domain-needed<% } -%>
+<%- if $bogus_priv { %>bogus-priv<% } -%>
+listen-address=<%= $listen.join(',') %>
+expand-hosts
+no-daemon
+cache-size=10000
+resolv-file=/etc/resolv.dnsmasq

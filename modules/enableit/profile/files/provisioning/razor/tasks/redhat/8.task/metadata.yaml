@@ -1,0 +1,5 @@
+---
+os_version: 8
+label: Red Hat Enterprise Linux 8
+description: Red Hat Enterprise Linux 8 installer
+base: redhat

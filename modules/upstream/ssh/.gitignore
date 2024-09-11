@@ -1,0 +1,7 @@
+pkg/
+*.swp
+.DS_Store
+Gemfile.lock
+vendor/
+.vendor/
+.bundle/

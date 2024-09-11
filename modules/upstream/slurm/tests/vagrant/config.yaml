@@ -1,0 +1,14 @@
+# -*- mode: yaml; -*-
+# Time-stamp: <Fri 2019-02-01 16:13 svarrette>
+################################################################################
+# Complementary configuration for Vagrant
+# You can overwrite here the default settings defined in ../../Vagrantfile and
+# rework the SLURM configuration and VM deployed (i.e. the characteristics of
+# the virtual cluster deployed)
+# See config.yaml.sample for all possible settings
+
+# :defaults:
+#   :nnodes: 2
+
+# :slurm:
+#   :clustername: iris

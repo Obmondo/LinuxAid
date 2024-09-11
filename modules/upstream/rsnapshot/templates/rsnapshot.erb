@@ -1,0 +1,132 @@
+# This file is being managed by puppet
+# Module 'rsnapshot'
+
+config_version	<%= @config_version %>
+snapshot_root	<%= @snapshot_root -%>/<%=@host%>
+<% if @no_create_root != '' -%> 
+no_create_root	<%= @no_create_root %>
+<% end -%>
+cmd_rsync	<%= @cmd_rsync %>
+<% if @cmd_cp  != '' -%>
+cmd_cp	<%= @cmd_cp %>
+<% end -%>
+<% if @cmd_rm  != '' -%>
+cmd_rm	<%= @cmd_rm %>
+<% end -%>
+<% if @cmd_ssh  != '' -%>
+cmd_ssh	<%= @cmd_ssh %>
+<% end -%>
+<% if @cmd_logger  != '' -%>
+cmd_logger	<%= @cmd_logger %>
+<% end -%>
+<% if @cmd_du  != '' -%>
+cmd_du	<%= @cmd_du %>
+<% end -%>
+<% if @cmd_rsnapshot_diff  != '' -%>
+cmd_rsnapshot_diff	<%= @cmd_rsnapshot_diff %>
+<% end -%>
+<% if @cmd_preexec  != '' -%>
+cmd_preexec	<%= @cmd_preexec %>
+<% end -%>
+<% if @cmd_postexec  != '' -%>
+cmd_postexec	<%= @cmd_postexec %>
+<% end -%>
+<% if @use_lvm  != '' -%>
+<% if @linux_lvm_cmd_lvcreate -%>
+linux_lvm_cmd_lvcreate	<%= @linux_lvm_cmd_lvcreate %>
+<% end -%>
+<% if @linux_lvm_cmd_lvremove  != '' -%>
+linux_lvm_cmd_lvremove	<%= @linux_lvm_cmd_lvremove %>
+<% end -%>
+<% if @linux_lvm_cmd_mount  != '' -%>
+linux_lvm_cmd_mount	<%= @linux_lvm_cmd_mount %>
+<% end -%>
+<% if @linux_lvm_cmd_umount  != '' -%>
+linux_lvm_cmd_umount	<%= @linux_lvm_cmd_umount %>
+<% end -%>
+<% end -%>
+#########################################
+#           BACKUP INTERVALS            #
+# Must be unique and in ascending order #
+# i.e. hourly, daily, weekly, etc.      #
+#########################################
+<%if @interval  != '' -%>
+<% @interval.each_pair do |name, time| -%>
+interval	<%= name %>	<%= time %>
+<% end -%>
+<% else %>
+<% @retain.each_pair do |name, time| -%>
+retain	<%= name %>	<%= time %>
+<% end -%>
+<% end -%>
+verbose	<%= @verbose %>
+loglevel	<%= @loglevel %>
+<% if @logfile  != '' -%>
+logfile	<%= @logfile %>
+<% end -%>
+<% if @lockfile  != '' -%>
+lockfile	<%= @lockfile %>
+<% end -%>
+<% if @stop_on_stale_lockfile != '' -%>
+stop_on_stale_lockfile	<%= @stop_on_stale_lockfile %>
+<%end-%>
+<% if @rsync_short_args  != '' -%>
+rsync_short_args	<%= @rsync_short_args %>
+<% end -%>
+<% if @rsync_long_args  != '' -%>
+rsync_long_args	<%= @rsync_long_args %>
+<% end -%>
+<% if @ssh_args  != '' -%>
+ssh_args	<%= @ssh_args %>
+<% end -%>
+<% if @du_args  != '' -%>
+du_args	<%= @du_args %>
+<% end -%>
+<% if @one_fs  != '' -%>
+one_fs	<%= @one_fs_num %>
+<% end -%>
+<% unless @real_include.empty? -%>
+<% if @include_file  != '' -%>
+include_file	<%= @include_file %>
+<% end -%>
+<% end -%>
+<% unless @real_exclude.empty? -%>
+<% if @exclude_file != '' -%>
+exclude_file	<%= @exclude_file %>
+<% end -%>
+<% end -%>
+<% if @link_dest  != '' -%>
+link_dest	<%= @link_dest_num %>
+<% end -%>
+<% if @sync_first  != '' -%>
+sync_first	<%= @sync_first_num %>
+<% end -%>
+<% if @use_lazy_deletes  != '' -%>
+use_lazy_deletes	<%= @use_lazy_deletes_num %>
+<% end -%>
+<% if @rsync_numtries  != '' -%>
+rsync_numtries	<%= @rsync_numtries %>
+<% end -%>
+<% if @use_lvm  != '' -%>
+<% if @linux_lvm_snapshotsize -%>
+linux_lvm_snapshotsize	<%= @linux_lvm_snapshotsize %>
+<% end -%>
+<% if @linux_lvm_snapshotname  != '' -%>
+linux_lvm_snapshotname	<%= @linux_lvm_snapshotname %>
+<% end -%>
+<% if @linux_lvm_vgpath  != '' -%>
+linux_lvm_vgpath	<%= @linux_lvm_vgpath %>
+<% end -%>
+<% if @linux_lvm_mountpath  != '' -%>
+linux_lvm_mountpath	<%= @linux_lvm_mountpath %>
+<% end -%>
+<% end -%>
+<% @backups.each_pair do |source, dest| -%>
+<% if @host == 'localhost' -%>
+backup	<%= source %>	<%=dest%>
+<% elsif @backup_user  != '' -%>
+backup	<%= @backup_user %>@<%=@host%>:<%= source %>	<%=dest%>
+<% else -%>
+backup	<%=@host%>:<%= source %>	<%=dest%>
+<% end -%>
+<% end -%>

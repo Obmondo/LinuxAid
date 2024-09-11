@@ -1,0 +1,3 @@
+---
+common::logging::rsyslog::log_local: true
+common::system::time::ntp::ntp_client: 'ntpd'

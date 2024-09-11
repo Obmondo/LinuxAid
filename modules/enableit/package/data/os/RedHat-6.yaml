@@ -1,0 +1,4 @@
+---
+package::libpam-systemd: null
+package::samba-common-tools: 'samba4-common'
+package::realmd: 'adcli'

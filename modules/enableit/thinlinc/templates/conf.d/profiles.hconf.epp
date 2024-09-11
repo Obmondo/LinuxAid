@@ -1,0 +1,322 @@
+#  -*- mode: conf-unix; -*-
+
+[/profiles]
+
+# The default profile. Must be present below
+default=<%= $thinlinc::profiles::default %>
+
+# The order the profiles will be presented in. Only profiles that exist in
+# this parameter will be presented as alternatives. This is a space-separated
+# list.
+order=<%= $thinlinc::profiles::order.join(' ') %>
+
+# If you wish to remove the introduction text, set this parameter to false
+show_intro=<%= $thinlinc::profiles::show_intro %>
+
+# Greeting text shown at the top of the profile chooser
+greeting=Welcome to Cendio ThinLinc
+greeting[de]=Willkommen bei Cendio ThinLinc
+greeting[es]=Bienvenido a Cendio ThinLinc
+greeting[it]=Benvenuto a Cendio ThinLinc
+greeting[fr]=Bienvenue chez CendioThinLinc
+greeting[nl]=Welkom bij Cendio ThinLinc
+greeting[pt_BR]=Bem-Vindo ao Cendio ThinLinc
+greeting[ru]=Начало работы с системой Cendio ThinLinc
+greeting[sv]=Välkommen till Cendio ThinLinc
+greeting[tr]=Cendio ThinLinc'e hoş geldiniz
+
+# Introduction text to be shown before any choices. Enter \n to get
+# a line break in the output text.
+introduction=Welcome to your newly installed ThinLinc system.\n\nThis introduction message is displayed during the profile selection. The message can be customized or disabled as you see fit for your installation. Please see the ThinLinc Administrator's Guide for more information.\n\nIf multiple profiles are available, the "Forward" button will display a list of available profiles. If there is only one available profile, or if the profile selection is overriden by a client command, the "OK" button will start the session.\n\nIf you want to log out at this moment, please press the "Quit" button.
+introduction[de]=Willkommen bei Ihrem neu installierten ThinLinc-System. \n\nDiese Einführungsmeldung wird während der Profilauswahl angezeigt. Sie können diese beliebig für Ihre Installation anpassen oder deaktivieren. Weitere Informationen finden Sie im ThinLinc-Administratorhandbuch. \n\nFalls mehrere Profile verfügbar sind, wird Ihnen beim Anklicken der Schaltfläche „Weiter“ eine Liste mit den verfügbaren Profilen angezeigt. Falls nur ein Profil verfügbar ist oder die Profilauswahl durch einen Client-Befehl übergangen wird, können Sie die Session durch Anklicken der Schaltfläche „OK“ starten. \n\nWenn Sie sich zu diesem Zeitpunkt abmelden möchten, klicken Sie auf die Schaltfläche „Beenden“.
+introduction[es]=Bienvenido a su nuevo sistema ThinLinc.\n\nEl mensaje de presentación se muestra durante la selección del perfil. El mensaje puede personalizarse o desactivarse según estime conveniente. Consulte la Guía del administrador para obtener más información.\n\nSi existen varios perfiles disponibles, el botón "Avanzar" mostrará una lista de los mismos. Si solo existe un perfil disponible, o si se sobreescribe la selección de perfil mediante un comando del cliente, el botón "Aceptar" iniciará la sesión.\n\nSi desea cerrar la sesión en este momento, pulse el botón "Salir".
+introduction[it]=Benvenuto nel tuo sistema ThinLinc appena installato.\n\nQuesto messaggio di introduzione viene visualizzato durante la selezione del profilo. Il messaggio può essere personalizzato o disattivato, come desideri per l'installazione. Consulta la Guida dell'amministratore di ThinLinc per ulteriori informazioni.\n\nSe sono disponibili più profili, il pulsante "Avanti" visualizzerà un elenco di profili disponibili. Se c'è un solo profilo disponibile, o se la selezione del profilo viene sovrascritta da un comando client, il pulsante "OK" avvia la sessione.\n\nSe desideri uscire in questo momento, premi il pulsante "Esci".
+introduction[fr]=Bienvenue dans votre nouveau système ThinLinc. \n\nCe message de présentation s'affiche pendant la sélection du profil. Le message peut être personnalisé ou désactivé selon les besoins de votre installation. Veuillez vous référer au guide d'administration de ThinLinc pour plus d'informations. \n\nSi plusieurs profils sont disponibles, le bouton "Suivant" affiche la liste des profils disponibles. S'il n'y a qu'un profil disponible ou si la sélection du profil est supplantée par une commande client, le bouton "OK" lance la session. \n\nPour vous déconnecter à ce moment, appuyez sur le bouton "Quitter".
+introduction[nl]=Welkom bij het zojuist geïnstalleerde ThinLinc-systeem.\n\nDeze introductie wordt weergegeven bij de profielselectie. Het bericht kan naar wens aangepast of uitgeschakeld worden voor uw installatie. Zie de ThinLinc-beheerdersgids voor meer informatie.\n\nAls er meerdere profielen beschikbaar zijn, wordt met de knop 'Verder' een lijst met beschikbare profielen weergegeven. Als er maar één profiel beschikbaar is, of als de profielselectie uitgeschakeld is met een client-opdracht, start u de sessie met de knop 'OK'.\n\nAls u nu wilt afmelden, klikt u op de knop 'Afsluiten'.
+introduction[pt_BR]=Bem-vindo ao seu recém instalado sistema ThinLinc. \n\nEsta mensagem de introdução é exibida durante a seleção de perfil. A mensagem pode ser personalizada ou desativada conforme o melhor ajuste para a sua instalação. Por favor, consulte o Guia do Administrador do ThinLinc para obter mais informações. \n\nSe vários perfis estiverem disponíveis, o botão "Avançar" irá mostrar uma lista de perfis disponíveis. Se houver apenas um perfil disponível, ou se a seleção de perfil for anulada por um comando do cliente, o botão "OK" irá iniciar a sessão. \n\nSe você deseja sair neste momento, por favor, pressione o botão "Sair".
+introduction[ru]=Добро пожаловать в установленную систему ThinLinc. \n\nЭто сообщение отображается при выборе профиля. Это сообщение возможно настроить или отключить по вашему усмотрению. Пожалуйста, обратитесь к руководству администратора ThinLinc для получения более подробной информации. \n\nЕсли доступно несколько профилей, кнопка "Вперед" отобразит список доступных профилей. Если доступен только один профиль или выбор профиля переопределен командой клиента, кнопка "ОК" запустит сеанс.\n\nЕсли вы хотите выйти из системы, пожалуйста, нажмите кнопку "Выход".
+introduction[sv]=Välkommen till ditt nyinstallerade ThinLinc-system.\n\nDet här introduktionsmeddelandet visas vid val av profil. Meddelandet kan anpassas eller stängas av för att passa din installation. Var vänlig se ThinLinc Administrators's Guide för mer information. \n\nIfall flera profiler är tillgängliga så kommer knappen "Framåt" att visa en lista av tillgängliga profiler. Ifall det bara finns en tillgänglig profil, eller ifall profilvalet åsidosätts av ett klientkommando, så kommer knappen "OK" att starta sessionen. \n\nOm du vill logga ut här och nu så trycker du på "Avsluta"-knappen.
+introduction[tr]=Yeni kurulan Thinlinc Sistemine hoşgeldiniz.\n\nBu giriş mesajı profil seçimi sırasında görüntülenir. Bu mesaj yükleme için uygun gördüğünüz gibi özelleştirilebilir veya devre dışı bırakılabilir. Daha fazla bilgi için ThinLinc Yönetici Kılavuzu'na bakın.\n\nBirden fazla profil varsa, "İleri" düğmesi kullanılabilir profillerin bir listesini gösterecektir. Sadece bir kullanılabilir profil varsa, ya da profil seçimi bir istemci komutu tarafından iptal edilmişse, "OK" tuşu oturumu başlayacaktır. \n\nBu anda dışarı oturum açmak istiyorsanız, "Çık" butonuna basınız.
+
+# Default/example profile entries. See the ThinLinc Administrator's
+# Guide for details.
+
+[/profiles/kde]
+xdg_session=kde kde-plasma plasma kde4 1-kde-plasma-standard
+name=KDE Desktop
+name[de]=KDE Desktop
+name[es]=Escritorio KDE
+name[it]=Desktop KDE
+name[fr]=Bureau KDE
+name[nl]=KDE Desktop
+name[pt_BR]=Desktop KDE
+name[ru]=Рабочий стол KDE
+name[sv]=KDE-skrivbord
+name[tr]=KDE Masaüstü
+description=KDE is a powerful graphical desktop environment for Unix workstations. It combines ease of use, contemporary functionality and outstanding graphical design with the technological superiority of the Unix operating system.
+description[de]=KDE ist eine mächtige Desktop Umgebung für Unix Workstations. Es verbindet einfache Bedienung, zeitgemäße Funktionalität und herausragendes graphisches Design mit der technologischen Überlegenheit des Unix Betriebssystemen.
+description[es]=KDE es un potente entorno de escritorio para sistemas Unix. Combina facilidad de uso, funcionalidad contemporánea y un diseño gráfico extraordinario con la superioridad tecnológica del sistema operativo Unix.
+description[it]=KDE è un potente ambiente desktop grafico per workstation Unix. Unisce facilità di utilizzo, funzionalità contemporanea e un eccellente design grafico con la superiorità tecnologica del sistema operativo Unix.
+description[fr]=KDE est un environnement de bureau graphique puissant destiné aux postes de travail Unix. Il allie la facilité d'utilisation, des fonctionnalités modernes et une une conception graphique unique, à la supériorité technologique du système d'exploitation Unix.
+description[nl]=KDE is een krachtige grafische desktopomgeving voor Unix-werkstations. Het combineert het gemakkelijke gebruik, de eigentijdse functionaliteit en het prachtige grafische ontwerp met de technologische kracht van het Unix-besturingssysteem.
+description[pt_BR]=O KDE é um ambiente desktop poderoso para estações de trabalho Unix. Ele combina facilidade de uso, funcionalidades modernas e uma interface gráfica excelente, com a superioridade de um sistema operacional Unix.
+description[ru]=KDE представляет собой мощную графическую среду рабочего стола для рабочих станций Unix. Она отличается сочетанием простоты в использовании, современной функциональности, превосходным графическим дизайном и обладает всеми техническими преимуществами операционной системы Unix.
+description[sv]=KDE är en kraftful, grafisk skrivbordsmiljö för Unix-baserade arbetsstationer. Den kombinerar enkel användning, moderna funktioner och enastående grafisk design tillsammans med Unix tekniska överlägsenhet.
+description[tr]=KDE, Unix iş istasyonları için güçlü bir grafik masaüstü ortamıdır. Kullanım kolaylığını, modern işlevleri ve mükemmel grafik tasarımını, Unix işletim sisteminin teknolojik üstünlüğüyle birleştirir.
+icon=kde.png
+screenshot=kde-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/unity]
+xdg_session=ubuntu-2d unity-2d ubuntu
+name=Unity
+name[de]=Unity
+name[es]=Unity
+name[it]=Unity
+name[fr]=Unity
+name[nl]=Unity
+name[pt_BR]=Unity
+name[ru]=Unity
+name[sv]=Unity
+name[tr]=Unity
+description=Unity is a shell interface for the GNOME desktop environment developed by Canonical Ltd for its Ubuntu operating system.
+description[de]=Unity ist eine Shell-Schnittstelle für die GNOME-Desktop-Umgebung, die für das Betriebssystem Ubuntu von Canonical Ltd entwickelt wurde.
+description[es]=Unity es una interfaz shell para el entorno de escritorio GNOME desarrollada por Canonical Ltd para su sistema operativo Ubuntu.
+description[it]=Unity è un'interfaccia shell per l'ambiente desktop GNOME sviluppata da Canonical Ltd per il proprio sistema operativo Ubuntu.
+description[fr]=Unity est une interface shell pour l'environnement de bureau GNOME développé par Canonical Ltd pour son système d'exploitation Ubuntu.
+description[nl]=Unity is een shell-interface voor de GNOME-desktopomgeving en is ontwikkeld door Canonical Ltd voor het Ubuntu-besturingssysteem.
+description[pt_BR]=Unity é uma interface shell para o ambiente desktop GNOME, desenvolvida pela Canonical Ltd para seu sistema operacional Ubuntu.
+description[ru]=Unity представляет собой интерфейс оболочки для настольной среды GNOME, разработанный компанией Canonical Ltd для своей операционной системы Ubuntu.
+description[sv]=Unity är ett gränssnitt för skrivbordsmiljön GNOME utvecklat av Canonical Ltd för deras operativsystem Ubuntu.
+description[tr]=Unity, Canonical Ltd tarafından Ubuntu işletim sistemi için geliştirilmiş GNOME masaüstü ortamı için bir kabuk arayüzüdür.
+icon=unity.png
+screenshot=unity-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/gnome]
+xdg_session=gnome
+name=GNOME Desktop
+name[de]=GNOME Desktop
+name[es]=Escritorio GNOME
+name[it]=Desktop GNOME
+name[fr]=Bureau GNOME
+name[nl]=GNOME Desktop
+name[pt_BR]=Desktop GNOME
+name[ru]=Рабочий стол GNOME
+name[sv]=GNOME-skrivbord
+name[tr]=GNOME Masaüstü
+description=GNOME offers an easy to understand desktop for your GNU/Linux or Unix computer. GNOME's focus is ease of use, stability, and first-class internationalisation and accessibility support.
+description[de]=GNOME bietet einen einfach zu verstehenden Desktop für Ihren GNU/Linux oder Unix Computer. GNOME's Fokus ist einfache Bedienung, Stabilität, erstklassige Internationalisierung und Unterstützung für körperlich beeinträchtigte Benutzer.
+description[es]=GNOME proporciona un escritorio fácil de entender para su ordenador GNU/Linux o Unix. Las principales ventajas de GNOME son su sencillez, estabilidad, internacionalización de primera clase y soporte de acceso.
+description[it]=GNOME offre un intuitivo desktop per il tuo computer GNU/Linux o Unix. La focalizzazione di GNOME è sulla facilità di utilizzo, la stabilità, l'internazionalizzazione di prima classe e il supporto all'accessibilità.
+description[fr]=GNOME offre un bureau facile à appréhender pour votre ordinateur GNU/Linux ou Unix. GNOME se concentre sur la facilité d'utilisation, la stabilité, une internationalisation très poussée et la recherche de l'accessibilité.
+description[nl]=GNOME biedt een makkelijk te begrijpen desktopomgeving voor uw GNU/Linux- of Unix-computer. Bij GNOME ligt de focus op gebruiksgemak, stabiliteit en eersteklas internationalisatie- en toegangsondersteuning.
+description[pt_BR]=O GNOME oferece um desktop fácil de entender para o seu computador GNU/Linux ou Unix. O foco do GNOME é a facilidade de uso, estabilidade, um alto nível de internacionalização e suporte à acessibilidade.
+description[ru]=GNOME предлагает простой в понимании рабочий стол для Вашей компьютерной системы на основе GNU/Linux или Unix. GNOME отличается простотой использования, стабильностью, первоклассной интернационализацией и поддержкой доступа.
+description[sv]=GNOME erbjuder ett lättbegripligt skrivbord för din GNU/Linux- eller Unix-dator. GNOMEs fokus är användarvänlighet, stabilitet och första klassens internationalisering och handikappsanpassning.
+description[tr]=GNOME, GNU/Linux ya da Unix bilgisayarınız için kolay anlaşılabilir bir masaüstü sunar. GNOME, kullanım kolaylığına, kararlılığa, ve birinci sınıf uluslararası kullanım uygunluğuna ve erişim desteğine odaklanmaktadır.
+icon=gnome.png
+screenshot=gnome-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/gnome-classic]
+xdg_session=gnome-classic
+name=GNOME Classic Desktop
+name[de]=GNOME Classic Desktop
+name[es]=Escritorio GNOME Classic
+name[it]=Desktop GNOME classico
+name[fr]=Bureau GNOME Classic
+name[nl]=GNOME Classic Desktop
+name[pt_BR]=Desktop GNOME Classic
+name[ru]=Классический рабочий стол GNOME
+name[sv]=Klassiskt GNOME-skrivbord
+name[tr]=GNOME Classic Masaüstü
+description=GNOME offers an easy to understand desktop for your GNU/Linux or Unix computer. GNOME's focus is ease of use, stability, and first-class internationalisation and accessibility support.
+description[de]=GNOME bietet einen einfach zu verstehenden Desktop für Ihren GNU/Linux oder Unix Computer. GNOME's Fokus ist einfache Bedienung, Stabilität, erstklassige Internationalisierung und Unterstützung für körperlich beeinträchtigte Benutzer.
+description[es]=GNOME proporciona un escritorio fácil de entender para su ordenador GNU/Linux o Unix. Las principales ventajas de GNOME son su sencillez, estabilidad, internacionalización de primera clase y soporte de acceso.
+description[it]=GNOME offre un intuitivo desktop per il tuo computer GNU/Linux o Unix. La focalizzazione di GNOME è sulla facilità di utilizzo, la stabilità, l'internazionalizzazione di prima classe e il supporto all'accessibilità.
+description[fr]=GNOME offre un bureau facile à appréhender pour votre ordinateur GNU/Linux ou Unix. GNOME se concentre sur la facilité d'utilisation, la stabilité, une internationalisation très poussée et la recherche de l'accessibilité.
+description[nl]=GNOME biedt een makkelijk te begrijpen desktopomgeving voor uw GNU/Linux- of Unix-computer. Bij GNOME ligt de focus op gebruiksgemak, stabiliteit en eersteklas internationalisatie- en toegangsondersteuning.
+description[pt_BR]=O GNOME oferece um desktop fácil de entender para o seu computador GNU/Linux ou Unix. O foco do GNOME é a facilidade de uso, estabilidade, um alto nível de internacionalização e suporte à acessibilidade.
+description[ru]=GNOME предлагает простой в понимании рабочий стол для Вашей компьютерной системы на основе GNU/Linux или Unix. GNOME отличается простотой использования, стабильностью, первоклассной интернационализацией и поддержкой доступа.
+description[sv]=GNOME erbjuder ett lättbegripligt skrivbord för din GNU/Linux- eller Unix-dator. GNOMEs fokus är användarvänlighet, stabilitet och första klassens internationalisering och handikappsanpassning.
+description[tr]=GNOME, GNU/Linux ya da Unix bilgisayarınız için kolay anlaşılabilir bir masaüstü sunar. GNOME, kullanım kolaylığına, kararlılığa, ve birinci sınıf uluslararası kullanım uygunluğuna ve erişim desteğine odaklanmaktadır.
+icon=gnome.png
+screenshot=gnome-classic-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/xfce]
+xdg_session=xfce
+name=Xfce Desktop
+name[de]=Xfce-Desktop
+name[es]=Escritorio Xfce
+name[it]=Desktop Xcfe
+name[fr]=Bureau Xfce
+name[nl]=Xfce Desktop
+name[pt_BR]=Desktop Xfce
+name[ru]=Рабочий стол Xfce
+name[sv]=Xfce-skrivbord
+name[tr]=Xfce Masaüstü
+description=Xfce is a lightweight desktop environment for various Unix systems. Designed for productivity, it loads and executes applications fast, while conserving system resources.
+description[de]=Xfce ist ein Leichtgewicht unter den Unix Desktop Umgebungen. Im Hinblick auf Produktivität entworfen, werden Applikationen resourcenschonend, jedoch schnell geladen und ausgeführt.
+description[es]=Xfce es un entorno de escritorio ligero para varios sistemas Unix. Diseñado para la productividad, su carga y ejecución rápida de aplicaciones, mientras conserva los recursos del sistema.
+description[it]=Xcfe è un ambiente desktop leggero per vari sistemi Unix. Ideato per la produttività, carica ed esegue rapidamente le applicazioni, conservando al tempo stesso le risorse di sistema.
+description[fr]=Xfce est un environnement de bureau léger destiné à différents systèmes Unix. Conçu pour des objectifs de productivité, il charge et exécute rapidement les applications, tout en préservant les ressources du système.
+description[nl]=Xfce is een lichtgewicht desktopomgeving voor verschillende Unix-systemen. Het is ontworpen voor productiviteit, het kan snel applicaties laden en belast het systeem zo weinig mogelijk.
+description[pt_BR]=O Xfce é um ambiente desktop para diversos sistemas Unix. Desenvolvido para produtividade, ele carrega e executa aplicativos de maneira rápida, conservando os recursos do sistema.
+description[ru]=Xfce представляет собой облегченную среду рабочего стола для различных систем Unix. Он характеризуется высокой производительностью, обеспечивая быстрое исполнение приложений, и экономит системные ресурсы.
+description[sv]=Xfce är en lättviktig skrivbordsmiljö för diverse Unix-system. Då det är designat för produktivitet så laddas och körs program snabbt men med låga krav på systemresurser.
+description[tr]=Xfce, çeşitli Unix sistemleri için hafif bir masaüstü ortamıdır. Üretkenlik için tasarlanan bu sistem, uygulamaları hızlı yükleyip çalıştırırken sistem kaynaklarından tasarruf edilmesini sağlar.
+icon=xfce.png
+screenshot=xfce-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/cinnamon]
+xdg_session=cinnamon
+name=Cinnamon Desktop
+name[de]=Cinnamon-Desktop
+name[es]=Escritorio Cinnamon
+name[it]=Desktop Cinnamon
+name[fr]=Bureau Cinnamon
+name[nl]=Cinnamon Desktop
+name[pt_BR]=Desktop Cinnamon
+name[ru]=Рабочий стол Cinnamon
+name[sv]=Cinnamon-skrivbord
+name[tr]=Cinnamon Masaüstü
+description=Cinnamon is a Linux desktop which provides advanced innovative features and a traditional user experience. The emphasis is put on making users feel at home and providing them with an easy to use and comfortable desktop experience.
+description[de]=Cinnamon ist ein Linux-Desktop mit erweiterten innovativen Funktionen und altbewährter Bedienung. Besonderes Gewicht wurde darauf gelegt, dem Benutzer ein vertrautes Gefühl zu vermitteln und ihm eine bedienerfreundliche und angenehme Desktop-Umgebung zu bieten.
+description[es]=Cinnamon es un escritorio Linux que ofrece avanzadas características innovadoras y la experiencia tradicional para el usuario. Se hace especial énfasis en que los usuarios se sientan cómodos y en proporcionarles la experiencia de un escritorio confortable y sencilo de utilizar.
+description[it]=Cinnamon è un desktop Linux che fornisce funzioni innovative avanzate e un'esperienza utente tradizionale. Viene messa in risalto l'esigenza di far sentire gli utenti a proprio agio fornendo loro un'esperienza desktop facile da usare e conveniente.
+description[fr]=Cinnamon est un bureau Linux qui offre des fonctionnalités innovantes avancées et une expérience utilisateur traditionnelle. Il vise à mettre à l'aise les utilisateurs et à leur fournir un environnement de bureau confortable et facile d'utilisation.
+description[nl]=Cinnamon is een Linux-desktop met geavanceerde innovatieve functies en een traditionele gebruikerservaring. Belangrijk is dat gebruikers zich thuis voelen door ze een gemakkelijk te gebruiken en comfortabele desktopervaring te bieden.
+description[pt_BR]=O Cinnamon é um desktop Linux que fornece recursos inovadores avançados e uma experiência de usuário tradicional. A ênfase é fazer os usuários se sentirem à vontade e proporcionar-lhes uma experiência de desktop simples e confortável.
+description[ru]=Cinnamon - это рабочий стол Linux, предоставляющий расширенные инновационные функции и традиционный опыт пользователя. Акцент ставится на то, чтобы пользователь чувствовал себя комфортно, используя простой и удобный  рабочий стол.
+description[sv]=Cinnamon är ett Linuxskrivbord som har avancerade och innovativa funktioner och ett traditionellt användargränssnitt. Tyngdpunkten läggs på att få användarna att känna sig som hemma och ge dem en lättanvänd och komfortabel skrivbordsupplevelse.
+description[tr]=Cinnamon gelişmiş yenilikçi özellikleri ve geleneksel bir kullanıcı deneyimi sağlayan bir Linux masaüstüdür. Kullanıcıların kendilerini rahat hissedecekleri ve kullanımı kolay ve rahat bir masaüstü deneyimi sağlamalarını vurgular.
+icon=cinnamon.png
+screenshot=cinnamon-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/mate]
+xdg_session=mate
+name=Mate Desktop
+name[de]=Mate-Desktop
+name[es]=Escritorio MATE
+name[it]=Desktop Mate
+name[fr]=Bureau Mate
+name[nl]=Mate Desktop
+name[pt_BR]=Mate Desktop
+name[ru]=Рабочий стол Mate
+name[sv]=Mate-skrivbord
+name[tr]=Mate Masaüstü
+description=MATE provides an intuitive and attractive desktop to Linux users using traditional metaphors.
+description[de]=MATE bietet Linux-Nutzern mit traditionellen Symbolen einen intuitiven und attraktiven Desktop.
+description[es]=MATE ofrece un escritorio intuitivo y atractivo para los usuarios de Linux que utilizan metáforas tradicionales.
+description[it]=MATE fornisce un desktop intuitivo e attraente agli utenti Linux che utilizzano metafore tradizionali.
+description[fr]=MATE fournit aux utilisateurs de Linux un bureau intuitif et attrayant avec des métaphores traditionnelles.
+description[nl]=MATE biedt Linux-gebruikers een intuïtieve en aantrekkelijke desktopomgeving met traditionele metaforen.
+description[pt_BR]=O MATE oferece um desktop intuitivo e atraente para usuários de Linux, usando metáforas tradicionais.
+description[ru]=MATE предоставляет интуитивно понятный и привлекательный рабочий стол для пользователей Linux с использованием традиционных метафор.
+description[sv]=MATE tillhandahåller ett intuitivt och attraktivt skrivbord för Linux med traditionella metaforer.
+description[tr]=MATE, geleneksel mecazları kullanarak Linux kullanıcılarına sezgisel ve çekici bir masaüstü sunar.
+icon=mate.png
+screenshot=mate-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/lxde]
+xdg_session=LXDE
+name=LXDE Desktop
+name[de]=LXDE Desktop
+name[es]=Escritorio LXDE
+name[it]=Desktop LXDE
+name[fr]=Bureau LXDE
+name[nl]=LXDE Desktop
+name[pt_BR]=Desktop LXDE
+name[ru]=Рабочий стол LXDE
+name[sv]=LXDE-skrivbord
+name[tr]=LXDE Masaüstü
+description=LXDE is a desktop environment which is lightweight and fast. It is designed to be user friendly and slim, while keeping the resource usage low.
+description[de]=LXDE ist eine leichte und schnelle Dektop-Umgebung. Sie wurde speziell dafür entwickelt, benutzerfreundlich und schlank zu sein und die Ressourcenauslastung gering zu halten.
+description[es]=LXDE es un entorno de escritorio que es ligero y rápido. Está diseñado para ser fácil de usar y sencillo, manteniendo al mismo tiempo un bajo consumo de recursos.
+description[it]=LXDE è un ambiente desktop leggero e veloce. È progettato per essere snello, intuitivo e con un ridotto consumo di risorse.
+description[fr]=LXDE est un environnement de bureau léger et rapide. Il est conçu pour être facile d'utilisation et consommer peu de ressources.
+description[nl]=LXDE is een lichte en snelle desktopomgeving die ontworpen is om gebruikersvriendelijk en slank te zijn, terwijl het gebruik van bronnen beperkt blijft.
+description[pt_BR]=O LXDE é um ambiente desktop leve e rápido. Ele é projetado para ser amigável e compacto, mantendo baixo o uso de recursos.
+description[ru]=LXDE - это легкая и быстрая среда рабочего стола. Она разработана для удобства пользователя, сохраняя при этом низкое использование ресурсов.
+description[sv]=LXDE är en skrivbordsmiljö som är lättviktig och snabb. Den är designad för att vara användarvänlig och enkel, samtidigt som resursanvändningen hålls låg.
+description[tr]=LXDE, hafif ve hızlı bir masaüstü ortamıdır. Kaynak kullanımını düşük tutarken, kullanıcı dostu ve ince olacak şekilde tasarlanmıştır.
+icon=lxde.png
+screenshot=lxde-ss.png
+cmdline=
+testcmd=
+description_from_testcmd=false
+
+[/profiles/windows]
+xdg_session=
+name=Windows desktop
+name[de]=Windows-Desktop
+name[es]=Escritorio Windows
+name[it]=desktop Windows
+name[fr]=Bureau Windows
+name[nl]=Windows Desktop
+name[pt_BR]=Desktop Windows
+name[ru]=Рабочий стол Windows
+name[sv]=Windows-skrivbord
+name[tr]=Windows masaüstü
+description=A complete Microsoft® Windows® desktop provided by a separate server with Remote Desktop Services. Extra features such as load balancing and added security is provided by accessing it through this ThinLinc system.
+description[de]=Ein vollständiger Microsoft® Windows® Desktop, der von einem separaten Server mit Remote Desktop Services bereitgestellt wird. Weitere Funktionen wie Loadbalancing und erweiterte Sicherheitseinstellungen werden von ThinLinc bereitgestellt.
+description[es]=Un escritorio completo Microsoft® Windows® proporcionado por un servidor independiente con Remote Desktop Services. Las funciones adicionales, como el balanceo de carga y la seguridad añadida, se obtienen al acceder al escritorio a través desde este sistema ThinLinc.
+description[it]=Un desktop Microsoft® Windows® completo fornito da un server separato di Servizi Desktop Remoti. Vengono fornite funzioni extra come il bilanciamento del carico e una sicurezza aggiuntiva tramite l'accesso attraverso questo sistema ThinLinc.
+description[fr]=Un bureau Microsoft® Windows® complet fourni par un serveur Remote Desktop Services séparé. Des caractéristiques supplémentaires, telles que l'équilibrage des charges et une sécurité accrue, sont accessibles au travers de ce système ThinLinc.
+description[nl]=Een compleet Microsoft® Windows®-bureaublad vanaf een afzonderlijke server met Extern bureaublad-services. Extra functies zoals taakverdeling en aanvullende beveiliging worden gegeven via het ThinLinc-systeem.
+description[pt_BR]=Um ambiente desktop Microsoft® Windows® oferecido a partir de um servidor de Desktop Remoto separado. Recursos adicionais, como balanceamento de carga e maior segurança são oferecidos ao acessar utilizando este sistema ThinLinc.
+description[ru]=Полнофункциональный рабочий стол Microsoft® Windows® обеспечивается отдельным сервером со службами удаленных рабочих столов. Все дополнительные функции, такие как балансировка нагрузки и повышение безопасности, обеспечиваются путем доступа через систему ThinLinc.
+description[sv]=Ett komplett Microsoft® Windows®-skrivbord från en separat server med Remote Desktop Services. Anslutning via detta ThinLinc-system ger extra funktionalitet såsom lastbalansering och ökad säkerhet.
+description[tr]=Tam bir Microsoft® Windows® masaüstü Uzak Masaüstü Hizmetleri ile ayrı bir sunucu tarafından sağlanmaktadır. Yük dengeleme ve ek güvenlik gibi ekstra özellikler, bu ThinLinc sistemi aracılığıyla bunlara erişimle sağlanmaktadır.
+icon=windows.png
+screenshot=windows-ss.png
+cmdline=${TLPREFIX}/bin/tl-run-windesk
+testcmd=${TLPREFIX}/bin/tl-config /appservergroups/rdp/default/servers | grep -v wts1.example.com
+description_from_testcmd=false
+
+[/profiles/xterm]
+xdg_session=
+name=Terminal
+name[de]=Terminal
+name[es]=Terminal
+name[it]=Terminale
+name[fr]=Terminal
+name[nl]=Terminal
+name[pt_BR]=Terminal
+name[ru]=Terminal
+name[sv]=Terminal
+name[tr]=Terminal
+description=A bare bone environment with just a single graphical terminal started. Only meant to be used for debugging and testing.
+description[de]=Eine Minimalumgebung mit lediglich einem graphischen Terminal. Nur für Test- und Debugzwecke gedacht.
+description[es]=Un sistema mínimo con sólo un terminal gráfico arrancado. Diseñado para ser utilizado únicamente para tracear y probar.
+description[it]=È stato avviato un ambiente bare bone con un solo terminale grafico. L'utilizzo è previsto solo per debugging e test.
+description[fr]=Un environnement standard avec simplement un terminal graphique lancé. Destiné uniquement au débogage et aux tests.
+description[nl]=Een uitgeklede omgeving waarbij maar één grafische terminal is gestart. Alleen bedoeld voor fouten opsporen en testen.
+description[pt_BR]=Um ambiente básico, contendo apenas um terminal gráfico simples de linha de comandos. Deve ser utilizado apenas para depuração e testes.
+description[ru]=Базовая рабочая среда с одним графическим терминалом. Предназначена для отладки и тестирования.
+description[sv]=En minimal miljö med enbart en enda grafisk terminal. Endast tänkt för felsökning och testning.
+description[tr]=Yalnızca tek grafiksel terminalin başlatıldığı yalın bir sistemdir. Yalnızca hata ayıklama ve test için kullanılmak amaçlı sağlanmaktadır.
+icon=terminal.png
+screenshot=terminal-ss.png
+cmdline=xterm || rxvt
+testcmd=type xterm || type rxvt
+description_from_testcmd=false

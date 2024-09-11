@@ -1,0 +1,10 @@
+---
+name: LXD Hosting
+description: Enables your server to act as a host for lxc guests, using the LXD framework, which supports live migrating guests between lxd hosts etc.
+
+features:
+  - security
+  - logging
+
+distributions:
+  - Ubuntu-16.04

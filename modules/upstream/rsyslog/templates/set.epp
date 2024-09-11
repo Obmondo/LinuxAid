@@ -1,0 +1,10 @@
+<%- |
+String $name,
+String $value
+| -%>
+<% if $name =~ /^(\$\.|\$!)\w*$/ {-%>
+set <%= $name %> = <%= $value %>;
+<%} else {-%>
+<%# This is deprecated and only here to maintain compatibility %>
+set $.<%= $name  %> = <%= $value %>;
+<%}-%>

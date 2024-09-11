@@ -1,0 +1,10 @@
+---
+role::package_management::repo::enable: true
+role::package_management::repo::weekday: 'Sun'
+role::package_management::repo::user: root
+role::package_management::repo::repodir: /var/lib/repository
+role::package_management::repo::ssl: false
+role::package_management::repo::ssl_cert:
+role::package_management::repo::ssl_key:
+role::package_management::repo::yum: {}
+role::package_management::repo::apt: {}

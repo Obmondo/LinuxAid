@@ -1,0 +1,118 @@
+#!/bin/bash
+#
+set -euo pipefail
+
+CMD=$1
+
+#
+# Setting this, so the repo does not need to be given on the commandline:
+export OLD_BACKUP=<%= @icinga_old %>
+export BACKUP_USER=<%= @remote_user %>
+export BACKUP_ROOT_DIR=<%= @backup_root %>
+export BACKUP_HOST=<%= @remote_ip %>
+export BACKUP_SSH_KEY=<%= @ssh_key_file %>
+export BORG_REPO="${BACKUP_USER}"@"${BACKUP_HOST}":"${BACKUP_ROOT_DIR}"
+
+export TEMP_LAST_BORGBACKUP="<%= scope['borgbackup::last_borgbackup'] %>/borg_last_backup_<%= @reponame %>"
+touch "${TEMP_LAST_BORGBACKUP}"
+
+<% if @_passphrase != '' -%>
+# Setting this, so you won't be asked for your repository passphrase:
+export BORG_PASSPHRASE='<%= @_passphrase %>'
+<% end -%>
+
+<% if @_passcommand != '' -%>
+# or this to ask an external program to supply the passphrase. this only works for borgbackup > 1.0.9
+if [ $(borgbackup --version |awk -F' ' '{print $2 " 1.0.9"}'|tr ' ' "\n"|sort -V|tail -1) =  '1.0.9' ]; then
+  export BORG_PASSPHRASE=`<%= @_passcommand -%>`
+else
+  export BORG_PASSCOMMAND='<%= @_passcommand -%>'
+fi
+<% end -%>
+
+<% @env_vars.each do | key, val| -%>
+export <%= key %>='<%= val %>'
+<% end -%>
+
+function finish {
+  echo -e "echo UNKNOWN - borg backup consistency check failed, due to some reason \nexit 3" > "$TEMP_LAST_BORGBACKUP"
+}
+
+trap finish ERR
+
+# Make sure we can connect to BACKUP_HOST on port 22 and it should end up with
+# 'Permission denied' error and nothing else, well we can use nc/netcat/telnet
+# but that would require additional dependencies and timeout feature would be missing too.
+if [ -n "$BACKUP_HOST" ]; then
+  if ! timeout 5 ssh -i "${BACKUP_SSH_KEY}" -l "${BACKUP_USER}" "${BACKUP_HOST}" borg --version; then
+    echo -e "UNKNOWN - backup host ($BACKUP_HOST) not reachable\nexit 3" > "$TEMP_LAST_BORGBACKUP"
+    exit
+  fi
+fi
+
+
+
+# to initialize the repo
+if [ "$CMD" = 'init' ]; then
+    borg init \
+<% if @apend_only -%>
+         --append-only \
+<% end -%>
+<% if @storage_quota != '' -%>
+         --storage-quota <%= @storage_quota %> \
+<% end -%>
+    --encryption <%= @encryption %>
+  exit $?
+fi
+
+# to check the repo
+if [ "$CMD" = 'check' ]; then
+  borg check -v --info
+  exit $?
+fi
+
+# to list the repo
+if [ "$CMD" = 'list' ]; then
+  borg list
+  exit $?
+fi
+
+# to check the repo and output icinga/nagios result
+# as a second parameter you can give an archive name used as prefix
+if [ "$CMD" = 'check_icinga' ]; then
+  borg check
+  if [ $? -ne 0 ]; then
+    echo -e "echo CRITICAL - backup is inconsistent\nexit 2" > "$TEMP_LAST_BORGBACKUP"
+  fi
+
+  last=$(borg list |sort |tail -1|sed 's/^.*,//')
+
+  if [ "$last" = '' ]; then
+    echo -e "echo WARNING - no backup yet\nexit 1" > "$TEMP_LAST_BORGBACKUP"
+  fi
+  age=$(echo "$(date +%s)","$(date -d"$last" +%s)"|awk -F',' '{print ($1 -$2)}')
+  if [ "$age" -gt "${OLD_BACKUP}" ]; then
+    echo -e "echo WARNING - backup is old $last but consistent\nexit 1" > "$TEMP_LAST_BORGBACKUP"
+  else
+    echo -e "echo OK - backup is recent $last and consistent\nexit 0" > "$TEMP_LAST_BORGBACKUP"
+  fi
+  exit
+fi
+
+# to print the keyfile to stdout
+if [ "$CMD" = 'exportkey' ]; then
+  borg key export :: /dev/stdout
+fi
+
+# the rest should only run if we give the 'run' command
+# this lets us source this script for setting the correct environment
+if [ "$CMD" != 'run' ]; then
+  echo -e "echo UNKNOWN - $CMD is invalid\nexit 3" > "$TEMP_LAST_BORGBACKUP"
+  exit 3
+fi
+
+# some helpers and error handling:
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+info "Starting backup"

@@ -1,0 +1,9 @@
+#!/bin/bash
+BASEDIR="<%= @basedir %>"
+REPREPRO="/usr/bin/reprepro"
+
+REPOSITORY=$1
+
+usage () { echo "Usage: $0 <repository>"; }
+
+$REPREPRO -b ${BASEDIR}/${REPOSITORY} --noskipold --silent update

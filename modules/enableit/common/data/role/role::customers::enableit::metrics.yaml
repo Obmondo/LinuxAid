@@ -1,0 +1,3 @@
+---
+common::system::kernel::sysctl:
+  'vm.max_map_count': 524288

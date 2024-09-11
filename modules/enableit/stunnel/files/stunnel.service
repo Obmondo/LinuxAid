@@ -1,0 +1,14 @@
+# This file is managed by Puppet
+# DO NOT MAKE MANUAL CHANGES TO THIS FILE
+
+[Unit]
+Description=TLS tunnel for %i
+After=syslog.target
+
+[Service]
+ExecStart=/usr/bin/stunnel /etc/stunnel/%i.conf
+Type=simple
+PIDFile=/run/stunnel-%i.pid
+
+[Install]
+WantedBy=multi-user.target

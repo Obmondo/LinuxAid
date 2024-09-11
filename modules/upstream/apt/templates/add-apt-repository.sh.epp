@@ -1,0 +1,8 @@
+<%- | Array $command, String $sources_list_d_path, String $sources_list_d_filename | -%>
+
+<%= $command.join(' ') %>
+
+if [ $? -gt 0 ]; then
+   rm <%= $sources_list_d_path %>/<%= $sources_list_d_filename %>
+   exit 1
+fi

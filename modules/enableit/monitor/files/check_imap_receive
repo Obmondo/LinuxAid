@@ -1,0 +1,290 @@
+#!/usr/bin/perl
+
+# This script is customized for EnableIT requirements
+# Original script is here
+# https://github.com/kanarip/monitoring-plugins-kolab/blob/master/nagios/check_imap_receive
+
+use Data::Dumper;
+use Nagios::Plugin;
+use vars qw($msg $state);
+
+my $plugin = Nagios::Plugin->new(
+        usage => "Usage: %s [ -v|--verbose ]  [ -h|--help ] [--usage] "
+            . "[ -c|--critical=<threshold> ] [ -w|--warning=<threshold> ] "
+            . "[ -t|--timeout=<seconds> ]  [--libexec=<libexec>] "
+            . "[ -p|--plugins=<plugins> ]  [ -A|--alert=<alert_num> ] ",
+
+        version => "0.1.1",
+        url => "http://kolab.org/about/nagios-plugins-kolab",
+        license => "GPLv2+"
+    );
+
+$plugin->add_arg(
+        spec => "critical|c=i",
+        help => "Exit with CRITICAL after <threshold> seconds have passed."
+    );
+
+$plugin->add_arg(
+        spec => "debug",
+        help => "Enable debugging."
+    );
+
+$plugin->add_arg(
+        spec => "hostname|imap-server|H=s",
+        help => "IMAP server address"
+    );
+
+$plugin->add_arg(
+        spec => "imap-check-interval=i",
+        help => "Number of seconds between checks"
+    );
+
+$plugin->add_arg(
+        spec => "imap-mailbox=s",
+        help => "IMAP mailbox to search for the message."
+    );
+
+$plugin->add_arg(
+        spec => "imap-port=i",
+        help => "IMAP port number"
+    );
+
+$plugin->add_arg(
+        spec => "imap-timeout=i",
+        help => "IMAP timeout"
+    );
+
+$plugin->add_arg(
+        spec => "mail-from=s",
+        help => "Use MAIL FROM address STRING"
+    );
+
+$plugin->add_arg(
+        spec => "mail-to=s",
+        help => "Use RCPT TO address STRING"
+    );
+
+$plugin->add_arg(
+        spec => "mail-subject=s",
+        help => "Specify mail subject"
+    );
+
+$plugin->add_arg(
+        spec => "mail-header=s@",
+        help => "Specify additional mail headers"
+    );
+
+$plugin->add_arg(
+        spec => "password|imap-password|P=s",
+        help => "Password"
+    );
+
+$plugin->add_arg(
+        spec => "ssl|imap-ssl",
+        help => "Use SSL (implicit SSL)"
+    );
+
+$plugin->add_arg(
+        spec => "starttls|imap-starttls",
+        help => "Use STARTTLS (explicit SSL)"
+    );
+
+$plugin->add_arg(
+        spec => "username|imap-username|U=s",
+        help => "Username"
+    );
+
+$plugin->add_arg(
+        spec => "warning|w=i",
+        help => "Exit with WARNING after <threshold> seconds have passed."
+    );
+
+$plugin->getopts();
+
+# print Dumper($plugin->opts) . "\n";
+
+##
+## Parse options to get to defaults
+##
+
+my $time_start = time;
+
+# The host address(es) to check
+if (!$plugin->opts->hostname) {
+    $plugin->nagios_exit(ERROR, "No hostname for IMAP specified")
+        unless $plugin->opts->{'imap-server'};
+
+} else {
+    $plugin->opts->{'imap-server'} = $plugin->opts->hostname
+        unless $plugin->opts->{'imap-server'};
+
+    delete $plugin->opts->{'hostname'};
+}
+
+# SSL or STARTTLS?
+if ($plugin->opts->starttls && $plugin->opts->ssl) {
+    $plugin->nagios_exit(ERROR, "Cannot specify both starttls and ssl");
+} elsif ($plugin->opts->starttls) {
+    $plugin->opts->{'imap-starttls'} = $plugin->opts->starttls
+        unless $plugin->opts->{'imap-starttls'};
+
+    $plugin->opts->{'imap-port'} = 143 unless $plugin->opts->{'imap-port'};
+    delete $plugin->opts->{'starttls'};
+} elsif ($plugin->opts->ssl) {
+    $plugin->opts->{'imap-ssl'} = $plugin->opts->ssl
+        unless $plugin->opts->{'imap-ssl'};
+
+    $plugin->opts->{'imap-port'} = 993 unless $plugin->opts->{'imap-port'};
+    delete $plugin->opts->{'ssl'};
+}
+
+# Plugin specific timeouts
+$plugin->opts->{'imap-timeout'} = $plugin->opts->timeout
+    unless $plugin->opts->{'imap-timeout'};
+
+if ($plugin->opts->username) {
+    $plugin->opts->{'imap-username'} = $plugin->opts->username
+        unless $plugin->opts->{'imap-username'};
+}
+
+if ($plugin->opts->password) {
+    $plugin->opts->{'imap-password'} = $plugin->opts->password
+        unless $plugin->opts->{'imap-password'};
+}
+
+$plugin->opts->{'imap-check-interval'} = 1
+    unless $plugin->opts->{'imap-check-interval'};
+
+if ($plugin->opts->{'imap-ssl'} or $plugin->opts->{'imap-starttls'}) {
+    eval "require IO::Socket::SSL";
+    $plugin->nagios_exit(ERROR, "Could not load IO::Socket::SSL") if $@;
+    require IO::Socket::SSL;
+
+    eval "require IO::Socket";
+    $plugin->nagios_exit(ERROR, "Could not load IO::Socket") if $@;
+    require IO::Socket;
+}
+
+eval "require Mail::IMAPClient";
+$plugin->nagios_exit(ERROR, "Could not load Mail::IMAPClient") if $@;
+require Mail::IMAPClient;
+
+##
+## Set our own timeout
+##
+local $SIG{ALRM} = sub {
+        $plugin->nagios_exit(
+                CRITICAL,
+                "Exceeded " . $plugin->opts->timeout . " seconds timeout"
+            );
+
+    };
+
+alarm $plugin->opts->timeout;
+
+my $imap = Mail::IMAPClient->new(
+        Authmechanism => "LOGIN",
+        Debug => $plugin->opts->debug
+    );
+
+my @sslargs = ( SSL_verify_mode => 0 );
+
+if ($plugin->opts->{'imap-ssl'}) {
+    $imap->connect(
+            Ssl => \@sslargs,
+            Server => $plugin->opts->{'imap-server'},
+            Port => $plugin->opts->{'imap-port'},
+            Debug => $plugin->opts->debug
+        );
+} elsif ($plugin->opts->{'imap-starttls'}) {
+    $imap->connect(
+            Starttls => \@sslargs,
+            Server => $plugin->opts->{'imap-server'},
+            Port => $plugin->opts->{'imap-port'},
+            Debug => $plugin->opts->debug
+        );
+} else {
+    $imap->connect(
+            Server => $plugin->opts->{'imap-server'},
+            Port => $plugin->opts->{'imap-port'},
+            Debug => $plugin->opts->debug
+        );
+}
+
+$imap->State(Mail::IMAPClient->Connected);
+$imap->User($plugin->opts->{'imap-username'});
+$imap->Password($plugin->opts->{'imap-password'});
+$imap->login() or $plugin->nagios_exit(CRITICAL, "Cannot login: $@");
+
+$imap->Peek(1) if $peek;
+$imap->Ignoresizeerrors(1);
+
+my $mailbox = $plugin->opts->{'imap-mailbox'} || "INBOX";
+
+my @search_args = ();
+
+if ($plugin->opts->{'mail-from'}) {
+    push @search_args, "FROM" => $plugin->opts->{'mail-from'};
+}
+
+if ($plugin->opts->{'mail-to'}) {
+    push @search_args, "TO" => $plugin->opts->{'mail-to'};
+}
+
+if ($plugin->opts->{'mail-subject'}) {
+    push @search_args, "SUBJECT" => $plugin->opts->{'mail-subject'};
+}
+
+my %header_search = ();
+
+if ($plugin->opts->{'mail-header'}) {
+    foreach (@{$plugin->opts->{'mail-header'}}) {
+        my ($h_name, $h_value) = split(/: /, $_);
+        $header_search{$h_name} = $h_value;
+
+    }
+
+    push @search_args, ( "HEADER" => %header_search );
+}
+
+my $tries = 0;
+my $max_retries = 10;
+my @msgs;
+
+until( scalar(@msgs) != 0 || $tries >= $max_retries ) {
+    eval {
+        $imap->select($mailbox) or
+            $plugin->nagios_exit(
+                    CRITICAL,
+                    "Cannot SELECT " . $mailbox . ": $@"
+                );
+
+        @msgs = $imap->search(@search_args);
+        $plugin->nagios_exit(UNKNOWN, "Invalid search parameters: $@") if $@;
+    };
+
+    $tries++;
+    sleep $plugin->opts->{'imap-check-interval'} unless
+        (scalar(@msgs) != 0 || $tries >= $max_retries);
+}
+
+if (scalar(@msgs) > 0) {
+    $imap->set_flag("Seen", @msgs);
+}
+
+if (scalar(@msgs) >= 10) {
+    $plugin->nagios_exit(
+            CRITICAL,
+            "Mails are present under opsmail, please fix all the alert"
+        );
+} elsif (scalar(@msgs) >= 1) {
+    $plugin->nagios_exit(
+            WARNING,
+            "Mails are present under opsmail, please fix all the alert"
+        );
+} else {
+    $plugin->nagios_exit(
+            OK,
+            "0 mails found under opsmail, Everything is fine"
+        );
+}

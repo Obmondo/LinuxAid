@@ -1,0 +1,6 @@
+<% if defined('$auditd::disp_qos') { -%>
+disp_qos = <%= $auditd::disp_qos %>
+<% } -%>
+<% if defined('$auditd::dispatcher') { -%>
+dispatcher = <%= $auditd::dispatcher %>
+<% } -%>

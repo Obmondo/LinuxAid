@@ -1,0 +1,3 @@
+---
+redmine::version: 2.6.2
+redmine::vhost_servername: localhost

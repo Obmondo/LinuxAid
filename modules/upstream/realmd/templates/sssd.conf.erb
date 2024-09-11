@@ -1,0 +1,14 @@
+<% @_sssd_config.sort.map do |k,v|  -%>
+<%   if v.is_a?(Hash)               -%>
+[<%=  k %>]
+<%     v.sort.map do |ki, vi|       -%>
+<%       if vi.is_a?(Array) -%>
+<%=        ki %> = <%= vi.join(',') %>
+<%       elsif vi != :undef         -%>
+<%=        ki %> = <%= vi %>
+<%       end                        -%>
+<%     end                          -%>
+<%   else                           -%>
+[<%=  k %>]
+<%   end                             %>
+<% end                              -%>

@@ -1,0 +1,10 @@
+---
+nfs::client::packages:
+  - 'nfs-utils'
+  - 'nfs-utils-lib'
+
+nfs::server::packages:
+  - 'nfs-utils'
+  - 'nfs-utils-lib'
+
+nfs::server::service_name: 'nfs'

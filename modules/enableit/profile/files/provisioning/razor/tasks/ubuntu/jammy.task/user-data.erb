@@ -1,0 +1,170 @@
+#cloud-config
+version: 1
+password: atomic
+ssh_pwauth: True
+chpasswd:
+  list: |
+     root:password
+  expire: False
+# reporting:
+#  central:
+#   type: rsyslog
+#   destination: '@dkcphsyslog01'
+runcmd:
+  - "wget '<%= log_url("runcmd") %>'"
+autoinstall:
+  version: 1
+  identity:
+    username: 'obmondo-admin'
+    hostname: '<%= node.metadata["hostname"] || node.hostname %>'
+    password: '$6$bPcGV4epr8l/awLg$f38VVgPVAupxBTBnKbpv11YnhQV1JKWwdWZk6bwsMzhJTuJ8VK6po7nAnyrtDVeF83Ec15W6DXP9Z1IIoD7Hp1'
+  refresh-installer:
+    update: yes
+  ssh:
+    authorized-keys:
+      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDLBg+1FBAGCXCHXDPG5Ibc7jHrdK4SHlg6CuLzpzzctaRPk0ujK9PuDJ7e2c+8mmnL8IyxmjWXKJapxZVgKM+MddSv0Gm/GLyEJwoP9aC76qLOh8/nFOyW6f6YwKPwNLArMx5nG9jE/YnpPSbx+f6NrhsN7cDzjWwI06R0U1zhmqsTey+suFlGTkiaW74piRaQF6dqDX/Qog8C73tSsCc7ZQiniSOw1/1UgZp75Qhp2fEV1/WtT6qgbmQcNaqTLwQH9ngX64J91nUh8H3RGFahC7y4ilC7NxUJ17eH5axqkKTFpPrUGMiYNsY89MLwGFw+gE8vu/Ak3AN992guD8TjMZD7zUfdLVy3dmiUqTI68ny7+WEVWvTpnQi49r3hXLxy72SwhUA9Wn7OSut1JibdwC0FdIZ1QiOqnR5VcFswNBkXVuph+g0GBZn6YebV4f+p+FHGGDTUw6I7pSC1AWe8EBhXsaYc7cHWDGaKtxBcy4S96Pi/MLkrpDSo3NQ6R1iGm9XXkuGZBt5/4yI3JkeeyatVbHeSFjQXH8y0gor2PT+GrHkQYh7LrkOlySaE7+jIA22L7aFZDsEaBYDJyv6r8CrDtJBZA1kY9p9EZnpshfNTBEdK14qqEB/RD21dVY/jIVxemqjrHoTFSp1UIYzllS7hazgYH8M4qTawOnKJkQ== cardno:000604694746'
+      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQD0xNXDwqOd7g394DitNlxz4YLJ8c8aPEZfPWskuF1s0IC5TLW/ymWtWpgfktU1BgkQWF5xE3QirqEZHdrLPFyBn7EgHq+IdPWUxxfoAHuH1FG7+xkRmfN+HPqgoDSi7PJefJ82NIepCiS78WBgFmgTJTKcF1CRaXangJSKoly5B6rQA8sk+MkotSAhjZhQYBxFbVB6BNjiC6Ui5p2h81crR5MLsPo8RHB4Dk9JkSzC++x+QwgSWCxztuR936h/gP+q6utsRqYT9vRr+BYmgN58uWbDeT1uUWVmQKyN3iWyEDjFa9Z8ZscdQqekb6NaxxUquRVVEhCDho244y7PR4pzHafISiMgaR/MShX2Yh5pAnKGRR5hyNm9bwjtQnXR7+7lTIzKsFgxgqg6DJTxkvqLPCT15MXDKK2SBGZUo9aIRwmPZeA8rLxTYC50adm2Cdn1KgfjtYvomupxBtxQkzNPsaEDiivRbLjMx2uovkXaRfNRr0BX73Of6iBTrzuhnI5iUcRO/lP0x/3aWNl38w4qRtCcWywyf1ugaphG7a6f3NHtvUeYPA3YMpV45tM1cqSQ3lM3qCz9oeH/3JrLNU36PBL0PRPKGDjNhtEALUY7R0GpDDsY6OYtXNAv1cGbOkr+q4rZg1qwOjAnm0q/0//yiocxxiH3Z4cZSPTUX95Q== openpgp:0x7C9EEBD5'
+  apt:
+    sources:
+      puppetlabs-pc1:
+        source: 'deb http://apt.puppetlabs.com $RELEASE puppet6'
+        key: | # full key as block
+          -----BEGIN PGP PUBLIC KEY BLOCK-----
+          Version: GnuPG v1
+
+          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
+          =u0aK
+          -----END PGP PUBLIC KEY BLOCK-----
+      obmondo:
+        source: 'deb https://repos.obmondo.com/packagesign/public/apt $RELEASE main'
+        key: | # full key as block
+          -----BEGIN PGP PUBLIC KEY BLOCK-----
+          Version: GnuPG v1
+
+          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
+          Zrk0PShAS2xNGtBvmJOFh7dIFU1H
+          =Uwf3
+          -----END PGP PUBLIC KEY BLOCK-----
+
+  packages:
+    - apt-transport-https
+    - ca-certificates
+    - iptables
+    - puppet-agent
+    - wget
+    - curtin
+
+  early-commands:
+    - 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgjmqOC7ghLNqK6CkD7YTpCw4rpC5CblAndACCpZ+3xXnT8qrNDxzCVj1O2QnWQw8w0J4WUBKhePClAlF3HUnXPxvBzAFGlxrkdfS6ndAy4T/Ew1healjxDF7mOcuDwoBPuLVEXwPYJ3OFUrOKajRcvP85AGO0MYAbVyVg/ANsiTmVp+T70UfHtYG6MQdTIO+wpcHAgHFV/yotaQTKNA5HpvbxP5qdjrlas1T5XXBoKV9HVXL0ipTBj4OFNFYF+FDKVfdM4MvrktFXzzGHGWtn/QkWxMvPOrnKFRhxvFse0YyKOV5wLtsdjdX23NKgC6skayAFiY/+T2Y5mcnIz3zOm0hCOtdVpaajWfJyIrSKz4UmuGtCfdyX4jqLOgtqByHGwMzHtkjfr3m+eqDvxyRLlEIEpITYdkIe2t5emeBTKHl2NrrC7btvL4Awz4azKkdTDgdXl7FUgL2537N8EYnQ8DHZrImsJkpV+hIwwSuZAGr6enfrObYTzyWbEo0HttXbot9iNWNjcf5aLZTNoPSM+gE/C3BTJs4ykjM9Aq1SC9qQwqeXvvv3x529tOW0SnrohVnNFn/Z41+nfYK6TC5ZNihBdKXkBQUi9YaLJs0jlYg9aDA0fhYDYr8OJOT1xRUwm/zfM7Je6QykS2fqAQRUEWknmfshVHrzY61IeSbWhQ== cardno:000604694749" >> /root/.ssh/authorized_keys'
+    - 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAhxkaT6cj+uRLA/wWu5d+5yun6NQXeUOE0tqGi6H8Dn3ZqC6wlYK7uHwOxZILJGa4X/kzGWHlZ6wfZw6lgbqunkJHLf3oXXI1cJGBkzPVBYkCnJItSP19fAty5C//SxNYlngicf+vowWdlq6O4ECkH7NdmVne4MHYz2DpRMjobjKDB1OW/0ESBlZhxzevwNnNqVdwXoz8852PQqo41w/uUAx5393Wj/VF2WB20HDWy97Ye6m3eV+ZMGiTJkumaNQ7JPdRTeNpl8zPwLJ0X0FS4H8z7wGfrUpVzlGuXjSGN3TxTewEW2WnD5yL0XRZznVBGARH71ut23VtFS8Fo8xsPn1ePjHho2BBviAxQ2ACp4UkzMt40lQNR7jtNZY/e2ZYMRVfJ+3cJgGfiwBfDjo6fgdPZowmGMJa0ydKT/WTt5LjEIiACFUMrMwn8yauXHybZCnUCduY/9AqSqh3ut0fKOsUS4tjj6/UUGDOjHE60nOvv3P7vCHQZqoznxC6oirYbTCCqQAK4Gm7vyNvzA5ep/4xMcp3vJVIKMj9z3sCSuvQYD2NsuC3H128FUYNjQMt2Z8dFO0oWme/x8Ghj9KEPLHGk452gif0JNzAgRRsXVmvGClx5XrrTa0jBAn7uT9DOZYMRPKYM7bluR2RtjHY1creHuH1DXTY3xaoUX65lw== cardno:000604694743" >> /root/.ssh/authorized_keys'
+    - 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQD0xNXDwqOd7g394DitNlxz4YLJ8c8aPEZfPWskuF1s0IC5TLW/ymWtWpgfktU1BgkQWF5xE3QirqEZHdrLPFyBn7EgHq+IdPWUxxfoAHuH1FG7+xkRmfN+HPqgoDSi7PJefJ82NIepCiS78WBgFmgTJTKcF1CRaXangJSKoly5B6rQA8sk+MkotSAhjZhQYBxFbVB6BNjiC6Ui5p2h81crR5MLsPo8RHB4Dk9JkSzC++x+QwgSWCxztuR936h/gP+q6utsRqYT9vRr+BYmgN58uWbDeT1uUWVmQKyN3iWyEDjFa9Z8ZscdQqekb6NaxxUquRVVEhCDho244y7PR4pzHafISiMgaR/MShX2Yh5pAnKGRR5hyNm9bwjtQnXR7+7lTIzKsFgxgqg6DJTxkvqLPCT15MXDKK2SBGZUo9aIRwmPZeA8rLxTYC50adm2Cdn1KgfjtYvomupxBtxQkzNPsaEDiivRbLjMx2uovkXaRfNRr0BX73Of6iBTrzuhnI5iUcRO/lP0x/3aWNl38w4qRtCcWywyf1ugaphG7a6f3NHtvUeYPA3YMpV45tM1cqSQ3lM3qCz9oeH/3JrLNU36PBL0PRPKGDjNhtEALUY7R0GpDDsY6OYtXNAv1cGbOkr+q4rZg1qwOjAnm0q/0//yiocxxiH3Z4cZSPTUX95Q== cardno:000606914847" >> /root/.ssh/authorized_keys'
+     - 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDLBg+1FBAGCXCHXDPG5Ibc7jHrdK4SHlg6CuLzpzzctaRPk0ujK9PuDJ7e2c+8mmnL8IyxmjWXKJapxZVgKM+MddSv0Gm/GLyEJwoP9aC76qLOh8/nFOyW6f6YwKPwNLArMx5nG9jE/YnpPSbx+f6NrhsN7cDzjWwI06R0U1zhmqsTey+suFlGTkiaW74piRaQF6dqDX/Qog8C73tSsCc7ZQiniSOw1/1UgZp75Qhp2fEV1/WtT6qgbmQcNaqTLwQH9ngX64J91nUh8H3RGFahC7y4ilC7NxUJ17eH5axqkKTFpPrUGMiYNsY89MLwGFw+gE8vu/Ak3AN992guD8TjMZD7zUfdLVy3dmiUqTI68ny7+WEVWvTpnQi49r3hXLxy72SwhUA9Wn7OSut1JibdwC0FdIZ1QiOqnR5VcFswNBkXVuph+g0GBZn6YebV4f+p+FHGGDTUw6I7pSC1AWe8EBhXsaYc7cHWDGaKtxBcy4S96Pi/MLkrpDSo3NQ6R1iGm9XXkuGZBt5/4yI3JkeeyatVbHeSFjQXH8y0gor2PT+GrHkQYh7LrkOlySaE7+jIA22L7aFZDsEaBYDJyv6r8CrDtJBZA1kY9p9EZnpshfNTBEdK14qqEB/RD21dVY/jIVxemqjrHoTFSp1UIYzllS7hazgYH8M4qTawOnKJkQ== cardno:000604694746">> /root/.ssh/authorized_keys'
+  late-commands:
+    - 'wget <%= log_url("preseed end") %>'
+    - 'wget <%= file_url("os_boot") %> -O /target/usr/local/bin/razor_postinstall.sh'
+    - 'chmod +x /target/usr/local/bin/razor_postinstall.sh'
+    # This should be enough to run the post-install script inside the target
+    # system; below are the commented out steps that the original preseed template
+    # uses.
+    - 'curtin in-target --target=/target -- /usr/local/bin/razor_postinstall.sh'
+    # - 'sed -i "/exit 0/d" /target/etc/rc.local'
+    # - 'echo bash /usr/local/bin/razor_postinstall.sh >> /target/etc/rc.local'
+    # - 'echo exit 0 >> /target/etc/rc.local'
+
+  error-commands:
+    # This might just work to automatically log everything to the syslog server in
+    # case of errors
+    - 'wget <%= log_url("error") %>'
+    - logger -n dkcphsyslog01 -t razor-task -p user.notice -f /var/log/installer

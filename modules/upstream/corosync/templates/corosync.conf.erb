@@ -1,0 +1,145 @@
+# This file is managed by Puppet.
+# Changes made manually may be lost.
+
+<% unless @compatibility.nil? -%>
+compatibility: <%= @compatibility %>
+
+<% end -%>
+totem {
+  version:                             2
+<% if @cluster_name -%>
+  cluster_name:                        <%= @cluster_name %>
+<% end -%>
+<% if @token -%>
+  token:                               <%= @token %>
+<% end -%>
+<% if @token_retransmits_before_loss_const -%>
+  token_retransmits_before_loss_const: <%= @token_retransmits_before_loss_const %>
+<% end -%>
+<% if @join -%>
+  join:                                <%= @join %>
+<% end -%>
+<% if @consensus -%>
+  consensus:                           <%= @consensus %>
+<% end -%>
+<% if @vsftype -%>
+  vsftype:                             <%= @vsftype %>
+<% end -%>
+<% if @max_messages -%>
+  max_messages:                        <%= @max_messages %>
+<% end -%>
+<% if @clear_node_high_bit -%>
+  clear_node_high_bit:                 <%= @clear_node_high_bit %>
+<% end -%>
+<% if @rrp_mode -%>
+  rrp_mode:                            <%= @rrp_mode %>
+<% end -%>
+<% if @netmtu -%>
+  netmtu:                              <%= @netmtu %>
+<% end -%>
+  secauth:                             <%= @enable_secauth ? 'on' : 'off' %>
+<% if @threads -%>
+  threads:                             <%= @threads %>
+<% end -%>
+<% if @unicast_addresses -%>
+  transport:                           udpu
+<% Array(@unicast_addresses.first).each_index do |interface| -%>
+  interface {
+<% if not @set_votequorum -%>
+<% Array(Array(@unicast_addresses.map{|x| Array(x).flatten}).transpose[interface]).each do |addr| -%>
+    member {
+      memberaddr: <%= addr %>
+    }
+<% end -%>
+    bindnetaddr: <%= Array(@bind_address)[interface] %>
+<% end -%>
+    ringnumber:  <%= interface %>
+    mcastport:   <%= Array(@port)[interface] || @port %>
+<% if @ttl -%>
+    ttl:         <%= Array(@ttl)[interface] || @ttl %>
+<% end -%>
+  }
+<% end -%>
+<% else -%>
+<% [@bind_address].flatten.each_index do |i| -%>
+  interface {
+    ringnumber:  <%= i %>
+    bindnetaddr: <%= [@bind_address].flatten[i] %>
+<% if @multicast_address.nil? -%>
+<% elsif [@multicast_address].flatten[i] == 'broadcast' -%>
+    broadcast:   yes
+<% else -%>
+    mcastaddr:   <%= [@multicast_address].flatten[i] %>
+<% end -%>
+    mcastport:   <%= [@port].flatten[i] %>
+<% if @ttl -%>
+    ttl:         <%= @ttl %>
+<% end -%>
+  }
+<% end -%>
+<% end -%>
+}
+
+logging {
+  fileline:        off
+<% if @log_timestamp -%>
+  timestamp:       on
+<% end -%>
+<% if @log_stderr -%>
+  to_stderr:       yes
+<% else -%>
+  to_stderr:       no
+<% end -%>
+<% if @log_file -%>
+  to_logfile:      yes
+<% if @log_file_name -%>
+  logfile:         <%= @log_file_name %>
+<% end -%>
+<% else -%>
+  to_logfile:      no
+<% end -%>
+  to_syslog:       yes
+  syslog_facility: daemon
+<% if @syslog_priority -%>
+  syslog_priority: <%= @syslog_priority %>
+<% end -%>
+<% if @log_function_name -%>
+  function_name:   on
+<% end -%>
+  debug:           <%= @debug ? 'on' : 'off' %>
+}
+
+<% if @set_votequorum -%>
+quorum {
+  provider: corosync_votequorum
+<% if @votequorum_expected_votes -%>
+  expected_votes: <%= @votequorum_expected_votes %>
+<%-# .to_i is needed for Puppet 3 -%>
+<% if @votequorum_expected_votes.to_i == 2 -%>
+  two_node: 1
+<% end -%>
+<% elsif Array(@quorum_members).count == 2 -%>
+  two_node: 1
+<% end -%>
+}
+
+<% if Array(@quorum_members).length > 0 -%>
+nodelist {
+<% Array(@quorum_members).each_index do |i| -%>
+  node {
+<% Array(Array(@quorum_members.map{|node| Array(node).flatten})[i]).each_with_index do |addr,ring| -%>
+    ring<%= ring %>_addr: <%= addr %>
+<% end -%>
+<% if @quorum_members_ids.nil? -%>
+    nodeid: <%= i+1 %>
+<% else -%>
+    nodeid: <%= [@quorum_members_ids].flatten[i] %>
+<% end -%>
+<% if not @quorum_members_names.nil? -%>
+    name: <%= [@quorum_members_names].flatten[i] %>
+<% end -%>
+  }
+<% end -%>
+}
+<% end -%>
+<% end -%>

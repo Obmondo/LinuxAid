@@ -1,0 +1,12 @@
+# -*- mode: conf; -*-
+########################################################################################
+# PAM module for slurm (installed by the slurm-pam_slurm RPM)
+#
+# Documentation: https://slurm.schedmd.com/faq.html#pam
+# See also https://hpcworks.wordpress.com/2017/05/29/setup-slurm-pam-plugin-on-centos-7/
+#
+# /!\ This file is being maintained by Puppet.
+# DO NOT EDIT
+auth    required        pam_localuser.so
+account required        pam_unix.so
+session required        pam_limits.so

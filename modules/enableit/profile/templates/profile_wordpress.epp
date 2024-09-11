@@ -1,0 +1,17 @@
+###################################################
+# Custom Config of wordpress for <%= $fqdn %>
+###################################################
+<% if $profile::wordpress::force_https { -%>
+## Settings needed if the wordpress is behind a SSL-terminating proxy
+if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+  $_SERVER['HTTPS']='on';
+}
+<% } -%>
+
+## Allow Wordpress to write directly to files in the wordpress folder. This
+## enables Wordpress to do upgrades of both core and plugins, and causes no
+## security risk with Wordpress deployment in containers (no risk of one
+## Wordpress installation writing to another installation).
+define('FS_METHOD', 'direct');
+
+require_once('<%= $common::settings::custom_config_dir %>/wordpress/wp-config-local.php');

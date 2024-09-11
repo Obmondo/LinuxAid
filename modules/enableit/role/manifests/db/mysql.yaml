@@ -1,0 +1,48 @@
+---
+name: MySQL database
+description: MySQL database installation and configuration
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  datadir:
+    name: Data directory
+    description: Directory where the MySQL database files should be stored.
+
+  webadmin:
+    name: Web administration
+    description: Setup MySQL web administration tools
+
+  variant:
+    name: Variant
+    description: MySQL variant
+    enum:
+      master:
+        name: Master
+      slave:
+        name: Slave
+      galera:
+        name: Galera
+
+  memlimit:
+    name: Memory limit
+    description: Max percentage of system memory that MySQL is allowed to use.
+
+  root_password:
+    name: Root Password
+    description: Setup root password for mysql
+
+  galeracname:
+    name: Galera cluster name
+    description: Galera Cluster is a synchronous multi-master cluster
+
+  mysql_restart_on_config_change:
+    name: Restart Mysql
+    description: Restart Mysql on config changes
+
+  backup:
+    name: Enable snapshot backup of databases

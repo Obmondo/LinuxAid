@@ -1,0 +1,5 @@
+---
+logrotate::ensure_cron_daily: absent
+logrotate::ensure_cron_hourly: absent
+logrotate::manage_systemd_timer: true
+logrotate::ensure_systemd_timer: present

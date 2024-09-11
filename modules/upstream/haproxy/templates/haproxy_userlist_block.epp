@@ -1,0 +1,26 @@
+<%- |
+  Array[Variant[String, Sensitive[String]]] $epp_users = [],
+  Array[String]                             $epp_groups = [],
+  String                                    $epp_section_name,
+| -%>
+
+userlist <%= $epp_section_name %>
+<%-
+  $epp_groups.each |String $group| {
+    unless $group.empty {
+-%>
+  group <%= $group %>
+<%-
+    }
+  }
+  $epp_users.each |Variant[String, Sensitive[String]] $user| {
+    # TODO: remove this Workaround, as soon as Function empty() can handle
+    # Sensitive (Pullrequest pending)
+    $user_unsensitive = if $user =~ Sensitive { $user.unwrap } else { $user }
+    unless $user_unsensitive.empty {
+-%>
+  user <%= $user_unsensitive %>
+<%-
+    }
+  }
+-%>

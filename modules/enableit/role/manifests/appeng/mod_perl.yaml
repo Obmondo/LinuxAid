@@ -1,0 +1,28 @@
+---
+name: mod_perl
+description: Apache web server with mod_perl module, enabling you to run perl applications with high performance.
+logo: mod_perl.png
+suggests:
+  - role::web::perl
+
+features:
+  - Monitoring
+  - Time
+  - Security
+  - Logging
+
+distributions:
+  - CentOS-7
+  - CentOS-6
+  - RedHat-6
+  - RedHat-7
+
+parameters:
+  url:
+    name: URL
+
+  http_server:
+    name: HTTP server
+    enum:
+      apache:
+        name: Apache

@@ -1,0 +1,97 @@
+# Default Hiera values for Puppet
+---
+msg: "serving %{::role} role"
+
+# Build in vagrant box
+# share the generated RPMs to avoid rebuild in each VM
+slurm::builddir: '/vagrant/tests/vagrant/rpmbuild'
+
+
+
+# SLURM general settings
+slurm::uid: 900
+slurm::gid: 900
+slurm::service_manage: true
+
+## SlurmDBD settings
+slurm::slurmdbd::dbdhost: 'localhost'
+slurm::slurmdbd::dbdaddr: 'localhost'
+slurm::slurmdbd::storagehost: "%{::hostname}"
+slurm::slurmdbd::storageloc: 'slurm'
+slurm::slurmdbd::storageport: 3306
+slurm::slurmdbd::storagetype: 'mysql'
+
+
+# MUNGE Authentication
+slurm::manage_munge: true
+slurm::munge_create_key: false
+slurm::munge_uid: 950
+slurm::munge_gid: 950
+# Below key content should be normally encrypted with eyaml on prod systems
+#
+slurm::munge_key_content: 'GNAimY7vUIYoAiBgriWflMvK1vFzRPxm6kcVu/wduKI'
+
+# Slurm.conf parameters
+slurm::batchstarttimeout: 60
+slurm::getenvtimeout: 5
+
+slurm::acct_storageenforce:
+  - 'qos'
+  - 'limits'
+  - 'associations'
+slurm::acct_gatherenergytype: 'rapl'
+
+#slurm::defmempercpu: 4096
+#slurm::maxmempercpu: 27000
+slurm::schedulertype: 'backfill'
+slurm::selecttype: 'cons_res'
+slurm::selecttype_params:
+  - 'CR_Core_Memory'
+  - 'CR_CORE_DEFAULT_DIST_BLOCK'
+
+slurm::grestypes:
+  - 'gpu'
+
+slurm::licenses: 'forge:576,perfreport:64'
+slurm::mpidefault: 'pmi2'
+slurm::mpiparams: 'ports=55000-59999'
+slurm::srunportrange: '40000-50000'
+slurm::jobrequeue: false
+
+slurm::priorityweightage: 2000
+slurm::priorityweightfairshare: 10000
+slurm::priorityweightpartition: 1000
+slurm::priorityweightqos: 1
+slurm::priorityflags:
+  - 'DEPTH_OBLIVIOUS'
+slurm::prologflags:
+  - 'Alloc'
+  - 'Contain'
+  - 'X11'
+slurm::messagetimeout: 30
+slurm::resumetimeout: 600
+slurm::taskplugin: ['affinity', 'cgroup']
+slurm::taskpluginparams :
+  - 'none'
+
+###############################
+### cgroup.conf settings     ###
+#################################
+# new default in 18.08 SLURM and related to bug
+# https://bugs.schedmd.com/show_bug.cgi?id=5507
+slurm::cgroup_constrainkmemspace: false
+# ensure job constraints on GRES such as GPUs
+slurm::cgroup_constraindevices: true
+slurm::cgroup_alloweddevices:
+  - '/dev/null'
+  - '/dev/urandom'
+  - '/dev/zero'
+  - '/dev/sda*'
+  - '/dev/cpu/*/*'
+  - '/dev/pts/*'
+  - '/dev/nvme0*'
+
+
+### PAM Pluggable Authentication Modules (PAM)
+slurm::pam::allowed_users:
+  - vagrant

@@ -1,0 +1,14 @@
+description "start and stop riemann-dash"
+author "Gareth Rushgrove"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+<% if scope.function_versioncmp([@lsbmajdistrelease.to_s, '10']) == 1 then -%>
+setuid <%= @user %>
+<% end -%>
+
+respawn
+respawn limit 5 20
+
+exec <%= @rvm_ruby_string ? "/usr/local/rvm/wrappers/#{@rvm_ruby_string}/riemann-dash" : "riemann-dash" %> /etc/riemann-dash.rb

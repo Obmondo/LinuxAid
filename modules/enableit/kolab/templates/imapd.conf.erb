@@ -1,0 +1,50 @@
+configdirectory: /var/lib/imap
+partition-default: /var/spool/imap
+admins: cyrus-admin
+sievedir: /var/lib/imap/sieve
+sendmail: /usr/sbin/sendmail
+sasl_pwcheck_method: saslauthd
+sasl_mech_list: PLAIN LOGIN
+allowplaintext: no
+tls_server_cert: <%= scope['kolab::kolab_server_cert'] %>
+tls_server_key: <%= scope['kolab::kolab_server_key'] %>
+tls_server_ca_file: <%= scope['kolab::kolab_server_ca_file'] %>
+# uncomment this if you're operating in a DSCP environment (RFC-4594)
+# qosmarking: af13
+auth_mech: pts
+pts_module: ldap
+ldap_servers: ldap://localhost:389
+ldap_sasl: 0
+ldap_base: dc=<%= scope['kolab::kolab_domain_part00'] %>,dc=<%= scope['kolab::kolab_domain_part01'] %>
+ldap_bind_dn: uid=kolab-service,ou=Special Users,dc=<%= scope['kolab::kolab_domain_part00'] %>,dc=<%= scope['kolab::kolab_domain_part01'] %>
+ldap_password: <%= scope['kolab::ldap_service_password'] %>
+ldap_filter: (|(&(|(uid=cyrus-admin)(uid=cyrus-murder))(uid=%U))(&(|(uid=%U)(mail=%U@%d)(mail=%U@%r))(objectclass=kolabinetorgperson)))
+ldap_user_attribute: mail
+ldap_group_base: dc=<%= scope['kolab::kolab_domain_part00'] %>,dc=<%= scope['kolab::kolab_domain_part01'] %>
+ldap_group_filter: (&(cn=%u)(objectclass=ldapsubentry)(objectclass=nsroledefinition))
+ldap_group_scope: one
+ldap_member_base: ou=People,dc=<%= scope['kolab::kolab_domain_part00'] %>,dc=<%= scope['kolab::kolab_domain_part01'] %>
+ldap_member_method: attribute
+ldap_member_attribute: nsrole
+ldap_restart: 1
+ldap_timeout: 10
+ldap_time_limit: 10
+unixhierarchysep: 1
+virtdomains: userid
+annotation_definitions: /etc/imapd.annotations.conf
+sieve_extensions: fileinto reject envelope body vacation imapflags notify include regex subaddress relational copy date index
+allowallsubscribe: 0
+allowusermoves: 1
+altnamespace: 1
+hashimapspool: 1
+anysievefolder: 1
+fulldirhash: 0
+sieveusehomedir: 0
+sieve_allowreferrals: 0
+lmtp_downcase_rcpt: 1
+lmtp_fuzzy_mailbox_match: 1
+username_tolower: 1
+deletedprefix: DELETED
+delete_mode: delayed
+expunge_mode: delayed
+postuser: shared

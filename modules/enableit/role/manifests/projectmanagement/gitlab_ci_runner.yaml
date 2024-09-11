@@ -1,0 +1,27 @@
+---
+name: Gitlab Continous Integration (CI) Runner
+description: CI runners for Gitlab.
+
+parameters:
+  url:
+    name: Gitlab CI runner URL
+
+  token:
+    name: Gitlab CI registration token
+
+  executor:
+    name: CI executor
+
+  docker_image:
+    name: Default docker image
+    description: Docker image to use if none given in `runners`.
+
+  runners:
+    name: Runners
+    description: |
+      Either an number of runners, or a hash of runners. Any options let undefined will be taken from the defaults.
+
+    concurrency:
+      name: Concurrency
+      description: |
+        Set how many runners should be able to run at the same time. Leave undefined to have Gitlab handle it.

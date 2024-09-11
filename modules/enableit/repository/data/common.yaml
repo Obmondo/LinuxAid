@@ -1,0 +1,6 @@
+---
+repository::mirror::enable: true
+repository::mirror::weekday: 'Sun'
+repository::mirror::user: 'www-data'
+repository::mirror::repodir: '/var/lib/repository'
+repository::mirror::snapshot: true

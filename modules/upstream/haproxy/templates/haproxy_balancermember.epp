@@ -1,0 +1,15 @@
+<% if $type == 'server' { -%>
+  <%- zip(Array($ipaddresses.flatten), Array($server_names.flatten)).each |$values| { -%>
+    <%- if $ports { -%>
+      <%- Array($ports.flatten).each |$port| { -%>
+  server <%= $values[1] %> <%= $values[0] %>:<%= $port %><% if $define_cookies { %><%= " cookie ${values[1]}" %><% } %> <% if $options { %><%= Array($options.flatten).sort.join(' ') %><% } %><% if $verifyhost == true { %> verifyhost <%= $values[1] %><% } %><% if $weight { %> weight <%= $weight %><% } %>
+      <%- } -%>
+    <%- } else { -%>
+  server <%= $values[1] %> <%= $values[0] %><% if $define_cookies { %><%= " cookie ${values[1]}" %><% } %> <% if $options { %><%= Array($options.flatten).sort.join(' ') %><% } %><% if $verifyhost == true { %> verifyhost <%= $values[1] %><% } %><% if $weight { %> weight <%= $weight %><% } %>
+    <%- } -%>
+  <%- } -%>
+<% } elsif $type == 'server-template' { -%>
+  server-template <%= $prefix %> <%= $amount %> <%= $fqdn %><% if $port { %><%= ":${port}" %><% }else { %><%= '' %><% } %><% if $define_cookies { %><%= " cookie ${fqdn}" %><% } %> <% if $options { %><%= Array($options.flatten).sort.join(' ') %><% } %><% if $verifyhost == true { %> verifyhost <%= $fqdn %><% } %><% if $weight { %> weight <%= $weight %><% } %>
+<% } elsif $type == 'default-server' { -%>
+  default-server <% if $options { %><%= Array($options.flatten).sort.join(' ') %><% } %>
+<% } -%>

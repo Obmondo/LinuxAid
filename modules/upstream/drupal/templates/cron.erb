@@ -1,0 +1,12 @@
+<%-
+  min = scope.function_fqdn_rand([60, @title])
+-%>
+#
+# Manage by Puppet
+#
+
+MAILTO="<%= @cron_email_address %>"
+PATH=<%= scope.lookupvar('::drupal::exec_paths').join(':') %>
+
+# m h dom mon dow user command
+<%= min %> * * * * <%= @real_process %> <%= @cron_command %>

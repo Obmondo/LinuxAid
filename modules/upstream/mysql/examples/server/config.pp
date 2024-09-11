@@ -1,0 +1,2 @@
+mysql::server::config { 'testfile':
+}
