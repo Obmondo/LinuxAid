@@ -279,6 +279,7 @@ module aims to support the current and previous major Puppet versions.
  * Debian 11
  * Ubuntu 20.04 LTS
  * Ubuntu 22.04 LTS
+ * Ubuntu 24.04 LTS
 
 ### May work
 
