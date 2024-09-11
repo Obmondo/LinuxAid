@@ -27,6 +27,7 @@ type Repository::Mirrors::Apt_Settings = Struct[{
     'puppet7',
     'stable',
   ]]],
-  key_id         => Optional[String],
+  key_ids        => Optional[Array[String[40,40]]],
   key_source     => Optional[String],
+  key_server     => Optional[Eit_types::URL],
 }]
