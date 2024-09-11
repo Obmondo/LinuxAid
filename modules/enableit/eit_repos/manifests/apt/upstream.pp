@@ -19,8 +19,8 @@ class eit_repos::apt::upstream (
   }
 
   $source = $architecture ? {
-    'arm64' => 'http://ports.ubuntu.com/ubuntu-ports/project/ubuntu-archive-keyring.gpg',
-    default => 'http://archive.ubuntu.com/ubuntu/project/ubuntu-archive-keyring.gpg',
+    'arm64' => 'https://mirrors.dotsrc.org/ubuntu-ports/project/ubuntu-archive-keyring.gpg',
+    default => 'https://mirrors.dotsrc.org/ubuntu/project/ubuntu-archive-keyring.gpg',
   }
 
   case $facts['os']['distro']['id'] {

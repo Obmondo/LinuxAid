@@ -14,9 +14,8 @@ define repository::mirror::repo (
   Stdlib::AbsolutePath                         $basedir         = $repository::mirror::basedir,
   Eit_types::SystemdTimer::Weekday             $weekday         = $repository::mirror::weekday,
   Stdlib::AbsolutePath                         $repo_config_dir = $repository::mirror::repo_config_dir,
-  Optional[String[40,40]]                      $key_id          = undef,
-  Optional[String]                             $key_content     = undef,
   Optional[Eit_types::URL]                     $key_source      = undef,
+  Optional[String[40,40]]                      $key_id          = undef,
   Eit_types::URL                               $key_server      = $repository::mirror::key_server,
   Variant[Stdlib::AbsolutePath, Pattern[/^~/]] $keyring_file    = $repository::mirror::keyring_file,
 ) {
@@ -63,15 +62,17 @@ define repository::mirror::repo (
     require => File[$repo_config_dir],
   }
 
-  if $key_id or $key_content {
-    ensure_resource('gnupg_pubkey', $key_id, {
+  # NOTE: you can look at the list of keys which debmirror will look at
+  # gpg --keyring ~/.gnupg/trustedkeys.kbx -k
+  if $key_id {
+    gnupg_pubkey { $name:
       ensure       => ensure_present($enable),
-      key_id       => $key_id,
-      key_content  => $key_content,
       user         => $user,
+      key_id       => $key_id,
       keyring_file => $keyring_file,
       key_server   => $key_server,
-    })
+      key_source   => $key_source,
+    }
   }
 
   common::systemd::timer { "repository_mirror_sync_${name}":

@@ -31,23 +31,19 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
     end
   end
 
-  def base_command
-    ['gpg', '--no-default-keyring', '--keyring', keyring_file]
-  end
-
-  def command(args)
-    base_command.concat(args).join(' ')
+  def gpg_custom_keyring
+    "--no-default-keyring --keyring #{keyring_file}"
   end
 
   def remove_key
     begin
-      fingerprint_command = "gpg --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
+      fingerprint_command = "gpg #{gpg_custom_keyring} --fingerprint --with-colons #{resource[:key_id]} | awk -F: '$1 == \"fpr\" {print $10;}'"
       fingerprint = Puppet::Util::Execution.execute(fingerprint_command, :uid => user_id)
     rescue Puppet::ExecutionFailure => e
       raise Puppet::Error, "Could not determine fingerprint for  #{resource[:key_id]} for user #{resource[:user]}: #{fingerprint}"
     end
 
-    command = "gpg --batch --yes --delete-key #{fingerprint}"
+    command = "gpg #{gpg_custom_keyring} --batch --yes --delete-key #{fingerprint}"
 
     begin
       output = Puppet::Util::Execution.execute(command, :uid => user_id)
@@ -57,7 +53,6 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
   end
 
   # where most of the magic happens
-  # TODO implement dry-run to check if the key_id match the content of the file
   def add_key
     if resource[:key_server]
       add_key_from_key_server
@@ -69,8 +64,7 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
   end
 
   def add_key_from_key_server
-    command = command(['--keyserver', resource[:key_server],
-                       '--recv-keys', resource[:key_id]])
+    command = "gpg #{gpg_custom_keyring} --keyserver #{resource[:key_server]} --recv-keys #{resource[:key_id]}"
     output = Puppet::Util::Execution.execute(command, :uid => user_id)
     return output if output.exitstatus == 0 || output.exitstatus == 2
 
@@ -87,7 +81,7 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
 
   def add_key_from_key_content
     path = create_temporary_file(user_id, resource[:key_content])
-    command = command(['--import', path])
+    command = "gpg #{gpg_custom_keyring} --batch --import #{path}"
     output = Puppet::Util::Execution.execute(command, :uid => user_id)
     return output if output.exitstatus == 0 || output.exitstatus == 2
 
@@ -96,7 +90,7 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
 
   def add_key_at_path
     if File.file?(resource[:key_source])
-      command = "gpg --import #{resource[:key_source]}"
+      command = "gpg #{gpg_custom_keyring} --batch --import #{resource[:key_source]}"
       begin
         output = Puppet::Util::Execution.execute(command, :uid => user_id, :failonfail => true)
       rescue Puppet::ExecutionFailure => e
@@ -108,13 +102,19 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
   end
 
   def add_key_at_url
-    uri = URI.parse(URI.escape(resource[:key_source]))
+    if URI.const_defined? 'DEFAULT_PARSER'
+      uri = URI.parse(URI::DEFAULT_PARSER.escape(resource[:key_source]))
+    else
+      uri = URI.parse(URI.escape(resource[:key_source]))
+    end
     case uri.scheme
     when /https/
-      command = "wget -O- #{resource[:key_source]} | gpg --import"
+      command = "wget -O- #{resource[:key_source]} | gpg #{gpg_custom_keyring} --batch --import"
+    when /http/
+      command = "gpg #{gpg_custom_keyring} --fetch-keys #{resource[:key_source]}"
     when 'puppet'
       path = create_temporary_file user_id, puppet_content
-      command = "gpg --import #{path}"
+      command = "gpg #{gpg_custom_keyring} --batch --import #{path}"
     end
     begin
       output = Puppet::Util::Execution.execute(command, :uid => user_id, :failonfail => true)
@@ -150,7 +150,7 @@ Puppet::Type.type(:gnupg_pubkey).provide(:gnupg_pubkey) do
   end
 
   def exists?
-    command=command(['--list-keys', '--with-colons', resource[:key_id]])
+    command= "gpg #{gpg_custom_keyring} --list-keys --with-colons #{resource[:key_id]}"
 
     output = Puppet::Util::Execution.execute(command, :uid => user_id)
     if output.exitstatus == 0
