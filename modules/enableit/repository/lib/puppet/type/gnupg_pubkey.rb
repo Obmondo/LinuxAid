@@ -77,7 +77,11 @@ Puppet::Type.newtype(:gnupg_pubkey) do
       raise ArgumentError, 'URL must be a string' unless source.is_a?(String)
 
       begin
-        uri = URI.parse(URI.escape(source))
+        if URI.const_defined? 'DEFAULT_PARSER'
+          uri = URI.parse(URI::DEFAULT_PARSER.escape(source))
+        else
+          uri = URI.parse(URI.escape(source))
+        end
       rescue => detail
         raise ArgumentError, "Could not understand source #{source}: #{detail}"
       end
@@ -86,6 +90,20 @@ Puppet::Type.newtype(:gnupg_pubkey) do
       raise ArgumentError, "Cannot use opaque URLs '#{source}'" unless uri.hierarchical?
       raise ArgumentError, "Cannot use URLs of type '#{uri.scheme}' as source for fileserving" unless uri.scheme == 'https'
     end
+
+    munge do |source|
+      if URI.const_defined? 'DEFAULT_PARSER'
+        uri = URI.parse(URI::DEFAULT_PARSER.escape(source))
+      else
+        uri = URI.parse(URI.escape(source))
+      end
+
+      if %w{file}.include?(uri.scheme)
+        uri.path
+      else
+        source
+      end
+    end
   end
 
   newparam(:key_server) do
@@ -93,7 +111,11 @@ Puppet::Type.newtype(:gnupg_pubkey) do
 
     validate do |server|
       if server
-        uri = URI.parse(URI.escape(server))
+        if URI.const_defined? 'DEFAULT_PARSER'
+          uri = URI.parse(URI::DEFAULT_PARSER.escape(server))
+        else
+          uri = URI.parse(URI.escape(server))
+        end
         unless uri.is_a?(URI::HTTPS) || uri.scheme.match(/^hkps$/)
           raise ArgumentError, "Invalid keyserver value #{server} #{uri.scheme}"
         end
