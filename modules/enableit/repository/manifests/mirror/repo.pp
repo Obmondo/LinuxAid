@@ -15,7 +15,7 @@ define repository::mirror::repo (
   Eit_types::SystemdTimer::Weekday             $weekday         = $repository::mirror::weekday,
   Stdlib::AbsolutePath                         $repo_config_dir = $repository::mirror::repo_config_dir,
   Optional[Eit_types::URL]                     $key_source      = undef,
-  Optional[String[40,40]]                      $key_id          = undef,
+  Optional[Array[String[40,40]]]               $key_ids         = [],
   Eit_types::URL                               $key_server      = $repository::mirror::key_server,
   Variant[Stdlib::AbsolutePath, Pattern[/^~/]] $keyring_file    = $repository::mirror::keyring_file,
 ) {
@@ -64,14 +64,16 @@ define repository::mirror::repo (
 
   # NOTE: you can look at the list of keys which debmirror will look at
   # gpg --keyring ~/.gnupg/trustedkeys.kbx -k
-  if $key_id {
-    gnupg_pubkey { $name:
-      ensure       => ensure_present($enable),
-      user         => $user,
-      key_id       => $key_id,
-      keyring_file => $keyring_file,
-      key_server   => $key_server,
-      key_source   => $key_source,
+  if $key_ids.length > 0 {
+    $key_ids.each |$key_id| {
+      gnupg_pubkey { "${name}_${key_id}":
+        ensure       => ensure_present($enable),
+        user         => $user,
+        key_id       => $key_id,
+        keyring_file => $keyring_file,
+        key_server   => $key_server,
+        key_source   => $key_source,
+      }
     }
   }
 

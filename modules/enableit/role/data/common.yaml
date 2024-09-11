@@ -107,7 +107,8 @@ role::package_management::repo::configurations:
         enable: false
         mirror_url: 'rsync://rsync.puppet.com/packages/apt'
         repodir: 'puppetlabs/apt'
-        key_id: 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
+        key_ids:
+          - 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
         sections:
           - 'puppet7'
         dists:
@@ -129,7 +130,8 @@ role::package_management::repo::configurations:
         sections: ['stable']
         repodir: 'docker/apt'
         package_format: 'deb'
-        key_id: '9DC858229FC7DD38854AE2D88D81803C0EBFCD88'
+        key_ids:
+          - '9DC858229FC7DD38854AE2D88D81803C0EBFCD88'
     yum:
       enable: false
       all:
@@ -150,7 +152,8 @@ role::package_management::repo::configurations:
         sections: ['main']
         repodir: 'microsoft/apt/focal'
         package_format: 'deb'
-        key_id: 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
       jammy:
         enable: false
         mirror_url: 'https://packages.microsoft.com/ubuntu/22.04/prod'
@@ -159,7 +162,8 @@ role::package_management::repo::configurations:
         sections: ['main']
         repodir: 'microsoft/apt/jammy'
         package_format: 'deb'
-        key_id: 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
       noble:
         enable: false
         mirror_url: 'https://packages.microsoft.com/ubuntu/24.04/prod'
@@ -168,7 +172,8 @@ role::package_management::repo::configurations:
         sections: ['main']
         repodir: 'microsoft/apt/noble'
         package_format: 'deb'
-        key_id: 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
     yum:
       enable: false
       el7:
@@ -194,7 +199,9 @@ role::package_management::repo::configurations:
       enable: false
       all:
         enable: false
-        key_id: 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+        key_ids:
+          - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+          - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
         mirror_url: 'rsync://dk.archive.ubuntu.com/ubuntu'
         package_format: 'deb'
         repodir: 'apt/ubuntu'
@@ -223,7 +230,9 @@ role::package_management::repo::configurations:
       enable: false
       all:
         enable: false
-        key_id: 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+        key_ids:
+          - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+          - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
         mirror_url: 'rsync://dk.ports.ubuntu.com/ubuntu-ports'
         package_format: 'deb'
         repodir: 'apt/ubuntu_arm64'
