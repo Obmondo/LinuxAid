@@ -1,6 +1,6 @@
 ---
-pam::common_files_create_links: false
-pam::common_files_suffix: ~
+pam::common_files_create_links: true
+pam::common_files_suffix: '_pc'
 pam::common_files:
   - common_account
   - common_auth
