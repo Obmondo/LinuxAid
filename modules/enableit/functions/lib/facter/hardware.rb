@@ -2,7 +2,7 @@
 # https://puppet.com/docs/puppet/6.5/core_facts.html#boardmanufacturer
 
 def read_line_if_exists f
-  if FileTest.exists?(f)
+  if FileTest.exist?(f)
     File.read(f).strip
   end
 end

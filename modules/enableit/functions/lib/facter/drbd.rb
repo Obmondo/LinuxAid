@@ -2,7 +2,7 @@
 # https://github.com/pubyun/puppet/blob/master/modules/custom/lib/facter/drbd.rb
 # Fix the thread deprecated issue and changed it to use Mutex.
 
-if FileTest.exists?("/proc/drbd")
+if FileTest.exist?("/proc/drbd")
   result = {}
 
   MUTEX = Mutex.new
