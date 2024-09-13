@@ -129,7 +129,7 @@ class profile::software::oms_agent (
   $service = sprintf('omsagent-%s', $workspace_id)
 
   package { ['omsagent','omi', 'scx']:
-    ensure  => ensure_present($enable),
+    ensure  => ensure_latest($enable),
     noop    => $noop_value,
     require => if $enable { File['/etc/omsagent-onboard.conf'] },
   }
@@ -139,6 +139,12 @@ class profile::software::oms_agent (
     noop    => $noop_value,
     enable  => $enable,
     require => if $enable { Package['omsagent', 'omi', 'scx'] },
+  }
+
+  file { '/etc/opt/microsoft/omsagent/conf/omsagent.d/container.conf':
+    ensure => 'absent',
+    noop   => $noop_value,
+    notify => Service[$service]
   }
 
   # File contains no entries but it's unique per host due to an UUID written
