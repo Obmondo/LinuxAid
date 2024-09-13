@@ -270,7 +270,7 @@ common::services::disabled_services:
   - 'rpc-svcgssd'
 
 # Puppet
-common::puppet::version: 'latest'
+common::puppet::version: '7.33.0'
 common::puppet::configure_agent: true
 common::puppet::setup_agent: true
 

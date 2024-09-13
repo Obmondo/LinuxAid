@@ -46,7 +46,6 @@ class profile::puppet (
           apt::pin { "pin  ${aio_package_name}":
             version    => $_version,
             priority   => 999,
-            originator => 'Puppetlabs',
             packages   => $aio_package_name,
           }
 

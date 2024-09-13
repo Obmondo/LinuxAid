@@ -8,3 +8,5 @@ role::package_management::repo::ssl_cert:
 role::package_management::repo::ssl_key:
 role::package_management::repo::yum: {}
 role::package_management::repo::apt: {}
+role::package_management::repo::registry_path: ghcr.io/obmondo/repository-nginx
+role::package_management::repo::nginx_tag: 'v1.0.5'
