@@ -436,3 +436,7 @@ common::system::updates::enable: true
 
 prometheus::bin_dir: /opt/obmondo/bin
 prometheus::install_method: package
+
+common::software::vncserver::config_defaults:
+  session: "gnome"
+  geometry: "1920x1080"
