@@ -137,19 +137,17 @@ Pl  ease change the URL to contain an EPP style template.")
             comment      => "${key} repo server",
             location     => $value['url'].inline_epp({ snapshot => $snapshot, }),
             repos        => 'main',
+            keyring      => "/etc/apt/keyrings/${key}.asc",
             include      => {
               'src' => false,
               'deb' => true,
             },
           }
 
-          apt::key { $key:
-            ensure   => present,
-            id       => $value['key_id'],
-            source   => $value['key_source'],
-            # Cause Puppet uses it own version of curl, which does not read OS ca bundle certs
-            weak_ssl => true,
-            noop     => $noop_value,
+          apt::keyring { "${key}.asc":
+            ensure => present,
+            source => $value['key_source'],
+            noop   => $noop_value,
           }
         }
       }
@@ -252,13 +250,12 @@ Pl  ease change the URL to contain an EPP style template.")
 
         }
         'Debian': {
-
           $_os_type = downcase($_os['distro']['id'])
 
           $feature_repo = $_os_type ? {
-            'ubuntu' => ['backports', 'security', 'updates'],
-            'debian' => ['backports', 'updates'],
-            default  => fail("${_os_type} not supported")
+            ubuntu  => ['backports', 'security', 'updates'],
+            debian  => ['backports', 'updates'],
+            default => fail("${_os_type} not supported")
           }
 
           $feature_repo.each |$repo| {
@@ -270,6 +267,7 @@ Pl  ease change the URL to contain an EPP style template.")
               comment      => "local apt ${_os_codename}-${repo} server",
               location     => "https://${domain}/${_snapshot_uri_fragment}apt/${_os_type}",
               repos        => 'main universe multiverse restricted',
+              keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
               include      => {
                 'src' => false,
                 'deb' => true,
@@ -285,6 +283,7 @@ Pl  ease change the URL to contain an EPP style template.")
             comment      => 'local apt repo server',
             location     => "https://${domain}/${_snapshot_uri_fragment}apt/${_os_type}",
             repos        => 'main universe multiverse restricted',
+            keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
             include      => {
               'src' => false,
               'deb' => true,

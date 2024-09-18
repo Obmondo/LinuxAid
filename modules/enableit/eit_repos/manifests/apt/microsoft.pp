@@ -27,8 +27,8 @@ class eit_repos::apt::microsoft (
     architecture => $architecture,
     # https://learn.microsoft.com/en-us/linux/packages#how-to-use-the-gpg-repository-signing-key
     key          => {
-      'id'     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',
-      'source' => 'https://packages.microsoft.com/keys/microsoft.asc',
+      name   => "microsoft_${facts['os']['distro']['codename']}.asc",
+      source => 'https://packages.microsoft.com/keys/microsoft.asc',
     },
     include      => {
       'src' => false,
