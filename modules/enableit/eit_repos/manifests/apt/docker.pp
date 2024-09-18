@@ -13,16 +13,16 @@ class eit_repos::apt::docker (
   }
 
   if $facts['os']['distro']['id'] == 'Ubuntu' {
-    apt::source { docker-ce-stable:
+    apt::source { 'docker-ce-stable':
       ensure       => ensure_present($ensure),
-      location     => "https://download.docker.com/linux/ubuntu",
+      location     => 'https://download.docker.com/linux/ubuntu',
       noop         => $noop_value,
       architecture => $architecture,
-      release      => "${distro}",
+      release      => $distro,
       repos        => 'stable',
       key          => {
-        'id'     => '9DC858229FC7DD38854AE2D88D81803C0EBFCD88',
-        'source' => "https://download.docker.com/linux/ubuntu/gpg",
+        name   => "docker_${distro}.asc",
+        source => 'https://download.docker.com/linux/ubuntu/gpg',
       },
     }
   }

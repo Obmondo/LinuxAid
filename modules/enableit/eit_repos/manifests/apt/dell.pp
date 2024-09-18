@@ -12,8 +12,8 @@ class eit_repos::apt::dell (
       location => "http://linux.dell.com/repo/community/openmanage/11010/${distro}/",
       noop     => $noop_value,
       key      => {
-        'id'     => '42550ABD1E80D7C1BC0BAD851285491434D8786F',
-        'source' => 'https://linux.dell.com/repo/pgp_pubkeys/0x1285491434D8786F.asc',
+        name   => "ubuntu_${distro}_dell.asc",
+        source => 'https://linux.dell.com/repo/pgp_pubkeys/0x1285491434D8786F.asc',
       },
     }
   }

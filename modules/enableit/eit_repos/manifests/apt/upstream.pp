@@ -5,6 +5,7 @@ class eit_repos::apt::upstream (
 ) {
 
   $distro = $facts['os']['distro']['codename']
+  $_os_type = downcase($facts['os']['distro']['id'])
 
   # Get the architecture
   $architecture = $facts['os']['architecture'] ? {
@@ -12,64 +13,44 @@ class eit_repos::apt::upstream (
     default   => 'amd64',
   }
 
-  # Get the location
-  $location = $architecture ? {
-    'arm64' => 'http://ports.ubuntu.com/ubuntu-ports',
-    default => 'http://archive.ubuntu.com/ubuntu',
-  }
-
-  $source = $architecture ? {
-    'arm64' => 'https://mirrors.dotsrc.org/ubuntu-ports/project/ubuntu-archive-keyring.gpg',
-    default => 'https://mirrors.dotsrc.org/ubuntu/project/ubuntu-archive-keyring.gpg',
-  }
-
   case $facts['os']['distro']['id'] {
     'Ubuntu': {
+      # Get the location
+      $location = $architecture ? {
+        'arm64' => 'http://ports.ubuntu.com/ubuntu-ports',
+        default => 'http://archive.ubuntu.com/ubuntu',
+      }
+
       $repos = [$distro, "${distro}-updates", "${distro}-security"]
 
-      $repos.each |$_repos| {
-        apt::source { "ubuntu-${_repos}":
+      $repos.each |$_repo| {
+        apt::source { "ubuntu-${_repo}":
           ensure       => ensure_present($ensure),
           location     => $location,
           noop         => $noop_value,
           architecture => $architecture,
-          release      => $_repos,
+          release      => $_repo,
           repos        => 'main universe multiverse restricted',
-          key          => {
-            'id'     => '630239CC130E1A7FD81A27B140976EAF437D05B5',
-            'source' => $source,
-          },
+          keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
         }
       }
     }
     'Debian': {
-      $repos = {
+      $distro_repos = {
         "${distro}"          => 'https://deb.debian.org/debian',
         "${distro}-updates"  => 'https://deb.debian.org/debian',
         "${distro}-security" => 'https://security.debian.org',
       }
 
-      $repos.each |$key, $value | {
-        apt::source { $key :
-          ensure   => ensure_present($ensure),
-          location => $value,
-          noop     => $noop_value,
-          release  => $key,
-          repos    => 'main contrib non-free',
-        }
-      }
-
-      $apt_keys = {
-        'AC530D520F2F3269F5E98313A48449044AAD5C5D' => "https://deb.debian.org/debian/dists/${distro}/Release.gpg",
-        '1F89983E0081FDE018F3CC9673A4F27B8DD47936' => "https://security.debian.org/dists/${distro}-security/Release.gpg",
-      }
-
-      $apt_keys.each | $key, $value | {
-        apt::key { $key :
-          ensure => ensure_present($ensure),
-          id     => $key,
-          noop   => $noop_value,
-          source => $value,
+      $distro_repos.each |$key, $value | {
+        apt::source { $key:
+          ensure       => ensure_present($ensure),
+          location     => $value,
+          noop         => $noop_value,
+          architecture => $architecture,
+          release      => $key,
+          repos        => 'main contrib non-free',
+          keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
         }
       }
     }
