@@ -1,5 +1,5 @@
 services:
-  <% if $provider != "gitea" { %>
+  <% if $provider == "gitlab" and $packagesign { %>
   server:
     image:  <%= $registry_path %>/packagesign-server:<%= $packagesign_tag %>
     ports:
@@ -17,7 +17,7 @@ services:
       <% } %>
   <% } -%>
 
-  <% if $provider != "packagesign" { %>
+  <% if $packagesign { %>
   script:
     image: <%= $registry_path %>/packagesign-script:<%= $packagesign_tag %>
     environment:

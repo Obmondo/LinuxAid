@@ -13,7 +13,7 @@ class role::package_management::repo (
   String                           $packagesign_tag,
   Optional[Array]                  $volumes,
   Boolean                          $manage,
-  Enum['gitea', 'gitlab']          $provider,
+  Enum['gitlab']                   $provider,
   Hash                             $locations,
   Boolean                          $snapshot,
 
