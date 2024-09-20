@@ -8,7 +8,6 @@ class profile::package_management::packagesign (
   Array                $volumes          = $role::package_management::repo::volumes,
   String               $registry_path    = $role::package_management::repo::registry_path,
   String               $packagesign_tag  = $role::package_management::repo::packagesign_tag,
-  String               $nginx_tag        = $role::package_management::repo::nginx_tag,
   Enum['gitlab']       $provider         = $role::package_management::repo::provider,
 
   Optional[String]           $signing_password = $role::package_management::repo::signing_password,
@@ -37,7 +36,6 @@ class profile::package_management::packagesign (
         'registry_path'   => $registry_path,
         'packagesign_tag' => $packagesign_tag,
         'packagesign'     => $packagesign,
-        'nginx_tag'       => $nginx_tag,
       }),
     ;
   }

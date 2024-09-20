@@ -6,7 +6,6 @@ class profile::package_management::repo (
   Eit_types::User                     $user             = $role::package_management::repo::user,
   Stdlib::Unixpath                    $basedir          = $role::package_management::repo::basedir,
   String                              $registry_path    = $role::package_management::repo::registry_path,
-  String                              $nginx_tag        = $role::package_management::repo::nginx_tag,
   Repository::Mirrors::Configurations $configurations   = $role::package_management::repo::configurations,
 ) {
 

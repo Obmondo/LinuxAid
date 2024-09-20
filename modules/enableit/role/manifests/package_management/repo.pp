@@ -7,7 +7,6 @@ class role::package_management::repo (
   Optional[String]                 $ssl_cert,
   Optional[String]                 $ssl_key,
   String                           $registry_path,
-  String                           $nginx_tag,
   Eit_types::SystemdTimer::Weekday $weekday,
   Boolean                          $packagesign,
   String                           $packagesign_tag,
