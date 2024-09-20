@@ -1,6 +1,7 @@
 # repository mirror and snapshot
 class profile::package_management::repo (
   Boolean                             $manage           = $role::package_management::repo::manage,
+  Boolean                             $snapshot         = $role::package_management::repo::snapshot,
   Eit_types::SystemdTimer::Weekday    $weekday          = $role::package_management::repo::weekday,
   Eit_types::User                     $user             = $role::package_management::repo::user,
   Stdlib::Unixpath                    $basedir          = $role::package_management::repo::basedir,
@@ -15,18 +16,6 @@ class profile::package_management::repo (
     user            => $user,
     basedir         => $basedir,
     configurations  => $configurations,
-  }
-
-  file { '/opt/obmondo/docker-compose/repository' :
-    ensure => ensure_dir($manage),
-    ;
-    '/opt/obmondo/docker-compose/repository/docker-compose.yaml':
-      ensure  => ensure_present($manage),
-      content => epp('profile/docker-compose/repository/docker-compose.yaml.epp', {
-        'basedir'         => $basedir,
-        'registry_path'   => $registry_path,
-        'nginx_tag'       => $nginx_tag,
-      }),
-    ;
+    snapshot        => $snapshot,
   }
 }

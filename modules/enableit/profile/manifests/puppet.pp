@@ -43,10 +43,10 @@ class profile::puppet (
     if $_pin_version {
       case $facts.dig('package_provider') {
         'apt': {
-          apt::pin { "pin  ${aio_package_name}":
-            version    => $_version,
-            priority   => 999,
-            packages   => $aio_package_name,
+          apt::pin { "pin ${aio_package_name}":
+            version  => $_version,
+            priority => 999,
+            packages => $aio_package_name,
           }
 
         }

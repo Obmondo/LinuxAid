@@ -17,6 +17,7 @@ services:
       <% } %>
   <% } -%>
 
+  <% if $provider != "packagesign" { %>
   script:
     image: <%= $registry_path %>/packagesign-script:<%= $packagesign_tag %>
     environment:
@@ -26,6 +27,7 @@ services:
       <%- $volumes.each |$vol| { %>
       - <%= $vol -%>
       <% } %>
+  <% } -%>
 
   nginx:
     image: <%= $registry_path %>/nginx:<%= $nginx_tag %>

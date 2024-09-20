@@ -1,7 +1,0 @@
-services:
-  nginx:
-    image: <%= $registry_path %>:<%= $nginx_tag %>
-    ports:
-      - 127.0.0.1:10080:80
-    volumes:
-      - <%= $basedir -%>:/var/cache/packagesign

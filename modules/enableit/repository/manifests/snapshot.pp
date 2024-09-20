@@ -1,6 +1,6 @@
 # Snapshot
 class repository::snapshot (
-  Boolean         $enable = $repository::mirror::enable,
+  Boolean         $enable = $repository::mirror::snapshot,
   Eit_types::User $user   = $repository::mirror::user,
 ) {
 
