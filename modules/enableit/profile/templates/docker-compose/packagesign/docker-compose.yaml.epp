@@ -1,5 +1,5 @@
 services:
-  <% if $provider != "gitea" { %>
+  <% if $provider == "gitlab" and $packagesign { %>
   server:
     image:  <%= $registry_path %>/packagesign-server:<%= $packagesign_tag %>
     ports:
@@ -17,6 +17,7 @@ services:
       <% } %>
   <% } -%>
 
+  <% if $packagesign { %>
   script:
     image: <%= $registry_path %>/packagesign-script:<%= $packagesign_tag %>
     environment:
@@ -26,9 +27,10 @@ services:
       <%- $volumes.each |$vol| { %>
       - <%= $vol -%>
       <% } %>
+  <% } -%>
 
   nginx:
-    image: <%= $registry_path %>/nginx:<%= $nginx_tag %>
+    image: ghcr.io/obmondo/dockerfiles/repository-mirror:1.27.0
     ports:
       - 127.0.0.1:10080:80
     volumes:

@@ -1,9 +1,0 @@
----
-profile::php::version: '7.0'
-profile::php::config_root: '/etc/php/7.0'
-profile::php::default_modules:
-  memcache:
-    package_prefix: 'php-'
-
-profile::puppet::package_version_suffix: '-1xenial'
-profile::logging::logrotate::__scheduling_method: 'cron'

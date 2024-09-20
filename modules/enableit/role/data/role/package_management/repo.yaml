@@ -1,4 +1,7 @@
 ---
+role::package_management::repo::manage: true
+role::package_management::repo::snapshot: true
+role::package_management::repo::basedir: '/var/cache/packagesign'
 role::package_management::repo::enable: true
 role::package_management::repo::weekday: 'Sun'
 role::package_management::repo::user: root
@@ -8,3 +11,15 @@ role::package_management::repo::ssl_cert:
 role::package_management::repo::ssl_key:
 role::package_management::repo::yum: {}
 role::package_management::repo::apt: {}
+role::package_management::repo::locations: {}
+role::package_management::repo::registry_path: 'ghcr.io/obmondo/dockerfiles'
+role::package_management::repo::packagesign: true
+role::package_management::repo::packagesign_tag: 'v3.0.6'
+role::package_management::repo::volumes:
+  - /var:/var
+
+role::web::haproxy::http: true
+role::web::haproxy::https: true
+role::web::haproxy::use_hsts: false
+role::web::haproxy::global_hsts: false
+role::web::haproxy::use_lets_encrypt: false

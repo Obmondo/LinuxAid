@@ -4,6 +4,7 @@
 # http://launchpadlibrarian.net/541793181/debmirror_2.34ubuntu1_all.deb
 class repository::mirror (
   Boolean                          $enable,
+  Boolean                          $snapshot,
   Eit_types::SystemdTimer::Weekday $weekday,
   Eit_types::User                  $user,
   Stdlib::Unixpath                 $basedir,
