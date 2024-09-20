@@ -56,7 +56,7 @@ class profile::puppet (
           }
         }
         default: {
-          fail('Unsupported package provider')
+          info('Not pinning the puppet-agent package, maybe you have an older distro')
         }
       }
     }
