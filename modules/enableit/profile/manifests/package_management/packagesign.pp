@@ -8,8 +8,8 @@ class profile::package_management::packagesign (
   Array                $volumes          = $role::package_management::repo::volumes,
   String               $registry_path    = $role::package_management::repo::registry_path,
   String               $packagesign_tag  = $role::package_management::repo::packagesign_tag,
-  Enum['gitlab']       $provider         = $role::package_management::repo::provider,
 
+  Optional[Enum['gitlab']]   $provider         = $role::package_management::repo::provider,
   Optional[String]           $signing_password = $role::package_management::repo::signing_password,
   Optional[Stdlib::HTTPSUrl] $gitserver_url    = $role::package_management::repo::gitserver_url,
   Optional[String]           $gitserver_token  = $role::package_management::repo::gitserver_token,

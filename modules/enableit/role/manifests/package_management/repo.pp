@@ -12,7 +12,6 @@ class role::package_management::repo (
   String                           $packagesign_tag,
   Optional[Array]                  $volumes,
   Boolean                          $manage,
-  Enum['gitlab']                   $provider,
   Hash                             $locations,
   Boolean                          $snapshot,
 
@@ -21,6 +20,7 @@ class role::package_management::repo (
   Optional[String]                 $signing_password = undef,
   Optional[Stdlib::HTTPSUrl]       $gitserver_url    = undef,
   Optional[String]                 $gitserver_token  = undef,
+  Optional[Enum['gitlab']]         $provider         = undef,
 
 ) inherits role::package_management {
 
