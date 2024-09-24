@@ -8,9 +8,9 @@ class profile::mail::mailcow (
   Eit_types::Timezone         $timezone         = $role::mail::mailcow::timezone,
   String                      $dbroot           = $role::mail::mailcow::dbroot,
   String                      $dbpass           = $role::mail::mailcow::dbpass,
+  Optional[Hash]              $extra_settings   = $role::mail::mailcow::extra_settings,
   Stdlib::Fqdn                $domain           = $role::mail::mailcow::domain,
   Integer[3,30]               $backup_retention = $role::mail::mailcow::backup_retention,
-
 
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = $role::mail::mailcow::http_bind,
 ) {
@@ -149,6 +149,15 @@ class profile::mail::mailcow (
 
   dhparam { "${install_dir}/data/assets/ssl/dhparams.pem":
     size => 2048,
+  }
+
+  # Extra setting that can be replaced.
+  file { "${install_dir}/data/conf/postfix/extra.cf":
+    ensure  => present,
+    content => epp('profile/mail/mailcow/extra.epp', {
+      myhostname     => $domain,
+      extra_settings => $extra_settings,
+    })
   }
 
   docker_compose { 'mailcow':
