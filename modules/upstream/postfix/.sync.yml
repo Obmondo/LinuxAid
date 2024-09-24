@@ -1,0 +1,10 @@
+---
+Gemfile:
+  optional:
+    ':development':
+      - gem: ruby-augeas
+spec/spec_helper_acceptance.rb:
+  unmanaged: false
+.puppet-lint.rc:
+  enabled_lint_checks:
+    - parameter_documentation
