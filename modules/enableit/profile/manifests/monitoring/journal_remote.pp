@@ -25,7 +25,6 @@ class profile::monitoring::journal_remote (
       'split-mode'  => 'host',
       'output'      => $output,
     },
-    require        => File[$output],
   }
 
   firewall_multi { '200 allow access to journald-remote':
