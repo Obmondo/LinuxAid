@@ -1,0 +1,8 @@
+---
+lookup_options:
+  role::mail::mailcow::extra_settings:
+    merge: 'deep'
+
+role::mail::mailcow::extra_settings:
+  smtpd_tls_protocols: '!SSLv2, !SSLv3, TLSv1.2, TLSv1.3'
+  smtp_tls_protocols: '!SSLv2, !SSLv3, TLSv1.2, TLSv1.3'

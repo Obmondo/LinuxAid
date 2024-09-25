@@ -9,6 +9,7 @@ class role::mail::mailcow (
   Eit_types::Mailcow::Version $version          = '2024-08a',
   Stdlib::Unixpath            $install_dir      = '/opt/mailcow',
   Eit_types::Timezone         $timezone         = 'Europe/Copenhagen',
+  Optional[Hash]              $extra_settings   = {},
   Integer[3,30]               $backup_retention = 5,
 
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = '0.0.0.0',

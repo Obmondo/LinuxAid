@@ -8,9 +8,9 @@ class profile::mail::mailcow (
   Eit_types::Timezone         $timezone         = $role::mail::mailcow::timezone,
   String                      $dbroot           = $role::mail::mailcow::dbroot,
   String                      $dbpass           = $role::mail::mailcow::dbpass,
+  Optional[Hash]              $extra_settings   = $role::mail::mailcow::extra_settings,
   Stdlib::Fqdn                $domain           = $role::mail::mailcow::domain,
   Integer[3,30]               $backup_retention = $role::mail::mailcow::backup_retention,
-
 
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = $role::mail::mailcow::http_bind,
 ) {
@@ -123,21 +123,41 @@ class profile::mail::mailcow (
     $_base_dir = lookup('common::certs::__base_dir')
     $x_name = regsubst($domain, '^(\w+)(.*)$', '\1')
 
-    file { default:
+    $_cert_file = "${_base_dir}/parts/${x_name}/cert.pem"
+    $_cert_ca   = "${_base_dir}/parts/${x_name}/ca.pem"
+
+    $_cert_combined_parts = [
+      $_cert_file,
+      $_cert_ca
+    ].delete_undef_values
+
+    # https://docs.mailcow.email/post_installation/firststeps-ssl/#how-to-use-your-own-certificate
+    exec { "write combined cert with ca ${x_name}":
+      command     => "cat ${_cert_combined_parts.join(' ')} > ${install_dir}/data/assets/ssl/cert.pem",
+      path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      refreshonly => true,
+      creates     => "${install_dir}/data/assets/ssl/cert.pem",
+      require     => Vcsrepo[$install_dir],
+    }
+
+    file { "${install_dir}/data/assets/ssl/key.pem":
       notify  => Docker_compose['mailcow'],
       require => Vcsrepo[$install_dir],
-      ;
-      "${install_dir}/data/assets/ssl/cert.pem":
-        source => "file://${_base_dir}/combined/${x_name}.pem",
-      ;
-      "${install_dir}/data/assets/ssl/key.pem":
-        source => "file://${_base_dir}/parts/${x_name}/key.pem",
-      ;
+      source  => "file://${_base_dir}/parts/${x_name}/key.pem",
     }
   }
 
   dhparam { "${install_dir}/data/assets/ssl/dhparams.pem":
     size => 2048,
+  }
+
+  # Extra setting that can be replaced.
+  file { "${install_dir}/data/conf/postfix/extra.cf":
+    ensure  => present,
+    content => epp('profile/mail/mailcow/extra.epp', {
+      myhostname     => $domain,
+      extra_settings => $extra_settings,
+    })
   }
 
   docker_compose { 'mailcow':
