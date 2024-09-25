@@ -24,7 +24,6 @@ class common::hosts (
     ]
   ] $entries = {},
 ) {
-
   $entries.each | $ip, $entry | {
     if type($entry) =~ Type[Hash] {
       # Get the first element

@@ -4,7 +4,6 @@ class common::devices (
   Hash $encrypted_devices = {},
   Hash $filesystems = {},
 ) {
-
   # we default to setting up LUKS only when we use encrypted devices
   $needs_encryption_scripts = !empty($encrypted_devices)
 
@@ -22,7 +21,6 @@ class common::devices (
   package::install('obmondo-scripts-disk-encryption', {
     ensure => ensure_present($needs_encryption_scripts),
   })
-
 
   # We need to make sure that we have enough entropy to avoid hanging when
   # waiting for /dev/random; haveged can do this for us

@@ -7,7 +7,6 @@ class common::setup (
   Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
   Boolean              $noop_value = false,
 ) {
-
   include common::system::authentication::sudo
   contain ::common::virtualization
 

@@ -4,8 +4,7 @@ class common::services (
   Hash    $systemd    = {},
   Hash    $initscript = {},
   Array[Eit_types::SimpleString] $disabled_services = [],
-){
-
+) {
   if $manage {
     if $::facts[service_provider] == 'systemd' {
       create_resources('::common::services::systemd', $systemd)

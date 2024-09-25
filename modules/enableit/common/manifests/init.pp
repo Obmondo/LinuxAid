@@ -20,10 +20,9 @@ class common (
       apply_recursively => Boolean,
       }]] $filepermissions = {},
 ) {
+  Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
 
-  Exec { path => [ '/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin' ] }
-
-  Stage['setup']->Stage['main']
+  Stage['setup'] -> Stage['main']
 
   $_full_host_management = if 'role::monitoring' in $::obmondo_classes {
     false
@@ -83,7 +82,7 @@ class common (
       }
 
       $filepermissions.each |$path, $params| {
-        $recurse = if $params[apply_recursively] {'-r'} else {''}
+        $recurse = if $params[apply_recursively] { '-r' } else { '' }
         $mode = $params[mode]
         exec { "chmod ${recurse} ${mode} ${path}":
           onlyif => "stat ${path}",

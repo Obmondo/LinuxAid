@@ -23,7 +23,6 @@ class common::repo (
   Optional[Stdlib::Fqdn]    $domain          = undef,
   Optional[Eit_types::Date] $snapshot        = undef,
 ) {
-
   File {
     noop => $noop_value,
   }
@@ -183,10 +182,8 @@ Pl  ease change the URL to contain an EPP style template.")
     # If local is enabled, we assume that the local repo server is already setup
     # Setup centos base, extra, updates and epel repos automatically
     if $local {
-
       case $_osfamily {
         'RedHat': {
-
           # NOTE: delete the wanted repo on RedHat OS, which got slipped in by mistake
           if $_os['name'] == 'RedHat' {
             file { [
@@ -247,7 +244,6 @@ Pl  ease change the URL to contain an EPP style template.")
             source     => "puppet:///modules/eit_repos/yum/RPM-GPG-KEY-EPEL-${_os_major}",
             noop_value => $noop_value,
           }
-
         }
         'Debian': {
           $_os_type = downcase($_os['distro']['id'])

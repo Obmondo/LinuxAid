@@ -1,6 +1,5 @@
 # Software class
 class common::software {
-
   if lookup('common::software::dependencyagent::enable', Boolean, undef, false) {
     common::software::dependencyagent.include
   }

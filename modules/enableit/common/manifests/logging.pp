@@ -4,7 +4,6 @@ class common::logging (
   Optional[Eit_types::Group] $log_dir_group = undef,
   Stdlib::Filemode           $log_dir_mode  = '0755',
 ) {
-
   if $manage {
     if lookup('common::logging::logrotate::manage', Boolean, undef, false) {
       contain ::common::logging::logrotate

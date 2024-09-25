@@ -2,9 +2,7 @@
 class common::extras (
   Boolean $manage = false,
 ) inherits ::common {
-
   if $manage {
     common::extras::computing.include
   }
-
 }

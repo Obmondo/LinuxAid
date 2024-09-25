@@ -27,7 +27,6 @@ class common::network (
   }]]           $routes              = {},
   Array[String] $__required_packages = [],
 ) inherits ::common {
-
   $_uses_dhcp = $interfaces.map |$_, $_interface_options| { $_interface_options.dig('method') }.grep('dhcp').size >= 1
 
   $_uses_gateway = $interfaces.map |$_, $_interface_options| { $_interface_options.dig('gateway').empty }[0]
@@ -58,7 +57,6 @@ class common::network (
           'the default route should be have parameter `network` set to "default"')
 
   if $manage {
-
     # NOTE: We don't use network manager at any place.
     service { [
       'NetworkManager',
@@ -76,7 +74,6 @@ class common::network (
         # Bonded not supported
         $interfaces.each |$_name, $_config| {
           if type($_config['ipaddress']) =~ Type[Stdlib::IP::Address::V4::CIDR] or $_uses_dhcp {
-
             $_is_dhcp = $_uses_dhcp.to_yesno
             systemd::network { "10-${_name}.network":
               # systemd-resolved is required if DNS entries are specified in .network files.
@@ -92,7 +89,6 @@ Address=${_config['ipaddress']}
 Gateway=${_config['gateway']}
 "
             }
-
           } else {
             fail("Given ipaddress ${_config['ipaddress']} is not correct and is not supported by systemd-networkd")
           }
@@ -101,7 +97,6 @@ Gateway=${_config['gateway']}
 
       # TODO: Add support for interface file.
       default: {
-
         class { '::network':
           ipaddress          => $ipaddress_package,
           ipaddress_provider => $ipaddress_provider,
@@ -186,7 +181,6 @@ Gateway=${_config['gateway']}
               ensure => 'file',
             }
           }
-
         }
 
         $bonded_interfaces.each |$_name, $_config| {
@@ -223,7 +217,6 @@ Gateway=${_config['gateway']}
               ensure => 'file',
             }
           }
-
         }
 
         $routes.each |$_name, $_config| {
@@ -272,5 +265,4 @@ Gateway=${_config['gateway']}
   if lookup('common::network::tcpshaker::enable', Boolean, undef, false) {
     'common::network::tcpshaker'.contain
   }
-
 }

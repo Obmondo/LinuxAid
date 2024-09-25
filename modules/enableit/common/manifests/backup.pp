@@ -28,7 +28,6 @@ class common::backup (
       exclude     => Array[Variant[Stdlib::Absolutepath,String]],
   }]]                            $push                     = {},
 ) {
-
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')
 
   confine($luks, !($lukspass or $luks_service_name),
@@ -73,5 +72,4 @@ class common::backup (
       common::backup::gitea.contain
     }
   }
-
 }

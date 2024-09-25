@@ -11,7 +11,6 @@ class common::certs (
     source => String,
   }]] $ca_certs = {},
 ) {
-
   Package {
     noop => false,
   }
