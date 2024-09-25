@@ -12,7 +12,6 @@ class common::system (
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
 ) {
-
   ############
   # Services #
   ############
@@ -157,7 +156,6 @@ class common::system (
       * => $_file_parameters,
     }
   }
-
 
   #############
   # NETWORK

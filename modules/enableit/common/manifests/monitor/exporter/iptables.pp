@@ -1,42 +1,37 @@
 # Prometheus iptables Exporter
 class common::monitor::exporter::iptables (
-  Boolean           $enable         = true,
+  Boolean           $enable         = $facts.dig('iptable_rules_exist'),
   Boolean[false]    $noop_value     = false,
   Eit_types::IPPort $listen_address = '127.254.254.254:63393',
 ) {
-
   File {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Service {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Package {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   User {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Group {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Exec {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
-  $_systemd_version_232_newer = $facts.dig('systemd_version')
-    .then |$_version| { Integer($_version) } >= 232
+  $_systemd_version_232_newer = $facts.dig('systemd_version').then |$_version| { Integer($_version) } >= 232
 
-
-  $_user = if $_systemd_version_232_newer {'iptables_exporter' } else {'root'}
-  $_group = if $_systemd_version_232_newer { 'iptables_exporter'} else {'root'}
-
-  $_enable = $enable and $_systemd_version_232_newer
+  $_user = if $_systemd_version_232_newer { 'iptables_exporter' } else { 'root' }
+  $_group = if $_systemd_version_232_newer { 'iptables_exporter' } else { 'root' }
 
   prometheus::daemon { 'iptables_exporter':
     package_name      => 'obmondo-iptables-exporter',
@@ -50,8 +45,8 @@ class common::monitor::exporter::iptables (
     install_method    => 'package',
     user              => $_user,
     group             => $_group,
-    notify_service    => Service[ 'iptables_exporter' ],
-    real_download_url => 'https://github.com/madron/iptables-exporter',
+    notify_service    => Service['iptables_exporter'],
+    real_download_url => 'https://github.com/Obmondo/iptables_exporter',
     tag               => $::trusted['certname'],
     options           => "--web.listen-address=${listen_address}",
     export_scrape_job => $enable,
@@ -90,5 +85,4 @@ class common::monitor::exporter::iptables (
       ensure => absent,
     }
   }
-
 }

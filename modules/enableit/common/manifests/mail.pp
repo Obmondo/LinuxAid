@@ -31,17 +31,15 @@ class common::mail (
   Variant[Stdlib::Filemode,String] $maildrop_perms           = 'u+rwX,g-r,g+wX',
   Optional[Boolean] $noop_value                              = undef,
 ) {
-
   $real_soft_bounce = to_yesno($soft_bounce)
 
   if $manage {
-
     $has_mail_server_role = $::obmondo_classes.grep('role::mail::').size
     if $has_mail_server_role {
       # we only want to setup as normal "outgoing only" mail server - if server
       # does not have role::mail::$something :)
       if $facts[os][family] == 'RedHat' {
-        package::install('ssmtp', {ensure => absent,})
+        package::install('ssmtp', { ensure => absent })
       }
 
       class { 'postfix::server':
@@ -101,6 +99,5 @@ class common::mail (
         noop      => $noop_value,
       }
     }
-
   }
 }

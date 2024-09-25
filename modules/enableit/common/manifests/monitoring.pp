@@ -2,7 +2,6 @@
 class common::monitoring (
   Boolean $manage = true,
 ) {
-
   if $manage {
     if lookup('common::monitoring::splunk::forwarder::enable', Boolean, undef, false) {
       include common::monitoring::splunk::forwarder

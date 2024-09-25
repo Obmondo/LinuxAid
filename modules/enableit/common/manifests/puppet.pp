@@ -12,7 +12,6 @@ class common::puppet (
   # TODO: lets control via enc script
   String               $environment         = 'master',
 ) {
-
   profile::puppet.contain
 
   # Few nodes is still on el6

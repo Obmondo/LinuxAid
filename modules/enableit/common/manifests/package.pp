@@ -12,7 +12,6 @@ class common::package (
   Array[String]           $removed_packages         = [],
   Array[String]           $required_packages        = [],
 ) {
-
   $manage.each | $package_name, $status | {
     package { $package_name :
       # make sure the default is installed, even if it should change
@@ -37,5 +36,4 @@ class common::package (
   package::remove($_default_removed.map |$p| {
     regsubst($p, '^(.*?)-?$', '\1', 'E')
   } + $removed_packages)
-
 }

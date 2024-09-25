@@ -2,7 +2,6 @@
 class common::security (
   Boolean $manage = true,
 ) {
-
   if $manage {
     if lookup('common::security::auditd::enable', Boolean, undef, false) {
       contain common::security::auditd

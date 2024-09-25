@@ -13,7 +13,6 @@ class common::lvm (
     }]
   ] $lvs = {}
 ) {
-
   $lvs.each |$lv_name, $lv_options| {
     lvm::volume { $lv_name:
       ensure => $lv_options['ensure'],

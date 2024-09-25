@@ -2,7 +2,6 @@
 class common::storage (
   Eit_types::Common::Storage::Mounts $mounts = {},
 ) {
-
   # if zfs_present fact is present, its enabled
   if lookup('common::storage::zfs::enable', Boolean, undef, false) {
     contain common::storage::zfs

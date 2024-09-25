@@ -18,7 +18,6 @@
 #  }
 #
 define common::mkdir_p () {
-
   validate_absolute_path($name)
 
   exec { "mkdir_p-${name}":
