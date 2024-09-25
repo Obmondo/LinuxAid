@@ -179,20 +179,23 @@ role::package_management::repo::configurations:
       el7:
         enable: false
         mirror_url: 'https://packages.microsoft.com/centos'
+        dists: ['7']
         sections: ['prod']
-        repodir: 'microsoft/yum/7'
+        repodir: 'microsoft/yum'
         package_format: 'rpm'
       el8:
         enable: false
         mirror_url: 'https://packages.microsoft.com/centos'
+        dists: ['8']
         sections: ['prod']
-        repodir: 'microsoft/yum/8'
+        repodir: 'microsoft/yum'
         package_format: 'rpm'
       el9:
         enable: false
         mirror_url: 'https://packages.microsoft.com/rhel'
+        dists: ['9']
         sections: ['prod']
-        repodir: 'microsoft/yum/9'
+        repodir: 'microsoft/yum'
         package_format: 'rpm'
   ubuntu:
     apt:
