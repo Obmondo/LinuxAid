@@ -33,13 +33,42 @@ class profile::mail::mailcow (
   # in the script.
   # mailcow is working a improvment here
   # https://github.com/mailcow/mailcow-dockerized/pull/6030
-  cron::daily { 'mailcow-backup':
-    command     => "/opt/obmondo/docker_compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}",
-    environment => [
-      'PATH="/usr/sbin:/usr/bin:/sbin:/bin"',
-      "BACKUP_LOCATION=${backup_dir}",
-      'CREATE_BACKUP_LOCATION=yes',
-    ],
+  $_timer = @("EOT"/$n)
+    # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+    [Unit]
+    Requires=mailcow-backup.service
+    Description=Mailcow backup script timer
+
+    [Install]
+    WantedBy=timers.target
+
+    [Timer]
+    OnCalendar=*-*-* 02:15:00
+    Unit=mailcow-backup.service
+    RandomizedDelaySec=300s
+    | EOT
+
+  $_service = @("EOT"/$n)
+    # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Mailcow backup script service
+    Wants=mailcow-backup.timer
+
+    [Service]
+    Type=oneshot
+    Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
+    Environment="BACKUP_LOCATION=${backup_dir}"
+    Environment="CREATE_BACKUP_LOCATION=yes"
+    ExecStart=/opt/obmondo/docker_compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}
+    | EOT
+
+  systemd::timer { 'mailcow_backup.timer':
+    ensure          => ensure_present($manage),
+    timer_content   => $_timer,
+    service_content => $_service,
+    active          => $manage,
+    enable          => $manage,
+    require         => Vcsrepo[$install_dir],
   }
 
   # Firewall
