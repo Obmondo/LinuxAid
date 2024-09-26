@@ -59,10 +59,10 @@ class profile::mail::mailcow (
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
     Environment="BACKUP_LOCATION=${backup_dir}"
     Environment="CREATE_BACKUP_LOCATION=yes"
-    ExecStart=/opt/obmondo/docker_compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}
+    ExecStart=/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}
     | EOT
 
-  systemd::timer { 'mailcow_backup.timer':
+  systemd::timer { 'mailcow-backup.timer':
     ensure          => ensure_present($manage),
     timer_content   => $_timer,
     service_content => $_service,
