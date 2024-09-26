@@ -22,6 +22,7 @@ class eit_repos::zypper::enableit_client (
     autorefresh => 1,
     gpgcheck    => 1,
     noop        => $noop_value,
+    gpgkey      => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EnableIT_Aps_Ltd',
     type        => 'rpm-md',
   }
 
