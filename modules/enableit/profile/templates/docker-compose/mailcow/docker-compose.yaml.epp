@@ -1,6 +1,6 @@
 services:
   unbound-mailcow:
-    image: mailcow/unbound:1.17
+    image: <%= $unbound_image %>
     environment:
       - TZ=${TZ}
     volumes:
@@ -15,7 +15,7 @@ services:
           - unbound
 
   mysql-mailcow:
-    image: mariadb:10.5
+    image: <%= $mysql_image %>
     depends_on:
       - unbound-mailcow
     stop_grace_period: 45s
@@ -39,7 +39,7 @@ services:
           - mysql
 
   redis-mailcow:
-    image: redis:7-alpine
+    image: <%= $redis_image %>
     volumes:
       - redis-vol-1:/data/
     restart: always
@@ -56,7 +56,7 @@ services:
           - redis
 
   clamd-mailcow:
-    image: mailcow/clamd:1.61
+    image: <%= $clamd_image %>
     restart: always
     depends_on:
       - unbound-mailcow
@@ -74,7 +74,7 @@ services:
           - clamd
 
   rspamd-mailcow:
-    image: mailcow/rspamd:1.92
+    image: <%= $rspamd_image %>
     stop_grace_period: 30s
     depends_on:
       - dovecot-mailcow
@@ -104,7 +104,7 @@ services:
           - rspamd
 
   php-fpm-mailcow:
-    image: mailcow/phpfpm:1.84
+    image: <%= $php_fpm_image %>
     command: "php-fpm -d date.timezone=${TZ} -d expose_php=0"
     depends_on:
       - redis-mailcow
@@ -168,7 +168,7 @@ services:
           - phpfpm
 
   sogo-mailcow:
-    image: mailcow/sogo:1.119
+    image: <%= $sogo_image %>
     environment:
       - DBNAME=${DBNAME}
       - DBUSER=${DBUSER}
@@ -215,7 +215,7 @@ services:
           - sogo
 
   dovecot-mailcow:
-    image: mailcow/dovecot:1.24
+    image: <%= $dovecot_image %>
     depends_on:
       - mysql-mailcow
     dns:
@@ -295,7 +295,7 @@ services:
           - dovecot
 
   postfix-mailcow:
-    image: mailcow/postfix:1.71
+    image: <%= $postfix_image %>
     depends_on:
       - mysql-mailcow
     volumes:
@@ -332,7 +332,7 @@ services:
           - postfix
 
   memcached-mailcow:
-    image: memcached:alpine
+    image: <%= $memcached_image %>
     restart: always
     environment:
       - TZ=${TZ}
@@ -346,7 +346,7 @@ services:
       - sogo-mailcow
       - php-fpm-mailcow
       - redis-mailcow
-    image: nginx:mainline-alpine
+    image: <%= $nginx_image %>
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     command: /bin/sh -c "envsubst < /etc/nginx/conf.d/templates/listen_plain.template > /etc/nginx/conf.d/listen_plain.active &&
@@ -389,7 +389,7 @@ services:
   acme-mailcow:
     depends_on:
       - nginx-mailcow
-    image: mailcow/acme:1.84
+    image: <%= $acme_image %>
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     environment:
@@ -425,7 +425,7 @@ services:
           - acme
 
   netfilter-mailcow:
-    image: mailcow/netfilter:1.52
+    image: <%= $netfilter_image %>
     stop_grace_period: 30s
     depends_on:
       - dovecot-mailcow
@@ -448,7 +448,7 @@ services:
       - /lib/modules:/lib/modules:ro
 
   watchdog-mailcow:
-    image: mailcow/watchdog:1.97
+    image: <%= $watchdog_image %>
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     tmpfs:
@@ -510,7 +510,7 @@ services:
           - watchdog
 
   dockerapi-mailcow:
-    image: mailcow/dockerapi:2.05
+    image: <%= $dockerapi_image %>
     security_opt:
       - label=disable
     restart: always
@@ -529,7 +529,7 @@ services:
           - dockerapi
 
   solr-mailcow:
-    image: mailcow/solr:1.8.1
+    image: mailcow/solr:1.8.3
     restart: always
     volumes:
       - solr-vol-1:/opt/solr/server/solr/dovecot-fts/data
@@ -545,7 +545,7 @@ services:
           - solr
 
   olefy-mailcow:
-    image: mailcow/olefy:1.11
+    image: <%= $olefy_image %>
     restart: always
     environment:
       - TZ=${TZ}
@@ -563,7 +563,7 @@ services:
           - olefy
 
   ofelia-mailcow:
-    image: mcuadros/ofelia:latest
+    image: <%= $olefia_image %>
     restart: always
     command: daemon --docker
     environment:
@@ -602,7 +602,7 @@ services:
       - solr-mailcow
     environment:
       - TZ=${TZ}
-    image: robbertkl/ipv6nat
+    image: <%= $ipv6nat_image %>
     security_opt:
       - label=disable
     restart: always
