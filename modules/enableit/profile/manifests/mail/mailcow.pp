@@ -129,7 +129,7 @@ class profile::mail::mailcow (
       ensure  => ensure_present($manage),
       content => epp('profile/docker-compose/mailcow/docker-compose.yaml.epp', {
         'install_dir'     => $install_dir,
-        'ssl_dir'         => "/etc/letsencrypt/live/${domain}/"
+        'ssl_dir'         => "/etc/letsencrypt/live/${domain}/",
         'unbound_image'   => 'mailcow/unbound:1.23',
         'mysql_image'     => 'mariadb:10.5',
         'redis_image'     => 'redis:7-alpine',
