@@ -95,12 +95,12 @@ class profile::mail::mailcow (
     ;
     [
       '/opt/obmondo/docker-compose/mailcow',
-      '/opt/obmondo/docker-compose/helper-scripts',
+      '/opt/obmondo/docker-compose/mailcow/helper-scripts',
       "${install_dir}/data/assets/ssl",
     ]:
     # TODO: remove this, when the backup PR is merged upstream.
     ;
-    '/opt/obmondo/docker-compose/helper-scripts/backup_and_restore.sh':
+    '/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh':
       ensure => link,
       target => "${install_dir}/helper-scripts/backup_and_restore.sh",
     ;
