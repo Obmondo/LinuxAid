@@ -154,7 +154,7 @@ class profile::mail::mailcow (
     ;
     # NOTE: These container tag are manually maintained to have a better control
     # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
-    '/opt/obmondo/docker-compose/mailcow/docker-compose.yaml':
+    '/opt/obmondo/docker-compose/mailcow/docker-compose.yml':
       ensure  => ensure_present($manage),
       content => epp('profile/docker-compose/mailcow/docker-compose.yaml.epp', {
         'install_dir'     => $install_dir,
@@ -229,8 +229,8 @@ class profile::mail::mailcow (
   docker_compose { 'mailcow':
     ensure        => ensure_present($manage),
     compose_files => [
-      '/opt/obmondo/docker-compose/mailcow/docker-compose.yaml',
+      '/opt/obmondo/docker-compose/mailcow/docker-compose.yml',
     ],
-    require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yaml'],
+    require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
   }
 }
