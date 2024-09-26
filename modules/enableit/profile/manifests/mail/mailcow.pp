@@ -28,11 +28,8 @@ class profile::mail::mailcow (
     revision => $version,
   }
 
-  # NOTE: we have creating a symlink to the original backup script
-  # since our compose file is at diff location, then the expected path
-  # in the script.
-  # mailcow is working a improvment here
-  # https://github.com/mailcow/mailcow-dockerized/pull/6030
+  # NOTE: we are creating a symlink to the original backup script since our compose file is at diff location, then the expected path
+  # in the script. mailcow is working an improvment here https://github.com/mailcow/mailcow-dockerized/pull/6030
   $_timer = @("EOT"/$n)
     # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
     [Unit]
@@ -55,7 +52,7 @@ class profile::mail::mailcow (
     Wants=mailcow-backup.timer
 
     [Service]
-    Type=oneshot
+    Type=simple
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
     Environment="BACKUP_LOCATION=${backup_dir}"
     Environment="CREATE_BACKUP_LOCATION=yes"
