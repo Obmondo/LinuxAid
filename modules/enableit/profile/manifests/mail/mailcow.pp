@@ -5,6 +5,7 @@ class profile::mail::mailcow (
   Optional[Eit_types::Email]  $acme_contact     = $role::mail::mailcow::acme_contact,
   Eit_types::Mailcow::Version $version          = $role::mail::mailcow::version,
   Stdlib::Unixpath            $install_dir      = $role::mail::mailcow::install_dir,
+  Stdlib::Unixpath            $backup_dir       = $role::mail::mailcow::backup_dir,
   Eit_types::Timezone         $timezone         = $role::mail::mailcow::timezone,
   String                      $dbroot           = $role::mail::mailcow::dbroot,
   String                      $dbpass           = $role::mail::mailcow::dbpass,
@@ -27,9 +28,44 @@ class profile::mail::mailcow (
     revision => $version,
   }
 
-  cron::daily { 'mailcow-backup':
-    command     => "${install_dir}/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}",
-    environment => [ 'PATH="/usr/sbin:/usr/bin:/sbin:/bin"' ],
+  # NOTE: we are creating a symlink to the original backup script since our compose file is at diff location, then the expected path
+  # in the script. mailcow is working an improvment here https://github.com/mailcow/mailcow-dockerized/pull/6030
+  $_timer = @("EOT"/$n)
+    # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+    [Unit]
+    Requires=mailcow-backup.service
+    Description=Mailcow backup script timer
+
+    [Install]
+    WantedBy=timers.target
+
+    [Timer]
+    OnCalendar=*-*-* 02:15:00
+    Unit=mailcow-backup.service
+    RandomizedDelaySec=300s
+    | EOT
+
+  $_service = @("EOT"/$n)
+    # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Mailcow backup script service
+    Wants=mailcow-backup.timer
+
+    [Service]
+    Type=simple
+    Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
+    Environment="BACKUP_LOCATION=${backup_dir}"
+    Environment="CREATE_BACKUP_LOCATION=yes"
+    ExecStart=/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}
+    | EOT
+
+  systemd::timer { 'mailcow-backup.timer':
+    ensure          => ensure_present($manage),
+    timer_content   => $_timer,
+    service_content => $_service,
+    active          => $manage,
+    enable          => $manage,
+    require         => Vcsrepo[$install_dir],
   }
 
   # Firewall
@@ -56,15 +92,22 @@ class profile::mail::mailcow (
     ;
     [
       '/opt/obmondo/docker-compose/mailcow',
+      '/opt/obmondo/docker-compose/mailcow/helper-scripts',
       "${install_dir}/data/assets/ssl",
     ]:
+    # TODO: remove this, when the backup PR is merged upstream.
+    ;
+    '/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh':
+      ensure => link,
+      target => "${install_dir}/helper-scripts/backup_and_restore.sh",
+    ;
+    '/opt/obmondo/docker-compose/mailcow/mailcow.conf':
+      ensure => link,
+      target => '/opt/obmondo/docker-compose/mailcow/.env',
     ;
     '/opt/obmondo/docker-compose/mailcow/.env':
       ensure  => present,
       content => anything_to_ini({
-        # NOTE: hostname and domains inside mailcow can't be same
-        # but its a edge case, when its just an internal domain
-        # with same name as mail domain
         'MAILCOW_HOSTNAME'              => $domain,
         'MAILCOW_PASS_SCHEME'           => 'BLF-CRYPT',
         'DBNAME'                        => 'mailcow',
@@ -106,11 +149,31 @@ class profile::mail::mailcow (
         'ADDITIONAL_SAN'                => '',
       }),
     ;
-    '/opt/obmondo/docker-compose/mailcow/docker-compose.yaml':
+    # NOTE: These container tag are manually maintained to have a better control
+    # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
+    '/opt/obmondo/docker-compose/mailcow/docker-compose.yml':
       ensure  => ensure_present($manage),
       content => epp('profile/docker-compose/mailcow/docker-compose.yaml.epp', {
-        'install_dir' => $install_dir,
-        'ssl_dir'     => "/etc/letsencrypt/live/${domain}/"
+        'install_dir'     => $install_dir,
+        'ssl_dir'         => "/etc/letsencrypt/live/${domain}/",
+        'unbound_image'   => 'mailcow/unbound:1.23',
+        'mysql_image'     => 'mariadb:10.5',
+        'redis_image'     => 'redis:7-alpine',
+        'clamd_image'     => 'mailcow/clamd:1.66',
+        'rspamd_image'    => 'mailcow/rspamd:1.97',
+        'php_fpm_image'   => 'mailcow/phpfpm:1.89',
+        'sogo_image'      => 'mailcow/sogo:1.125',
+        'dovecot_image'   => 'mailcow/dovecot:2.1',
+        'postfix_image'   => 'mailcow/postfix:1.76',
+        'memcached_image' => 'memcached:alpine',
+        'nginx_image'     => 'nginx:mainline-alpine',
+        'acme_image'      => 'mailcow/acme:1.90',
+        'netfilter_image' => 'mailcow/netfilter:1.59',
+        'watchdog_image'  => 'mailcow/watchdog:2.05',
+        'dockerapi_image' => 'mailcow/dockerapi:2.08',
+        'olefy_image'     => 'mailcow/olefy:1.13',
+        'olefia_image'    => 'mcuadros/ofelia:latest',
+        'ipv6nat_image'   => 'robbertkl/ipv6nat',
       }),
       require => [
         File['/opt/obmondo/docker-compose/mailcow'],
@@ -163,8 +226,8 @@ class profile::mail::mailcow (
   docker_compose { 'mailcow':
     ensure        => ensure_present($manage),
     compose_files => [
-      '/opt/obmondo/docker-compose/mailcow/docker-compose.yaml',
+      '/opt/obmondo/docker-compose/mailcow/docker-compose.yml',
     ],
-    require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yaml'],
+    require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
   }
 }
