@@ -34,14 +34,11 @@ role::package_management::repo::configurations:
       enable: false
       all:
         enable: false
-        mirror_url: 'https://dl.fedoraproject.org/pub/epel'
+        mirror_url: 'https://dl.fedoraproject.org/pub/'
         package_format: 'rpm'
         repodir: 'yum/epel'
+        architectures: ['x86_64']
         dists: ['7', '8', '9']
-        exclude:
-          - 'aarch64'
-          - 'ppc64le'
-          - 'ppc64'
   jenkins:
     yum:
       enable: false
@@ -138,6 +135,7 @@ role::package_management::repo::configurations:
         enable: false
         mirror_url: 'https://download.docker.com/linux/centos'
         dists: ['7', '8', '9']
+        architectures: ['x86_64']
         sections: ['stable']
         repodir: 'docker/yum'
         package_format: 'rpm'
