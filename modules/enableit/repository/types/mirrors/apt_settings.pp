@@ -4,7 +4,7 @@ type Repository::Mirrors::Apt_Settings = Struct[{
   repodir        => Optional[String],
   package_format => Optional[Enum['deb']],
   architectures  => Optional[Array[Enum['amd64', 'arm64', 'all']]],
-  deb_sync_type  => Optional[Enum['wget', 'debmirror']],
+  deb_sync_type  => Optional[Enum['debmirror']],
   dists          => Optional[Array[Enum[
     'focal',
     'focal-backports',
