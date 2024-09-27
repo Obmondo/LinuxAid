@@ -7,42 +7,7 @@ class profile::software::oms_agent (
   Optional[String]                  $workspace_id           = $common::software::oms_agent::workspace_id,
   Optional[String]                  $workspace_key          = $common::software::oms_agent::workspace_key,
   Optional[String]                  $checksum               = $common::software::oms_agent::checksum,
-  Eit_types::SimpleString           $__linux_azure_package  = $common::software::oms_agent::__linux_azure_package,
-  Eit_types::SimpleString           $__linux_azure_service  = $common::software::oms_agent::__linux_azure_service,
-  Optional[String]                  $waagent_memory_limit   = $common::software::oms_agent::waagent_memory_limit,
 ) {
-
-  package { $__linux_azure_package:
-    ensure  => ensure_present($enable),
-    noop    => $noop_value,
-    require => unless $enable { Service[$__linux_azure_service] },
-  }
-
-  $_services = ([$__linux_azure_service] + if $enable { [] } else {
-    # This is apparently also installed and may be left behind
-    'omid.service'
-  }).delete_undef_values
-
-  service { $_services:
-    ensure  => ensure_service($enable),
-    noop    => $noop_value,
-    require => if $enable { Package[$__linux_azure_package] },
-  }
-
-    if $waagent_memory_limit {
-      common::services::systemd { 'azure-walinuxagent-logcollector.slice':
-        ensure => ensure_present($enable),
-        unit   => {
-          'Description'         => 'Slice for Azure VM Agent Periodic Log Collector',
-          'DefaultDependencies' => 'no',
-          'Before'              => 'slices.target',
-        },
-        slice  => {
-          'MemoryAccounting' => 'yes',
-          'MemoryLimit'      => $waagent_memory_limit,
-        },
-      }
-    }
 
   $service_file = sprintf('/lib/systemd/system/omsagent-%s.service', $workspace_id)
 
@@ -179,8 +144,6 @@ class profile::software::oms_agent (
         'omsagent-*',
         'omsconfig',
         'scxagent',
-        'waagent-extn.logrotate',
-        'waagent.logrotate',
       ],
       recurse => 1,
       noop    => $noop_value,
@@ -221,7 +184,6 @@ class profile::software::oms_agent (
       # we might want to move these lines to an Azure WAAgent profile at some
       # point
       '/var/log/azure/*/*.log',
-      '/var/log/waagent.log',
     ],
     rotate_every  => 'daily',
     rotate        => 30,

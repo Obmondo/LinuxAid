@@ -47,4 +47,8 @@ class common::software {
   if lookup('common::software::msftlinuxpatchautoassess::manage', Boolean, undef, false) {
     common::software::msftlinuxpatchautoassess.include
   }
+
+  if lookup('common::software::walinuxagent::manage', Boolean, undef, false) {
+    common::software::walinuxagent.include
+  }
 }

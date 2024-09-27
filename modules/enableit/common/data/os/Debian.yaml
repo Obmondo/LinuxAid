@@ -8,8 +8,8 @@ common::services::disabled_services:
 common::package::default_packages:
   - 'molly-guard'
 
-common::software::oms_agent::__linux_azure_package: 'walinuxagent'
-common::software::oms_agent::__linux_azure_service: 'walinuxagent'
+common::software::walinuxagent::__linux_azure_package: 'walinuxagent'
+common::software::walinuxagent::__linux_azure_service: 'walinuxagent'
 
 common::system::selinux::enable: false
 
