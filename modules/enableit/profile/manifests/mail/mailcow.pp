@@ -154,7 +154,6 @@ class profile::mail::mailcow (
       ensure  => ensure_present($manage),
       content => epp('profile/mail/mailcow/docker-compose.yml.epp', {
         'install_dir'     => $install_dir,
-        'ssl_dir'         => "/etc/letsencrypt/live/${domain}/",
         'letsencrypt'     => $letsencrypt,
         'unbound_image'   => 'mailcow/unbound:1.23',
         'mysql_image'     => 'mariadb:10.5',
@@ -229,5 +228,10 @@ class profile::mail::mailcow (
       '/opt/obmondo/docker-compose/mailcow/docker-compose.yml',
     ],
     require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
+  }
+
+  # NOTE: lets stop postfix on the host
+  service { 'postfix':
+    ensure => stopped,
   }
 }
