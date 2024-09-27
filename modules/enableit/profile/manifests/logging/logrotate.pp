@@ -9,6 +9,13 @@ class profile::logging::logrotate (
   Enum['cron', 'service'] $__scheduling_method = 'cron',
 ) {
 
+  # The condition should be that if we are using SUSE OS, the logrotate group must be set to root.
+  if $facts['os']['family'] == 'Suse' {
+    $logrotate_group = 'root'
+  } else {
+    $logrotate_group = 'adm'
+  }
+
   $default_config = {
     dateext  => $dateext,
     compress => $compress,
@@ -104,7 +111,7 @@ class profile::logging::logrotate (
     postrotate    => '/usr/bin/pkill -HUP rsyslogd',
     create        => true,
     create_owner  => 'root',
-    create_group  => 'adm',
+    create_group  => $logrotate_group,
     create_mode   => '0640',
   }
 
