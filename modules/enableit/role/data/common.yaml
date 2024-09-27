@@ -60,7 +60,7 @@ role::package_management::repo::configurations:
       enable: false
       el7:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/7/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/7/'
         repodir: 'puppetlabs/yum/puppet7/el/7'
         package_format: 'rpm'
         exclude:
@@ -68,7 +68,7 @@ role::package_management::repo::configurations:
           - 'ppc64le'
       el8:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/8/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/8/'
         repodir: 'puppetlabs/yum/puppet7/el/8'
         package_format: 'rpm'
         exclude:
@@ -76,7 +76,7 @@ role::package_management::repo::configurations:
           - 'ppc64le'
       el9:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/9/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/9/'
         repodir: 'puppetlabs/yum/puppet7/el/9'
         package_format: 'rpm'
         exclude:
@@ -84,7 +84,7 @@ role::package_management::repo::configurations:
           - 'ppc64le'
       sles12:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/sles/12/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/12/'
         repodir: 'puppetlabs/sles/puppet7/12/'
         package_format: 'rpm'
         exclude:
@@ -92,7 +92,7 @@ role::package_management::repo::configurations:
           - 'ppc64le'
       sles15:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/sles/15/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/15/'
         repodir: 'puppetlabs/sles/puppet7/15/'
         package_format: 'rpm'
         exclude:
@@ -102,7 +102,7 @@ role::package_management::repo::configurations:
       enable: false
       all:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/apt'
+        mirror_url: 'https://rsync.puppet.com/packages/apt'
         repodir: 'puppetlabs/apt'
         key_ids:
           - 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
@@ -203,7 +203,7 @@ role::package_management::repo::configurations:
         key_ids:
           - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
           - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
-        mirror_url: 'rsync://dk.archive.ubuntu.com/ubuntu'
+        mirror_url: 'https://dk.archive.ubuntu.com/ubuntu'
         package_format: 'deb'
         repodir: 'apt/ubuntu'
         architectures:
@@ -234,7 +234,7 @@ role::package_management::repo::configurations:
         key_ids:
           - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
           - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
-        mirror_url: 'rsync://dk.ports.ubuntu.com/ubuntu-ports'
+        mirror_url: 'https://dk.ports.ubuntu.com/ubuntu-ports'
         package_format: 'deb'
         repodir: 'apt/ubuntu_arm64'
         architectures:
