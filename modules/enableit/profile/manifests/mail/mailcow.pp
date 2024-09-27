@@ -152,7 +152,7 @@ class profile::mail::mailcow (
     # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
     '/opt/obmondo/docker-compose/mailcow/docker-compose.yml':
       ensure  => ensure_present($manage),
-      content => epp('profile/docker-compose/mailcow/docker-compose.yaml.epp', {
+      content => epp('profile/mail/mailcow/docker-compose.yml.epp', {
         'install_dir'     => $install_dir,
         'ssl_dir'         => "/etc/letsencrypt/live/${domain}/",
         'letsencrypt'     => $letsencrypt,
