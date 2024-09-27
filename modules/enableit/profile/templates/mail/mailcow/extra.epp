@@ -1,5 +1,5 @@
 # Managed by LinuxAid
-myhostname = <%= $domain %>
+myhostname = <%= $myhostname %>
 <% $extra_settings.map |$key, $value| { %>
 <%= $key %> = <%= $value %>
 <% } %>

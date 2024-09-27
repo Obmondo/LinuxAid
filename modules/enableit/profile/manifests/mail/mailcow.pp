@@ -132,7 +132,6 @@ class profile::mail::mailcow (
         'SKIP_HTTP_VERIFICATION'        => 'y',
         'SKIP_CLAMD'                    => 'n',
         'SKIP_SOGO'                     => 'n',
-        'SKIP_SOLR'                     => 'y',
         'SOLR_HEAP'                     => 1024,
         'ALLOW_ADMIN_EMAIL_LOGIN'       => 'n',
         'USE_WATCHDOG'                  => 'y',
@@ -153,9 +152,9 @@ class profile::mail::mailcow (
     # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
     '/opt/obmondo/docker-compose/mailcow/docker-compose.yml':
       ensure  => ensure_present($manage),
-      content => epp('profile/docker-compose/mailcow/docker-compose.yaml.epp', {
+      content => epp('profile/mail/mailcow/docker-compose.yml.epp', {
         'install_dir'     => $install_dir,
-        'ssl_dir'         => "/etc/letsencrypt/live/${domain}/",
+        'letsencrypt'     => $letsencrypt,
         'unbound_image'   => 'mailcow/unbound:1.23',
         'mysql_image'     => 'mariadb:10.5',
         'redis_image'     => 'redis:7-alpine',
@@ -229,5 +228,10 @@ class profile::mail::mailcow (
       '/opt/obmondo/docker-compose/mailcow/docker-compose.yml',
     ],
     require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
+  }
+
+  # NOTE: lets stop postfix on the host
+  service { 'postfix':
+    ensure => stopped,
   }
 }
