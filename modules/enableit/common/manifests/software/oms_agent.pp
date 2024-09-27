@@ -7,9 +7,6 @@ class common::software::oms_agent (
   Optional[String]                  $workspace_id           = undef,
   Optional[String]                  $workspace_key          = undef,
   Optional[String]                  $checksum               = undef,
-  Eit_types::SimpleString           $__linux_azure_package  = undef,
-  Eit_types::SimpleString           $__linux_azure_service  = undef,
-  Optional[String]                  $waagent_memory_limit   = undef,
 ) inherits common {
 
   confine($enable, !$workspace_id, !$workspace_key,
