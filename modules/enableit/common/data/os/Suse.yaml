@@ -161,3 +161,4 @@ common::monitor::exporter::mtail::enable: false
 common::monitor::prom::env_file_path: '/etc/default'
 common::monitor::prom::usershell: '/usr/sbin/nologin'
 common::monitor::exporter::security::enable: true
+common::system::systemd::manage_resolved: true

@@ -170,3 +170,4 @@ common::system::services:
 
 common::monitor::prom::env_file_path: '/etc/sysconfig'
 common::monitor::exporter::security::enable: true
+common::system::systemd::manage_resolved: true
