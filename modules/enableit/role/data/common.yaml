@@ -54,7 +54,7 @@ role::package_management::repo::configurations:
         mirror_url: 'https://archives.jenkins.io/debian-stable/'
         repodir: 'jenkins/debian-stable'
         package_format: 'deb'
-        deb_sync_type: 'wget'
+        deb_sync_type: 'debmirror'
   puppetlabs:
     yum:
       enable: false
