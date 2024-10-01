@@ -40,13 +40,21 @@ class repository::mirror (
     $_repo_config.map |$_provider, $_supported_dist| {
       $_supported_dist.map |$_dist, $_configs| {
         if type($_configs) =~ Type[Hash] {
-          $_configs['repodir']
+          { 'repo_name' => $_repo_name,
+            'provider' => $_provider,
+            'repodir' => $_configs['repodir']
+          }
         }
       }
     }.flatten.delete_undef_values
-  }.flatten.then |$_repodir | {
-    if $_repodir.size != $_repodir.unique.size {
-      fail('One or more repos of the same type (rpm/deb) use the same repodir. Exiting..')
+  }.flatten.group_by |$_entry| {
+    $_entry['repodir']
+  }.each |$repodir, $entries| {
+    $providers = $entries.map |$entry| { $entry['provider'] }.unique
+    $repo_names = $entries.map |$entry| { $entry['repo_name'] }.unique
+
+    if $providers.size > 1 or $repo_names.size > 1 {
+      fail("Conflicting repodir: ${repodir}. Providers: ${providers.join(', ')}. Repo Names: ${repo_names.join(', ')}")
     }
   }
 
