@@ -6,7 +6,6 @@ profile::system::authentication::sssd::extra_packages:
   - 'sssd-krb5-common'
   - 'sssd-ldap'
   - 'sssd-tools'
-  - 'sssd-common'
   - 'sssd-ipa'
   - 'sssd-dbus'
   - 'sssd-proxy'
