@@ -1,7 +1,7 @@
 type Repository::Mirrors::Apt_Settings = Struct[{
   enable         => Boolean,
   mirror_url     => Optional[String],
-  repodir        => Optional[String],
+  repodir        => String,
   package_format => Optional[Enum['deb']],
   architectures  => Optional[Array[Enum['amd64', 'arm64', 'all']]],
   deb_sync_type  => Optional[Enum['debmirror']],
