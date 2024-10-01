@@ -4,6 +4,7 @@ type Repository::Mirrors::Yum_Settings = Struct[{
   repodir        => String,
   package_format => Optional[Enum['rpm']],
   exclude        => Optional[Array[String]],
+  architectures  => Optional[Array[Enum['x86_64']]],
   sections       => Optional[Array[Enum[
     'prod',
     'stable',
