@@ -30,4 +30,8 @@ class role::projectmanagement::perforce (
   if git_connector {
     include role::projectmanagement::perforce::git_connector
   }
+
+  if icmanage {
+    include role::projectmanagement::perforce::icmanage
+  }
 }
