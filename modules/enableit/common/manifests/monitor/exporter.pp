@@ -23,5 +23,6 @@ class common::monitor::exporter (
     include common::monitor::exporter::filestat
     include common::monitor::exporter::security
     include common::monitor::exporter::blackbox
+    include common::monitor::exporter::puppetagent
   }
 }
