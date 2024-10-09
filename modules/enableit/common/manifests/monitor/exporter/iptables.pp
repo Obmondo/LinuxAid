@@ -77,12 +77,4 @@ class common::monitor::exporter::iptables (
   Exec <| tag == 'systemd-iptables_exporter.service-systemctl-daemon-reload' |> {
     noop => $noop_value,
   }
-
-  # The upstream module does not have support for removing the unit file
-  # will rase the PR for that later will remove from this resources file
-  if !$enable {
-    File { '/etc/systemd/system/iptables_exporter.service':
-      ensure => absent,
-    }
-  }
 }

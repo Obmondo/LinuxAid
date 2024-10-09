@@ -107,6 +107,12 @@ class common::monitor::exporter::node (
     tag               => $::trusted['certname'],
   }
 
+  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
+  # upstream module cant handle noop. (which is correct)
+  Exec <| tag == 'systemd-node_exporter.service-systemctl-daemon-reload' |> {
+    noop => $noop_value,
+  }
+
   firewall { '100 allow node exporter':
     ensure   => ensure_present($enable and $listen_address !~ /^127\./),
     proto    => 'tcp',
@@ -115,11 +121,4 @@ class common::monitor::exporter::node (
     jump     => 'accept',
   }
 
-  # The upstream module does not have support for removing the unit file
-  # will rase the PR for that later will remove from this resources file
-  if !$enable {
-    File { '/etc/systemd/system/node_exporter.service':
-      ensure => absent,
-    }
-  }
 }

@@ -22,4 +22,10 @@ class common::monitor::exporter::mysql (
     scrape_port       => Integer($listen_port),
     scrape_host       => $trusted['certname'],
   }
+
+  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
+  # upstream module cant handle noop. (which is correct)
+  Exec <| tag == 'systemd-mysqld_exporter.service-systemctl-daemon-reload' |> {
+    noop => $noop_value,
+  }
 }

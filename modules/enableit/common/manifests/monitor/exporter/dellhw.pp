@@ -41,14 +41,6 @@ class common::monitor::exporter::dellhw (
     }
   }
 
-  # The upstream module does not have support for removing the unit file 
-  # will rase the PR for that later will remove from this resources file
-  if !$enable {
-    File { '/etc/systemd/system/dellhw_exporter.service':
-      ensure => absent,
-    }
-  }
-
   class { 'prometheus::dellhw_exporter':
     package_name      => 'obmondo-dellhw-exporter',
     package_ensure    => ensure_latest($enable),
