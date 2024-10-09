@@ -6,7 +6,7 @@ exec >> /var/log/razor.log 2>&1
 
 
 # APT configuration and system update
-sed -i s$'\001'<%= repo_url %>$'\001'http://dk.archive.ubuntu.com/ubuntu$'\001' /etc/apt/sources.list
+sed -i s$'\001'<%= repo_url %>$'\001'https://mirrors.dotsrc.org/ubuntu$'\001' /etc/apt/sources.list
 
 apt-get -y update
 [ "$?" -eq 0 ] || curl -s <%= log_url("apt_update_fail", :error) %>
