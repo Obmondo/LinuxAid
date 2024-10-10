@@ -97,6 +97,7 @@ class profile::software::oms_agent (
     ensure  => ensure_latest($enable),
     noop    => $noop_value,
     require => if $enable { File['/etc/omsagent-onboard.conf'] },
+    uninstall_options => ['--nodeps']
   }
 
   service { $service:
