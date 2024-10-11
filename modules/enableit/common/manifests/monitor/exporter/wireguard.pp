@@ -53,11 +53,9 @@ class common::monitor::exporter::wireguard (
     scrape_job_name   => 'wireguard',
   }
 
-  # The upstream module does not have support for removing the unit file 
-  # will rase the PR for that later will remove from this resources file
-  if !$enable {
-    File { '/etc/systemd/system/wireguard_exporter.service':
-      ensure => absent,
-    }
+  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
+  # upstream module cant handle noop. (which is correct)
+  Exec <| tag == 'systemd-wireguard_exporter.service-systemctl-daemon-reload' |> {
+    noop => $noop_value,
   }
 }
