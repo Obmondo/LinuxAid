@@ -2,19 +2,23 @@
 class profile::storage::samba (
   String                            $workgroup         = $::common::storage::samba::workgroup,
   String                            $server_string     = $::common::storage::samba::server_string,
-  Enum['ADS']                       $security          = $::common::storage::samba::security,
-  Boolean                           $local_master      = $::common::storage::samba::local_master,
-  Boolean                           $domain_master     = $::common::storage::samba::domain_master,
-  Boolean                           $preferred_master  = $::common::storage::samba::preferred_master,
-  Eit_types::Domain                 $realm             = $::common::storage::samba::realm,
-  Boolean                           $load_printers     = $::common::storage::samba::load_printers,
+  Enum['ADS', 'user']               $security          = $::common::storage::samba::security,
+  Optional[Boolean]                 $local_master      = $::common::storage::samba::local_master,
+  Optional[Boolean]                 $domain_master     = $::common::storage::samba::domain_master,
+  Optional[Boolean]                 $preferred_master  = $::common::storage::samba::preferred_master,
+  Optional[Eit_types::Domain]       $realm             = $::common::storage::samba::realm,
+  Optional[Boolean]                 $load_printers     = $::common::storage::samba::load_printers,
   Optional[Stdlib::Absolutepath]    $printcap_name     = $::common::storage::samba::printcap_name,
-  Enum['system keytab']             $kerberos_method   = $::common::storage::samba::kerberos_method,
   Eit_types::Storage::Samba::Shares $shares            = $::common::storage::samba::shares,
   Array[String]                     $listen_interfaces = $::common::storage::samba::listen_interfaces,
-  Boolean                           $override_dfree    = $::common::storage::samba::override_dfree,
-
-  Array $idmap_config = $::common::storage::samba::idmap_config,
+  Eit_types::Storage::Samba::Global $global_options    = $::common::storage::samba::global_options,
+  Enum[
+    'Never',
+    'Bad User',
+    'Bad Password',
+    'Bad Uid'
+  ]                                 $map_to_guest      = $::common::storage::samba::map_to_guest,
+  Array                             $idmap_config      = $::common::storage::samba::idmap_config,
 
 ) {
 
@@ -25,10 +29,6 @@ class profile::storage::samba (
     and $facts.dig('os', 'family') != 'RedHat'
     or ($facts.dig('os', 'family') == 'RedHat'
         and Integer($facts.dig('os', 'release', 'major')) > 6))
-
-  if $security == 'ADS' and $kerberos_method == 'system keytab' {
-    Class['realmd']->Class['samba::server']
-  }
 
   # Convert the booleans to yes/no
   $_shares = $shares.reduce({}) |$acc, $_x| {
@@ -48,7 +48,22 @@ class profile::storage::samba (
     $acc + {$_name => $_config_array}
   }
 
-  if $override_dfree {
+  $extra_global_options = $global_options.reduce({}) |$acc, $_option| {
+    [$_option_name, $_option_value] = $_option
+    $_option_value_formatted = $_option_value ? {
+      Array   => $_option_value.join(' '),
+      Boolean => to_yesno($_option_value),
+      default => $_option_value,
+    }
+    $_specified_option_name = regsubst($_option_name, '_', ' ', 'G')
+    $acc + { $_specified_option_name => $_option_value_formatted }
+  }
+
+  if $security == 'ADS' and $extra_global_options['kerberos method'] == 'system keytab' {
+    Class['realmd']->Class['samba::server']
+  }
+
+  if $extra_global_options['dfree command'] {
     include ::samba::params
 
     file { '/usr/local/share/samba':
@@ -76,13 +91,7 @@ class profile::storage::samba (
     printcap_name      => pick($printcap_name, '/dev/null'),
     manage_winbind     => !$_use_wbclient_over_winbind,
     manage_libwbclient => $_use_wbclient_over_winbind,
-    global_options     => {
-      'kerberos method' => $kerberos_method,
-    } + if $override_dfree {
-      {
-        'dfree command' => '/usr/local/share/samba/dfree.sh',
-      }
-    }.delete_undef_values,
+    global_options     => $extra_global_options,
     shares             => $_shares,
     idmap_config       => $idmap_config,
     interfaces         => $listen_interfaces,

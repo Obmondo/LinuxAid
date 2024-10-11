@@ -31,8 +31,8 @@ class samba::server (
   Stdlib::Absolutepath           $log_file               = '/var/log/samba/log.%m',
   Integer                        $max_log_size_kilobytes = 10000,
   String                         $passdb_backend         = 'tdbsam',
-  String                         $realm                  = undef,
-  Boolean                        $load_printers          = undef,
+  Optional[String]               $realm                  = undef,
+  Optional[Boolean]              $load_printers          = undef,
   Optional[Stdlib::Absolutepath] $printcap_name          = undef,
   Boolean                        $disable_spoolss        = true,
 
@@ -45,12 +45,12 @@ class samba::server (
     'Bad User',
     'Bad Password',
     'Bad Uid'
-  ]                              $map_to_guest           = 'Never',
-  Eit_types::Username            $guest_account          = 'nobody',
-  Integer[0,255]                 $os_level               = 20,
-  Variant[Boolean, Enum['auto']] $preferred_master       = undef,
-  Hash                           $global_options         = {},
-  Hash                           $shares                 = {},
+  ]                                        $map_to_guest           = 'Never',
+  Eit_types::Username                      $guest_account          = 'nobody',
+  Integer[0,255]                           $os_level               = 20,
+  Optional[Variant[Boolean, Enum['auto']]] $preferred_master       = undef,
+  Hash                                     $global_options         = {},
+  Hash                                     $shares                 = {},
 
   # SELinux options
   Boolean              $selinux_enable_home_dirs = false,
