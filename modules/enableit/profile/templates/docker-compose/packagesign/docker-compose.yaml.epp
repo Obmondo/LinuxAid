@@ -1,7 +1,7 @@
 services:
   <% if $provider == "gitlab" and $packagesign { %>
   server:
-    image:  <%= $registry_path %>/packagesign-server:<%= $packagesign_tag %>
+    image:  <%= $registry_path %>/packagesign-server:<%= $server_tag %>
     ports:
       - 10090:8080
     depends_on:
@@ -19,7 +19,7 @@ services:
 
   <% if $packagesign { %>
   script:
-    image: <%= $registry_path %>/packagesign-script:<%= $packagesign_tag %>
+    image: <%= $registry_path %>/packagesign-script:<%= $script_tag %>
     environment:
       - PASS=${PASS}
     volumes:
