@@ -10,27 +10,38 @@ class common::backup::gitea (
     source => 'puppet:///modules/common/gitea/gitea-backup.sh',
   }
 
-common::services::systemd { 'gitea-backup.service':
-  ensure     => 'stopped',
-  noop_value => $noop_value,
-  unit       => {
-    'Description' => 'Gitea Backup',
-    'Wants'       => 'gitea-backup.timer',  # Depend on the timer unit
-  },
-  service    => {
-    'Type'            => 'simple',
-    'RemainAfterExit' => 'yes',
-    'ExecStart'       => '/opt/obmondo/bin/gitea-backup',
-  }
-}
+    $_timer = @("EOT"/$n)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Requires=gitea-backup.service
+      Description=Run gitea backup
 
-common::services::systemd { 'gitea-backup.timer':
-  ensure     => ensure_present($enable),
-  noop_value => $noop_value,
-  timer      => {
-    'OnCalendar'         => 'daily',
-    'RandomizedDelaySec' => '10m',
-    'Persistent'         => 'true',
-  },
-}
+      [Install]
+      WantedBy=timers.target
+
+      [Timer]
+      
+      OnCalendar=daily
+      Persistent=true
+      Unit=gitea-backup.service
+      RandomizedDelaySec=1h
+      | EOT
+
+    $_service = @(EOT)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Run Gitea backup based on timer
+      Wants=gitea-backup.timer
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/obmondo/bin/gitea-backup
+      | EOT
+
+    systemd::timer { 'gitea-backup.timer':
+      timer_content   => $_timer,
+      service_content => $_service,
+      active          => true,
+      enable          => true,
+    }
 }
