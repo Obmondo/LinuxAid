@@ -30,7 +30,7 @@ services:
   <% } -%>
 
   nginx:
-    image: ghcr.io/obmondo/dockerfiles/repository-mirror:1.27.0
+    image: <%= $nginx_path %>:<%= $nginx_tag %>
     ports:
       - 127.0.0.1:10080:80
     volumes:

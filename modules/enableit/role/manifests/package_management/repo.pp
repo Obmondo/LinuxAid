@@ -17,7 +17,8 @@ class role::package_management::repo (
   Boolean                          $snapshot,
 
   Repository::Mirrors::Configurations $configurations,
-
+  String                           $nginx_path       = 'ghcr.io/obmondo/dockerfiles/repository-mirror',
+  String                           $nginx_tag        = '1.27.0',
   Optional[String]                 $signing_password = undef,
   Optional[Stdlib::HTTPSUrl]       $gitserver_url    = undef,
   Optional[String]                 $gitserver_token  = undef,
