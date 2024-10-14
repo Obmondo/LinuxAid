@@ -7,7 +7,8 @@ class profile::package_management::packagesign (
   Hash                 $locations        = $role::package_management::repo::locations,
   Array                $volumes          = $role::package_management::repo::volumes,
   String               $registry_path    = $role::package_management::repo::registry_path,
-  String               $packagesign_tag  = $role::package_management::repo::packagesign_tag,
+  String               $server_tag       = $role::package_management::repo::server_tag,
+  String               $script_tag       = $role::package_management::repo::script_tag,
 
   Optional[Enum['gitlab']]   $provider         = $role::package_management::repo::provider,
   Optional[String]           $signing_password = $role::package_management::repo::signing_password,
@@ -29,13 +30,14 @@ class profile::package_management::packagesign (
     '/opt/obmondo/docker-compose/packagesign/docker-compose.yaml':
       ensure  => ensure_present($manage),
       content => epp('profile/docker-compose/packagesign/docker-compose.yaml.epp', {
-        'basedir'         => $basedir,
-        'baseurl'         => $gitserver_url,
-        'volumes'         => $volumes,
-        'provider'        => $provider,
-        'registry_path'   => $registry_path,
-        'packagesign_tag' => $packagesign_tag,
-        'packagesign'     => $packagesign,
+        'basedir'       => $basedir,
+        'baseurl'       => $gitserver_url,
+        'volumes'       => $volumes,
+        'provider'      => $provider,
+        'registry_path' => $registry_path,
+        'server_tag'    => $server_tag,
+        'script_tag'    => $script_tag,
+        'packagesign'   => $packagesign,
       }),
     ;
   }
