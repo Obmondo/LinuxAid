@@ -17,8 +17,9 @@ class common::monitor::exporter::mysql (
     service_ensure    => ensure_service($enable),
     user              => 'mysqld_exporter',
     group             => 'mysqld_exporter',
+    cnf_user          => $username,
+    cnf_password      => $password,
     export_scrape_job => $enable,
-    extra_options     => "DATA_SOURCE_NAME=${username}:${password}@(${mysql_monitor_hostname}:${mysql_port})/",
     scrape_port       => Integer($listen_port),
     scrape_host       => $trusted['certname'],
   }
