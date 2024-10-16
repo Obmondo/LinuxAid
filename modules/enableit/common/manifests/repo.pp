@@ -15,7 +15,12 @@ class common::repo (
   Array                     $rhrepos         = [],
   Hash[String, Hash]        $yumrepos        = {},
   Hash[String, Hash]        $zypprepos       = {},
-  Hash[String, Hash]        $aptrepos        = {},
+  Hash[String, Struct[
+    {
+    url         => String,
+    key_content => Optional[String[1]],
+    key_source  => Optional[Stdlib::Filesource],
+    }]]                     $aptrepos        = {},
   Boolean                   $purge           = false,
   Boolean                   $upstream        = false,
   Enum['http', 'https']     $source_protocol = 'https',
@@ -144,9 +149,10 @@ Pl  ease change the URL to contain an EPP style template.")
           }
 
           apt::keyring { "${key}.asc":
-            ensure => present,
-            source => $value['key_source'],
-            noop   => $noop_value,
+            ensure  => present,
+            source  => $value['key_source'],
+            content => $value['key_content'],
+            noop    => $noop_value,
           }
         }
       }
