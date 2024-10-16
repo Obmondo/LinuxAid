@@ -3,7 +3,9 @@ lookup_options:
   role::db::elasticsearch::instances:
     merge: 'deep'
   role::package_management::repo::configurations:
-    merge: 'deep'
+    merge:
+       strategy: 'deep'
+       sort_merged_arrays: true
 
 # GitLab CI Runner
 role::projectmanagement::gitlab_ci_runner::runners_defaults:
