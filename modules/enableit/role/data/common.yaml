@@ -116,6 +116,7 @@ role::package_management::repo::configurations:
         architectures:
           - 'amd64'
           - 'arm64'
+          - 'all'
   docker:
     apt:
       enable: false
