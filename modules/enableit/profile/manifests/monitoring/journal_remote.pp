@@ -33,4 +33,15 @@ class profile::monitoring::journal_remote (
     dport  => 19532,
     jump   => 'accept',
   }
+
+  logrotate::rule { 'journal-remote':
+    ensure        => 'present',
+    path          => '/var/log/journal/remote/*.journal',
+    rotate_every  => 'week',
+    rotate        => 6,
+    compress      => true,
+    delaycompress => false,
+    missingok     => true,
+    create        => false
+  }
 }
