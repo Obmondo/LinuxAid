@@ -3,7 +3,7 @@ class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,
   Stdlib::Fqdn                $domain,
-  Stdlib::Unixpath            $backup_dir,
+  Stdlib::Unixpath            $backup_dir       = '/opt/backup',
   Boolean                     $manage           = true,
   Boolean                     $letsencrypt      = false,
   Optional[Eit_types::Email]  $acme_contact     = undef,
