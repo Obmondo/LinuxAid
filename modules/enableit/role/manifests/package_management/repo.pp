@@ -26,11 +26,11 @@ class role::package_management::repo (
 
 ) inherits role::package_management {
 
-  confine($packagesign, !($signing_password and $gitserver_url and $gitserver_token and $server_tag),
-    'Enabling packagesigni-server requires **signing_password** and **gitserver_url** and **gitserver_token** and **server_tag** to be set')
+  confine($packagesign, !($gitserver_url and $gitserver_token and $server_tag),
+    'Enabling packagesign-server requires **gitserver_url** and **gitserver_token** and **server_tag** to be set')
 
-  confine($packagesign, !($script_tag),
-    'Enabling packagesign-script requires **script_tag** to be set')
+  confine($packagesign, !($script_tag and $signing_password),
+    'Enabling packagesign-script requires **script_tag** and **signing_password** to be set')
 
   contain role::virtualization::docker
   contain role::web::haproxy
