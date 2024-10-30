@@ -35,3 +35,11 @@ services:
       - 127.0.0.1:10080:80
     volumes:
       - <%= $basedir -%>:/var/cache/packagesign
+
+  <% if $snapshot { %>
+  snapshot:
+    image: <%= $registry_path %>/repository-snapshot:<%= $snapshot_tag %>
+    volumes:
+      - <%= $basedir -%>:/var/cache/packagesign
+      - /etc/obmondo/repository-mirror/repos:/etc/obmondo/repository-mirror/repos
+  <% } -%>

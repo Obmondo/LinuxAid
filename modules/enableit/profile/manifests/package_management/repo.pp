@@ -1,11 +1,9 @@
 # repository mirror and snapshot
 class profile::package_management::repo (
   Boolean                             $manage           = $role::package_management::repo::manage,
-  Boolean                             $snapshot         = $role::package_management::repo::snapshot,
   Eit_types::SystemdTimer::Weekday    $weekday          = $role::package_management::repo::weekday,
   Eit_types::User                     $user             = $role::package_management::repo::user,
   Stdlib::Unixpath                    $basedir          = $role::package_management::repo::basedir,
-  String                              $registry_path    = $role::package_management::repo::registry_path,
   Repository::Mirrors::Configurations $configurations   = $role::package_management::repo::configurations,
 ) {
 
@@ -15,6 +13,5 @@ class profile::package_management::repo (
     user            => $user,
     basedir         => $basedir,
     configurations  => $configurations,
-    snapshot        => $snapshot,
   }
 }

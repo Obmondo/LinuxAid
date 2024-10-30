@@ -2,21 +2,21 @@
 class role::package_management::repo (
   Eit_types::User                  $user,
   Stdlib::Unixpath                 $basedir,
-  Stdlib::Fqdn                     $domain,
   Boolean                          $ssl,
   Optional[String]                 $ssl_cert,
   Optional[String]                 $ssl_key,
   String                           $registry_path,
   Eit_types::SystemdTimer::Weekday $weekday,
   Boolean                          $packagesign,
-  String                           $server_tag,
-  String                           $script_tag,
+  Optional[String]                 $server_tag       = undef,
+  Optional[String]                 $script_tag       = undef,
   Optional[Array]                  $volumes,
   Boolean                          $manage,
   Hash                             $locations,
   Boolean                          $snapshot,
 
   Repository::Mirrors::Configurations $configurations,
+  String                           $snapshot_tag,
   String                           $nginx_path       = 'ghcr.io/obmondo/dockerfiles/repository-mirror',
   String                           $nginx_tag        = '1.27.0',
   Optional[String]                 $signing_password = undef,
@@ -26,8 +26,11 @@ class role::package_management::repo (
 
 ) inherits role::package_management {
 
-  confine($packagesign, !($signing_password and $gitserver_url and $gitserver_token),
-    'Enabling packagesign requires **signing_password** and **gitserver_url** and **gitserver_token** to be set')
+  confine($packagesign, !($gitserver_url and $gitserver_token and $server_tag),
+    'Enabling packagesign-server requires **gitserver_url** and **gitserver_token** and **server_tag** to be set')
+
+  confine($packagesign, !($script_tag and $signing_password),
+    'Enabling packagesign-script requires **script_tag** and **signing_password** to be set')
 
   contain role::virtualization::docker
   contain role::web::haproxy
