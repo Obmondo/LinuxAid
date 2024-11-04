@@ -14,7 +14,7 @@ role::package_management::repo::apt: {}
 role::package_management::repo::locations: {}
 role::package_management::repo::registry_path: 'ghcr.io/obmondo/dockerfiles'
 role::package_management::repo::packagesign: true
-role::package_management::repo::packagesign_tag: 'v3.1.0'
+role::package_management::repo::packagesign_tag: 'v3.1.5'
 role::package_management::repo::snapshot_tag: '1.0.0'
 role::package_management::repo::volumes:
   - /var:/var
