@@ -102,7 +102,7 @@ role::package_management::repo::configurations:
       enable: false
       all:
         enable: false
-        mirror_url: 'https://rsync.puppet.com/packages/apt'
+        mirror_url: 'rsync://rsync.puppet.com/packages/apt'
         repodir: 'puppetlabs/apt'
         key_ids:
           - 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
