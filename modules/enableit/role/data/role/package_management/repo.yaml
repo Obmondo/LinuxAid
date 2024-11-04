@@ -16,7 +16,7 @@ role::package_management::repo::registry_path: 'ghcr.io/obmondo/dockerfiles'
 role::package_management::repo::packagesign: true
 role::package_management::repo::provider:
 role::package_management::repo::script_tag: 'v3.1.5'
-role::package_management::repo::snapshot_tag: '1.0.0'
+role::package_management::repo::snapshot_tag: 'v3.1.5'
 role::package_management::repo::server_tag:
 role::package_management::repo::nginx_tag: '1.27.0'
 role::package_management::repo::nginx_path: ghcr.io/obmondo/dockerfiles/repository-mirror
