@@ -1,35 +1,36 @@
 # Repo Mirror
 class role::package_management::repo (
-  Eit_types::User                  $user,
-  Stdlib::Unixpath                 $basedir,
-  Boolean                          $ssl,
-  Optional[String]                 $ssl_cert,
-  Optional[String]                 $ssl_key,
-  String                           $registry_path,
-  Eit_types::SystemdTimer::Weekday $weekday,
-  Boolean                          $packagesign,
-  Optional[String]                 $server_tag       = undef,
-  Optional[String]                 $script_tag       = undef,
-  Optional[Array]                  $volumes,
-  Boolean                          $manage,
-  Hash                             $locations,
-  Boolean                          $snapshot,
+  Eit_types::User  $user,
+  Stdlib::Unixpath $basedir,
+  Boolean          $ssl,
+  Optional[String] $ssl_cert,
+  Optional[String] $ssl_key,
+  String           $registry_path,
+  Boolean          $packagesign,
+  Optional[Array]  $volumes,
+  Boolean          $manage,
+  Hash             $locations,
+  Boolean          $snapshot,
+  String           $signing_password,
+  String           $snapshot_tag,
+  String           $nginx_path,
+  String           $nginx_tag,
+  String           $script_tag,
 
   Repository::Mirrors::Configurations $configurations,
-  String                           $snapshot_tag,
-  String                           $nginx_path       = 'ghcr.io/obmondo/dockerfiles/repository-mirror',
-  String                           $nginx_tag        = '1.27.0',
-  Optional[String]                 $signing_password = undef,
-  Optional[Stdlib::HTTPSUrl]       $gitserver_url    = undef,
-  Optional[String]                 $gitserver_token  = undef,
-  Optional[Enum['gitlab']]         $provider         = undef,
+  Eit_types::SystemdTimer::Weekday    $weekday,
+
+  Optional[String]           $server_tag,
+  Optional[Stdlib::HTTPSUrl] $gitserver_url,
+  Optional[String]           $gitserver_token,
+  Optional[Enum['gitlab']]   $provider,
 
 ) inherits role::package_management {
 
-  confine($packagesign, !($gitserver_url and $gitserver_token and $server_tag),
+  confine($server_tag, !($gitserver_url and $gitserver_token),
     'Enabling packagesign-server requires **gitserver_url** and **gitserver_token** and **server_tag** to be set')
 
-  confine($packagesign, !($script_tag and $signing_password),
+  confine($script_tag, !($script_tag and $signing_password),
     'Enabling packagesign-script requires **script_tag** and **signing_password** to be set')
 
   contain role::virtualization::docker
