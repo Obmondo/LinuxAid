@@ -326,7 +326,6 @@ common::monitor::prom::server::collect_scrape_jobs:
   - job_name: dellhw
   - job_name: cadvisor
   - job_name: security
-  - job_name: puppetagent
 
 common::monitor::exporter::node::lib_directory: '/var/lib/node_exporter'
 common::monitor::exporter::node::textfile_directory: '/var/lib/node_exporter/textfile_collector'
