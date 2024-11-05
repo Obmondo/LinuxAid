@@ -11,11 +11,11 @@ class role::package_management::repo (
   Boolean          $manage,
   Hash             $locations,
   Boolean          $snapshot,
-  String           $signing_password,
+  Optional[String] $signing_password,
   String           $snapshot_tag,
   String           $nginx_path,
   String           $nginx_tag,
-  String           $script_tag,
+  Optional[String] $script_tag,
 
   Repository::Mirrors::Configurations $configurations,
   Eit_types::SystemdTimer::Weekday    $weekday,
@@ -30,7 +30,7 @@ class role::package_management::repo (
   confine($server_tag, !($gitserver_url and $gitserver_token),
     'Enabling packagesign-server requires **gitserver_url** and **gitserver_token** and **server_tag** to be set')
 
-  confine($script_tag, !($script_tag and $signing_password),
+  confine($script_tag, !($signing_password),
     'Enabling packagesign-script requires **script_tag** and **signing_password** to be set')
 
   contain role::virtualization::docker
