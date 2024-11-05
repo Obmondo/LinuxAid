@@ -162,7 +162,9 @@ class profile::software::oms_agent (
       recurse => 1,
       noop    => $noop_value,
     }
+  }
 
+  if $manage and !$enable {
     # Remove systemd unit
     tidy { 'ms omsagent service with uuid':
       path    => '/usr/lib/systemd/system',
