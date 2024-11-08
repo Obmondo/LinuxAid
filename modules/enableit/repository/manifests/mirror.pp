@@ -4,7 +4,6 @@
 # http://launchpadlibrarian.net/541793181/debmirror_2.34ubuntu1_all.deb
 class repository::mirror (
   Boolean                          $enable,
-  Boolean                          $snapshot,
   Eit_types::SystemdTimer::Weekday $weekday,
   Eit_types::User                  $user,
   Stdlib::Unixpath                 $basedir,
@@ -17,10 +16,8 @@ class repository::mirror (
 ) {
 
   include repository::package
-  include repository::snapshot
 
-  # Lets have the script and the script directory present incase customer leaves
-  # Obmondo
+  # Lets have the script and the script directory present incase customer stop subscription obn obmondo
   file { [
     $config_dir,
     $repo_config_dir,
@@ -36,7 +33,9 @@ class repository::mirror (
     ensure => ensure_latest($enable),
   }
 
-  $configurations.map |$_repo_name, $_repo_config| {
+  $_configurations = repos_deep_merge(lookup('repository::mirror::default_configurations'), $configurations)
+
+  $_configurations.map |$_repo_name, $_repo_config| {
     $_repo_config.map |$_provider, $_supported_dist| {
       $_supported_dist.map |$_dist, $_configs| {
         if type($_configs) =~ Type[Hash] {

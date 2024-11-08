@@ -4,3 +4,233 @@ repository::mirror::weekday: 'Sun'
 repository::mirror::user: 'www-data'
 repository::mirror::repodir: '/var/lib/repository'
 repository::mirror::snapshot: true
+repository::mirror::default_configurations:
+  epel:
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'https://dl.fedoraproject.org/pub/'
+        package_format: 'rpm'
+        repodir: 'yum/epel'
+        architectures: ['x86_64']
+        dists: ['7', '8', '9']
+  jenkins:
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'https://archives.jenkins.io/redhat-stable/'
+        repodir: 'jenkins/redhat-stable'
+        package_format: 'rpm'
+    apt:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'https://archives.jenkins.io/debian-stable/'
+        repodir: 'jenkins/debian-stable'
+        package_format: 'deb'
+        deb_sync_type: 'debmirror'
+  puppetlabs:
+    yum:
+      enable: false
+      el7:
+        enable: false
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/7/'
+        repodir: 'puppetlabs/yum/puppet7/el/7'
+        package_format: 'rpm'
+        exclude:
+          - 'aarch64'
+          - 'ppc64le'
+      el8:
+        enable: false
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/8/'
+        repodir: 'puppetlabs/yum/puppet7/el/8'
+        package_format: 'rpm'
+        exclude:
+          - 'aarch64'
+          - 'ppc64le'
+      el9:
+        enable: false
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/9/'
+        repodir: 'puppetlabs/yum/puppet7/el/9'
+        package_format: 'rpm'
+        exclude:
+          - 'aarch64'
+          - 'ppc64le'
+      sles12:
+        enable: false
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/12/'
+        repodir: 'puppetlabs/sles/puppet7/12/'
+        package_format: 'rpm'
+        exclude:
+          - 'aarch64'
+          - 'ppc64le'
+      sles15:
+        enable: false
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/15/'
+        repodir: 'puppetlabs/sles/puppet7/15/'
+        package_format: 'rpm'
+        exclude:
+          - 'aarch64'
+          - 'ppc64le'
+    apt:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'rsync://rsync.puppet.com/packages/apt'
+        repodir: 'puppetlabs/apt'
+        key_ids:
+          - 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
+        sections:
+          - 'puppet7'
+        dists:
+          - 'focal'
+          - 'jammy'
+          - 'noble'
+        package_format: 'deb'
+        architectures:
+          - 'amd64'
+          - 'arm64'
+          - 'all'
+  docker:
+    apt:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'https://download.docker.com/linux/ubuntu'
+        dists: ['focal', 'jammy', 'noble']
+        architectures: ['amd64']
+        sections: ['stable']
+        repodir: 'docker/apt'
+        package_format: 'deb'
+        key_ids:
+          - '9DC858229FC7DD38854AE2D88D81803C0EBFCD88'
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: 'https://download.docker.com/linux/centos'
+        dists: ['7', '8', '9']
+        architectures: ['x86_64']
+        sections: ['stable']
+        repodir: 'docker/yum'
+        package_format: 'rpm'
+  microsoft:
+    apt:
+      enable: false
+      focal:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/ubuntu/20.04/prod'
+        dists: ['focal']
+        architectures: ['amd64']
+        sections: ['main']
+        repodir: 'microsoft/apt/focal'
+        package_format: 'deb'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+      jammy:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/ubuntu/22.04/prod'
+        dists: ['jammy']
+        architectures: ['amd64']
+        sections: ['main']
+        repodir: 'microsoft/apt/jammy'
+        package_format: 'deb'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+      noble:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/ubuntu/24.04/prod'
+        dists: ['noble']
+        architectures: ['amd64']
+        sections: ['main']
+        repodir: 'microsoft/apt/noble'
+        package_format: 'deb'
+        key_ids:
+          - 'BC528686B50D79E339D3721CEB3E94ADBE1229CF'
+    yum:
+      enable: false
+      el7:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/centos'
+        dists: ['7']
+        sections: ['prod']
+        repodir: 'microsoft/yum'
+        package_format: 'rpm'
+      el8:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/centos'
+        dists: ['8']
+        sections: ['prod']
+        repodir: 'microsoft/yum'
+        package_format: 'rpm'
+      el9:
+        enable: false
+        mirror_url: 'https://packages.microsoft.com/rhel'
+        dists: ['9']
+        sections: ['prod']
+        repodir: 'microsoft/yum'
+        package_format: 'rpm'
+  ubuntu:
+    apt:
+      enable: false
+      all:
+        enable: false
+        key_ids:
+          - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+          - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
+        mirror_url: 'https://mirrors.dotsrc.org/ubuntu/'
+        package_format: 'deb'
+        repodir: 'apt/ubuntu'
+        architectures:
+          - 'amd64'
+        sections:
+          - 'main'
+          - 'restricted'
+          - 'universe'
+          - 'multiverse'
+        dists:
+          - 'focal'
+          - 'focal-backports'
+          - 'focal-security'
+          - 'focal-updates'
+          - 'jammy'
+          - 'jammy-backports'
+          - 'jammy-security'
+          - 'jammy-updates'
+          - 'noble'
+          - 'noble-backports'
+          - 'noble-security'
+          - 'noble-updates'
+  ubuntu_arm64:
+    apt:
+      enable: false
+      all:
+        enable: false
+        key_ids:
+          - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
+          - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
+        mirror_url: 'http://dk.ports.ubuntu.com/ubuntu-ports'
+        package_format: 'deb'
+        repodir: 'apt/ubuntu_arm64'
+        architectures:
+          - 'arm64'
+        sections:
+          - 'main'
+          - 'restricted'
+          - 'universe'
+          - 'multiverse'
+        dists:
+          - 'focal'
+          - 'focal-backports'
+          - 'focal-security'
+          - 'focal-updates'
+          - 'jammy'
+          - 'jammy-backports'
+          - 'jammy-security'
+          - 'jammy-updates'
+          - 'noble'
+          - 'noble-backports'
+          - 'noble-security'
+          - 'noble-updates'
