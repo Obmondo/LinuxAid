@@ -1,7 +1,7 @@
 type Repository::Mirrors::Yum_Settings = Struct[{
   enable         => Boolean,
   mirror_url     => Optional[String],
-  repodir        => String,
+  repodir        => Optional[String],
   package_format => Optional[Enum['rpm']],
   exclude        => Optional[Array[String]],
   architectures  => Optional[Array[Enum['x86_64']]],
