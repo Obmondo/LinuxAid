@@ -39,7 +39,8 @@ class repository::mirror (
     $_repo_config.map |$_provider, $_supported_dist| {
       $_supported_dist.map |$_dist, $_configs| {
         if type($_configs) =~ Type[Hash] {
-          { 'repo_name' => $_repo_name,
+          {
+            'repo_name' => $_repo_name,
             'provider' => $_provider,
             'repodir' => $_configs['repodir']
           }
@@ -57,7 +58,7 @@ class repository::mirror (
     }
   }
 
-  $configurations.each |$_repo_name, $_repo_config| {
+  $_configurations.each |$_repo_name, $_repo_config| {
     $_repo_config.each |$_provider, $_supported_dist| {
       if ! $_supported_dist['enable'] {
         next()
