@@ -1,6 +1,7 @@
 ---
 role::package_management::repo::manage: true
 role::package_management::repo::snapshot: true
+role::package_management::repo::snapshot_tag: '1.0.0'
 role::package_management::repo::basedir: '/var/cache/packagesign'
 role::package_management::repo::enable: true
 role::package_management::repo::weekday: 'Sun'
@@ -15,8 +16,7 @@ role::package_management::repo::locations: {}
 role::package_management::repo::registry_path: 'ghcr.io/obmondo/dockerfiles'
 role::package_management::repo::packagesign: true
 role::package_management::repo::provider:
-role::package_management::repo::script_tag:
-role::package_management::repo::snapshot_tag: '1.0.0'
+role::package_management::repo::script_tag: 'v3.1.5'
 role::package_management::repo::signing_password:
 role::package_management::repo::server_tag:
 role::package_management::repo::nginx_tag: '1.27.0'

@@ -30,7 +30,7 @@ class role::package_management::repo (
   confine($server_tag, !($gitserver_url and $gitserver_token),
     'Enabling packagesign-server requires **gitserver_url** and **gitserver_token** and **server_tag** to be set')
 
-  confine($script_tag, !($signing_password),
+  confine($packagesign, !($script_tag and $signing_password),
     'Enabling packagesign-script requires **script_tag** and **signing_password** to be set')
 
   contain role::virtualization::docker
