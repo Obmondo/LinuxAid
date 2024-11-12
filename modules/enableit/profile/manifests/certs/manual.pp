@@ -66,6 +66,7 @@ define profile::certs::manual (
     refreshonly => true,
     creates     => $_cert_combined,
     require     => File[$base_dir_combined],
+    noop        => false,
   }
 
   monitor::domains::expiry { $domain:
