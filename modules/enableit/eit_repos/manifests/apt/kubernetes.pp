@@ -12,7 +12,7 @@ class eit_repos::apt::kubernetes (
   }
 
   $versions.each |$version| {
-    apt::source { "obmondo_kubernetes_${version}":
+    apt::source { "kubernetes_${version}":
       ensure       => ensure_present($ensure),
       location     => "https://pkgs.k8s.io/core:/stable:/${version}/deb/ /",
       noop         => $noop_value,
@@ -21,8 +21,8 @@ class eit_repos::apt::kubernetes (
       release      => '',
       repos        => '',
       key          => {
-        'name'   => "obmondo_kubernetes_${version}.gpg",
-        'source' => "https://pkgs.k8s.io/core:/stable:/${version}/deb/Release.key",
+        'name'   => "kubernetes_${version}.gpg",
+        'source' => 'puppet:///modules/eit_repos/apt/kubernetes-apt-keyring.gpg',
       },
     }
   }
