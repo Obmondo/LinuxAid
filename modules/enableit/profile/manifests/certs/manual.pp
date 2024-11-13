@@ -33,7 +33,7 @@ define profile::certs::manual (
   file {
     default:
       require => File[$_parts_dir],
-      notify  => Exec["write combined cert ${name}"],
+      notify  => File[$_cert_combined],
     ;
     $_cert_file:
       content => "${cert}\n",
@@ -48,7 +48,7 @@ define profile::certs::manual (
     file { $_cert_ca:
       content => "${ca}\n",
       require => File[$_parts_dir],
-      notify  => Exec["write combined cert ${name}"],
+      notify  => File[$_cert_combined],
     }
   }
 
@@ -60,13 +60,10 @@ define profile::certs::manual (
     },
   ].delete_undef_values
 
-  exec { "write combined cert ${name}":
-    command     => "cat ${_cert_combined_parts.join(' ')} > ${_cert_combined}",
-    path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    refreshonly => true,
-    creates     => $_cert_combined,
-    require     => File[$base_dir_combined],
-    noop        => false,
+  $key_and_cert = join([$key, $cert], "\n")
+
+  file { $_cert_combined:
+    content => $key_and_cert,
   }
 
   monitor::domains::expiry { $domain:
