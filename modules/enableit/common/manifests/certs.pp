@@ -26,20 +26,13 @@ class common::certs (
     $_base_dir_parts = "${__base_dir}/parts"
     $_base_dir_combined = "${__base_dir}/combined"
 
-    file { [$__base_dir, $_base_dir_parts]:
+    file { [$__base_dir, $_base_dir_combined, $_base_dir_parts]:
       ensure  => 'directory',
       owner   => 'root',
       group   => 'root',
       mode    => '0700',
-      purge   => true,
       recurse => true,
-    }
-
-    file { $_base_dir_combined:
-      ensure  => 'directory',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0700',
+      purge   => true,
     }
   }
 
