@@ -47,6 +47,18 @@ class profile::projectmanagement::gitlab (
 
   contain monitor::system::service::gitlab
 
+  @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
+    job_name    => 'probe_domains_blackbox',
+    tag         => [
+      $trusted['certname'],
+      $facts.dig('obmondo', 'customerid')
+    ],
+    targets     => $domain/users/sign_in,
+    noop        => false,
+    labels      => { 'certname' => $trusted['certname'] },
+    collect_dir => '/etc/prometheus/file_sd_config.d',
+  }
+
   if $ssl_cert {
 
     $ssl_cert_filepath = "/etc/ssl/private/${domain}/combined.pem"
