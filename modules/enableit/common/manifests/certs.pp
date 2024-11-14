@@ -47,6 +47,17 @@ class common::certs (
       domain            => $_name,
       *                 => $_values,
     }
+    @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${_name}" :
+      job_name    => 'probe_domains_blackbox',
+      tag         => [
+        $trusted['certname'],
+        $facts.dig('obmondo', 'customerid')
+      ],
+      targets     => $_name,
+      noop        => false,
+      labels      => { 'certname' => $trusted['certname'] },
+      collect_dir => '/etc/prometheus/file_sd_config.d',
+    }
   }
 
   $ca_certs.each |$_name, $params| {
