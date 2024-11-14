@@ -53,7 +53,7 @@ class profile::projectmanagement::gitlab (
       $trusted['certname'],
       $facts.dig('obmondo', 'customerid')
     ],
-    targets     => $domain/users/sign_in,
+    targets     => ["${domain}/users/sign_in"],
     noop        => false,
     labels      => { 'certname' => $trusted['certname'] },
     collect_dir => '/etc/prometheus/file_sd_config.d',

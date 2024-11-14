@@ -116,7 +116,20 @@ class profile::web::apache (
           notify  => Service['httpd'],
         ;
       }
+    }
 
+    $params['domains'].each |$domain| {
+      @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
+        job_name    => 'probe_domains_blackbox',
+        tag         => [
+          $trusted['certname'],
+          $facts.dig('obmondo', 'customerid')
+        ],
+        targets     => [$domain],
+        noop        => false,
+        labels      => { 'certname' => $trusted['certname'] },
+        collect_dir => '/etc/prometheus/file_sd_config.d',
+      }
     }
 
     apache::vhost { $vhost_name:
