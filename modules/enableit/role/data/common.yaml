@@ -22,6 +22,4 @@ role::projectmanagement::gitlab_ci_runner::runners:
       volumes:
         - /cache
 
-# FIXME: not sure why this is required, it should be enough to have this value
-# in modules/enableit/role/data/customers/enableit/metrics.yaml:2
 role::customers::enableit::metrics::__blendable: true
