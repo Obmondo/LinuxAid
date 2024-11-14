@@ -20,8 +20,9 @@ hierarchy:
   - name: "OS kernel"
     path: "%{kernel}.yaml"
 
+  - name: "Role Defaults"
+    paths:
+      - "role/%{::obmondo_classes.0}.yaml"
+
   - name: "common"
     path: "common.yaml"
-
-  - name: "module defaults"
-    glob: "role/**/*.yaml"

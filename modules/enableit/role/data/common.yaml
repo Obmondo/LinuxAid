@@ -1,27 +1,10 @@
 ---
-lookup_options:
-  role::db::elasticsearch::instances:
-    merge: 'deep'
-
-# GitLab CI Runner
-role::projectmanagement::gitlab_ci_runner::runners_defaults:
-  executor: "%{hiera('role::projectmanagement::gitlab_ci_runner::executor')}"
-  docker-image: "%{hiera('role::projectmanagement::gitlab_ci_runner::docker_image')}"
-  url: "%{hiera('role::projectmanagement::gitlab_ci_runner::url')}"
-  registration-token: "%{hiera('role::projectmanagement::gitlab_ci_runner::token')}"
-  check_interval: "%{hiera('role::projectmanagement::gitlab_ci_runner::check_interval')}"
-
-role::projectmanagement::gitlab_ci_runner::runners:
-  runner_1:
-    name:
-    docker:
-      tls_verify: false
-      image: "%{hiera('role::projectmanagement::gitlab_ci_runner::docker_image')}"
-      privileged: false
-      disable_cache: false
-      volumes:
-        - /cache
-
-# FIXME: not sure why this is required, it should be enough to have this value
-# in modules/enableit/role/data/customers/enableit/metrics.yaml:2
-role::customers::enableit::metrics::__blendable: true
+role::computing::slurm::__blendable: true
+role::monitoring::rsyslog::__blendable: true
+role::projectmanagement::gitlab_ci_runner::__blendable: true
+role::projectmanagement::perforce::git_connector::__blendable: true
+role::projectmanagement::perforce::icmanage::__blendable: true
+role::storage::beegfs::__blendable: true
+role::virtualization::docker::__blendable: true
+role::web::haproxy::__blendable: true
+role::web::nginx::__blendable: true

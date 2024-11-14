@@ -9,8 +9,8 @@
 #  include samba::server
 #
 class samba::server (
-  Variant[Enum['present', 'latest'], String] $version                   = 'latest',
   Array[String]                              $services,
+  Variant[Enum['present', 'latest'], String] $version                   = 'latest',
   Array[String]                              $packages                  = [
     'samba'
   ],
@@ -108,7 +108,7 @@ class samba::server (
 
   file { $config_file:
     ensure  => 'file',
-    require => Package[$::samba::params::package],
+    require => Package[$packages],
     content => template('samba/smb.conf.erb'),
   }
 

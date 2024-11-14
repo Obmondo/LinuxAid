@@ -1,4 +1,8 @@
 ---
+lookup_options:
+  role::db::elasticsearch::instances:
+    merge: 'deep'
+
 role::db::elasticsearch::kibana::enabled: true
 role::db::elasticsearch::kibana::expose: false
 role::db::elasticsearch::kibana::ssl: false
