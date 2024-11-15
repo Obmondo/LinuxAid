@@ -47,22 +47,27 @@ class profile::projectmanagement::gitlab (
 
   contain monitor::system::service::gitlab
 
-  @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
-    job_name    => 'probe_domains_blackbox',
-    tag         => [
-      $trusted['certname'],
-      $facts.dig('obmondo', 'customerid')
-    ],
-    targets     => ["${domain}/users/sign_in"],
-    noop        => false,
-    labels      => { 'certname' => $trusted['certname'] },
-    collect_dir => '/etc/prometheus/file_sd_config.d',
-  }
-
   if $ssl_cert {
-
     $ssl_cert_filepath = "/etc/ssl/private/${domain}/combined.pem"
     $ssl_key_filepath = "/etc/ssl/private/${domain}/privkey.pem"
+    $job_name = 'probe_domains_blackbox'
+    $collect_dir = '/etc/prometheus/file_sd_config.d'
+
+    @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
+      job_name    => $job_name,
+      tag         => [
+        $trusted['certname'],
+        $facts.dig('obmondo', 'customerid')
+      ],
+      targets     => ["${domain}/users/sign_in"],
+      noop        => false,
+      labels      => { 'certname' => $trusted['certname'] },
+      collect_dir => $collect_dir,
+    }
+
+    File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
+      ensure => absent
+    }
 
     file { "/etc/ssl/private/${domain}":
       ensure => directory,
