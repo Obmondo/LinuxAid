@@ -135,6 +135,11 @@ class profile::web::apache (
         collect_dir => $collect_dir,
       }
 
+      @@monitor::alert { 'monitor::domains::status':
+        enable => true,
+        tag    => $::trusted['certname'],
+      }
+
       File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
         ensure => absent
       }
