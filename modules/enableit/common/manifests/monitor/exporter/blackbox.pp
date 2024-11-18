@@ -59,6 +59,11 @@ class common::monitor::exporter::blackbox (
     tag    => $::trusted['certname'],
   }
 
+  @@monitor::alert { 'monitor::domains::status':
+    enable => $enable,
+    tag    => $::trusted['certname'],
+  }
+
   if $targets.size > 0 {
     @@prometheus::scrape_job { "blackbox_${trusted['certname']}_customs" :
       job_name    => 'probe_domains_blackbox',
