@@ -33,6 +33,7 @@ monitor::system::disk::partitions_excluded:
 
 monitor::system::service::down::blacklist:
   - 'run-puppet.service'
+  - 'MsftLinuxPatchAutoAssess.service'
 
 monitor::service::enable: true
 
