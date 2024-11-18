@@ -59,11 +59,6 @@ class common::monitor::exporter::blackbox (
     tag    => $::trusted['certname'],
   }
 
-  @@monitor::alert { 'monitor::domains::status':
-    enable => $enable,
-    tag    => $::trusted['certname'],
-  }
-
   if $targets.size > 0 {
     @@prometheus::scrape_job { "blackbox_${trusted['certname']}_customs" :
       job_name    => 'probe_domains_blackbox',
@@ -74,6 +69,11 @@ class common::monitor::exporter::blackbox (
       targets     => $targets,
       labels      => { 'certname' => $trusted['certname'] },
       collect_dir => '/etc/prometheus/file_sd_config.d',
+    }
+
+    @@monitor::alert { 'monitor::domains::status':
+      enable => $enable,
+      tag    => $::trusted['certname'],
     }
 
     $targets.each |$domain| {
