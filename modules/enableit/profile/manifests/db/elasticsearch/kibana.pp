@@ -129,6 +129,12 @@ class profile::db::elasticsearch::kibana (
     "https://${node}:9200"
   }
 
+  apt::pin { pin_kibana:
+    packages => 'kibana',
+    version  => $version,
+    priority => '1001',
+  }
+
   class { 'kibana':
     ensure => $version,
     oss    => $oss,
