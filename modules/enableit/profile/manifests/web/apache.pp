@@ -117,31 +117,32 @@ class profile::web::apache (
         ;
       }
     }
+    if $params['domains'] {
+      $params['domains'].each |$domain| {
 
-    $params['domains'].each |$domain| {
+        $job_name = 'probe_domains_blackbox'
+        $collect_dir = '/etc/prometheus/file_sd_config.d'
 
-      $job_name = 'probe_domains_blackbox'
-      $collect_dir = '/etc/prometheus/file_sd_config.d'
+        @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
+          job_name    => $job_name,
+          tag         => [
+            $trusted['certname'],
+            $facts.dig('obmondo', 'customerid')
+          ],
+          targets     => [$domain],
+          noop        => false,
+          labels      => { 'certname' => $trusted['certname'] },
+          collect_dir => $collect_dir,
+        }
 
-      @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
-        job_name    => $job_name,
-        tag         => [
-          $trusted['certname'],
-          $facts.dig('obmondo', 'customerid')
-        ],
-        targets     => [$domain],
-        noop        => false,
-        labels      => { 'certname' => $trusted['certname'] },
-        collect_dir => $collect_dir,
-      }
+        @@monitor::alert { 'monitor::domains::status':
+          enable => true,
+          tag    => $::trusted['certname'],
+        }
 
-      @@monitor::alert { 'monitor::domains::status':
-        enable => true,
-        tag    => $::trusted['certname'],
-      }
-
-      File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
-        ensure => absent
+        File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
+          ensure => absent
+        }
       }
     }
 
