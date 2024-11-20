@@ -74,12 +74,6 @@ class common::monitor::prom::server (
           regex         => 'go_gc_.*',
           action        => 'drop',
         },
-        {
-          source_labels => ['instance'],
-          regex         => '(.*):(.*)',
-          target_label  => 'certname',
-          replacement   => '$1',
-        },
         # Send only those metrics if instance ID matches the customer_id, otherwise drop the metrics
         {
           source_labels => ['certname'],
