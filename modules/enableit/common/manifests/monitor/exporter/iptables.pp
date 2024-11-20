@@ -53,6 +53,7 @@ class common::monitor::exporter::iptables (
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'iptables',
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
   systemd::manage_dropin { 'iptables_exporter.service-90-capabilities.conf':

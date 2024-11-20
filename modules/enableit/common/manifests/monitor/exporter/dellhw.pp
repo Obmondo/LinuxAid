@@ -54,5 +54,6 @@ class common::monitor::exporter::dellhw (
     scrape_ipadress   => $listen_address.split(':')[0],
     tag               => $::trusted['certname'],
     scrape_host       => $::trusted['certname'],
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 }

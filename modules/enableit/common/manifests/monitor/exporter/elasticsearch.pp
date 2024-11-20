@@ -20,6 +20,7 @@ class common::monitor::exporter::elasticsearch (
     extra_options     => "--web.listen-address=${listen_address}",
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $::trusted['certname'],
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.

@@ -15,7 +15,7 @@ class common::monitor::exporter::tcpshaker (
     job_name    => 'tcpshaker',
     tag         => $::trusted['certname'],
     targets     => [ "${host}:${listen_port}" ],
-    labels      => { 'alias' => $trusted['certname'] },
+    labels      => { 'certname' => $trusted['certname'] },
     collect_dir => '/etc/prometheus/file_sd_config.d',
   }
 }
