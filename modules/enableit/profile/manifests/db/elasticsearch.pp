@@ -76,6 +76,12 @@ class profile::db::elasticsearch (
     mode    => '0400',
   }
 
+  apt::pin { pin_elasticsearch:
+    packages => 'elasticsearch',
+    version  => $version,
+    priority => '1001',
+  }
+
   # Merge the instances value
   $instances = {
     'cluster.name' => $cluster_name,
