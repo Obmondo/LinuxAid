@@ -22,6 +22,7 @@ class common::monitor::exporter::mysql (
     export_scrape_job => $enable,
     scrape_port       => Integer($listen_port),
     scrape_host       => $trusted['certname'],
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.

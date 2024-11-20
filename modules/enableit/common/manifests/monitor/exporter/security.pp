@@ -61,6 +61,7 @@ class common::monitor::exporter::security (
     scrape_port       => Integer($listen_port),
     scrape_host       => $host,
     scrape_job_name   => 'security',
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
   $_service = @("EOT"/$n)

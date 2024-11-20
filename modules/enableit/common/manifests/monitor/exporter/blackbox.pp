@@ -36,6 +36,7 @@ class common::monitor::exporter::blackbox (
     config_file       => $config_file,
     tag               => $::trusted['certname'],
     export_scrape_job => $enable,
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
     modules           => {
       'http_2xx'    => {
         'prober'  => 'http',
