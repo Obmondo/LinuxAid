@@ -37,7 +37,7 @@ class common::monitor::exporter::mtail (
   $_port = $listen_address.split(':')[1]
 
   $_extra_groups = $facts.dig('os', 'family') ? {
-    'Ubuntu' => 'adm',
+    'Debian' => 'adm',
     default  => 'root',
   }
 
@@ -62,7 +62,7 @@ class common::monitor::exporter::mtail (
     notify_service    => Service['mtail_exporter'],
     real_download_url => 'https://github.com/madron/mtail-exporter',
     export_scrape_job => $enable,
-    extra_groups      => $_extra_groups,
+    extra_groups      => [$_extra_groups],
     options           => $_options.join(' '),
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
