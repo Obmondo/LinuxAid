@@ -122,8 +122,9 @@ class profile::web::apache (
 
         $job_name = 'probe_domains_blackbox'
         $collect_dir = '/etc/prometheus/file_sd_config.d'
+        $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
 
-        @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain}" :
+        @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain_without_http}" :
           job_name    => $job_name,
           tag         => [
             $trusted['certname'],
@@ -140,7 +141,7 @@ class profile::web::apache (
           tag    => $::trusted['certname'],
         }
 
-        File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
+        File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain_without_http}.yaml" |> {
           ensure => absent
         }
       }
