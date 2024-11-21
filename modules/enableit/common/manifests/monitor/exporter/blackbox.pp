@@ -1,8 +1,8 @@
-# Prometheus Blackbox Exporter
+  # Prometheus Blackbox Exporter
 class common::monitor::exporter::blackbox (
   Boolean              $enable,
   Stdlib::Port         $listen_port,
-  Array[String]        $targets     = [],
+  Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl, Stdlib::HttpsUrl]]  $targets     = [],
   Boolean[false]       $noop_value  = false,
   Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
 ) {
@@ -78,7 +78,10 @@ class common::monitor::exporter::blackbox (
     }
 
     $targets.each |$domain| {
-      monitor::domains::expiry { $domain:
+      $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
+      $domain_split = split($domain_without_http, '/')[0]
+
+      monitor::domains::expiry { $domain_split:
         enable => $enable,
       }
     }
