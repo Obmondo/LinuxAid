@@ -9,7 +9,7 @@ class profile::web::apache (
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Array[Eit_types::Hostname,1]],
+    domains                  => Optional[Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl, Stdlib::HttpsUrl]]],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
     port                     => Optional[Stdlib::Port],
