@@ -1,6 +1,6 @@
 # Haproxy Config
 class eit_haproxy::manual_config (
-  Customers::Source $config_file,
+  Eit_Files::Source $config_file,
 ) {
 
   $_config_file = customers::to_file($config_file)

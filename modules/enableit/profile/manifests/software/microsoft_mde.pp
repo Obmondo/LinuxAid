@@ -3,7 +3,7 @@ class profile::software::microsoft_mde (
   Boolean                                $enable              = $common::software::microsoft_mde::enable,
   Optional[Boolean]                      $noop_value          = $common::software::microsoft_mde::noop_value,
   Eit_types::Package::Version::Installed $version             = $common::software::microsoft_mde::version,
-  Optional[Customers::Source]            $onboard_config      = $common::software::microsoft_mde::onboard_config,
+  Optional[Eit_Files::Source]            $onboard_config      = $common::software::microsoft_mde::onboard_config,
   Eit_types::Microsoft::Mde::Exclusions  $exclusions          = $common::software::microsoft_mde::exclusions,
 ) {
 
@@ -86,7 +86,7 @@ class profile::software::microsoft_mde (
       require => File['/etc/opt/microsoft/mdatp/managed/mdatp_onboard.json'],
     }
 
-    customers::file { '/etc/opt/microsoft/mdatp/managed/mdatp_onboard.json':
+    eit_files::file { '/etc/opt/microsoft/mdatp/managed/mdatp_onboard.json':
       ensure     => 'present',
       source     => $onboard_config,
       owner      => root,

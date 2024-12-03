@@ -147,12 +147,12 @@ class common::system (
     [$key, $_file_parameters] = $_element
     $_source = $_file_parameters['source']
     # Only allow sources that the Obmondo file resource pattern
-    if $_source and $_source !~ Customers::Source {
+    if $_source and $_source !~ Eit_Files::Source {
       fail("Invalid file resource
            ${_element}")
     }
 
-    customers::file { $key:
+    eit_files::file { $key:
       * => $_file_parameters,
     }
   }
