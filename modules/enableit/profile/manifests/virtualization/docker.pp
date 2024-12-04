@@ -155,7 +155,7 @@ class profile::virtualization::docker (
   }
 
   $compose_instances.each |$key, $value| {
-    $_docker_compose = customers::to_file($value['compose_files'])
+    $_docker_compose = eit_files::to_file($value['compose_files'])
     $_docker_compose_base = "/opt/obmondo/docker-compose/${key}"
     $_docker_compose_base_file = "${_docker_compose_base}/docker-compose.yml"
 
