@@ -5,6 +5,7 @@ class common::certs (
     key  => String,
     cert => String,
     ca   => Optional[String],
+    port => Optional[Integer],
   }]] $manual = {},
   Hash[String, Struct[{
     ensure => Eit_types::Cert::Ensure,
@@ -51,13 +52,18 @@ class common::certs (
       *                 => $_values,
     }
 
+    $_targets = $_values['port'] ? {
+      Integer => "${_name}:${_values['port']}",
+      default => $_name,
+    }
+
     @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${_name}" :
       job_name    => $job_name,
       tag         => [
         $trusted['certname'],
         $facts.dig('obmondo', 'customerid')
       ],
-      targets     => [$_name],
+      targets     => [$_targets],
       noop        => false,
       labels      => { 'certname' => $trusted['certname'] },
       collect_dir => $collect_dir,
@@ -66,11 +72,12 @@ class common::certs (
     File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${_name}.yaml" |> {
       ensure => absent
     }
-  }
 
-  @@monitor::alert { 'monitor::domains::status':
-    enable => true,
-    tag    => $::trusted['certname'],
+    @@monitor::alert { $_name:
+      alert_id => 'monitor::domains::status',
+      enable   => true,
+      tag      => $::trusted['certname'],
+    }
   }
 
   $ca_certs.each |$_name, $params| {
