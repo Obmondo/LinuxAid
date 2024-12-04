@@ -1,7 +1,7 @@
 # CA Cert
 define profile::certs::ca_cert (
   Eit_types::Cert::Ensure $ensure,
-  Customers::Source       $source,
+  Eit_Files::Source       $source,
 
   Optional[Eit_types::Cert::Update] $update = undef,
 ) {
