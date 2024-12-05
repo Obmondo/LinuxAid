@@ -6,12 +6,14 @@ class profile::monitoring::scom (
   Boolean                       $noop_value         = $common::monitoring::scom::noop_value,
 ) inherits ::profile {
 
-  firewall { '100 allow microsoft scom agent':
-    proto  => 'tcp',
-    dport  => 1270,
-    jump   => 'accept',
-    source => if $scom_masters and $scom_masters.size { $scom_masters },
-    noop   => $noop_value,
+  if !$scom_masters.empty {
+    firewall { '100 allow microsoft scom agent':
+      proto  => 'tcp',
+      dport  => 1270,
+      jump   => 'accept',
+      source => $scom_masters,
+      noop   => $noop_value,
+    }
   }
 
   if $install_sudo_rules {
