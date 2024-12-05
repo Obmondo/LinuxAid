@@ -15,12 +15,16 @@ class profile::projectmanagement::perforce::git_connector (
   Perforce::LogLevel   $p4gc_log_level  = $::role::projectmanagement::perforce::git_connector::p4gc_log_level,
 ) inherits ::profile::projectmanagement::perforce {
 
-  $_version_suffix = if $facts.dig('os', 'family') == 'RedHat' {
-    ".el${facts.dig('os', 'release', 'major')}"
-  }
+  $_version_suffix = ".el${facts.dig('os', 'release', 'major')}"
 
-  package { 'helix-git-connector':
-    ensure => "${version}${_version_suffix}",
+  $versionrelease = $version.split('-')
+
+  yum::versionlock { 'helix-git-connector':
+    ensure => present,
+    version => $versionrelease[0],
+    release => "${versionrelease[1]}${_version_suffix}.*",
+    epoch   => 0,
+    arch    => 'x86_64',
   }
 
   ssh::server::match_block { 'git':

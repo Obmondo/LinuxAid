@@ -37,3 +37,15 @@ profile::system::cloud_init::services:
   - 'cloud-final.service'
   - 'cloud-init.service'
   - 'cloud-init-local.service'
+
+profile::projectmanagement::perforce::helix_packages:
+  - 'helix-p4dctl'
+  - 'helix-proxy'
+  - 'helix-broker'
+  - 'helix-cli'
+  - 'helix-p4d'
+  - 'helix-p4d-base'
+  - 'helix-cli-base'
+  - 'helix-broker-base'
+  - 'helix-proxy-base'
+  - 'helix-p4d-base-24.1'
