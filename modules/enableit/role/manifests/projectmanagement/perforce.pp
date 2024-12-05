@@ -15,7 +15,6 @@ class role::projectmanagement::perforce (
 
   Boolean                   $icmanage          = false,
   Boolean                   $git_connector     = true,
-
   Eit_types::User           $admin_user        = 'p4admin',
   Eit_types::Password       $admin_password,
   Eit_types::User           $operator_user     = 'p4operator',
@@ -24,6 +23,8 @@ class role::projectmanagement::perforce (
   Stdlib::Absolutepath      $backup_dir        = $::common::backup::dump_dir,
   Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits ::role {
+
+  confine($facts.dig('os', 'family') != 'RedHat', 'Only Redhat-based distributions are supported')
 
   'profile::projectmanagement::perforce'.contain
 

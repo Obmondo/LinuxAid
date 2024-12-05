@@ -25,6 +25,20 @@ class profile::projectmanagement::perforce (
   Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits profile {
 
+  $_version_suffix = ".el${facts.dig('os', 'release', 'major')}"
+
+  $versionrelease = $version.split('-')
+
+  $helix_packages = lookup('profile::projectmanagement::perforce::helix_packages')
+
+  yum::versionlock { $helix_packages:
+    ensure => present,
+    version => $versionrelease[0],
+    release => "${versionrelease[1]}${_version_suffix}.*",
+    epoch   => 0,
+    arch    => 'x86_64',
+  }
+
   class { 'perforce':
     user              => $user,
     service_root      => $service_root,
