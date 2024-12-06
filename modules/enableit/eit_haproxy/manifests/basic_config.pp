@@ -146,30 +146,7 @@ class eit_haproxy::basic_config (
           cert_host           => '0.0.0.0',
         }
 
-        @@prometheus::scrape_job { "blackbox_haproxy_${trusted['certname']}_${cn}" :
-          job_name    => 'probe_domains_blackbox',
-          tag         => [
-            $trusted['certname'],
-            $facts.dig('obmondo', 'customerid')
-          ],
-          targets     => [$cn],
-          noop        => false,
-          labels      => { 'alias' => $trusted['certname'] },
-          collect_dir => '/etc/prometheus/file_sd_config.d',
-        }
-      }
-    } else {
-      # If domains are managed by user itself, like internal domains
-      # managed via common::cert::manual
-      @@prometheus::scrape_job { "blackbox_haproxy_${trusted['certname']}" :
-        job_name    => 'probe_domains_blackbox',
-        tag         => [
-          $trusted['certname'],
-          $facts.dig('obmondo', 'customerid')
-        ],
-        targets     => $alldomains,
-        labels      => { 'alias' => $trusted['certname'] },
-        collect_dir => '/etc/prometheus/file_sd_config.d',
+        monitor::domains { $cn: }
       }
     }
 

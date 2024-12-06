@@ -123,26 +123,7 @@ class profile::web::apache (
         $collect_dir = '/etc/prometheus/file_sd_config.d'
         $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
 
-        @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain_without_http}" :
-          job_name    => $job_name,
-          tag         => [
-            $trusted['certname'],
-            $facts.dig('obmondo', 'customerid')
-          ],
-          targets     => [$domain],
-          noop        => false,
-          labels      => { 'certname' => $trusted['certname'] },
-          collect_dir => $collect_dir,
-        }
-
-        @@monitor::alert { 'monitor::domains::status':
-          enable => true,
-          tag    => $::trusted['certname'],
-        }
-
-        File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain_without_http}.yaml" |> {
-          ensure => absent
-        }
+        monitor::domains { $domain_without_http: }
       }
     }
 

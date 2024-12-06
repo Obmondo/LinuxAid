@@ -57,27 +57,7 @@ class common::certs (
       default => $_name,
     }
 
-    @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${_name}" :
-      job_name    => $job_name,
-      tag         => [
-        $trusted['certname'],
-        $facts.dig('obmondo', 'customerid')
-      ],
-      targets     => [$_targets],
-      noop        => false,
-      labels      => { 'certname' => $trusted['certname'] },
-      collect_dir => $collect_dir,
-    }
-
-    File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${_name}.yaml" |> {
-      ensure => absent
-    }
-
-    @@monitor::alert { $_name:
-      alert_id => 'monitor::domains::status',
-      enable   => true,
-      tag      => $::trusted['certname'],
-    }
+    monitor::domains { $_name: }
   }
 
   $ca_certs.each |$_name, $params| {
