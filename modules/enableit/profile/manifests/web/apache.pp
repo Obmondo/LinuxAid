@@ -30,9 +30,9 @@ class profile::web::apache (
 
   # Firewall
   firewall_multi { '000 allow http request':
-    dport  => $listen_ports,
-    proto  => 'tcp',
-    jump   => 'accept',
+    dport => $listen_ports,
+    proto => 'tcp',
+    jump  => 'accept',
   }
 
   $default_modules = [
@@ -116,8 +116,7 @@ class profile::web::apache (
           notify  => Service['httpd'],
         ;
       }
-    }
-    if $params['domains'] {
+
       $params['domains'].each |$domain| {
 
         $job_name = 'probe_domains_blackbox'
@@ -148,19 +147,19 @@ class profile::web::apache (
     }
 
     apache::vhost { $vhost_name:
-      ssl                      => $params['ssl'],
-      port                     => $params['port'],
-      ssl_cert                 => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.pem" },
-      ssl_key                  => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.key" },
-      docroot                  => $params['docroot'],
-      manage_docroot           => false,
-      override                 => ['ALL'],
-      redirect_dest            => $params['redirect_dest'],
-      redirect_status          => $params['redirect_status'],
-      directories              => $params['directories'],
-      serveraliases            => $params['serveraliases'],
-      aliases                  => $params['aliases'],
-      proxy_pass               => $params['proxy_pass'],
+      ssl             => $params['ssl'],
+      port            => $params['port'],
+      ssl_cert        => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.pem" },
+      ssl_key         => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.key" },
+      docroot         => $params['docroot'],
+      manage_docroot  => false,
+      override        => ['ALL'],
+      redirect_dest   => $params['redirect_dest'],
+      redirect_status => $params['redirect_status'],
+      directories     => $params['directories'],
+      serveraliases   => $params['serveraliases'],
+      aliases         => $params['aliases'],
+      proxy_pass      => $params['proxy_pass'],
     }
   }
 
