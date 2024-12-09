@@ -1,34 +1,38 @@
-# exec_once
+# service_oneshot is a service, which runs only once
+# and remainsexited
 define profile::system::service_oneshot (
-  String  $content,
+  Stdlib::Base64 $content,
+
+  Boolean $enable     = true,
+  Boolean $noop_value = false,
 ) {
 
-$file_path = "/opt/obmondo/bin/${name}"
+  $file_path = "/opt/obmondo/bin/${name}"
 
-  file { "${file_path}":
-    ensure  => 'file',
-    content => base64('decode', $file_content),
+  file { $file_path:
+    ensure  => ensure_file($enable),
+    content => base64('decode', $content),
     mode    => '0700',
     owner   => 'root',
     group   => 'root',
-    noop    => false,
+    noop    => $noop_value,
   }
 
   common::services::systemd { "${name}.service":
+    ensure     => ensure_service($enable),
     enable     => false,
-    ensure     => 'running',
     unit       => {
-      'Description'    => "${name} Once Service",
+      'Description'    => "${name} Service",
     },
     service    => {
       'Type'            => 'oneshot',
-      'ExecStart'       => "/bin/sh -c ${file_path}",
+      'ExecStart'       => $file_path,
       'RemainAfterExit' => 'Yes',
     },
     install    => {
       'WantedBy'        => 'multi-user.target'
     },
-    require    => File["${file_path}"],
-    noop_value => false,
+    require    => File[$file_path],
+    noop_value => $noop_value,
   }
 }
