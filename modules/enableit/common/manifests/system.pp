@@ -10,7 +10,7 @@ class common::system (
   Hash[String,Hash]              $files               = {},
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
-    content => Stdlib::Base64,
+    content => String,
   }]]] $service_oneshot  = {},
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
@@ -164,8 +164,8 @@ class common::system (
   #  Service_Oneshot
   #################
 
-  $service_oneshot.each |$name, $value| {
-    profile::system::service_oneshot { $name:
+  $service_oneshot.each | $name, $value| {
+    profile::system::service_oneshot { "$name":
       content => $value['content'],
     }
   }
