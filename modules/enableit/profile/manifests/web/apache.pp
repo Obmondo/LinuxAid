@@ -106,14 +106,17 @@ class profile::web::apache (
       file {
         "/etc/ssl/private/${vhost_name}":
           ensure => directory,
+          owner  => $apache_user,
           mode   => '0700',
         ;
         "/etc/ssl/private/${vhost_name}/cert.pem":
           content => $params['ssl_cert'],
+          owner   => $apache_user,
           notify  => Service['httpd'],
         ;
         "/etc/ssl/private/${vhost_name}/cert.key":
           content => $params['ssl_key'],
+          owner   => $apache_user,
           notify  => Service['httpd'],
         ;
       }

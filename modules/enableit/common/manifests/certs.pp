@@ -42,8 +42,6 @@ class common::certs (
     # and to keep the old way of manual certs, since earlier we were only
     # accepting string and a not a FQDN
     $x_name = regsubst($_name, '^(\w+)(.*)$', '\1')
-    $job_name = 'probe_domains_blackbox'
-    $collect_dir = '/etc/prometheus/file_sd_config.d'
 
     profile::certs::manual { $x_name:
       base_dir_parts    => $_base_dir_parts,
