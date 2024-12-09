@@ -12,7 +12,7 @@ Puppet::Functions.create_function(:openssl_cn) do
   # @return CN object from the x509 cert
   #
   dispatch :cn? do
-    param 'String', :certfile
+    param 'Stdlib::Unixpath', :certfile
     return_type 'String'
   end
 

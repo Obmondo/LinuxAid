@@ -4,12 +4,13 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
+
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl, Stdlib::HttpsUrl]]],
+    domains                  => Optional[Variant[Stdlib::Fqdn, Stdlib::HttpUrl]],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
     port                     => Optional[Stdlib::Port],
@@ -117,14 +118,8 @@ class profile::web::apache (
         ;
       }
 
-      $params['domains'].each |$domain| {
-
-        $job_name = 'probe_domains_blackbox'
-        $collect_dir = '/etc/prometheus/file_sd_config.d'
-        $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
-
-        monitor::domains { $domain_without_http: }
-      }
+      $domains = openssl_cn("/etc/ssl/private/${vhost_name}/cert.pem")
+      monitor::domains { $domains: }
     }
 
     apache::vhost { $vhost_name:
