@@ -89,11 +89,6 @@ class profile::web::apache (
 
       # Let proxy_fcgi mod handle the file by puppet and not by package
       ::apache::mod { 'proxy_fcgi' : }
-
-      # mod_proxy_fcgi is needed on centos6 and on centos7 is built in under httpd
-      if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '6' {
-        package::install('mod_proxy_fcgi')
-      }
     }
 
     # Setup apache modules
@@ -112,16 +107,18 @@ class profile::web::apache (
         "/etc/ssl/private/${vhost_name}/cert.pem":
           content => $params['ssl_cert'],
           owner   => $apache_user,
+          mode    => '0600',
           notify  => Service['httpd'],
         ;
         "/etc/ssl/private/${vhost_name}/cert.key":
           content => $params['ssl_key'],
           owner   => $apache_user,
+          mode    => '0600',
           notify  => Service['httpd'],
         ;
       }
 
-      $domains = openssl_cn("/etc/ssl/private/${vhost_name}/cert.pem")
+      $domains = extract_common_name($params['ssl_cert'])
       monitor::domains { $domains: }
     }
 

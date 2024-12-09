@@ -1,10 +1,11 @@
-  # Prometheus Blackbox Exporter
+# Prometheus Blackbox Exporter
 class common::monitor::exporter::blackbox (
   Boolean              $enable,
   Stdlib::Port         $listen_port,
-  Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl, Stdlib::HttpsUrl]]  $targets     = [],
   Boolean[false]       $noop_value  = false,
   Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
+
+  Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl]] $targets = [],
 ) {
 
   $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }

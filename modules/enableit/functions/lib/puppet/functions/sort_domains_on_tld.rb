@@ -151,7 +151,7 @@ Puppet::Functions.create_function(:sort_domains_on_tld) do
     san_domains.each do |tld, domains|
 
       # The reason we are doing an unshift, because we want the tld domain to be CN
-      # if tld is present in the array list, otherwise go ahead with whaever domains we have
+      # if tld is present in the array list, otherwise go ahead with whatever domains we have
       _domains = (domains.include? tld) ? domains.sort.unshift(tld).uniq : domains.sort.uniq
 
       if cn_domains.size > 0 then
