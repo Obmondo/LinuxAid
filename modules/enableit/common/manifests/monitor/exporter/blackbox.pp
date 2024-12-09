@@ -71,7 +71,7 @@ class common::monitor::exporter::blackbox (
       noop => $noop_value,
     }
 
-    Prometheus::Scrape_job <<| job_name == 'probe_domains_blackbox' and tag == $customer_id |>> {
+    Prometheus::Scrape_job <<| job_name == 'probe_blackbox_domains' and tag == $customer_id |>> {
       notify => Class['prometheus::service_reload'],
     }
   }
