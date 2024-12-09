@@ -24,8 +24,13 @@ define monitor::domains (
     collect_dir => $collect_dir,
   }
 
-  File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
-    ensure => absent
+  $blackbox_node = if $enable { lookup('common::monitor::exporter::blackbox::node') }
+
+  # NOTE: skip deleting the files on the actual blackbox node
+  if $blackbox_node != $trusted['certname'] {
+    File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
+      ensure => absent
+    }
   }
 
   @@monitor::threshold { "monitor::domains::expiry::${_domain}":
