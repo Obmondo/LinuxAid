@@ -4,12 +4,13 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
+
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Array[Variant[Stdlib::Fqdn, Stdlib::HttpUrl, Stdlib::HttpsUrl]]],
+    domains                  => Optional[Variant[Stdlib::Fqdn, Stdlib::HttpUrl]],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
     port                     => Optional[Stdlib::Port],
@@ -30,9 +31,9 @@ class profile::web::apache (
 
   # Firewall
   firewall_multi { '000 allow http request':
-    dport  => $listen_ports,
-    proto  => 'tcp',
-    jump   => 'accept',
+    dport => $listen_ports,
+    proto => 'tcp',
+    jump  => 'accept',
   }
 
   $default_modules = [
@@ -105,62 +106,39 @@ class profile::web::apache (
       file {
         "/etc/ssl/private/${vhost_name}":
           ensure => directory,
+          owner  => $apache_user,
           mode   => '0700',
         ;
         "/etc/ssl/private/${vhost_name}/cert.pem":
           content => $params['ssl_cert'],
+          owner   => $apache_user,
           notify  => Service['httpd'],
         ;
         "/etc/ssl/private/${vhost_name}/cert.key":
           content => $params['ssl_key'],
+          owner   => $apache_user,
           notify  => Service['httpd'],
         ;
       }
-    }
-    if $params['domains'] {
-      $params['domains'].each |$domain| {
 
-        $job_name = 'probe_domains_blackbox'
-        $collect_dir = '/etc/prometheus/file_sd_config.d'
-        $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
-
-        @@prometheus::scrape_job { "blackbox_domain_${trusted['certname']}_${domain_without_http}" :
-          job_name    => $job_name,
-          tag         => [
-            $trusted['certname'],
-            $facts.dig('obmondo', 'customerid')
-          ],
-          targets     => [$domain],
-          noop        => false,
-          labels      => { 'certname' => $trusted['certname'] },
-          collect_dir => $collect_dir,
-        }
-
-        @@monitor::alert { 'monitor::domains::status':
-          enable => true,
-          tag    => $::trusted['certname'],
-        }
-
-        File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain_without_http}.yaml" |> {
-          ensure => absent
-        }
-      }
+      $domains = openssl_cn("/etc/ssl/private/${vhost_name}/cert.pem")
+      monitor::domains { $domains: }
     }
 
     apache::vhost { $vhost_name:
-      ssl                      => $params['ssl'],
-      port                     => $params['port'],
-      ssl_cert                 => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.pem" },
-      ssl_key                  => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.key" },
-      docroot                  => $params['docroot'],
-      manage_docroot           => false,
-      override                 => ['ALL'],
-      redirect_dest            => $params['redirect_dest'],
-      redirect_status          => $params['redirect_status'],
-      directories              => $params['directories'],
-      serveraliases            => $params['serveraliases'],
-      aliases                  => $params['aliases'],
-      proxy_pass               => $params['proxy_pass'],
+      ssl             => $params['ssl'],
+      port            => $params['port'],
+      ssl_cert        => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.pem" },
+      ssl_key         => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.key" },
+      docroot         => $params['docroot'],
+      manage_docroot  => false,
+      override        => ['ALL'],
+      redirect_dest   => $params['redirect_dest'],
+      redirect_status => $params['redirect_status'],
+      directories     => $params['directories'],
+      serveraliases   => $params['serveraliases'],
+      aliases         => $params['aliases'],
+      proxy_pass      => $params['proxy_pass'],
     }
   }
 

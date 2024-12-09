@@ -51,7 +51,7 @@ define profile::certs::letsencrypt::domain (
     $rejected_domains = pick($facts.dig('rejected_domains'), [])
 
     # Monitor the CN, since SAN are part of same cert, so expiry would be same ofcourse :)
-    monitor::domains::expiry { $name:
+    monitor::domains { $name:
       enable => true,
     }
 

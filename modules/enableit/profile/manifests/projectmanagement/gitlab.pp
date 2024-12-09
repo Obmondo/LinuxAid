@@ -65,9 +65,8 @@ class profile::projectmanagement::gitlab (
       collect_dir => $collect_dir,
     }
 
-    @@monitor::alert { 'monitor::domains::status':
+    monitor::domains { $domain:
       enable => true,
-      tag    => $::trusted['certname'],
     }
 
     File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${domain}.yaml" |> {
@@ -198,9 +197,9 @@ class profile::projectmanagement::gitlab (
   ].delete_undef_values
 
   firewall_multi { '200 allow access to Gitlab':
-    proto  => 'tcp',
-    dport  => $bind_ports,
-    jump   => 'accept',
+    proto => 'tcp',
+    dport => $bind_ports,
+    jump  => 'accept',
   }
 
   $_themes = ['graphite', 'charcoal', 'green', 'black', 'violet', 'blue']
@@ -250,9 +249,9 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
 
       # Allow registry access from allowed IP ranges
       firewall_multi { '200 allow access to Gitlab Docker registry':
-        proto  => 'tcp',
-        dport  => $_container_registry_port,
-        jump   => 'accept',
+        proto => 'tcp',
+        dport => $_container_registry_port,
+        jump  => 'accept',
       }
 
       "https://${registry_domain}:${_container_registry_port}"

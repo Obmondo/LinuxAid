@@ -66,7 +66,7 @@ define profile::certs::manual (
     content => $key_and_cert,
   }
 
-  monitor::domains::expiry { $domain:
+  monitor::domains { $domain:
     enable => true,
   }
 

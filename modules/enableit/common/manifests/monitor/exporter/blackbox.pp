@@ -55,35 +55,9 @@ class common::monitor::exporter::blackbox (
     noop => $noop_value,
   }
 
-  @@monitor::alert { 'monitor::domains::cert_expiry':
-    enable => $enable,
-    tag    => $::trusted['certname'],
-  }
-
   if $targets.size > 0 {
-    @@prometheus::scrape_job { "blackbox_${trusted['certname']}_customs" :
-      job_name    => 'probe_domains_blackbox',
-      tag         => [
-        $trusted['certname'],
-        $customer_id,
-      ],
-      targets     => $targets,
-      labels      => { 'certname' => $trusted['certname'] },
-      collect_dir => '/etc/prometheus/file_sd_config.d',
-    }
-
-    @@monitor::alert { 'monitor::domains::status':
-      enable => $enable,
-      tag    => $::trusted['certname'],
-    }
-
     $targets.each |$domain| {
-      $domain_without_http = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G')
-      $domain_split = split($domain_without_http, '/')[0]
-
-      monitor::domains::expiry { $domain_split:
-        enable => $enable,
-      }
+      monitor::domains { $domain: }
     }
   }
 
