@@ -300,7 +300,7 @@ common::monitor::prom::server::config_dir: '/etc/prometheus'
 common::monitor::prom::server::collect_scrape_jobs:
   - job_name: node
   - job_name: blackbox
-  - job_name: probe_domains_blackbox
+  - job_name: probe_blackbox_domains
     scrape_interval: 12h
     metrics_path: /probe
     params:

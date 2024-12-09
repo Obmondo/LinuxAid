@@ -8,11 +8,11 @@ define monitor::domains (
 
   include monitor::domains::health
 
-  $job_name = 'probe_domains_blackbox'
+  $job_name = 'probe_blackbox_domains'
   $collect_dir = '/etc/prometheus/file_sd_config.d'
   $_domain = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0]
 
-  @@prometheus::scrape_job { "blackbox_haproxy_${trusted['certname']}_${_domain}" :
+  @@prometheus::scrape_job { $_domain :
     job_name    => $job_name,
     tag         => [
       $trusted['certname'],
@@ -24,7 +24,7 @@ define monitor::domains (
     collect_dir => $collect_dir,
   }
 
-  File <| title == "${collect_dir}/${job_name}_blackbox_domain_${trusted['certname']}_${_domain}.yaml" |> {
+  File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
     ensure => absent
   }
 
