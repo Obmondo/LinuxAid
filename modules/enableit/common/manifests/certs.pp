@@ -54,8 +54,6 @@ class common::certs (
       Integer => "${_name}:${_values['port']}",
       default => $_name,
     }
-
-    monitor::domains { $_name: }
   }
 
   $ca_certs.each |$_name, $params| {

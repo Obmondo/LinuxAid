@@ -66,8 +66,6 @@ define profile::certs::manual (
     content => $key_and_cert,
   }
 
-  monitor::domains { $domain:
-    enable => true,
-  }
+  monitor::domains { $domain: }
 
 }
