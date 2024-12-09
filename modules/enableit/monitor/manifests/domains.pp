@@ -6,6 +6,8 @@ define monitor::domains (
   Variant[Stdlib::Fqdn, Stdlib::HttpUrl] $domain = $title,
 ) {
 
+  include monitor::domains::health
+
   $job_name = 'probe_domains_blackbox'
   $collect_dir = '/etc/prometheus/file_sd_config.d'
   $_domain = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0]
@@ -34,17 +36,5 @@ define monitor::domains (
       'domain' => $_domain,
     },
     expr   => $expiry_days,
-  }
-
-  @@monitor::alert { "monitor::domains::cert_expiry::${_domain}":
-    enable   => $enable,
-    alert_id => 'monitor::domains::cert_expiry',
-    tag      => $::trusted['certname'],
-  }
-
-  @@monitor::alert { "monitor::domains::status::${_domain}":
-    enable   => $enable,
-    alert_id => 'monitor::domains::status',
-    tag      => $::trusted['certname'],
   }
 }
