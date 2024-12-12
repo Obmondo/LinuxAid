@@ -3,7 +3,7 @@ define monitor::domains (
   Boolean       $enable      = true,
   Integer[1,30] $expiry_days = 30,
 
-  Variant[Stdlib::Fqdn, Stdlib::HttpUrl] $domain = $title,
+  Eit_types::Monitor::Domains $domain = $title,
 ) {
 
   include monitor::domains::health
@@ -27,7 +27,7 @@ define monitor::domains (
   $blackbox_node = if $enable { lookup('common::monitor::exporter::blackbox::node') }
 
   # NOTE: skip deleting the files on the actual blackbox node
-  if $blackbox_node != $trusted['certname'] {
+  if $blackbox_node == $trusted['certname'] {
     File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
       ensure => absent
     }
