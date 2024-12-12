@@ -4,14 +4,14 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
-  Eit_types::Monitor::Domains          $domains = $role::web::apache::domains,
+  Array[Eit_types::Monitor::Domains]   $domains = $role::web::apache::domains,
 
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Eit_types::Monitor::Domains],
+    domains                  => Optional[Array[Eit_types::Monitor::Domains]],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
     port                     => Optional[Stdlib::Port],

@@ -5,7 +5,7 @@ class common::monitor::exporter::blackbox (
   Boolean[false]       $noop_value  = false,
   Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
 
-  Eit_types::Monitor::Domains $targets = [],
+  Array[Eit_types::Monitor::Domains] $targets = [],
 ) {
 
   $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }

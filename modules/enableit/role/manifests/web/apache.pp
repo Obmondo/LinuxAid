@@ -5,13 +5,15 @@ class role::web::apache (
   Boolean                     $manage_haproxy = false,
   Enum['default', 'insecure'] $ciphers        = 'default',
   Array                       $modules        = [],
-  Eit_types::Monitor::Domains $domains        = [],
+
+  Array[Eit_types::Monitor::Domains] $domains = [],
+
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Eit_types::Monitor::Domains,
+    domains                  => Optional[Array[Eit_types::Monitor::Domains]],
     port                     => Optional[Stdlib::Port],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
