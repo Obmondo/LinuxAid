@@ -4,13 +4,14 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
+  Eit_types::Monitor::Domains          $domains = $role::web::apache::domains,
 
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Variant[Stdlib::Fqdn, Stdlib::HttpUrl]],
+    domains                  => Optional[Eit_types::Monitor::Domains],
     redirect_dest            => Optional[Array[String]],
     redirect_status          => Optional[Array[String]],
     port                     => Optional[Stdlib::Port],
@@ -118,8 +119,18 @@ class profile::web::apache (
         ;
       }
 
-      $domains = extract_common_name($params['ssl_cert'])
-      monitor::domains { $domains: }
+      if ! $params['domains'].empty {
+        $params['domains'].map |$domain| {
+          monitor::domains { "${domain}:${params['port']}": }
+        }
+      } elsif ! $domains.empty {
+        $domains.map |$domain| {
+          monitor::domains { $domain: }
+        }
+      } else {
+        $domains = extract_common_name($params['ssl_cert'])
+        monitor::domains { $domains: }
+      }
     }
 
     apache::vhost { $vhost_name:
