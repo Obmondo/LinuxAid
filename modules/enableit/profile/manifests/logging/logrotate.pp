@@ -63,10 +63,12 @@ class profile::logging::logrotate (
     }
     'service': {
       # Taken care by logrotate::rule
-      $_logrotate_cron = '/etc/cron.daily/logrotate'
+      $_logrotate_cron = ['/etc/cron.daily/logrotate', '/etc/cron.d/logrotate']
 
-      file { $_logrotate_cron:
-        ensure => absent,
+      $_logrotate_cron.each |$cron_file| {
+        file { $cron_file:
+          ensure => absent,
+        }
       }
 
     }
