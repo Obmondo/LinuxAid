@@ -2,10 +2,10 @@
 class common::certs (
   Stdlib::Absolutepath $__base_dir,
   Hash[Stdlib::Fqdn, Struct[{
-    key  => String,
-    cert => String,
-    ca   => Optional[String],
-    port => Optional[Integer],
+    key   => String,
+    cert  => String,
+    ca    => Optional[String],
+    ports => Optional[Array[Stdlib::Port]],
   }]] $manual = {},
   Hash[String, Struct[{
     ensure => Eit_types::Cert::Ensure,

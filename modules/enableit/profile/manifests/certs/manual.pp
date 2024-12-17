@@ -10,6 +10,8 @@ define profile::certs::manual (
 
   Stdlib::Fqdn         $domain = $title,
   Optional[String]     $ca     = undef,
+
+  Optional[Array[Stdlib::Port]] $ports = undef,
 ) {
 
   $_parts_dir     = "${base_dir_parts}/${name}"
@@ -66,6 +68,12 @@ define profile::certs::manual (
     content => $key_and_cert,
   }
 
-  monitor::domains { $domain: }
+  if $ports.empty {
+    monitor::domains { $domain: }
+  } else {
+    $ports.each |$port| {
+      monitor::domains { "${domain}:${port}": }
+    }
+  }
 
 }
