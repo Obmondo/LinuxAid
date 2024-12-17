@@ -22,6 +22,12 @@ class profile::puppet (
     noop   => $noop_value,
   }
 
+  common::services::systemd { 'puppet-agent-exporter.service':
+    ensure     => absent,
+    enable     => 'mask',
+    noop_value => $noop_value,
+  }
+
   $_version = if $version == 'latest' {
     $version
   } else {
