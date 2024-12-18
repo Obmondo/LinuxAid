@@ -8,7 +8,7 @@ class profile::php::mssql (
     ensure       => ensure_present($ensure),
     location     => 'https://packages.microsoft.com/ubuntu/16.04/prod',
     architecture => 'amd64',
-    release      => $::lsbdistcodename,
+    release      => $facts['os']['distro']['codename'],
     repos        => 'main',
     key          => {
       'id'     => 'BC528686B50D79E339D3721CEB3E94ADBE1229CF',

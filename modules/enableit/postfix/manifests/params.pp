@@ -37,7 +37,7 @@ class postfix::params {
       $postfix_version = undef
       $command_directory = '/usr/sbin'
       $config_directory = '/etc/postfix'
-      case $::lsbdistid {
+      case $facts['os']['distro']['id'] {
         'Ubuntu': {
           $daemon_directory = str2bool(versioncmp($::operatingsystemrelease, '16.04') < 0) ? {
             true    => '/usr/lib/postfix',
@@ -45,7 +45,7 @@ class postfix::params {
           }
         }
         'Debian': {
-          $daemon_directory = $::lsbdistcodename ? {
+          $daemon_directory = $facts['os']['distro']['codename'] ? {
             /(wheezy|jessie)/ => '/usr/lib/postfix',
             default           => '/usr/lib/postfix/sbin',
           }
