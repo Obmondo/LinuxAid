@@ -27,9 +27,9 @@ class eit_repos::apt::enableit_private (
     'updates',
     'security',
   ].each |$release_name| {
-    $_release = if $release_name == 'base' { $::lsbdistcodename } else { "${::lsbdistcodename}-${release_name}" }
+    $_release = if $release_name == 'base' { $facts['os']['distro']['codename'] } else { "${$facts['os']['distro']['codename']}-${release_name}" }
 
-    apt::source { "obmondo_${release_name}_${::lsbdistcodename}" :
+    apt::source { "obmondo_${release_name}_${::facts['os']['distro']['codename']}" :
       ensure       => ensure_present($ensure),
       location     => $location,
       noop         => $noop_value,

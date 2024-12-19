@@ -20,7 +20,7 @@ class xtrabackup::repo inherits xtrabackup {
           ensure   => present,
           include  => { src => true },
           location => 'http://repo.percona.com/apt',
-          release  => $::lsbdistcodename,
+          release  => $facts['os']['distro']['codename'],
           repos    => 'main',
           key      => '4D1BB29D63D98E422B2113B19334A25F8507EFA5',
         }

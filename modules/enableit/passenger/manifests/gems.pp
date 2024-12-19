@@ -31,7 +31,7 @@ class passenger::gems (
       $mod_passenger  = $real_mod_passenger
 
       # Ubuntu does not have libopenssl-ruby - it's packaged in libruby
-      if $::lsbdistid == 'Debian' and $::operatingsystemmajrelese <= 5 {
+      if $facts['os']['distro']['id'] == 'Debian' and $::operatingsystemmajrelese <= 5 {
         $package_dependencies01   = [ 'libopenssl-ruby', 'libcurl4-openssl-dev' ]
       } else {
         $package_dependencies01   = [ 'libruby', 'libcurl4-openssl-dev' ]
