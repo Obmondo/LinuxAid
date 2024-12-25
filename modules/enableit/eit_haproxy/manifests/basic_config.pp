@@ -259,11 +259,13 @@ class eit_haproxy::basic_config (
       "${key} ${server} check"
     }
 
+    $_bind_options = if $value['bind_options'].empty { [] } else { $value['bind_options'] }
+
     haproxy::listen { $key:
       mode    => $mode,
       bind    => $value['binds'].reduce({}) |$acc, $x| {
         $acc + {
-          $x => [],
+          $x => $_bind_options,
         }
       },
       options => {
