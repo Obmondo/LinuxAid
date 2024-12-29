@@ -18,7 +18,7 @@ define monitor::domains (
       $trusted['certname'],
       $facts.dig('obmondo', 'customerid')
     ],
-    targets     => [$_domain],
+    targets     => [$domain],
     noop        => false,
     labels      => { 'certname' => $trusted['certname'] },
     collect_dir => $collect_dir,
