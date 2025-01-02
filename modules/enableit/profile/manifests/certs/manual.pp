@@ -68,12 +68,14 @@ define profile::certs::manual (
     content => $key_and_cert,
   }
 
+  $_domain = extract_common_name($cert)
+
   if $ports.empty {
-    monitor::domains { $domain: }
+    monitor::domains { $_domain: }
   } else {
     $ports.each |$port| {
-      monitor::domains { "${domain}_${port}":
-        domain => "https://${domain}:${port}",
+      monitor::domains { "${_domain}_${port}":
+        domain => "https://${_domain}:${port}",
       }
     }
   }
