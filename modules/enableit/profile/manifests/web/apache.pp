@@ -121,15 +121,21 @@ class profile::web::apache (
 
       if ! $params['domains'].empty {
         $params['domains'].map |$domain| {
-          monitor::domains { "${domain}:${params['port']}": }
+          monitor::domains { "${domain}_${params['port']}":
+            domain => "https://${domain}:${params['port']}",
+          }
         }
       } elsif ! $domains.empty {
         $domains.map |$domain| {
-          monitor::domains { $domain: }
+          monitor::domains { $domain:
+            domain => "https://${domain}",
+          }
         }
       } else {
-        $domains = extract_common_name($params['ssl_cert'])
-        monitor::domains { $domains: }
+        $domain = extract_common_name($params['ssl_cert'])
+        monitor::domains { $domain:
+          domain => "https://${domain}",
+        }
       }
     }
 
