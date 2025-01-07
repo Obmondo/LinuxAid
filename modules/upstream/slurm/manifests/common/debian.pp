@@ -7,4 +7,4 @@
 # = Class: slurm::common::debian
 #
 # Specialization class for Debian systems
-class slurm::common::debian inherits slurm::common { }
+class slurm::common::debian inherits slurm::common {}

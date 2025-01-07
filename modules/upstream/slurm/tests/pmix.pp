@@ -5,8 +5,7 @@
 #      sudo puppet apply --modulepath /vagrant/tests/vagrant/puppet/modules -t /vagrant/tests/pmix.pp
 #
 node default {
-
-  include ::slurm::params
+  include slurm::params
 
   $version = $::slurm::params::pmix_version
   $checksum = $::slurm::params::pmix_src_checksum
@@ -30,5 +29,4 @@ node default {
   #   ensure => $ensure,
   #   require => Slurm::Pmix::Build[$version]
   # }
-
 }

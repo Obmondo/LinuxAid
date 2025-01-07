@@ -1,5 +1,5 @@
 ################################################################################
-# Time-stamp: <Thu 2022-06-30 14:38 svarrette>
+# Time-stamp: <Fri 2024-08-23 17:13:19 hcartiaux>
 #
 # File::      <tt>munge.pp</tt>
 # Author::    UL HPC Team (hpc-sysadmins@uni.lu)
@@ -25,8 +25,8 @@
 #
 # See https://slurm.schedmd.com/authplugins.html
 #
-# @param ensure       [String]  Default: 'present'
-#          Ensure the presence (or absence) of the Munge service
+# @param ensure
+#          Ensure the presence (or absence) of the Munge service - Default: 'present'
 # @param create_key   [Boolean] Default: true
 #          Whether or not to generate a new key if it does not exists
 # @param daemon_args  [Array] Default: []
@@ -37,9 +37,9 @@
 #          https://github.com/dun/munge/wiki/Installation-Guide#starting-the-daemon
 # @param gid [Integer] Default: 992
 #          GID of the munge group
-# @param key_content  [String] Default: undef
-#          The desired contents of a file, as a string. This attribute is mutually
-#          exclusive with source and target.
+# @param key_content  [String,Binary] Default: undef
+#          The desired content of the munge key file, as a string or binary object.
+#          This attribute is mutually exclusive with source and target.
 # @param key_filename [String] Default: '/etc/munge/munge.key'
 #          The secret key filename
 # @param key_source   [String] Default: undef
@@ -53,24 +53,20 @@
 # /!\ We assume the RPM 'slurm-munge' has been already installed -- this class
 # does not care about it
 #
-class slurm::munge(
-  String  $ensure         = $slurm::params::ensure,
-  Boolean $create_key     = $slurm::params::munge_create_key,
-  Array $daemon_args      = $slurm::params::munge_daemon_args,
-  Integer $uid            = $slurm::params::munge_uid,
-  Integer $gid            = $slurm::params::munge_gid,
-  String $key_filename    = $slurm::params::munge_key,
-  $key_source             = undef,
-  $key_content            = undef,
-  Boolean $service_manage = $slurm::service_manage,
+class slurm::munge (
+  Enum['present', 'absent']        $ensure         = $slurm::params::ensure,
+  Boolean                          $create_key     = $slurm::params::munge_create_key,
+  Array                            $daemon_args    = $slurm::params::munge_daemon_args,
+  Integer                          $uid            = $slurm::params::munge_uid,
+  Integer                          $gid            = $slurm::params::munge_gid,
+  String                           $key_filename   = $slurm::params::munge_key,
+  Optional[String]                 $key_source     = undef,
+  Optional[Variant[String,Binary]] $key_content    = undef,
+  Boolean                          $service_manage = $slurm::service_manage,
 )
-inherits slurm::params
-{
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  #validate_legacy('Boolean', 'validate_bool', $create_key)
-
-  if ($::osfamily == 'RedHat') {
-    include ::epel
+inherits slurm::params {
+  if ($facts['os']['family'] == 'RedHat') {
+    include epel
   }
 
   # Order
@@ -114,7 +110,7 @@ inherits slurm::params
   }
 
   if $ensure == 'present' {
-    file { [ $slurm::params::munge_configdir, $slurm::params::munge_logdir ]:
+    file { [$slurm::params::munge_configdir, $slurm::params::munge_logdir]:
       ensure  => 'directory',
       owner   => $slurm::params::munge_username,
       group   => $slurm::params::munge_group,
@@ -143,7 +139,7 @@ inherits slurm::params
 
   # Create the key if needed
   if ($create_key and $ensure == 'present') {
-    class { '::rngd':
+    class { 'rngd':
       hwrng_device => '/dev/urandom',
     }
     exec { "create Munge key ${slurm::params::munge_key}":
@@ -155,7 +151,7 @@ inherits slurm::params
       require => [
         File[dirname($key_filename)],
         Package['munge'],
-        Class['::rngd']
+        Class['rngd']
       ],
     }
   }

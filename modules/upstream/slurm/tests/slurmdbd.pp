@@ -6,9 +6,8 @@
 node default {
   # include ::slurm::params
 
-  include ::slurm
-  class { '::slurm::slurmdbd':
-    privatedata => [ 'accounts', 'users', 'usage', 'jobs'],
+  include slurm
+  class { 'slurm::slurmdbd':
+    privatedata => ['accounts', 'users', 'usage', 'jobs'],
   }
-
 }

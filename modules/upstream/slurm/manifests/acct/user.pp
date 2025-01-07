@@ -16,8 +16,8 @@
 # and a working SLURMDBD.
 # The name of this resource is expected to be the qos name.
 #
-# @param ensure [String]  Default: 'present'
-#          Ensure the presence (or absence) of the entity
+# @param ensure
+#          Ensure the presence (or absence) of the entity - Default: 'present'
 # @param $defaultaccount [String]
 #          Identify the default bank account name to be used for a job if none is
 #          specified at submission time.
@@ -25,13 +25,11 @@
 #          Specification options -- see https://slurm.schedmd.com/sacctmgr.html
 #          Elligible keys:
 #
-define slurm::acct::user(
-  String  $ensure         = $slurm::params::ensure,
-  String  $defaultaccount = '',
-  Hash    $options        = {},
-)
-{
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
+define slurm::acct::user (
+  Enum['present', 'absent'] $ensure         = $slurm::params::ensure,
+  String                    $defaultaccount = '',
+  Hash                      $options        = {},
+) {
   $default_options = empty($defaultaccount) ? {
     true    => {},
     default => { 'DefaultAccount' => $defaultaccount, }

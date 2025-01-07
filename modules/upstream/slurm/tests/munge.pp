@@ -15,6 +15,5 @@
 #      sudo puppet apply -t /vagrant/tests/munge.pp
 #
 node default {
-  include ::slurm::munge
-
+  include slurm::munge
 }

@@ -5,7 +5,7 @@
 #      sudo puppet apply -t /vagrant/tests/clean.pp
 #
 node default {
-  class { '::slurm':
+  class { 'slurm':
     ensure         => 'absent',
     with_slurmdbd  => true,
     with_slurmctld => true,

@@ -18,8 +18,8 @@
 #
 # More details on <https://slurm.schedmd.com/>
 #
-# @param ensure [String] Default: 'present'.
-#         Ensure the presence (or absence) of slurm
+# @param ensure
+#         Ensure the presence (or absence) of slurm - Default: 'present'.
 # @param content [String]
 #          The desired contents of a file, as a string. This attribute is
 #          mutually exclusive with source and target.
@@ -56,6 +56,8 @@
 #          Do we perform the build of the Slurm packages from sources or not?
 # @param do_package_install       [Boolean]     Default: true
 #          Do we perform the install of the Slurm packages or not?
+# @param package_install_options  [Array]       Default: []
+#          installation_options for the package resource
 # @param wrappers                 [Array]       Default: [ 'slurm-openlava',  'slurm-torque' ]
 #          Extra wrappers/package to install (ex: openlava/LSF wrapper, Torque/PBS wrappers)
 # @param src_checksum             [String]      Default: ''
@@ -190,22 +192,22 @@
 #           Hash defining the partitions and QOS settings for SLURM.
 #           Format
 #           { '<name>' => {
-  #              nodes         => n,           # Number of nodes
-  #              default       => true|false,  # Default partition?
-  #              hidden        => true|false,  # Hidden partition?
-  #              allowgroups   => 'ALL|group[,group]*'
-  #              allowaccounts => 'ALL|acct[,acct]*'
-  #              allowqos      => 'ALL|qos[,qos]*'
-  #              state         => 'UP|DOWN|DRAIN|INACTIVE'
-  #              oversubscribe => 'EXCLUSIVE|FORCE|YES|NO' (replace :shared)
-  #              #=== Time: Format is minutes, minutes:seconds, hours:minutes:seconds, days-hours,
-  #                      days-hours:minutes, days-hours:minutes:seconds or "UNLIMITED"
-  #              default_time  => 'UNLIMITED|DD-HH:MM:SS',
-  #              max_time      => 'UNLIMITED|DD-HH:MM:SS',
-  #              #=== associated QoS config, named 'qos-<partition>' ===
-  #              priority      => n           # QoS priority (default: 0)
-  #              preempt       => 'qos-<name>
-  #         }
+#              nodes         => n,           # Number of nodes
+#              default       => true|false,  # Default partition?
+#              hidden        => true|false,  # Hidden partition?
+#              allowgroups   => 'ALL|group[,group]*'
+#              allowaccounts => 'ALL|acct[,acct]*'
+#              allowqos      => 'ALL|qos[,qos]*'
+#              state         => 'UP|DOWN|DRAIN|INACTIVE'
+#              oversubscribe => 'EXCLUSIVE|FORCE|YES|NO' (replace :shared)
+#              #=== Time: Format is minutes, minutes:seconds, hours:minutes:seconds, days-hours,
+#                      days-hours:minutes, days-hours:minutes:seconds or "UNLIMITED"
+#              default_time  => 'UNLIMITED|DD-HH:MM:SS',
+#              max_time      => 'UNLIMITED|DD-HH:MM:SS',
+#              #=== associated QoS config, named 'qos-<partition>' ===
+#              priority      => n           # QoS priority (default: 0)
+#              preempt       => 'qos-<name>
+#         }
 # @param preemptmode              [Array]       Default: [ 'REQUEUE' ]
 #           in ['OFF','CANCEL','CHECKPOINT','GANG','REQUEUE','SUSPEND']
 # @param preempttype              [String]      Default: 'qos'
@@ -233,6 +235,7 @@
 # @param prolog                   [String]      Default: ''
 # @param prologflags              [Array]       Default: []
 # @param prologslurmctld          [String]      Default: ''
+# @param reconfigflags            [Array]       Default: []
 # @param propagateresourcelimits  [Array]       Default: []
 # @param propagateresourcelimits_except [Array] Default: ['MEMLOCK']
 # @param resvoverrun              [Integer]     Default: 0
@@ -245,8 +248,12 @@
 # @param suspendprogram           [String]      Default: ''
 # @param suspendtimeout           [Integer]     Default: ''
 # @param suspendtime              [Integer]     Default: ''
+# @param suspendrate              [Integer]     Default: ''
 # @param suspendexcnodes          [String]      Default: ''
 # @param suspendexcparts          [String]      Default: ''
+# @param suspendexcstates         [Array]       Default: []
+#           SuspendExcStates specifies node states that should not to be powered down
+#           automatically. It was introduced in 23.02.
 # @param statesavelocation        [String]      Default: '/var/lib/slurmctld'
 #           Fully qualified pathname of a directory into which the Slurm
 #           controller, slurmctld, saves its state
@@ -321,17 +328,17 @@
 #          Hash defining the hierarchical network topology iff $topology == 'tree'
 #          Format
 #          'switchname' => {
-  #              [comment => 'This will become a comment above the line',]
-  #              nodes => '<nodes>',
-  #              [linkspeed => '<speed>']
-  #        }
+#              [comment => 'This will become a comment above the line',]
+#              nodes => '<nodes>',
+#              [linkspeed => '<speed>']
+#        }
 #        Example
 #        { 's0' => { nodes => 'dev[0-5]'   },
 #          's1' => { nodes => 'dev-[6-11]' },
 #          's2' => { nodes => 'dev-[12-17]'},
 #          's3' => { comment   => 'GUID: XXXXXX - switch 0',
-  #                  switches  => 's[0-2]',
-  #                  linkspeed => '100Mb/s',} }
+#                  switches  => 's[0-2]',
+#                  linkspeed => '100Mb/s',} }
 #       Which will produce the following entries in the topology.conf file
 #           SwitchName=s0 Nodes=dev[0-5]
 #           SwitchName=s1 Nodes=dev-[6-11]
@@ -380,6 +387,8 @@
 #            lower bound (in MB) on the memory limits defined by AllowedRAMSpace & AllowedSwapSpace.
 # @param cgroup_taskaffinity       [Boolean]    Default: false
 #            This feature requires the Portable Hardware Locality (hwloc) library
+# @param cgroup_signalchildrenprocesses [Boolean] Default: false
+#            Send signals (for cancelling, suspending, resuming, etc.) to all children processes in a job/step.
 #
 ############################                      ####################################
 ############################ gres.conf attributes ####################################
@@ -480,8 +489,8 @@
 # for instance
 #
 #         class { 'slurm':
-  #             ensure => 'present'
-  #         }
+#             ensure => 'present'
+#         }
 #
 # === Authors
 #
@@ -499,8 +508,8 @@
 #
 # [Remember: No empty lines between comments and class definition]
 #
-class slurm(
-  String  $ensure                         = $slurm::params::ensure,
+class slurm (
+  Enum['present', 'absent'] $ensure       = $slurm::params::ensure,
   $content                                = undef,
   $custom_content                         = undef,
   $source                                 = undef,
@@ -520,6 +529,7 @@ class slurm(
   # Slurm source building
   Boolean $do_build                       = $slurm::params::do_build,
   Boolean $do_package_install             = $slurm::params::do_package_install,
+  Array[String] $package_install_options  = [],  # values from hiera data
   String  $src_checksum                   = $slurm::params::src_checksum,
   String  $src_checksum_type              = $slurm::params::src_checksum_type,
   String  $srcdir                         = $slurm::params::srcdir,
@@ -619,6 +629,7 @@ class slurm(
   Boolean $priorityfavorsmall             = $slurm::params::priorityfavorsmall,
   Array   $prologflags                    = $slurm::params::prologflags,
   String  $prologslurmctld                = $slurm::params::prologslurmctld,
+  Array   $reconfigflags                  = $slurm::params::reconfigflags,
   Array   $propagateresourcelimits        = $slurm::params::propagateresourcelimits,
   Array   $propagateresourcelimits_except = $slurm::params::propagateresourcelimits_except,
   Hash    $qos                            = $slurm::params::qos,
@@ -631,8 +642,10 @@ class slurm(
   String  $suspendprogram                 = $slurm::params::suspendprogram,
   Integer $suspendtimeout                 = $slurm::params::suspendtimeout,
   Integer $suspendtime                    = $slurm::params::suspendtime,
+  Integer $suspendrate                    = $slurm::params::suspendrate,
   String  $suspendexcnodes                = $slurm::params::suspendexcnodes,
   String  $suspendexcparts                = $slurm::params::suspendexcparts,
+  Array   $suspendexcstates               = $slurm::params::suspendexcstates,
   String  $statesavelocation              = $slurm::params::statesavelocation,
   String  $schedulertype                  = $slurm::params::schedulertype,
   Array   $schedulerparameters            = $slurm::params::schedulerparameters,
@@ -654,6 +667,7 @@ class slurm(
   Integer $slurmdtimeout                  = $slurm::params::slurmdtimeout,
   Array   $slurmctldparameters            = $slurm::params::slurmctldparameters,
   Array   $slurmdparameters               = $slurm::params::slurmdparameters,
+  String  $slurmdspooldir                 = $slurm::params::slurmdspooldir,
   String  $srunportrange                  = $slurm::params::srunportrange,
   String  $srunepilog                     = $slurm::params::srunepilog,
   String  $srunprolog                     = $slurm::params::srunprolog,
@@ -710,6 +724,7 @@ class slurm(
   Integer $cgroup_minkmemspace            = $slurm::params::cgroup_minkmemspace,
   Integer $cgroup_minramspace             = $slurm::params::cgroup_minramspace,
   Boolean $cgroup_taskaffinity            = $slurm::params::cgroup_taskaffinity,
+  Boolean $cgroup_signalchildrenprocesses = $slurm::params::cgroup_signalchildrenprocesses,
   #
   # gres.conf
   #
@@ -755,17 +770,14 @@ class slurm(
   $pluginsdir_target                      = undef,
   Array $plugins                          = [],
 )
-inherits slurm::params
-{
-  validate_legacy('String', 'validate_re', $ensure, ['^present', '^absent'])
-
+inherits slurm::params {
   info ("Configuring SLURM (with ensure = ${ensure})")
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     #'Debian': { contain ::slurm::common::debian }
-    'RedHat':  { contain ::slurm::common::redhat }
+    'RedHat':  { contain slurm::common::redhat }
     default: {
-      fail("Module ${module_name} is not supported on ${::operatingsystem}")
+      fail("Module ${module_name} is not supported on ${facts['os']['name']}")
     }
   }
 }

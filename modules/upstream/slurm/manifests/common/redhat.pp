@@ -8,16 +8,15 @@
 #
 # Specialization class for Redhat systems
 class slurm::common::redhat inherits slurm::common {
-
-  include ::epel
-  include ::yum
-  include ::selinux
+  include epel
+  include yum
+  include selinux
 
   if $slurm::do_build {
     yum::group { $slurm::params::groupinstall:
       ensure  => 'present',
       timeout => 600,
-      require => Class['::epel'],
+      require => Class['epel'],
     }
 
     # Resource default statements
@@ -27,7 +26,6 @@ class slurm::common::redhat inherits slurm::common {
   }
 
   if $slurm::manage_firewall and versioncmp($facts['os']['release']['major'], '7') >= 0 {
-    include ::firewalld
+    include firewalld
   }
-
 }

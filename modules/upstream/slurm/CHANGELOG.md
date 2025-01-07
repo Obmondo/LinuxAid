@@ -4,6 +4,145 @@ Changelog
 
 (unreleased)
 ------------
+- Merge tag 'v1.5.1' into devel. [Hyacinthe Cartiaux]
+
+  v1.5.1
+
+
+v1.5.1 (2024-09-03)
+-------------------
+- Merge branch 'release/1.5.1' into production. [Hyacinthe Cartiaux]
+- Bump to version '1.5.1' [Hyacinthe Cartiaux]
+- Gemfile.lock update. [Hyacinthe Cartiaux]
+- Gemfile.lock update. [Hyacinthe Cartiaux]
+- Merge pull request #77 from jorhett/fix-slurmd-spooldir. [Hyacinthe
+  Cartiaux]
+
+  Fix slurmd spooldir to be consistent/default
+- Fix slurmd spooldir to be consistent/default. [Jo Rhett]
+- Falkorlib and facter update. [Hyacinthe Cartiaux]
+- Lint! [Hyacinthe Cartiaux]
+- Syntax clean. [Hyacinthe Cartiaux]
+- PDK and Falkorlib update tentative. [Hyacinthe Cartiaux]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
+- Merge tag 'v1.5.0' into devel. [Hyacinthe Cartiaux]
+
+  v1.5.0
+
+
+v1.5.0 (2024-08-23)
+-------------------
+- Merge branch 'release/1.5.0' into production. [Hyacinthe Cartiaux]
+- Bump to version '1.5.0' [Hyacinthe Cartiaux]
+- Bundle update. [Hyacinthe Cartiaux]
+- Munge key content can be either a string or binary object. [Hyacinthe
+  Cartiaux]
+- Merge pull request #71 from jorhett/allow-pure-package-installation.
+  [Hyacinthe Cartiaux]
+
+  Apply broken when do_build is false
+- Apply broken when do_build is false. [Jo Rhett]
+- Merge pull request #70 from jorhett/fix-missing-spool-directory.
+  [Hyacinthe Cartiaux]
+
+  Fix missing spool directory, pidfile location, obsoleted specplugin
+- Fix missing spool directory, pidfile location, obsoleted specplugin.
+  [Jo Rhett]
+- Merge pull request #72 from jorhett/replace-validate-legacy-with-data-
+  types. [Hyacinthe Cartiaux]
+
+  Replace obsolete validate_legacy with data type tests
+- Replace obsolete validate_legacy with data type tests. [Jo Rhett]
+- Merge pull request #73 from jorhett/update-mysql-module. [Hyacinthe
+  Cartiaux]
+
+  Update mysql dependency to moodern versions, replace legacy password function
+- Merge branch 'devel' into update-mysql-module. [Hyacinthe Cartiaux]
+- Merge pull request #76 from jorhett/skip-too-long-mysql-hostnames.
+  [Hyacinthe Cartiaux]
+
+  Avoid mysql failures with too-long host names
+- Avoid mysql failures with too-long host names. [Jo Rhett]
+- Update mysql dependency to moodern versions, replace legacy password
+  function. [Jo Rhett]
+- Update mkdocs.yml - use nav instead of pages. [Hyacinthe Cartiaux]
+- Gemfile.lock update - fix dependabot alerts. [Hyacinthe Cartiaux]
+- Add missing .readthedocs file. [Hyacinthe Cartiaux]
+- Gemfile.lock - update. [Hyacinthe Cartiaux]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
+- Merge tag 'v1.4.10' into devel. [Hyacinthe Cartiaux]
+
+  v1.4.10
+
+
+v1.4.10 (2024-06-20)
+--------------------
+- Merge branch 'release/1.4.10' into production. [Hyacinthe Cartiaux]
+- Bump to version '1.4.10' [Hyacinthe Cartiaux]
+- Lint! Fixed legacy facts. [Hyacinthe Cartiaux]
+- Synchronize Changelog with latest commits. [Teddy Rodrigues Valette]
+- Merge tag 'v1.4.9' into devel. [Teddy Rodrigues Valette]
+
+  v1.4.9
+
+
+v1.4.9 (2024-03-13)
+-------------------
+- Merge branch 'release/1.4.9' into production. [Teddy Rodrigues
+  Valette]
+- Bump to version '1.4.9' [Teddy Rodrigues Valette]
+- Merge pull request #69 from ULHPC/23-11_cgroup_changes. [Teddy
+  Rodrigues Valette]
+
+  cgroup.conf - adapt template for v23.11
+- Cgroup.conf - adapt template for v23.11     - Removed deprecated
+  parameters AllowedKmemSpace, ConstrainKmemSpace, MaxKmemPercent,
+  MinKmemSpace for >= 23.11.     - Remove CgroupAutomount= option from
+  cgroup.conf for >= 23.11.     - Add "SignalChildrenProcesses=<yes|no>"
+  option to cgroup.conf for >= 23.11.     - See
+  https://github.com/SchedMD/slurm/blob/slurm-23.11/RELEASE_NOTES.
+  [Teddy Rodrigues Valette]
+- Metadata.json - update tested dependencies. [Hyacinthe Cartiaux]
+- Slurmdbd.conf - fix typo in ArchiveResvs parameter. [Teddy Rodrigues
+  Valette]
+- Slurm.conf - typo in commented definition of SuspendRate. [Teddy
+  Rodrigues Valette]
+- Synchronize Changelog with latest commits. [Teddy Valette]
+- Merge tag 'v1.4.8' into devel. [Teddy Valette]
+
+  v1.4.8
+
+
+v1.4.8 (2024-01-10)
+-------------------
+- Merge branch 'release/1.4.8' into production. [Teddy Valette]
+- Bump to version '1.4.8' [Teddy Valette]
+- Merge pull request #68 from ULHPC/feature/powersaving. [Teddy
+  Rodrigues Valette]
+
+  slurm.conf - add a few parameters for power saving
+- Slurm.conf - add a few parameters for power saving     - ReconfigFlags
+  - SuspendRate     - SuspendExcStates     - SuspendExcParts. [Teddy
+  Valette]
+- Merge pull request #66 from uvNikita/slurmdbd/auth-alt-params. [Teddy
+  Rodrigues Valette]
+
+  [slurm::slurmdbd] set AuthAltTypes and AuthAltParameters
+- [slurm::slurmdbd] set AuthAltTypes and AuthAltParameters. [Nikita
+  Uvarov]
+- Synchronize Changelog with latest commits. [Teddy Valette]
+- Merge tag 'v1.4.7' into devel. [Teddy Valette]
+
+  v1.4.7
+
+
+v1.4.7 (2023-05-22)
+-------------------
+- Merge branch 'release/1.4.7' into production. [Teddy Valette]
+- Bump to version '1.4.7' [Teddy Valette]
+- [slurm::params] add rocky support for munge dependencies. [Teddy
+  Valette]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
 - Merge tag 'v1.4.6' into devel. [Hyacinthe Cartiaux]
 
   v1.4.6

@@ -14,8 +14,8 @@
 # This assumes the sources have been downloaded using slurm::download
 #
 #
-# @param ensure  [String]  Default: 'present'
-#          Ensure the presence (or absence) of building
+# @param ensure
+#          Ensure the presence (or absence) of building - Default: 'present'
 # @param srcdir  [String] Default: '/usr/local/src'
 #          Where the [downloaded] Slurm sources are located
 # @param dir     [String] Default: '/root/rpmbuild' on redhat systems
@@ -59,27 +59,28 @@
 #      slurm-slurmdbd-19.05.3-2.el7.x86_64.rpm
 #      slurm-torque-19.05.3-2.el7.x86_64.rpm
 #
-define slurm::build(
-  String  $ensure  = $slurm::params::ensure,
-  String  $srcdir  = $slurm::params::srcdir,
-  String  $dir     = $slurm::params::builddir,
-  Array   $with    = $slurm::params::build_with,
-  Array   $without = $slurm::params::build_without,
-)
-{
-  include ::slurm::params
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  validate_legacy('String',  'validate_re',   $name,   [ '\d+[\.-]?' ])
+define slurm::build (
+  Enum['present', 'absent'] $ensure  = $slurm::params::ensure,
+  String                    $srcdir  = $slurm::params::srcdir,
+  String                    $dir     = $slurm::params::builddir,
+  Array                     $with    = $slurm::params::build_with,
+  Array                     $without = $slurm::params::build_without,
+) {
+  include slurm::params
 
   # $name is provided at define invocation
-  $version = $name
+  $version = $name ? {
+    Pattern[/\d+[\.-]?/] => $name,
+    Integer              => $name,
+    default              => fail("\$name must contain only digits, periods, and dashes")
+  }
 
   # Path to the SLURM sources
   $src = "${srcdir}/slurm-${version}.tar.bz2"
 
   # Prepare the [RPM] build option
   $with_options = empty($with) ? {
-    true    =>  '',
+    true    => '',
     default => join(prefix($with, '--with '), ' ')
   }
   # NOT YET IMPLEMENTED:
@@ -88,7 +89,7 @@ define slurm::build(
   #    (by default, installed under /usr so all good...)
 
   $without_options = empty($without) ? {
-    true    =>  '',
+    true    => '',
     default => join(prefix($without, '--without '), ' ')
   }
 
@@ -100,9 +101,9 @@ define slurm::build(
 
   # Management of PMIx
   if ($slurm::with_pmix or ('pmix' in $with)) {
-    if !defined(Class['::slurm::pmix']) {
-      include ::slurm::pmix
-      Class['::slurm::pmix'] -> Exec[$buildname]
+    if !defined(Class['slurm::pmix']) {
+      include slurm::pmix
+      Class['slurm::pmix'] -> Exec[$buildname]
       # Slurm::Pmix::Install[$slurm::pmix::version] -> Exec[$buildname]
     }
     $define_pmix = "--define \"_with_pmix --with-pmix=${slurm::params::pmix_install_path}\""
@@ -110,22 +111,22 @@ define slurm::build(
     $define_pmix = ''
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Redhat': {
-      include ::epel
-      include ::yum
+      include epel
+      include yum
       if !defined(Yum::Group[$slurm::params::groupinstall]) {
         yum::group { $slurm::params::groupinstall:
           ensure  => 'present',
           timeout => 600,
-          require => Class['::epel'],
+          require => Class['epel'],
         }
       }
       Yum::Group[$slurm::params::groupinstall] -> Exec[$buildname]
 
-      $rpmdir = "${dir}/RPMS/${::architecture}"
+      $rpmdir = "${dir}/RPMS/${facts['os']['architecture']}"
       $rpms   = prefix(suffix(concat($slurm::params::common_rpms_basename, $slurm::params::slurmdbd_rpms_basename),
-                              "-${version}*.rpm"), "${rpmdir}/")
+      "-${version}*.rpm"), "${rpmdir}/")
       # the below command should typically produce the following RPMs
       # slurm[-suffix]-<version>-1.el7.centos.x86_64.rpm
       case $ensure {
@@ -143,7 +144,7 @@ define slurm::build(
       }
     }
     default: {
-      fail("Module ${module_name} is not supported on ${::operatingsystem}")
+      fail("Module ${module_name} is not supported on ${facts['os']['name']}")
     }
   }
 

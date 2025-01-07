@@ -12,19 +12,17 @@
 # This definition takes care of firewall aspects for SLURM
 #
 #
-define slurm::firewall(
-  String $ensure    = 'present',
-  String  $zone     = 'public',
-  $port             = undef,
-  String  $seltype  = '',
-  String  $protocol = 'tcp',
-)
-{
-  include ::slurm::params
-  validate_legacy('String', 'validate_re', $ensure, ['^present', '^absent'])
+define slurm::firewall (
+  Enum['present', 'absent'] $ensure   = 'present',
+  String                    $zone     = 'public',
+  Optional[String]          $port     = undef,
+  String                    $seltype  = '',
+  String                    $protocol = 'tcp',
+) {
+  include slurm::params
 
-  if (($::osfamily != 'RedHat') or (versioncmp($facts['os']['release']['major'], '7') < 0)) {
-    fail("Module ${module_name} is not supported on ${::operatingsystem}")
+  if (($facts['os']['family'] != 'RedHat') or (versioncmp($facts['os']['release']['major'], '7') < 0)) {
+    fail("Module ${module_name} is not supported on ${facts['os']['name']}")
   }
 
   # $name is provided at define invocation
@@ -47,7 +45,7 @@ define slurm::firewall(
         ensure     => $ensure,
         seltype    => $seltype,
         protocol   => $protocol,
-        port_range => [ ($array_range[0]+0), ($array_range[1]+0) ],
+        port_range => [($array_range[0]+0), ($array_range[1]+0)],
       }
     }
   }

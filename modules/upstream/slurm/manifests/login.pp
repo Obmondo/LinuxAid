@@ -18,15 +18,14 @@
 #
 # [Remember: No empty lines between comments and class definition]
 #
-class slurm::login inherits slurm
-{
-  case $::osfamily {
-    'Redhat': { }
-    default:  { fail("Module ${module_name} is not supported on ${::operatingsystem}") }
+class slurm::login inherits slurm {
+  case $facts['os']['family'] {
+    'Redhat': {}
+    default:  { fail("Module ${module_name} is not supported on ${facts['os']['name']}") }
   }
 
-  include ::slurm::install
-  include ::slurm::config
+  include slurm::install
+  include slurm::config
   Class['slurm::install'] -> Class['slurm::config']
 
   if $slurm::ensure == 'present' {
@@ -34,5 +33,4 @@ class slurm::login inherits slurm
       require => File[$slurm::configdir],
     }
   }
-
 }

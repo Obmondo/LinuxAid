@@ -4,11 +4,9 @@
 #      sudo puppet apply -t /vagrant/tests/repo.pp
 #
 node default {
-
-  class { '::slurm::repo':
+  class { 'slurm::repo':
     ensure => 'present',
     source => 'https://github.com/SchedMD/slurm.git',
     #'ssh://git@github.com/ULHPC/slurm-control.git',
   }
-
 }

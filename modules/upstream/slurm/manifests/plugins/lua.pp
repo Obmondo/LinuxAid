@@ -16,16 +16,15 @@
 # More details on <https://slurm.schedmd.com/slurm.conf.html>
 #
 class slurm::plugins::lua inherits slurm::plugins {
-
   $lua_content = $slurm::lua_content ? {
     undef   => $slurm::lua_source ? {
       undef   => $slurm::lua_target ? {
         undef   => template('slurm/job_submit.lua.erb'),
         default => $slurm::lua_content,
       },
-    default => $slurm::lua_content
+      default => $slurm::lua_content
     },
-  default => $slurm::lua_content,
+    default => $slurm::lua_content,
   }
   $ensure = $slurm::lua_target ? {
     undef   => $slurm::ensure,
@@ -46,5 +45,4 @@ class slurm::plugins::lua inherits slurm::plugins {
     tag     => 'slurm::configfile',
     require => File[$slurm::configdir],
   }
-
 }

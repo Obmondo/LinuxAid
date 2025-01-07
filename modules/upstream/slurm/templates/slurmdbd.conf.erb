@@ -37,18 +37,30 @@ LogFile=<%= scope['slurm::logdir'] %>/slurmdbd.log
 DebugLevelSyslog=<%= scope['slurm::slurmdbddebugsyslog']%>
 <% end -%>
 
-#PidFile=/var/run/slurmdbd.pid
+PidFile=/var/run/slurmdbd/slurmdbd.pid  # created by RuntimeDirectory options in service
 # Authentication for communications with the other Slurm components
 AuthType=auth/<%= scope['slurm::authtype'] %>
 <% unless scope['slurm::authinfo'].empty? -%>
 AuthInfo=auth/<%= scope['slurm::authinfo'] %>
 <% end -%>
 
+<% if scope['slurm::authalttypes'].empty? -%>
+#AuthAltTypes=
+<% else -%>
+AuthAltTypes=<%= scope['slurm::authalttypes'].join(',') %>
+<% end -%>
+
+<% if scope['slurm::authaltparameters'].empty? -%>
+#AuthAltParameters=
+<% else -%>
+AuthAltParameters=<%= scope['slurm::authaltparameters'].join(',') %>
+<% end -%>
+
 # How many seconds between commits on a connection from a Slurmctld. This speeds
 # up inserts into the database dramatically.
 # /!\ There is a [very] small probability of data loss
 <% if scope['slurm::slurmdbd::commitdelay'] > 0  -%>
-CommitDelay=<%= scope['slurm::slurmdbpausd::commitdelay'] %>
+CommitDelay=<%= scope['slurm::slurmdbd::commitdelay'] %>
 <% else -%>
 #CommitDelay=<%= scope['slurm::slurmdbd::commitdelay'] %>
 <% end -%>
@@ -87,10 +99,10 @@ ArchiveJobs=yes
 <% else -%>
 #ArchiveJobs=yes
 <% end -%>
-<% if scope['slurm::slurmdbd::archiveresv'] -%>
-ArchiveResv=yes
+<% if scope['slurm::slurmdbd::archiveresvs'] -%>
+ArchiveResvs=yes
 <% else -%>
-#ArchiveResv=yes
+#ArchiveResvs=yes
 <% end -%>
 #ArchiveScript=
 <% if scope['slurm::slurmdbd::archivesteps'] -%>

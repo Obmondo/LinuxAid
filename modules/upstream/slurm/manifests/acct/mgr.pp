@@ -15,9 +15,9 @@
 # /!\ WARNING: this assumes you are using the MySQL plugin as SlurmDBD plugin
 # and a working SLURMDBD.
 #
-# @param ensure [String]  Default: 'present'
-#          Ensure the presence (or absence) of the cluster
-# @param entity [String]
+# @param ensure
+#          Ensure the presence (or absence) of the cluster - Default: 'present'
+# @param entity
 #          the entity to consider for the name of this resource.
 #          Elligible values in [ 'account',
 #                                'association',
@@ -41,31 +41,15 @@
 #          Specification options, preferably as a hash -- depends on the entity
 #          See https://slurm.schedmd.com/sacctmgr.html
 #
-define slurm::acct::mgr(
-  String $ensure  = $slurm::params::ensure,
-  String $entity  = '',
-  String $value   = '',
-  String $content = '',
-  $options        = undef,
-)
-{
-  include ::slurm
-  include ::slurm::params
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  validate_legacy('String',  'validate_re',   $entity,
-  [ '^account',
-    '^association',
-    '^cluster',
-    '^coordinator',
-    '^event',
-    '^job',
-    '^qos',
-    '^Resource',
-    '^RunawayJobs',
-    '^stats',
-    '^transaction',
-    '^user',
-    '^wckeys'])
+define slurm::acct::mgr (
+  Enum['present','absent'] $ensure  = $slurm::params::ensure,
+  Slurm::Entity            $entity  = '',
+  String                   $value   = '',
+  String                   $content = '',
+  Optional[Hash]           $options = undef,
+) {
+  include slurm
+  include slurm::params
 
   $action = $ensure ? {
     'absent' => 'del',
@@ -76,9 +60,9 @@ define slurm::acct::mgr(
     default => $value,
   }
   $cmd_options = ($options == undef) ? {
-    true    => [ ],
+    true    => [],
     default => ($options.is_a(String) or $options.is_a(Array)) ? {
-      true    => flatten([ $options ]),
+      true    => flatten([$options]),
       default => $options.map |$k, $v| {
         $key = ($k =~ /[A-Z]/) ? {
           true    => $k,
@@ -88,7 +72,7 @@ define slurm::acct::mgr(
           $v
         }
         else {
-          join([ $key, $v ], '=')
+          join([$key, $v], '=')
         }
       },
     }
@@ -115,7 +99,7 @@ define slurm::acct::mgr(
       path    => '/sbin:/usr/bin:/usr/sbin:/bin',
       command => $cmd,
       unless  => $check_unless,
-      require => Class['::slurm::config'],
+      require => Class['slurm::config'],
     }
   }
   else {

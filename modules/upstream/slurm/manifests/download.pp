@@ -14,8 +14,8 @@
 # You can also invoke this definition with the full archive filename i.e.
 # slurm-<version>.tar.bz2.
 #
-# @param ensure [String]  Default: 'present'
-#          Ensure the presence (or absence) of building
+# @param ensure
+#          Ensure the presence (or absence) of building - Default: 'present'
 # @param target [String] Default: '/usr/local/src'
 #          Target directory for the downloaded sources
 # @param checksum [String] Default: ''
@@ -34,25 +34,21 @@
 #        target        => '/usr/local/src/',
 #   }
 #
-define slurm::download(
-  String  $ensure          = $slurm::params::ensure,
-  String  $target          = $slurm::params::srcdir,
-  String  $checksum        = '',
-  String  $checksum_type   = $slurm::params::src_checksum_type,
-  Boolean $checksum_verify = false,
-)
-{
-  include ::slurm::params
-
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  validate_legacy('String',  'validate_re',   $name,   [ 'slurm-.*\.tar\.bz2', '\d+[\.-]?' ])
+define slurm::download (
+  Enum['present', 'absent'] $ensure          = $slurm::params::ensure,
+  String                    $target          = $slurm::params::srcdir,
+  String                    $checksum        = '',
+  String                    $checksum_type   = $slurm::params::src_checksum_type,
+  Boolean                   $checksum_verify = false,
+) {
+  include slurm::params
 
   # $name is provided at define invocation
-  if $name =~ /slurm-(.*)\.tar\.bz2/ {  # Full archive name provided
+  if $name =~ /slurm-(.*)\.tar\.bz2/ { # Full archive name provided
     $archive = $name
     $version = $1
   }
-  elsif ($name =~ /\d+[\.-]?/ ) {       # only the version was provided
+  elsif ($name =~ /\d+[\.-]?/ ) { # only the version was provided
     $version = $name
     $archive = "slurm-${version}.tar.bz2"
   }
@@ -85,10 +81,9 @@ define slurm::download(
     creates         => $path,
   }
   if $ensure == 'absent' {
-    file {$path:
+    file { $path:
       ensure  => $ensure,
       require => Archive[$archive],
     }
   }
-
 }

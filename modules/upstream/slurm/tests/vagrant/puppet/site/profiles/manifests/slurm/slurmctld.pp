@@ -4,8 +4,7 @@
 # Profile class used for setting up a Slurm Head node (where the slurmctld daemon runs)
 #
 
-class profiles::slurm::slurmctld
-{
-  include ::profiles::slurm
-  include ::slurm::slurmctld
+class profiles::slurm::slurmctld {
+  include profiles::slurm
+  include slurm::slurmctld
 }

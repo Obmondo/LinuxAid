@@ -14,8 +14,8 @@
 # This assumes the sources have been downloaded using slurm::pmix::download
 #
 #
-# @param ensure  [String]  Default: 'present'
-#          Ensure the presence (or absence) of building
+# @param ensure
+#          Ensure the presence (or absence) of building - Default: 'present'
 # @param srcdir  [String] Default: '/usr/local/src'
 #          Where the [downloaded] Slurm sources are located
 # @param dir     [String] Default: '/root/rpmbuild' on redhat systems
@@ -51,19 +51,20 @@
 # In particular, ONLY THE FIRST RPM will be installed (to avoid the conflict
 # with slurm-libmpi).
 #
-define slurm::pmix::build(
-  String  $ensure  = $slurm::params::ensure,
-  String  $srcdir  = $slurm::params::srcdir,
-  String  $dir     = $slurm::params::builddir,
-  Array   $defines = [],
-)
-{
-  include ::slurm::params
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  validate_legacy('String',  'validate_re',   $name,   [ '\d+[\.-]?' ])
+define slurm::pmix::build (
+  Enum['present', 'absent'] $ensure  = $slurm::params::ensure,
+  String                    $srcdir  = $slurm::params::srcdir,
+  String                    $dir     = $slurm::params::builddir,
+  Array                     $defines = [],
+) {
+  include slurm::params
 
   # $name is provided at define invocation
-  $version = $name
+  $version = $name ? {
+    Pattern[/\d+[\.-]?/] => $name,
+    Integer              => $name,
+    default              => fail("\$name must contain only digits, periods, and dashes")
+  }
 
   # Path to the PMIx sources
   $src = "${srcdir}/pmix-${version}.tar.bz2"
@@ -72,17 +73,17 @@ define slurm::pmix::build(
   $buildname = $ensure ? {
     'absent'  => "uninstall-pmix-${version}",
     default   => "build-pmix-${version}",
-    }
+  }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Redhat': {
-      include ::epel
-      include ::yum
+      include epel
+      include yum
       if !defined(Yum::Group[$slurm::params::groupinstall]) {
         yum::group { $slurm::params::groupinstall:
           ensure  => 'present',
           timeout => 600,
-          require => Class['::epel'],
+          require => Class['epel'],
         }
       }
       if !defined(Package['libevent-devel']) {
@@ -98,7 +99,7 @@ define slurm::pmix::build(
       Yum::Group[$slurm::params::groupinstall] -> Exec[$buildname]
       Package['libevent-devel'] -> Package['python3-devel'] -> Exec[$buildname]
 
-      $rpmdir = "${dir}/RPMS/${::architecture}"
+      $rpmdir = "${dir}/RPMS/${facts['os']['architecture']}"
       $rpms = prefix(suffix($slurm::params::pmix_rpms, "-${version}*.rpm"), "${rpmdir}/")
       $extra_define_opts = join(suffix(prefix($defines, "--prefix \""), "\""), ' ')
 
@@ -119,7 +120,7 @@ define slurm::pmix::build(
       }
     }
     default: {
-      fail("Module ${module_name} is not supported on ${::operatingsystem}")
+      fail("Module ${module_name} is not supported on ${facts['os']['name']}")
     }
   }
 
@@ -133,5 +134,4 @@ define slurm::pmix::build(
     onlyif  => $check_onlyif,
     unless  => $check_unless,
   }
-
 }

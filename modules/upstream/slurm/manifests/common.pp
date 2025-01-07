@@ -13,9 +13,8 @@
 #
 
 class slurm::common {
-
   # Load the variables used in this module. Check the params.pp file
-  require ::slurm::params
+  require slurm::params
 
   # Packages required for building SLURM
   $build_required_pkgs = if $slurm::do_build {
@@ -33,7 +32,8 @@ class slurm::common {
   }
 
   package { $all_packages:
-    ensure => 'present',
+    ensure          => 'present',
+    install_options => $slurm::package_install_options,
   }
 
   # Prepare the user and group
@@ -63,11 +63,11 @@ class slurm::common {
   }
 
   if ($slurm::manage_pam and $slurm::use_pam and ($slurm::with_slurmd or defined(Class['slurm::slurmd']))) {
-    include ::slurm::pam
+    include slurm::pam
   }
 
   if ($slurm::with_pmix or ('pmix' in $slurm::build_with)) {
-    include ::slurm::pmix
+    include slurm::pmix
     # class { '::slurm::pmix':
     #   ensure            => $slurm::ensure,
     #   version           => $slurm::pmix_version,
@@ -80,7 +80,7 @@ class slurm::common {
 
   if ($slurm::manage_munge and $slurm::authtype =~ /munge/) {
     # include ::slurm::munge
-    class { '::slurm::munge':
+    class { 'slurm::munge':
       ensure       => $slurm::ensure,
       create_key   => $slurm::munge_create_key,
       daemon_args  => $slurm::munge_daemon_args,
@@ -96,13 +96,13 @@ class slurm::common {
   }
 
   if $slurm::with_slurmdbd {
-    include ::slurm::slurmdbd
+    include slurm::slurmdbd
   }
   if $slurm::with_slurmctld {
-    include ::slurm::slurmctld
+    include slurm::slurmctld
   }
   if $slurm::with_slurmd {
-    include ::slurm::slurmd
+    include slurm::slurmd
   }
 }
 

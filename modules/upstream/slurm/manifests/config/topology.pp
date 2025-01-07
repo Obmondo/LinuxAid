@@ -15,16 +15,15 @@
 # More details: see <https://slurm.schedmd.com/topology.conf.html>
 #
 class slurm::config::topology inherits slurm::config {
-
   $topology_content = $slurm::topology_content ? {
     undef   => $slurm::topology_source ? {
       undef   => $slurm::topology_target ? {
         undef   => template('slurm/topology.conf.erb'),
         default => $slurm::topology_content,
       },
-    default => $slurm::topology_content
+      default => $slurm::topology_content
     },
-  default => $slurm::topology_content,
+    default => $slurm::topology_content,
   }
   $ensure = $slurm::topology_target ? {
     undef   => $slurm::ensure,

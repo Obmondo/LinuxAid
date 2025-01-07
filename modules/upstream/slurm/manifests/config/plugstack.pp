@@ -20,7 +20,6 @@
 # and they will be loaded at runtime during the next job launch
 #
 class slurm::config::plugstack inherits slurm::config {
-
   $plugstack_content = $slurm::plugstack_content ? {
     undef   => $slurm::plugstack_source ? {
       undef   => $slurm::plugstack_target ? {
