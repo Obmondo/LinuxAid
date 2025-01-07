@@ -15,5 +15,5 @@
 #      sudo puppet apply -t /vagrant/tests/pam.pp
 #
 node default {
-  include ::slurm::pam
+  include slurm::pam
 }

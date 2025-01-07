@@ -35,8 +35,8 @@
 #
 # Also, this server is expected to have push writes on the branch 'server/${::hostname}'
 #
-# @param ensure       [String]  Default: 'present'
-#          Ensure the presence (or absence) of the repository
+# @param ensure
+#          Ensure the presence (or absence) of the repository - Default: 'present'
 # @param force        [Boolean] Default: force
 #          Specifies whether to delete any existing files in the repository path
 #          if creating a new repository. Use with care.
@@ -61,33 +61,29 @@
 # @example Clone the SLURM control repository into '/usr/local/src/git/ULHPC/slurm'
 # # Create the SSH key, using for instance the maestrodev/ssh_keygen module
 # ssh_keygen { $slurm::username:
-  #    comment => "${slurm::username}@${::fqdn}",
-  #    home    => $slurm::params::home,
-  #  }
+#    comment => "${slurm::username}@${::fqdn}",
+#    home    => $slurm::params::home,
+#  }
 # # /!\ Render the host key known globally using sshkey { ... }
 # # Now you can expect the clone to work
 # class { 'slurm::repo':
-  #     ensure => 'present',
-  #     source => 'ssh://git@gitlab.uni.lu:8022/ULHPC/slurm.git',
-  #  }
+#     ensure => 'present',
+#     source => 'ssh://git@gitlab.uni.lu:8022/ULHPC/slurm.git',
+#  }
 #
-class slurm::repo(
-  String  $ensure      = $slurm::params::ensure,
-  String  $provider    = 'git',
-  String  $basedir     = $slurm::params::repo_basedir,
-  String  $path        = '',
-  $source              = undef,
-  String  $branch      = 'HEAD',
-  String  $syncscript  = '',
-  String  $linkdir     = '',
-  String  $link_subdir = '',
-  Boolean $force       = false,
+class slurm::repo (
+  Enum['present', 'absent', 'latest'] $ensure = $slurm::params::ensure,
+  Enum['git', 'bzr', 'hg', 'svn']     $provider    = 'git',
+  String                              $basedir     = $slurm::params::repo_basedir,
+  String                              $path        = '',
+  Optional[String]                    $source      = undef,
+  String                              $branch      = 'HEAD',
+  String                              $syncscript  = '',
+  String                              $linkdir     = '',
+  String                              $link_subdir = '',
+  Boolean                             $force       = false,
 )
-inherits slurm::params
-{
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent', '^latest'])
-  validate_legacy('String',  'validate_re',   $provider, ['^git', '^bzr', '^hg', '^svn'])
-
+inherits slurm::params {
   if ($source == undef or empty($source)) {
     fail("Module ${module_name} requires a valid source to clone the SLURM control repository")
   }
@@ -99,22 +95,22 @@ inherits slurm::params
     ''      => "${basedir}/${institute}/${reponame}",
     default => $path,
   }
-  $user = defined(Class[::slurm]) ? {
+  $user = defined(Class[slurm]) ? {
     true    => $slurm::username,
     default => 'root',
   }
-  $group = defined(Class[::slurm]) ? {
+  $group = defined(Class[slurm]) ? {
     true    => $slurm::group,
     default => 'root',
   }
 
-  if $ensure in [ 'present', 'latest' ] {
+  if $ensure in ['present', 'latest'] {
     exec { "mkdir -p ${real_path}":
       path   => '/sbin:/usr/bin:/usr/sbin:/bin',
       unless => "test -d ${real_path}",
       before => File[$real_path],
     }
-    [ dirname($real_path), $real_path ].each |String $d| {
+    [dirname($real_path), $real_path].each |String $d| {
       if !defined(File[$d]) {
         file { $d:
           ensure => 'directory',
@@ -148,7 +144,7 @@ inherits slurm::params
   }
   if !defined(Git::Config['user.email']) {
     git::config { 'user.email':
-      value => "${slurm::params::username}@${::fqdn}",
+      value => "${slurm::params::username}@${facts['networking']['fqdn']}",
       user  => $slurm::params::username,
     }
   }
@@ -176,5 +172,4 @@ inherits slurm::params
       target => $link_target,
     }
   }
-
 }

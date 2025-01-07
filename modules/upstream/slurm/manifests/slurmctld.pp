@@ -18,18 +18,17 @@
 #
 # [Remember: No empty lines between comments and class definition]
 #
-class slurm::slurmctld inherits slurm
-{
-  case $::osfamily {
-    'Redhat': { }
-    default:  { fail("Module ${module_name} is not supported on ${::operatingsystem}") }
+class slurm::slurmctld inherits slurm {
+  case $facts['os']['family'] {
+    'Redhat': {}
+    default:  { fail("Module ${module_name} is not supported on ${facts['os']['name']}") }
   }
 
   $dir_ensure = $slurm::ensure ? {
     'present' => 'directory',
     default   => $slurm::ensure
   }
-  file { $slurm::params::slurmctld_libdir:
+  file { $slurm::statesavelocation:
     ensure => $dir_ensure,
     owner  => $slurm::params::username,
     group  => $slurm::params::group,
@@ -38,8 +37,8 @@ class slurm::slurmctld inherits slurm
     before => File[$slurm::configdir],
   }
 
-  include ::slurm::install
-  include ::slurm::config
+  include slurm::install
+  include slurm::config
   Class['slurm::install'] -> Class['slurm::config']
 
   if $slurm::manage_firewall {
@@ -55,7 +54,6 @@ class slurm::slurmctld inherits slurm
   }
 
   if $slurm::service_manage == true {
-
     File <| tag == 'slurm::configfile' |> {
       notify  +> Service['slurmctld'],
     }
@@ -67,19 +65,18 @@ class slurm::slurmctld inherits slurm
       pattern    => $slurm::params::controller_processname,
       hasrestart => $slurm::params::hasrestart,
       hasstatus  => $slurm::params::hasstatus,
-      require    => Class['::slurm::config'],
+      require    => Class['slurm::config'],
     }
 
     # if $slurm::ensure == 'present' {
-      #   Class['slurm::install'] ->
-      #   Class['slurm::config'] ->
-      #   Service['slurmctld']
-      # }
+    #   Class['slurm::install'] ->
+    #   Class['slurm::config'] ->
+    #   Service['slurmctld']
+    # }
     # else {
-      #   Service['slurmctld'] ->
-      #   Class['slurm::install'] ->
-      #   Class['slurm::config']
-      # }
+    #   Service['slurmctld'] ->
+    #   Class['slurm::install'] ->
+    #   Class['slurm::config']
+    # }
   }
-
 }

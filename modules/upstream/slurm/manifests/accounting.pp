@@ -11,31 +11,29 @@
 #
 # Setup the accounting structure
 #
-#@param ensure       [String]  Default: 'present'
-#          Ensure the presence (or absence) of the Munge service
+#@param ensure
+#          Ensure the presence (or absence) of the Munge service - Default: 'present'.
 #
-class slurm::accounting(
-  String  $ensure = $slurm::params::ensure,
-  $cluster        = undef,
-  $qos            = undef,
-  $account        = undef,
+class slurm::accounting (
+  Enum['present', 'absent'] $ensure  = $slurm::params::ensure,
+  Optional[String]          $cluster = undef,
+  Optional[String]          $qos     = undef,
+  Optional[Stirng]          $account = undef,
 )
-inherits slurm::params
-{
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
+inherits slurm::params {
   ### Clusters
   $clusters = $cluster ? {
     undef   => $slurm::clustername,
     default => $cluster
   }
   if $clusters.is_a(String) or $clusters.is_a(Array) {
-    slurm::acct::cluster{ $clusters:
+    slurm::acct::cluster { $clusters:
       ensure => $ensure,
     }
   }
   elsif $clusters.is_a(Hash) {
     $clusters.each |$k, $v| {
-      slurm::acct::cluster{ $k:
+      slurm::acct::cluster { $k:
         ensure  => $ensure,
         options => $v,
       }
@@ -47,7 +45,7 @@ inherits slurm::params
   $slurm::partitions.each |$partition, $h| {
     if $partition != 'DEFAULT' {
       $qosname = "qos-${partition}"
-      slurm::acct::qos{ $qosname:
+      slurm::acct::qos { $qosname:
         ensure   => $ensure,
         priority => ($h['priority'] + 0),
       }
@@ -68,7 +66,7 @@ inherits slurm::params
   # Complete with the explicit qos hash
   $qoses.each |$qosname, $h| {
     unless $slurm::partitions[regsubst($qosname, '^qos-', '')] {
-      slurm::acct::qos{ $qosname:
+      slurm::acct::qos { $qosname:
         ensure  => $ensure,
       }
       if $h.is_a(String) {
@@ -84,22 +82,22 @@ inherits slurm::params
     }
   }
   # if $qos != undef {
-    #   if $qos.is_a(String) or $qos.is_a(Array) {
-      #     slurm::acct::qos{ $qos:
-        #       ensure => $ensure,
-        #     }
-      #   }
-    #   elsif $qos.is_a(Hash) {
-      #     $qos.each |$k, $v| {
-        #       slurm::acct::qos{ $k:
-          #         ensure => $ensure,
-          #       }
-        #       unless $v == undef {
-          #         Slurm::Acct::Qos[$k] {
-            #           options => $v,
-            #         }
-          #       }
-        #     }
-      #   }
-    # }
+  #   if $qos.is_a(String) or $qos.is_a(Array) {
+  #     slurm::acct::qos{ $qos:
+  #       ensure => $ensure,
+  #     }
+  #   }
+  #   elsif $qos.is_a(Hash) {
+  #     $qos.each |$k, $v| {
+  #       slurm::acct::qos{ $k:
+  #         ensure => $ensure,
+  #       }
+  #       unless $v == undef {
+  #         Slurm::Acct::Qos[$k] {
+  #           options => $v,
+  #         }
+  #       }
+  #     }
+  #   }
+  # }
 }

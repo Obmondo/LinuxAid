@@ -1,5 +1,5 @@
 site_name: Slurm Puppet Module
-pages:
+nav:
 - Home: 'index.md'
 - Overview:  'overview.md'
 - Tests with Vagrant: 'vagrant.md'

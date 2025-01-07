@@ -17,8 +17,8 @@
 # More details on <https://slurm.schedmd.com/slurmdbd.html>
 # See also <https://slurm.schedmd.com/slurmdbd.conf.html>
 #
-# @param ensure [String] Default: 'present'.
-#         Ensure the presence (or absence) of slurm
+# @param ensure
+#         Ensure the presence (or absence) of slurm - Default: 'present'
 # @param content [String]
 #          The desired contents of a file, as a string. This attribute is
 #          mutually exclusive with source and target.
@@ -45,7 +45,7 @@
 #           When purging events also archive them?
 # @param archivejobs        [Boolean]     Default: false
 #           When purging jobs also archive them?
-# @param archiveresv        [Boolean]     Default: false
+# @param archiveresvs       [Boolean]     Default: false
 #           When purging reservations also archive them?
 # @param archivesteps       [Boolean]     Default: false
 #           When purging steps also archive them?
@@ -100,6 +100,8 @@
 # @param storageport        [Integer]     Default: 3306
 # @param storagetype        [String]      Default: 'mysql'
 # @param storageuser        [String]      Default: 'slurm'
+# @param storagecharset     [String]      Default: undefined  # to override mysql module default
+# @param storagecollate     [String]      Default: undefined  # to override mysql module default
 # @param trackslurmctlddown [Boolean]     Default: false
 #           Boolean yes or no. If set the slurmdbd will mark all idle resources
 #           on the cluster as down when a slurmctld disconnects or is no longer
@@ -130,18 +132,18 @@
 #
 # [Remember: No empty lines between comments and class definition]
 #
-class slurm::slurmdbd(
-  String  $ensure             = $slurm::ensure,
-  $content                    = undef,
-  $source                     = undef,
-  $target                     = undef,
+class slurm::slurmdbd (
+  Enum['present', 'absent'] $ensure  = $slurm::ensure,
+  Optional[String]          $content = undef,
+  Optional[String]          $source  = undef,
+  Optional[String]          $target  = undef,
   #
   # Main configuration paramaters
   #
   String  $archivedir         = $slurm::params::archivedir,
   Boolean $archiveevents      = $slurm::params::archiveevents,
   Boolean $archivejobs        = $slurm::params::archivejobs,
-  Boolean $archiveresv        = $slurm::params::archiveresv,
+  Boolean $archiveresvs       = $slurm::params::archiveresvs,
   Boolean $archivesteps       = $slurm::params::archivesteps,
   Boolean $archivesuspend     = $slurm::params::archivesuspend,
   Boolean $archivetxn         = $slurm::params::archivetxn,
@@ -168,6 +170,8 @@ class slurm::slurmdbd(
   Integer $storageport        = $slurm::params::storageport,
   String  $storagetype        = $slurm::params::storagetype,
   String  $storageuser        = $slurm::params::storageuser,
+  String  $storagecharset     = undef,
+  String  $storagecollate     = undef,
   Boolean $trackslurmctlddown = $slurm::params::trackslurmctlddown,
   #
   # MySQL settings
@@ -177,17 +181,14 @@ class slurm::slurmdbd(
   Integer $innodb_lock_wait_timeout = $slurm::params::innodb_lock_wait_timeout,
   Boolean $bootstrap_mysql    = $slurm::params::bootstrap_mysql,
 )
-inherits slurm
-{
-  validate_legacy('String', 'validate_re', $ensure, ['^present', '^absent'])
-
-  case $::osfamily {
-    'Redhat': { }
-    default:  { fail("Module ${module_name} is not supported on ${::operatingsystem}") }
+inherits slurm {
+  case $facts['os']['family'] {
+    'Redhat': {}
+    default:  { fail("Module ${module_name} is not supported on ${facts['os']['name']}") }
   }
 
-  include ::slurm::install
-  include ::slurm::config
+  include slurm::install
+  include slurm::config
   Class['slurm::install'] -> Class['slurm::config']
 
   if $slurm::manage_firewall {
@@ -212,7 +213,7 @@ inherits slurm
         default   => '127.0.0.1',
       }
     }
-    class { '::mysql::server':
+    class { 'mysql::server':
       override_options => {
         'mysqld' => {
           'bind-address'             => $bind_setting,
@@ -224,12 +225,14 @@ inherits slurm
       },
     }
 
-    include ::mysql::server::account_security
+    include mysql::server::account_security
 
     mysql::db { $storageloc:
       user     => $storageuser,
       password => $storagepass,
       host     => $dbdhost,
+      charset  => $storagecharset,
+      collate  => $storagecollate,
       grant    => ['ALL'],
       before   => File[$slurm::params::dbd_configfile],
     }
@@ -246,16 +249,24 @@ inherits slurm
     }
 
     # Eventually create the 'slurm'@'*' user with all rights
-    unique([ $storagehost, $::hostname, $::fqdn]).each |String $host| {
-      mysql_user { "${storageuser}@${host}":
-        password_hash => mysql_password($storagepass),
+    unique([$storagehost, $facts['networking']['hostname'], $facts['networking']['fqdn']]).each |String $host| {
+      if $host.length < 60 {
+        mysql_user { "${storageuser}@${host}":
+          password_hash => mysql::password($storagepass),
+        }
+        mysql_grant { "${storageuser}@${host}/${storageloc}.*":
+          privileges => ['ALL'],
+          table      => "${storageloc}.*",
+          user       => "${storageuser}@${host}",
+          require    => Mysql_user["${storageuser}@${host}"],
+          before     => File[$slurm::params::dbd_configfile],
+        }
       }
-      mysql_grant {  "${storageuser}@${host}/${storageloc}.*":
-        privileges => ['ALL'],
-        table      => "${storageloc}.*",
-        user       => "${storageuser}@${host}",
-        require    => Mysql_user["${storageuser}@${host}"],
-        before     => File[$slurm::params::dbd_configfile],
+      else {
+        notify { "too-long-hostname_${host}":
+          message  => "Hostname ${host} is too long to use for mysql auth, skipping",
+          loglevel => warning,
+        }
       }
     }
   }
@@ -303,10 +314,9 @@ inherits slurm
   }
 
   if $slurm::service_manage == true {
-
     if $slurm::manage_accounting {
       # Ensure the cluster have been created
-      slurm::acct::cluster{ $slurm::clustername:
+      slurm::acct::cluster { $slurm::clustername:
         ensure  => $slurm::ensure,
         require => Service['slurmdbd'],
       }
@@ -330,6 +340,5 @@ inherits slurm
     if $slurm::with_slurmctld or defined(Class['slurm::slurmctld']) {
       Service['slurmdbd'] -> Service['slurmctld']
     }
-
   }
 }

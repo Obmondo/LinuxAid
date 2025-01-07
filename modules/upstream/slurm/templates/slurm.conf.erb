@@ -128,7 +128,11 @@ SlurmdParameters=<%=  scope['slurm::slurmdparameters'].join(',')  %>
 <% end -%>
 SlurmdPidFile=/var/run/slurmd.pid
 SlurmdPort=<%= scope['slurm::slurmdport'] %>
-SlurmdSpoolDir=/var/lib/slurmd
+<% if scope['slurm::slurmdspooldir'].empty? -%>
+#SlurmdSpoolDir=
+<% else -%>
+SlurmdSpoolDir=<%= scope['slurm::slurmdspooldir'] %>
+<% end -%>
 <% if scope['slurm::srunepilog'].empty? -%>
 #SrunEpilog=
 <% else -%>
@@ -266,8 +270,21 @@ ResumeRate=<%= scope['slurm::resumerate'] %>
 <% else -%>
 SuspendExcNodes=<%= scope['slurm::suspendexcnodes'] %>
 <% end -%>
+<% if scope['slurm::suspendexcparts'].empty? -%>
 #SuspendExcParts=
+<% else -%>
+SuspendExcParts=<%= scope['slurm::suspendexcparts'] %>
+<% end -%>
+<% if scope['slurm::suspendexcstates'].empty? -%>
+#SuspendExcStates=
+<% else -%>
+SuspendExcStates=<%= scope['slurm::suspendexcstates'].join(',') %>
+<% end -%>
+<% if scope['slurm::suspendrate'] > 0 -%>
+SuspendRate=<%= scope['slurm::suspendrate'] %>
+<% else -%>
 #SuspendRate=
+<% end -%>
 <% if scope['slurm::suspendtime'] > 0 -%>
 SuspendTime=<%= scope['slurm::suspendtime'] %>
 <% else -%>
@@ -508,6 +525,11 @@ PrologSlurmctld=<%= scope['slurm::prologslurmctld'] %>
 <% else -%>
 PrologFlags=<%= scope['slurm::prologflags'].join(',') %>
 <% end -%>
+<% if scope['slurm::reconfigflags'].empty? -%>
+#ReconfigFlags=
+<% else -%>
+ReconfigFlags=<%= scope['slurm::reconfigflags'].join(',') %>
+<% end -%>
 
 ### MPI default
 MpiDefault=<%= scope['slurm::mpidefault'] %>
@@ -543,7 +565,9 @@ TopologyPlugin=topology/<%= scope['slurm::topology'] %>
 #######################
 # - Characteristics (sockets, cores, threads, memory, features)
 # - Network addresses
+<% unless scope.call_function('versioncmp', [scope['slurm::version'], '24.05']) >= 0 %>
 CoreSpecPlugin=core_spec/<%= scope['slurm::corespecplugin'] %>
+<% end -%>
 <% unless scope['slurm::cpufreqdef'].nil? -%>
 CpuFreqDef=<%= scope['slurm::cpufreqdef'] %>
 <% end -%>

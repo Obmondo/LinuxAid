@@ -22,11 +22,10 @@
 # [Remember: No empty lines between comments and class definition]
 #
 class slurm::params {
-
   #### MODULE INTERNAL VARIABLES  #########
   # (Modify to adapt to unsupported OSes)
   #########################################
-  $pre_requisite_packages = $::osfamily ? {
+  $pre_requisite_packages = $facts['os']['family'] ? {
     'Redhat' => [
       'hwloc', 'hwloc-devel', 'hwloc-plugins', 'numactl', 'numactl-devel',
       'http-parser-devel', 'json-c-devel',
@@ -45,9 +44,9 @@ class slurm::params {
   }
 
   # Probably out of scope here, but useful
-  $extra_packages = $::osfamily ? {
+  $extra_packages = $facts['os']['family'] ? {
     'Redhat' => [
-      'libibmad', 'rrdtool-devel',
+      'infiniband-diags', 'rrdtool-devel',
     ],
     default  => []
   }
@@ -63,17 +62,17 @@ class slurm::params {
   $manage_accounting = false
 
   # Configuration directory & file
-  $configdir = $::operatingsystem ? {
+  $configdir = $facts['os']['name'] ? {
     default => '/etc/slurm',
   }
-  $logdir = $::operatingsystem ? {
+  $logdir = $facts['os']['name'] ? {
     default => '/var/log/slurm'
   }
   # $piddir = $::operatingsystem ? {
   #   default => '/var/run/slurm',
   # }
   # Slurm controller save state directory
-  $slurmctld_libdir = $::operatingsystem ? {
+  $slurmctld_libdir = $facts['os']['name'] ? {
     default => '/var/lib/slurmctld',
   }
 
@@ -130,16 +129,16 @@ class slurm::params {
   # The name by which this Slurm managed cluster is known in the accounting database
   $clustername             = 'cluster'
   # Main / backup Slurm controllers
-  $slurmctldhost           = $::hostname
+  $slurmctldhost           = $facts['networking']['hostname']
   $slurmctldaddr           = ''
   # OLD Deprecated
-  $controlmachine          = $::hostname
+  $controlmachine          = $facts['networking']['hostname']
   $controladdr             = ''
   $backupcontroller        = ''
   $backupaddr              = ''
 
   # Accounting storage slurmdbd server
-  $accountingstoragehost   = $::hostname
+  $accountingstoragehost   = $facts['networking']['hostname']
   $accountingstorageexternalhost = []
   $accountingstoreflags = []
   # Authentication method for communications between Slurm components.
@@ -162,7 +161,7 @@ class slurm::params {
   $completewait            = 0
   $corespecplugin          = 'none'
   $cpufreqdef              = undef   # or in ['Conservative', 'OnDemand', 'Performance', 'PowerSave']
-  $cpufreqgovernors        = [ 'OnDemand', 'Performance' ]  # in above + 'UserSpace'
+  $cpufreqgovernors        = ['OnDemand', 'Performance']  # in above + 'UserSpace'
   $debugflags              = []
 
   $defmempercpu            = 0           # 0 = unlimited, mutually exclusive with $defmempernode
@@ -190,12 +189,12 @@ class slurm::params {
   $jobcomptype             = 'none'      # in ["none", "elasticsearch", "filetxt", "mysql", "script"]
   $jobcontainertype        = 'none'      # In ['cncu', 'none'] (CNCU = Compute Node Clean Up on Cray)
   $jobrequeue              = true
-  $jobsubmitplugins        = [ 'lua' ]   #
+  $jobsubmitplugins        = ['lua']   #
   $killwait                = 30          # sec. interval given to a job's processes between the SIGTERM and SIGKILL
   $launchparameters        = ''
   $launchtype              = 'slurm'
   $licenses                = ''          # Specification of licenses
-  $maildomain              = $::domain
+  $maildomain              = $facts['networking']['domain']
   $mailprog                = '/bin/mail'
   $maxarraysize            = undef
   $maxjobcount             = undef
@@ -218,7 +217,7 @@ class slurm::params {
   # }
   $nodes                   = {}
 
-  $preemptmode             = [ 'REQUEUE' ] # in ['OFF','CANCEL','CHECKPOINT','GANG','REQUEUE','SUSPEND']
+  $preemptmode             = ['REQUEUE'] # in ['OFF','CANCEL','CHECKPOINT','GANG','REQUEUE','SUSPEND']
   $preempttype             = 'qos'         # in ['none', 'partition_prio', 'qos']
   $prioritydecayhalflife   = '5-0'         # aka 5 days
   $priorityfavorsmall      = false
@@ -241,7 +240,8 @@ class slurm::params {
   $prologflags             = []
   $prologslurmctld         = ''
   $propagateresourcelimits = []
-  $propagateresourcelimits_except = [ 'MEMLOCK'] # see https://slurm.schedmd.com/faq.html#memlock
+  $propagateresourcelimits_except = ['MEMLOCK'] # see https://slurm.schedmd.com/faq.html#memlock
+  $reconfigflags           = []
   $resvoverrun             = 0
   $resumetimeout           = 60
   $resumeprogram           = ''
@@ -252,13 +252,15 @@ class slurm::params {
   $suspendprogram          = ''
   $suspendtimeout          = 0
   $suspendtime             = 0
+  $suspendrate             = 0
   $suspendexcnodes         = ''
   $suspendexcparts         = ''
+  $suspendexcstates        = []
   $statesavelocation       = '/var/lib/slurmctld'
   $schedulertype           = 'backfill' # in ['backfill', 'builtin', 'hold']
   $schedulerparameters     = []
   $selecttype              = 'cons_res' # in ['bluegene','cons_res','cray','linear','serial' ]
-  $selecttype_params       = [ 'CR_Core_Memory', 'CR_CORE_DEFAULT_DIST_BLOCK' ]
+  $selecttype_params       = ['CR_Core_Memory', 'CR_CORE_DEFAULT_DIST_BLOCK']
   # Log details
   $slurmdbddebug           = 'info'
   $slurmdbddebugsyslog     = ''
@@ -275,6 +277,7 @@ class slurm::params {
   $slurmdtimeout           = 300
   $slurmctldparameters     = []
   $slurmdparameters        = []
+  $slurmdspooldir          = ''
   $srunportrange           = '50000-53000'
   $srunepilog              = ''
   $srunprolog              = ''
@@ -365,6 +368,7 @@ class slurm::params {
   $cgroup_minkmemspace              = 30    # lower bound (in MB) on the memory limits defined by AllowedKmemSpace.
   $cgroup_minramspace               = 30    # lower bound (in MB) on the memory limits defined by AllowedRAMSpace & AllowedSwapSpace.
   $cgroup_taskaffinity              = false # if true, this feature requires the Portable Hardware Locality (hwloc) library
+  $cgroup_signalchildrenprocesses   = false # if true, send signals (for cancelling, suspending, resuming, etc.) to all children processes in a job/step.
 
   ###
   ### Generic RESource management -- gres.conf
@@ -397,13 +401,13 @@ class slurm::params {
   $shell    = '/bin/bash'
 
   # Slurmd associated services
-  $servicename = $::operatingsystem ? {
+  $servicename = $facts['os']['name'] ? {
     default => 'slurmd'
   }
-  $controller_servicename = $::operatingsystem ? {
+  $controller_servicename = $facts['os']['name'] ? {
     default => 'slurmctld'
   }
-  $dbd_servicename = $::operatingsystem ? {
+  $dbd_servicename = $facts['os']['name'] ? {
     default => 'slurmdbd'
   }
   # used for pattern in a service ressource
@@ -411,12 +415,12 @@ class slurm::params {
   $controller_processname = $controller_servicename
   $dbd_processname        = $dbd_servicename
 
-  $hasstatus = $::operatingsystem ? {
+  $hasstatus = $facts['os']['name'] ? {
     /(?i-mx:ubuntu|debian)/        => false,
     /(?i-mx:centos|fedora|redhat)/ => true,
     default => true,
   }
-  $hasrestart = $::operatingsystem ? {
+  $hasrestart = $facts['os']['name'] ? {
     default => true,
   }
   # Whether to manage the slurm services
@@ -427,7 +431,7 @@ class slurm::params {
   ##########################################
   # Which group install is required to build the Slurm sources -- see slurm::build[::redhat]
   # Makes only sense on yum-based systems
-  $groupinstall = $::osfamily ? {
+  $groupinstall = $facts['os']['family'] ? {
     'Redhat' => 'Development tools',
     default  => undef
   }
@@ -444,12 +448,12 @@ class slurm::params {
   $do_build            = true
   $do_package_install  = true
   # Where to place the sources
-  $srcdir = $::operatingsystem ? {
+  $srcdir = $facts['os']['name'] ? {
     default => '/usr/local/src'
   }
   ### Slurm Build
   # Where to place the builds of the sources (i.e. RPMs, debs...)
-  $builddir = $::osfamily ? {
+  $builddir = $facts['os']['family'] ? {
     'Redhat' => '/root/rpmbuild', # rpmbuild _topdir Build directory
     default  => '/tmp/slurmbuild',
   }
@@ -551,32 +555,32 @@ class slurm::params {
   # Set the content of the DAEMON_ARGS variable
   $munge_daemon_args = []
   # Packages to install
-  $munge_package = $::operatingsystem ? {
+  $munge_package = $facts['os']['name'] ? {
     default => 'munge'
   }
-  $munge_extra_packages = $::operatingsystem ? {
-    /(?i-mx:ubuntu|debian)/        => [ 'libmunge-dev' ],
-    /(?i-mx:centos|fedora|redhat|rocky)/ => [ 'munge-devel', 'munge-libs' ],
+  $munge_extra_packages = $facts['os']['name'] ? {
+    /(?i-mx:ubuntu|debian)/        => ['libmunge-dev'],
+    /(?i-mx:centos|fedora|redhat|rocky)/ => ['munge-devel', 'munge-libs'],
     default => [],
   }
 
-  $munge_configdir = $::operatingsystem ? {
+  $munge_configdir = $facts['os']['name'] ? {
     default => '/etc/munge',
   }
-  $munge_logdir = $::operatingsystem ? {
+  $munge_logdir = $facts['os']['name'] ? {
     default => '/var/log/munge',
   }
-  $munge_piddir = $::operatingsystem ? {
+  $munge_piddir = $facts['os']['name'] ? {
     default => '/var/run/munge',
   }
-  $munge_default_sysconfig = $::operatingsystem ? {
+  $munge_default_sysconfig = $facts['os']['name'] ? {
     /(?i-mx:ubuntu|debian)/ => '/etc/default/munge',
     default                 => '/etc/sysconfig/munge'
   }
-  $munge_servicename = $::operatingsystem ? {
+  $munge_servicename = $facts['os']['name'] ? {
     default => 'munge'
   }
-  $munge_processname = $::operatingsystem ? {
+  $munge_processname = $facts['os']['name'] ? {
     default => 'munge'
   }
 
@@ -618,7 +622,7 @@ class slurm::params {
   $archivedir          = '/tmp'
   $archiveevents       = false # When purging events also archive them?
   $archivejobs         = false # When purging jobs also archive them?
-  $archiveresv         = false # When purging reservations also archive them?
+  $archiveresvs        = false # When purging reservations also archive them?
   $archivesteps        = false # When purging steps also archive them?
   $archivesuspend      = false # When purging suspend data also archive it?
   $archivetxn          = false # When purging transaction data also archive it?
@@ -627,7 +631,7 @@ class slurm::params {
   $dbdhost             = 'localhost'
   $dbdaddr             = 'localhost'
   $dbdbackuphost       = ''
-  $storagehost         = $::hostname
+  $storagehost         = $facts['networking']['hostname']
   $storagebackuphost   = ''
   $storageloc          = 'slurm'    # name of the DB as the location where accounting records are written
   $storageport         = 3306
@@ -644,5 +648,4 @@ class slurm::params {
   $innodb_buffer_pool_size  = '256M'
   $innodb_log_file_size     = '24M'
   $innodb_lock_wait_timeout = 500
-
 }

@@ -15,7 +15,7 @@
 #      sudo puppet apply --modulepath /vagrant/tests/vagrant/puppet/modules -vt /vagrant/tests/build.pp
 #
 node default {
-  require ::slurm::params
+  require slurm::params
   $version = $::slurm::params::version
   $ensure  = 'present' #'absent'
 
@@ -25,5 +25,4 @@ node default {
   slurm::build { $version:
     ensure => $ensure,
   }
-
 }

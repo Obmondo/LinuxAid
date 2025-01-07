@@ -34,14 +34,18 @@
 ###################################################################################
 #
 
+<% if scope['slurm::version'] <= '23.02.6' -%>
 CgroupAutomount=<%= scope['slurm::cgroup_automount'] ? 'yes' : 'no' %>
+<% end -%>
 CgroupMountpoint=<%= scope['slurm::cgroup_mountpoint'] %>
 
 ### Task/cgroup Plugin ###
+<% if scope['slurm::version'] <= '23.02.6' -%>
 <% unless scope['slurm::cgroup_allowedkmemspace'].nil? -%>
 # Constrain the job cgroup kernel memory to this amount of the allocated memory, specified in bytes
 AllowedKmemSpace=<%= scope['slurm::cgroup_allowedkmemspace'] %>
 
+<% end -%>
 <% end -%>
 <% if scope['slurm::cgroup_allowedramspace'] != 100 -%>
 # Constrain the job cgroup RAM to this percentage of the allocated memory
@@ -64,7 +68,9 @@ ConstrainCores=<%= scope['slurm::cgroup_constraincores'] ? 'yes' : 'no' %>
 # See <%= scope['slurm::configdir'] %>/<%= scope['slurm::params::cgroup_alloweddevices_configfile'] %>
 ConstrainDevices=yes
 <% end -%>
+<% if scope['slurm::version'] <= '23.02.6' -%>
 ConstrainKmemSpace=<%= scope['slurm::cgroup_constrainkmemspace']  ? 'yes' : 'no' %>
+<% end -%>
 ConstrainRAMSpace=<%=  scope['slurm::cgroup_constrainramspace']  ? 'yes' : 'no' %>
 ConstrainSwapSpace=<%= scope['slurm::cgroup_constrainswapspace'] ? 'yes' : 'no' %>
 <% if scope['slurm::cgroup_maxrampercent'] != 100  -%>
@@ -78,16 +84,21 @@ MaxRAMPercent=<%= scope['slurm::cgroup_maxrampercent'] %>
 MaxSwapPercent=<%= scope['slurm::cgroup_maxswappercent'] %>
 
 <% end -%>
-<% if scope['slurm::cgroup_maxkmempercent'] != 100  -%>
+<% if scope['slurm::version'] <= '23.02.6' && scope['slurm::cgroup_maxkmempercent'] != 100  -%>
 # Upper bound in percent of total Kmem for a job
-MaxKmemPercent= <%= scope['slurm::cgroup_maxkmempercent'] %>
+MaxKmemPercent=<%= scope['slurm::cgroup_maxkmempercent'] %>
 
 <% end -%>
+<% if scope['slurm::version'] <= '23.02.6' -%>
 MinKmemSpace=<%= scope['slurm::cgroup_minkmemspace']  %>
+<% end -%>
 MinRAMSpace=<%=  scope['slurm::cgroup_minramspace']   %>
 <% if scope['slurm::cgroup_taskaffinity'] -%>
 # Set a default task affinity to bind each step task to a subset of the
 # allocated cores using sched_setaffinity
 # /!\ This feature requires the Portable Hardware Locality (hwloc) library
 TaskAffinity=yes
+<% end -%>
+<% if scope['slurm::version'] >= '23.11.0' -%>
+SignalChildrenProcesses=<%= scope['slurm::cgroup_signalchildrenprocesses'] ? 'yes' : 'no' %>
 <% end -%>

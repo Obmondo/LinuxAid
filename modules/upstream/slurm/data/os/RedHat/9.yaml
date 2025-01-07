@@ -1,0 +1,5 @@
+---
+# EL9 moves the development packages to these repos
+slurm::package_install_options:
+  - '--enablerepo=plus'
+  - '--enablerepo=crb'

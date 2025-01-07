@@ -17,9 +17,8 @@
 # - https://slurm.schedmd.com/cgroup.conf.html
 #
 class slurm::config {
-
-  include ::slurm
-  include ::slurm::params
+  include slurm
+  include slurm::params
 
   # Prepare the directory structure
   $pluginsdir = "${slurm::configdir}/${slurm::params::pluginsdir}"
@@ -56,12 +55,12 @@ class slurm::config {
     if (!empty($slurm::plugins)) {
       $slurm::plugins.each |String $plugin| {
         file { "${pluginsdir}/${plugin}.conf":
-          ensure  =>  $slurm::ensure,
+          ensure  => $slurm::ensure,
           owner   => $slurm::params::username,
           group   => $slurm::params::group,
           require => File[$pluginsdir],
         }
-        if ($::osfamily == 'RedHat') {
+        if ($facts['os']['family'] == 'RedHat') {
           File["${pluginsdir}/${plugin}.conf"] {
             seltype => 'etc_t',
           }
@@ -70,7 +69,7 @@ class slurm::config {
     }
   }
   else {
-    file { flatten([ $slurmdirs, $pluginsdir ]):
+    file { flatten([$slurmdirs, $pluginsdir]):
       ensure => $slurm::ensure,
       force  => true,
     }
@@ -115,14 +114,14 @@ class slurm::config {
   }
 
   # Now add the other configuration files
-  include ::slurm::config::cgroup
-  include ::slurm::config::gres
-  include ::slurm::config::plugstack
-  include ::slurm::config::topology
+  include slurm::config::cgroup
+  include slurm::config::gres
+  include slurm::config::plugstack
+  include slurm::config::topology
 
   # Eventually, add the [default] plugins
   if member($slurm::build_with, 'lua') {
-    include ::slurm::plugins::lua
+    include slurm::plugins::lua
   }
 
   if $slurm::ensure == 'present' {

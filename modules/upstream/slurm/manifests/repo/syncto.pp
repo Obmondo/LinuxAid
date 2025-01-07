@@ -20,18 +20,15 @@
 #         Target [shared] directory where to synchronize
 # @param purge        [Boolean] Default: false
 #          If set, rsync will use '--delete'
-define slurm::repo::syncto(
-  String  $ensure = $slurm::params::ensure,
-  String  $target = '',
-  String  $subdir = '',
-  Boolean $purge  = false,
-)
-{
-  validate_legacy('String', 'validate_re', $ensure, ['^present', '^absent'])
-
-  include ::slurm::params
+define slurm::repo::syncto (
+  Enum['present', 'absent'] $ensure = $slurm::params::ensure,
+  String                    $target = '',
+  String                    $subdir = '',
+  Boolean                   $purge  = false,
+) {
+  include slurm::params
   if !defined(Class['slurm::repo']) {
-    include ::slurm::repo
+    include slurm::repo
   }
 
   # $name is provided at define invocation
@@ -51,5 +48,4 @@ define slurm::repo::syncto(
     purge   => $purge,
     options => '-a --copy-links',
   }
-
 }

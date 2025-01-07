@@ -5,8 +5,6 @@
 #
 
 class profiles::slurm::slurmdbd {
-
-  include ::profiles::slurm
-  include ::slurm::slurmdbd
-
+  include profiles::slurm
+  include slurm::slurmdbd
 }

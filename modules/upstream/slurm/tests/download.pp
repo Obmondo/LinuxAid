@@ -5,8 +5,7 @@
 #      sudo puppet apply --modulepath /vagrant/tests/vagrant/puppet/modules -t /vagrant/tests/download.pp
 #
 node default {
-
-  include ::slurm::params
+  include slurm::params
   $ensure = 'present'
   # $ensure = 'absent'
 
@@ -17,5 +16,4 @@ node default {
     ensure   => $ensure,
     checksum => '4a2c176b54a56763704bcc7abfd9b8a4f91c82b8',
   }
-
 }

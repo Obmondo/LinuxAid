@@ -6,6 +6,6 @@
 node default {
   #include ::slurm::params
 
-  include ::slurm
-  include ::slurm::login
+  include slurm
+  include slurm::login
 }

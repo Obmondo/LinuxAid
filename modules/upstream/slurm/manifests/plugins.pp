@@ -14,6 +14,4 @@
 #
 # NOT YET IMPLEMENTED
 #
-class slurm::plugins inherits slurm {
-
-}
+class slurm::plugins inherits slurm {}

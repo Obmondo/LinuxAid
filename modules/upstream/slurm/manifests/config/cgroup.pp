@@ -18,7 +18,6 @@
 # <https://slurm.schedmd.com/cgroups.html>.
 #
 class slurm::config::cgroup inherits slurm::config {
-
   # NOTE: Debian and derivatives (e.g. Ubuntu) usually exclude the memory and
   # memsw (swap) cgroups by default. To include them, add the following
   # parameters to the kernel command line: cgroup_enable=memory swapaccount=1
@@ -30,9 +29,9 @@ class slurm::config::cgroup inherits slurm::config {
         undef   => template('slurm/cgroup.conf.erb'),
         default => $slurm::cgroup_content,
       },
-    default => $slurm::cgroup_content
+      default => $slurm::cgroup_content
     },
-  default => $slurm::cgroup_content,
+    default => $slurm::cgroup_content,
   }
   $ensure = $slurm::cgroup_target ? {
     undef   => $slurm::ensure,
@@ -69,5 +68,4 @@ class slurm::config::cgroup inherits slurm::config {
   #     tag     => 'slurm::configfile',
   #   }
   # }
-
 }

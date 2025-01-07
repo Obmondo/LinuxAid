@@ -3,9 +3,7 @@
 ###########################################################################################
 # Profile (base) class used for slurm general settings
 
-class profiles::slurm
-{
+class profiles::slurm {
   #require ::slurm::params
-  include ::slurm
-
+  include slurm
 }

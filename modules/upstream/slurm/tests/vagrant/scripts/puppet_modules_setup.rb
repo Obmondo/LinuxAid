@@ -37,9 +37,9 @@ moduledir = File.join(puppetdir, 'modules')
 
 metadata['dependencies'].each do |dep|
   lib = dep['name']
-  shortname = lib.gsub(/^.*[\/-]/,'')
+  shortname = lib.gsub(%r{^.*[/-]}, '')
   action = File.directory?("#{moduledir}/#{shortname}") ? 'upgrade --force' : 'install'
-  run %{ puppet module #{action} --target-dir #{moduledir}   #{lib} }
+  run %( puppet module #{action} --target-dir #{moduledir}   #{lib} )
 end
 
 # puts "Module path: #{modulepath}"

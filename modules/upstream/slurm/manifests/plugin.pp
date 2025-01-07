@@ -11,10 +11,10 @@
 #
 # This definition takes care of managing SLURM plugins.
 #
-# @param ensure [String]  Default: 'present'
-#          Ensure the presence (or absence) of building
-# @param target  [String] Default: '/usr/local/src'
-#          Target directory for the downloaded sources
+# @param ensure
+#          Ensure the presence (or absence) of building - Default: 'present'
+# @param path
+#          Target directory for the downloaded sources - Default '/usr/local/src'
 # @param content [String]      Default: undef
 #           The desired contents of a topology file, as a string. This attribute is
 #           mutually exclusive with topology_source and topology_target.
@@ -25,18 +25,14 @@
 #          Target link path
 #
 #
-define slurm::plugin(
-  String  $ensure = $slurm::params::ensure,
-  String  $path   = '',
-  $target         = undef,
-  $source         = undef,
-  $content        = undef
-)
-{
-  include ::slurm::params
-
-  validate_legacy('String',  'validate_re',   $ensure, ['^present', '^absent'])
-  #validate_legacy('String',  'validate_re',   $name,   [ 'slurm-.*\.tar\.bz2', '\d+[\.-]?' ])
+define slurm::plugin (
+  Enum['present', 'absent']      $ensure  = $slurm::params::ensure,
+  Optional[Stdlib::Absolutepath] $path    = '/usr/local/src',
+  Optional[Stdlib::Absolutepath] $target  = undef,
+  Optional[String]               $source  = undef,
+  Optional[String]               $content = undef,
+) {
+  include slurm::params
 
   # $name is provided at define invocation
   # if $name =~ /slurm-(.*)\.tar\.bz2/ {  # Full archive name provided

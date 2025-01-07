@@ -12,9 +12,8 @@
 # This PRIVATE class handles the installation of SLURM
 #
 class slurm::install {
-
-  include ::slurm
-  include ::slurm::params
+  include slurm
+  include slurm::params
 
   Class['slurm::common'] -> Class['slurm::install']
 
@@ -44,11 +43,14 @@ class slurm::install {
     slurm::install::packages { $slurm::version :
       ensure    => $slurm::ensure,
       pkgdir    => $slurm::builddir,
-      slurmd    => ($slurm::with_slurmd    or defined(Class['::slurm::slurmd'])),
-      slurmctld => ($slurm::with_slurmctld or defined(Class['::slurm::slurmctld'])),
-      slurmdbd  => ($slurm::with_slurmdbd  or defined(Class['::slurm::slurmdbd'])),
+      slurmd    => ($slurm::with_slurmd    or defined(Class['slurm::slurmd'])),
+      slurmctld => ($slurm::with_slurmctld or defined(Class['slurm::slurmctld'])),
+      slurmdbd  => ($slurm::with_slurmdbd  or defined(Class['slurm::slurmdbd'])),
       wrappers  => $slurm::wrappers,
-      require   => Slurm::Build[$slurm::version],
+      require   => $slurm::do_build ? {
+        true  => Slurm::Build[$slurm::version],
+        false => undef
+      },
     }
   }
 }

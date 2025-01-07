@@ -1,6 +1,6 @@
 {
   "name": "ULHPC-slurm",
-  "version": "1.4.7",
+  "version": "1.5.1",
   "author": "UL HPC Team",
   "summary": "Configure and manage Slurm: A Highly Scalable Resource Manager",
   "license": "Apache-2.0",
@@ -10,35 +10,35 @@
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">=4.2.2 <5.0.0"
+      "version_requirement": ">=4.2.2 <10.0.0"
     },
     {
       "name": "puppetlabs-mysql",
-      "version_requirement": ">=6.0.0 <7.0.0"
+      "version_requirement": ">=10.0.0 <16.0.0"
     },
     {
       "name": "puppetlabs-vcsrepo",
-      "version_requirement": ">=2.0.0 <3.0.0"
+      "version_requirement": ">=2.0.0 <6.0.0"
     },
     {
       "name": "puppetlabs-firewall",
-      "version_requirement": ">=1.9.0 <2.0.0"
+      "version_requirement": ">=1.9.0 <9.0.0"
     },
     {
       "name": "puppet-archive",
-      "version_requirement": ">=3.0.0 <4.0.0"
+      "version_requirement": ">=3.0.0 <7.2.0"
     },
     {
       "name": "puppet-yum",
-      "version_requirement": ">=2.0.0 <4.0.0"
+      "version_requirement": ">=2.0.0 <6.3.0"
     },
     {
       "name": "puppet-selinux",
-      "version_requirement": ">=1.3.0 <2.0.0"
+      "version_requirement": ">=1.3.0 <3.5.0"
     },
     {
       "name": "puppet-epel",
-      "version_requirement": ">=1.2.2 <3.0.1"
+      "version_requirement": ">=1.2.2 <6.0.0"
     },
     {
       "name": "saz-limits",
@@ -50,7 +50,7 @@
     },
     {
       "name": "bodgit-rngd",
-      "version_requirement": ">=2.0.0 <3.0.0"
+      "version_requirement": ">=2.0.0 <4.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -58,7 +58,9 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
@@ -66,14 +68,22 @@
       "operatingsystemrelease": [
         "6",
         "7",
-        "8"
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
+      "version_requirement": ">= 4.10.0 < 9.0.0"
     }
   ],
   "mail": "hpc-team@uni.lu",
@@ -88,7 +98,7 @@
     "slurmctld",
     "slurmdbd"
   ],
-  "pdk-version": "2.5.0",
-  "template-url": "pdk-default#2.5.0",
-  "template-ref": "tags/2.5.0-0-g369d483"
+  "pdk-version": "3.2.0",
+  "template-url": "pdk-default#3.2.0",
+  "template-ref": "tags/3.2.0-0-gb257ef1"
 }

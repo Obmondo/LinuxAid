@@ -15,16 +15,15 @@
 # More details: see <https://slurm.schedmd.com/gres.conf.html>
 #
 class slurm::config::gres inherits slurm::config {
-
   $gres_content = $slurm::gres_content ? {
     undef   => $slurm::gres_source ? {
       undef   => $slurm::gres_target ? {
         undef   => template('slurm/gres.conf.erb'),
         default => $slurm::gres_content,
       },
-    default => $slurm::gres_content
+      default => $slurm::gres_content
     },
-  default => $slurm::gres_content,
+    default => $slurm::gres_content,
   }
   $ensure = $slurm::gres_target ? {
     undef   => $slurm::ensure,
@@ -44,5 +43,4 @@ class slurm::config::gres inherits slurm::config {
     target  => $slurm::gres_target,
     tag     => 'slurm::configfile',
   }
-
 }
