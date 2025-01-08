@@ -34,46 +34,53 @@ repository::mirror::default_configurations:
   puppetlabs:
     yum:
       enable: false
-      el7:
+      el_puppet8:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/7/'
-        repodir: 'puppetlabs/yum/puppet7/el/7'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet8/el/'
+        repodir: 'puppetlabs/yum/puppet8/el/'
+        dists:
+          - '7'
+          - '8'
+          - '9'
         package_format: 'rpm'
         exclude:
           - 'aarch64'
           - 'ppc64le'
-      el8:
+      el_puppet7:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/8/'
-        repodir: 'puppetlabs/yum/puppet7/el/8'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/'
+        repodir: 'puppetlabs/yum/puppet7/el/'
+        dists:
+          - '7'
+          - '8'
+          - '9'
         package_format: 'rpm'
         exclude:
           - 'aarch64'
           - 'ppc64le'
-      el9:
+      sles_puppet8:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/el/9/'
-        repodir: 'puppetlabs/yum/puppet7/el/9'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet8/sles/'
+        repodir: 'puppetlabs/sles/puppet8/'
+        dists:
+          - '12'
+          - '15'
         package_format: 'rpm'
         exclude:
           - 'aarch64'
           - 'ppc64le'
-      sles12:
+      sles_puppet7:
         enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/sles/12/'
-        repodir: 'puppetlabs/sles/puppet7/12/'
+        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/'
+        repodir: 'puppetlabs/sles/puppet7/'
+        dists:
+          - '12'
+          - '15'
         package_format: 'rpm'
         exclude:
           - 'aarch64'
           - 'ppc64le'
-      sles15:
-        enable: false
-        mirror_url: 'rsync://rsync.puppet.com/packages/yum/puppet7/sles/15/'
-        repodir: 'puppetlabs/sles/puppet7/15/'
-        package_format: 'rpm'
-        exclude:
-          - 'aarch64'
-          - 'ppc64le'
+
     apt:
       enable: false
       all:
@@ -84,6 +91,7 @@ repository::mirror::default_configurations:
           - 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26'
         sections:
           - 'puppet7'
+          - 'puppet8'
         dists:
           - 'focal'
           - 'jammy'
