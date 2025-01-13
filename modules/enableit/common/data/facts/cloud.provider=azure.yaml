@@ -3,6 +3,3 @@ common::system::cloud_init::manage: true
 
 common::software::walinuxagent::enable: true
 common::software::walinuxagent::manage: true
-
-common::software::oms_agent::enable: false
-common::software::oms_agent::manage: true

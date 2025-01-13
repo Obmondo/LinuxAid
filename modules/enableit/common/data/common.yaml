@@ -382,7 +382,6 @@ common::software::cloudamize::manage: false
 common::software::fwupd::manage: false
 common::software::microsoft_mde::manage: false
 common::software::nvidia_driver::manage: false
-common::software::oms_agent::manage: false
 common::software::rubrik::manage: false
 common::software::teleport::manage: false
 common::software::vscode::manage: false

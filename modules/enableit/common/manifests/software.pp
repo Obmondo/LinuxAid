@@ -12,10 +12,6 @@ class common::software {
     common::software::microsoft_mde.include
   }
 
-  if lookup('common::software::oms_agent::manage', Boolean, undef, false) {
-    common::software::oms_agent.include
-  }
-
   if lookup('common::software::teleport::enable', Boolean, undef, false) {
     common::software::teleport.include
   }
