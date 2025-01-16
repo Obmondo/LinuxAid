@@ -36,7 +36,7 @@ repository::mirror::default_configurations:
       enable: false
       el_puppet8:
         enable: false
-        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet8/el/'
+        mirror_url: 'https://yum.puppet.com/puppet8/el/'
         repodir: 'puppetlabs/yum/puppet8/el/'
         dists:
           - '7'
@@ -48,7 +48,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       el_puppet7:
         enable: false
-        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/el/'
+        mirror_url: 'https://yum.puppet.com/puppet7/el/'
         repodir: 'puppetlabs/yum/puppet7/el/'
         dists:
           - '7'
@@ -60,7 +60,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       sles_puppet8:
         enable: false
-        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet8/sles/'
+        mirror_url: 'https://yum.puppet.com/puppet8/sles/'
         repodir: 'puppetlabs/sles/puppet8/'
         dists:
           - '12'
@@ -71,7 +71,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       sles_puppet7:
         enable: false
-        mirror_url: 'https://rsync.puppet.com/packages/yum/puppet7/sles/'
+        mirror_url: 'https://yum.puppet.com/puppet7/sles/'
         repodir: 'puppetlabs/sles/puppet7/'
         dists:
           - '12'
