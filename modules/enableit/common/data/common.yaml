@@ -260,6 +260,7 @@ common::package::default_packages:
   - 'tcpdump'
   - 'tmux'
   - 'net-tools'
+  - 'iptables'
 
 common::setup::__conf_dir: '/etc/obmondo'
 
@@ -285,6 +286,7 @@ common::certs::__base_dir: '/etc/ssl/private/static-certs'
 common::certs::letsencrypt::deploy_hook_command: '/opt/obmondo/bin/letsencrypt_deploy_hook.sh'
 
 common::monitor::exporter::enable: true
+common::monitor::exporter::iptables::enable: true
 common::monitor::exporter::ssl::enable: false
 common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315

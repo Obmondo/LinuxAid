@@ -73,11 +73,12 @@ class profile::puppet (
       }
     }
 
-    exec { 'mask_puppetagent' :
-      command     => '/bin/systemctl mask puppet',
-      refreshonly => true,
-      noop        => $noop_value,
-      require     => Package['puppet-agent'],
+    ['puppet', 'pxp-agent'].each |$service| {
+      service { $service:
+        enable  => 'mask',
+        noop    => $noop_value,
+        require => Package['puppet-agent'],
+      }
     }
   }
 

@@ -13,15 +13,17 @@ class eit_repos::yum::puppetlabs (
   $_os_major = $facts.dig('os', 'release', 'major')
 
   # PuppetLabs
-  yumrepo { 'puppetlabs-puppet7':
-    ensure   => present,
-    noop     => $noop_value,
-    enabled  => 1,
-    gpgcheck => 1,
-    gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-inc-release-key',
-    descr    => "PuppetLabs 7 Products El \$releasever - \$basearch",
-    baseurl  => "https://repos.obmondo.com/puppetlabs/yum/puppet7/el/${_os_major}/\$basearch/",
-    target   => '/etc/yum.repos.d/puppetlabs-puppet7.repo',
+  [7, 8].each |$version| {
+    yumrepo { "puppetlabs-puppet${version}":
+      ensure   => present,
+      noop     => $noop_value,
+      enabled  => 1,
+      gpgcheck => 1,
+      gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-inc-release-key',
+      descr    => "PuppetLabs ${version} Products El \$releasever - \$basearch",
+      baseurl  => "https://repos.obmondo.com/puppetlabs/yum/puppet${version}/el/${_os_major}/\$basearch/",
+      target   => "/etc/yum.repos.d/puppetlabs-puppet${version}.repo",
+    }
   }
   # Same key is used to sign all packages
   eit_repos::yum::gpgkey { 'puppetlabs-puppet7':
