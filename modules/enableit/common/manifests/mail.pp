@@ -5,6 +5,8 @@ class common::mail (
     Eit_types::IP,
     Enum['all', 'localhost']
   ] $inet_interfaces                                         = 'localhost',
+  Eit_types::Hostname $myhostname                            = $facts['networking']['fqdn'],
+  Optional[Eit_types::Domain] $mydomain                      = $facts.dig('domain'),
   Optional[Eit_types::Host] $relayhost                       = undef,
   Boolean $smtp_sasl_auth                                    = false,
   Optional[String] $smtp_sasl_password_maps                  = undef,
@@ -32,7 +34,7 @@ class common::mail (
   $real_soft_bounce = to_yesno($soft_bounce)
 
   if $manage {
-    $has_mail_server_role = $::obmondo_classes.grep('role::mail::').size
+    $has_mail_server_role = $facts['obmondo_classes'].grep('role::mail::').size
     if $has_mail_server_role {
       # we only want to setup as normal "outgoing only" mail server - if server
       # does not have role::mail::$something :)
@@ -41,8 +43,8 @@ class common::mail (
       }
 
       class { 'postfix::server':
-        myhostname                 => $facts['fqdn'],
-        mydomain                   => $facts.dig('domain'),
+        myhostname                 => $myhostname,
+        mydomain                   => $mydomain,
         relayhost                  => $relayhost,
         inet_interfaces            => $inet_interfaces,
         smtp_sasl_auth             => $smtp_sasl_auth,

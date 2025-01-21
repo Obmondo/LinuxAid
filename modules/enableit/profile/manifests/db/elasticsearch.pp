@@ -76,7 +76,7 @@ class profile::db::elasticsearch (
     mode    => '0400',
   }
 
-  apt::pin { pin_elasticsearch:
+  apt::pin { 'pin_elasticsearch':
     packages => 'elasticsearch',
     version  => $version,
     priority => '1001',

@@ -10,7 +10,7 @@ class profile::tomcat (
 
   case $version {
     6 : {
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian' : {
           package { ['tomcat6-admin', 'tomcat6-common' ] :
             ensure  => present,
@@ -28,12 +28,12 @@ class profile::tomcat (
           $package_name = "tomcat${version}"
         }
         default : {
-          fail("${::operatingsystem} not support, Please contact obomdo.com")
+          fail("${facts['os']['family']} not support, Please contact obomdo.com")
         }
       }
     }
     7 : {
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian' : {
           package { ['tomcat7-admin', 'tomcat7-common' ] :
             ensure  => present,
@@ -51,12 +51,12 @@ class profile::tomcat (
           $catalina_base = 'tomcat'
         }
         default : {
-          fail("${::operatingsystem} not support, Please contact obomdo.com")
+          fail("${facts['os']['family']} not support, Please contact obomdo.com")
         }
       }
     }
     8 : {
-      case $::osfamily {
+      case $facts['os']['family'] {
         'Debian' : {
           fail('Not Supported Yet')
         }
@@ -64,7 +64,7 @@ class profile::tomcat (
           fail('Not Supported Yet')
         }
         default : {
-          fail("${::operatingsystem} not support, Please contact obomdo.com")
+          fail("${facts['os']['family']} not support, Please contact obomdo.com")
         }
       }
     }

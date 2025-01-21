@@ -1,18 +1,18 @@
 # Class redmine::params
 class redmine::params {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-      case $::operatingsystem {
+      case $facts['os']['family'] {
         'Fedora': {
-          if versioncmp($::operatingsystemrelease, '19') >= 0 or $::operatingsystemrelease == 'Rawhide' {
+          if versioncmp($facts['os']['release']['full'], '19') >= 0 or $facts['os']['release']['full'] == 'Rawhide' {
             $mysql_devel = 'mariadb-devel'
           } else {
             $mysql_devel = 'mysql-devel'
           }
         }
         /^(RedHat|CentOS|Scientific)$/: {
-          if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+          if versioncmp($facts['os']['release']['major'], '7') >= 0 {
             $mysql_devel = 'mariadb-devel'
           } else {
             $mysql_devel = 'mysql-devel'
@@ -24,13 +24,13 @@ class redmine::params {
       }
     }
     default: {
-      notice("nothing special for ${::osfamily}")
+      notice("nothing special for ${facts['os']['family']}")
     }
   }
 
   if $redmine::database_adapter {
     $real_adapter = $redmine::database_adapter
-  } elsif versioncmp($::rubyversion, '1.9') >= 0 {
+  } elsif versioncmp($facts['ruby']['version'], '1.9') >= 0 {
     $real_adapter = 'mysql2'
   } else {
     $real_adapter = 'mysql'

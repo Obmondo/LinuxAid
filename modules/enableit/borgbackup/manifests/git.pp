@@ -32,7 +32,7 @@
 #    defaults to "${borgbackup::configdir}/git"
 #  $git_author
 #    String to be used as git author for commits.
-#    defaults to 'borgbackup <root@${::fqdn}>'
+#    defaults to 'borgbackup <root@${facts['networking']['fqdn']}>'
 #
 class borgbackup::git (
   Array  $packages       = ['git','gnupg'],
@@ -41,10 +41,10 @@ class borgbackup::git (
   String $gitrepo        = '',
   String $gitrepo_sshkey = '',
   String $git_home       = "${borgbackup::configdir}/git",
-  String $git_author     = "borgbackup <root@${::fqdn}>",
+  String $git_author     = "borgbackup <root@${facts['networking']['fqdn']}>",
 ) inherits borgbackup {
 
-  Package<| tag =='borgbackup_git_package'  |> -> Exec["create gpg private key for ${::fqdn}"]
+  Package<| tag =='borgbackup_git_package'  |> -> Exec["create gpg private key for ${facts['networking']['fqdn']}"]
   Package<| tag =='borgbackup_git_package'  |> -> Exec['setup git repo']
 
   ensure_packages($packages, {'ensure' => 'present', tag => 'borgbackup_git_package' })
@@ -60,11 +60,11 @@ class borgbackup::git (
     mode   => '0700',
   }
 
-  exec { "create gpg private key for ${::fqdn}":
+  exec { "create gpg private key for ${facts['networking']['fqdn']}":
     environment => [ "GNUPGHOME=${gpg_home}" ],
     path        => '/usr/bin:/usr/sbin:/bin',
-    command     => "gpg --quick-generate-key --batch --passphrase '' 'borg ${::fqdn}'",
-    unless      => "gpg --list-keys 'borg ${::fqdn}'",
+    command     => "gpg --quick-generate-key --batch --passphrase '' 'borg ${facts['networking']['fqdn']}'",
+    unless      => "gpg --list-keys 'borg ${facts['networking']['fqdn']}'",
     require     => File[$gpg_home],
   }
 
@@ -74,7 +74,7 @@ class borgbackup::git (
       path        => '/usr/bin:/usr/sbin:/bin',
       command     => "echo \"${gpgkey}\"| gpg --import",
       unless      => "gpg --list-keys ${name}",
-      require     => [ File[$gpg_home], Exec["create gpg private key for ${::fqdn}"] ],
+      require     => [ File[$gpg_home], Exec["create gpg private key for ${facts['networking']['fqdn']}"] ],
     }
   }
 
@@ -128,7 +128,7 @@ class borgbackup::git (
     }
   }
 
-  file { "${git_home}/${::fqdn}":
+  file { "${git_home}/${facts['networking']['fqdn']}":
     ensure  => 'directory',
     owner   => 'root',
     group   => 'root',
@@ -140,7 +140,7 @@ class borgbackup::git (
     environment => [ "GIT_SSH_COMMAND=ssh -i ${borgbackup::configdir}/.ssh/gitrepo_key" ],
     path        => '/usr/bin:/usr/sbin:/bin',
     cwd         => $git_home,
-    command     => "git add .;git commit --message 'autocommit on ${::fqdn}' --author='${git_author}'",
+    command     => "git add .;git commit --message 'autocommit on ${facts['networking']['fqdn']}' --author='${git_author}'",
     refreshonly => true,
     require     => Exec['setup git repo'],
   }

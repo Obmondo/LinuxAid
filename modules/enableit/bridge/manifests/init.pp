@@ -25,7 +25,7 @@ class bridge (
     default => 'static',
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       augeas { 'Add source directive to interfaces':
         context => '/files/etc/network/interfaces',
@@ -49,7 +49,7 @@ class bridge (
 
     }
     default: {
-      fail("${::osfamily} not supported")
+      fail("${facts['os']['family']} not supported")
     }
   }
 

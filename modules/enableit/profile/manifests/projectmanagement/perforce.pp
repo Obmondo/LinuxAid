@@ -8,7 +8,7 @@ class profile::projectmanagement::perforce (
   Stdlib::Port              $service_port      = $role::projectmanagement::perforce::service_port,
   Eit_types::Password       $service_password  = $role::projectmanagement::perforce::service_password,
   Optional[String]          $license_content   = $role::projectmanagement::perforce::license_content,
-  Stdlib::Host              $hostname          = $role::projectmanagement::perforce::hostname,
+  Stdlib::Host              $hostname          = $role::projectmanagement::perforcefacts['networking']['hostname'],
   Perforce::Version         $version           = $role::projectmanagement::perforce::version,
   Stdlib::Absolutepath      $log_dir           = $role::projectmanagement::perforce::log_dir,
   Stdlib::Absolutepath      $log_file          = "${log_dir}/p4d.log",
@@ -32,7 +32,7 @@ class profile::projectmanagement::perforce (
   $helix_packages = lookup('profile::projectmanagement::perforce::helix_packages')
 
   yum::versionlock { $helix_packages:
-    ensure => present,
+    ensure  => present,
     version => $versionrelease[0],
     release => "${versionrelease[1]}${_version_suffix}.*",
     epoch   => 0,

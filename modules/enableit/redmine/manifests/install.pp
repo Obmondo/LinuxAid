@@ -19,7 +19,7 @@ class redmine::install {
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian':   { $packages = concat($generic_packages, $debian_packages) }
     'RedHat':   { $packages = concat($generic_packages, $redhat_packages) }
     default:    { $packages = concat($generic_packages, $redhat_packages) }

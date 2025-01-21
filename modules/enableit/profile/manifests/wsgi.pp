@@ -34,8 +34,8 @@ class profile::wsgi (
 
     # Setup uWSGI
     class { '::uwsgi' :
-      package_provider => $::package_provider,
-      service_provider => $::service_provider,
+      package_provider => $facts['package_provider'],
+      service_provider => $facts['service_provider'],
     }
 
     if $domains {

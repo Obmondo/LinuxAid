@@ -1,3 +1,4 @@
+# Samba
 class common::storage::samba (
   Boolean                           $enable = false,
   String                            $workgroup,

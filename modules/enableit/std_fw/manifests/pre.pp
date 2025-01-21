@@ -6,23 +6,23 @@ class std_fw::pre {
 
   # Default firewall rules
   firewall { '000 accept all icmp':
-    proto  => 'icmp',
-    jump => 'accept',
+    proto => 'icmp',
+    jump  => 'accept',
   }
   -> firewall { '001 accept all to lo interface':
     proto   => 'all',
     iniface => 'lo',
-    jump  => 'accept',
+    jump    => 'accept',
   }
   -> firewall { '002 accept related established rules':
-    proto  => 'all',
-    state  => ['RELATED', 'ESTABLISHED'],
-    jump => 'accept',
+    proto => 'all',
+    state => ['RELATED', 'ESTABLISHED'],
+    jump  => 'accept',
   }
 
   firewall { '003 allow ssh':
-    proto  => 'tcp',
-    dport  => 22,
-    jump => 'accept',
+    proto => 'tcp',
+    dport => 22,
+    jump  => 'accept',
   }
 }

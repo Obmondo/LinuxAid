@@ -68,7 +68,7 @@ class profile::appeng::phpfpm (
         'include'       => '/etc/nginx/fastcgi_params',
         'fastcgi_pass'  => '127.0.0.1:9001',
         'fastcgi_param' => 'SCRIPT_FILENAME $document_root$fastcgi_script_name',
-        'allow'         => [ '127.0.0.1', $::ipaddress ],
+        'allow'         => [ '127.0.0.1', $facts['networking']['ip'] ],
         'deny'          => 'all',
       },
     }

@@ -57,7 +57,6 @@ class role::mail::postfix (
     stats_daemon_port                     => $stats_daemon_port,
     run_newaliases                        => $run_newaliases,
     aliases                               => $aliases,
-    extra_main_parameters                 => $extra_main_parameters,
     maildrop_perms                        => $maildrop_perms,
     noop_value                            => $noop_value,
   }

@@ -3,7 +3,7 @@ class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
   Stdlib::Absolutepath     $install_path       = '/opt/icmanage',
 
-  Stdlib::Host             $hostname           = $profile::projectmanagement::perforce::hostname,
+  Stdlib::Host             $hostname           = $profile::projectmanagement::perforcefacts['networking']['hostname'],
 
   Boolean                  $manage_db          = false,
   Eit_types::SimpleString  $db_user            = 'icm',
@@ -23,7 +23,7 @@ class role::projectmanagement::perforce::icmanage (
   Boolean                  $__blendable,
 ) inherits ::role::projectmanagement::perforce {
 
-  confine(!('role::projectmanagement::perforce' in $::obmondo_classes),
+  confine(!('role::projectmanagement::perforce' in $facts['obmondo_classes']),
             'This role requires the Perforce role to also be used.')
 
   'profile::projectmanagement::perforce::icmanage'.contain

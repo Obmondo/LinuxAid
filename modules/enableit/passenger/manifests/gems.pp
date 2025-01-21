@@ -9,9 +9,9 @@ class passenger::gems (
     $builddir     = 'ext'
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '14.04' : {
           $real_gem_path        = '/var/lib/gems/1.9.1/gems'
           $real_passenger_root  = "${real_gem_path}/passenger-${passenger_version}"
@@ -46,7 +46,7 @@ class passenger::gems (
       ensure_packages($package_dependencies)
     }
     'RedHat': {
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '6' : {
           $real_gem_path               = '/usr/lib/ruby/gems/1.8/gems'
           $real_passenger_root         = "${real_gem_path}/passenger-${passenger_version}"
@@ -80,7 +80,7 @@ class passenger::gems (
       ensure_packages($package_dependencies)
     }
     default: {
-      fail("Operating system ${::operatingsystem} is not supported with the Passenger module")
+      fail("Operating system ${facts['os']['family']} is not supported with the Passenger module")
     }
   }
 }

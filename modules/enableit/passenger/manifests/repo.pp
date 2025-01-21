@@ -1,7 +1,7 @@
 # Setups repo for installing passenger from upstream
 class passenger::repo {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : {
       # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
       # sudo apt-get install -y apt-transport-https ca-certificates

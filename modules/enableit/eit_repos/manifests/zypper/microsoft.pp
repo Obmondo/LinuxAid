@@ -1,3 +1,4 @@
+# Zypper Microsoft
 class eit_repos::zypper::microsoft (
   Boolean           $ensure     = true,
   Optional[Boolean] $noop_value = $eit_repos::noop_value,

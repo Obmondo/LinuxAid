@@ -41,7 +41,7 @@ class profile::mongodb (
     * => $_server_settings,
   }
 
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     selinux::fcontext { 'selinux-fcontext-mongodb-datadir':
       pathname            => $_dbpath, #lint:ignore:variable_scope # FIXME
       context             => 'mongod_var_lib_t',

@@ -7,7 +7,7 @@ class passenger::install (
 ) {
 
   $require = if $passenger_version =~ /^5\./ {
-    $::osfamily ? {
+    $facts['os']['family'] ? {
       'Debian' => Class['apt::update'],
       'RedHat' => Yumrepo['passenger'],
       default  => fail('Not Supported'),

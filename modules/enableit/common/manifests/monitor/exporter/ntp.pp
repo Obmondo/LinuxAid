@@ -3,7 +3,7 @@ class common::monitor::exporter::ntp (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:9559',
   Optional[Boolean] $noop_value     = undef,
-  String            $telemetry_path = "/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s",
+  String            $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
 ) {
 
   File {
@@ -27,7 +27,7 @@ class common::monitor::exporter::ntp (
   }
 
   $_options = [
-    "-ntp.source http",
+    '-ntp.source http',
     "-web.listen-address ${listen_address}",
     "-web.telemetry-path ${telemetry_path}",
   ]
@@ -44,9 +44,9 @@ class common::monitor::exporter::ntp (
     user              => 'ntp_exporter',
     group             => 'ntp_exporter',
     notify_service    => Service[ 'ntp_exporter' ],
-    real_download_url => "https://github.com/sapcc/ntp_exporter",
+    real_download_url => 'https://github.com/sapcc/ntp_exporter',
     export_scrape_job => $enable,
-    options           => $_options.join(" "),
+    options           => $_options.join(' '),
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $::trusted['certname'],
     scrape_job_name   => 'ntp',

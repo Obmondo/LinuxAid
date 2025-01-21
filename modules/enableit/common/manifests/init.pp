@@ -24,13 +24,13 @@ class common (
 
   Stage['setup'] -> Stage['main']
 
-  $_full_host_management = if 'role::monitoring' in $::obmondo_classes {
+  $_full_host_management = if 'role::monitoring' in $facts['obmondo_classes'] {
     false
   } else {
     $full_host_management
   }
 
-  if $::obmondo_monitoring_status {
+  if $facts['obmondo_monitoring_status'] {
     # NOTE: Lets not allow anyone to remove our public repo, otherwise monitoring won't be setup
     eit_repos::repo { 'enableit_client':
       noop_value => false,
@@ -45,7 +45,7 @@ class common (
     contain ::common::hosts
 
     # NOTE: when user only want role::basic and repo + updates with no full host management
-    if 'role::basic' in $::obmondo_classes and !$_full_host_management {
+    if 'role::basic' in $facts['obmondo_classes'] and !$_full_host_management {
       contain ::common::repo
       contain ::common::certs
       contain ::common::system::updates
@@ -77,7 +77,7 @@ class common (
       contain ::common::extras
 
       # Only manage mail if not using a role that provides it
-      if $::obmondo_classes.grep('::kolab').empty or $::obmondo_classes.grep('::mailcow').empty {
+      if $facts['obmondo_classes'].grep('::kolab').empty or $facts['obmondo_classes'].grep('::mailcow').empty {
         contain ::common::mail
       }
 

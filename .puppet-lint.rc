@@ -1,1 +1,3 @@
+--fail-on-warnings
+--no-140chars-check
 --no-parameter_order-check

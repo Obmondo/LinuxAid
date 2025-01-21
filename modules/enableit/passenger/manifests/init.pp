@@ -67,18 +67,18 @@ class passenger (
           $_passenger_name    = $passenger_name
           $_passenger_version = 'present'
 
-          case $::osfamily {
+          case $facts['os']['family'] {
             'RedHat' : { ensure_packages('mod_passenger') }
             'Debian' : { ensure_packages('libapache2-mod-passenger') }
             default  : { fail('Not Supported') }
           }
         }
         4: {
-          case $::osfamily {
+          case $facts['os']['family'] {
             'RedHat': {
 
               # Setup enableit private repo
-              if $::operatingsystemmajrelease == '7' {
+              if $facts['os']['release']['major'] == '7' {
                 fail('Passenger version 4 is not supported from enableit on Centos7, Please setup using gems or select Passenger version 5')
               }
 

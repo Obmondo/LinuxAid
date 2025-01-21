@@ -12,7 +12,7 @@ define common::backup::borg::push (
 
   $_ssh_key_file = '/etc/obmondo/borg/borg_id_rsa'
   $_reponame     = $name
-  $_backup_root  = "${remote_backup_root}/${::hostname}"
+  $_backup_root  = "${remote_backup_root}/${facts['networking']['hostname']}"
 
   ::borgbackup::archive { $_reponame :
     reponame        => $_reponame,

@@ -8,7 +8,7 @@ class profile::package_management::guix::client (
 
   ::common::system::nscd.contain
 
-  $_do_mount = $enable and !($server in ['localhost', $facts['fqdn']])
+  $_do_mount = $enable and !($server in ['localhost', $facts['networking']['fqdn']])
   $_ensure_link = ensure_present($enable, 'link')
 
   if $enable and $manage_mounts {

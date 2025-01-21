@@ -123,7 +123,7 @@ class profile::computing::slurm (
     })
 
     class { '::profile::computing::slurm::slurmd':
-      interface => $interface,
+      interface  => $interface,
       node_cidrs => $node_cidrs,
     }
   }

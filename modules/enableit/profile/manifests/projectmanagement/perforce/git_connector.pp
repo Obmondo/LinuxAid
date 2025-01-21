@@ -20,7 +20,7 @@ class profile::projectmanagement::perforce::git_connector (
   $versionrelease = $version.split('-')
 
   yum::versionlock { 'helix-git-connector':
-    ensure => present,
+    ensure  => present,
     version => $versionrelease[0],
     release => "${versionrelease[1]}${_version_suffix}.*",
     epoch   => 0,
@@ -71,7 +71,7 @@ class profile::projectmanagement::perforce::git_connector (
     gitExecPath   => '/bin',
     envPath       => '/usr/bin:/usr/local/bin:/opt/perforce/git-connector/bin',
     authGroup     => 'gconn-auth',
-    serverId      => "gconn-${facts['fqdn']}",
+    serverId      => "gconn-${facts['networking']['fqdn']}",
   }
   $_p4gc_conf = {
     log => {

@@ -3,7 +3,7 @@ class passenger::params {
   $passenger_ruby     = '/usr/bin/ruby'
 
   # Default values for package installation
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : {
       # This is directory is needed in redhat for passenger 5
       file { '/var/run/passenger-instreg' :
@@ -14,7 +14,7 @@ class passenger::params {
       $mod_passenger  = '/usr/lib64/httpd/modules/mod_passenger.so'
 
       # Different location of passenger_root under centos6
-      if $::operatingsystemmajrelease == '6' {
+      if $facts['os']['release']['major'] == '6' {
         $passenger_root = '/usr/lib/ruby/1.8/phusion_passenger/locations.ini'
         } else {
           $passenger_root = '/usr/share/ruby/vendor_ruby/phusion_passenger/locations.ini'

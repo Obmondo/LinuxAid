@@ -4,7 +4,7 @@ class kolab::amavisd {
   file_line { 'amavisd_conf_hostname':
     ensure => 'present',
     path   => '/etc/amavisd/amavisd.conf',
-    line   => "\$myhostname = '${::fqdn}';"
+    line   => "\$myhostname = '${facts['networking']['fqdn']}';"
   }
 
   file { '/var/run/amavisd' :

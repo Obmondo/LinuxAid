@@ -6,7 +6,7 @@ class profile::redmine (
   Boolean $setupdb = true,
 ) {
 
-  $passenger_version = $::operatingsystemmajrelease ? {
+  $passenger_version = $facts['os']['release']['major'] ? {
     6       => 4,
     default => 5,
   }

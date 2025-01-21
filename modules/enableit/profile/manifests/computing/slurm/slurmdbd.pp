@@ -14,9 +14,9 @@ class profile::computing::slurm::slurmdbd (
   }
 
   firewall { '000 allow mysql connections':
-    proto  => 'tcp',
-    dport  => 3306,
-    jump   => 'accept',
+    proto => 'tcp',
+    dport => 3306,
+    jump  => 'accept',
   }
 
   class { '::slurm::slurmdbd' :

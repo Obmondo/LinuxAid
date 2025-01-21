@@ -47,10 +47,10 @@ class role::appeng::mod_php (
     }
 
     # Admin vhost to get status for apache,php and more application
-    apache::vhost { "${::hostname}.local.${::domain}":
+    apache::vhost { "${facts['networking']['hostname']}.local.${facts['networking']['domain']}":
       port            => '80',
       docroot         => '/var/www/html',
-      servername      => "${::hostname}.local.${::domain}",
+      servername      => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
       custom_fragment => template('profile/httpd-defaultvhost.erb'),
     }
   }
@@ -73,14 +73,14 @@ class role::appeng::mod_php (
     # Setups the apc,xcache vhosts
     # default vhost for customer, like status for nginx and apc status
     $default_status_locations = {
-      'allow' => [ '127.0.0.1', $::ipaddress ],
+      'allow' => [ '127.0.0.1', $facts['networking']['ip'] ],
       'deny'  => 'all',
     }
 
-    ::nginx::resource::location { "${::fqdn}-01":
+    ::nginx::resource::location { "${facts['networking']['fqdn']}-01":
       ensure              => present,
       stub_status         => true,
-      vhost               => "${::hostname}.local.${::domain}",
+      vhost               => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
       location            => '/status/nginx_status',
       location_cfg_append => $default_status_locations,
     }
@@ -90,9 +90,9 @@ class role::appeng::mod_php (
         fail("${opcodecache} is not supported")
       }
       'apc': {
-        ::nginx::resource::location { "${::fqdn}-02":
+        ::nginx::resource::location { "${facts['networking']['fqdn']}-02":
           ensure              => present,
-          vhost               => "${::hostname}.local.${::domain}",
+          vhost               => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
           location            => '/status/apcu',
           location_alias      => '/usr/share/apcu-panel',
           location_cfg_append => {
@@ -101,7 +101,7 @@ class role::appeng::mod_php (
             'fastcgi_param' => 'SCRIPT_FILENAME /usr/share/apcu-panel/index.php',
             'allow'         => [
               '127.0.0.1',
-              $::ipaddress,
+              $facts['networking']['ip'],
             ],
             'deny'          => 'all',
           },
@@ -109,16 +109,16 @@ class role::appeng::mod_php (
       }
 
       'xcache': {
-        ::nginx::resource::location { "${::fqdn}-02":
+        ::nginx::resource::location { "${facts['networking']['fqdn']}-02":
           ensure         => present,
-          vhost          => "${::hostname}.local.${::domain}",
+          vhost          => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
           location       => '/status/xcache',
           location_alias => '/usr/share/xcache',
         }
 
-        ::nginx::resource::location { "${::fqdn}-03":
+        ::nginx::resource::location { "${facts['networking']['fqdn']}-03":
           ensure              => present,
-          vhost               => "${::hostname}.local.${::domain}",
+          vhost               => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
           location            => ' ~ ^/status/xcache(.+\\.php)$',
           location_alias      => '/usr/share/xcache/\$1',
           location_cfg_append => {
@@ -127,7 +127,7 @@ class role::appeng::mod_php (
             'fastcgi_param' => 'SCRIPT_FILENAME \$request_filename',
             'allow'         => [
               '127.0.0.1',
-              $::ipaddress,
+              $facts['networking']['ip'],
             ],
             'deny'          => 'all',
           },
@@ -138,17 +138,17 @@ class role::appeng::mod_php (
     # TODO
     # Currently nginx pam auth doesn't seems to be easy.
     # Will try for next time.
-    ::nginx::resource::vhost { "${::hostname}.local.${::domain}":
+    ::nginx::resource::vhost { "${facts['networking']['hostname']}.local.${facts['networking']['domain']}":
       listen_port => 80,
       www_root    => '/var/www/html',
-      server_name => ["${::hostname}.local.${::domain}"],
+      server_name => ["${facts['networking']['hostname']}.local.${facts['networking']['domain']}"],
     }
   }
 
   # Host entry for php vhost
-  host { "${::hostname}.local.${::domain}":
-    ip           => $::ipaddress,
-    host_aliases => [ "${::hostname}.local" ],
+  host { "${facts['networking']['hostname']}.local.${facts['networking']['domain']}":
+    ip           => $facts['networking']['ip'],
+    host_aliases => [ "${facts['networking']['hostname']}.local" ],
   }
 
   # script to check that code status

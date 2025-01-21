@@ -15,12 +15,12 @@ class profile::web::nginx (
 
   # Firewall Rule
   firewall_multi { '000 allow http request':
-    dport  => [
+    dport => [
     if $ssl { 443 },
     80,
     ].delete_undef_values,
-    proto  => 'tcp',
-    jump   => 'accept',
+    proto => 'tcp',
+    jump  => 'accept',
   }
 
   $_nginx_cfg_prepend = $cfg_prepend + Hash(['load_module', $modules.map |$x| {
@@ -73,13 +73,13 @@ class profile::web::nginx (
   ::nginx::resource::server { 'znginx' :
     listen_port => $monitor_port,
     www_root    => '/var/www/html',
-    server_name => [ "www.znginx.${::hostname}", 'znginx' ],
+    server_name => [ "www.znginx.${facts['networking']['hostname']}", 'znginx' ],
     access_log  => 'off',
   }
 
   $status_locations  = {
     'access_log' => '/var/log/nginx/znginx.log',
-    'allow'      => [ '127.0.0.1', $::ipaddress ],
+    'allow'      => [ '127.0.0.1', $facts['networking']['ip'] ],
     'deny'       => 'all',
   }
 
@@ -91,9 +91,9 @@ class profile::web::nginx (
     location_cfg_append => $status_locations,
   }
 
-  host { "znginx.${::hostname}":
+  host { "znginx.${facts['networking']['hostname']}":
     ip           => '127.0.0.1',
-    host_aliases => [ "www.znginx.${::hostname}", 'znginx' ],
+    host_aliases => [ "www.znginx.${facts['networking']['hostname']}", 'znginx' ],
   }
 
   file { '/var/www/html/index.html':

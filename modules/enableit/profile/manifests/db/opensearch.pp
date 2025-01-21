@@ -74,9 +74,11 @@ class profile::db::opensearch (
     }
   }
 
-  $_memorysize_gb = $::facts['memorysize_mb']/1024
+  $memory_size = $facts['memory']['system']['total']
+  $memory_gb = regsubst($memory_size, ' MB', '', 'G') / 1024
+  $memory_gb = regsubst($memory_gb, ' GB', '', 'G')
 
-  $_naive_heap_gb = $_memorysize_gb*($es_heap_size_pct/100.0)
+  $_naive_heap_gb = $memory_gb*($es_heap_size_pct/100.0)
 
   $_es_heap_size_g = clamp(1, $_naive_heap_gb, $es_heap_size_max_gb)
 

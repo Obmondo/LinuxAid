@@ -2,9 +2,9 @@
 class kolab::cyrus {
   # Firewall
   firewall {'000 allow imaps':
-    proto  => 'tcp',
-    dport  => 993,
-    jump   => 'accept',
+    proto => 'tcp',
+    dport => 993,
+    jump  => 'accept',
   }
 
   # Install package

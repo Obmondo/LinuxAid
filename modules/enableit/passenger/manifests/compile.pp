@@ -10,7 +10,7 @@ class passenger::compile (
     default   : { fail('Not Supported') }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : { $verify_command = 'apache2ctl' }
     'RedHat' : { $verify_command = 'apachectl'  }
     default  : { fail('Not Supported') }

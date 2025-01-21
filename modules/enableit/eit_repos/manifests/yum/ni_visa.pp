@@ -2,7 +2,7 @@
 class eit_repos::yum::ni_visa (
   Boolean           $ensure     = true,
   Optional[Boolean] $noop_value = $eit_repos::noop_value,
-  Optional[String]  $version    = "2019.07"
+  Optional[String]  $version    = '2019.07'
 ) {
 
 
@@ -15,7 +15,7 @@ class eit_repos::yum::ni_visa (
   yumrepo { 'ni-software':
     ensure        => ensure_present($ensure),
     noop          => $noop_value,
-    baseurl       => "https://download.ni.com/ni-linux-desktop/$version/rpm/ni/el\$releasever",
+    baseurl       => "https://download.ni.com/ni-linux-desktop/${version}/rpm/ni/el\$releasever",
     enabled       => 1,
     gpgcheck      => 0,
     repo_gpgcheck => 1,

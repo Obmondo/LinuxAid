@@ -10,10 +10,10 @@ class profile::memcached (
     $ensure = 'absent'
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian' : { $user = 'memcache' }
     'RedHat' : { $user = 'memcached' }
-    default  : { fail("${::osfamily} is not supported") }
+    default  : { fail("${facts['os']['family']} is not supported") }
   }
 
   class { '::memcached' :

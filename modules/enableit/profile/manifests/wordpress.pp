@@ -5,7 +5,7 @@ class profile::wordpress (
   Optional[Eit_types::Hostname] $site_domain = undef,
   $http_server                               = 'apache',
   Enum['mysql'] $dbdriver                    = 'mysql',
-  $url                                       = "wordpress.${::domain}",
+  $url                                       = "wordpress.${facts['networking']['domain']}",
   $php                                       = '::role::appeng::mod_php',
   Boolean $force_https                       = false,
   Stdlib::Absolutepath $install_dir          = '/var/www/wordpress',

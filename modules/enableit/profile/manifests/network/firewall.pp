@@ -236,18 +236,18 @@ class profile::network::firewall (
 
   if $block_dhcp_broadcast {
     firewall { '950 ignore broadcast: dhcp':
-      proto  => 'udp',
-      sport  => 68,
-      dport  => 67,
-      jump   => $drop_action,
+      proto => 'udp',
+      sport => 68,
+      dport => 67,
+      jump  => $drop_action,
     }
   }
 
   if $block_netbios_broadcast {
     firewall {
       default:
-        proto  => 'udp',
-        jump   => $drop_action,
+        proto => 'udp',
+        jump  => $drop_action,
         ;
       '951 ignore netbios broadcast udp port 137':
         sport => 137,

@@ -5,7 +5,7 @@ class kolab::params {
   $kolab_ssl            = false
   $manage_kolab_repo    = true
   $manage_epel_repo     = true
-  $virtualhost_name     = $::fqdn
+  $virtualhost_name     = $facts['networking']['fqdn']
 
   # Kolab configurations options
   # [kolab]
@@ -28,7 +28,7 @@ class kolab::params {
   # Mysql
   $kolab_manage_database  = true
   $kolab_mysql_host       = 'localhost'
-  $kolab_mysql_password   = $::kolab_mysql_kolab_password
+  $kolab_mysql_password   = $facts['kolab_mysql_kolab_password']
 
   # Certs
   $kolab_server_cert = '/etc/pki/cyrus-imapd/cyrus-imapd.pem'
@@ -36,10 +36,10 @@ class kolab::params {
   $kolab_server_ca_file = '/etc/pki/cyrus-imapd/cyrus-imapd.pem'
 
   # Cyrus
-  $kolab_cyrus_imap_password = $::kolab_cyrus_admin_password
+  $kolab_cyrus_imap_password = $facts['kolab_cyrus_admin_password']
 
   # LDAP
-  $kolab_ldap_service_password            = $::kolab_service_password
+  $kolab_ldap_service_password            = $facts['kolab_service_password']
   $kolab_ldap_directory_manager_password  = 'lzXOcoTPjP6'
 
   # Postfix
@@ -55,7 +55,7 @@ class kolab::params {
 
   # SSL
   $generate_ssl    = false
-  $cert_commonname = $::fqdn
+  $cert_commonname = $facts['networking']['fqdn']
   $cert_state      = undef
   $cert_unit       = undef
   $cert_altnames   = []
@@ -67,7 +67,7 @@ class kolab::params {
   $cert_password   = undef
   $cert_force      = false
   $cert_template   = 'openssl/cert.cnf.erb'
-  $cert_certname   = $::domain
+  $cert_certname   = $facts['networking']['domain']
 
   # DKIM
   $dkim = false

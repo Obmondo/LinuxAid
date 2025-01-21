@@ -136,7 +136,7 @@ class redmine (
   $development_database = 'redmine_development',
   $database_adapter     = undef,
   $smtp_server          = 'localhost',
-  $smtp_domain          = $::domain,
+  $smtp_domain          = $facts['networking']['domain'],
   $smtp_port            = 25,
   $smtp_authentication  = false,
   $smtp_username        = '',
