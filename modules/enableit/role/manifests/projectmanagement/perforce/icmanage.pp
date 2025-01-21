@@ -23,7 +23,7 @@ class role::projectmanagement::perforce::icmanage (
   Boolean                  $__blendable,
 ) inherits ::role::projectmanagement::perforce {
 
-  confine(!('role::projectmanagement::perforce' in $facts['obmondo_classes']),
+  confine(!('role::projectmanagement::perforce' in $::obmondo_classes),
             'This role requires the Perforce role to also be used.')
 
   'profile::projectmanagement::perforce::icmanage'.contain
