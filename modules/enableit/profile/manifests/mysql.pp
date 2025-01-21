@@ -64,11 +64,7 @@ class profile::mysql (
   #
   # We use `max` to ensure that we never get below a pool size of 512 MB; if it
   # gets too low mysql wastes CPU cycles.
-  $memory_size = $facts['memory']['system']['total']
-  $memory_mb = regsubst($memory_size, ' GB', '', 'G') * 1024
-  $memory_mb = regsubst($memory_mb, ' MB', '', 'G')
-
-  $innodb_buffer_pool_size = max(512, Integer($memory_mb * ($innodb_buffer_percentage/100)))
+  $innodb_buffer_pool_size = max(512, Integer(functions::memory_human_readable('MB') * ($innodb_buffer_percentage/100)))
 
   # Default for every OS's
   $mysql_defaults = {
