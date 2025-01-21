@@ -57,7 +57,7 @@ class common::backup::borg (
       require => Package[ 'obmondo-borg-exporter'],
     }
 
-    common::backup::borg::server { $::hostname :
+    common::backup::borg::server { $facts['networking']['hostname'] :
       backup_root     => $backup_root,
       authorized_keys => $authorized_keys,
     }

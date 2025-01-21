@@ -7,7 +7,7 @@ class profile::drupal (
   Enum['mysql']
     $dbdriver    = 'mysql',
   String
-    $url         = "drupal.${::domain}",
+    $url         = "drupal.${facts['networking']['domain']}",
   Enum['apache']
     $http_server = 'apache',
   String

@@ -7,7 +7,7 @@ class passenger::config (
     File { notify => Class['apache::service'] }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       file { '/etc/apache2/mods-available/passenger.load':
         ensure  => present,
@@ -54,7 +54,7 @@ class passenger::config (
       }
     }
     default:{
-      fail("Operating system ${::operatingsystem} is not supported with the Passenger module")
+      fail("Operating system ${facts['os']['family']} is not supported with the Passenger module")
     }
   }
 

@@ -4,6 +4,6 @@
 :yaml:
   :datadir: /var/lib/hiera
 :hierarchy:
-  - "%{::osfamily}-%{::operatingsystemrelease}"
-  - "%{::operatingsystem}-%{::operatingsystemrelease}"
+  - "%{facts['os']['family']}-%{::operatingsystemrelease}"
+  - "%{facts['os']['family']}-%{::operatingsystemrelease}"
   - common

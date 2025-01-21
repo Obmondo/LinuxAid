@@ -15,19 +15,19 @@ class varnish (
 
     package { 'varnish': }
     #ensure tmpfs to handle varnish _.vsm file
-    file { "/var/lib/varnish/${::fqdn}":
+    file { "/var/lib/varnish/${facts['networking']['fqdn']}":
       ensure  => directory,
       require => Package[varnish],
     }
 
-    mount { "/var/lib/varnish/${::fqdn}":
+    mount { "/var/lib/varnish/${facts['networking']['fqdn']}":
       ensure   => 'mounted',
       fstype   => 'tmpfs',
       device   => 'tmpfs',
       options  => 'rw,size=256M',
       atboot   => true,
       remounts => true,
-      require  => File["/var/lib/varnish/${::fqdn}"],
+      require  => File["/var/lib/varnish/${facts['networking']['fqdn']}"],
       notify   => Service[varnish],
     }
     service { 'varnish':

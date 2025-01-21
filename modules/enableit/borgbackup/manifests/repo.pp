@@ -101,7 +101,7 @@ define borgbackup::repo (
   if $passcommand == 'default' {
     include ::borgbackup::git
 
-    $_passcommand = "export GNUPGHOME='${::borgbackup::git::gpg_home}'; gpg --decrypt ${::borgbackup::git::git_home}/${::fqdn}/${reponame}_pass.gpg" #lint:ignore:140chars
+    $_passcommand = "export GNUPGHOME='${::borgbackup::git::gpg_home}'; gpg --decrypt ${::borgbackup::git::git_home}/${facts['networking']['fqdn']}/${reponame}_pass.gpg" #lint:ignore:140chars
     if $passphrase == '' {
       # default behaviour, save a random passphrase encrypted in git repo
       $_passphrase = ''
@@ -113,7 +113,7 @@ define borgbackup::repo (
     }
     # so add to git repo ...
     $add_gitrepo = {
-      "gitrepo-add-${::fqdn}-${reponame}" => {
+      "gitrepo-add-${facts['networking']['fqdn']}-${reponame}" => {
         passphrase => $_passphrase_to_git,
         reponame   => $reponame,
       },

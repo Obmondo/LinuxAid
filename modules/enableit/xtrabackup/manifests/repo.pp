@@ -3,7 +3,7 @@ class xtrabackup::repo inherits xtrabackup {
 
   if $xtrabackup::manage_repo == true {
 
-    case $::operatingsystem {
+    case $facts['os']['family'] {
       'RedHat', 'CentOS': {
         yumrepo { 'percona':
           descr    => 'CentOS $releasever - Percona',
@@ -27,7 +27,7 @@ class xtrabackup::repo inherits xtrabackup {
       }
 
       default: {
-        fail("Module ${module_name} is not supported on ${::operatingsystem}")
+        fail("Module ${module_name} is not supported on ${facts['os']['family']}")
       }
     }
   }

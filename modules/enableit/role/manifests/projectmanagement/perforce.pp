@@ -8,7 +8,7 @@ class role::projectmanagement::perforce (
   Stdlib::Port              $service_port      = 1666,
   Eit_types::Password       $service_password,
   Optional[String]          $license_content   = undef,
-  Stdlib::Host              $hostname          = $facts['hostname'],
+  Stdlib::Host              $hostname          = $facts['networking']['hostname'],
   Perforce::Version         $version,
   Stdlib::Absolutepath      $log_dir           = '/var/log/perforce',
   Perforce::LogLevel        $log_level         = 1,

@@ -16,8 +16,8 @@ class std_fw::post (
 
   if $drop_all {
     firewall { '999 drop all':
-      proto  => 'all',
-      jump => $drop_action,
+      proto => 'all',
+      jump  => $drop_action,
     }
   }
 }

@@ -13,8 +13,8 @@ class role::computing::slurm (
   Hash                           $nodes                   = {},
   Hash                           $partitions              = {},
   String                         $srun_port_range         = '50000-53000',
-  Stdlib::Host                   $accounting_storage_host = $::facts['hostname'],
-  Stdlib::Host                   $control_machine         = $::facts['hostname'],
+  Stdlib::Host                   $accounting_storage_host = $facts['networking']['hostname'],
+  Stdlib::Host                   $control_machine         = $facts['networking']['hostname'],
   # Make DOWN nodes available automatically, even after unexpected reboots. This
   # might not be a good idea, but let's try it for now. The alternative is that
   # we manually have to bring up DOWN nodes.

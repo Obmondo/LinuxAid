@@ -89,20 +89,20 @@ class profile::virtualization::kubernetes (
   if !empty($extra_public_ports) {
 
     firewall_multi { '010 allow access though teleport':
-      proto  => 'tcp',
-      dport  => $extra_public_ports,
-      jump   => 'accept',
+      proto => 'tcp',
+      dport => $extra_public_ports,
+      jump  => 'accept',
     }
   }
 
   # Expose http and https
   firewall_multi { '010 allow access to k8s http':
-    proto  => 'tcp',
-    dport  => [
+    proto => 'tcp',
+    dport => [
       if $expose_http_on_master { '80' },
       if $expose_https_on_master { '443' },
     ],
-    jump   => 'accept',
+    jump  => 'accept',
   }
 
   package { 'cri-tools':

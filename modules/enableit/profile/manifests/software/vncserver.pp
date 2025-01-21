@@ -1,3 +1,4 @@
+# VNC Server
 class profile::software::vncserver (
   Boolean                               $enable         = $common::software::vncserver::enable,
   Optional[Boolean]                     $noop_value     = $common::software::vncserver::noop_value,

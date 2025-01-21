@@ -10,7 +10,7 @@ class profile::system::selinux (
     contain ::auditd
   }
 
-  if $::osfamily == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     $_selinux_mode = $enable ? {
       true  => $enforce ? {
         true  => 'enforcing',

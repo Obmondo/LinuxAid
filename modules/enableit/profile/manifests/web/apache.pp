@@ -45,7 +45,7 @@ class profile::web::apache (
   $_modules = [ $default_modules + $modules ].flatten.unique
 
   # which user runs apache
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : { $apache_user = 'apache' }
     'Debian' : { $apache_user = 'www-data' }
     default  : { $apache_user = 'daemon' }
@@ -62,10 +62,10 @@ class profile::web::apache (
   # we just want the module to be loaded, like mod_headers
   $_modules.each | $mod | {
     if $mod == 'proxy_uwsgi' {
-      case $::osfamily {
+      case $facts['os']['family'] {
         'RedHat': { package { 'mod_proxy_uwsgi' : } }
         'Debian': { package { 'libapache2-mod-proxy-uwsgi' : } }
-        default: { fail("Not supported ${::osfamily} ") }
+        default: { fail("Not supported ${facts['os']['family']} ") }
       }
     }
 

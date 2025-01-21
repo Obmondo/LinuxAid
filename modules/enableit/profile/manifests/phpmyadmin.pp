@@ -8,12 +8,12 @@ class profile::phpmyadmin (
     manage_apache => false
   }
 
-  $custom_conf = $::osfamily ? {
+  $custom_conf = $facts['os']['family'] ? {
     'RedHat' => 'phpMyAdmin',
     'Debian' => 'phpmyadmin'
   }
 
-  $conf_group = $::osfamily ? {
+  $conf_group = $facts['os']['family'] ? {
     'RedHat' => 'apache',
     'Debian' => 'www-data'
   }
@@ -145,7 +145,7 @@ class profile::phpmyadmin (
       ]
     }
 
-    ::apache::vhost { "${::fqdn}_phpmyadmin" :
+    ::apache::vhost { "${facts['networking']['fqdn']}_phpmyadmin" :
       port             => '443',
       ssl              => $ssl,
       docroot          => "/usr/share/${custom_conf}",

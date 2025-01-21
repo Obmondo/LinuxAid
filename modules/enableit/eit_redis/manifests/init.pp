@@ -18,13 +18,13 @@ class eit_redis (
   ] $config_template                                     = 'eit_redis/redis.conf.erb',
 ) {
 
-  confine(!($::osfamily in ['Debian', 'RedHat']), 'Platform not supported')
+  confine(!($facts['os']['family'] in ['Debian', 'RedHat']), 'Platform not supported')
   confine(!$logfile and $daemon, 'Not running as daemon and sending logs to stdout will cause logs to be redirected to /dev/null')
 
   # FIXME: check that IPPorts in $bind all have the same port; Redis supports
   # binding to multiple interfaces, but the port has to be the same, apparently.
 
-  $conf_file = $::osfamily ? {
+  $conf_file = $facts['os']['family'] ? {
     'Debian' => '/etc/redis/redis.conf',
     'RedHat' => '/etc/redis.conf',
   }

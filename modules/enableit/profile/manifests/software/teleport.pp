@@ -35,7 +35,7 @@ class profile::software::teleport (
     noop    => $noop_value,
     content => to_yaml({
       'teleport'        => {
-        'nodename'     => $facts['hostname'],
+        'nodename'     => $facts['networking']['hostname'],
         'data_dir'     => '/run/teleport',
         'auth_token'   => $join_token,
         'auth_servers' => [

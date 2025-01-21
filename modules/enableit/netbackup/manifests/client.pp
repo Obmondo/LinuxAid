@@ -2,7 +2,7 @@
 class netbackup::client (
   Stdlib::Absolutepath $installer,
   Optional[String]     $version         = undef,
-  Stdlib::Host         $clientname      = $::fqdn,
+  Stdlib::Host         $clientname      = $facts['networking']['fqdn'],
   Stdlib::Host         $masterserver,
   Array[Stdlib::Host]  $mediaservers    = [],
   Boolean              $service_enabled = true,
@@ -11,7 +11,7 @@ class netbackup::client (
 )
 {
 
-  $_version_cmp = versioncmp($version, $::netbackup_version)
+  $_version_cmp = versioncmp($version, $facts['netbackup_version'])
   if $_version_cmp == 1 {
     # $version is newer than installed
     class { 'netbackup::client::install':
@@ -19,7 +19,7 @@ class netbackup::client (
     }
   } elsif $_version_cmp == -1 {
     # $version is older than installed
-    fail("Installed version ${::netbackup_version} newer then ${version}, not downgrading")
+    fail("Installed version ${facts['netbackup_version']} newer then ${version}, not downgrading")
   }
 
   class { 'netbackup::client::config': }

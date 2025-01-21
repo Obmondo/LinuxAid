@@ -3,7 +3,7 @@ class profile::kolab (
   Boolean                   $manage_database  = true,
   Boolean                   $manage_epel_repo = false,
   Boolean                   $manage_postfix   = true,
-  Eit_types::Domain         $domain           = $::domain,
+  Eit_types::Domain         $domain           = $facts['networking']['domain'],
   Boolean                   $dkim             = false,
   Array[Eit_types::Domain]  $dkim_domains     = [],
   Array[Eit_types::IP]      $dkim_ips         = [],

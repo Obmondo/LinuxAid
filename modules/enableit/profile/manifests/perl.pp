@@ -14,7 +14,7 @@ class profile::perl (
     $custom_fragment = "
 AddHandler ${handler} .cgi .pl"
 
-    if $::osfamily == 'RedHat' {
+    if $facts['os']['family'] == 'RedHat' {
       # Install CGI perl library
       package { 'perl-CGI' : ensure => present }
     }

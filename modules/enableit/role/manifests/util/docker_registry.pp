@@ -3,9 +3,9 @@ class role::util::docker_registry (
   Eit_types::Email $admin_email
 ) inherits role::util {
   firewall { '000 allow http':
-    proto  => 'tcp',
-    dport  => 80,
-    jump   => 'accept',
+    proto => 'tcp',
+    dport => 80,
+    jump  => 'accept',
   }
   class { '::docker_distribution':
     log_fields               => {

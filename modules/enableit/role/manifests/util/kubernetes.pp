@@ -38,9 +38,9 @@ class role::util::kubernetes (
 
   # We need anyone to be able to reach k8s controller api
   firewall { '010 allow k8s controller api':
-    proto  => 'tcp',
-    dport  => 6443,
-    jump   => 'accept',
+    proto => 'tcp',
+    dport => 6443,
+    jump  => 'accept',
   }
 
   #TODO: use our logic function to validate correct variables role selected

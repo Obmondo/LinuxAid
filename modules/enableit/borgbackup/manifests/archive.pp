@@ -5,7 +5,7 @@
 #
 # $reponame,
 #   The name of the repo to add the archive
-#   defaults to $::fqdn, the default repo created
+#   defaults to $facts['networking']['fqdn'], the default repo created
 #   by including borgbackup without parameters
 # $archive_name
 #   The name of the archive.
@@ -73,7 +73,7 @@
 #   Defaults to ''
 #
 define borgbackup::archive (
-  String                   $reponame           = $::fqdn,
+  String                   $reponame           = $facts['networking']['fqdn'],
   String                   $archive_name       = $title,
   Array                    $pre_commands       = [],
   Array                    $post_commands      = [],

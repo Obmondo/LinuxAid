@@ -14,7 +14,7 @@ class profile::mysql (
   Boolean                               $binlog                         = true,
   Enum['MIXED', 'ROW', 'STATEMENT']     $binlog_format                  = 'MIXED',
   Boolean                               $local_tcp_root_access          = false,
-  Optional[Stdlib::Absolutepath]        $binlog_dir                     = "${datadir}/binlog/${facts['fqdn']}",
+  Optional[Stdlib::Absolutepath]        $binlog_dir                     = "${datadir}/binlog/${facts['networking']['fqdn']}",
   Optional[Integer[4096, 1073741824]]   $binlog_max_size_bytes          = 1*1024*1024*1024, # 1 GB
   Optional[Integer[0, 4294967295]]      $binlog_sync                    = 1,
   Hash[Eit_types::Mysql_Variable, Data] $override_options               = {},
@@ -64,7 +64,11 @@ class profile::mysql (
   #
   # We use `max` to ensure that we never get below a pool size of 512 MB; if it
   # gets too low mysql wastes CPU cycles.
-  $innodb_buffer_pool_size = max(512, Integer($facts['memorysize_mb'] * ($innodb_buffer_percentage/100)))
+  $memory_size = $facts['memory']['system']['total']
+  $memory_mb = regsubst($memory_size, ' GB', '', 'G') * 1024
+  $memory_mb = regsubst($memory_mb, ' MB', '', 'G')
+
+  $innodb_buffer_pool_size = max(512, Integer($memory_mb * ($innodb_buffer_percentage/100)))
 
   # Default for every OS's
   $mysql_defaults = {
@@ -99,10 +103,10 @@ class profile::mysql (
     # necessary when using innodb_file_per_table
     'innodb_open_files'         => '1024',
     # let innodb engines find optimal concurrency
-    'innodb_read_io_threads'    => $facts['processorcount'] * 2,
+    'innodb_read_io_threads'    => $facts['processors']['count'] * 2,
     # set to max because innodb_thread_concurrency=0 should mean it scales
     # automaticly.
-    'innodb_write_io_threads'   => $facts['processorcount'] * 2,
+    'innodb_write_io_threads'   => $facts['processors']['count'] * 2,
   }
 
   if $facts['os']['release']['major'] == '16.04' {
@@ -170,7 +174,7 @@ class profile::mysql (
 
   # If we use systemd we can let it handle mounting any encrypted disks before
   # mysqld starts
-  if $::service_provider == 'systemd' {
+  if $facts['service_provider'] == 'systemd' {
     $service_d = "/etc/systemd/system/${::mysql::server::service_name}.service.d"
 
     file { $service_d:

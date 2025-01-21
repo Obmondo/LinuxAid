@@ -5,7 +5,7 @@ class profile::elk (
   Variant[Pattern[/\d\.\d\.\d/], Enum['2.x', '5.x']] $es_version  = undef,
   Pattern[/[A-Za-z0-9_.-]+/] $clustername                         = 'elkstack',
   Stdlib::Absolutepath $es_datadir                                = '/var/lib/elasticsearch/data',
-  Array[Eit_types::IP] $cluster_hosts                             = [$::facts['ipaddress']],
+  Array[Eit_types::IP] $cluster_hosts                             = [$facts['networking']['ip']],
   Boolean $nxlog_windowseventlog                                  = false,
   Boolean $nxlog_ssl_windowseventlog                              = false,
   Boolean $nxlog_json                                             = false,
@@ -26,7 +26,7 @@ class profile::elk (
   Integer $curator_delete_days                                    = 7,
 ) {
 
-  $_es_instance_name = pick($es_instance_name, "es-${::hostname}")
+  $_es_instance_name = pick($es_instance_name, "es-${facts['networking']['hostname']}")
   $_es_service_name = "elasticsearch-${_es_instance_name}"
   $_ssl = $nginx_ssl_mode in [true, 'force']
 
@@ -100,7 +100,7 @@ class profile::elk (
     }
   }
 
-  $_http_server_name = "kibana.${::hostname}"
+  $_http_server_name = "kibana.${facts['networking']['hostname']}"
 
   class { 'nginx':
     confd_only        => true,

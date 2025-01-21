@@ -188,12 +188,12 @@ class profile::system::sshd (
           'docker0',
         ],
         export_ipaddresses => true,
-        storeconfigs_group => $::obmondo['customer_id'],
+        storeconfigs_group => $facts['obmondo']['customer_id'],
       }
 
       class { 'ssh::knownhosts':
         collect_enabled    => true,
-        storeconfigs_group => $::obmondo['customer_id'],
+        storeconfigs_group => $facts['obmondo']['customer_id'],
       }
     }
   }

@@ -3,8 +3,8 @@ class kolab::postfix (
   Boolean              $ssl                             = false,
   Boolean              $dkim                            = false,
   String               $myorigin                        = '$myhostname',
-  String               $mydomain                        = $::facts['domain'],
-  String               $myhostname                      = $::facts['fqdn'],
+  String               $mydomain                        = $facts['networking']['domain'],
+  String               $myhostname                      = $facts['networking']['fqdn'],
   String               $mynetworks                      = '127.0.0.1',
   Boolean              $postscreen                      = false,
   Hash                 $virtualalias                    = {},
@@ -34,9 +34,9 @@ class kolab::postfix (
 
   if $ssl {
     firewall { '001 allow smtps':
-      proto  => 'tcp',
-      dport  => 465,
-      jump   => 'accept',
+      proto => 'tcp',
+      dport => 465,
+      jump  => 'accept',
     }
   }
 
@@ -65,9 +65,9 @@ class kolab::postfix (
 
   if $postscreen {
     firewall {'001 allow postscreen':
-      proto  => 'tcp',
-      dport  => 10465,
-      jump   => 'accept',
+      proto => 'tcp',
+      dport => 10465,
+      jump  => 'accept',
     }
 
     common::services::systemd { 'postwhite.timer':

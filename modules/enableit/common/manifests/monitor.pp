@@ -1,6 +1,6 @@
 # Monitoring defaults
 class common::monitor (
-  Boolean $enable = $::obmondo_monitoring_status,
+  Boolean $enable = $facts['obmondo_monitoring_status'],
 ) {
   if $enable {
     contain ::monitor

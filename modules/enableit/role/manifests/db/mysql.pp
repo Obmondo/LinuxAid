@@ -9,7 +9,7 @@ class role::db::mysql (
   Boolean                               $binlog                         = true,
   Enum['MIXED', 'ROW', 'STATEMENT']     $binlog_format                  = 'MIXED',
   Boolean                               $local_tcp_root_access          = false,
-  Optional[Stdlib::Absolutepath]        $binlog_dir                     = "${datadir}/binlog/${facts['fqdn']}",
+  Optional[Stdlib::Absolutepath]        $binlog_dir                     = "${datadir}/binlog/${facts['networking']['fqdn']}",
   Optional[Integer[4096, 1073741824]]   $binlog_max_size_bytes          = 1*1024*1024*1024, # 1 GB
   Optional[Integer[0, 4294967295]]      $binlog_sync                    = 1,
   Optional[Eit_types::CustomerHost]     $binlog_backup_target           = undef,
@@ -47,8 +47,8 @@ class role::db::mysql (
   # FIXME: binlog backup not implemented
 
   if $binlog_backup_target {
-    @@commmon::backup::pull::backup { "pull mysql binlog from ${facts['fqdn']}":
-      from        => $facts['fqdn'],
+    @@commmon::backup::pull::backup { "pull mysql binlog from ${facts['networking']['fqdn']}":
+      from        => $facts['networking']['fqdn'],
       to          => $binlog_backup_target,
       source      => 1,
       destination => $binlog_backup_target_dir,

@@ -19,7 +19,7 @@ function package::install (
   Boolean $pin = false,
 ) {
 
-  confine($pin, $::facts['osfamily'] != 'Debian', 'Package pinning only supported on Debian-based systems')
+  confine($pin, $::facts['os']['family'] != 'Debian', 'Package pinning only supported on Debian-based systems')
   confine($pin, $parameters in ['present', 'absent'] or $parameters =~ Boolean, 'Package pinning requires an explicit package version')
 
   # Packages

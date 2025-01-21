@@ -16,8 +16,8 @@
 #  $repos
 #    Hash of repos to create (also see borgbackup::repo for
 #    parameters.
-#    defautls to {$::fqdn => {}} which creates an
-#    empty repo named $::fqdn.
+#    defautls to {$facts['networking']['fqdn'] => {}} which creates an
+#    empty repo named $facts['networking']['fqdn'].
 #  $default_target
 #    the default target of the backup for $repos definition
 #    defaults to ''
@@ -32,7 +32,7 @@ class borgbackup (
   Boolean $ensure_ssh_directory = true,
   String  $ssh_key_define       = '',
   Hash    $ssh_key_res          = {},
-  Hash    $repos                = {$::fqdn => {}},
+  Hash    $repos                = {$facts['networking']['fqdn'] => {}},
   String  $default_target       = '',
   Hash    $repos_defaults       = {},
 ) {

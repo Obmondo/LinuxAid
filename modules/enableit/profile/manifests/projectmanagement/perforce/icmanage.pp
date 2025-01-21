@@ -3,7 +3,7 @@ class profile::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version           = $::role::projectmanagement::perforce::icmanage::version,
   Stdlib::Absolutepath     $install_path      = $::role::projectmanagement::perforce::icmanage::install_path,
 
-  Stdlib::Host             $hostname          = $::role::projectmanagement::perforce::icmanage::hostname,
+  Stdlib::Host             $hostname          = $::role::projectmanagement::perforce::icmanagefacts['networking']['hostname'],
 
   Boolean                  $manage_db         = $::role::projectmanagement::perforce::icmanage::manage_db,
   Eit_types::Password      $root_password     = $::role::projectmanagement::perforce::icmanage::root_password,

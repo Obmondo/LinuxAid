@@ -80,7 +80,7 @@ class role::projectmanagement::gitlab (
   confine($enable_pages, $pages_domain.then |$_| { $pages_domain[$pages_domain.size-$domain.size, $pages_domain.size] == $domain },
           '`$pages_domain` must not be a subdomain of `$domain`.')
 
-  if $::obmondo_classes[0] != 'role::projectmanagement::gitlab' {
+  if $facts['obmondo_classes'][0] != 'role::projectmanagement::gitlab' {
     fail('class `role::projectmanagement::gitlab` MUST be the first element in classes array to add git to allowed_users via hiera.')
   }
 

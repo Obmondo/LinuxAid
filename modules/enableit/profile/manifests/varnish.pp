@@ -12,9 +12,9 @@ class profile::varnish (
 
   if ( ! defined (Firewall['000 allow http'] )) {
     firewall { '000 allow http':
-      proto  => 'tcp',
-      dport  => 80,
-      jump   => 'accept',
+      proto => 'tcp',
+      dport => 80,
+      jump  => 'accept',
     }
   }
   if ( $adminacl ) {

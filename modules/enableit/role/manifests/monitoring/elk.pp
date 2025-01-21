@@ -4,7 +4,7 @@ class role::monitoring::elk (
   Hash[String, Data] $es_config                                   = {},
   Variant[Pattern[/\d\.\d\.\d/], Enum['2.x', '5.x']] $es_version  = undef,
   Stdlib::Absolutepath $es_datadir                                = '/var/lib/elasticsearch/data',
-  Array[Eit_types::IP] $cluster_hosts                             = [$facts['ipaddress']],
+  Array[Eit_types::IP] $cluster_hosts                             = [$facts['networking']['ip']],
   Boolean $nxlog_windowseventlog                                  = false,
   Boolean $nxlog_ssl_windowseventlog                              = false,
   Boolean $nxlog_json                                             = false,

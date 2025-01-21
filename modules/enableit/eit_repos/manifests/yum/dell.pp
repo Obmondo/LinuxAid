@@ -11,13 +11,13 @@ class eit_repos::yum::dell (
 
   $repos.each | $key, $value | {
     yumrepo { $key :
-      ensure      => ensure_present($ensure),
-      mirrorlist  => $value,
-      enabled     => 1,
-      noop        => $noop_value,
-      gpgcheck    => 1,
-      gpgkey      => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell-system-update',
-      descr       => $key,
+      ensure     => ensure_present($ensure),
+      mirrorlist => $value,
+      enabled    => 1,
+      noop       => $noop_value,
+      gpgcheck   => 1,
+      gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-dell-system-update',
+      descr      => $key,
     }
   }
 

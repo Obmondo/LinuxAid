@@ -3,8 +3,8 @@ class profile::puppetdb {
 
   firewall {
     default:
-      proto  => 'tcp',
-      jump => 'accept',
+      proto => 'tcp',
+      jump  => 'accept',
       ;
 
     '000 allow puppetdb http from internal-api01':

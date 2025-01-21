@@ -1,6 +1,6 @@
 # Kolab class
 class kolab (
-  $domain                           = $::domain,
+  $domain                           = $facts['networking']['domain'],
   $cert_country                     = undef,
   $cert_organization                = undef,
   $cert_commonname                  = $kolab::params::cert_commonname,
@@ -27,7 +27,7 @@ class kolab (
   $upload_max_filesize              = '$upload_max_filesize',
   $post_max_size                    = '$post_max_size',
   $mydomain                         = $domain,
-  $myhostname                       = $::facts['fqdn'],
+  $myhostname                       = $facts['networking']['fqdn'],
   $mysql_host                       = $kolab::params::kolab_mysql_host,
   # NOTE: TODO: FIXME: the kolab installation workflow is bit odd/broken
   # so we use this module to setup the kolab by running the install script
@@ -207,7 +207,7 @@ class kolab (
     path      => ['/usr/bin', '/usr/sbin'],
     command   => "setup-kolab --mysqlserver=${mysqlserver} --timezone=${timezone} --directory-manager-pwd=${ldap_directory_manager_password} --default > /etc/kolab/installation_password", #lint:ignore:140chars
     timeout   => '600',
-    creates   => "/etc/dirsrv/slapd-${::hostname}",
+    creates   => "/etc/dirsrv/slapd-${facts['networking']['hostname']}",
     logoutput => 'on_failure',
     require   => Package['kolab']
   }

@@ -1,9 +1,9 @@
 # Class: postfix::params
 #
 class postfix::params {
-  case $::osfamily {
+  case $facts['os']['family'] {
     /RedHat|Suse/ : {
-      $postfix_version = $::operatingsystemmajrelease ? {
+      $postfix_version = $facts['os']['release']['major'] ? {
         '7|15'  => '2.10.1',
         '6|14'  => '2.6.6',
         '5|12'  => '2.3.3',
@@ -39,7 +39,7 @@ class postfix::params {
       $config_directory = '/etc/postfix'
       case $facts['os']['distro']['id'] {
         'Ubuntu': {
-          $daemon_directory = str2bool(versioncmp($::operatingsystemrelease, '16.04') < 0) ? {
+          $daemon_directory = str2bool(versioncmp($facts['os']['release']['full'], '16.04') < 0) ? {
             true    => '/usr/lib/postfix',
             default => '/usr/lib/postfix/sbin',
           }
@@ -102,7 +102,7 @@ class postfix::params {
       $postmap = '/usr/local/sbin/postmap'
     }
     default: {
-      fail("Unsupported OS family ${::osfamily}")
+      fail("Unsupported OS family ${facts['os']['family']}")
     }
   }
 

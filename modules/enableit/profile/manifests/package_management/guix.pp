@@ -29,7 +29,7 @@ class profile::package_management::guix (
 
   exec { 'install guix':
     command     => 'mv /tmp/var/guix /var/guix && mv /tmp/gnu /gnu',
-    path        => $::path,
+    path        => $facts['path'],
     refreshonly => true,
     subscribe   => Archive[$_install_source_file_name],
     before      => Service['guix-daemon.service'],

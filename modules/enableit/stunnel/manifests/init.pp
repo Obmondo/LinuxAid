@@ -66,7 +66,7 @@ class stunnel (
     enable => false,
   }
 
-  if $facts['osfamily'] == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     exec { 'enable stunnel':
       command => 'sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/stunnel4',
       path    => [ '/bin', '/usr/bin' ],

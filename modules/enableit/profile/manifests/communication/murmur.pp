@@ -26,9 +26,9 @@ class profile::communication::murmur (
 
   ['udp', 'tcp'].map |$protocol| {
     firewall { "000 allow murmur ${protocol}":
-      proto  => $protocol,
-      port   => $port,
-      jump   => 'accept',
+      proto => $protocol,
+      port  => $port,
+      jump  => 'accept',
     }
   }
 

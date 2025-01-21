@@ -4,7 +4,7 @@ class profile::software::nvidia_driver (
   Optional[Boolean] $noop_value = $common::software::nvidia_driver::noop_value,
 ){
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian':{
       $distro = regsubst(downcase("${facts['os']['name']}${facts['os']['release']['full']}"), '\.', '', 'G')
 

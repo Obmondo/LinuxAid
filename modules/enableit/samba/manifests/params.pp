@@ -2,9 +2,9 @@
 #
 class samba::params {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
-      if $::operatingsystemmajrelease == '5' {
+      if $facts['os']['release']['major'] == '5' {
         $service = [ 'smb' ]
       } else {
         $service = [ 'smb', 'nmb' ]
@@ -14,12 +14,12 @@ class samba::params {
       $package = 'samba'
     }
     'Debian': {
-      if $::operatingsystem == 'Debian' and versioncmp($::operatingsystemrelease, '8') < 0 {
+      if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['full'], '8') < 0 {
         $service = [ 'samba' ]
       } else {
         $service = [ 'smbd', 'nmbd' ]
       }
-      if $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemrelease, '14') >= 0 {
+      if $facts['os']['family'] == 'Ubuntu' and versioncmp($facts['os']['release']['full'], '14') >= 0 {
         $secretstdb = '/var/lib/samba/private/secrets.tdb'
       } else {
         $secretstdb = '/var/lib/samba/secrets.tdb'

@@ -30,8 +30,8 @@ class profile::influxdb (
 
   firewall {
     default:
-      proto  => ['tcp'],
-      jump   => 'accept',
+      proto => ['tcp'],
+      jump  => 'accept',
       ;
 
     '100 allow influxdb connections':

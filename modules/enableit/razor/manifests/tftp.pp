@@ -20,12 +20,12 @@ class razor::tftp (
   }
 
   firewall_multi { '100 allow tftpd':
-    dport  => [
+    dport => [
       69,
       "${tftp_port_range[0]}-${tftp_port_range[1]}",
     ],
-    proto  => 'udp',
-    jump   => 'accept',
+    proto => 'udp',
+    jump  => 'accept',
   }
 
 }
