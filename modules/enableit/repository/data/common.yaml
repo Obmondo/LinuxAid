@@ -10,7 +10,7 @@ repository::mirror::default_configurations:
       enable: false
       all:
         enable: false
-        mirror_url: 'https://dl.fedoraproject.org/pub/'
+        mirror_url: 'https://dl.fedoraproject.org/pub'
         package_format: 'rpm'
         repodir: 'yum/epel'
         architectures: ['x86_64']
@@ -20,14 +20,14 @@ repository::mirror::default_configurations:
       enable: false
       all:
         enable: false
-        mirror_url: 'https://archives.jenkins.io/redhat-stable/'
+        mirror_url: 'https://archives.jenkins.io/redhat-stable'
         repodir: 'jenkins/redhat-stable'
         package_format: 'rpm'
     apt:
       enable: false
       all:
         enable: false
-        mirror_url: 'https://archives.jenkins.io/debian-stable/'
+        mirror_url: 'https://archives.jenkins.io/debian-stable'
         repodir: 'jenkins/debian-stable'
         package_format: 'deb'
         deb_sync_type: 'debmirror'
@@ -36,7 +36,7 @@ repository::mirror::default_configurations:
       enable: false
       el_puppet8:
         enable: false
-        mirror_url: 'https://yum.puppet.com/puppet8/el/'
+        mirror_url: 'https://yum.puppet.com/puppet8/el'
         repodir: 'puppetlabs/yum/puppet8/el/'
         dists:
           - '7'
@@ -48,7 +48,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       el_puppet7:
         enable: false
-        mirror_url: 'https://yum.puppet.com/puppet7/el/'
+        mirror_url: 'https://yum.puppet.com/puppet7/el'
         repodir: 'puppetlabs/yum/puppet7/el/'
         dists:
           - '7'
@@ -60,7 +60,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       sles_puppet8:
         enable: false
-        mirror_url: 'https://yum.puppet.com/puppet8/sles/'
+        mirror_url: 'https://yum.puppet.com/puppet8/sles'
         repodir: 'puppetlabs/sles/puppet8/'
         dists:
           - '12'
@@ -71,7 +71,7 @@ repository::mirror::default_configurations:
           - 'ppc64le'
       sles_puppet7:
         enable: false
-        mirror_url: 'https://yum.puppet.com/puppet7/sles/'
+        mirror_url: 'https://yum.puppet.com/puppet7/sles'
         repodir: 'puppetlabs/sles/puppet7/'
         dists:
           - '12'
