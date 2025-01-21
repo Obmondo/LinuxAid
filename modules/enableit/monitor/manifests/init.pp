@@ -1,6 +1,6 @@
 # Obmondo monitoring
 class monitor (
-  Boolean $enable     = $facts['obmondo_monitoring_status'],
+  Boolean $enable     = $::obmondo_monitoring_status,
   Boolean $noop_value = false,
 ) {
 

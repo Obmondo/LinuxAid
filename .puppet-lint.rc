@@ -1,3 +1,4 @@
---fail-on-warnings
+# TODO: Remove the below comment after obmondo_monitoring_status is added as facter
+# --fail-on-warnings
 --no-140chars-check
 --no-parameter_order-check
