@@ -260,7 +260,6 @@ common::package::default_packages:
   - 'tcpdump'
   - 'tmux'
   - 'net-tools'
-  - 'iptables'
 
 common::setup::__conf_dir: '/etc/obmondo'
 
