@@ -5,8 +5,6 @@ class common::mail (
     Eit_types::IP,
     Enum['all', 'localhost']
   ] $inet_interfaces                                         = 'localhost',
-  Eit_types::Hostname $myhostname                            = $facts['fqdn'],
-  Optional[Eit_types::Domain] $mydomain                      = $facts.dig('domain'),
   Optional[Eit_types::Host] $relayhost                       = undef,
   Boolean $smtp_sasl_auth                                    = false,
   Optional[String] $smtp_sasl_password_maps                  = undef,
@@ -43,8 +41,8 @@ class common::mail (
       }
 
       class { 'postfix::server':
-        myhostname                 => $myhostname,
-        mydomain                   => $mydomain,
+        myhostname                 => $facts['fqdn'],
+        mydomain                   => $facts.dig('domain'),
         relayhost                  => $relayhost,
         inet_interfaces            => $inet_interfaces,
         smtp_sasl_auth             => $smtp_sasl_auth,

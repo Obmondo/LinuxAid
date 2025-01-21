@@ -15,14 +15,16 @@ class eit_repos::zypper::puppetlabs (
   $suseversion = $facts['os']['release']['major']
 
   # Obmondo Puppetlabs Repo
-  zypprepo { 'obmodo_puppetlabs':
-    ensure      => ensure_present($ensure),
-    name        => 'Obmondo-Puppetlabs',
-    baseurl     => "${source_protocol}://repos.obmondo.com/puppetlabs/sles/puppet7/${suseversion}/\$basearch/",
-    enabled     => 1,
-    autorefresh => 1,
-    gpgcheck    => 1,
-    type        => 'rpm-md',
+  [7, 8].each |$version| {
+    zypprepo { "obmodo_puppetlabs${version}":
+      ensure      => ensure_present($ensure),
+      name        => 'Obmondo-Puppetlabs',
+      baseurl     => "${source_protocol}://repos.obmondo.com/puppetlabs/sles/puppet${version}/${suseversion}/\$basearch/",
+      enabled     => 1,
+      autorefresh => 1,
+      gpgcheck    => 1,
+      type        => 'rpm-md',
+    }
   }
 
   eit_repos::yum::gpgkey { 'obmondo_puppetlabs':
