@@ -30,11 +30,13 @@ class eit_repos::apt::puppetlabs (
       include      => {
         'src' => false,
       },
+      keyring      => '/etc/apt/keyrings/obmondo_puppetlabs.asc',
     }
   }
-    apt::keyring { 'obmondo_puppetlabs.asc':
-      ensure => present,
-      source => 'puppet:///modules/eit_repos/apt/DEB-GPG-KEY-puppet-inc-release-key',
-      noop   => $noop_value,
-    }
+
+  apt::keyring { 'obmondo_puppetlabs.asc':
+    ensure => present,
+    source => 'puppet:///modules/eit_repos/apt/DEB-GPG-KEY-puppet-inc-release-key',
+    noop   => $noop_value,
+  }
 }
