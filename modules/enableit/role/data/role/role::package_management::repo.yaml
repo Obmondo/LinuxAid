@@ -1,7 +1,7 @@
 ---
 role::package_management::repo::manage: true
 role::package_management::repo::snapshot: true
-role::package_management::repo::snapshot_tag: '1.0.0'
+role::package_management::repo::snapshot_tag: 'v3.1.5'
 role::package_management::repo::basedir: '/var/cache/packagesign'
 role::package_management::repo::enable: true
 role::package_management::repo::weekday: 'Sun'
