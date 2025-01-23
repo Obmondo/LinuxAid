@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-postgresql",
-  "version": "10.2.0",
+  "version": "10.5.0",
   "author": "puppetlabs",
   "summary": "Offers support for basic management of PostgreSQL databases.",
   "license": "Apache-2.0",
@@ -14,11 +14,11 @@
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 9.2.0 < 10.0.0"
+      "version_requirement": ">= 9.2.0 < 11.0.0"
     },
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 4.0.1 < 7.0.0"
+      "version_requirement": ">= 4.0.1 < 9.0.0"
     },
     {
       "name": "puppetlabs/concat",
@@ -38,13 +38,15 @@
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "9"
       ]
     },
     {
@@ -73,19 +75,22 @@
       "operatingsystemrelease": [
         "18.04",
         "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     }
   ],
@@ -95,7 +100,7 @@
       "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
-  "pdk-version": "3.0.0",
+  "pdk-version": "3.2.0",
   "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "heads/main-0-g4fb29e7"
+  "template-ref": "tags/3.2.0.4-0-g5d17ec1"
 }
