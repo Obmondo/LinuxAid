@@ -149,7 +149,7 @@ class profile::logging::rsyslog (
 
       $_standard_logs = merge($_auth_logs, $_cron_logs, $_mail_logs)
 
-      case $facts.dig('osfamily') {
+      case $facts['os']['family'] {
         'RedHat', 'Suse': {
           $omfile_setting = {
             'fileOwner'      => 'root',
@@ -176,7 +176,7 @@ class profile::logging::rsyslog (
         }
       }
 
-      $os_rules = case $facts.dig('osfamily') {
+      $os_rules = case $facts['os']['family'] {
         /RedHat|Suse/: {
           merge(
             if $system_log {
