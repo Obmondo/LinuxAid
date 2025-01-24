@@ -97,7 +97,7 @@ class common::repo (
         # fail only when snapshot repos are enabled
         if $manage_update and $snapshot_repo {
           $yumrepos.each |$_name, $_parameters| {
-            if $_parameters['baseurl'] !~ /\$\{snapshot\}/ {
+            if $_parameters['baseurl'] !~ /\$\{snapshot\}/ and $_parameters['baseurl'] !~ /freight/ {
               fail("Repository '${_name}' is missing snapshot placeholder, which is required if automatic system updates are enabled.
 Pl  ease change the URL to contain an EPP style template.")
             }
