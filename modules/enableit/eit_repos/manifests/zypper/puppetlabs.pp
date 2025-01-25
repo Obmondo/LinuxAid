@@ -18,7 +18,7 @@ class eit_repos::zypper::puppetlabs (
   [7, 8].each |$version| {
     zypprepo { "obmodo_puppetlabs${version}":
       ensure      => ensure_present($ensure),
-      name        => 'Obmondo-Puppetlabs',
+      name        => "obmodo_puppetlabs${version}",
       baseurl     => "${source_protocol}://repos.obmondo.com/puppetlabs/sles/puppet${version}/${suseversion}/\$basearch/",
       enabled     => 1,
       autorefresh => 1,
