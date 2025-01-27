@@ -53,4 +53,3 @@ profile::haproxy::manual:
   config_file: "haproxy.cfg"
 
 profile::virtualization::lxc::__blendable: true
-profile::enableit::haproxy::__blendable: true
