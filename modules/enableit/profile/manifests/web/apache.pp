@@ -4,7 +4,9 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
-  Array[Eit_types::Monitor::Domains]   $domains = $role::web::apache::domains,
+  Optional[
+    Array[Eit_types::Monitor::Domains
+  ]]                                   $domains = $role::web::apache::domains,
 
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
