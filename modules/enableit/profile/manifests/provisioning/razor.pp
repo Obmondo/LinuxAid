@@ -66,7 +66,7 @@ class profile::provisioning::razor (
       'dhcp_router'      => $dhcp_route,
       'dhcp_dns_servers' => $dhcp_dns_servers,
       'domain'           => $dhcp_domain,
-      'interface'        => $facts['networking']['interfaces']['primary_interface']['network'],
+      'interface'        => $facts['networking']['primary'],
     }),
   }
 
