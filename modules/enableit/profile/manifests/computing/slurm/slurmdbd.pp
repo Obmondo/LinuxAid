@@ -20,6 +20,8 @@ class profile::computing::slurm::slurmdbd (
   }
 
   class { '::slurm::slurmdbd' :
-    storagehost => $storagehost,
+    storagehost    => $storagehost,
+    storagecharset => 'utf8',
+    storagecollate => 'utf8_general_ci',
   }
 }
