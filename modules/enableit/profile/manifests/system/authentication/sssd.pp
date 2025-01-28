@@ -184,9 +184,9 @@ class profile::system::authentication::sssd (
       #
       # we make a numerical comparison by converting the OS release number to a 4
       # digit integer
-      $_sssd_sockets_supported = $facts.dig('os', 'family') ? {
-        'Debian' => $facts.dig('os', 'release', 'major').regsubst(/[^0-9]/, '', 'G').then |$_x| { Integer($_x) } >= 2004,
-        'RedHat' => $facts.dig('os', 'release', 'major').then |$_x| { Integer($_x) } >= 7,
+      $_sssd_sockets_supported = $facts['os']['family'] ? {
+        'Debian' => $facts['os']['release']['major'].regsubst(/[^0-9]/, '', 'G').then |$_x| { Integer($_x) } >= 2004,
+        'RedHat' => $facts['os']['release']['major'].then |$_x| { Integer($_x) } >= 7,
         default => false,
       }
     }

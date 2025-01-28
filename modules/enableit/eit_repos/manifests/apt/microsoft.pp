@@ -10,8 +10,8 @@ class eit_repos::apt::microsoft (
     notify { '$noop_value is true!': }
   }
 
-  $_os_type = $facts.dig('os', 'name').downcase
-  $_os_major = $facts.dig('os', 'release', 'major')
+  $_os_type = $facts['os']['name'].downcase
+  $_os_major = $facts['os']['release']['major']
 
   # Get the architecture
   $architecture = $facts['os']['architecture'] ? {

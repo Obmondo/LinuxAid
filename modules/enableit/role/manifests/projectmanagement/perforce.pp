@@ -24,7 +24,7 @@ class role::projectmanagement::perforce (
   Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits ::role {
 
-  confine($facts.dig('os', 'family') != 'RedHat', 'Only Redhat-based distributions are supported')
+  confine($facts['os']['family'] != 'RedHat', 'Only Redhat-based distributions are supported')
 
   'profile::projectmanagement::perforce'.contain
 

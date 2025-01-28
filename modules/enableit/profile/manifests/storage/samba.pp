@@ -26,9 +26,9 @@ class profile::storage::samba (
   # might not work
   $_use_wbclient_over_winbind = (
     $security == 'ADS'
-    and $facts.dig('os', 'family') != 'RedHat'
-    or ($facts.dig('os', 'family') == 'RedHat'
-        and Integer($facts.dig('os', 'release', 'major')) > 6))
+    and $facts['os']['family'] != 'RedHat'
+    or ($facts['os']['family'] == 'RedHat'
+        and Integer($facts['os']['release']['major']) > 6))
 
   # Convert the booleans to yes/no
   $_shares = $shares.reduce({}) |$acc, $_x| {

@@ -10,7 +10,7 @@ class eit_repos::yum::puppetlabs (
     notify { '$noop_value is true!': }
   }
 
-  $_os_major = $facts.dig('os', 'release', 'major')
+  $_os_major = $facts['os']['release']['major']
 
   # PuppetLabs
   [7, 8].each |$version| {

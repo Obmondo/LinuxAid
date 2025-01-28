@@ -7,7 +7,7 @@ class beegfs::repo::redhat (
   Beegfs::Release $release        = $beegfs::release,
 ) {
 
-  $_os_release = $facts.dig('os', 'release', 'major')
+  $_os_release = $facts['os']['release']['major']
 
   # If using the old version pattern the release folder is the same as the major
   # version; if using the new pattern we need to replace dots (`.`) with spaces

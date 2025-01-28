@@ -91,7 +91,7 @@ class profile::virtualization::docker (
     iptables                    => true,
     ip_masq                     => true,
     log_driver                  => 'local',
-    selinux_enabled             => $facts.dig('selinux'),
+    selinux_enabled             => $facts['selinux'],
     use_upstream_package_source => true,
     service_state               => 'running',
     service_enable              => true,
@@ -114,7 +114,7 @@ class profile::virtualization::docker (
   }
 
   $instances.each |$instance_name, $instance| {
-    if $facts.dig('selinux') {
+    if $facts['selinux'] {
       $instance['ports'].each |$_docker_port| {
         $_port_details = docker_port_details($_docker_port)
 

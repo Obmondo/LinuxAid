@@ -9,7 +9,7 @@ class role::projectmanagement::readthedocs (
   Stdlib::Fqdn            $public_domainname,
 ) inherits ::role {
 
-  confine($facts.dig('os', 'family') != 'RedHat',
+  confine($facts['os']['family'] != 'RedHat',
           'Only RedHat family is supported')
   confine_systemd()
 
