@@ -4,7 +4,7 @@ class eit_haproxy::log (
   Stdlib::Absolutepath $log_dir        = pick($eit_haproxy::log_dir, '/var/log'),
 ) {
 
-  $defaults = $facts.dig('os', 'family') ? {
+  $defaults = $facts['os']['family'] ? {
     'Debian' => $::facts['os']['release']['major'] ? {
       8 => {
         owner => 'root',

@@ -10,21 +10,21 @@ class common::logging::logrotate (
 ) inherits ::common::logging {
 
   # su directive is not supported.
-  confine($facts.dig('os', 'family') == 'RedHat',
-          $facts.dig('os', 'release', 'major') == '6',
+  confine($facts['os']['family'] == 'RedHat',
+          $facts['os']['release']['major'] == '6',
           $su == true,
           'su logrotate directive is not support on this platform')
 
   # Ensure that we don't try to use a config that is invalid on this platform
-  confine($facts.dig('os', 'family') == 'RedHat',
-          $facts.dig('os', 'release', 'major') == '6',
+  confine($facts['os']['family'] == 'RedHat',
+          $facts['os']['release']['major'] == '6',
           !($rules.values.filter |$r| {
             $r.dig('su_owner') or $r.dig('su_group')
           }.empty),
           '`su_group` and `su_owner` are not valid on this platform')
 
   # Ensure that we don't try to use a config that is invalid on this platform
-  confine($facts.dig('os', 'family') == 'RedHat',
+  confine($facts['os']['family'] == 'RedHat',
           !($rules.values.filter |$r| {
             $r.dig('minage')
           }.empty),

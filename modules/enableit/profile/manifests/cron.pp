@@ -20,7 +20,7 @@ class profile::cron (
     }
   }
 
-  if $facts.dig('os', 'family') == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     # Anacron (cronie-anacron) fails if the anacron folder is missing
     file { '/var/spool/anacron':
       ensure => directory,

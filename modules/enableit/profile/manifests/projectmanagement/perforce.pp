@@ -25,7 +25,7 @@ class profile::projectmanagement::perforce (
   Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits profile {
 
-  $_version_suffix = ".el${facts.dig('os', 'release', 'major')}"
+  $_version_suffix = ".el${facts['os']['release']['major']}"
 
   $versionrelease = $version.split('-')
 

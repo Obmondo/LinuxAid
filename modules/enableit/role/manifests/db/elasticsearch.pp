@@ -31,7 +31,7 @@ class role::db::elasticsearch (
   Optional[String]                    $kibana_password       = undef,
 ) inherits ::role::db {
 
-  confine($facts.dig('os', 'family') != 'Debian', 'Only Debian-based distributions are supported')
+  confine($facts['os']['family'] != 'Debian', 'Only Debian-based distributions are supported')
 
   contain profile::db::elasticsearch
 

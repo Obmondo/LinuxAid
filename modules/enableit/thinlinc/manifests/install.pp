@@ -57,7 +57,7 @@ inherits ::thinlinc {
     }
   }
 
-  if $facts.dig('os','family') == 'RedHat' {
+  if $facts['os']['family'] == 'RedHat' {
     file { '/usr/local/bin/python-thinlinc':
       ensure => 'link',
       target => '/usr/bin/python2.7',

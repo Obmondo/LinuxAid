@@ -15,7 +15,7 @@ class profile::projectmanagement::perforce::git_connector (
   Perforce::LogLevel   $p4gc_log_level  = $::role::projectmanagement::perforce::git_connector::p4gc_log_level,
 ) inherits ::profile::projectmanagement::perforce {
 
-  $_version_suffix = ".el${facts.dig('os', 'release', 'major')}"
+  $_version_suffix = ".el${facts['os']['release']['major']}"
 
   $versionrelease = $version.split('-')
 

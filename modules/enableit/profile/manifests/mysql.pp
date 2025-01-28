@@ -36,7 +36,7 @@ class profile::mysql (
     source => $access_mysql_from,
   }
 
-  if $facts.dig('selinux') {
+  if $facts['selinux'] {
     selinux::fcontext { 'selinux-fcontext-mysql-datadir':
       pathspec => $datadir,
       seltype  => 'mysqld_db_t',

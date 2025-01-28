@@ -68,7 +68,7 @@ class common::system (
     include common::system::systemd
   }
 
-  if $remove_fstrim_cron or $facts.dig('virtual') == 'lxc' {
+  if $remove_fstrim_cron or $facts['virtual'] == 'lxc' {
     # Remove the fstrim cron job. This comes from the `util-linux` and is
     # installed by default with no proper way to disable it. Issues at
     # https://github.com/lxc/lxd/issues/2030 and
@@ -186,9 +186,9 @@ class common::system (
 
   $_location = $locations.map |$location, $ip_address| {
     $ip_address.map |$ip_addr| {
-      if $ip_addr == $facts.dig('ipaddress') {
+      if $ip_addr == $facts['ipaddress'] {
         $location
-      } elsif stdlib::ip_in_range($facts.dig('ipaddress'), $ip_addr) {
+      } elsif stdlib::ip_in_range($facts['ipaddress'], $ip_addr) {
         $location
       }
     }

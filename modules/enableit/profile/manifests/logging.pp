@@ -16,7 +16,7 @@ class profile::logging (
 
     # RHEL systems needs to have /var/log/rhsm, otherwise logs are output on
     # stderr: https://bugzilla.redhat.com/show_bug.cgi?id=1686920
-    if $facts.dig('os', 'name') == 'RedHat' {
+    if $facts['os']['name'] == 'RedHat' {
       file { '/var/log/rhsm':
         ensure => directory,
         owner  => 'root',

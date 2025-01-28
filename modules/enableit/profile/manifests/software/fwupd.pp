@@ -26,7 +26,7 @@ class profile::software::fwupd (
 
 # Since fwupd-refresh is not there in redhat7 so skiping the service there.
 
-  if $facts.dig('os', 'release', 'major') != '7' {
+  if $facts['os']['release']['major'] != '7' {
     service { 'fwupd-refresh.timer':
       ensure  => ensure_service($enable),
       noop    => $noop_value,

@@ -130,7 +130,7 @@ Gateway=${_config['gateway']}
           hasrestart => true,
         }
 
-        if $purge and $::facts.dig('os', 'family') == 'RedHat' {
+        if $purge and $::facts['os']['family'] == 'RedHat' {
           tidy { '/etc/sysconfig/network-scripts':
             age     => '0',
             recurse => 1,
@@ -141,7 +141,7 @@ Gateway=${_config['gateway']}
           }
         }
 
-        $_lo_method = $facts.dig('os', 'family') ? {
+        $_lo_method = $facts['os']['family'] ? {
           'Debian' => 'loopback',
           'RedHat' => 'static',
         }
@@ -154,7 +154,7 @@ Gateway=${_config['gateway']}
         }
 
         # To avoid purging the ifcfg file
-        if $facts.dig('os', 'family') == 'RedHat' {
+        if $facts['os']['family'] == 'RedHat' {
           file { '/etc/sysconfig/network-scripts/ifcfg-lo':
             ensure => 'file',
           }
@@ -176,7 +176,7 @@ Gateway=${_config['gateway']}
           }
 
           # To avoid purging the ifcfg file
-          if $facts.dig('os', 'family') == 'RedHat' {
+          if $facts['os']['family'] == 'RedHat' {
             file { "/etc/sysconfig/network-scripts/ifcfg-${_name}":
               ensure => 'file',
             }
@@ -202,7 +202,7 @@ Gateway=${_config['gateway']}
             notify => $_network_notify,
           }
 
-          if $facts.dig('os', 'family') == 'RedHat' {
+          if $facts['os']['family'] == 'RedHat' {
             $_ifcfg_slave_files = $_merged_config['slaves'].map |$_slave| {
               "/etc/sysconfig/network-scripts/ifcfg-${_slave}"
             }
@@ -227,7 +227,7 @@ Gateway=${_config['gateway']}
           }
 
           # To avoid purging the route file
-          if $facts.dig('os', 'family') == 'RedHat' {
+          if $facts['os']['family'] == 'RedHat' {
             file { '/etc/sysconfig/network':
               ensure  => 'file',
               content => "GATEWAY=${_config['gateway']}\n",

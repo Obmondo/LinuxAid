@@ -47,7 +47,7 @@ class role::projectmanagement::gitlab (
 
 ) inherits ::role::projectmanagement {
 
-  confine($facts.dig('os', 'family') != 'Debian',
+  confine($facts['os']['family'] != 'Debian',
           'Only Debian-based distributions are supported')
 
   # Fail, if terminate_https is true and no ssl_cert and no ssl_key params are passed

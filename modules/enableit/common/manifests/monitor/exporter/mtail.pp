@@ -36,7 +36,7 @@ class common::monitor::exporter::mtail (
   $_address = $listen_address.split(':')[0]
   $_port = $listen_address.split(':')[1]
 
-  $_extra_groups = $facts.dig('os', 'family') ? {
+  $_extra_groups = $facts['os']['family'] ? {
     'Debian' => 'adm',
     default  => 'root',
   }

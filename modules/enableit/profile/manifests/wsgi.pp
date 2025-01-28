@@ -94,7 +94,7 @@ class profile::wsgi (
 
         #FIXME test this selinux would work under apache as well,
         # Ideally it will but lets test it first
-        if $facts.dig('selinux') {
+        if $facts['selinux'] {
           selinux::boolean { 'httpd_can_network_connect' :
             ensure => 'on',
           }

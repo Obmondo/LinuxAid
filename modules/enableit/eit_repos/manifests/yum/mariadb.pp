@@ -11,7 +11,7 @@ class eit_repos::yum::mariadb (
     notify { '$noop_value is true!': }
   }
 
-  $_release = $facts.dig('os', 'name').downcase
+  $_release = $facts['os']['name'].downcase
   $_release_mysql = if $_release == 'redhat' {
     'rhel'
   } else {
@@ -21,7 +21,7 @@ class eit_repos::yum::mariadb (
   yumrepo { 'mariadb' :
     ensure   => ensure_present($ensure),
     noop     => $noop_value,
-    baseurl  => "https://yum.mariadb.org/${version}/${_release_mysql}${facts.dig('os', 'release', 'major').downcase}-amd64",
+    baseurl  => "https://yum.mariadb.org/${version}/${_release_mysql}${facts['os']['release']['major'].downcase}-amd64",
     enabled  => 1,
     gpgcheck => 1,
     gpgkey   => 'https://yum.mariadb.org/RPM-GPG-KEY-MariaDB',

@@ -99,7 +99,7 @@ class profile::system::authentication::kerberos (
     if $install_client {
       package::install('openldap-clients')
 
-      $_ldap_conf_path = $facts.dig('os', 'family') ? {
+      $_ldap_conf_path = $facts['os']['family'] ? {
         /RedHat|Suse/ => '/etc/openldap/ldap.conf',
         'Debian'      => '/etc/ldap/ldap.conf',
       }
@@ -108,7 +108,7 @@ class profile::system::authentication::kerberos (
       $_uri = "${_ldap}://${$realms[$default_realm]['kdc'].downcase}"
 
       # NOTE: TLS_CACERTDIR does not work, since opeldap uses GnuTLS and not OpenSSL on Debian.
-      $_ldap_cacert_path = if $cacert_path and $facts.dig('os', 'family') == 'Debian' {
+      $_ldap_cacert_path = if $cacert_path and $facts['os']['family'] == 'Debian' {
         $cacert_path
       } else {
         '/etc/pki/tls/certs/ca-bundle.crt'

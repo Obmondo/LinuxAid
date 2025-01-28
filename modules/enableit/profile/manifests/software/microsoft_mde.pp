@@ -33,7 +33,7 @@ class profile::software::microsoft_mde (
     noop   => $noop_value,
   }
 
-  $_nologin_path = $facts.dig('os', 'distro', 'codename') ? {
+  $_nologin_path = $facts['os']['distro']['codename'] ? {
     'bionic' => '/usr/sbin/nologin',
     default  => '/sbin/nologin',
   }

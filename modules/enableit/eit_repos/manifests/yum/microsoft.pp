@@ -10,7 +10,7 @@ class eit_repos::yum::microsoft (
     notify { '$noop_value is true!': }
   }
 
-  $_os_major = $facts.dig('os', 'release', 'major')
+  $_os_major = $facts['os']['release']['major']
 
   yumrepo { 'microsoft-prod' :
     ensure   => ensure_present($ensure),

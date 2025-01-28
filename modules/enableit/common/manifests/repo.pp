@@ -73,10 +73,10 @@ class common::repo (
     $_snapshot_uri_fragment = if $snapshot {
       # Compare two dates, if the install date is newer then the group specific snapshot date and
       # only change the apt/yum repos location, if the install date is lower then the snapshote date
-      case $facts.dig('install_date') {
+      case $facts['install_date'] {
         Undef: { "snapshots/${snapshot}/" }
         default: {
-          if Integer($snapshot.split('-').join) > $facts.dig('install_date') {
+          if Integer($snapshot.split('-').join) > $facts['install_date'] {
             "snapshots/${snapshot}/"
           }
         }
