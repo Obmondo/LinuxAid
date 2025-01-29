@@ -53,7 +53,7 @@ class profile::puppet (
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
 
     if $_pin_version {
-      case $facts.dig('package_provider') {
+      case $facts['package_provider'] {
         'apt': {
           apt::pin { "pin ${aio_package_name}":
             version  => $_version,
