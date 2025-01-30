@@ -27,9 +27,24 @@ Puppet::Functions.create_function(:extract_common_name) do
       # Extract the Common Name (CN)
       subject = cert.subject
       cn = subject.to_a.find { |name| name[0] == 'CN' }
+      
+      # Return the Common Name or raise an error if not found
+      if cn
+        cn[1]
+      else
+        subject_alt_name_extension = cert.extensions.find { |ext| ext.oid == 'subjectAltName' }
+        subject_alt_names = subject_alt_name_extension.value.split(', ').map(&:strip)
 
-      # Return the Common Name or nil if not found
-      cn ? cn[1] : nil
+        dns_names = subject_alt_names.map do |name|
+          if name.start_with?("DNS:")
+            dns_name = name.split("DNS:")[1].strip  # Get the part after "DNS:"
+            if dns_name.count('.') >= 2
+              dns_name
+            end
+          end
+        end.compact  # Remove nil values
+        dns_names[0]
+      end
     rescue OpenSSL::X509::CertificateError => e
       raise Puppet::Error, "Invalid certificate string: #{e.message}"
     end
