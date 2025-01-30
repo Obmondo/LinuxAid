@@ -252,7 +252,6 @@ common::package::default_packages:
   - 'curl'
   - 'less'
   - 'lsof'
-  - 'mailx'
   - 'netcat'
   - 'rsync'
   - 'socat'
