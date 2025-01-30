@@ -4,7 +4,7 @@ class common::package (
   Hash[
     String,
     Struct[{
-      ensure => Optional[Variant[Enum['latest','present','purge','absent', 'installed'], String]],
+      ensure => Optional[Variant[Enum['latest', 'present', 'purge', 'absent', 'installed'], String]],
       noop   => Optional[Boolean],
     }]
   ] $manage = {},
