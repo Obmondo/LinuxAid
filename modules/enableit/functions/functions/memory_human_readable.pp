@@ -5,10 +5,10 @@ function functions::memory_human_readable(Enum['GB', 'MB', 'Bytes'] $unit) {
 
   case $unit {
     'GB': {
-      $total_bytes / (1024 ** 3)
+      $total_bytes / pow(1024,3)
     }
     'MB': {
-      $total_bytes / (1024 ** 2)
+      $total_bytes / pow(1024,2)
     }
     default: {
       $total_bytes
