@@ -8,7 +8,7 @@ class profile::projectmanagement::perforce (
   Stdlib::Port              $service_port      = $role::projectmanagement::perforce::service_port,
   Eit_types::Password       $service_password  = $role::projectmanagement::perforce::service_password,
   Optional[String]          $license_content   = $role::projectmanagement::perforce::license_content,
-  Stdlib::Host              $hostname          = $role::projectmanagement::perforcefacts['networking']['hostname'],
+  Stdlib::Host              $hostname          = $role::projectmanagement::perforce::hostname,
   Perforce::Version         $version           = $role::projectmanagement::perforce::version,
   Stdlib::Absolutepath      $log_dir           = $role::projectmanagement::perforce::log_dir,
   Stdlib::Absolutepath      $log_file          = "${log_dir}/p4d.log",

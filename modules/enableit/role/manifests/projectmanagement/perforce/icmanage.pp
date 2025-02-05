@@ -3,7 +3,7 @@ class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
   Stdlib::Absolutepath     $install_path       = '/opt/icmanage',
 
-  Stdlib::Host             $hostname           = $profile::projectmanagement::perforcefacts['networking']['hostname'],
+  Stdlib::Host             $hostname           = $facts['networking']['hostname'],
 
   Boolean                  $manage_db          = false,
   Eit_types::SimpleString  $db_user            = 'icm',
