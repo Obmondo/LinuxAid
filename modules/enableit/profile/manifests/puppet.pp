@@ -51,7 +51,6 @@ class profile::puppet (
 
     $_puppet_version_currently_installed = $facts['puppetversion']
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
-
     if $_pin_version {
       case $facts['package_provider'] {
         'apt': {
@@ -60,12 +59,25 @@ class profile::puppet (
             priority => 999,
             packages => $aio_package_name,
           }
-
         }
         'yum': {
-          yum::versionlock { "0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}":
+          # use yum data types, otherwise assertion fails in yum::versionlock
+          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}")
+          yum::versionlock { $full_package_name:
             ensure  => present,
           }
+        }
+        'dnf': {
+          # use yum data types, otherwise assertion fails in yum::versionlock
+          $full_package_name = Yum::RpmName($aio_package_name)
+
+          yum::versionlock { $full_package_name:
+            ensure  => present,
+            version => $_version,
+          }
+        }
+        'zypper': {
+          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": }
         }
         default: {
           info('Not pinning the puppet-agent package, maybe you have an older distro')
