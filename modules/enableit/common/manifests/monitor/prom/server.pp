@@ -29,9 +29,9 @@ class common::monitor::prom::server (
     notify  => Service['prometheus'],
   }
 
-  $customer_id = $facts.dig('obmondo', 'customerid')
+  $customer_id = $::obmondo['customer_id'] #lint:ignore:top_scope_facts
   $scrape_port = Integer($listen_address.split(':')[1])
-  $scrape_host = $::trusted['certname']
+  $scrape_host = $trusted['certname']
 
   # Agent Mode, means no local storage on the node.
   class { 'prometheus::server':

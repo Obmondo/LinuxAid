@@ -37,7 +37,7 @@ class profile::provisioning::razor (
   file { '/opt/obmondo/razor/brokers/enableit.broker/install.erb':
     ensure  => present,
     content => epp('profile/provisioning/install.epp', {
-      'customerid' => $facts.dig('obmondo', 'customerid'),
+      'customerid' => $::obmondo['customer_id'], #lint:ignore:top_scope_facts
     }),
     before  => Class['razor'],
   }
