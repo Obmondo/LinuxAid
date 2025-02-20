@@ -94,7 +94,7 @@ class profile::system::sshd (
     $_settings = $_version_specific_settings.reduce({}) |$acc, $x| {
       [$version, $values] = $x
       if $_ssh_version >= $version {
-        merge($acc, $values)
+        stdlib::merge($acc, $values)
       } else {
         $acc
       }

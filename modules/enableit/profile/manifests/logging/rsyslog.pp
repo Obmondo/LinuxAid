@@ -147,7 +147,7 @@ class profile::logging::rsyslog (
         ])
       }
 
-      $_standard_logs = merge($_auth_logs, $_cron_logs, $_mail_logs)
+      $_standard_logs = stdlib::merge($_auth_logs, $_cron_logs, $_mail_logs)
 
       case $facts['os']['family'] {
         'RedHat', 'Suse': {
@@ -178,7 +178,7 @@ class profile::logging::rsyslog (
 
       $os_rules = case $facts['os']['family'] {
         /RedHat|Suse/: {
-          merge(
+          stdlib::merge(
             if $system_log {
               file { '/var/log/messages': }
 
@@ -219,7 +219,7 @@ class profile::logging::rsyslog (
       }
 
       $log_rules = if $log_local {
-        merge($_boot_logs, $os_rules)
+        stdlib::merge($_boot_logs, $os_rules)
       }
 
       # This file  with Ubuntu and will cause journal logs to be

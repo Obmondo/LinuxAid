@@ -85,14 +85,14 @@ class profile::system::authentication::sssd (
       [$name, $domain] = $x
       $_realmd_tags = $domain['realmd_tags']
 
-      $_domain = merge(
+      $_domain = stdlib::merge(
         $domain,
         if size($_realmd_tags) {
           { 'realmd_tags' => join($_realmd_tags, ' '), }
         },
       )
 
-      merge($acc, { "domain/${name}" => $_domain })
+      stdlib::merge($acc, { "domain/${name}" => $_domain })
     }
 
     $_config = {
