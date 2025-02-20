@@ -7,7 +7,7 @@
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">=1.1.0 <8.0.0"
+      "version_requirement": ">=1.1.0 <10.0.0"
     },
     {
       "name": "ccin2p3/etc_services",
