@@ -57,7 +57,7 @@ class profile::projectmanagement::gitlab (
       job_name    => $job_name,
       tag         => [
         $trusted['certname'],
-        $facts.dig('obmondo', 'customerid')
+        $::obmondo['customer_id'], #lint:ignore:top_scope_facts
       ],
       targets     => ["${domain}/users/sign_in"],
       noop        => false,

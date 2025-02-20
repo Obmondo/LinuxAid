@@ -9,7 +9,7 @@ class common::monitor::exporter::blackbox (
 ) {
 
   $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }
-  $customer_id = $facts.dig('obmondo', 'customerid')
+  $customer_id = $::obmondo['customer_id'] #lint:ignore:top_scope_facts
 
   Exec {
     noop => $noop_value,

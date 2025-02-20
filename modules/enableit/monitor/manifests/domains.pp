@@ -16,7 +16,7 @@ define monitor::domains (
     job_name    => $job_name,
     tag         => [
       $trusted['certname'],
-      $facts.dig('obmondo', 'customerid')
+      $::obmondo['customer_id'],
     ],
     targets     => [$domain],
     noop        => false,
