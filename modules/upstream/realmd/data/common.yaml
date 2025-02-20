@@ -16,6 +16,7 @@ realmd::sssd_config_cache_file: /var/lib/sss/db/config.ldb
 realmd::manage_sssd_config: false
 realmd::manage_sssd_service: true
 realmd::manage_sssd_package: true
+realmd::manage_krb5_package: true
 realmd::domain: "%{::domain}"
 realmd::domain_join_user: ~
 realmd::domain_join_password: ~

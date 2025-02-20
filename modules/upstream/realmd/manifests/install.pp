@@ -11,8 +11,10 @@ class realmd::install {
     ensure => $realmd::adcli_package_ensure,
   }
 
-  package { $realmd::krb_client_package_name:
-    ensure => $realmd::krb_client_package_ensure,
+  if $realmd::manage_krb5_package {
+    package { $realmd::krb_client_package_name:
+      ensure => $realmd::krb_client_package_ensure,
+    }
   }
 
   if $realmd::manage_sssd_package {
