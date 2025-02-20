@@ -1,5 +1,0 @@
-fixtures:
-  repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-  symlinks:
-    realmd: "#{source_dir}"

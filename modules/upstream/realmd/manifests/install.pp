@@ -12,11 +12,9 @@ class realmd::install {
     ensure => $::realmd::adcli_package_ensure,
   }
 
-  # NOTE: the krb5-workstation is already declared in
-  # mit_krb5 module, but this is a quickest solution for now.
-  #package { $::realmd::krb_client_package_name:
-  #  ensure => $::realmd::krb_client_package_ensure,
-  #}
+  package { $::realmd::krb_client_package_name:
+    ensure => $::realmd::krb_client_package_ensure,
+  }
 
   package { $::realmd::sssd_package_name:
     ensure => $::realmd::sssd_package_ensure,
