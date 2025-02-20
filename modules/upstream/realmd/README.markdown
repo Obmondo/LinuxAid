@@ -137,7 +137,7 @@ Set up Realmd, join an Active Directory domain via a keytab and fully configure 
 
 ### Parameters
 
-Default values are in params.pp.
+Default values are in data/common.yaml.
 
 * `realmd_package_name`: String. The name of the main Realmd package.
 * `realmd_config_file`: String. The absolute path of the Realmd configuration file.
@@ -150,6 +150,7 @@ Default values are in params.pp.
 * `sssd_config_file`: String. The absolute path of the SSSD configuration file.
 * `sssd_config`: Hash. A hash of configuration options structured in an ini-style format.
 * `manage_sssd_config`: Boolean. Enable or disable management of the SSSD configuration file.
+* `manage_sssd_service`: Boolean. Enable or disable management of the SSSD service.
 * `required_packages`: Hash. A hash of package resources to manage for any auxilliary functionality.
 * `domain`: String. The name of the domain to join.
 * `domain_join_user`: String. The account to be used in joining the domain.

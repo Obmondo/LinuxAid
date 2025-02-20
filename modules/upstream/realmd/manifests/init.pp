@@ -28,6 +28,8 @@ class realmd (
   Stdlib::Absolutepath $sssd_config_cache_file,
   Hash $sssd_config,
   Boolean $manage_sssd_config,
+  Boolean $manage_sssd_service,
+  Boolean $manage_sssd_package,
   String $domain,
   String $netbiosname,
   Variant[String, Undef] $domain_join_user,
@@ -41,7 +43,7 @@ class realmd (
   Variant[String, Undef] $ou,
   Hash $required_packages,
   Variant[Array, Undef] $extra_join_options,
-  Variant[String[1, 15], Undef] $computer_name,
+  Variant[String[1, 15], Undef, Boolean[false]] $computer_name,
 ) {
 
   if $krb_ticket_join == false {
@@ -64,10 +66,19 @@ class realmd (
     fail('The krb_config parameter cannot be an empty hash when managing the Kerberos client configuration')
   }
 
-  class { '::realmd::install': }
-  -> class { '::realmd::config': }
-  ~> class { '::realmd::join': }
-  -> class { '::realmd::sssd::config': }
-  ~> class { '::realmd::sssd::service': }
+  contain 'realmd::install'
+  contain 'realmd::config'
+  contain 'realmd::join'
+  contain 'realmd::sssd::config'
+
+  Class['realmd::install']
+  -> Class['realmd::config']
+  ~> Class['realmd::join']
+  -> Class['realmd::sssd::config']
+
+  if $manage_sssd_service {
+    contain 'realmd::sssd::service'
+    Class['realmd::sssd::config'] ~> Class['realmd::sssd::service']
+  }
 
 }
