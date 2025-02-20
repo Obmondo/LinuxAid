@@ -11,44 +11,43 @@ class realmd::join::password {
   $_ou                 = $::realmd::ou
   $_extra_join_options = $::realmd::extra_join_options
 
-  # FIXME: The hostname length seems to be limited to 15 chars, but doing it
-  # this way seems like a surpremely bad way to go about it, as
-  # `dkcphsomelonghostname01` and `dkcphsomelonghostname02` would both result in
-  # `dkcphsomelongho`.
-  $_computer_name = pick($::realmd::computer_name, $facts['hostname'][0,15])
+  if $::realmd::computer_name != undef {
+    $_computer_name = $::realmd::computer_name
+  } else {
+    $_computer_name = $::hostname[0,15]
+  }
 
-  $_realm_args = [
-    $_domain,
-    '--unattended',
-    "--user=${_user}",
-    if $_ou {
-      "--computer-ou='${_ou}'"
-    },
-    unless $::operatingsystem == 'Ubuntu' {
-      "--computer-name=${_computer_name}"
-    },
-  ].delete_undef_values
+  if $::operatingsystem == 'Ubuntu' and $facts['os']['distro']['codename']  == 'xenial' {
+    $_computer_name_arg  = ''
+  } else {
+      $_computer_name_arg = ["--computer-name=${_computer_name}"]
+  }
 
-  ($_realm_args + $_extra_join_options).join(' ').strip
+  if $_ou != undef {
+    $_realm_args = [$_domain, '--unattended', "--computer-ou='${_ou}'", "--user=${_user}"]
+  } else {
+    $_realm_args = [$_domain, '--unattended', "--user=${_user}"]
+  }
 
-  # NOTE: somehow realmd is giving us a hard time, so lets stick to plain adcli, which works on el6 and el7 (realmd is only on el7)
-  # MR #1369
-  # For password with special character need to be escaped while encrypting it 
-  # eg:- for password #HONDA'CIty  we should encrypt that with \#HONDA\'CIty 
-  # Command:-  eyaml encrypt -s "\#HONDA\'CIty"  --pkcs7-public-key="./var/public_key.pkcs7.pem 
-  $_command = "echo -n ${_password} | adcli join --login-user=${_user} --domain=${_domain} --domain-ou '${_ou}' --stdin-password"
+  $_args = strip(join(concat($_realm_args, $_computer_name_arg, $_extra_join_options), ' '))
+
+  file { '/usr/libexec':
+    ensure  => 'directory',
+  }
 
   file { '/usr/libexec/realm_join_with_password':
-    ensure => absent,
+    ensure  => file,
+    owner   => '0',
+    group   => '0',
+    mode    => '0755',
+    content => template('realmd/realm_join_with_password.erb'),
   }
 
   exec { 'realm_join_with_password':
-    path    => '/usr/bin:/usr/sbin:/bin',
-    command => $_command,
-    unless  => "which klist; klist -k /etc/krb5.keytab | grep -i '${_computer_name}@${_domain}'",
-    require => Package[
-      $::realmd::krb_client_package_name,
-      'adcli',
-    ],
+    environment => ["AD_JOIN_PASSWORD=${_password}"],
+    path        => '/usr/bin:/usr/sbin:/bin',
+    command     => "/usr/libexec/realm_join_with_password realm join ${_args}",
+    unless      => "klist -k /etc/krb5.keytab | grep -i '${_computer_name}@${_domain}'",
+    require     => File['/usr/libexec/realm_join_with_password'],
   }
 }
