@@ -192,7 +192,7 @@ class profile::logging::rsyslog (
           )
         }
         'Debian': {
-          merge(
+          stdlib::merge(
             if $system_log {
               file { ['/var/log/daemon.log', '/var/log/debug']: }
 
