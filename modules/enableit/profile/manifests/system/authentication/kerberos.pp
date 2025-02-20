@@ -45,7 +45,6 @@ class profile::system::authentication::kerberos (
       ticket_lifetime  => '24h',
       renew_lifetime   => '7d',
       forwardable      => true,
-      noop_value       => $noop_value,
     }
 
     class { 'mit_krb5::logging':
