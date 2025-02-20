@@ -5,7 +5,7 @@ function eit_files::to_file (
 
   $_obmondo_file_regexp = Regexp('^obmondo:///')
   $_file_name = $source.regsubst($_obmondo_file_regexp, '')
-  $_resource_location = "customers::${facts['obmondo']['customer_id']}::files"
+  $_resource_location = "customers::${::obmondo['customer_id']}::files" #lint:ignore:top_scope_facts
   $_is_dir = $_file_name =~ /\/$/
 
   # Look up and merge with a default resource adding defaults
