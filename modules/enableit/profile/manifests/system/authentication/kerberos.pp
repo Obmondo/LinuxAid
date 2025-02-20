@@ -90,6 +90,7 @@ class profile::system::authentication::kerberos (
         krb_ticket_join      => false,
         manage_sssd_config   => false,
         manage_krb_config    => false,
+        manage_krb5_package  => false,
         before               => Class['sssd'],
         notify               => Service['sssd'],
       }
