@@ -50,7 +50,7 @@ class common::mail (
         smtp_sasl_auth             => $smtp_sasl_auth,
         smtp_sasl_password_maps    => $smtp_sasl_password_maps,
         smtp_sasl_security_options => $smtp_sasl_security_options,
-        extra_main_parameters      => merge({
+        extra_main_parameters      => stdlib::merge({
           smtp_tls_security_level               => $smtp_tls_security_level,
           smtp_tls_loglevel                     => $smtp_tls_loglevel,
           smtpd_tls_auth_only                   => $smtpd_tls_auth_only,

@@ -34,6 +34,6 @@ define eit_repos::repo (
   }
 
   class { "eit_repos::${_package_provider}::${name}":
-    * => merge($_options, $_defaults),
+    * => stdlib::merge($_options, $_defaults),
   }
 }

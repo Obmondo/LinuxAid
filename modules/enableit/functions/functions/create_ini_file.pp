@@ -25,7 +25,7 @@ function functions::create_ini_file (
   })
 
   # Make sure we default to the file being present
-  $_defaults = merge({
+  $_defaults = stdlib::merge({
     ensure => 'file',
   }, $defaults)
 

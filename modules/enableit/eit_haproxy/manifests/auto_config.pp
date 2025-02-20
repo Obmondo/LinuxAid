@@ -84,7 +84,7 @@ class eit_haproxy::auto_config (
   | {
 
     # Merge the two hashes, if letsencrypt is true
-    $_sites = if $letsencrypt { merge($letsencrypt_setup,$sites) } else { $sites }
+    $_sites = if $letsencrypt { stdlib::merge($letsencrypt_setup,$sites) } else { $sites }
 
     # Haproxy Frontend
     # Acls

@@ -50,7 +50,7 @@ class profile::elk (
     cluster_hosts => $cluster_hosts,
     instances     => {
       $_es_instance_name => {
-        config => merge({
+        config => stdlib::merge({
           'cluster.name'                     => $clustername,
           'network.host'                     => ['_local_', '_site_'],
           'discovery.zen.ping.unicast.hosts' => $cluster_hosts,
