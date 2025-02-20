@@ -1,13 +1,13 @@
 ---
 realmd::realmd_package_name: realmd
-realmd::realmd_package_ensure: present
+realmd::realmd_package_ensure: installed
 realmd::realmd_config_file: /etc/realmd.conf
 realmd::realmd_config: {}
 realmd::homedir_umask: '0022'
 realmd::adcli_package_name: adcli
-realmd::adcli_package_ensure: present
+realmd::adcli_package_ensure: installed
 realmd::sssd_package_name: sssd
-realmd::sssd_package_ensure: present
+realmd::sssd_package_ensure: installed
 realmd::sssd_service_name: sssd
 realmd::sssd_service_ensure: running
 realmd::sssd_config_file: /etc/sssd/sssd.conf
@@ -26,7 +26,7 @@ realmd::krb_ticket_join: false
 realmd::krb_keytab: ~
 realmd::krb_config_file: /etc/krb5.conf
 realmd::manage_krb_config: true
-realmd::krb_client_package_ensure: present
+realmd::krb_client_package_ensure: installed
 realmd::extra_join_options: ~
 realmd::computer_name: ~
 realmd::krb_config:
