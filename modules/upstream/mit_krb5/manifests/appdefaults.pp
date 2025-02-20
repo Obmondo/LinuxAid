@@ -26,12 +26,12 @@ define mit_krb5::appdefaults(
     target  => $mit_krb5::krb5_conf_path,
     order   => '50appdefauls_header',
     content => "\n[appdefaults]",
-    noop    => $mit_krb5::noop_value,
   })
   concat::fragment { "mit_krb5::appdefaults::${title}":
     target  => $mit_krb5::krb5_conf_path,
     order   => "51appdefault-${title}",
     content => template('mit_krb5/appdefaults.erb'),
-    noop    => $mit_krb5::noop_value,
   }
 }
+
+

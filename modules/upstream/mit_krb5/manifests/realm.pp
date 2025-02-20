@@ -49,18 +49,18 @@
 #   passwords. The tag value is the Kerberos V4 realm name.
 #
 # [*v4_realm_convert*]
-#   Add a v4 realm convert, v4_name_convert, takes the following format =>
+#   Add a v4 realm convert, v4_name_convert, takes the following format => 
 #   v4_realm_convert => { host=> [ "TEST = host", "TEST1 = host], TEST2 => ["TEST4=host2"]} , to produce :
 #         v4_name_convert = {
 #            host = {
 #                TEST = host
 #		 TEST1 = host
 #            }
-#        TEST2 = {
+#	     TEST2 = {
 #		 TEST4 = host2
+#	     }
 #        }
-#        }
-#
+#                                                   
 # [*auth_to_local_names*]
 #   This subsection allows you to set explicit mappings from principal names to
 #   local user names.  The tag is the mapping name, and the value is the
@@ -87,6 +87,11 @@
 # [*pkinit_pool*]
 #   Specifies the location of intermediate certificates which may be used by the
 #   client to complete the trust chain between a KDC certificate and a trusted anchor.
+#
+# [*http_anchors*]
+#   When  KDCs and kpasswd servers are accessed through HTTPS proxies, this tag can
+#   be used to specify the location of the CA certificate which should be trusted to
+#   issue the certificate for a proxy server.
 #
 # [*rotate_servers*]
 #   Whether to apply a random rotation to the list of KDCs and admin servers so
@@ -125,6 +130,7 @@ define mit_krb5::realm(
   $pkinit_anchors         = '',
   $pkinit_pool            = '',
   Boolean $rotate_servers = false,
+  $http_anchors           = '',
 ) {
 
   include ::mit_krb5
@@ -133,12 +139,10 @@ define mit_krb5::realm(
     target  => $mit_krb5::krb5_conf_path,
     order   => '10realm_header',
     content => "[realms]\n",
-    noop    => $mit_krb5::noop_value,
   })
   concat::fragment { "mit_krb5::realm::${title}":
     target  => $mit_krb5::krb5_conf_path,
     order   => "11realm_${title}",
     content => template('mit_krb5/realm.erb'),
-    noop    => $mit_krb5::noop_value,
   }
 }

@@ -29,7 +29,7 @@
 #   disables account lockout. First introduced in release 1.9.
 #
 # [*ldap_cert_path*]
-#   Path to the Network Security Services (NSS) trusted database for an SSL connection.
+#   Path to the Network Security Services (NSS) trusted database for an SSL connection. 
 #   This is a required parameter when using the LDAP KDB plug-in.
 #
 # [*ldap_conns_per_server*]
@@ -103,20 +103,17 @@ define mit_krb5::dbmodules(
     target  => $mit_krb5::krb5_conf_path,
     order   => '30dbmodules_header',
     content => "\n[dbmodules]\n",
-    noop    => $mit_krb5::noop_value,
   })
   if (! empty($mit_krb5::db_module_dir)) {
     ensure_resource('concat::fragment', 'mit_krb5::dbmodules_db_module_dir', {
       target  => $mit_krb5::krb5_conf_path,
       order   => '31dbmodules_db_module_dir',
       content => "    db_module_dir = ${mit_krb5::db_module_dir}\n",
-      noop    => $mit_krb5::noop_value,
     })
   }
   concat::fragment { "mit_krb5::dbmodules::${realm}":
     target  => $mit_krb5::krb5_conf_path,
     order   => "32dbmodules_${realm}",
     content => template('mit_krb5/dbmodules.erb'),
-    noop    => $mit_krb5::noop_value,
   }
 }

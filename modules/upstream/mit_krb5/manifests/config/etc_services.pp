@@ -1,14 +1,15 @@
 #
 class mit_krb5::config::etc_services {
 
-  [ 'tcp', 'udp' ].each |String $protocol| {
+  $protocols = {
+    'tcp' => 88,
+    'udp' => 88,
+  }
 
-    ::etc_services { "kerberos/${protocol}":
-      port    => '88',
-      aliases => [ 'kerberos5', 'krb5', 'kerberos-sec' ],
-      comment => 'Kerberos v5'
-    }
-
+  ::etc_services { 'kerberos':
+    protocols => $protocols,
+    aliases   => [ 'kerberos5', 'krb5', 'kerberos-sec' ],
+    comment   => 'Kerberos v5'
   }
 }
 
