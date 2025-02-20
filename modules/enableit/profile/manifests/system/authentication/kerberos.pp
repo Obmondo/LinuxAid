@@ -89,6 +89,7 @@ class profile::system::authentication::kerberos (
         domain_join_password => $join_password,
         krb_ticket_join      => false,
         manage_sssd_config   => false,
+        manage_sssd_service  => false,
         manage_krb_config    => false,
         manage_krb5_package  => false,
         before               => Class['sssd'],
