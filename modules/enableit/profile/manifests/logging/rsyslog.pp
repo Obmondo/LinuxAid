@@ -298,7 +298,7 @@ class profile::logging::rsyslog (
             },
           }
         },
-        legacy_config => merge($_standard_logs, $log_rules, $_remote_servers),
+        legacy_config => stdlib::merge($_standard_logs, $log_rules, $_remote_servers),
       }
     }
 
