@@ -105,9 +105,9 @@
 #   The default value is false.
 #
 # [*dns_canonicalize_hostname*]
-#   Indicate whether name lookups will be used to canonicalize hostnames for use
-#   in service principal names. Setting this flag to false can improve security
-#   by reducing reliance on DNS, but means that short hostnames will not be
+#   Indicate whether name lookups will be used to canonicalize hostnames for use 
+#   in service principal names. Setting this flag to false can improve security 
+#   by reducing reliance on DNS, but means that short hostnames will not be 
 #   canonicalized to fully-qualified hostnames. The default value is true.
 #
 # [*ccache_type*]
@@ -175,6 +175,17 @@
 #   hostnames into service principal names.  Defaults to true.  Setting this
 #   flag to false is more secure, but may force users to exclusively use fully
 #   qualified domain names when authenticating to services.
+#
+# [*pkinit_anchors*]
+#   This relation allows you set the path of a certificate authority file.
+#
+# [*spake_preauth_groups*]
+#   SPAKE preauthentication (added in release 1.17) uses public key cryptography
+#   techniques to protect against password dictionary attacks.  Accepts a
+#   whitespace or comma-separated list of words which specifies the groups
+#   allowed for SPAKE preauthentication.
+#   The possible values are: 'edwards25519', 'P-256', 'P-384', 'P-521'.
+#   The recommended value is: 'edwards25519'.
 #
 # [*plugin_base_dir*]
 #   If set, determines the base directory where krb5 plugins are located.  The
@@ -263,6 +274,8 @@ class mit_krb5(
   $forwardable                      = '',
   $proxiable                        = '',
   $rdns                             = '',
+  $pkinit_anchors                   = '',
+  $spake_preauth_groups             = '',
   String $plugin_base_dir           = '',
   $include                          = '',
   $includedir                       = '',
@@ -278,8 +291,7 @@ class mit_krb5(
   Hash $capaths                     = {},
   Hash $appdefaults                 = {},
   Hash $realms                      = {},
-  Hash $dbmodules                   = {},
-  Optional[Boolean] $noop_value     = undef,
+  Hash $dbmodules                   = {}
 ) {
   # SECTION: Parameter validation {
   # Boolean-type parameters are not type-validated at this time.
@@ -295,10 +307,6 @@ class mit_krb5(
   # SECTION: Resource creation {
   anchor { 'mit_krb5::begin': }
 
-  File {
-    noop => $noop_value,
-  }
-
   class { '::mit_krb5::install': }
 
   if ($alter_etc_services == true) {
@@ -311,20 +319,17 @@ class mit_krb5(
     owner => $krb5_conf_owner,
     group => $krb5_conf_group,
     mode  => $krb5_conf_mode,
-    warn  => $krb5_conf_warn,
-    noop  => $noop_value,
+    warn  => $krb5_conf_warn
   }
   concat::fragment { 'mit_krb5::header':
     target  => $krb5_conf_path,
     order   => '00header',
     content => template('mit_krb5/header.erb'),
-    noop  => $noop_value,
   }
   concat::fragment { 'mit_krb5::libdefaults':
     target  => $krb5_conf_path,
     order   => '01libdefaults',
     content => template('mit_krb5/libdefaults.erb'),
-    noop  => $noop_value,
   }
 
   # Create dynamic resources

@@ -1,0 +1,25 @@
+<%- tags = [
+    'disable',
+    'enable_only',
+    'module',
+]
+output = []
+scope_hash = scope.to_hash
+tags.each do |t|
+  if scope_hash.include?(t)
+    value = scope_hash[t]
+    if value.respond_to?('each')
+      # Allow multiple values via array
+      value.flatten! if value.respond_to?('flatten')
+      value.each do |v|
+        output.push("#{t} = #{v}")
+      end
+    elsif not value.empty?
+      output.push("#{t} = #{value}")
+    end
+  end
+end
+-%>
+    <%= @title -%> = {
+        <%= output.join("\n        ") %>
+    }

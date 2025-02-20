@@ -42,13 +42,16 @@ define mit_krb5::domain_realm(
       target  => $mit_krb5::krb5_conf_path,
       order   => '20domain_realm_header',
       content => "[domain_realm]\n",
-      noop    => $mit_krb5::noop_value,
     })
     concat::fragment { "mit_krb5::domain_realm::${title}":
       target  => $mit_krb5::krb5_conf_path,
       order   => "21realm_${realm}_${title}",
       content => template('mit_krb5/domain_realm.erb'),
-      noop  => $mit_krb5::noop_value,
     }
+    ensure_resource('concat::fragment', 'mit_krb5::domain_realm_trailer', {
+      target  => $mit_krb5::krb5_conf_path,
+      order   => '22domain_realm_trailer',
+      content => "\n",
+    })
   }
 }
