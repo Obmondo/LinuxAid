@@ -30,7 +30,7 @@ function package::lookup (
       default => fail("Got unknown trailing char '${_trailing_char}"),
     }
 
-    merge($acc, {
+    stdlib::merge($acc, {
       $p => [$_found_package_name, $_parameters]
     })
   }

@@ -42,7 +42,7 @@ class common::monitor::exporter::filestat (
     noop    => false,
     owner   => $user,
     group   => $user,
-    content =>  to_yaml({
+    content => stdlib::to_yaml({
       'exporter' => {
         'working_directory'     => $working_directory,
         'enable_crc32_metric'   => false,
