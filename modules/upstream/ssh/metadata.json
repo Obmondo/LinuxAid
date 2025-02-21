@@ -1,64 +1,111 @@
 {
   "name": "saz-ssh",
-  "version": "6.0.0",
+  "version": "13.1.0",
   "author": "saz",
   "summary": "Manage SSH client and server via Puppet.",
-  "description": "Manage SSH client and server via puppet",
   "license": "Apache-2.0",
-  "source": "git://github.com/saz/puppet-ssh.git",
+  "source": "https://github.com/saz/puppet-ssh.git",
   "project_page": "https://github.com/saz/puppet-ssh",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 7.0.0"
+      "version_requirement": ">= 2.2.0 < 10.0.0"
+    },
+    {
+      "name": "puppet/systemd",
+      "version_requirement": ">= 3.7.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat"
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
     },
     {
-      "operatingsystem": "CentOS"
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "9"
+      ]
     },
     {
-      "operatingsystem": "OracleLinux"
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
     },
     {
-      "operatingsystem": "Scientific"
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+	"12"
+      ]
     },
     {
-      "operatingsystem": "Debian"
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04"
+      ]
     },
     {
-      "operatingsystem": "Ubuntu"
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12",
+        "15"
+      ]
     },
     {
-      "operatingsystem": "FreeBSD"
+      "operatingsystem": "OpenSuSE",
+      "operatingsystemrelease": [
+        "42"
+      ]
     },
     {
-      "operatingsystem": "DragonFly"
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "13"
+      ]
     },
     {
-      "operatingsystem": "OpenBSD"
+      "operatingsystem": "DragonFly",
+      "operatingsystemrelease": [
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "OpenBSD",
+      "operatingsystemrelease": [
+        "7"
+      ]
     },
     {
       "operatingsystem": "Gentoo"
     },
     {
-      "operatingsystem": "Solaris"
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "11"
+      ]
     },
     {
-      "operatingsystem": "ArchLinux"
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "AIX"
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.10 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }
