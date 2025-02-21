@@ -11,7 +11,7 @@ Puppet::Functions.create_function(:safe_string) do
 
   def safe_string(prefix, max_length=nil, suffix_length=10)
     prefix = prefix.gsub(/[^A-Za-z0-9_-]/, '_')
-    suffix = call_function('fqdn_rand_string', suffix_length, nil, prefix)
+    suffix = call_function('stdlib::fqdn_rand_string', suffix_length, nil, prefix)
 
     if max_length && suffix_length
       prefix_length = (max_length - suffix_length - 1)
