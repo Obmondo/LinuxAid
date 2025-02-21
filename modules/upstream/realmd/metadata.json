@@ -30,6 +30,12 @@
       ]
     },
     {
+      "operatingsystem": "Suse",
+      "operatingsystemrelease": [
+        "15"
+      ]
+    },
+    {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8",
