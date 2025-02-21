@@ -151,7 +151,7 @@ class profile::system::sshd (
         $k => profile::ssh_config_value($v),
       }
 
-      $acc.merge($_coerced_x)
+      $acc.stdlib::merge($_coerced_x)
     }
 
     class { 'ssh':
