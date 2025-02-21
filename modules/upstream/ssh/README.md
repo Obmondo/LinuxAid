@@ -1,10 +1,10 @@
-# Puppet SSH [![Support via Gratipay](https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.svg)](https://gratipay.com/~saz/)
+# Puppet SSH
 
 [![Puppet Forge modules by saz](https://img.shields.io/puppetforge/mc/saz.svg)](https://forge.puppetlabs.com/saz)
 [![Puppet Forge](http://img.shields.io/puppetforge/v/saz/ssh.svg)](https://forge.puppetlabs.com/saz/ssh)
 [![Puppet Forge downloads](https://img.shields.io/puppetforge/dt/saz/ssh.svg)](https://forge.puppetlabs.com/saz/ssh)
 [![Puppet Forge score](https://img.shields.io/puppetforge/f/saz/ssh.svg)](https://forge.puppetlabs.com/saz/ssh)
-[![Build Status](https://travis-ci.org/saz/puppet-ssh.png)](https://travis-ci.org/saz/puppet-ssh)
+[![Build Status](https://github.com/saz/puppet-ssh/workflows/CI/badge.svg)](https://github.com/saz/puppet-ssh/actions?query=workflow%3ACI)
 
 Manage SSH client and server via Puppet.
 Source: https://github.com/saz/puppet-ssh
@@ -252,7 +252,7 @@ class { 'ssh::server':
 
 ## Overwriting default options
 Default options will be merged with options passed in.
-If an option is set both as default and via options parameter, the latter will
+If an option is set both as default and via options parameter, the latter
 will win.
 
 The following example will disable X11Forwarding, which is enabled by default:
@@ -346,6 +346,35 @@ class YOURCUSTOMCLASS {
     }
   }
 }
+```
+
+## Tag hostkey
+
+Assign tags to exported `sshkey` resources (when `ssh::storeconfigs_enabled` is set to `true`).
+
+```yaml
+ssh::hostkeys::tags:
+  - hostkey_group1
+  - hostkey_group2
+```
+
+Host keys then can be imported using:
+
+```puppet
+Sshkey <<| tag == "hostkey_group1" |>>
+```
+
+## Excluding network interfaces or ipaddresses
+
+Use hiera to exclude interfaces or ipaddresses from hostkey inclusion
+
+```yaml
+ssh::hostkeys::exclude_interfaces:
+  - eth0
+  - eth3
+ssh::hostkeys::exclude_ipaddresses:
+  - 192.168.0.1
+  - 10.42.24.242
 ```
 
 ## Facts

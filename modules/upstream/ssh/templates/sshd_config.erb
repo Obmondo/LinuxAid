@@ -11,11 +11,16 @@
     end
   end
 -%>
-<%- options = scope.lookupvar('ssh::server::merged_options') -%>
-<%- if addressfamily = options.delete('AddressFamily') -%>
+<%- if @include_dir -%>
+Include <%= @include_dir %>/*.conf
+<%- end -%>
+<%- if @include -%>
+Include <%= @include %>
+<%- end -%>
+<%- if addressfamily = @options.delete('AddressFamily') -%>
 AddressFamily <%= addressfamily %>
 <%- end -%>
-<%- if port = options.delete('Port') -%>
+<%- if port = @options.delete('Port') -%>
 <%- if port.is_a?(Array) -%>
 <%- port.reject{ |x| x.to_s.strip.empty? }.each do |p| -%>
 Port <%= p %>
@@ -24,7 +29,7 @@ Port <%= p %>
 Port <%= port %>
 <%- end -%>
 <%- end -%>
-<%- if listen = options.delete('ListenAddress') -%>
+<%- if listen = @options.delete('ListenAddress') -%>
 <%- if listen.is_a?(Array) -%>
 <%- listen.reject{ |x| x.strip.empty? }.each do |l| -%>
 ListenAddress <%= l %>
@@ -34,16 +39,20 @@ ListenAddress <%= listen %>
 <%- end -%>
 <%- end -%>
 
-<%- options.keys.sort_by{ |sk| (sk.to_s.downcase.include? "match") ? 'zzz' + sk.to_s : sk.to_s }.each do |k| -%>
-<%- v = options[k] -%>
+<%- @options.keys.sort_by{ |sk| (sk.to_s.downcase.include? "match") ? 'zzz' + sk.to_s : sk.to_s }.each do |k| -%>
+<%- v = @options[k] -%>
 <%- if v.is_a?(Hash) -%>
 <%= k %>
 <%- v.keys.sort.each do |key| -%>
     <%- value = v[key] -%>
     <%- if value.is_a?(Array) -%>
+    <%- if ['ciphers', 'macs', 'kexalgorithms'].include?(key.downcase) -%>
+    <%= key %> <%= value.join(',') %>
+    <%- else -%>
     <%- value.each do |a| -%>
     <%- if a != '' && a != nil -%>
     <%= key %> <%= bool2str(a) %>
+    <%- end -%>
     <%- end -%>
     <%- end -%>
     <%- elsif value != '' && value != nil -%>
@@ -52,9 +61,13 @@ ListenAddress <%= listen %>
 <%- end -%>
 <%- else -%>
 <%- if v.is_a?(Array) -%>
+<%- if ['ciphers', 'macs', 'kexalgorithms'].include?(k.downcase) -%>
+<%= k %> <%= v.join(',') %>
+<%- else -%>
 <%- v.each do |a| -%>
 <%- if a != '' && a != nil -%>
 <%= k %> <%= bool2str(a) %>
+<%- end -%>
 <%- end -%>
 <%- end -%>
 <%- elsif v != nil and v != '' -%>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Facter.add('ssh_server_version_full') do
   confine kernel: %w[Linux SunOS FreeBSD DragonFly Darwin]
 
@@ -13,7 +15,7 @@ Facter.add('ssh_server_version_full') do
                 first.
                 rstrip
 
-      version.gsub(%r{^(OpenSSH_|Sun_SSH_)([^ ,]+).*$}, '\2') unless version.nil?
+      version&.gsub(%r{^(OpenSSH_|Sun_SSH_)([^ ,]+).*$}, '\2')
     end
   end
 end
@@ -24,14 +26,7 @@ Facter.add('ssh_server_version_major') do
   setcode do
     version = Facter.value('ssh_server_version_full')
 
-    case version
-    when %r{([0-9]+)\.([0-9]+)\.([0-9]+p[0-9]+)}
-      # 6.6.1p1 style formatting
-      version.gsub(%r{([0-9]+)\.([0-9]+)\.([0-9]+p[0-9]+)}, '\1')
-    when %r{^([0-9]+)\.([0-9]+p[0-9]+)}
-      # 7.2p2 style formatting
-      version.gsub(%r{^([0-9]+)\.([0-9]+p[0-9]+)}, '\1')
-    end
+    version.gsub(%r{^([0-9]+)\..*$}, '\1')
   end
 end
 
@@ -40,6 +35,6 @@ Facter.add('ssh_server_version_release') do
   setcode do
     version = Facter.value('ssh_server_version_full')
 
-    version.gsub(%r{^([0-9]+\.[0-9]+(?:\.[0-9]+)?).*$}, '\1') unless version.nil?
+    version&.gsub(%r{^([0-9]+\.[0-9]+(?:\.[0-9]+)?).*$}, '\1')
   end
 end

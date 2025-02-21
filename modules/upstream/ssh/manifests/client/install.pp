@@ -1,5 +1,16 @@
+# @summary
+#   Install ssh client package
+#
+# @api private
+#
 class ssh::client::install {
-  if $ssh::params::client_package_name {
-    ensure_packages([$ssh::params::client_package_name], {'ensure' => $ssh::client::ensure})
+  assert_private()
+
+  if $ssh::client::client_package_name {
+    stdlib::ensure_packages([
+        $ssh::client::client_package_name,
+      ], {
+        'ensure' => $ssh::client::ensure,
+    })
   }
 }

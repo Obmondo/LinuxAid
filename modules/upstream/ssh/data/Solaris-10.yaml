@@ -1,0 +1,3 @@
+---
+ssh::server::server_package_name: 'SUNWsshdu'
+ssh::client::client_package_name: 'SUNWsshu'

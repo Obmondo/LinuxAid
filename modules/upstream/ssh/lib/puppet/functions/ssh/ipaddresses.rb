@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary Returns ip addresses of network interfaces (except lo) found by facter.
 # @api private
 #
@@ -6,26 +8,44 @@
 Puppet::Functions.create_function(:'ssh::ipaddresses') do
   dispatch :ipaddresses do
     # @param excluded_interfaces An array of interface names to be excluded.
+    param 'Array[String[1]]', :excluded_interfaces
+    # @param excluded_interfaces_re An array of regexp matching interface names to be excluded.
+    param 'Array', :excluded_interfaces_re
     # @return The IP addresses found.
-    optional_param 'Array[String[1]]', :excluded_interfaces
     return_type 'Array[Stdlib::IP::Address]'
   end
 
-  def ipaddresses(excluded_interfaces = [])
+  def ipaddresses(excluded_interfaces, excluded_interfaces_re)
     facts = closure_scope['facts']
 
     # always exclude loopback interface
     excluded_interfaces += ['lo']
 
+    if !facts['networking'].nil? && !facts['networking'].empty?
+      interfaces = facts['networking']['interfaces']
+    else
+      interfaces = {}
+      facts['interfaces'].split(',').each do |iface|
+        next if facts["ipaddress_#{iface}"].nil? && facts["ipaddress6_#{iface}"].nil?
+
+        interfaces[iface] = {}
+        interfaces[iface]['bindings'] = [{ 'address' => facts["ipaddress_#{iface}"] }] if !facts["ipaddress_#{iface}"].nil? && !facts["ipaddress_#{iface}"].empty?
+        interfaces[iface]['bindings6'] = [{ 'address' => facts["ipaddress6_#{iface}"] }] if !facts["ipaddress6_#{iface}"].nil? && !facts["ipaddress6_#{iface}"].empty?
+      end
+    end
+
     result = []
-    facts['networking']['interfaces'].each do |iface, data|
+    interfaces.each do |iface, data|
       # skip excluded interfaces
       next if excluded_interfaces.include?(iface)
+      next if excluded_interfaces_re.any? { |pattern| Regexp.new(pattern).match?(iface) }
 
       %w[bindings bindings6].each do |binding_type|
         next unless data.key?(binding_type)
+
         data[binding_type].each do |binding|
           next unless binding.key?('address')
+
           result << binding['address']
         end
       end

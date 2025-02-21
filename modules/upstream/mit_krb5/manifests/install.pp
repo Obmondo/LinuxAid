@@ -29,5 +29,5 @@ class mit_krb5::install($packages = undef) {
       'Suse'      => ['krb5-client'],
     }
   }
-  ensure_packages($install)
+  stdlib::ensure_packages($install)
 }
