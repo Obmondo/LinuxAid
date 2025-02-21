@@ -1,19 +1,20 @@
 # Mailcow Setup
 class profile::mail::mailcow (
-  Boolean                     $manage           = $role::mail::mailcow::manage,
-  Boolean                     $letsencrypt      = $role::mail::mailcow::letsencrypt,
-  Optional[Eit_types::Email]  $acme_contact     = $role::mail::mailcow::acme_contact,
-  Eit_types::Mailcow::Version $version          = $role::mail::mailcow::version,
-  Stdlib::Unixpath            $install_dir      = $role::mail::mailcow::install_dir,
-  Stdlib::Unixpath            $backup_dir       = $role::mail::mailcow::backup_dir,
-  Eit_types::Timezone         $timezone         = $role::mail::mailcow::timezone,
-  String                      $dbroot           = $role::mail::mailcow::dbroot,
-  String                      $dbpass           = $role::mail::mailcow::dbpass,
-  Optional[Hash]              $extra_settings   = $role::mail::mailcow::extra_settings,
-  Stdlib::Fqdn                $domain           = $role::mail::mailcow::domain,
-  Integer[3,30]               $backup_retention = $role::mail::mailcow::backup_retention,
+  Boolean                     $manage                   = $role::mail::mailcow::manage,
+  Boolean                     $letsencrypt              = $role::mail::mailcow::letsencrypt,
+  Optional[Eit_types::Email]  $acme_contact             = $role::mail::mailcow::acme_contact,
+  Eit_types::Mailcow::Version $version                  = $role::mail::mailcow::version,
+  Stdlib::Unixpath            $install_dir              = $role::mail::mailcow::install_dir,
+  Stdlib::Unixpath            $backup_dir               = $role::mail::mailcow::backup_dir,
+  Eit_types::Timezone         $timezone                 = $role::mail::mailcow::timezone,
+  String                      $dbroot                   = $role::mail::mailcow::dbroot,
+  String                      $dbpass                   = $role::mail::mailcow::dbpass,
+  Optional[Hash]              $extra_settings           = $role::mail::mailcow::extra_settings,
+  Stdlib::Fqdn                $domain                   = $role::mail::mailcow::domain,
+  Integer[3,30]               $backup_retention         = $role::mail::mailcow::backup_retention,
 
-  Stdlib::IP::Address::V4::Nosubnet $http_bind  = $role::mail::mailcow::http_bind,
+  Stdlib::IP::Address::V4::Nosubnet $http_bind          = $role::mail::mailcow::http_bind,
+  Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
 ) {
 
   confine($letsencrypt,
@@ -146,6 +147,7 @@ class profile::mail::mailcow (
         'SOGO_EXPIRE_SESSION'           => 480,
         'WEBAUTHN_ONLY_TRUSTED_VENDORS' => 'n',
         'ADDITIONAL_SAN'                => '',
+        'SKIP_UNBOUND_HEALTHCHECK'      => to_yn($skip_unbound_healthcheck),
       }),
     ;
     # NOTE: These container tag are manually maintained to have a better control
