@@ -1,0 +1,230 @@
+name: greenbone-community-edition
+
+services:
+  vulnerability-tests:
+    image: <%= $registry %>/vulnerability-tests:<%= $vulnerability_tests_version %>
+    environment:
+      FEED_RELEASE: "<%= $feed_release_version %>"
+    volumes:
+      - vt_data_vol:<%= $data_mount_path %>
+
+  notus-data:
+    image: <%= $registry %>/notus-data:<%= $notus_data_version %>
+    volumes:
+      - notus_data_vol:<%= $data_mount_path %>
+
+  scap-data:
+    image: <%= $registry %>/scap-data:<%= $scap_data_version %>
+    volumes:
+      - scap_data_vol:<%= $data_mount_path %>
+
+  cert-bund-data:
+    image: <%= $registry %>/cert-bund-data:<%= $cert_bund_data_version %>
+    volumes:
+      - cert_data_vol:<%= $data_mount_path %>
+
+  dfn-cert-data:
+    image: <%= $registry %>/dfn-cert-data:<%= $dfn_cert_data_version %>
+    volumes:
+      - cert_data_vol:<%= $data_mount_path %>
+    depends_on:
+      - cert-bund-data
+
+  data-objects:
+    image: <%= $registry %>/data-objects:<%= $data_objects_version %>
+    environment:
+      FEED_RELEASE: "<%= $feed_release_version %>"
+    volumes:
+      - data_objects_vol:<%= $data_mount_path %>
+
+  report-formats:
+    image: <%= $registry %>/report-formats:<%= $report_formats_version %>
+    environment:
+      FEED_RELEASE: "<%= $feed_release_version %>"
+    volumes:
+      - data_objects_vol:<%= $data_mount_path %>
+    depends_on:
+      - data-objects
+
+  gpg-data:
+    image: <%= $registry %>/gpg-data:<%= $gpg_data_version %>
+    volumes:
+      - gpg_data_vol:<%= $data_mount_path %>
+
+  redis-server:
+    image: <%= $registry %>/redis-server:<%= $redis_server_version %>
+    restart: on-failure
+    volumes:
+      - redis_socket_vol:<%= $redis_socket_path %>
+
+  pg-gvm:
+    image: <%= $registry %>/pg-gvm:<%= $pg_gvm_version %>
+    restart: on-failure
+    volumes:
+      - psql_data_vol:<%= $psql_data_path %>
+      - psql_socket_vol:<%= $psql_socket_path %>
+
+  gvmd:
+    image: <%= $registry %>/gvmd:<%= $gvmd_version %>
+    restart: on-failure
+    volumes:
+      - gvmd_data_vol:<%= $gvm_data_path %>
+      - scap_data_vol:<%= $gvm_data_path %>/scap-data/
+      - cert_data_vol:<%= $gvm_data_path %>/cert-data
+      - data_objects_vol:<%= $gvm_data_path %>/data-objects/gvmd
+      - vt_data_vol:<%= $openvas_plugins_path %>
+      - psql_data_vol:<%= $psql_data_path %>
+      - gvmd_socket_vol:<%= $gvmd_socket_path %>
+      - ospd_openvas_socket_vol:<%= $ospd_socket_path %>
+      - psql_socket_vol:<%= $psql_socket_path %>
+    depends_on:
+      pg-gvm:
+        condition: service_started
+      scap-data:
+        condition: service_completed_successfully
+      cert-bund-data:
+        condition: service_completed_successfully
+      dfn-cert-data:
+        condition: service_completed_successfully
+      data-objects:
+        condition: service_completed_successfully
+      report-formats:
+        condition: service_completed_successfully
+
+  gsa:
+    image: <%= $registry %>/gsa:<%= $gsa_version %>
+    restart: on-failure
+    ports:
+      - <%= $web_bind_address %>:<%= $web_port %>:80
+    volumes:
+      - gvmd_socket_vol:<%= $gvmd_socket_path %>
+    depends_on:
+      - gvmd
+  # Sets log level of openvas to the set LOG_LEVEL within the env
+  # and changes log output to /var/log/openvas instead /var/log/gvm
+  # to reduce likelyhood of unwanted log interferences
+  configure-openvas:
+    image: <%= $registry %>/openvas-scanner:<%= $openvas_scanner_version %>
+    volumes:
+      - openvas_data_vol:<%= $data_mount_path %>
+      - openvas_log_data_vol:<%= $openvas_log_path %>
+    command:
+      - /bin/sh
+      - -c
+      - |
+        printf "table_driven_lsc = yes\nopenvasd_server = http://openvasd:80\n" > <%= $data_mount_path %>/openvas.conf
+        sed "s/127/128/" <%= $openvas_config_path %>/openvas_log.conf | sed 's/gvm/openvas/' > <%= $data_mount_path %>/openvas_log.conf
+        chmod 644 <%= $data_mount_path %>/openvas.conf
+        chmod 644 <%= $data_mount_path %>/openvas_log.conf
+        touch <%= $openvas_log_path %>/openvas.log
+        chmod 666 <%= $openvas_log_path %>/openvas.log
+
+  # shows logs of openvas
+  openvas:
+    image: <%= $registry %>/openvas-scanner:<%= $openvas_scanner_version %>
+    restart: on-failure
+    volumes:
+      - openvas_data_vol:<%= $openvas_config_path %>
+      - openvas_log_data_vol:<%= $openvas_log_path %>
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cat <%= $openvas_config_path %>/openvas.conf
+        tail -f <%= $openvas_log_path %>/openvas.log
+    depends_on:
+      configure-openvas:
+        condition: service_completed_successfully
+
+  openvasd:
+    image: <%= $registry %>/openvas-scanner:<%= $openvas_scanner_version %>
+    restart: on-failure
+    environment:
+      # `service_notus` is set to disable everything but notus,
+      # if you want to utilize openvasd directly removed `OPENVASD_MODE`
+      OPENVASD_MODE: <%= $openvasd_mode %>
+      GNUPGHOME: <%= $openvas_config_path %>/gnupg
+      LISTENING: <%= $openvasd_addressport %>
+    volumes:
+      - openvas_data_vol:<%= $openvas_config_path %>
+      - openvas_log_data_vol:<%= $openvas_log_path %>
+      - gpg_data_vol:<%= $openvas_config_path %>/gnupg
+      - notus_data_vol:<%= $notus_path %>
+    # enable port forwarding when you want to use the http api from your host machine
+    # ports:
+    #   - 127.0.0.1:3000:80
+    depends_on:
+      vulnerability-tests:
+        condition: service_completed_successfully
+      configure-openvas:
+        condition: service_completed_successfully
+      gpg-data:
+        condition: service_completed_successfully
+    networks:
+      default:
+        aliases:
+          - openvasd
+
+  ospd-openvas:
+    image: <%= $registry %>/ospd-openvas:<%= $ospd_openvas_version %>
+    restart: on-failure
+    hostname: ospd-openvas.local
+    cap_add:
+      - NET_ADMIN # for capturing packages in promiscuous mode
+      - NET_RAW # for raw sockets e.g. used for the boreas alive detection
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
+    command:
+      [
+        "ospd-openvas",
+        "-f",
+        "--config",
+        "/etc/gvm/ospd-openvas.conf",
+        "--notus-feed-dir",
+        "<%= $notus_path %>/advisories",
+        "-m",
+        "666"
+      ]
+    volumes:
+      - gpg_data_vol:<%= $openvas_config_path %>/gnupg
+      - vt_data_vol:<%= $openvas_plugins_path %>
+      - notus_data_vol:<%= $notus_path %>
+      - ospd_openvas_socket_vol:<%= $ospd_socket_path %>
+      - redis_socket_vol:<%= $redis_socket_path %>
+      - openvas_data_vol:<%= $openvas_config_path %>
+      - openvas_log_data_vol:<%= $openvas_log_path %>
+    depends_on:
+      redis-server:
+        condition: service_started
+      gpg-data:
+        condition: service_completed_successfully
+      vulnerability-tests:
+        condition: service_completed_successfully
+      configure-openvas:
+        condition: service_completed_successfully
+
+  gvm-tools:
+    image: <%= $registry %>/gvm-tools:<%= $gvm_tools_version %>
+    volumes:
+      - gvmd_socket_vol:<%= $gvmd_socket_path %>
+      - ospd_openvas_socket_vol:<%= $ospd_socket_path %>
+    depends_on:
+      - gvmd
+      - ospd-openvas
+
+volumes:
+  gpg_data_vol:
+  scap_data_vol:
+  cert_data_vol:
+  data_objects_vol:
+  gvmd_data_vol:
+  psql_data_vol:
+  vt_data_vol:
+  notus_data_vol:
+  psql_socket_vol:
+  gvmd_socket_vol:
+  ospd_openvas_socket_vol:
+  redis_socket_vol:
+  openvas_data_vol:
+  openvas_log_data_vol:
