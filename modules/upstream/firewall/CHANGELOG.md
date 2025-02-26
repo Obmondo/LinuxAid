@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.1.3](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.3) - 2024-12-05
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.2...v8.1.3)
+
+### Fixed
+
+- Prevent sources with zero prefix length being applied every agent run [#1189](https://github.com/puppetlabs/puppetlabs-firewall/pull/1189) ([nabertrand](https://github.com/nabertrand))
+
+## [v8.1.2](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.2) - 2024-11-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.1...v8.1.2)
+
+### Fixed
+
+- (MODULE-11463): Fix rule parsing when iptables chains with '-A' in the name [#1210](https://github.com/puppetlabs/puppetlabs-firewall/pull/1210) ([2fa](https://github.com/2fa))
+- Allow a singular numeric port for the `--to-ports` parameter [#1199](https://github.com/puppetlabs/puppetlabs-firewall/pull/1199) ([gcoxmoz](https://github.com/gcoxmoz))
+- Add `tcp-reset` as an allowed option for `--reject-with` [#1194](https://github.com/puppetlabs/puppetlabs-firewall/pull/1194) ([gcoxmoz](https://github.com/gcoxmoz))
+
+## [v8.1.1](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.1) - 2024-10-28
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.0...v8.1.1)
+
+### Added
+
+- (CAT-2101) Add support for Debian-12 [#1236](https://github.com/puppetlabs/puppetlabs-firewall/pull/1236) ([skyamgarp](https://github.com/skyamgarp))
+
+### Fixed
+
+- (CAT-2088): Allow colon(:) in IP table syntax [#1240](https://github.com/puppetlabs/puppetlabs-firewall/pull/1240) ([span786](https://github.com/span786))
+
+## [v8.1.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.0) - 2024-09-23
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.0.3...v8.1.0)
+
+### Added
+
+- Support ip[6]tables protocol in firewallchain [#1191](https://github.com/puppetlabs/puppetlabs-firewall/pull/1191) ([jcharaoui](https://github.com/jcharaoui))
+
+## [v8.0.3](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.0.3) - 2024-07-19
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.0.2...v8.0.3)
+
+### Fixed
+
+- Fix resource generation ipcidr dependency [#1204](https://github.com/puppetlabs/puppetlabs-firewall/pull/1204) ([2fa](https://github.com/2fa))
+
+## [v8.0.2](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.0.2) - 2024-05-22
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.0.1...v8.0.2)
+
+### Fixed
+
+- Fix "creation" of empty built-in firewall chains [#1206](https://github.com/puppetlabs/puppetlabs-firewall/pull/1206) ([2fa](https://github.com/2fa))
+
 ## [v8.0.1](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.0.1) - 2024-03-20
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.0.0...v8.0.1)
@@ -22,6 +76,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v7.0.2...v8.0.0)
 
 ### Changed
+
 - [CAT-1425] : Removing RedHat/Scientific/OracleLinux 6 [#1163](https://github.com/puppetlabs/puppetlabs-firewall/pull/1163) ([rajat-puppet](https://github.com/rajat-puppet))
 
 ### Fixed
@@ -49,6 +104,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v6.0.0...v7.0.0)
 
 ### Changed
+
 - (CAT-376) Rework firewall module to use the resource_api [#1145](https://github.com/puppetlabs/puppetlabs-firewall/pull/1145) ([david22swan](https://github.com/david22swan))
 
 ### Fixed
@@ -61,6 +117,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v5.0.0...v6.0.0)
 
 ### Changed
+
 - (CONT-242) Fix duplicate rule detection [#1140](https://github.com/puppetlabs/puppetlabs-firewall/pull/1140) ([david22swan](https://github.com/david22swan))
 - pdksync - (MAINT) - Require Stdlib 9.x only [#1135](https://github.com/puppetlabs/puppetlabs-firewall/pull/1135) ([LukasAud](https://github.com/LukasAud))
 
@@ -80,6 +137,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v4.1.0...v5.0.0)
 
 ### Changed
+
 - (Cont 779) Add Support for Puppet 8 / Drop Support for Puppet 6 [#1118](https://github.com/puppetlabs/puppetlabs-firewall/pull/1118) ([david22swan](https://github.com/david22swan))
 
 ## [v4.1.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v4.1.0) - 2023-03-31
@@ -112,6 +170,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v3.6.0...v4.0.0)
 
 ### Changed
+
 - (CONT-256) Removing outdated code [#1084](https://github.com/puppetlabs/puppetlabs-firewall/pull/1084) ([LukasAud](https://github.com/LukasAud))
 
 ### Added
@@ -228,6 +287,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v2.8.1...v3.0.0)
 
 ### Changed
+
 - pdksync - (MAINT) Remove SLES 11 support [#977](https://github.com/puppetlabs/puppetlabs-firewall/pull/977) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - (MAINT) Remove RHEL 5 family support [#976](https://github.com/puppetlabs/puppetlabs-firewall/pull/976) ([sanfrancrisko](https://github.com/sanfrancrisko))
 - pdksync - Remove Puppet 5 from testing and bump minimal version to 6.0.0 [#972](https://github.com/puppetlabs/puppetlabs-firewall/pull/972) ([carabasdaniel](https://github.com/carabasdaniel))
@@ -350,6 +410,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.15.3...v2.0.0)
 
 ### Changed
+
 - pdksync - (MODULES-8444) - Raise lower Puppet bound [#841](https://github.com/puppetlabs/puppetlabs-firewall/pull/841) ([david22swan](https://github.com/david22swan))
 
 ### Added
@@ -390,7 +451,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - (DOC-3056) Remove mention of rules ordering [#809](https://github.com/puppetlabs/puppetlabs-firewall/pull/809) ([clairecadman](https://github.com/clairecadman))
 - (FM-7712) - Remove Gentoo 1.0 testing/support for Firewall module [#808](https://github.com/puppetlabs/puppetlabs-firewall/pull/808) ([david22swan](https://github.com/david22swan))
-- (MODULES-8360) Fix IPv6 bug relating to Bugzilla 1015 [#804](https://github.com/puppetlabs/puppetlabs-firewall/pull/804) ([alexharv074](https://github.com/alexharv074))
+- (MODULES-8360) Fix IPv6 bug relating to Bugzilla 1015 [#804](https://github.com/puppetlabs/puppetlabs-firewall/pull/804) ([alex-harvey-z3q](https://github.com/alex-harvey-z3q))
 
 ## [1.15.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/1.15.0) - 2019-01-18
 
@@ -436,7 +497,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Fixed
 
 - (MODULES-7627) - Update README Limitations section [#769](https://github.com/puppetlabs/puppetlabs-firewall/pull/769) ([eimlav](https://github.com/eimlav))
-- Corrections to readme [#766](https://github.com/puppetlabs/puppetlabs-firewall/pull/766) ([alexharv074](https://github.com/alexharv074))
+- Corrections to readme [#766](https://github.com/puppetlabs/puppetlabs-firewall/pull/766) ([alex-harvey-z3q](https://github.com/alex-harvey-z3q))
 - (MODULES-6129) negated option with address mask bugfix [#756](https://github.com/puppetlabs/puppetlabs-firewall/pull/756) ([mirekys](https://github.com/mirekys))
 - (MODULES-2119) iptables delete -p all exception [#749](https://github.com/puppetlabs/puppetlabs-firewall/pull/749) ([mikkergimenez](https://github.com/mikkergimenez))
 
@@ -462,6 +523,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.9.0...1.10.0)
 
 ### Changed
+
 - (MODULES-5501) - Remove unsupported Ubuntu [#715](https://github.com/puppetlabs/puppetlabs-firewall/pull/715) ([pmcmaw](https://github.com/pmcmaw))
 - (Modules-1141) No longer accepts an array for icmp types #puppethack [#705](https://github.com/puppetlabs/puppetlabs-firewall/pull/705) ([spynappels](https://github.com/spynappels))
 
@@ -526,6 +588,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.8.0...1.8.1)
 
 ### Changed
+
 - (maint) Remove nat flush [#625](https://github.com/puppetlabs/puppetlabs-firewall/pull/625) ([hunner](https://github.com/hunner))
 
 ### Added
@@ -579,6 +642,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.7.0...1.7.1)
 
 ### Changed
+
 - Deprecate port parameter [#570](https://github.com/puppetlabs/puppetlabs-firewall/pull/570) ([hunner](https://github.com/hunner))
 
 ### Fixed
@@ -686,6 +750,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.1.3...1.2.0)
 
 ### Changed
+
 - Doesn't actually support OEL5 [#418](https://github.com/puppetlabs/puppetlabs-firewall/pull/418) ([underscorgan](https://github.com/underscorgan))
 
 ### Added
@@ -728,6 +793,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/1.0.2...1.1.0)
 
 ### Changed
+
 - Apply firewall resources alphabetically [#342](https://github.com/puppetlabs/puppetlabs-firewall/pull/342) ([mcanevet](https://github.com/mcanevet))
 
 ### Added
