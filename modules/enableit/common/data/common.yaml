@@ -2,6 +2,8 @@
 lookup_options:
   common::repo::repos:
     merge: 'unique'
+  common::monitor::prom::server::collect_scrape_jobs:
+    merge: 'deep'
   common::system::authentication::allowed_users:
     merge:
       strategy: 'deep'

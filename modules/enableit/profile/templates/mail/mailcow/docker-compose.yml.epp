@@ -569,6 +569,16 @@ services:
         aliases:
           - ofelia
 
+  mailcow-exporter:
+    image: <%= $exporter_image %>
+    restart: always
+    ports:
+      - "${EXPORTER_LISTEN_ADDRESS:-127.254.254.254:63382}:9099" 
+    networks:
+      mailcow-network:
+        aliases:
+          - mailcow-exporter
+
   ipv6nat-mailcow:
     depends_on:
       - unbound-mailcow

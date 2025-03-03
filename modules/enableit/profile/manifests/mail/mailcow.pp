@@ -12,6 +12,8 @@ class profile::mail::mailcow (
   Optional[Hash]              $extra_settings           = $role::mail::mailcow::extra_settings,
   Stdlib::Fqdn                $domain                   = $role::mail::mailcow::domain,
   Integer[3,30]               $backup_retention         = $role::mail::mailcow::backup_retention,
+  String                      $exporter_image           = $role::mail::mailcow::exporter_image,
+  Eit_types::IPPort           $exporter_listen_address  = $role::mail::mailcow::exporter_listen_address,
 
   Stdlib::IP::Address::V4::Nosubnet $http_bind          = $role::mail::mailcow::http_bind,
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
@@ -148,6 +150,7 @@ class profile::mail::mailcow (
         'WEBAUTHN_ONLY_TRUSTED_VENDORS' => 'n',
         'ADDITIONAL_SAN'                => '',
         'SKIP_UNBOUND_HEALTHCHECK'      => to_yn($skip_unbound_healthcheck),
+        'EXPORTER_LISTEN_ADDRESS'       => $exporter_listen_address,
       }),
     ;
     # NOTE: These container tag are manually maintained to have a better control
@@ -175,6 +178,7 @@ class profile::mail::mailcow (
         'olefy_image'     => 'mailcow/olefy:1.13',
         'olefia_image'    => 'mcuadros/ofelia:latest',
         'ipv6nat_image'   => 'robbertkl/ipv6nat',
+        'exporter_image'  => $exporter_image,
       }),
       require => [
         File['/opt/obmondo/docker-compose/mailcow'],
@@ -235,5 +239,16 @@ class profile::mail::mailcow (
   # NOTE: lets stop postfix on the host
   service { 'postfix':
     ensure => stopped,
+  }
+
+  $host = $::trusted['certname']
+  $exporter_port = Integer($exporter_listen_address.split(':')[1])
+
+  @@prometheus::scrape_job { 'mailcow' :
+    job_name    => 'mailcow',
+    tag         => $::trusted['certname'],
+    targets     => [ "${host}:${exporter_port}" ],
+    labels      => { 'certname' => $host },
+    collect_dir => '/etc/prometheus/file_sd_config.d',
   }
 }
