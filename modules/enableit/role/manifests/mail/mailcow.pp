@@ -13,6 +13,8 @@ class role::mail::mailcow (
   Optional[Hash]              $extra_settings           = {},
   Integer[3,30]               $backup_retention         = 5,
   Optional[Boolean]           $skip_unbound_healthcheck = false,
+  String                      $exporter_image           = 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
+  Eit_types::IPPort           $exporter_listen_address  = '127.254.254.254:63382',
 
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = '0.0.0.0',
 ) {
