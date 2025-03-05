@@ -1,0 +1,3 @@
+---
+common::network::firewall::enable_forwarding: true
+common::network::firewall::allow_docker: true
