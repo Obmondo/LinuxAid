@@ -32,6 +32,7 @@
 # @param gitlab_kas Hash of 'gitlab_kas' config parameters.
 # @param gitlab_pages Hash of 'gitlab_pages' config parameters.
 # @param gitlab_rails Hash of 'gitlab_pages' config parameters.
+# @param gitlab_sshd Hash of 'gitlab_sshd' config parameters.
 # @param gitlab_workhorse Hash of 'gitlab_workhorse' config parameters.
 # @param grafana Hash of 'grafana' config parameters.
 # @param logging Hash of 'logging' config parameters.
@@ -54,6 +55,7 @@
 # @param pages_external_url External URL of Gitlab Pages.
 # @param pages_nginx Hash of 'pages_nginx' config parameters.
 # @param pages_nginx_eq_nginx Replicate the Pages Nginx config from the Gitlab Nginx config.
+# @param praefect Hash of 'praefect' config parameters.
 # @param postgresql Hash of 'postgresql' config parameters.
 # @param prometheus Hash of 'prometheus' config parameters.
 # @param prometheus_monitoring_enable Enable/disable prometheus support.
@@ -84,6 +86,7 @@
 # @param backup_cron_minute The minute when to run the daily backup cron job
 # @param backup_cron_hour The hour when to run the daily backup cron job
 # @param backup_cron_skips Array of items to skip valid values: db, uploads, repositories, builds, artifacts, lfs, registry, pages
+# @param package_hold Wether to hold the specified package version. Available options are 'hold' or 'none'. Defaults to 'none'. Available only for Debian/Solaris package managers. 
 # @param package_name The internal packaging system's name for the package. This name will automatically be changed by the gitlab::edition parameter. Can be overridden for the purposes of installing custom compiled version of gitlab-omnibus.
 # @param manage_package Should the GitLab package be managed?
 # @param repository_configuration A hash of repository types and attributes for configuraiton the gitlab package repositories. See docs in README.md
@@ -132,6 +135,7 @@ class gitlab (
   Optional[Hash]                      $gitlab_kas                      = undef,
   Optional[Hash]                      $gitlab_pages                    = undef,
   Optional[Hash]                      $gitlab_rails                    = undef,
+  Optional[Hash]                      $gitlab_sshd                     = undef,
   Optional[Hash]                      $grafana                         = undef,
   Optional[Hash]                      $high_availability               = undef,
   Optional[Hash]                      $logging                         = undef,
@@ -155,12 +159,14 @@ class gitlab (
   Optional[Hash]                      $pgbouncer_exporter              = undef,
   Optional[Hash]                      $gitlab_monitor                  = undef,
   Optional[Hash]                      $gitlab_exporter                 = undef,
+  Enum['hold', 'none']                $package_hold                    = 'none',
   Optional[String]                    $package_name                    = undef,
   Optional[String]                    $pages_external_url              = undef,
   Optional[Hash]                      $pages_nginx                     = undef,
   Boolean                             $pages_nginx_eq_nginx            = false,
   Optional[Hash]                      $pgbouncer                       = undef,
   Optional[Hash]                      $postgresql                      = undef,
+  Optional[Hash]                      $praefect                        = undef,
   Optional[Hash]                      $prometheus                      = undef,
   Optional[Boolean]                   $prometheus_monitoring_enable    = undef,
   Optional[Hash]                      $redis                           = undef,

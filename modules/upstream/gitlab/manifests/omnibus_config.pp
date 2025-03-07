@@ -26,6 +26,7 @@ class gitlab::omnibus_config (
   $gitlab_kas = $gitlab::gitlab_kas
   $gitlab_pages = $gitlab::gitlab_pages
   $gitlab_rails = $gitlab::gitlab_rails
+  $gitlab_sshd = $gitlab::gitlab_sshd
   $grafana = $gitlab::grafana
   $high_availability = $gitlab::high_availability
   $letsencrypt = $gitlab::letsencrypt
@@ -49,6 +50,7 @@ class gitlab::omnibus_config (
   $pages_nginx = $gitlab::pages_nginx
   $pages_nginx_eq_nginx = $gitlab::pages_nginx_eq_nginx
   $pgbouncer = $gitlab::pgbouncer
+  $praefect = $gitlab::praefect
   $postgresql = $gitlab::postgresql
   $prometheus = $gitlab::prometheus
   $prometheus_monitoring_enable = $gitlab::prometheus_monitoring_enable

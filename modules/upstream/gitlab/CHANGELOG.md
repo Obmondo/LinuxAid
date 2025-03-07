@@ -4,6 +4,88 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v10.2.0](https://github.com/voxpupuli/puppet-gitlab/tree/v10.2.0) (2025-02-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v10.1.0...v10.2.0)
+
+**Closed issues:**
+
+- Add support for Content Security Policy \(CSP\) settings [\#450](https://github.com/voxpupuli/puppet-gitlab/issues/450)
+
+**Merged pull requests:**
+
+- puppetlabs/apt: Allow 10.x [\#455](https://github.com/voxpupuli/puppet-gitlab/pull/455) ([bastelfreak](https://github.com/bastelfreak))
+- Fix apt-key deprecation on Ubuntu [\#453](https://github.com/voxpupuli/puppet-gitlab/pull/453) ([saz](https://github.com/saz))
+
+## [v10.1.0](https://github.com/voxpupuli/puppet-gitlab/tree/v10.1.0) (2024-11-04)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v10.0.0...v10.1.0)
+
+**Implemented enhancements:**
+
+- Debian: Add support for holding a package [\#440](https://github.com/voxpupuli/puppet-gitlab/pull/440) ([NeatNerdPrime](https://github.com/NeatNerdPrime))
+
+## [v10.0.0](https://github.com/voxpupuli/puppet-gitlab/tree/v10.0.0) (2024-09-20)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v9.0.0...v10.0.0)
+
+**Breaking changes:**
+
+- Drop EoL CentOS 8 [\#448](https://github.com/voxpupuli/puppet-gitlab/pull/448) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Debian 10 & 11 [\#447](https://github.com/voxpupuli/puppet-gitlab/pull/447) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Ubuntu 18.04 [\#444](https://github.com/voxpupuli/puppet-gitlab/pull/444) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL EL7 support [\#442](https://github.com/voxpupuli/puppet-gitlab/pull/442) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add AlmaLinux 8 & 9 support [\#446](https://github.com/voxpupuli/puppet-gitlab/pull/446) ([bastelfreak](https://github.com/bastelfreak))
+- Add CentOS 9 support [\#445](https://github.com/voxpupuli/puppet-gitlab/pull/445) ([bastelfreak](https://github.com/bastelfreak))
+- Add Ubuntu 24.04 support [\#443](https://github.com/voxpupuli/puppet-gitlab/pull/443) ([bastelfreak](https://github.com/bastelfreak))
+- Add EL9, Debian 12, Ubuntu 22.04 support [\#430](https://github.com/voxpupuli/puppet-gitlab/pull/430) ([yakatz](https://github.com/yakatz))
+- Improve support for hooks in `@hashed` storage [\#429](https://github.com/voxpupuli/puppet-gitlab/pull/429) ([yakatz](https://github.com/yakatz))
+
+**Merged pull requests:**
+
+- Update to support Praefect [\#433](https://github.com/voxpupuli/puppet-gitlab/pull/433) ([talseth](https://github.com/talseth))
+- fix apt-key deprecation [\#432](https://github.com/voxpupuli/puppet-gitlab/pull/432) ([b17k0](https://github.com/b17k0))
+- Updated CI badges [\#431](https://github.com/voxpupuli/puppet-gitlab/pull/431) ([yakatz](https://github.com/yakatz))
+
+## [v9.0.0](https://github.com/voxpupuli/puppet-gitlab/tree/v9.0.0) (2024-01-25)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v8.1.0...v9.0.0)
+
+**Breaking changes:**
+
+- Remove Debian 9 \(EOL\) [\#408](https://github.com/voxpupuli/puppet-gitlab/pull/408) ([smortex](https://github.com/smortex))
+- Drop Puppet 6 support [\#407](https://github.com/voxpupuli/puppet-gitlab/pull/407) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Adding support for the gitlab\_sshd configuration hash [\#421](https://github.com/voxpupuli/puppet-gitlab/pull/421) ([lodzo](https://github.com/lodzo))
+- Add Puppet 8 support [\#416](https://github.com/voxpupuli/puppet-gitlab/pull/416) ([bastelfreak](https://github.com/bastelfreak))
+- puppetlabs/stdlib: Allow 9.x [\#415](https://github.com/voxpupuli/puppet-gitlab/pull/415) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 11 \(stable\) [\#412](https://github.com/voxpupuli/puppet-gitlab/pull/412) ([smortex](https://github.com/smortex))
+
+**Closed issues:**
+
+- gitlab\_sshd support in the omnibus config [\#417](https://github.com/voxpupuli/puppet-gitlab/issues/417)
+
+**Merged pull requests:**
+
+- Use hiera\_config in .sync.yml [\#349](https://github.com/voxpupuli/puppet-gitlab/pull/349) ([ekohl](https://github.com/ekohl))
+
+## [v8.1.0](https://github.com/voxpupuli/puppet-gitlab/tree/v8.1.0) (2022-12-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v8.0.0...v8.1.0)
+
+**Implemented enhancements:**
+
+- Allow up-to-date dependencies [\#402](https://github.com/voxpupuli/puppet-gitlab/pull/402) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- Ensure apt::update is run before installing Gitlab [\#388](https://github.com/voxpupuli/puppet-gitlab/pull/388) ([baurmatt](https://github.com/baurmatt))
+
 ## [v8.0.0](https://github.com/voxpupuli/puppet-gitlab/tree/v8.0.0) (2021-08-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-gitlab/compare/v7.1.0...v8.0.0)
@@ -38,7 +120,7 @@ These should not affect the functionality of the module.
 
 **Implemented enhancements:**
 
-- Add system hooks management [\#380](https://github.com/voxpupuli/puppet-gitlab/pull/380) ([carlosduelo](https://github.com/carlosduelo))
+- Add system hooks management [\#380](https://github.com/voxpupuli/puppet-gitlab/pull/380) ([cduelo](https://github.com/cduelo))
 - Add support for geo\_logcursor options in gitlab.rb [\#379](https://github.com/voxpupuli/puppet-gitlab/pull/379) ([liger1978](https://github.com/liger1978))
 
 **Closed issues:**
@@ -100,7 +182,6 @@ These should not affect the functionality of the module.
 
 **Closed issues:**
 
-- Hiera not parsing gitlab.rb and ::gitlab\_rails: [\#343](https://github.com/voxpupuli/puppet-gitlab/issues/343)
 - Convert dokumentation to puppet-strings [\#339](https://github.com/voxpupuli/puppet-gitlab/issues/339)
 - Support puma [\#337](https://github.com/voxpupuli/puppet-gitlab/issues/337)
 - New GitLab GPG Keys [\#333](https://github.com/voxpupuli/puppet-gitlab/issues/333)
@@ -637,7 +718,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Add 'manage\_package' parameter [\#40](https://github.com/voxpupuli/puppet-gitlab/pull/40) ([iamjamestl](https://github.com/iamjamestl))
+- Add 'manage\_package' parameter [\#40](https://github.com/voxpupuli/puppet-gitlab/pull/40) ([jameslikeslinux](https://github.com/jameslikeslinux))
 - Gitlab CI Runner [\#39](https://github.com/voxpupuli/puppet-gitlab/pull/39) ([maetthu-indermuehle](https://github.com/maetthu-indermuehle))
 
 ## [v1.6.0](https://github.com/voxpupuli/puppet-gitlab/tree/v1.6.0) (2015-11-06)
