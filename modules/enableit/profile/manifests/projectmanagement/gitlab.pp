@@ -506,7 +506,6 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
     nginx                        => $_nginx,
     backup_cron_enable           => $backup,
     backup_cron_hour             => $backup_cron_hour,
-    manage_omnibus_repository    => true,
     manage_package               => true,
     package_ensure               => $package_version,
     registry_external_url        => if $registry { $registry_external_url },

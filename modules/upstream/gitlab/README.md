@@ -1,6 +1,7 @@
 # GitLab module for Puppet
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-gitlab.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-gitlab)
+[![Build Status](https://github.com/voxpupuli/puppet-gitlab/actions/workflows/ci.yml/badge.svg)](https://github.com/voxpupuli/puppet-gitlab/actions/workflows/ci.yml)
+[![Release](https://github.com/voxpupuli/puppet-gitlab/actions/workflows/release.yml/badge.svg)](https://github.com/voxpupuli/puppet-gitlab/actions/workflows/release.yml)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/gitlab.svg)](https://forge.puppetlabs.com/puppet/gitlab)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/gitlab.svg)](https://forge.puppetlabs.com/puppet/gitlab)
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/gitlab.svg)](https://forge.puppetlabs.com/puppet/gitlab)
@@ -221,7 +222,7 @@ Each unique resource provided to the `repository_configuration` setup:
 
 You can use these tags to further customize ordering within your own catalogs.
 
-#### Selecting Version, edition, and package name
+#### Selecting Version, edition, package name and holding
 
 The `package_ensure` parameter is used to control which version of the package
 installed. It expects either a version string, or one of the `ensure` values for
@@ -240,6 +241,13 @@ This approach of package management has the following advantages:
   (won't require you to install new puppet-gitlab module if you're not ready)
 * allows you to install custom built packages for gitlab-omnibus that have
   different package name on your host
+
+The `package_hold` parameter allows you to hold the package version in the APT
+package manager. This is useful when you intend to update the host with
+'apt upgrade' (or the bolt task `apt action=upgrade` from puppetlabs-apt) and
+keep your gitlab instance at the intended version. This prevents unintended
+upgrading gitlab and perhaps skipping important upgrade path steps.
+To learn more about gitlab upgrading please visit the [upgrade path page.](https://gitlab-com.gitlab.io/support/toolbox/upgrade-path/)
 
 #### Custom Repository & Package configuration example
 
@@ -434,12 +442,14 @@ initial connections for ssh operations. GitLab has created a feature that allows
 authorized ssh keys to be stored in the db (instead of the `authorized_keys`
 file for the `git` user)
 
-You can enable this feature in GitLab using the `store_git_keys_in_db` parameter.
+You can enable this feature in GitLab using the `store_git_keys_in_db` parameter,
+or by enabling `gitlab-sshd` as it is configured to use fast lookup automatically.
 
-Please note, managing the sshd service and openssh is outside the scope of this
-module. You will need to configure the AuthorizedKeysCommand for the `git` user
-in sshd.server yourself. Instructions for this are provided by GitLab at [Fast
-lookup of authorized SSH keys in the databasse][15]
+Please note, while you can manage [gitlab-sshd][23] (Gitlab's standalone SSH server)
+with this module, you can not manage openssh and the sshd service as it is outside
+the scope of the module. You will need to configure the AuthorizedKeysCommand
+for the `git` user in sshd.server yourself. Instructions for this are provided by
+GitLab at [Fast lookup of authorized SSH keys in the databasse][15]
 
 ### Setting up GitLab HA
 
@@ -520,3 +530,4 @@ broader community is able to maintain the module.‚
 [20]: https://vshn.ch
 [21]: https://docs.gitlab.com/ee/system_hooks/system_hooks.html
 [22]: https://docs.gitlab.com/ee/administration/file_hooks.html
+[23]: https://docs.gitlab.com/ee/administration/operations/gitlab_sshd.html
