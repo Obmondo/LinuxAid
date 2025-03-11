@@ -124,6 +124,10 @@ class eit_repos (
     'Suse': {
       # TODO: add support for deltarpm and metadata_expire, just like we do for EL
 
+      if $upstream {
+        eit_repos::zypper::upstream.include
+      }
+
       include 'zypprepo::plugin::versionlock'
 
       file { '/etc/pki/rpm-gpg':
