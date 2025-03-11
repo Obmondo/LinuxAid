@@ -1,9 +1,10 @@
 # Prometheus iptables Exporter
 class common::monitor::exporter::iptables (
-  Boolean           $enable         = $facts.dig('iptable_rules_exist'),
+  Boolean  $enable,
   Boolean[false]    $noop_value     = false,
   Eit_types::IPPort $listen_address = '127.254.254.254:63393',
 ) {
+  $_enable = $enable and $facts['iptable_rules_exist']
   File {
     noop => $noop_value,
   }
@@ -35,11 +36,11 @@ class common::monitor::exporter::iptables (
 
   prometheus::daemon { 'iptables_exporter':
     package_name      => 'obmondo-iptables-exporter',
-    package_ensure    => ensure_latest($enable),
+    package_ensure    => ensure_latest($_enable),
     version           => '0.9.3',
-    service_enable    => $enable,
-    service_ensure    => ensure_service($enable),
-    init_style        => if !$enable { 'none' },
+    service_enable    => $_enable,
+    service_ensure    => ensure_service($_enable),
+    init_style        => if !$_enable { 'none' },
     manage_user       => $_systemd_version_232_newer,
     manage_group      => $_systemd_version_232_newer,
     install_method    => 'package',
@@ -49,7 +50,7 @@ class common::monitor::exporter::iptables (
     real_download_url => 'https://github.com/Obmondo/iptables_exporter',
     tag               => $::trusted['certname'],
     options           => "--web.listen-address=${listen_address}",
-    export_scrape_job => $enable,
+    export_scrape_job => $_enable,
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'iptables',

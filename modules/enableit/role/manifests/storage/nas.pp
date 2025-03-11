@@ -4,12 +4,12 @@ class role::storage::nas (
     String,
     Struct[{
       device                             => String[1],
-      Optional[target]                   => Stdlib::Absolutepath,
-      Optional[mount]                    => Boolean,
-      Optional[use_luks]                 => Boolean,
-      Optional[luks_secret]              => String[1],
-      Optional[luks_key_service]         => Eit_types::URL,
-      Optional[luks_key_service_headers] => Hash[String, String],
+      target                             => Optional[Stdlib::Absolutepath],
+      mount                              => Optional[Boolean],
+      use_luks                           => Optional[Boolean],
+      luks_secret                        => Optional[String[1]],
+      luks_key_service                   => Optional[Eit_types::URL],
+      luks_key_service_headers           => Optional[Hash[String, String]]
     }]
   ] $devices = {},
   Boolean $backuphost = true,

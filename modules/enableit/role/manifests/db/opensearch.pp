@@ -9,11 +9,9 @@ class role::db::opensearch (
   Eit_types::Percentage               $es_heap_size_pct      = 50,
   Variant[Integer[1,31], Float[1,31]] $es_heap_size_max_gb   = 31,
   Boolean                             $cerebro               = false,
-  Stdlib::Fqdn                        $host                  = $facts.dig('hostname'),
+  Stdlib::Fqdn                        $host,
   Optional[Array[Stdlib::Host]]       $access_9200_port_from = [],
-  Array[Stdlib::Host]                 $nodes                 = [
-    $facts.dig('network_primary_ip')
-  ],
+  Array[Stdlib::Host]                 $nodes,
   Stdlib::Unixpath                    $datadir               = '/var/lib/opensearch',
   Eit_types::SimpleString             $cluster_name          = 'opensearch-cluster',
   Hash[Eit_types::SimpleString, Hash] $curate_filters        = {},

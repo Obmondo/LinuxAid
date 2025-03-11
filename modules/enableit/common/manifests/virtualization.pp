@@ -1,7 +1,5 @@
 # Class for managing virtualized servers
-class common::virtualization (
-  Boolean $treat_as_physical = $facts['virtual'] in ['kvm', 'physical', 'vmware', 'xenhvm', 'hyperv'],
-) {
+class common::virtualization () {
   if lookup('common::virtualization::vmware::openvmtools::ensure', Boolean, undef, false) {
     contain '::common::virtualization::vmware'
   }

@@ -441,3 +441,6 @@ prometheus::install_method: package
 common::software::vncserver::config_defaults:
   session: "gnome"
   geometry: "1920x1080"
+
+common::mail::myhostname: "%{facts.networking.fqdn}"
+common::mail::mydomain: "%{facts.networking.domain}"

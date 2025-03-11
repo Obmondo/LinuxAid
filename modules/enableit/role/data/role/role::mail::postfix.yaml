@@ -1,0 +1,4 @@
+---
+role::mail::postfix::myhostname: "%{facts.networking.fqdn}"
+role::mail::postfix::mydomain:
+  - "%{facts.networking.domain}"
