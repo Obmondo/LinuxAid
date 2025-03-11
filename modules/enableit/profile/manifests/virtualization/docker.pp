@@ -16,6 +16,7 @@ class profile::virtualization::docker (
   Boolean                              $prune_system        = $role::virtualization::docker::prune_system,
   Boolean                              $prune_volume        = $role::virtualization::docker::prune_volume,
   Hash[Eit_types::Domain, Hash]        $registry            = $role::virtualization::docker::registry,
+  Boolean                              $upstream_repo       = $role::virtualization::docker::upstream_repo,
 ) {
 
   $__cadvisor_listen_port = 63392
@@ -92,7 +93,7 @@ class profile::virtualization::docker (
     ip_masq                     => true,
     log_driver                  => 'local',
     selinux_enabled             => $facts['selinux'],
-    use_upstream_package_source => true,
+    use_upstream_package_source => $upstream_repo,
     service_state               => 'running',
     service_enable              => true,
     manage_service              => true,

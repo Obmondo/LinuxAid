@@ -17,6 +17,8 @@ class role::virtualization::docker (
   Boolean                              $prune_volume        = true,
   Eit_types::Package_Version           $compose_version     = 'present',
   Hash[Eit_types::Domain, Hash]        $registry            = {},
+  Boolean                              $upstream_repo       = true,
+  String                               $cadvisor_image      = 'gcr.io/cadvisor/cadvisor:v0.39.0',
 ) inherits ::role::virtualization {
 
   $_allow_docker = lookup('common::network::firewall::allow_docker', Boolean, undef, false)

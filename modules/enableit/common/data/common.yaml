@@ -2,6 +2,12 @@
 lookup_options:
   common::repo::repos:
     merge: 'unique'
+  common::repo::aptrepos:
+    merge:
+      strategy: 'deep'
+  common::repo::yumrepos:
+    merge:
+      strategy: 'deep'
   common::monitor::prom::server::collect_scrape_jobs:
     merge: 'deep'
   common::system::authentication::allowed_users:

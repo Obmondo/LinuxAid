@@ -18,6 +18,7 @@ class common::repo (
   Hash[String, Struct[
     {
     url         => String,
+    repos       => Optional[String],
     key_content => Optional[String[1]],
     key_source  => Optional[Stdlib::Filesource],
     }]]                     $aptrepos        = {},
@@ -140,7 +141,7 @@ Pl  ease change the URL to contain an EPP style template.")
             release      => $_os_codename,
             comment      => "${key} repo server",
             location     => $value['url'].inline_epp({ snapshot => $snapshot, }),
-            repos        => 'main',
+            repos        => pick($value['repos'], main),
             keyring      => "/etc/apt/keyrings/${key}.asc",
             include      => {
               'src' => false,
