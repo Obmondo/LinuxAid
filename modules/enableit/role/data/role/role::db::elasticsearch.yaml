@@ -7,5 +7,9 @@ role::db::elasticsearch::kibana::enabled: true
 role::db::elasticsearch::kibana::expose: false
 role::db::elasticsearch::kibana::ssl: false
 
+role::db::elasticsearch::host: "%{facts.networking.hostname}"
+role::db::elasticsearch::nodes:
+  - "%{facts.network_primary_ip}"
+
 common::system::kernel::sysctl:
   'vm.max_map_count': 262144

@@ -5,8 +5,8 @@ class role::mail::postfix (
     Eit_types::IP,
     Enum['all', 'localhost']
   ] $inet_interfaces                                         = 'localhost',
-  Eit_types::Hostname $myhostname                            = $facts['networking']['fqdn'],
-  Optional[Eit_types::Domain] $mydomain                      = $facts.dig('domain'),
+  Eit_types::Hostname $myhostname,
+  Optional[Eit_types::Domain] $mydomain,
   Optional[Eit_types::Host] $relayhost                       = undef,
   Boolean $smtp_sasl_auth                                    = false,
   Optional[String] $smtp_sasl_password_maps                  = undef,
