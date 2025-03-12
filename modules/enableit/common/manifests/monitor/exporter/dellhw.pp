@@ -31,6 +31,13 @@ class common::monitor::exporter::dellhw (
     noop   => $noop_value,
   }
 
+  # NOTE: This is a temporary fix as the Dell team is working to resolve a dependency conflict where an 11.3 RPM requires another package that depends on an 11.1 RPM.
+  # https://www.dell.com/community/en/conversations/systems-management-general/omsa-11300-rpms-available-but-not-completely/67ab61a31c2953253c271688?page=2
+  yum::versionlock { 'srvadmin-hapi':
+    ensure  => present,
+    version => '11.1.0'
+  }
+
   # NOTE: The OMSA is not supported on Debian distro. We have not added the debain repository
   # https://linux.dell.com/repo/community/openmanage/
 
