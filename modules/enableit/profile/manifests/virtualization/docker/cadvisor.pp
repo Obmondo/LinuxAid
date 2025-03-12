@@ -1,8 +1,9 @@
 # cadvisor docker container
 class profile::virtualization::docker::cadvisor (
-  Boolean           $enable      = $common::monitor::exporter::enable,
-  Optional[Boolean] $noop_value  = false,
-  Stdlib::Port      $listen_port = 63392,
+  Boolean           $enable         = $common::monitor::exporter::enable,
+  Optional[Boolean] $noop_value     = false,
+  Stdlib::Port      $listen_port    = 63392,
+  String            $cadvisor_image = $role::virtualization::docker::cadvisor_image,
 ) inherits profile::virtualization::docker {
 
   Exec {
@@ -21,7 +22,7 @@ class profile::virtualization::docker::cadvisor (
   # but exit status is 0 always
   docker::run { 'obmondo_monitoring_cadvisor':
     ensure           => ensure_present($enable),
-    image            => 'gcr.io/cadvisor/cadvisor:v0.39.0',
+    image            => $cadvisor_image,
     command          => '-docker_only',
     detach           => false,
     ports            => [ "127.254.254.254:${listen_port}:8080" ],
