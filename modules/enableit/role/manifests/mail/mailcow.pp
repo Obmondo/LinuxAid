@@ -1,4 +1,38 @@
-# Mailcow Setup
+
+# @summary Mailcow Setup
+#
+# @param dbroot The root password for the database.
+#
+# @param dbpass The database password.
+#
+# @param domain The fully qualified domain name.
+#
+# @param backup_dir The directory for backups. Defaults to '/opt/backup'.
+#
+# @param manage Flag to manage the service. Defaults to true.
+#
+# @param letsencrypt Flag to manage Let's Encrypt certificates. Defaults to false.
+#
+# @param acme_contact The contact email for ACME. Defaults to undef.
+#
+# @param version The version of Mailcow to install. Defaults to '2024-08a'.
+#
+# @param install_dir The directory to install Mailcow. Defaults to '/opt/mailcow'.
+#
+# @param timezone The timezone for the installation. Defaults to 'Europe/Copenhagen'.
+#
+# @param extra_settings Additional settings for Mailcow. Defaults to an empty hash.
+#
+# @param backup_retention The number of days to keep backups. Defaults to 5.
+#
+# @param skip_unbound_healthcheck Flag to skip Unbound health check. Defaults to false.
+#
+# @param exporter_image The image for the Mailcow exporter. Defaults to 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0'.
+#
+# @param exporter_listen_address The address for the exporter to listen on. Defaults to '127.254.254.254:63382'.
+#
+# @param http_bind The HTTP bind address. Defaults to '0.0.0.0'.
+#
 class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,
@@ -15,7 +49,6 @@ class role::mail::mailcow (
   Optional[Boolean]           $skip_unbound_healthcheck = false,
   String                      $exporter_image           = 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
   Eit_types::IPPort           $exporter_listen_address  = '127.254.254.254:63382',
-
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = '0.0.0.0',
 ) {
 

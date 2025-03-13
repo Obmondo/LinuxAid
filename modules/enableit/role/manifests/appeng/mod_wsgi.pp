@@ -1,6 +1,14 @@
-# Mod Uwsgi Role
+
+# @summary Class for managing the Uwsgi role
+#
+# @param domains The array of FQDNs for the application.
+#
+# @param ssl Specifies whether to enable SSL. Defaults to false.
+#
+# @param enable_python Specifies whether to enable Python support. Defaults to true.
+#
 class role::appeng::mod_wsgi (
-  Array[Stdlib::Fqdn]  $domains,
+  Array[Stdlib::Fqdn] $domains,
   Boolean              $ssl         = false,
   Boolean              $enable_python = true,
 ) inherits ::role::appeng {
@@ -9,7 +17,7 @@ class role::appeng::mod_wsgi (
     contain ::profile::python
   }
 
-  class { 'profile::wsgi' :
+  class { 'profile::wsgi':
     domains     => $domains,
     ssl         => $ssl,
     mod_wsgi    => true,

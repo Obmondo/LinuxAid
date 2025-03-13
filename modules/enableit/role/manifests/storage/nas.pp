@@ -1,4 +1,10 @@
-# Storage Nas role
+
+# @summary Storage Nas roleclass
+#
+# @param devices A hash of devices with their properties. Defaults to {}.
+#
+# @param backuphost Whether to enable the backup host. Defaults to true.
+#
 class role::storage::nas (
   Hash[
     String,
@@ -24,5 +30,4 @@ class role::storage::nas (
   if $backuphost {
     class { 'profile::storage::backuphost': }
   }
-
 }

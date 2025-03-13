@@ -1,27 +1,64 @@
-# TODO: Docs
+
+# @summary Class for managing the Kubernetes role
+#
+# @param cluster_public_dns The public DNS for the cluster.
+#
+# @param cluster_public_port The public port for the cluster.
+#
+# @param version The version of Kubernetes.
+#
+# @param semver_version The semantic version of Kubernetes. Defaults to SemVer($version).
+#
+# @param role The role of the node. Can be 'master' or 'worker'.
+#
+# @param token The token for authentication.
+#
+# @param node_join_token The join token for worker nodes. Defaults to undef.
+#
+# @param ceph_client Boolean to enable Ceph client. Defaults to false.
+#
+# @param users The users for the cluster if role is master. Defaults to undef.
+#
+# @param pod_cidr The CIDR for pods. Defaults to undef.
+#
+# @param service_cidr The CIDR for services. Defaults to undef.
+#
+# @param etcd_ca_crt The CA certificate for etcd. Defaults to undef.
+#
+# @param etcd_ca_key The CA key for etcd. Defaults to undef.
+#
+# @param apiserver2etcd_crt The certificate for API server to etcd. Defaults to undef.
+#
+# @param apiserver2etcd_key The key for API server to etcd. Defaults to undef.
+#
+# @param etcdpeer_crt The certificate for etcd peers. Defaults to undef.
+#
+# @param etcdpeer_key The key for etcd peers. Defaults to undef.
+#
+# @param kubernetes_ca_crt The CA certificate for Kubernetes. Defaults to undef.
+#
+# @param kubernetes_ca_key The CA key for Kubernetes. Defaults to undef.
+#
+# @param sa_pub The public key for service account. Defaults to undef.
+#
+# @param sa_key The private key for service account. Defaults to undef.
+#
+# @param front_proxy_ca_crt The CA certificate for the front proxy. Defaults to undef.
+#
+# @param front_proxy_ca_key The CA key for the front proxy. Defaults to undef.
+#
 class role::util::kubernetes (
-  # Options needed for all roles
   String                      $cluster_public_dns,
   Integer                     $cluster_public_port,
   String                      $version,
   SemVer                      $semver_version = SemVer($version),
   Enum['master','worker']     $role,
   String                      $token,
-
-  # Options for ONLY role=worker
   Optional[String]            $node_join_token = undef,
   Optional[Boolean]           $ceph_client = false,
-
-  # Options for ONLY role=master
-  Optional[Hash[String, Struct[{
-    role  => Enum['cluster-admin'],
-  }]]]                        $users = undef,
+  Optional[Hash[String, Struct[{ role => Enum['cluster-admin'], }]]] $users = undef,
   Optional[Eit_types::IPCIDR] $pod_cidr = undef,
   Optional[Eit_types::IPCIDR] $service_cidr = undef,
-  # Certificates for this cluster - should be kept ENC[] in yaml files
-  # TODO: Mark as secrets somehow here
-  # Generated certs (by script in modules/enableit/kubernetes)
-  #  - have ALL hostnames needed for all nodes in SAN field (x509) so these can be shared
   Optional[String]            $etcd_ca_crt = undef,
   Optional[String]            $etcd_ca_key = undef,
   Optional[String]            $apiserver2etcd_crt = undef,

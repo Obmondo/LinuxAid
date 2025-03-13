@@ -1,4 +1,46 @@
-# Perforce version control system
+
+# @summary Class for managing the Perforce version control system
+#
+# @param user The user for the Perforce service. Defaults to 'perforce'.
+#
+# @param service_root The root directory for the Perforce service. Defaults to '/opt/perforce/p4root'.
+#
+# @param service_name The name of the Perforce service. Defaults to 'perforce'.
+#
+# @param ssl Whether to use SSL for the Perforce service. Defaults to true.
+#
+# @param service_ssldir The directory for the SSL certificates. Defaults to '/etc/perforce/ssl'.
+#
+# @param service_port The port for the Perforce service. Defaults to 1666.
+#
+# @param service_password The password for the Perforce service.
+#
+# @param license_content The content of the Perforce license. Defaults to undef.
+#
+# @param hostname The hostname for the Perforce service. Defaults to the system's hostname.
+#
+# @param version The version of the Perforce service.
+#
+# @param log_dir The directory for Perforce logs. Defaults to '/var/log/perforce'.
+#
+# @param log_level The logging level for the Perforce service. Defaults to 1.
+#
+# @param icmanage Whether to manage IC. Defaults to false.
+#
+# @param git_connector Whether to enable Git connector. Defaults to true.
+#
+# @param admin_user The admin user for the Perforce service. Defaults to 'p4admin'.
+#
+# @param admin_password The password for the admin user.
+#
+# @param operator_user The operator user for the Perforce service. Defaults to 'p4operator'.
+#
+# @param operator_password The password for the operator user.
+#
+# @param backup_dir The directory for backups. Defaults to the common backup directory.
+#
+# @param backup_retention The number of days to retain backups. Defaults to 7.
+#
 class role::projectmanagement::perforce (
   Eit_types::User           $user              = 'perforce',
   Stdlib::Absolutepath      $service_root      = '/opt/perforce/p4root',
@@ -12,14 +54,12 @@ class role::projectmanagement::perforce (
   Perforce::Version         $version,
   Stdlib::Absolutepath      $log_dir           = '/var/log/perforce',
   Perforce::LogLevel        $log_level         = 1,
-
   Boolean                   $icmanage          = false,
   Boolean                   $git_connector     = true,
   Eit_types::User           $admin_user        = 'p4admin',
   Eit_types::Password       $admin_password,
   Eit_types::User           $operator_user     = 'p4operator',
   Eit_types::Password       $operator_password,
-
   Stdlib::Absolutepath      $backup_dir        = $::common::backup::dump_dir,
   Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits ::role {

@@ -1,3 +1,4 @@
-# Storage
-class role::storage inherits ::role {
-}
+
+# @summary Class for managing the Storage role
+#
+class role::storage inherits ::role {}

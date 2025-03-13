@@ -1,4 +1,18 @@
-# Mod PHP role
+
+# @summary Class for managing the PHP role
+#
+# @param opcodecache The opcode cache to use. Defaults to undef.
+#
+# @param url The URL for the application. Defaults to undef.
+#
+# @param ssl Specifies if SSL is enabled. Defaults to false.
+#
+# @param http_server The HTTP server to use. Defaults to 'apache'.
+#
+# @param mysql Specifies if MySQL support is enabled. Defaults to false.
+#
+# @param memory_limit Sets the memory limit for PHP. Defaults to undef.
+#
 class role::appeng::mod_php (
   Optional[Enum['apc', 'xcache']] $opcodecache  = undef,
   Optional[Eit_types::URL] $url                 = undef,
@@ -8,7 +22,7 @@ class role::appeng::mod_php (
   Optional[Pattern[/[0-9]+[MG]/]] $memory_limit = undef,
 ) inherits ::role::appeng {
 
-  class { '::profile::php' :
+  class { '::profile::php':
     url          => $url,
     ssl          => $ssl,
     mod_php      => true,
@@ -57,7 +71,7 @@ class role::appeng::mod_php (
 
   if $http_server == 'nginx' {
     class { '::profile::web::nginx':
-        phpcache => $opcodecache
+      phpcache => $opcodecache
     }
 
     # Vhosts
@@ -107,7 +121,6 @@ class role::appeng::mod_php (
           },
         }
       }
-
       'xcache': {
         ::nginx::resource::location { "${facts['networking']['fqdn']}-02":
           ensure         => present,
@@ -115,7 +128,6 @@ class role::appeng::mod_php (
           location       => '/status/xcache',
           location_alias => '/usr/share/xcache',
         }
-
         ::nginx::resource::location { "${facts['networking']['fqdn']}-03":
           ensure              => present,
           vhost               => "${facts['networking']['hostname']}.local.${facts['networking']['domain']}",
@@ -156,5 +168,4 @@ class role::appeng::mod_php (
     ensure  => file,
     content => template('profile/index-html.erb'),
   }
-
 }

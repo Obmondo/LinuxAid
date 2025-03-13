@@ -1,22 +1,28 @@
-# == Class: role::webframeworks::drupal
+
+# @summary Class: role::webframeworks::drupal  Optimized Drupal server setup including Latest stable Drupal version
 #
-# description: Optimized Drupal server setup including Latest stable Drupal
-# version
+# @param url The URL for the Drupal application.
+#
+# @param php The PHP backend to use. Defaults to '::role::appeng::phpfpm'.
+#
+# @param reverse_cache Enable or disable reverse caching. Defaults to true.
+#
+# @param memcached Enable or disable memcached. Defaults to false.
+#
+# @param db The database backend to use. Defaults to '::role::db::mysql'.
+#
+# @param http_server The HTTP server to use. Defaults to '::role::web::apache'.
+#
+# @param password The password for the Drupal application. Defaults to 'drupal_xyz'.
 #
 class role::webframeworks::drupal (
   String $url,
-  Enum['::role::appeng::phpfpm', '::role::appeng::mod_php']
-    $php           = '::role::appeng::phpfpm',
-  Boolean
-    $reverse_cache = true,
-  Boolean
-    $memcached     = false,
-  Enum['::role::db::mysql', '::role::db::pgsql']
-    $db            = '::role::db::mysql',
-  Enum['::role::web::apache']
-    $http_server   = '::role::web::apache',
-  String
-    $password      = 'drupal_xyz'
+  Enum['::role::appeng::phpfpm', '::role::appeng::mod_php'] $php           = '::role::appeng::phpfpm',
+  Boolean    $reverse_cache = true,
+  Boolean    $memcached     = false,
+  Enum['::role::db::mysql', '::role::db::pgsql'] $db            = '::role::db::mysql',
+  Enum['::role::web::apache'] $http_server   = '::role::web::apache',
+  String    $password      = 'drupal_xyz'
 ) inherits ::role::webframeworks {
 
   class { $php:

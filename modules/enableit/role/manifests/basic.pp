@@ -1,5 +1,4 @@
-# Basic role will include
-# Monitoring
-# Repo Management
-# System Update
+
+# @summary Class Basic will include Monitoring , Repo Management, and  System Update
+#
 class role::basic inherits ::role {}

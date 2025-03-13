@@ -1,13 +1,27 @@
-# Apache Web Role
+
+# @summary Class for managing the Apache Web Role
+#
+# @param https Whether to enable HTTPS. Defaults to false.
+#
+# @param http Whether to enable HTTP. Defaults to true.
+#
+# @param manage_haproxy Whether to manage HAProxy. Defaults to false.
+#
+# @param ciphers The ciphers to use for SSL. Defaults to 'default'.
+#
+# @param modules The list of Apache modules to enable. Defaults to [].
+#
+# @param domains The list of domains to manage. Defaults to [].
+#
+# @param vhosts The virtual hosts configuration. Defaults to {}.
+#
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,
   Boolean                     $manage_haproxy = false,
   Enum['default', 'insecure'] $ciphers        = 'default',
   Array                       $modules        = [],
-
   Array[Eit_types::Monitor::Domains] $domains = [],
-
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[String],
@@ -23,7 +37,6 @@ class role::web::apache (
     proxy_pass               => Optional[Array[Hash]],
   }]]                         $vhosts         = {},
 ) {
-
   if $manage_haproxy {
     contain role::web::haproxy
   }
@@ -40,4 +53,3 @@ class role::web::apache (
 
   contain profile::web::apache
 }
-

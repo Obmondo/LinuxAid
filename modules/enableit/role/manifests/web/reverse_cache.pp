@@ -1,6 +1,21 @@
-# Reverse cache web role
+
+# @summary Reverse cache web role
+#
+# @param variant Defines which VCL to use.
+#
+# @param secret The secret for authentication.
+#
+# @param backendip The backend IP address.
+#
+# @param backendport The backend port.
+#
+# @param adminacl The admin ACL. Defaults to undef.
+#
+# @param adminlistens The admin listen addresses. Defaults to undef.
+#
+# @param purgers The purgers. Defaults to ['localhost'].
+#
 class role::web::reverse_cache (
-  # FIXME: Need a refactor...
   Enum['drupal'] $variant,
   Eit_types::UUID $secret,
   Eit_types::IP $backendip,
@@ -9,9 +24,9 @@ class role::web::reverse_cache (
   Optional[Array[Eit_types::AddressPort]] $adminlistens = undef,
   Array[String] $purgers = ['localhost'],
 ) inherits role::web {
-  #vcl, secret and other options should be arguments to THIS class
+
+  # vcl, secret and other options should be arguments to THIS class
   # should also setup nginx - if ssl is selected
-  #variant - defines which vcl to use..
   class { '::profile::varnish':
     backendip    => $backendip,
     backendport  => $backendport,

@@ -1,4 +1,16 @@
-# NTPD server role
+
+# @summary Class for managing the NTPD server role
+#
+# @param servers The list of NTPD servers. No default value.
+#
+# @param burst Whether to enable burst mode. Defaults to false.
+#
+# @param restrict The list of restrict configurations. Defaults to an empty array.
+#
+# @param tinker Whether to enable tinker options. Defaults to false.
+#
+# @param panic The panic threshold in seconds. Defaults to undef.
+#
 class role::ntpd (
   Array[Stdlib::Host]     $servers,
   Optional[Boolean]       $burst    = false,
@@ -15,4 +27,3 @@ class role::ntpd (
     panic    => $panic,
   }
 }
-
