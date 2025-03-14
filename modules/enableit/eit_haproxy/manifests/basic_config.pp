@@ -145,8 +145,6 @@ class eit_haproxy::basic_config (
           deploy_hook_command => '/opt/obmondo/bin/letsencrypt_deploy_hook.sh',
           cert_host           => '0.0.0.0',
         }
-
-        monitor::domains { $cn: }
       }
     }
 
