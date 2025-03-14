@@ -13,7 +13,31 @@ hierarchy:
       # certname is the most unique identifier, so this has precedence over the
       # other entries in the list
       - "agents/%{trusted.certname}.yaml"
-
+      # Tags -> OS  -> Major
+      - "agents/tags/%{obmondo_tag_0}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_1}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_2}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_3}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_4}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_5}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_6}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_7}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_8}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      - "agents/tags/%{obmondo_tag_9}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
+      # `obmondo_tag_XX` should be from low to high, meaning that the tags are
+      # applied in reverse order (like PATH environment variable). I.e.
+      # `obmondo_tag_0` overwrites `obmondo_tag_1`, etc.
+      # Meaning: bottom to top is how hiera reads the data, top is the final selection
+      - "agents/tags/%{obmondo_tag_0}.yaml"
+      - "agents/tags/%{obmondo_tag_1}.yaml"
+      - "agents/tags/%{obmondo_tag_2}.yaml"
+      - "agents/tags/%{obmondo_tag_3}.yaml"
+      - "agents/tags/%{obmondo_tag_4}.yaml"
+      - "agents/tags/%{obmondo_tag_5}.yaml"
+      - "agents/tags/%{obmondo_tag_6}.yaml"
+      - "agents/tags/%{obmondo_tag_7}.yaml"
+      - "agents/tags/%{obmondo_tag_8}.yaml"
+      - "agents/tags/%{obmondo_tag_9}.yaml"
       # DRBD primary
       - 'agents/facts/drbd=%{facts.drbdlocalstate1}.yaml'
       # Zone -> Company -> Country
@@ -46,32 +70,6 @@ hierarchy:
       - "agents/facts/%{facts.os.family}-%{facts.os.release.major}.yaml"
       - "agents/facts/%{facts.os.name}-%{facts.os.release.major}.yaml"
       - "agents/facts/os.family=%{facts.os.family}.yaml"
-      # Tags -> OS  -> Major
-      - "agents/tags/%{obmondo_tag_0}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_1}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_2}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_3}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_4}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_5}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_6}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_7}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_8}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-      - "agents/tags/%{obmondo_tag_9}/os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
-
-      # `obmondo_tag_XX` should be from low to high, meaning that the tags are
-      # applied in reverse order (like PATH environment variable). I.e.
-      # `obmondo_tag_0` overwrites `obmondo_tag_1`, etc.
-      # Meaning: bottom to top is how hiera reads the data, top is the final selection
-      - "agents/tags/%{obmondo_tag_0}.yaml"
-      - "agents/tags/%{obmondo_tag_1}.yaml"
-      - "agents/tags/%{obmondo_tag_2}.yaml"
-      - "agents/tags/%{obmondo_tag_3}.yaml"
-      - "agents/tags/%{obmondo_tag_4}.yaml"
-      - "agents/tags/%{obmondo_tag_5}.yaml"
-      - "agents/tags/%{obmondo_tag_6}.yaml"
-      - "agents/tags/%{obmondo_tag_7}.yaml"
-      - "agents/tags/%{obmondo_tag_8}.yaml"
-      - "agents/tags/%{obmondo_tag_9}.yaml"
       - "global.yaml"
       - "common.yaml"
     options:
