@@ -146,7 +146,9 @@ class eit_haproxy::basic_config (
           cert_host           => '0.0.0.0',
         }
 
-        monitor::domains { $cn: }
+        if $cn != 'rejected_domains' {
+          monitor::domains { $cn: }
+        }
       }
     }
 
