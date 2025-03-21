@@ -93,6 +93,54 @@ Gateway=${_config['gateway']}
             fail("Given ipaddress ${_config['ipaddress']} is not correct and is not supported by systemd-networkd")
           }
         }
+
+        $bonded_interfaces.each |$_name, $_config| {
+          if type($_config['ipaddress']) =~ Type[Stdlib::IP::Address::V4::CIDR] or $_uses_dhcp {
+            $_is_dhcp = $_uses_dhcp.to_yesno
+            systemd::network { "10-${_name}.netdev":
+              content => "
+[NetDev]
+Name=${_name}
+Kind=bond
+
+[Bond]
+Mode=${_config['mode']}
+MIIMonitorSec=100
+UpDelaySec=200ms
+DownDelaySec=200ms
+TransmitHashPolicy=${_config['transmit_hash_policy']}
+"
+            }
+            systemd::network { "10-${_name}.network":
+              content => "
+[Match]
+Name=${_name}
+
+[Network]
+Address=${_config['ipaddress']}
+Gateway=${_config['gateway']}
+DHCP=${_is_dhcp}
+
+[Route]
+Destination=0.0.0.0/0
+Gateway=${_config['gateway']}
+"
+            }
+            $_config['slaves'].each |$slave| {
+              systemd::network { "10-${slave}.network":
+                content => "
+[Match]
+Name=${slave}
+
+[Network]
+Bond=${_name}
+"
+              }
+            }
+          } else {
+            fail("Given ipaddress ${_config['ipaddress']} is not correct and is not supported by systemd-networkd")
+          }
+        }
       }
 
       # TODO: Add support for interface file.
