@@ -274,7 +274,11 @@ common::mail::stats_daemon_port: 63777
 
 common::services::disabled_services:
   - 'smartd'
-  - 'rpc-svcgssd'
+
+common::system::services:
+  'rpc-svcgssd':
+    enable: 'mask'
+    noop: false
 
 # Puppet
 common::puppet::version: '7.33.0'
