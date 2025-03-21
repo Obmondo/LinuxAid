@@ -47,4 +47,7 @@ class common::software {
   if lookup('common::software::walinuxagent::manage', Boolean, undef, false) {
     common::software::walinuxagent.include
   }
+  if lookup('common::software::iptables_api::manage', Boolean, undef, false) {
+    common::software::iptables_api.include
+  }
 }
