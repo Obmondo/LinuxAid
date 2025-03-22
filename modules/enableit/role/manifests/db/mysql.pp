@@ -1,4 +1,40 @@
-# Mysql Role
+
+# @summary Class for managing MySQL database configurations
+#
+# @param root_password The root password for the MySQL database.
+#
+# @param webadmin Boolean indicating whether to create a webadmin. Defaults to true.
+#
+# @param datadir The data directory for MySQL. Defaults to '/var/lib/mysql'.
+#
+# @param memlimit The memory limit percentage for MySQL. Defaults to 75.
+#
+# @param mysql_restart_on_config_change Boolean indicating whether to restart MySQL on configuration changes. Defaults to false.
+#
+# @param backup Boolean indicating whether to enable backup. Defaults to true.
+#
+# @param binlog Boolean indicating whether to enable binary logging. Defaults to true.
+#
+# @param binlog_format The format for binary logs. Defaults to 'MIXED'.
+#
+# @param local_tcp_root_access Boolean indicating whether to allow local TCP root access. Defaults to false.
+#
+# @param binlog_dir The directory for binary logs. Defaults to "${datadir}/binlog/${facts['networking']['fqdn']}".
+#
+# @param binlog_max_size_bytes The maximum size of binary log files in bytes. Defaults to 1 GB.
+#
+# @param binlog_sync The binary log sync configuration. Defaults to 1.
+#
+# @param binlog_backup_target The target for binlog backups. Defaults to undef.
+#
+# @param binlog_backup_target_dir The directory for binlog backups. Defaults to undef.
+#
+# @param binlog_backup_interval The interval for binlog backups. Defaults to undef.
+#
+# @param override_options Custom MySQL variable overrides. Defaults to an empty hash.
+#
+# @param access_mysql_from Array of IP addresses allowed to access MySQL. Defaults to ['0.0.0.0/0'].
+#
 class role::db::mysql (
   Eit_types::MysqlPassword              $root_password,
   Boolean                               $webadmin                       = true,
@@ -27,7 +63,6 @@ class role::db::mysql (
   #we only handle backup if they are on lvm disks for now -
   #FIXME : handle mysql on /root - using regular mysqldump at night
   #FIXME: confirm that mysqld_datadir_on_root actually checks that the datadir IS an lvm device !
-
   class { '::profile::mysql':
     webadmin                       => $webadmin,
     datadir                        => $datadir,
@@ -45,7 +80,6 @@ class role::db::mysql (
   }
 
   # FIXME: binlog backup not implemented
-
   if $binlog_backup_target {
     @@commmon::backup::pull::backup { "pull mysql binlog from ${facts['networking']['fqdn']}":
       from        => $facts['networking']['fqdn'],

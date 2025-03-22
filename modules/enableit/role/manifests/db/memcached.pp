@@ -1,4 +1,8 @@
-# Memcached role
+
+# @summary Class for managing the Memcached role
+#
+# @param ensure Boolean value to ensure that memcached is present. Defaults to true.
+#
 class role::db::memcached (
   Boolean $ensure = true,
 ) inherits ::role::db {

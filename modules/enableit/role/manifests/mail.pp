@@ -1,4 +1,5 @@
-# Mail Role
-class role::mail
-  inherits ::role {
+
+# @summary Class for managing the Mail role
+#
+class role::mail inherits ::role {
 }

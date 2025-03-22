@@ -1,4 +1,40 @@
-# PHPFPM
+
+# @summary Class for managing the PHP-FPM role
+#
+# @param ssl Enable SSL support. Defaults to false.
+#
+# @param ssl_cert The path to the SSL certificate file. Defaults to undef.
+#
+# @param ssl_key The path to the SSL key file. Defaults to undef.
+#
+# @param mysql Enable MySQL support. Defaults to false.
+#
+# @param mssql Enable MS SQL support. Defaults to false.
+#
+# @param catch_workers_output Catch the output of the PHP-FPM workers. Defaults to false.
+#
+# @param manage_webserver Manage the web server configuration. Defaults to true.
+#
+# @param opcodecache The opcode cache mechanism to use. Defaults to 'apc'.
+#
+# @param modules A hash of modules to be enabled. Defaults to an empty hash.
+#
+# @param version The version of PHP to install. Defaults to undef.
+#
+# @param memory_limit The memory limit for PHP-FPM. Defaults to undef.
+#
+# @param http_cfg_prepend Additional HTTP configuration to prepend. Defaults to an empty hash.
+#
+# @param max_children The maximum number of child processes. Defaults to 128.
+#
+# @param start_servers The number of child processes created on startup. Defaults to 64.
+#
+# @param min_spare_servers The minimum number of idle child processes. Defaults to 64.
+#
+# @param max_spare_servers The maximum number of idle child processes. Defaults to 100.
+#
+# @param virtualhosts A hash of virtual host configurations. Defaults to an empty hash.
+#
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
   Optional[String]                    $ssl_cert             = undef,
@@ -7,7 +43,7 @@ class role::appeng::phpfpm (
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,
   Boolean                             $manage_webserver     = true,
-  Enum[ 'opcache', 'xcache', 'apc' ]  $opcodecache          = 'apc',
+  Enum['opcache', 'xcache', 'apc']  $opcodecache          = 'apc',
   Hash[Eit_types::SimpleString, Hash] $modules              = {},
   Optional[Eit_types::Version]        $version              = undef,
   Optional[Eit_types::Capacity]       $memory_limit         = undef,

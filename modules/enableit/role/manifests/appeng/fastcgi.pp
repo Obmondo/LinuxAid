@@ -1,7 +1,13 @@
-# Appeng fastcgi role
+
+# @summary Class for managing the Appeng fastcgi role
+#
+# @param url The URL for the fastcgi application. Defaults to undef.
+#
+# @param http_server The HTTP server to use. Defaults to 'apache'.
+#
 class role::appeng::fastcgi (
   Eit_types::URL $url         = undef,
-  Enum['apache'] $http_server = 'apache',
+  Enum['apache'] $http_server  = 'apache',
 ) inherits ::role::appeng {
 
   class { '::profile::perl':

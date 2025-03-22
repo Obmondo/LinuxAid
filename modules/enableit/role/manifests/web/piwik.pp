@@ -1,4 +1,20 @@
-# Piwik web role
+
+# @summary Class for managing the Piwik web role
+#
+# @param hostname The hostname for the Piwik application.
+#
+# @param database_password The password for the database.
+#
+# @param variant The variant of PHP to use. Defaults to '::role::appeng::mod_php'.
+#
+# @param database The database type to use. Defaults to '::role::db::mysql'.
+#
+# @param force_https Whether to force HTTPS. Defaults to false.
+#
+# @param use_forwarded_for Whether to use the forwarded for header. Defaults to false.
+#
+# @param use_forwarded_host Whether to use the forwarded host header. Defaults to false.
+#
 class role::web::piwik (
   String $hostname,
   Eit_types::Password $database_password,
@@ -13,7 +29,7 @@ class role::web::piwik (
     variant => $variant,
   }
 
-  class { $database:  }
+  class { $database: }
 
   class { 'piwik':
     version            => 'latest',
@@ -39,5 +55,4 @@ class role::web::piwik (
   } else {
     fail('We should probably do something here..')
   }
-
 }

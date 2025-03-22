@@ -1,5 +1,28 @@
+
+# @summary Class for managing the GitLab CI Runner
 #
-# $redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen on port 80 normally). it actually won't redirect unless external_url IS set to https://
+# @param url The URL for the GitLab instance.
+#
+# @param token The registration token for the runner.
+#
+# @param executor The executor type for the runner. Defaults to 'docker'.
+#
+# @param docker_image The Docker image to use for the runner. Defaults to 'ubuntu/xenial'.
+#
+# @param concurrency The number of concurrent jobs to run. Defaults to 2.
+#
+# @param runners A hash of runner-specific configurations.
+#
+# @param runners_defaults A hash of default configurations for the runners.
+#
+# @param manage_repo Flag to manage the repository settings. Defaults to true.
+#
+# @param manage_docker Flag to manage Docker settings. Defaults to true.
+#
+# @param check_interval The interval in seconds for checking the GitLab server for new jobs. Defaults to 30.
+#
+# @param $__blendable
+# An internal parameter.
 #
 class role::projectmanagement::gitlab_ci_runner (
   Eit_types::URL                   $url,

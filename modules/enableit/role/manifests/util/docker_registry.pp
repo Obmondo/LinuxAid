@@ -1,18 +1,23 @@
-# Docker registry role
+
+# @summary Docker registry role
+#
+# @param admin_email The email of the administrator for notifications. No default value.
+#
 class role::util::docker_registry (
   Eit_types::Email $admin_email
 ) inherits role::util {
+
   firewall { '000 allow http':
     proto => 'tcp',
     dport => 80,
     jump  => 'accept',
   }
+
   class { '::docker_distribution':
     log_fields               => {
       service     => 'registry',
       environment => 'production'
-    }
-    ,
+    },
     log_hooks_mail_disabled  => false,
     log_hooks_mail_levels    => ['panic', 'error'],
     log_hooks_mail_to        => $admin_email,
@@ -20,5 +25,4 @@ class role::util::docker_registry (
     http_addr                => ':443',
     http_tls                 => true,
   }
-
 }

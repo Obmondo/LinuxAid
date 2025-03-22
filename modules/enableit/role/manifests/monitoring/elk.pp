@@ -1,4 +1,50 @@
-# ELK role
+
+# @summary Class for managing the ELK role
+#
+# @param clustername The name of the ELK cluster. Defaults to 'elkstack'.
+#
+# @param es_config Configuration hash for Elasticsearch. Defaults to an empty hash.
+#
+# @param es_version The version of Elasticsearch to use. Defaults to undef.
+#
+# @param es_datadir The absolute path for Elasticsearch data directory. Defaults to '/var/lib/elasticsearch/data'.
+#
+# @param cluster_hosts An array of IP addresses for the Elasticsearch cluster hosts. Defaults to the node's IP address.
+#
+# @param nxlog_windowseventlog If true, enables nxlog for Windows Event Log. Defaults to false.
+#
+# @param nxlog_ssl_windowseventlog If true, enables SSL for nxlog Windows Event Log. Defaults to false.
+#
+# @param nxlog_json If true, enables JSON logging for nxlog. Defaults to false.
+#
+# @param nxlog_ssl_json If true, enables SSL for nxlog JSON logging. Defaults to false.
+#
+# @param nginx_cfg_append Additional configuration for Nginx. Defaults to an empty hash.
+#
+# @param nginx_ssl_mode Defines the SSL mode for Nginx. Defaults to 'force'.
+#
+# @param ssl_cert The path to the SSL certificate. Defaults to undef.
+#
+# @param ssl_key The path to the SSL key. Defaults to undef.
+#
+# @param install_cerebro If true, installs Cerebro management UI. Defaults to true.
+#
+# @param enable_redis If true, enables Redis integration. Defaults to true.
+#
+# @param redis_datadir The absolute path for Redis data directory. Defaults to '/var/lib/redis'.
+#
+# @param redis_bind The addresses Redis will bind to. Defaults to '127.0.0.1'.
+#
+# @param redis_port The port on which Redis listens. Defaults to 6379.
+#
+# @param logstash_redis_to_es_workers Number of workers for Logstash to Redis to Elasticsearch pipeline. Defaults to undef.
+#
+# @param install_search_guard If true, installs Search Guard for security features. Defaults to false.
+#
+# @param curator If true, enables Curator for log management. Defaults to false.
+#
+# @param curator_delete_days Number of days to keep logs before deletion by Curator. Defaults to 7.
+#
 class role::monitoring::elk (
   Pattern[/[A-Za-z0-9_.-]+/] $clustername                         = 'elkstack',
   Hash[String, Data] $es_config                                   = {},
@@ -46,5 +92,4 @@ class role::monitoring::elk (
     curator                   => $curator,
     curator_delete_days       => $curator_delete_days,
   }
-
 }

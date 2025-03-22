@@ -1,2 +1,6 @@
-# ProjectMangement role
-class role::projectmanagement () inherits role {}
+
+# @summary Class for managing the ProjectManagement role
+#
+class role::projectmanagement () inherits role {
+
+}

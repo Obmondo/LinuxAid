@@ -1,4 +1,19 @@
-# RubyonRails role
+
+#
+# @summary Class for managing the RubyonRails role
+#
+# @param db The database to use. Defaults to 'role::db::mysql'.
+#
+# @param ruby The Ruby implementation to use. Defaults to 'role appeng passenger'.
+#
+# @param http_server The HTTP server to use. Defaults to '::role::web::apache'.
+#
+# @param version The version of RubyonRails to install. Defaults to 5.
+#
+# @param provider The provider to use for installing RubyonRails. Defaults to 'package'.
+#
+# @param manage_web_server Whether to manage the web server or not. Defaults to false.
+#
 class role::webframeworks::rubyonrails (
   Optional[Enum['::role::db::mysql', '::role::db::pgsql']] $db = '::role::db::mysql',
   Enum['::role::appeng::passenger'] $ruby = '::role::appeng::passenger',
@@ -18,7 +33,7 @@ class role::webframeworks::rubyonrails (
 
   case $ruby {
     '::role::appeng::passenger' : {
-      class { '::profile::passenger' :
+      class { '::profile::passenger':
         http_server        => $_http_server,
         passenger_version  => $version,
         passenger_provider => $provider,
