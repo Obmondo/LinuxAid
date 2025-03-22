@@ -2,14 +2,15 @@
 define profile::storage::mount (
   Eit_types::Resource::Mount::Ensure $ensure,
 
-  Stdlib::Absolutepath               $path     = $name,
-  Optional[Boolean]                  $atboot   = undef,
-  Optional[String]                   $device   = undef,
-  Optional[Integer[0,2]]             $dump     = undef,
-  Optional[Eit_types::SimpleString]  $fstype   = undef,
-  Optional[Array[String[1]]]         $options  = undef,
-  Optional[Boolean]                  $remounts = undef,
-  Optional[Stdlib::Absolutepath]     $target   = undef,
+  Stdlib::Absolutepath               $path      = $name,
+  Optional[Boolean]                  $atboot    = undef,
+  Optional[String]                   $device    = undef,
+  Optional[Integer[0,2]]             $dump      = undef,
+  Optional[Eit_types::SimpleString]  $fstype    = undef,
+  Optional[Array[String[1]]]         $options   = undef,
+  Optional[Boolean]                  $remounts  = undef,
+  Optional[Stdlib::Absolutepath]     $target    = undef,
+  Optional[Boolean]                  $noop_mode = false,
 ) {
 
   $_require = case $fstype {
@@ -49,6 +50,7 @@ define profile::storage::mount (
     remounts => $remounts,
     target   => $target,
     require  => $_require,
+    noop     => $noop_mode,
   })
 
 }
