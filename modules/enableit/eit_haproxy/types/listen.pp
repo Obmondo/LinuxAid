@@ -1,8 +1,9 @@
 type Eit_haproxy::Listen = Hash[
   String,
   Struct[{
-    binds         => Array[Eit_types::IPPort],
+    binds        => Array[Eit_types::IPPort],
     bind_options => Optional[Array],
-    servers       => Array[Eit_types::IPPort],
+    servers      => Array[Eit_types::IPPort],
+    force_https  => Optional[Boolean],
   }]
 ]

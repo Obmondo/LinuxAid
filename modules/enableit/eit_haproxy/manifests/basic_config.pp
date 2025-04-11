@@ -257,18 +257,32 @@ class eit_haproxy::basic_config (
       "${key} ${server} check"
     }
 
-    $_bind_options = if $value['bind_options'].empty { [] } else { $value['bind_options'] }
+    $_bind_options = $value['bind_options'].empty ? {
+      true  => [],
+      false => $value['bind_options'],
+    }
+
+    $bind = $value['binds'].reduce({}) |$acc, $x| {
+      if $value['force_https'] {
+        $acc + {
+          $x => [],
+        } + {
+          "${x} ${value['bind_options'].join(' ')}" => [],
+        }
+      } else {
+        $acc + {
+          $x => $value['bind_options'],
+        }
+      }
+    }
 
     haproxy::listen { $key:
       mode    => $mode,
-      bind    => $value['binds'].reduce({}) |$acc, $x| {
-        $acc + {
-          $x => $_bind_options,
-        }
-      },
+      bind    => $bind,
       options => {
         'option'  => 'tcplog',
         'balance' => 'roundrobin',
+        'http-request redirect' => if $value['force_https'] { 'scheme https code 301 unless { ssl_fc }' },
         'server'  => $_servers,
         'timeout' => 'server 10m',
       },
