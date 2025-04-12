@@ -1,7 +1,7 @@
 # Monitor domains will monitor cert expiry and status code
 define monitor::domains (
   Boolean       $enable      = true,
-  Integer[1,30] $expiry_days = 30,
+  Integer[1,25] $expiry_days = 25,
 
   Eit_types::Monitor::Domains $domain = $title,
 ) {
