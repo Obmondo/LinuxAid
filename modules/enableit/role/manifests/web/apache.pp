@@ -24,8 +24,8 @@ class role::web::apache (
   Array[Eit_types::Monitor::Domains] $domains = [],
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
-    ssl_cert                 => Optional[String],
-    ssl_key                  => Optional[String],
+    ssl_cert                 => Optional[Sensitive[String]],
+    ssl_key                  => Optional[Sensitive[String]],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
     domains                  => Optional[Array[Eit_types::Monitor::Domains]],
     port                     => Optional[Stdlib::Port],

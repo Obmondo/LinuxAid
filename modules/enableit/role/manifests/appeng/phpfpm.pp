@@ -37,8 +37,8 @@
 #
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
-  Optional[String]                    $ssl_cert             = undef,
-  Optional[String]                    $ssl_key              = undef,
+  Optional[Sensitive[String]]         $ssl_cert             = undef,
+  Optional[Sensitive[String]]         $ssl_key              = undef,
   Boolean                             $mysql                = false,
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,

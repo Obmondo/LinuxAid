@@ -34,8 +34,8 @@
 # @param http_bind The HTTP bind address. Defaults to '0.0.0.0'.
 #
 class role::mail::mailcow (
-  String                      $dbroot,
-  String                      $dbpass,
+  Sensitive[String]           $dbroot,
+  Sensitive[String]           $dbpass,
   Stdlib::Fqdn                $domain,
   Stdlib::Unixpath            $backup_dir               = '/opt/backup',
   Boolean                     $manage                   = true,
