@@ -12,6 +12,7 @@ class monitor::system (
   contain monitor::system::file_size
   contain monitor::system::hwmon
   contain monitor::system::dns
+  contain monitor::system::docker
 
   if $facts['drbdpeerstate1'] {
     contain monitor::system::drbd
