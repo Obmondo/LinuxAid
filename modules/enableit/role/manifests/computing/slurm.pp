@@ -41,7 +41,7 @@
 # @param hwloc_enabled Whether to enable hwloc support. Defaults to false.
 #
 class role::computing::slurm (
-  Optional[String]               $munge_key               = undef,
+  Optional[Sensitive[String]]    $munge_key               = undef,
   Boolean                        $__blendable,
   Boolean                        $enable                  = false,
   Eit_types::SimpleString        $interface               = undef,
