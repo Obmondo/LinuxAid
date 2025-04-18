@@ -1,3 +1,0 @@
----
-name: Custom servers
-description: This role is for servers, fully managed by Obmondo, but only uses features that can be used on all servers (i.e. not part of a role).

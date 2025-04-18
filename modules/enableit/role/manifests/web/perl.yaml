@@ -1,7 +1,0 @@
----
-name: Perl
-description: Perl web server
-
-parameters:
-  variant:
-    name: Variant
