@@ -30,6 +30,10 @@ lookup_options:
     merge: 'hash'
   common::package::default_packages:
     merge: 'unique'
+
+  common::system::authentication::kerberos::join_password:
+    convert_to: "Sensitive"
+
   common::system::authentication::sudo::sudoers:
     merge:
       strategy: 'deep'
