@@ -28,7 +28,7 @@ class profile::storage::s3 (
       shortid     => String($_shortid),
       keys        => [{
         'access' => $_name,
-        'secret' => $opts['access_key'],
+        'secret' => $opts[unwarp(access_key)],
       }]
     }
   }

@@ -1,1 +1,1 @@
-type Eit_types::Password = Sensitive[String]
+type Eit_types::Password = String

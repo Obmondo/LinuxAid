@@ -6,18 +6,18 @@
 # openssl pkcs12 -in http.p12 -out http.pem -clcerts -nodes
 # openssl pkcs12 -in http.p12 -out http.pem -nocerts -nodes
 class profile::db::elasticsearch::kibana (
-  Boolean             $manage           = $role::db::elasticsearch::kibana,
-  Boolean             $oss              = $role::db::elasticsearch::oss,
-  Boolean             $expose           = $role::db::elasticsearch::expose,
-  Boolean             $ssl              = $role::db::elasticsearch::ssl,
-  Stdlib::Fqdn        $host             = $role::db::elasticsearch::host,
-  Eit_types::Version  $version          = $role::db::elasticsearch::version,
-  Optional[String]    $ssl_combined_pem = $role::db::elasticsearch::ssl_combined_pem,
-  Optional[Hash]      $elasticsearch    = $role::db::elasticsearch::kibana_elasticsearch,
-  Array[Stdlib::Host] $nodes            = $role::db::elasticsearch::nodes,
-  Optional[String]    $ca_cert          = $role::db::elasticsearch::ca_cert,
-  Optional[String]    $kibana_username  = $role::db::elasticsearch::kibana_username,
-  Optional[String]    $kibana_password  = $role::db::elasticsearch::kibana_password,
+  Boolean                      $manage           = $role::db::elasticsearch::kibana,
+  Boolean                      $oss              = $role::db::elasticsearch::oss,
+  Boolean                      $expose           = $role::db::elasticsearch::expose,
+  Boolean                      $ssl              = $role::db::elasticsearch::ssl,
+  Stdlib::Fqdn                 $host             = $role::db::elasticsearch::host,
+  Eit_types::Version           $version          = $role::db::elasticsearch::version,
+  Optional[String]             $ssl_combined_pem = $role::db::elasticsearch::ssl_combined_pem,
+  Optional[Hash]               $elasticsearch    = $role::db::elasticsearch::kibana_elasticsearch,
+  Array[Stdlib::Host]          $nodes            = $role::db::elasticsearch::nodes,
+  Optional[String]             $ca_cert          = $role::db::elasticsearch::ca_cert,
+  Optional[Sensitive[String]]  $kibana_username  = $role::db::elasticsearch::kibana_username,
+  Optional[Sensitive[String]]  $kibana_password  = $role::db::elasticsearch::kibana_password,
 ) {
   if $expose {
     if $ssl {
@@ -141,9 +141,9 @@ class profile::db::elasticsearch::kibana (
     config => {
       'elasticsearch.hosts'                      => $elasticsearch_hosts,
       'server.ssl.enabled'                       => false,
-      'elasticsearch.username'                   => $kibana_username,
+      'elasticsearch.username'                   => unwrap($kibana_username),
       # # TODO: https://github.com/voxpupuli/puppet-kibana/issues/38
-      'elasticsearch.password'                   => $kibana_password,
+      'elasticsearch.password'                   => unwrap($kibana_password),
       'elasticsearch.ssl.verificationMode'       => 'full',
       'elasticsearch.ssl.certificate'            => "${etc_kibana}/certs/http.crt",
       'elasticsearch.ssl.certificateAuthorities' => [

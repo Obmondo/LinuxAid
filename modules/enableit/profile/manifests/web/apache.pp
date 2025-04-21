@@ -10,7 +10,7 @@ class profile::web::apache (
 
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
-    ssl_cert                 => Optional[String],
+    ssl_cert                 => Optional[Sensitive[String]],
     ssl_key                  => Optional[String],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
     domains                  => Optional[Array[Eit_types::Monitor::Domains]],
@@ -108,13 +108,13 @@ class profile::web::apache (
           mode   => '0700',
         ;
         "/etc/ssl/private/${vhost_name}/cert.pem":
-          content => $params['ssl_cert'],
+          content => $params[unwrap('ssl_cert')],
           owner   => $apache_user,
           mode    => '0600',
           notify  => Service['httpd'],
         ;
         "/etc/ssl/private/${vhost_name}/cert.key":
-          content => $params['ssl_key'],
+          content => $params[unwrap('ssl_key')],
           owner   => $apache_user,
           mode    => '0600',
           notify  => Service['httpd'],
