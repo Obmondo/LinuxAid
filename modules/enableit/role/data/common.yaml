@@ -16,7 +16,12 @@ lookup_options:
     convert_to: "Sensitive"
   role::projectmanagement::gitlab::registry_ssl_key:
     convert_to: "Sensitive"
-
+  role::mail::mailcow::dbroot:
+    convert_to: "Sensitive"
+  role::mail::mailcow::dbpass:
+    convert_to: "Sensitive"
+  role::computing::slurm::mung_key:
+    convert_to: "Sensitive"
 
 role::computing::slurm::__blendable: true
 role::monitoring::rsyslog::__blendable: true
