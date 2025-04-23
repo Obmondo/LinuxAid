@@ -8,6 +8,8 @@ lookup_options:
     convert_to: "Sensitive"
   role::projectmanagement::gitlab::ssl_key:
     convert_to: "Sensitive"
+  role::projectmanagement::gitlab_ci_runner::token:
+    convert_to: "Sensitive"
   role::projectmanagement::gitlab::mattermost_ssl_cert:
     convert_to: "Sensitive"
   role::projectmanagement::gitlab::mattermost_ssl_key:
