@@ -20,7 +20,7 @@ lookup_options:
     convert_to: "Sensitive"
   role::mail::mailcow::dbpass:
     convert_to: "Sensitive"
-  role::computing::slurm::mung_key:
+  role::computing::slurm::munge_key:
     convert_to: "Sensitive"
 
 role::computing::slurm::__blendable: true
