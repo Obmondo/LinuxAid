@@ -6,7 +6,7 @@ class profile::system::time::ntp (
   Optional[Boolean]                           $noop_value = $common::system::time::ntp::noop_value,
 ) {
 
-  $_enable_ntp = $::common::virtualization::treat_as_physical and !($facts.dig('cloud', 'provider') == 'azure')
+  $_enable_ntp = $facts.dig('treat_as_physical') and !($facts.dig('cloud', 'provider') == 'azure')
 
   File {
     noop => $noop_value,
