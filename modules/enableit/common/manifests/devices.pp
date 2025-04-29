@@ -10,7 +10,7 @@ class common::devices (
   # Install haveged only if we aren't virtual, or if we are on kvm or
   # vmware. You can use the script in https://security.stackexchange.com/a/34552
   # to check if haveged should work or not.
-  $_install_haveged = $::common::virtualization::treat_as_physical and $needs_encryption_scripts
+  $_install_haveged = $facts.dig('treat_as_physical') and $needs_encryption_scripts
 
   if $_install_haveged {
     package::install('haveged', {

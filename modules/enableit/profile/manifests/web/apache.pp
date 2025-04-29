@@ -11,7 +11,7 @@ class profile::web::apache (
   Hash[String,Struct[{
     ssl                      => Optional[Boolean],
     ssl_cert                 => Optional[Sensitive[String]],
-    ssl_key                  => Optional[String],
+    ssl_key                  => Optional[Sensitive[String]],
     docroot                  => Variant[Stdlib::Unixpath, Boolean],
     domains                  => Optional[Array[Eit_types::Monitor::Domains]],
     redirect_dest            => Optional[Array[String]],
