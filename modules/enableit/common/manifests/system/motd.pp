@@ -8,8 +8,8 @@ class common::system::motd (
 ) inherits ::common::system {
   # MOTD
   if $enable {
-    $_cores = $facts.dig('cpuinfo', 'processor0', 'cpu_cores')
-    $_threads = $facts.dig('cpuinfo', 'processor0', 'siblings')
+    $_cores = $facts.dig('processors', 'cores')
+    $_threads = $facts.dig('processors', 'threads')
     $_smt_enabled = $_cores != $_threads
     $_stats = {
       memory   => $facts.dig('memory'),

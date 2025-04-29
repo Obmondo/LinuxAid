@@ -169,8 +169,26 @@ class profile::puppet (
       type    => 'array_element',
       value   => [
         { 'dmi' => '1 day' },
+        { 'packages' => '1 day' },
+        { 'partitions' => '1 day' },
+        { 'networking' => '1 day' },
+        { 'sssd' => '1 day' },
+        { 'puppet_sslpaths' => '1 day' },
+        { 'puppet_settings' => '1 day' },
       ],
       ;
+
+    'facter blocklist':
+      setting => 'facts.blocklist',
+      type    => 'array_element',
+      value   => [
+        'network_ports',
+        'login_defs',
+        'cpuinfo',
+        'fips_ciphers',
+      ],
+      ;
+
   }
 
   host { $server:
