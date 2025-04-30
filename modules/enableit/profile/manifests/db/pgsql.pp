@@ -182,7 +182,7 @@ class profile::db::pgsql (
       inherit       => false,
       replication   => true,
       username      => $replication_username,
-      password_hash => postgresql::postgresql_password($replication_username, ($replication_password.node_encrypt::secret)),
+      password_hash => postgresql::postgresql_password($replication_username, ($replication_password)),
     }
   }
 
