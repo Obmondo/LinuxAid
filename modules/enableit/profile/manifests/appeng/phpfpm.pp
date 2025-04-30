@@ -1,8 +1,8 @@
 # PHPFPm profile
 class profile::appeng::phpfpm (
   Boolean                             $ssl                  = false,
-  Optional[Sensitive[String]]         $ssl_cert             = $::role::appeng::phpfpm::ssl_cert,
-  Optional[Sensitive[String]]         $ssl_key              = $::role::appeng::phpfpm::ssl_key,
+  Optional[String]                    $ssl_cert             = $::role::appeng::phpfpm::ssl_cert,
+  Optional[String]                    $ssl_key              = $::role::appeng::phpfpm::ssl_key,
   Boolean                             $mysql                = false,
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,
@@ -93,10 +93,10 @@ class profile::appeng::phpfpm (
             mode   => '0700',
           ;
           "/etc/ssl/private/${virtualhost}/cert.pem":
-            content => pick($opts['ssl_cert'], $ssl_cert.unwrap),
+            content => pick($opts['ssl_cert'], $ssl_cert.node_encrypt::secret),
           ;
           "/etc/ssl/private/${virtualhost}/cert.key":
-            content => pick($opts['ssl_key'], $ssl_key.unwrap),
+            content => pick($opts['ssl_key'], $ssl_key.node_encrypt::secret),
           ;
         }
       }

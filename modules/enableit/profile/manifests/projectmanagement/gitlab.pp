@@ -20,14 +20,14 @@ class profile::projectmanagement::gitlab (
   Integer[0,23]                        $backup_cron_hour       = $role::projectmanagement::gitlab::backup_cron_hour,
   Optional[Stdlib::Absolutepath]       $backup_path            = $role::projectmanagement::gitlab::backup_path,
   Integer[1,default]                   $backup_keep_days       = $role::projectmanagement::gitlab::backup_keep_days,
-  Optional[Sensitive[String]]          $ssl_cert               = $role::projectmanagement::gitlab::ssl_cert,
-  Optional[Sensitive[String]]          $ssl_key                = $role::projectmanagement::gitlab::ssl_key,
-  Optional[Sensitive[String]]          $registry_ssl_cert      = $role::projectmanagement::gitlab::registry_ssl_cert,
-  Optional[Sensitive[String]]          $registry_ssl_key       = $role::projectmanagement::gitlab::registry_ssl_key,
+  Optional[String]                     $ssl_cert               = $role::projectmanagement::gitlab::ssl_cert,
+  Optional[String]                     $ssl_key                = $role::projectmanagement::gitlab::ssl_key,
+  Optional[String]                     $registry_ssl_cert      = $role::projectmanagement::gitlab::registry_ssl_cert,
+  Optional[String]                     $registry_ssl_key       = $role::projectmanagement::gitlab::registry_ssl_key,
   Stdlib::Fqdn                         $registry_domain        = $role::projectmanagement::gitlab::registry_domain,
   Optional[Array[Stdlib::IP::Address]] $trusted_proxies        = $role::projectmanagement::gitlab::trusted_proxies,
-  Optional[Sensitive[String]]          $mattermost_ssl_cert    = $role::projectmanagement::gitlab::mattermost_ssl_cert,
-  Optional[Sensitive[String]]          $mattermost_ssl_key     = $role::projectmanagement::gitlab::mattermost_ssl_key,
+  Optional[String]          $mattermost_ssl_cert               = $role::projectmanagement::gitlab::mattermost_ssl_cert,
+  Optional[String]          $mattermost_ssl_key                = $role::projectmanagement::gitlab::mattermost_ssl_key,
   Stdlib::Fqdn                         $mattermost_domain      = $role::projectmanagement::gitlab::mattermost_domain,
   Array[String]                        $public_keys            = $role::projectmanagement::gitlab::public_keys,
   Eit_types::User                      $backupcron_user        = $role::projectmanagement::gitlab::backupcron_user,
@@ -81,7 +81,7 @@ class profile::projectmanagement::gitlab (
 
     file { $ssl_key_filepath:
       ensure  => file,
-      content => unwrap($ssl_key),
+      content => $ssl_key.node_encrypt::secret,
       owner   => 'gitlab-www',
       mode    => '0640',
       require => File["/etc/ssl/private/${domain}"],
@@ -89,7 +89,7 @@ class profile::projectmanagement::gitlab (
 
     file { $ssl_cert_filepath:
       ensure  => file,
-      content => unwrap($ssl_cert),
+      content => $ssl_cert.node_encrypt::secret,
       owner   => 'gitlab-www',
       mode    => '0640',
       require => File["/etc/ssl/private/${domain}"],
@@ -286,14 +286,14 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
 
         file { $registry_key_filepath:
           ensure  => file,
-          content => unwrap($registry_ssl_key),
+          content => $registry_ssl_key.node_encrypt::secret,
           owner   => 'gitlab-www',
           mode    => '0640',
         }
 
         file { $registry_cert_filepath:
           ensure  => file,
-          content => unwrap($registry_ssl_cert),
+          content => $registry_ssl_cert.node_encrypt::secret,
           owner   => 'gitlab-www',
           mode    => '0640',
         }
@@ -350,14 +350,14 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
         $_mattermost_key_filepath = "/etc/ssl/private/${mattermost_domain}/privkey.pem"
         file { $_mattermost_key_filepath:
           ensure  => file,
-          content => unwrap($mattermost_ssl_key),
+          content => $mattermost_ssl_key.node_encrypt::secret,
           owner   => 'gitlab-www',
           mode    => '0640',
         }
 
         file { $_mattermost_cert_filepath:
           ensure  => file,
-          content => unwrap($mattermost_ssl_cert),
+          content => $mattermost_ssl_cert.node_encrypt::secret,
           owner   => 'gitlab-www',
           mode    => '0640',
         }

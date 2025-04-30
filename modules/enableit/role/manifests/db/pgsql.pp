@@ -36,13 +36,13 @@ class role::db::pgsql (
   Eit_types::Pgsql::Db               $databases            = {},
   Eit_types::Pgsql::Mode             $mode                 = 'standalone',
   Optional[Eit_types::SimpleString]  $recovery_username    = undef,
-  Optional[Sensitive[String]]        $recovery_password    = undef,
+  Optional[String]                   $recovery_password    = undef,
   Optional[Eit_types::IP]            $recovery_host        = undef,
   Optional[Stdlib::Port]             $recovery_port        = 5432,
   Optional[Stdlib::Unixpath]         $recovery_trigger     = undef,
   Optional[Eit_types::Pgsql::Pg_hba] $pg_hba_rule          = {},
   Optional[Eit_types::SimpleString]  $replication_username = undef,
-  Optional[Sensitive[String]]        $replication_password = undef,
+  Optional[String]                   $replication_password = undef,
   Optional[Eit_types::SimpleString]  $application_name     = undef,
 ) inherits ::role::db {
 

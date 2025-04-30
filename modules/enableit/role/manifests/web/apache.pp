@@ -21,21 +21,9 @@ class role::web::apache (
   Boolean                     $manage_haproxy = false,
   Enum['default', 'insecure'] $ciphers        = 'default',
   Array                       $modules        = [],
+
+  Eit_types::Web::Apache::Vhosts     $vhosts  = {},
   Array[Eit_types::Monitor::Domains] $domains = [],
-  Hash[String,Struct[{
-    ssl                      => Optional[Boolean],
-    ssl_cert                 => Optional[Sensitive[String]],
-    ssl_key                  => Optional[Sensitive[String]],
-    docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Array[Eit_types::Monitor::Domains]],
-    port                     => Optional[Stdlib::Port],
-    redirect_dest            => Optional[Array[String]],
-    redirect_status          => Optional[Array[String]],
-    serveraliases            => Optional[Array],
-    directories              => Optional[Array[Hash]],
-    aliases                  => Optional[Array[Hash]],
-    proxy_pass               => Optional[Array[Hash]],
-  }]]                         $vhosts         = {},
 ) {
   if $manage_haproxy {
     contain role::web::haproxy

@@ -26,7 +26,7 @@
 #
 class role::projectmanagement::gitlab_ci_runner (
   Eit_types::URL                   $url,
-  Sensitive[String]                $token,
+  String                           $token,
   Optional[Enum['docker']]         $executor         = 'docker',
   Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/xenial',
   Integer[1,default]               $concurrency      = 2,

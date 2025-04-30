@@ -75,8 +75,8 @@ class role::db::elasticsearch (
   Optional[String]                    $http                  = undef,
   Optional[String]                    $transport             = undef,
   Optional[String]                    $ca_cert               = undef,
-  Optional[Sensitive[String]]         $kibana_username       = undef,
-  Optional[Sensitive[String]]         $kibana_password       = undef,
+  Optional[String]                    $kibana_username       = undef,
+  Optional[String]                    $kibana_password       = undef,
 ) inherits ::role::db {
 
   confine($facts['os']['family'] != 'Debian', 'Only Debian-based distributions are supported')

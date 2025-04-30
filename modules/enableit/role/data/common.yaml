@@ -1,38 +1,4 @@
 ---
-lookup_options:
-  role::appeng::phpfpm::ssl_cert:
-    convert_to: "Sensitive"
-  role::appeng::phpfpm::ssl_key:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::ssl_cert:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::ssl_key:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab_ci_runner::token:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::mattermost_ssl_cert:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::mattermost_ssl_key:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::registry_ssl_cert:
-    convert_to: "Sensitive"
-  role::projectmanagement::gitlab::registry_ssl_key:
-    convert_to: "Sensitive"
-  role::mail::mailcow::dbroot:
-    convert_to: "Sensitive"
-  role::mail::mailcow::dbpass:
-    convert_to: "Sensitive"
-  role::computing::slurm::munge_key:
-    convert_to: "Sensitive"
-  role::db::elasticsearch::kibana_username:
-    convert_to: "Sensitive"
-  role::db::elasticsearch::kibana_password:
-    convert_to: "Sensitive"
-  role::package_management::repo::signing_password:
-    convert_to: "Sensitive"
-  role::package_management::repo::gitserver_token:
-    convert_to: "Sensitive"
-
 role::computing::slurm::__blendable: true
 role::monitoring::rsyslog::__blendable: true
 role::projectmanagement::gitlab_ci_runner::__blendable: true
