@@ -172,7 +172,7 @@ class profile::virtualization::kubernetes (
     etcdpeer_key                  => $etcdpeer_key.node_encrypt::secret,
     kubernetes_ca_crt             => $kubernetes_ca_crt,
     kubernetes_ca_key             => $kubernetes_ca_key.node_encrypt::secret,
-    discovery_token_hash          => $discovery_token_hash,node_encrypt::secret,
+    discovery_token_hash          => $discovery_token_hash.node_encrypt::secret,
     kubernetes_front_proxy_ca_crt => $front_proxy_ca_crt,
     kubernetes_front_proxy_ca_key => $front_proxy_ca_key.node_encrypt::secret,
     sa_pub                        => $sa_pub,
