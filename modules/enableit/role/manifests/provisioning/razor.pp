@@ -23,18 +23,27 @@
 #
 # @param manage_tftpd Whether to manage TFTP daemon. Defaults to false.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::provisioning::razor (
-  Boolean $manage_postgres          = false,
-  Eit_types::Host $db_server        = 'localhost',
-  Eit_types::SimpleString $db_name  = 'razor_prd',
-  Eit_types::SimpleString $db_user  = 'razor',
   Eit_types::Password $db_password,
   Eit_types::Domain $dhcp_domain,
   Eit_types::IP $dhcp_start,
   Eit_types::IP $dhcp_end,
   Eit_types::IP $dhcp_route,
+
+  Boolean $manage_postgres          = false,
+  Eit_types::Host $db_server        = 'localhost',
+  Eit_types::SimpleString $db_name  = 'razor_prd',
+  Eit_types::SimpleString $db_user  = 'razor',
+
   Array[Eit_types::IP, 1] $dhcp_dns = $common::system::dns::nameservers,
   Boolean $manage_tftpd             = false,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'db_password',
+  ]
+
 ) inherits ::role {
 
   include profile::provisioning::razor

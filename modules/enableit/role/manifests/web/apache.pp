@@ -15,6 +15,8 @@
 #
 # @param vhosts The virtual hosts configuration. Defaults to {}.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,
@@ -24,6 +26,11 @@ class role::web::apache (
 
   Eit_types::Web::Apache::Vhosts     $vhosts  = {},
   Array[Eit_types::Monitor::Domains] $domains = [],
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'vhosts.*.ssl_key',
+    'vhosts.*.ssl_cert',
+  ]
 ) {
   if $manage_haproxy {
     contain role::web::haproxy

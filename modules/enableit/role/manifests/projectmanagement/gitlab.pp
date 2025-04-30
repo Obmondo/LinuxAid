@@ -77,6 +77,8 @@
 #
 # @param garbage_cleanup_job_hour The hour of the day to run garbage cleanup jobs. Defaults to 4.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::projectmanagement::gitlab (
   Stdlib::Fqdn                         $domain,
   Boolean                              $email_enabled,
@@ -116,6 +118,15 @@ class role::projectmanagement::gitlab (
   Optional[Array[Eit_types::IPCIDR]]   $monitoring_whitelist     = undef,
   Optional[Eit_types::Gitlab::Prometheus_exporters] $prometheus_exporters = undef,
   Optional[Cron::Hour]                 $garbage_cleanup_job_hour  = 4,
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'ssl_cert',
+    'ssl_key',
+    'registry_ssl_cert',
+    'registry_ssl_key',
+    'mattermost_ssl_cert',
+    'mattermost_ssl_key',
+  ]
 ) inherits ::role::projectmanagement {
 
   confine($facts['os']['family'] != 'Debian',

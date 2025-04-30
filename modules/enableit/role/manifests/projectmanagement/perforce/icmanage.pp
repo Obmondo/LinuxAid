@@ -35,24 +35,34 @@
 #
 # @param __blendable This parameter allows blending. No default.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
+  Eit_types::Password      $db_password,
+  Eit_types::Password      $root_password,
+  Boolean                  $db_backup,
+  Eit_types::Password      $db_admin_password,
+  Stdlib::Absolutepath     $backup_dir,
+  Boolean                  $__blendable,
+
   Stdlib::Absolutepath     $install_path       = '/opt/icmanage',
   Stdlib::Host             $hostname           = $facts['networking']['hostname'],
   Boolean                  $manage_db          = false,
   Eit_types::SimpleString  $db_user            = 'icm',
-  Eit_types::Password      $db_password,
-  Eit_types::Password      $root_password,
-  Boolean                  $db_backup,
   Eit_types::SimpleString  $db_admin_user      = 'icmadmin',
-  Eit_types::Password      $db_admin_password,
   Eit_types::SimpleString  $db_charset         = 'utf8',
   Eit_types::SimpleString  $db_collate         = 'utf8_general_ci',
   Stdlib::Absolutepath     $config_file        = '/etc/icmanage/icmPm.cfg',
   Array[Eit_types::IPCIDR] $access_mysql_from  = ['0.0.0.0/0'],
   String                   $mysql_version      = '5.5',
-  Stdlib::Absolutepath     $backup_dir,
-  Boolean                  $__blendable,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'db_password',
+    'root_password',
+    'db_admin_password',
+  ]
+
 ) inherits ::role::projectmanagement::perforce {
 
   confine(!('role::projectmanagement::perforce' in $facts['obmondo_classes']),

@@ -45,6 +45,8 @@
 #
 # @param provider The provider for the repository, defaults to undef.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::package_management::repo (
   Eit_types::User  $user,
   Stdlib::Unixpath $basedir,
@@ -68,6 +70,12 @@ class role::package_management::repo (
   Optional[Stdlib::HTTPSUrl] $gitserver_url,
   Optional[String]           $gitserver_token,
   Optional[Enum['gitlab']]   $provider,
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'signing_password',
+    'gitserver_token',
+  ]
+
 ) inherits role::package_management {
 
   confine($server_tag, !($gitserver_url and $gitserver_token),

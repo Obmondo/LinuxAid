@@ -24,6 +24,8 @@
 # @param $__blendable
 # An internal parameter.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::projectmanagement::gitlab_ci_runner (
   Eit_types::URL                   $url,
   String                           $token,
@@ -36,6 +38,11 @@ class role::projectmanagement::gitlab_ci_runner (
   Boolean                          $manage_docker    = true,
   Integer[0,default]               $check_interval   = 30,
   Boolean                          $__blendable,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'token',
+  ]
+
 ) inherits ::role::projectmanagement {
 
   confine($executor == 'docker', !$docker_image, "`docker_image` needs to be set if `executor` set to 'docker'")

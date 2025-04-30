@@ -35,10 +35,13 @@
 #
 # @param virtualhosts A hash of virtual host configurations. Defaults to an empty hash.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
+
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
-  Optional[String]         $ssl_cert             = undef,
-  Optional[String]         $ssl_key              = undef,
+  Optional[String]                    $ssl_cert             = undef,
+  Optional[String]                    $ssl_key              = undef,
   Boolean                             $mysql                = false,
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,
@@ -56,6 +59,10 @@ class role::appeng::phpfpm (
     ensure        => Boolean,
     document_root => Stdlib::Unixpath,
   }]]                                 $virtualhosts         = {},
+  Eit_types::Encrypt::Params          $__encrypt            = [
+    'ssl_cert',
+    'ssl_key',
+  ],
 ) inherits ::role::appeng {
 
   confine($opcodecache == 'opcache',

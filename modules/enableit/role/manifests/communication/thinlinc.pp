@@ -25,6 +25,8 @@
 #
 # @param loadbalancer_ip The IP address of the load balancer. Defaults to undef.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::communication::thinlinc (
   Eit_types::Password    $webadm_password,
   String                 $version                     = '4.9.0',
@@ -38,6 +40,10 @@ class role::communication::thinlinc (
   Array[Eit_types::User] $shadowing_allowed_shadowers = [],
   Stdlib::Host           $master_hostname             = 'localhost',
   Optional[Stdlib::IP::Address] $loadbalancer_ip      = undef,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'webadm_password',
+  ],
 ) inherits ::role::communication {
 
   confine($enable, $::common::system::selinux::enable, 'selinux must be disabled')
