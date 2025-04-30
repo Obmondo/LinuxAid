@@ -4,24 +4,9 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
-  Optional[
-    Array[Eit_types::Monitor::Domains
-  ]]                                   $domains = $role::web::apache::domains,
 
-  Hash[String,Struct[{
-    ssl                      => Optional[Boolean],
-    ssl_cert                 => Optional[Sensitive[String]],
-    ssl_key                  => Optional[Sensitive[String]],
-    docroot                  => Variant[Stdlib::Unixpath, Boolean],
-    domains                  => Optional[Array[Eit_types::Monitor::Domains]],
-    redirect_dest            => Optional[Array[String]],
-    redirect_status          => Optional[Array[String]],
-    port                     => Optional[Stdlib::Port],
-    serveraliases            => Optional[Array],
-    directories              => Optional[Array[Hash]],
-    aliases                  => Optional[Array[Hash]],
-    proxy_pass               => Optional[Array[Hash]],
-  }]]                                   $vhosts = $role::web::apache::vhosts,
+  Eit_types::Web::Apache::Vhosts     $vhosts  = $role::web::apache::vhosts,
+  Array[Eit_types::Monitor::Domains] $domains = $role::web::apache::domains,
 ) {
 
   $listen_ports = [
@@ -99,7 +84,7 @@ class profile::web::apache (
   }
 
   # Setup customers virtualhosts
-  $vhosts.each |$vhost_name, $params| {
+  unwrap($vhosts).each |$vhost_name, $params| {
     if $params['ssl'] {
       file {
         "/etc/ssl/private/${vhost_name}":
@@ -108,13 +93,13 @@ class profile::web::apache (
           mode   => '0700',
         ;
         "/etc/ssl/private/${vhost_name}/cert.pem":
-          content => $params[unwrap('ssl_cert')],
+          content => $params['ssl_cert'].node_encrypt::secret,
           owner   => $apache_user,
           mode    => '0600',
           notify  => Service['httpd'],
         ;
         "/etc/ssl/private/${vhost_name}/cert.key":
-          content => $params[unwrap('ssl_key')],
+          content => $params['ssl_key'].node_encrypt::secret,
           owner   => $apache_user,
           mode    => '0600',
           notify  => Service['httpd'],

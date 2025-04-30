@@ -73,6 +73,8 @@
 #
 # @param backup Whether to enable backups. Defaults to false.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::db::mongodb (
   Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = undef,
   Boolean $use_upstream_repo                             = true,
@@ -110,17 +112,22 @@ class role::db::mongodb (
   Eit_types::User $monitor_user                          = 'obmondo-mon',
   Eit_types::Password $monitor_password                  = undef,
   Boolean $backup                                        = false,
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'admin_password',
+    'monitor_password',
+  ],
 ) inherits ::role::db {
-  # FUTURE: When we support replication from the role, make sure to default to 
+  # FUTURE: When we support replication from the role, make sure to default to
   # the v1 protocol: https://jepsen.io/analyses/mongodb-3-4-0-rc3
-  confine($remote_user_auth,    $disable_auth,    'Disabling authentication globally is not possible while requiring authentication for remote users')
+  confine($remote_user_auth,    $disable_auth,    'Disabling authentication globally is not possible while requiring authentication for remote users') #lint:ignore:140chars
   confine($ssl, !$ssl_key, 'Enabling `ssl` requires `ssl_key` to be set')
   confine(!$ssl, $ssl_ca, '`ssl_ca` should only be used when `ssl` is enabled')
-  confine($create_admin,    !($admin_username and $admin_password and $admin_roles),    'If `create_admin` is enabled, `admin_username`, `admin_password` and `admin_roles` must be set.')
+  confine($create_admin,    !($admin_username and $admin_password and $admin_roles),    'If `create_admin` is enabled, `admin_username`, `admin_password` and `admin_roles` must be set.') #lint:ignore:140chars
   confine(!$create_admin, $admin_store_credentials !~ Undef, '`create_admin` must be enabled if `admin_store_credentials` is set')
   # verbositylevel is a string of up to 5 repeated 'v's
   $_verbosity = join(range(1,$verbosity).each |$_| { 'v' }, '')
-  # Since we run under systemd we'd rather not fork and instead output logs on 
+  # Since we run under systemd we'd rather not fork and instead output logs on
   # stdout/stderr.
   $_fork = !!$log_file
   # Always listen on localhost

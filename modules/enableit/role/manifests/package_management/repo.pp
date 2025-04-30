@@ -45,6 +45,8 @@
 #
 # @param provider The provider for the repository, defaults to undef.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::package_management::repo (
   Eit_types::User  $user,
   Stdlib::Unixpath $basedir,
@@ -57,7 +59,7 @@ class role::package_management::repo (
   Boolean          $manage,
   Hash             $locations,
   Boolean          $snapshot,
-  Optional[Sensitive[String]] $signing_password,
+  Optional[String] $signing_password,
   String           $snapshot_tag,
   String           $nginx_path,
   String           $nginx_tag,
@@ -66,8 +68,14 @@ class role::package_management::repo (
   Eit_types::SystemdTimer::Weekday    $weekday,
   Optional[String]           $server_tag,
   Optional[Stdlib::HTTPSUrl] $gitserver_url,
-  Optional[Sensitive[String]]           $gitserver_token,
+  Optional[String]           $gitserver_token,
   Optional[Enum['gitlab']]   $provider,
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'signing_password',
+    'gitserver_token',
+  ]
+
 ) inherits role::package_management {
 
   confine($server_tag, !($gitserver_url and $gitserver_token),

@@ -8,7 +8,7 @@ function functions::create_ini_file (
   $_settings = Hash($settings.map |$k, $v| {
     [$k, case $v {
       Sensitive: {
-        $v.unwrap
+        $v.node_encrypt::secret
       }
       Array: {
         # Make sure no values in the array has a space in it

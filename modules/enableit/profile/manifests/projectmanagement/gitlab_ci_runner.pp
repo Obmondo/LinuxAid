@@ -3,7 +3,7 @@
 #
 class profile::projectmanagement::gitlab_ci_runner (
   Eit_types::URL                   $url,
-  Sensitive[String]                $token,
+  String                           $token,
   Optional[Enum['docker']]         $executor         = 'docker',
   Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/xenial',
   Hash                             $runners          = {},
@@ -23,7 +23,6 @@ class profile::projectmanagement::gitlab_ci_runner (
       home       => $gitlab_runner_home,
       managehome => true,
     }
-
   }
 
   class { '::gitlab_ci_runner':

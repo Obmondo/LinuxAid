@@ -16,8 +16,8 @@ class profile::db::elasticsearch::kibana (
   Optional[Hash]               $elasticsearch    = $role::db::elasticsearch::kibana_elasticsearch,
   Array[Stdlib::Host]          $nodes            = $role::db::elasticsearch::nodes,
   Optional[String]             $ca_cert          = $role::db::elasticsearch::ca_cert,
-  Optional[Sensitive[String]]  $kibana_username  = $role::db::elasticsearch::kibana_username,
-  Optional[Sensitive[String]]  $kibana_password  = $role::db::elasticsearch::kibana_password,
+  Optional[String]             $kibana_username  = $role::db::elasticsearch::kibana_username,
+  Optional[String]             $kibana_password  = $role::db::elasticsearch::kibana_password,
 ) {
   if $expose {
     if $ssl {
@@ -141,9 +141,9 @@ class profile::db::elasticsearch::kibana (
     config => {
       'elasticsearch.hosts'                      => $elasticsearch_hosts,
       'server.ssl.enabled'                       => false,
-      'elasticsearch.username'                   => unwrap($kibana_username),
+      'elasticsearch.username'                   => $kibana_username.node_encrypt::secret,
       # # TODO: https://github.com/voxpupuli/puppet-kibana/issues/38
-      'elasticsearch.password'                   => unwrap($kibana_password),
+      'elasticsearch.password'                   => $kibana_password.node_encrypt::secret,
       'elasticsearch.ssl.verificationMode'       => 'full',
       'elasticsearch.ssl.certificate'            => "${etc_kibana}/certs/http.crt",
       'elasticsearch.ssl.certificateAuthorities' => [

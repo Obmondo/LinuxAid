@@ -41,14 +41,18 @@
 #
 # @param backup_retention The number of days to retain backups. Defaults to 7.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::projectmanagement::perforce (
+  Eit_types::Password       $service_password,
+  Eit_types::Password       $admin_password,
+  Eit_types::Password       $operator_password,
   Eit_types::User           $user              = 'perforce',
   Stdlib::Absolutepath      $service_root      = '/opt/perforce/p4root',
   Eit_types::SimpleString   $service_name      = 'perforce',
   Boolean                   $ssl               = true,
   Stdlib::Absolutepath      $service_ssldir    = '/etc/perforce/ssl',
   Stdlib::Port              $service_port      = 1666,
-  Eit_types::Password       $service_password,
   Optional[String]          $license_content   = undef,
   Stdlib::Host              $hostname          = $facts['networking']['hostname'],
   Perforce::Version         $version,
@@ -57,11 +61,16 @@ class role::projectmanagement::perforce (
   Boolean                   $icmanage          = false,
   Boolean                   $git_connector     = true,
   Eit_types::User           $admin_user        = 'p4admin',
-  Eit_types::Password       $admin_password,
   Eit_types::User           $operator_user     = 'p4operator',
-  Eit_types::Password       $operator_password,
   Stdlib::Absolutepath      $backup_dir        = $::common::backup::dump_dir,
   Eit_types::Duration::Days $backup_retention  = 7,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'service_password',
+    'admin_password',
+    'operator_password',
+  ],
+
 ) inherits ::role {
 
   confine($facts['os']['family'] != 'RedHat', 'Only Redhat-based distributions are supported')

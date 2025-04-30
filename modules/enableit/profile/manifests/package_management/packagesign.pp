@@ -13,9 +13,9 @@ class profile::package_management::packagesign (
   String                      $nginx_tag        = $role::package_management::repo::nginx_tag,
   Optional[String]            $snapshot_tag     = $role::package_management::repo::snapshot_tag,
   Optional[Enum['gitlab']]    $provider         = $role::package_management::repo::provider,
-  Optional[Sensitive[String]] $signing_password = $role::package_management::repo::signing_password,
+  Optional[String]            $signing_password = $role::package_management::repo::signing_password,
   Optional[Stdlib::HTTPSUrl]  $gitserver_url    = $role::package_management::repo::gitserver_url,
-  Optional[Sensitive[String]] $gitserver_token  = $role::package_management::repo::gitserver_token,
+  Optional[String]            $gitserver_token  = $role::package_management::repo::gitserver_token,
 ) {
 
   file {
@@ -25,8 +25,8 @@ class profile::package_management::packagesign (
     '/opt/obmondo/docker-compose/packagesign/.env':
       ensure  => ensure_present($packagesign),
       content => anything_to_ini({
-        'TOKEN' => $gitserver_token,
-        'PASS'  => $signing_password,
+        'TOKEN' => $gitserver_token.node_encrypt::secret,
+        'PASS'  => $signing_password.node_encrypt::secret,
       }),
     ;
     '/opt/obmondo/docker-compose/packagesign/docker-compose.yaml':

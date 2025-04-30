@@ -8,12 +8,12 @@ class profile::db::pgsql (
   Array[Stdlib::IP::Address]         $listen_address       = $role::db::pgsql::listen_address,
   Array[Stdlib::IP::Address]         $allow_remote_hosts   = $role::db::pgsql::allow_remote_hosts,
   Optional[Eit_types::SimpleString]  $recovery_username    = $role::db::pgsql::recovery_username,
-  Optional[Sensitive[String]]        $recovery_password    = $role::db::pgsql::recovery_password,
+  Optional[String]                   $recovery_password    = $role::db::pgsql::recovery_password,
   Optional[Eit_types::Host]          $recovery_host        = $role::db::pgsql::recovery_host,
   Optional[Stdlib::Port]             $recovery_port        = $role::db::pgsql::recovery_port,
   Optional[Stdlib::Unixpath]         $recovery_trigger     = $role::db::pgsql::recovery_trigger,
   Optional[Eit_types::SimpleString]  $replication_username = $role::db::pgsql::replication_username,
-  Optional[Sensitive[String]]        $replication_password = $role::db::pgsql::replication_password,
+  Optional[String]                   $replication_password = $role::db::pgsql::replication_password,
   Optional[Eit_types::SimpleString]  $application_name     = $role::db::pgsql::application_name,
   Optional[Eit_types::Pgsql::Pg_hba] $pg_hba_rule          = $role::db::pgsql::pg_hba_rule,
 ) {
@@ -156,7 +156,7 @@ class profile::db::pgsql (
     postgresql::server::recovery { 'hot_standby_recovery.conf':
       standby_mode     => 'on',
       trigger_file     => $recovery_trigger,
-      primary_conninfo => "host=${recovery_host} port=${recovery_port} user=${recovery_username} password=unwrap(${recovery_password}) application_name=${application_name}", #lint:ignore:140chars
+      primary_conninfo => "host=${recovery_host} port=${recovery_port} user=${recovery_username} password=(${recovery_password}.node_encrypt::secret) application_name=${application_name}", #lint:ignore:140chars
     }
   }
 
@@ -182,7 +182,7 @@ class profile::db::pgsql (
       inherit       => false,
       replication   => true,
       username      => $replication_username,
-      password_hash => postgresql::postgresql_password($replication_username, unwrap($replication_password)),
+      password_hash => postgresql::postgresql_password($replication_username, ($replication_password)),
     }
   }
 

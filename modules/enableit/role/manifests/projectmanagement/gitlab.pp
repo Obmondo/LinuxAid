@@ -77,6 +77,8 @@
 #
 # @param garbage_cleanup_job_hour The hour of the day to run garbage cleanup jobs. Defaults to 4.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::projectmanagement::gitlab (
   Stdlib::Fqdn                         $domain,
   Boolean                              $email_enabled,
@@ -97,14 +99,14 @@ class role::projectmanagement::gitlab (
   Integer[0,23]                        $backup_cron_hour         = 2,
   Optional[Stdlib::Absolutepath]       $backup_path              = undef,
   Integer[1,default]                   $backup_keep_days         = 7,
-  Optional[Sensitive[String]]          $ssl_cert                 = undef,
-  Optional[Sensitive[String]]          $ssl_key                  = undef,
-  Optional[Sensitive[String]]          $registry_ssl_cert        = $ssl_cert,
-  Optional[Sensitive[String]]          $registry_ssl_key         = $ssl_key,
+  Optional[String]                     $ssl_cert                 = undef,
+  Optional[String]                     $ssl_key                  = undef,
+  Optional[String]                     $registry_ssl_cert        = $ssl_cert,
+  Optional[String]                     $registry_ssl_key         = $ssl_key,
   Stdlib::Fqdn                         $registry_domain          = $domain,
   Optional[Array[Stdlib::IP::Address]] $trusted_proxies          = [],
-  Optional[Sensitive[String]]          $mattermost_ssl_cert      = $ssl_cert,
-  Optional[Sensitive[String]]          $mattermost_ssl_key       = $ssl_key,
+  Optional[String]                     $mattermost_ssl_cert      = $ssl_cert,
+  Optional[String]                     $mattermost_ssl_key       = $ssl_key,
   Optional[String]                     $pages_ssl_cert           = undef,
   Optional[String]                     $pages_ssl_key            = undef,
   Stdlib::Fqdn                         $mattermost_domain        = $domain,
@@ -116,6 +118,15 @@ class role::projectmanagement::gitlab (
   Optional[Array[Eit_types::IPCIDR]]   $monitoring_whitelist     = undef,
   Optional[Eit_types::Gitlab::Prometheus_exporters] $prometheus_exporters = undef,
   Optional[Cron::Hour]                 $garbage_cleanup_job_hour  = 4,
+
+  Eit_types::Encrypt::Params $__encrypt       = [
+    'ssl_cert',
+    'ssl_key',
+    'registry_ssl_cert',
+    'registry_ssl_key',
+    'mattermost_ssl_cert',
+    'mattermost_ssl_key',
+  ]
 ) inherits ::role::projectmanagement {
 
   confine($facts['os']['family'] != 'Debian',

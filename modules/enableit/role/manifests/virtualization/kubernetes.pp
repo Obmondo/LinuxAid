@@ -77,10 +77,12 @@
 #
 # @param containerd_snapshotter The snapshotter to use for containerd. Defaults to 'zfs'.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::virtualization::kubernetes (
   Enum['controller','worker'] $role,
-  Sensitive[String]           $discovery_token_hash,
-  Sensitive[String]           $token,
+  String                      $discovery_token_hash,
+  String                      $token,
   Eit_types::IPPort           $controller_address,
   Boolean                     $install_dashboard,
   String                      $version                    = '1.26.1',
@@ -92,30 +94,44 @@ class role::virtualization::kubernetes (
   Optional[String]            $etcd_initial_cluster       = undef,
   Optional[Array]             $etcd_peers                 = undef,
   Optional[Array]             $worker_peers               = undef,
-  Optional[Array[Variant[    Stdlib::IP::Address,    Stdlib::Host  ]]]                         $allow_k8s_api              = $etcd_peers,
   Optional[Stdlib::Fqdn]      $keycloak_oidc_domain       = undef,
   String                      $keycloak_oidc_client_id    = 'kubernetes',
   Boolean                     $keycloak_oidc_groups_claim = true,
   Optional[String]            $etcdserver_crt             = undef,
-  Optional[Sensitive[String]] $etcdserver_key             = undef,
+  Optional[String]            $etcdserver_key             = undef,
   Optional[String]            $etcdpeer_crt               = undef,
-  Optional[Sensitive[String]] $etcdpeer_key               = undef,
+  Optional[String]            $etcdpeer_key               = undef,
   Optional[String]            $etcd_ca_crt                = undef,
-  Optional[Sensitive[String]] $etcd_ca_key                = undef,
+  Optional[String]            $etcd_ca_key                = undef,
   Optional[String]            $etcdclient_crt             = undef,
-  Optional[Sensitive[String]] $etcdclient_key             = undef,
+  Optional[String]            $etcdclient_key             = undef,
   Optional[String]            $kubernetes_ca_crt          = undef,
-  Optional[Sensitive[String]] $kubernetes_ca_key          = undef,
+  Optional[String]            $kubernetes_ca_key          = undef,
   Optional[String]            $sa_pub                     = undef,
-  Optional[Sensitive[String]] $sa_key                     = undef,
+  Optional[String]            $sa_key                     = undef,
   Optional[Array]             $apiserver_cert_extra_sans  = [],
   Optional[String]            $front_proxy_ca_crt         = undef,
-  Optional[Sensitive[String]] $front_proxy_ca_key         = undef,
+  Optional[String]            $front_proxy_ca_key         = undef,
   Optional[String]            $docker_storage_driver      = undef,
   Optional[String]            $containerd_version         = '1.6.20-1',
   Optional[String]            $image_repository           = 'registry.k8s.io',
   Optional[String]            $containerd_install_method  = 'package',
   Enum['overlayfs', 'zfs']    $containerd_snapshotter     = 'zfs',
+
+  Optional[Array[Variant[Stdlib::IP::Address,Stdlib::Host]]] $allow_k8s_api = $etcd_peers,
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'discovery_token_hash',
+    'token',
+    'etcdserver_key',
+    'etcdpeer_key',
+    'etcd_ca_key',
+    'etcdclient_key',
+    'kubernetes_ca_key',
+    'sa_key',
+    'front_proxy_ca_key',
+  ]
+
 ) inherits role::virtualization {
 
   if ($role == 'controller') {
@@ -134,6 +150,6 @@ class role::virtualization::kubernetes (
   confine($facts.dig('os', 'family') != 'Debian', 'Only Debian-based distributions are supported')
   confine($keycloak_oidc_domain, !($keycloak_oidc_client_id and $keycloak_oidc_groups_claim), 'keycloak OIDC domain needs `keycloak_oidc_client_id` and `keycloak_oidc_groups_claim`')
 
-  #lint:ignore:140chars  
+  #lint:ignore:140chars
   include profile::virtualization::kubernetes
 }

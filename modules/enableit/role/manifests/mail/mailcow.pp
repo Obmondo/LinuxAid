@@ -33,9 +33,11 @@
 #
 # @param http_bind The HTTP bind address. Defaults to '0.0.0.0'.
 #
+# @param __encrypt The list of params, which needs to be encrypted
+#
 class role::mail::mailcow (
-  Sensitive[String]           $dbroot,
-  Sensitive[String]           $dbpass,
+  String                      $dbroot,
+  String                      $dbpass,
   Stdlib::Fqdn                $domain,
   Stdlib::Unixpath            $backup_dir               = '/opt/backup',
   Boolean                     $manage                   = true,
@@ -50,6 +52,12 @@ class role::mail::mailcow (
   String                      $exporter_image           = 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
   Eit_types::IPPort           $exporter_listen_address  = '127.254.254.254:63382',
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = '0.0.0.0',
+
+  Eit_types::Encrypt::Params $__encrypt = [
+    'dbroot',
+    'dbpass',
+  ]
+
 ) {
 
   contain role::virtualization::docker
