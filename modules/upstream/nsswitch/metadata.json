@@ -1,6 +1,6 @@
 {
   "name": "trlinkin-nsswitch",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "author": "Thomas Linkin",
   "summary": "Module for managing nsswitch.conf",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.3.2 < 6.0.0"
+      "version_requirement": ">= 4.25.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -18,21 +18,24 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {

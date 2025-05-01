@@ -1,8 +1,10 @@
-# @summary nsswitch class
-#   This module creates a /etc/nsswitch.conf file whith all the lines that
-#   determine the sources from which to obtain name-service information in a
-#   range of categories, and in what order. For further information look into
-#   manual pages.
+# @summary Manages the system nsswitch.conf configuration
+#
+# This module creates a `nsswitch.conf` file with all the lines that determine
+# the sources from which to obtain name-service information in a range of
+# categories, and in what order.
+#
+# @see nsswitch.conf(5)
 #
 # @example Basic example
 #    include nsswitch
@@ -13,140 +15,101 @@
 #    }
 #
 # @param aliases
-#
 #   Mail aliases, used by getaliasent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::aliases_default)
 #
 # @param automount
-#
 #   Which conventions to use for automounting of homes.
-#   *Variant* (defaults to $nsswitch::params::automount_default)
 #
 # @param bootparams
-#
 #   Where bootparams shall be supplied from (e.g. for diskless clients at boot
 #   time using rpc.bootparamd).
-#   *Variant* (defaults to $nsswitch::params::bootparams_default)
 #
 # @param ethers
-#
 #   Ethernet numbers.
-#   *Variant* (defaults to $nsswitch::params::ethers_default)
 #
 # @param file_group
-#
 #   Group of the nsswitch.conf file
-#   *Optional* (defaults to $nsswitch::params::file_group)
 #
 # @param file_owner
-#
 #   Owner of the nsswitch.conf file
-#   *Optional* (defaults to $nsswitch::params::file_owner)
 #
 # @param file_perms
-#
 #   Permissions for the nsswitch.conf file
-#   *Optional* (defaults to $nsswitch::params::file_perms)
 #
 # @param group
-#
 #   Groups of users, used by getgrent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::group_default)
 #
 # @param gshadow
-#
 #   Shadow groups, used by getspnam() and related functions.
-#   *Variant* (defaults to $nsswitch::params::gshadow_default)
 #
 # @param hosts
-#
 #   Host names and numbers, used by gethostbyname() and related functions.
-#   *Variant* (defaults to $nsswitch::params::hosts_default)
 #
 # @param netgroup
-#
 #   Network-wide list of hosts and users, used for access rules.
-#   *Variant* (defaults to $nsswitch::params::netgroup_default)
 #
 # @param netmasks
-#
 #   Netmasks specify how much of the address to reserve for sub-dividing
 #   networks into subnetworks.
-#   *Variant* (defaults to $nsswitch::params::netmasks_default)
 #
 # @param networks
-#
 #   Network names and numbers, used by getnetent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::network_default)
 #
 # @param passwd
-#
 #   User passwords, used by getpwent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::passwd_default)
 #
 # @param protocols
-#
 #   Network protocols, used by getprotoent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::protocols_default)
 #
 # @param publickey
-#
 #   Public and secret keys for Secure_RPC used by NFS and NIS+.
-#   *Variant* (defaults to $nsswitch::params::rpc_default)
 #
-# @param services
-#
+# @param rpc
 #   Remote procedure call names and numbers, used by getrpcbyname() and related
 #   functions.
-#   *Variant* (defaults to $nsswitch::params::rpc_default)
 #
 # @param services
-#
 #   Network services, used by getservent() and related functions.
-#   *Variant* (defaults to $nsswitch::params::services_default)
 #
 # @param shadow
-#
 #   Shadow user passwords, used by getspnam() and related functions.
-#   *Variant* (defaults to $nsswitch::params::shadow_default)
 #
 # @param shells
-#
 #   Valid user shells, used by getusershell() and related functions.
-#   *Optional* (defaults to $nsswitch::params::shells_default)
 #
 # @param sudoers
-#
 #   Sudoers policy module users.
-#   *Variant* (defaults to $nsswitch::params::sudoers_default)
 #
+# @param file_path
+#   The path to `nsswitch.conf` on the system.
 class nsswitch (
-  Variant[String, Array, Undef] $aliases    = $nsswitch::params::aliases_default,
-  Variant[String, Array, Undef] $automount  = $nsswitch::params::automount_default,
-  Variant[String, Array, Undef] $bootparams = $nsswitch::params::bootparams_default,
-  Variant[String, Array, Undef] $ethers     = $nsswitch::params::ethers_default,
-  Variant[String, Undef] $file_group        = $nsswitch::params::file_group,
-  Variant[String, Undef] $file_owner        = $nsswitch::params::file_owner,
-  Variant[String, Undef] $file_perms        = $nsswitch::params::file_perms,
-  Variant[String, Array, Undef] $group      = $nsswitch::params::group_default,
-  Variant[String, Array, Undef] $hosts      = $nsswitch::params::hosts_default,
-  Variant[String, Array, Undef] $netgroup   = $nsswitch::params::netgroup_default,
-  Variant[String, Array, Undef] $netmasks   = $nsswitch::params::netmasks_default,
-  Variant[String, Array, Undef] $networks   = $nsswitch::params::networks_default,
-  Variant[String, Array, Undef] $passwd     = $nsswitch::params::passwd_default,
-  Variant[String, Array, Undef] $protocols  = $nsswitch::params::protocols_default,
-  Variant[String, Array, Undef] $publickey  = $nsswitch::params::publickey_default,
-  Variant[String, Array, Undef] $rpc        = $nsswitch::params::rpc_default,
-  Variant[String, Array, Undef] $services   = $nsswitch::params::services_default,
-  Variant[String, Array, Undef] $shadow     = $nsswitch::params::shadow_default,
-  Variant[String, Array, Undef] $shells     = $nsswitch::params::shells_default,
-  Variant[String, Array, Undef] $gshadow    = $nsswitch::params::gshadow_default,
-  Variant[String, Array, Undef] $sudoers    = $nsswitch::params::sudoers_default,
+  Optional[Variant[String, Array]] $aliases    = $nsswitch::params::aliases_default,
+  Optional[Variant[String, Array]] $automount  = $nsswitch::params::automount_default,
+  Optional[Variant[String, Array]] $bootparams = $nsswitch::params::bootparams_default,
+  Optional[Variant[String, Array]] $ethers     = $nsswitch::params::ethers_default,
+  Optional[Variant[String]]        $file_group = $nsswitch::params::file_group,
+  Variant[String]                  $file_owner = 'root',
+  Variant[String]                  $file_perms = '0644',
+  Optional[Variant[String, Array]] $group      = $nsswitch::params::group_default,
+  Optional[Variant[String, Array]] $hosts      = $nsswitch::params::hosts_default,
+  Optional[Variant[String, Array]] $netgroup   = $nsswitch::params::netgroup_default,
+  Optional[Variant[String, Array]] $netmasks   = $nsswitch::params::netmasks_default,
+  Optional[Variant[String, Array]] $networks   = $nsswitch::params::networks_default,
+  Optional[Variant[String, Array]] $passwd     = $nsswitch::params::passwd_default,
+  Optional[Variant[String, Array]] $protocols  = $nsswitch::params::protocols_default,
+  Optional[Variant[String, Array]] $publickey  = $nsswitch::params::publickey_default,
+  Optional[Variant[String, Array]] $rpc        = $nsswitch::params::rpc_default,
+  Optional[Variant[String, Array]] $services   = $nsswitch::params::services_default,
+  Optional[Variant[String, Array]] $shadow     = $nsswitch::params::shadow_default,
+  Optional[Variant[String, Array]] $shells     = $nsswitch::params::shells_default,
+  Optional[Variant[String, Array]] $gshadow    = $nsswitch::params::gshadow_default,
+  Optional[Variant[String, Array]] $sudoers    = $nsswitch::params::sudoers_default,
+  Stdlib::Unixpath                 $file_path  = '/etc/nsswitch.conf'
 ) inherits nsswitch::params {
 
   file { 'nsswitch.conf':
     ensure  => file,
-    path    => '/etc/nsswitch.conf',
+    path    => $file_path,
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_perms,

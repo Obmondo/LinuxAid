@@ -44,6 +44,8 @@ Testing has only confirmed functionality on the following:
 
 ### Usage
 
+See [REFERENCE.md](./REFERENCE.md) for full API details.
+
 #### nsswitch class
 
 This is the class by which you will manage the nsswitch.conf file. There
