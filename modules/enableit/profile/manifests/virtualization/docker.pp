@@ -56,7 +56,7 @@ class profile::virtualization::docker (
 
   file { '/etc/docker/daemon.json':
     ensure  => 'present',
-    content => to_json_pretty(
+    content => stdlib::to_json_pretty(
       [
         {
           'default-address-pools' => [

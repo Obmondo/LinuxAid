@@ -33,7 +33,7 @@ class profile::software::teleport (
   file { '/etc/teleport.yaml':
     ensure  => ensure_present($enable),
     noop    => $noop_value,
-    content => to_yaml({
+    content => stdlib::to_yaml({
       'teleport'        => {
         'nodename'     => $facts['networking']['hostname'],
         'data_dir'     => '/run/teleport',
