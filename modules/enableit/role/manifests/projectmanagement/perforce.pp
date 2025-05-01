@@ -41,7 +41,7 @@
 #
 # @param backup_retention The number of days to retain backups. Defaults to 7.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::projectmanagement::perforce (
   Eit_types::Password       $service_password,
@@ -65,7 +65,7 @@ class role::projectmanagement::perforce (
   Stdlib::Absolutepath      $backup_dir        = $::common::backup::dump_dir,
   Eit_types::Duration::Days $backup_retention  = 7,
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'service_password',
     'admin_password',
     'operator_password',

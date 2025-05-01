@@ -40,7 +40,7 @@
 #
 # @param hwloc_enabled Whether to enable hwloc support. Defaults to false.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::computing::slurm (
   Optional[String]               $munge_key               = undef,
@@ -63,7 +63,7 @@ class role::computing::slurm (
   Boolean                        $use_pam                 = false,
   Boolean                        $hwloc_enabled           = false,
 
-  Eit_types::Encrypt::Params     $__encrypt               = [
+  Eit_types::Encrypt::Params     $encrypt_params               = [
     'munge_key',
   ]
 

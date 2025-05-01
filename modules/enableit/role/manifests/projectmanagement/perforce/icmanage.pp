@@ -35,7 +35,7 @@
 #
 # @param __blendable This parameter allows blending. No default.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
@@ -57,7 +57,7 @@ class role::projectmanagement::perforce::icmanage (
   Array[Eit_types::IPCIDR] $access_mysql_from  = ['0.0.0.0/0'],
   String                   $mysql_version      = '5.5',
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'db_password',
     'root_password',
     'db_admin_password',

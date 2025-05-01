@@ -24,7 +24,7 @@
 # @param $__blendable
 # An internal parameter.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::projectmanagement::gitlab_ci_runner (
   Eit_types::URL                   $url,
@@ -39,7 +39,7 @@ class role::projectmanagement::gitlab_ci_runner (
   Integer[0,default]               $check_interval   = 30,
   Boolean                          $__blendable,
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'token',
   ]
 

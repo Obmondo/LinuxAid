@@ -35,7 +35,7 @@
 #
 # @param virtualhosts A hash of virtual host configurations. Defaults to an empty hash.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 
 class role::appeng::phpfpm (
@@ -59,7 +59,7 @@ class role::appeng::phpfpm (
     ensure        => Boolean,
     document_root => Stdlib::Unixpath,
   }]]                                 $virtualhosts         = {},
-  Eit_types::Encrypt::Params          $__encrypt            = [
+  Eit_types::Encrypt::Params          $encrypt_params            = [
     'ssl_cert',
     'ssl_key',
   ],

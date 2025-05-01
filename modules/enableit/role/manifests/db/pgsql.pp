@@ -29,7 +29,7 @@
 #
 # @param application_name The name of the application. Defaults to undef.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::db::pgsql (
   Array[Stdlib::IP::Address]         $allow_remote_hosts   = [],
@@ -47,7 +47,7 @@ class role::db::pgsql (
   Optional[String]                   $replication_password = undef,
   Optional[Eit_types::SimpleString]  $application_name     = undef,
 
-  Eit_types::Encrypt::Params         $__encrypt            = [
+  Eit_types::Encrypt::Params         $encrypt_params            = [
     'recovery_password',
     'replication_password',
   ]

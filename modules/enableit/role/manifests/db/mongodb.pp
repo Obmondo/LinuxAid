@@ -73,7 +73,7 @@
 #
 # @param backup Whether to enable backups. Defaults to false.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::db::mongodb (
   Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = undef,
@@ -113,7 +113,7 @@ class role::db::mongodb (
   Eit_types::Password $monitor_password                  = undef,
   Boolean $backup                                        = false,
 
-  Eit_types::Encrypt::Params $__encrypt       = [
+  Eit_types::Encrypt::Params $encrypt_params       = [
     'admin_password',
     'monitor_password',
   ],

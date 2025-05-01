@@ -23,7 +23,7 @@
 #
 # @param manage_tftpd Whether to manage TFTP daemon. Defaults to false.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::provisioning::razor (
   Eit_types::Password $db_password,
@@ -40,7 +40,7 @@ class role::provisioning::razor (
   Array[Eit_types::IP, 1] $dhcp_dns = $common::system::dns::nameservers,
   Boolean $manage_tftpd             = false,
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'db_password',
   ]
 
