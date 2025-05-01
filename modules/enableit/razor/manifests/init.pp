@@ -103,7 +103,7 @@ class razor (
 
   file { '/etc/puppetlabs/razor-server/config.yaml':
     ensure  => 'file',
-    content => to_yaml({
+    content => stdlib::to_yaml({
       'production' => {
         'database_url' => "jdbc:postgresql://${db_server}/${db_name}?user=${_db_user_escaped}&password=${_db_password_escaped}",
       },

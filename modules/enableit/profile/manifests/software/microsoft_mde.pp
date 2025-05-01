@@ -143,7 +143,7 @@ class profile::software::microsoft_mde (
       file { '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json':
         ensure  => 'present',
         noop    => $noop_value,
-        content => to_json({
+        content => stdlib::to_json({
           'antivirusEngine' => {
             'exclusions' => $_exclusion_lists,
           }

@@ -45,7 +45,7 @@ class profile::storage::s3 (
     ;
     "${conf_dir}/authdata.json":
       ensure  => ensure_present($manage),
-      content => to_json_pretty({
+      content => stdlib::to_json_pretty({
         accounts => $_roles,
       }),
     ;

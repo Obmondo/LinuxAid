@@ -27,7 +27,7 @@ define profile::certs::letsencrypt::domain (
       file {'/etc/puppetlabs/facter/facts.d/obmondo_certs_rejected.json':
         ensure  => present,
         mode    => '0644',
-        content => to_json({
+        content => stdlib::to_json({
           'rejected_domains' => $domains
         }),
         noop    => false,

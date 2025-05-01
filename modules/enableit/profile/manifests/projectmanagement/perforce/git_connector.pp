@@ -91,7 +91,7 @@ class profile::projectmanagement::perforce::git_connector (
     content => {
       gconn => $_gconn_conf,
       p4gc  => $_p4gc_conf,
-    }.to_json_pretty(true, {
+    }.stdlib::to_json_pretty(true, {
       indent => '    ',
     }),
     require => Group['gconn-auth'],

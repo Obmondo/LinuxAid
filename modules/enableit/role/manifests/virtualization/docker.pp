@@ -63,7 +63,7 @@ class role::virtualization::docker (
   $_allow_docker = lookup('common::network::firewall::allow_docker', Boolean, undef, false)
   confine(!$_allow_docker, 'This role needs the setting `common::network::firewall::allow_docker` to be enabled!')
   confine($manage_compose, !$compose_instances, 'A compose instance must be present if managing compose')
-  confine($bip, $bridge_interface,           '`$bip` and `$bridge_interface` cannot be set simultaneously')
+  confine($bip, $bridge_interface, '`$bip` and `$bridge_interface` cannot be set simultaneously')
 
   contain profile::virtualization::docker
 }
