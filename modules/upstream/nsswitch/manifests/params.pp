@@ -3,13 +3,9 @@
 #   operatingsystem being used.
 #
 class nsswitch::params {
-
-  $file_owner = 'root'
-  $file_perms = '0644'
-
   case $facts['operatingsystem'] {
     /CentOS|RedHat|Amazon|OEL|OracleLinux|Scientific|CloudLinux/: {
-      if $facts[operatingsystemmajrelease] == '7' {
+      if versioncmp($facts[operatingsystemmajrelease], '6') > 0 {
         $passwd_default     = ['files','sss']
         $shadow_default     = ['files','sss']
         $group_default      = ['files','sss']
