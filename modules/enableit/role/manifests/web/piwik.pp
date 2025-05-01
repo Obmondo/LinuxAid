@@ -15,7 +15,7 @@
 #
 # @param use_forwarded_host Whether to use the forwarded host header. Defaults to false.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::web::piwik (
   String $hostname,
@@ -28,7 +28,7 @@ class role::web::piwik (
 
   Enum['::role::appeng::mod_php', '::role::appeng::phpfpm'] $variant = '::role::appeng::mod_php',
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'database_password',
   ],
 

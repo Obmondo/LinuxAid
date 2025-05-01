@@ -77,7 +77,7 @@
 #
 # @param containerd_snapshotter The snapshotter to use for containerd. Defaults to 'zfs'.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::virtualization::kubernetes (
   Enum['controller','worker'] $role,
@@ -120,7 +120,7 @@ class role::virtualization::kubernetes (
 
   Optional[Array[Variant[Stdlib::IP::Address,Stdlib::Host]]] $allow_k8s_api = $etcd_peers,
 
-  Eit_types::Encrypt::Params $__encrypt = [
+  Eit_types::Encrypt::Params $encrypt_params = [
     'discovery_token_hash',
     'token',
     'etcdserver_key',

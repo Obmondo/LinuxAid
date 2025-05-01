@@ -51,7 +51,7 @@
 #
 # @param kibana_password Optional password for Kibana. Defaults to undef.
 #
-# @param __encrypt The list of params, which needs to be encrypted
+# @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::db::elasticsearch (
   Eit_types::Version                  $version               = '7.10.2',
@@ -79,7 +79,7 @@ class role::db::elasticsearch (
   Optional[String]                    $ca_cert               = undef,
   Optional[String]                    $kibana_username       = undef,
   Optional[String]                    $kibana_password       = undef,
-  Eit_types::Encrypt::Params          $__encrypt             = [
+  Eit_types::Encrypt::Params          $encrypt_params             = [
     'kibana_username',
     'kibana_password',
   ],
