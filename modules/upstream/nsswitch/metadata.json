@@ -10,16 +10,18 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 4.25.0 < 9.0.0"
     }
   ],
+  "data_provider": null,
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
@@ -27,6 +29,20 @@
       "operatingsystemrelease": [
         "6",
         "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
         "8"
       ]
     },
@@ -35,14 +51,16 @@
       "operatingsystemrelease": [
         "6",
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CloudLinux",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
@@ -74,6 +92,10 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
+        "20.04",
+        "18.04",
+        "16.04",
+        "14.04",
         "12.04",
         "10.04"
       ]
@@ -81,8 +103,11 @@
     {
       "operatingsystem": "Debian",
        "operatingsystemrelease": [
-        "12.04",
-        "10.04"
+         "13",
+         "12",
+         "11",
+         "10",
+         "9"
       ]
     },
     {
@@ -125,14 +150,25 @@
         "19",
         "26",
         "27",
-        "28"
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36"
       ]
+    },
+    {
+      "operatingsystem": "Archlinux"
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 7.0.0"
+      "version_requirement": ">= 4.0.0 < 8.0.0"
     }
   ],
   "tags": [
