@@ -1,0 +1,18 @@
+nsswitch::group:
+  - compat
+nsswitch::hosts:
+  - files
+  - dns
+nsswitch::networks:
+  - files
+nsswitch::passwd:
+  - compat
+nsswitch::protocols:
+  - files
+nsswitch::rpc:
+  - files
+nsswitch::services:
+  - compat
+nsswitch::shells:
+  - files
+nsswitch::file_group: wheel

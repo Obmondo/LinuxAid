@@ -1,24 +1,32 @@
 {
-  "name": "trlinkin-nsswitch",
-  "version": "2.2.0",
-  "author": "Thomas Linkin",
+  "name": "puppet-nsswitch",
+  "version": "3.2.0",
+  "author": "Vox Pupuli",
   "summary": "Module for managing nsswitch.conf",
   "license": "Apache-2.0",
-  "source": "https://github.com/trlinkin/puppet-nsswitch",
-  "project_page": "https://github.com/trlinkin/puppet-nsswitch",
-  "issues_url": "https://github.com/trlinkin/puppet-nsswitch/issues",
+  "source": "https://github.com/voxpupuli/puppet-nsswitch",
+  "project_page": "https://github.com/voxpupuli/puppet-nsswitch",
+  "issues_url": "https://github.com/voxpupuli/puppet-nsswitch/issues",
+  "tags": [
+    "linux",
+    "authentication"
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 9.0.0"
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     }
   ],
-  "data_provider": null,
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8",
         "9"
@@ -27,7 +35,6 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8",
         "9"
@@ -43,79 +50,35 @@
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8",
         "9"
       ]
     },
     {
-      "operatingsystem": "CloudLinux",
-      "operatingsystemrelease": [
-        "6",
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "2018.03",
-        "2017.09",
-        "2017.03",
-        "2016.09",
-        "2016.03",
-        "2015.09",
-        "2015.03",
-        "2014.09",
-        "2014.03",
-        "2013.09",
-        "2013.03",
-        "2012.09",
-        "2012.03",
-        "2011.09"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "20.04",
-        "18.04",
-        "16.04",
-        "14.04",
-        "12.04",
-        "10.04"
+        "22.04"
       ]
     },
     {
       "operatingsystem": "Debian",
-       "operatingsystemrelease": [
-         "13",
-         "12",
-         "11",
-         "10",
-         "9"
+      "operatingsystemrelease": [
+        "11",
+        "12",
+        "13"
       ]
     },
     {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": [
-        "11",
-        "12"
-      ]
+      "operatingsystem": "SLES"
     },
     {
       "operatingsystem": "Solaris",
@@ -139,44 +102,7 @@
       ]
     },
     {
-      "operatingsystem": "LinuxMint",
-      "operatingsystemrelease": [
-        "17.2"
-      ]
-    },
-    {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "19",
-        "26",
-        "27",
-        "28",
-        "29",
-        "30",
-        "31",
-        "32",
-        "33",
-        "34",
-        "35",
-        "36"
-      ]
-    },
-    {
       "operatingsystem": "Archlinux"
     }
-  ],
-  "requirements": [
-    {
-      "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 8.0.0"
-    }
-  ],
-  "tags": [
-    "linux",
-    "nsswitch",
-    "authentication"
-  ],
-  "pdk-version": "1.4.1",
-  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
-  "template-ref": "1.4.1-0-g52adbbb"
+  ]
 }

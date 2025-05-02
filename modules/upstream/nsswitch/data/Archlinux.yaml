@@ -1,0 +1,30 @@
+nsswitch::passwd:
+  - files
+  - mymachines
+  - systemd
+nsswitch::shadow:
+  - files
+nsswitch::group:
+  - files
+  - mymachines
+  - systemd
+nsswitch::services:
+  - files
+nsswitch::netgroup:
+  - files
+nsswitch::ethers:
+  - files
+nsswitch::hosts:
+  - files
+  - mymachines
+  - myhostname
+  - resolve [!UNAVAIL=return]
+  - dns
+nsswitch::networks:
+  - files
+nsswitch::protocols:
+  - files
+nsswitch::publickey:
+  - files
+nsswitch::rpc:
+  - files

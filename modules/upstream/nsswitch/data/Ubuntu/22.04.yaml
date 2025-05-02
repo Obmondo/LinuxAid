@@ -1,0 +1,54 @@
+---
+# The commented text below is the /etc/nsswitch.conf from a freshly-built Ubuntu 22.04 Server.
+# # /etc/nsswitch.conf
+# #
+# # Example configuration of GNU Name Service Switch functionality.
+# # If you have the `glibc-doc-reference' and `info' packages installed, try:
+# # `info libc "Name Service Switch"' for information about this file.
+#
+# passwd:         files systemd
+# group:          files systemd
+# shadow:         files
+# gshadow:        files
+#
+# hosts:          files dns
+# networks:       files
+#
+# protocols:      db files
+# services:       db files
+# ethers:         db files
+# rpc:            db files
+#
+# netgroup:       nis
+#
+# The following YAML attempts to recreate the above file.
+
+nsswitch::passwd:
+  - files
+  - systemd
+nsswitch::group:
+  - files
+  - systemd
+nsswitch::shadow:
+  - files
+nsswitch::gshadow:
+  - files
+nsswitch::hosts:
+  - files
+  - dns
+nsswitch::networks:
+  - files
+nsswitch::protocols:
+  - db
+  - files
+nsswitch::rpc:
+  - db
+  - files
+nsswitch::services:
+  - db
+  - files
+nsswitch::ethers:
+  - db
+  - files
+nsswitch::netgroup:
+  - nis

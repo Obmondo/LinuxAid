@@ -1,16 +1,13 @@
 # nsswitch.conf module for Puppet
-[![Build Status](https://travis-ci.org/trlinkin/puppet-nsswitch.svg?branch=master)](https://travis-ci.org/trlinkin/puppet-nsswitch)
 
-A way of expressing nsswitch.conf configurations declaratively. This
-should manage the standard 15 databases NSS supports, plus the `sudo` entry
-respected by sudo since the 1.7.0 release.
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-nsswitch.svg)](https://github.com/voxpupuli/puppet-nsswitch/blob/master/LICENSE)
+[![CI Status](https://github.com/voxpupuli/puppet-nsswitch/workflows/CI/badge.svg?branch=master)]((https://github.com/voxpupuli/puppet-nsswitch/workflows/CI/badge.svg?branch=master))
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/nsswitch.svg)](https://forge.puppetlabs.com/puppet/nsswitch)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/nsswitch.svg)](https://forge.puppetlabs.com/puppet/nsswitch)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/nsswitch.svg)](https://forge.puppetlabs.com/puppet/nsswitch)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/nsswitch.svg)](https://forge.puppetlabs.com/puppet/nsswitch)
 
-### Updated for Puppet 4 - No Puppet 3 Compatibility
-
-The 2.x series of this module officially adopts the Puppet 4 parser syntax and
-other new Puppet features. The 2.x series will no longer work with Puppet 3 or
-earlier. One benefit is the removal of dependency the `trlinkin-validate_multi`
-module.
+A way of expressing nsswitch.conf configurations declaratively.
 
 ### Defaults
 
@@ -20,27 +17,6 @@ nsswitch.conf that uses defaults derived from what the distribution uses in
 the nsswitch.conf file on fresh install. These defaults have been verified
 on the mentioned distributions by the kindness and diligence of
 contributors, of which I'm very grateful.
-
-### Supported Systems
-
-This module should be capable of supporting the following systems using
-Puppet versions 4 and 5 with the ruby versions that are released with
-the AIO (all in one installer). For an exact matrix see `.travis.yml`.
-
- * Debian/Ubuntu 10.04, 12.04
- * Solaris 10, 11, 11.1, 11.2, 11.3
- * Variants of Enterprise Linux 6 and 7 (Such as Amazon Linux, Scientific Linux, etc)
- * Fedora (defaults need validation)
- * Gentoo
- * FreeBSD 10.3, 10.4, 11.1
- * LinuxMint 17.2
- * SLES 11, 12
-
-Testing has only confirmed functionality on the following:
-  * Ubuntu 12.4
-  * Fedora 19
-  * Centos 6/7
-  * RHEL 6/7
 
 ### Usage
 
@@ -114,3 +90,9 @@ class { 'nsswitch':
     publickey:  nisplus
     automount:  files nisplus
     aliases:    files nisplus
+
+## Authors and Module History
+
+Puppet-nsswitch has been maintained by VoxPupuli since version 3.0.0.
+It was migrated from https://forge.puppet.com/modules/trlinkin/nsswitch.
+It is licensed under the Apache-2 license.

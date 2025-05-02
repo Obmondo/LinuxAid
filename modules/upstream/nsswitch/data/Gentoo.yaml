@@ -1,0 +1,34 @@
+nsswitch::aliases:
+  - files
+nsswitch::automount:
+  - files
+nsswitch::bootparams:
+  - files
+nsswitch::ethers:
+  - db
+  - files
+nsswitch::group:
+  - compat
+nsswitch::hosts:
+  - files
+  - dns
+nsswitch::netgroup:
+  - files
+nsswitch::netmasks:
+  - files
+nsswitch::networks:
+  - files
+  - dns
+nsswitch::passwd:
+  - compat
+nsswitch::protocols:
+  - db
+  - files
+nsswitch::rpc:
+  - db
+  - files
+nsswitch::services:
+  - db
+  - files
+nsswitch::shadow:
+  - compat
