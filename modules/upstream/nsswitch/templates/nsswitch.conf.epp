@@ -1,56 +1,80 @@
+<%- |
+  Optional[Variant[String, Array]] $aliases,
+  Optional[Variant[String, Array]] $automount,
+  Optional[Variant[String, Array]] $bootparams,
+  Optional[Variant[String, Array]] $ethers,
+  Optional[Variant[String, Array]] $group,
+  Optional[Variant[String, Array]] $hosts,
+  Optional[Variant[String, Array]] $netgroup,
+  Optional[Variant[String, Array]] $netmasks,
+  Optional[Variant[String, Array]] $networks,
+  Optional[Variant[String, Array]] $passwd,
+  Optional[Variant[String, Array]] $protocols,
+  Optional[Variant[String, Array]] $publickey,
+  Optional[Variant[String, Array]] $rpc,
+  Optional[Variant[String, Array]] $services,
+  Optional[Variant[String, Array]] $shadow,
+  Optional[Variant[String, Array]] $shells,
+  Optional[Variant[String, Array]] $gshadow,
+  Optional[Variant[String, Array]] $sudoers,
+  Optional[Variant[String, Array]] $subid,
+| -%>
 # This file is controlled by Puppet
 
-<% if $::nsswitch::passwd { -%>
-passwd:     <%= [*$::nsswitch::passwd].join(" ") %>
+<% if $passwd { -%>
+passwd:     <%= [*$passwd].join(" ") %>
 <% } -%>
-<% if $::nsswitch::shadow { -%>
-shadow:     <%= [*$::nsswitch::shadow].join(" ") %>
+<% if $shadow { -%>
+shadow:     <%= [*$shadow].join(" ") %>
 <% } -%>
-<% if $::nsswitch::gshadow { -%>
-gshadow:    <%= [*$::nsswitch::gshadow].join(" ") %>
+<% if $gshadow { -%>
+gshadow:    <%= [*$gshadow].join(" ") %>
 <% } -%>
-<% if $::nsswitch::group { -%>
-group:      <%= [*$::nsswitch::group].join(" ") %>
+<% if $group { -%>
+group:      <%= [*$group].join(" ") %>
 <% } -%>
-<% if $::nsswitch::sudoers { -%>
-sudoers:    <%= [*$::nsswitch::sudoers].join(" ") %>
+<% if $sudoers { -%>
+sudoers:    <%= [*$sudoers].join(" ") %>
 <% } -%>
-<% if $::nsswitch::hosts { -%>
-hosts:      <%= [*$::nsswitch::hosts].join(" ") %>
+<% if $hosts { -%>
+hosts:      <%= [*$hosts].join(" ") %>
 <% } -%>
-<% if $::nsswitch::bootparams { -%>
-bootparams: <%= [*$::nsswitch::bootparams].join(" ") %>
+<% if $bootparams { -%>
+bootparams: <%= [*$bootparams].join(" ") %>
 <% } -%>
-<% if $::nsswitch::ethers { -%>
-ethers:     <%= [*$::nsswitch::ethers].join(" ") %>
+<% if $ethers { -%>
+ethers:     <%= [*$ethers].join(" ") %>
 <% } -%>
-<% if $::nsswitch::netmasks { -%>
-netmasks:   <%= [*$::nsswitch::netmasks].join(" ") %>
+<% if $netmasks { -%>
+netmasks:   <%= [*$netmasks].join(" ") %>
 <% } -%>
-<% if $::nsswitch::networks { -%>
-networks:   <%= [*$::nsswitch::networks].join(" ") %>
+<% if $networks { -%>
+networks:   <%= [*$networks].join(" ") %>
 <% } -%>
-<% if $::nsswitch::protocols { -%>
-protocols:  <%= [*$::nsswitch::protocols].join(" ") %>
+<% if $protocols { -%>
+protocols:  <%= [*$protocols].join(" ") %>
 <% } -%>
-<% if $::nsswitch::rpc { -%>
-rpc:        <%= [*$::nsswitch::rpc].join(" ") %>
+<% if $rpc { -%>
+rpc:        <%= [*$rpc].join(" ") %>
 <% } -%>
-<% if $::nsswitch::services { -%>
-services:   <%= [*$::nsswitch::services].join(" ") %>
+<% if $services { -%>
+services:   <%= [*$services].join(" ") %>
 <% } -%>
-<% if $::nsswitch::netgroup { -%>
-netgroup:   <%= [*$::nsswitch::netgroup].join(" ") %>
+<% if $netgroup { -%>
+netgroup:   <%= [*$netgroup].join(" ") %>
 <% } -%>
-<% if $::nsswitch::publickey { -%>
-publickey:  <%= [*$::nsswitch::publickey].join(" ") %>
+<% if $publickey { -%>
+publickey:  <%= [*$publickey].join(" ") %>
 <% } -%>
-<% if $::nsswitch::automount { -%>
-automount:  <%= [*$::nsswitch::automount].join(" ") %>
+<% if $automount { -%>
+automount:  <%= [*$automount].join(" ") %>
 <% } -%>
-<% if $::nsswitch::aliases { -%>
-aliases:    <%= [*$::nsswitch::aliases].join(" ") %>
+<% if $aliases { -%>
+aliases:    <%= [*$aliases].join(" ") %>
 <% } -%>
-<% if $::nsswitch::shells { -%>
-shells:    <%= [*$::nsswitch::shells].join(" ") %>
+<% if $shells { -%>
+shells:    <%= [*$shells].join(" ") %>
+<% } -%>
+<% if $subid { -%>
+subid:     <%= [*$subid].join(" ") %>
 <% } -%>

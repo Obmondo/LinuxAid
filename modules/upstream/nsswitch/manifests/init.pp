@@ -27,15 +27,6 @@
 # @param ethers
 #   Ethernet numbers.
 #
-# @param file_group
-#   Group of the nsswitch.conf file
-#
-# @param file_owner
-#   Owner of the nsswitch.conf file
-#
-# @param file_perms
-#   Permissions for the nsswitch.conf file
-#
 # @param group
 #   Groups of users, used by getgrent() and related functions.
 #
@@ -80,39 +71,72 @@
 # @param sudoers
 #   Sudoers policy module users.
 #
+# @param subid
+#   subuid and subgid mapping
+#
 # @param file_path
 #   The path to `nsswitch.conf` on the system.
+#
+# @param file_group
+#   Group of the nsswitch.conf file
+#
+# @param file_owner
+#   Owner of the nsswitch.conf file
+#
+# @param file_perms
+#   Permissions for the nsswitch.conf file
+#
 class nsswitch (
-  Optional[Variant[String, Array]] $aliases    = $nsswitch::params::aliases_default,
-  Optional[Variant[String, Array]] $automount  = $nsswitch::params::automount_default,
-  Optional[Variant[String, Array]] $bootparams = $nsswitch::params::bootparams_default,
-  Optional[Variant[String, Array]] $ethers     = $nsswitch::params::ethers_default,
-  Optional[Variant[String]]        $file_group = $nsswitch::params::file_group,
-  Variant[String]                  $file_owner = 'root',
-  Variant[String]                  $file_perms = '0644',
-  Optional[Variant[String, Array]] $group      = $nsswitch::params::group_default,
-  Optional[Variant[String, Array]] $hosts      = $nsswitch::params::hosts_default,
-  Optional[Variant[String, Array]] $netgroup   = $nsswitch::params::netgroup_default,
-  Optional[Variant[String, Array]] $netmasks   = $nsswitch::params::netmasks_default,
-  Optional[Variant[String, Array]] $networks   = $nsswitch::params::networks_default,
-  Optional[Variant[String, Array]] $passwd     = $nsswitch::params::passwd_default,
-  Optional[Variant[String, Array]] $protocols  = $nsswitch::params::protocols_default,
-  Optional[Variant[String, Array]] $publickey  = $nsswitch::params::publickey_default,
-  Optional[Variant[String, Array]] $rpc        = $nsswitch::params::rpc_default,
-  Optional[Variant[String, Array]] $services   = $nsswitch::params::services_default,
-  Optional[Variant[String, Array]] $shadow     = $nsswitch::params::shadow_default,
-  Optional[Variant[String, Array]] $shells     = $nsswitch::params::shells_default,
-  Optional[Variant[String, Array]] $gshadow    = $nsswitch::params::gshadow_default,
-  Optional[Variant[String, Array]] $sudoers    = $nsswitch::params::sudoers_default,
-  Stdlib::Unixpath                 $file_path  = '/etc/nsswitch.conf'
-) inherits nsswitch::params {
-
+  Optional[Variant[String[1], Array[String[1]]]] $aliases    = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $automount  = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $bootparams = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $ethers     = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $group      = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $hosts      = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $netgroup   = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $netmasks   = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $networks   = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $passwd     = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $protocols  = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $publickey  = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $rpc        = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $services   = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $shadow     = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $shells     = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $gshadow    = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $sudoers    = undef,
+  Optional[Variant[String[1], Array[String[1]]]] $subid      = undef,
+  Stdlib::Unixpath $file_path  = '/etc/nsswitch.conf',
+  String[1] $file_group = 'root',
+  String[1] $file_owner = 'root',
+  Stdlib::Filemode $file_perms = '0644',
+) {
   file { 'nsswitch.conf':
     ensure  => file,
     path    => $file_path,
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_perms,
-    content => epp('nsswitch/nsswitch.conf.epp'),
+    content => epp('nsswitch/nsswitch.conf.epp', {
+        'aliases'    => $aliases,
+        'automount'  => $automount,
+        'bootparams' => $bootparams,
+        'ethers'     => $ethers,
+        'group'      => $group,
+        'hosts'      => $hosts,
+        'netgroup'   => $netgroup,
+        'netmasks'   => $netmasks,
+        'networks'   => $networks,
+        'passwd'     => $passwd,
+        'protocols'  => $protocols,
+        'publickey'  => $publickey,
+        'rpc'        => $rpc,
+        'services'   => $services,
+        'shadow'     => $shadow,
+        'shells'     => $shells,
+        'gshadow'    => $gshadow,
+        'sudoers'    => $sudoers,
+        'subid'      => $subid,
+    }),
   }
 }

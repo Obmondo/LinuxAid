@@ -1,0 +1,38 @@
+nsswitch::passwd:
+  - files
+  - sss
+nsswitch::shadow:
+  - files
+  - sss
+nsswitch::group:
+  - files
+  - sss
+nsswitch::automount:
+  - files
+nsswitch::services:
+  - files
+  - sss
+nsswitch::netgroup:
+  - files
+  - sss
+nsswitch::aliases:
+  - files
+  - nisplus
+nsswitch::bootparams:
+  - nisplus [NOTFOUND=return]
+  - files
+nsswitch::ethers:
+  - files
+nsswitch::hosts:
+  - files
+  - dns
+nsswitch::netmasks:
+  - files
+nsswitch::networks:
+  - files
+nsswitch::protocols:
+  - files
+nsswitch::publickey:
+  - nisplus
+nsswitch::rpc:
+  - files
