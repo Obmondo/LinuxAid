@@ -3,6 +3,7 @@ services:
     image: <%= $unbound_image %>
     environment:
       - TZ=${TZ}
+      - SKIP_UNBOUND_HEALTHCHECK=${SKIP_UNBOUND_HEALTHCHECK:-n}
     volumes:
       - <%= $install_dir %>/data/hooks/unbound:/hooks:Z
       - <%= $install_dir %>/data/conf/unbound/unbound.conf:/etc/unbound/unbound.conf:ro,Z
@@ -18,6 +19,7 @@ services:
     image: <%= $mysql_image %>
     depends_on:
       - unbound-mailcow
+      - netfilter-mailcow
     stop_grace_period: 45s
     volumes:
       - mysql-vol-1:/var/lib/mysql/
@@ -40,13 +42,19 @@ services:
 
   redis-mailcow:
     image: <%= $redis_image %>
+    entrypoint: ["/bin/sh","/redis-conf.sh"]
     volumes:
       - redis-vol-1:/data/
+      - <%= $install_dir %>/data/conf/redis/redis-conf.sh:/redis-conf.sh:z
     restart: always
+    depends_on:
+      - netfilter-mailcow
     ports:
       - "${REDIS_PORT:-127.0.0.1:7654}:6379"
     environment:
       - TZ=${TZ}
+      - REDISPASS=${REDISPASS}
+      - REDISMASTERPASS=${REDISMASTERPASS:-}
     sysctls:
       - net.core.somaxconn=4096
     networks:
@@ -60,7 +68,8 @@ services:
     image: <%= $clamd_image %>
     restart: always
     depends_on:
-      - unbound-mailcow
+      unbound-mailcow:
+        condition: service_healthy
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     environment:
@@ -80,12 +89,15 @@ services:
     stop_grace_period: 30s
     depends_on:
       - dovecot-mailcow
+      - clamd-mailcow
     environment:
       - TZ=${TZ}
       - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
       - IPV6_NETWORK=${IPV6_NETWORK:-fd4d:6169:6c63:6f77::/64}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
+      - SPAMHAUS_DQS_KEY=${SPAMHAUS_DQS_KEY:-}
     volumes:
       - <%= $install_dir %>/data/hooks/rspamd:/hooks:Z
       - <%= $install_dir %>/data/conf/rspamd/custom/:/etc/rspamd/custom:z
@@ -115,10 +127,18 @@ services:
       - <%= $install_dir %>/data/web:/web:z
       - <%= $install_dir %>/data/conf/rspamd/dynmaps:/dynmaps:ro,z
       - <%= $install_dir %>/data/conf/rspamd/custom/:/rspamd_custom_maps:z
+      - <%= $install_dir %>/data/conf/dovecot/auth/mailcowauth.php:/mailcowauth/mailcowauth.php:z
+      - <%= $install_dir %>/data/web/inc/functions.inc.php:/mailcowauth/functions.inc.php:z
+      - <%= $install_dir %>/data/web/inc/functions.auth.inc.php:/mailcowauth/functions.auth.inc.php:z
+      - <%= $install_dir %>/data/web/inc/sessions.inc.php:/mailcowauth/sessions.inc.php:z
+      - <%= $install_dir %>/data/web/inc/functions.mailbox.inc.php:/mailcowauth/functions.mailbox.inc.php:z
+      - <%= $install_dir %>/data/web/inc/functions.ratelimit.inc.php:/mailcowauth/functions.ratelimit.inc.php:z
+      - <%= $install_dir %>/data/web/inc/functions.acl.inc.php:/mailcowauth/functions.acl.inc.php:z
       - rspamd-vol-1:/var/lib/rspamd
       - mysql-socket-vol-1:/var/run/mysqld/
       - <%= $install_dir %>/data/conf/sogo/:/etc/sogo/:z
       - <%= $install_dir %>/data/conf/rspamd/meta_exporter:/meta_exporter:ro,z
+      - <%= $install_dir %>/data/conf/phpfpm/crons:/crons:z
       - <%= $install_dir %>/data/conf/phpfpm/sogo-sso/:/etc/sogo-sso/:z
       - <%= $install_dir %>/data/conf/phpfpm/php-fpm.d/pools.conf:/usr/local/etc/php-fpm.d/z-pools.conf:Z
       - <%= $install_dir %>/data/conf/phpfpm/php-conf.d/opcache-recommended.ini:/usr/local/etc/php/conf.d/opcache-recommended.ini:Z
@@ -133,6 +153,7 @@ services:
     environment:
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
       - LOG_LINES=${LOG_LINES:-9999}
       - TZ=${TZ}
       - DBNAME=${DBNAME}
@@ -154,6 +175,7 @@ services:
       - API_KEY_READ_ONLY=${API_KEY_READ_ONLY:-invalid}
       - API_ALLOW_FROM=${API_ALLOW_FROM:-invalid}
       - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-mailcow-dockerized}
+      - SKIP_FTS=${SKIP_FTS:-y}
       - SKIP_CLAMD=${SKIP_CLAMD:-n}
       - SKIP_SOGO=${SKIP_SOGO:-n}
       - ALLOW_ADMIN_EMAIL_LOGIN=${ALLOW_ADMIN_EMAIL_LOGIN:-n}
@@ -162,6 +184,15 @@ services:
       - DEMO_MODE=${DEMO_MODE:-n}
       - WEBAUTHN_ONLY_TRUSTED_VENDORS=${WEBAUTHN_ONLY_TRUSTED_VENDORS:-n}
       - CLUSTERMODE=${CLUSTERMODE:-}
+      - ADDITIONAL_SERVER_NAMES=${ADDITIONAL_SERVER_NAMES:-}
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.phpfpm_keycloak_sync.schedule: "@every 1m"
+      ofelia.job-exec.phpfpm_keycloak_sync.no-overlap: "true"
+      ofelia.job-exec.phpfpm_keycloak_sync.command: "/bin/bash -c \"php /crons/keycloak-sync.php || exit 0\""
+      ofelia.job-exec.phpfpm_ldap_sync.schedule: "@every 1m"
+      ofelia.job-exec.phpfpm_ldap_sync.no-overlap: "true"
+      ofelia.job-exec.phpfpm_ldap_sync.command: "/bin/bash -c \"php /crons/ldap-sync.php || exit 0\""
     restart: always
     networks:
       mailcow-network:
@@ -186,12 +217,16 @@ services:
       - MASTER=${MASTER:-y}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     volumes:
       - <%= $install_dir %>/data/hooks/sogo:/hooks:Z
       - <%= $install_dir %>/data/conf/sogo/:/etc/sogo/:z
       - <%= $install_dir %>/data/web/inc/init_db.inc.php:/init_db.inc.php:z
+      - <%= $install_dir %>/data/conf/sogo/custom-shortlogo.svg:/usr/lib/GNUstep/SOGo/WebServerResources/img/sogo-compact.svg:z
+      - <%= $install_dir %>/data/conf/sogo/custom-fulllogo.svg:/usr/lib/GNUstep/SOGo/WebServerResources/img/sogo-full.svg:z
+      - <%= $install_dir %>/data/conf/sogo/custom-fulllogo.png:/usr/lib/GNUstep/SOGo/WebServerResources/img/sogo-logo.png:z
       - <%= $install_dir %>/data/conf/sogo/custom-favicon.ico:/usr/lib/GNUstep/SOGo/WebServerResources/img/sogo.ico:z
       - <%= $install_dir %>/data/conf/sogo/custom-theme.js:/usr/lib/GNUstep/SOGo/WebServerResources/js/theme.js:z
       - <%= $install_dir %>/data/conf/sogo/custom-sogo.js:/usr/lib/GNUstep/SOGo/WebServerResources/js/custom-sogo.js:z
@@ -219,6 +254,8 @@ services:
     image: <%= $dovecot_image %>
     depends_on:
       - mysql-mailcow
+      - netfilter-mailcow
+      - redis-mailcow
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
     cap_add:
@@ -239,6 +276,8 @@ services:
     environment:
       - DOVECOT_MASTER_USER=${DOVECOT_MASTER_USER:-}
       - DOVECOT_MASTER_PASS=${DOVECOT_MASTER_PASS:-}
+      - MAILCOW_REPLICA_IP=${MAILCOW_REPLICA_IP:-}
+      - DOVEADM_REPLICA_PORT=${DOVEADM_REPLICA_PORT:-}
       - LOG_LINES=${LOG_LINES:-9999}
       - DBNAME=${DBNAME}
       - DBUSER=${DBUSER}
@@ -250,10 +289,14 @@ services:
       - ALLOW_ADMIN_EMAIL_LOGIN=${ALLOW_ADMIN_EMAIL_LOGIN:-n}
       - MAILDIR_GC_TIME=${MAILDIR_GC_TIME:-7200}
       - ACL_ANYONE=${ACL_ANYONE:-disallow}
+      - SKIP_FTS=${SKIP_FTS:-y}
+      - FTS_HEAP=${FTS_HEAP:-512}
+      - FTS_PROCS=${FTS_PROCS:-3}
       - MAILDIR_SUB=${MAILDIR_SUB:-}
       - MASTER=${MASTER:-y}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
       - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-mailcow-dockerized}
     ports:
       - "${DOVEADM_PORT:-127.0.0.1:19991}:12345"
@@ -280,8 +323,9 @@ services:
       ofelia.job-exec.dovecot_sarules.schedule: "@every 24h"
       ofelia.job-exec.dovecot_sarules.command: "/bin/bash -c \"/usr/local/bin/sa-rules.sh\""
       ofelia.job-exec.dovecot_fts.schedule: "@every 24h"
+      ofelia.job-exec.dovecot_fts.command: "/bin/bash -c \"/usr/local/bin/gosu vmail /usr/local/bin/optimize-fts.sh\""
       ofelia.job-exec.dovecot_repl_health.schedule: "@every 5m"
-      ofelia.job-exec.dovecot_repl_health.command: "/bin/bash -c \"/usr/local/bin/gosu vmail /usr/local/bin/repl_health.sh\""
+      ofelia.job-exec.dovecot_repl_health.command: "/bin/bash -c \"/usr/local/bin/gosu vmail /usr/local/bin/repl_health.sh\"
     ulimits:
       nproc: 65535
       nofile:
@@ -296,7 +340,10 @@ services:
   postfix-mailcow:
     image: <%= $postfix_image %>
     depends_on:
-      - mysql-mailcow
+      mysql-mailcow:
+        condition: service_started
+      unbound-mailcow:
+        condition: service_healthy
     volumes:
       - <%= $install_dir %>/data/hooks/postfix:/hooks:Z
       - <%= $install_dir %>/data/conf/postfix:/opt/postfix/conf:z
@@ -314,6 +361,7 @@ services:
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
       - MAILCOW_HOSTNAME=${MAILCOW_HOSTNAME}
+      - REDISPASS=${REDISPASS}
       - SPAMHAUS_DQS_KEY=${SPAMHAUS_DQS_KEY:-}
     cap_add:
       - NET_BIND_SERVICE
@@ -345,21 +393,10 @@ services:
       - sogo-mailcow
       - php-fpm-mailcow
       - redis-mailcow
+      - rspamd-mailcow
     image: <%= $nginx_image %>
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
-    command: /bin/sh -c "envsubst < /etc/nginx/conf.d/templates/listen_plain.template > /etc/nginx/conf.d/listen_plain.active &&
-      envsubst < /etc/nginx/conf.d/templates/listen_ssl.template > /etc/nginx/conf.d/listen_ssl.active &&
-      envsubst < /etc/nginx/conf.d/templates/sogo.template > /etc/nginx/conf.d/sogo.active &&
-      . /etc/nginx/conf.d/templates/server_name.template.sh > /etc/nginx/conf.d/server_name.active &&
-      . /etc/nginx/conf.d/templates/sites.template.sh > /etc/nginx/conf.d/sites.active &&
-      . /etc/nginx/conf.d/templates/sogo_eas.template.sh > /etc/nginx/conf.d/sogo_eas.active &&
-      nginx -qt &&
-      until ping phpfpm -c1 > /dev/null; do sleep 1; done &&
-      until ping sogo -c1 > /dev/null; do sleep 1; done &&
-      until ping redis -c1 > /dev/null; do sleep 1; done &&
-      until ping rspamd -c1 > /dev/null; do sleep 1; done &&
-      exec nginx -g 'daemon off;'"
     environment:
       - HTTPS_PORT=${HTTPS_PORT:-443}
       - HTTP_PORT=${HTTP_PORT:-80}
@@ -367,14 +404,27 @@ services:
       - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
       - TZ=${TZ}
       - SKIP_SOGO=${SKIP_SOGO:-n}
+      - SKIP_RSPAMD=${SKIP_RSPAMD:-n}
       - ALLOW_ADMIN_EMAIL_LOGIN=${ALLOW_ADMIN_EMAIL_LOGIN:-n}
       - ADDITIONAL_SERVER_NAMES=${ADDITIONAL_SERVER_NAMES:-}
+      - DISABLE_IPv6=${DISABLE_IPv6:-n}
+      - HTTP_REDIRECT=${HTTP_REDIRECT:-n}
+      - PHPFPMHOST=${PHPFPMHOST:-}
+      - SOGOHOST=${SOGOHOST:-}
+      - RSPAMDHOST=${RSPAMDHOST:-}
+      - REDISHOST=${REDISHOST:-}
+      - NGINX_USE_PROXY_PROTOCOL=${NGINX_USE_PROXY_PROTOCOL:-n}
+      - TRUSTED_PROXIES=${TRUSTED_PROXIES:-}
     volumes:
       - <%= $install_dir %>/data/web:/web:ro,z
       - <%= $install_dir %>/data/conf/rspamd/dynmaps:/dynmaps:ro,z
       - <%= $install_dir %>/data/assets/ssl/:/etc/ssl/mail/:ro,z
       - <%= $install_dir %>/data/conf/nginx/:/etc/nginx/conf.d/:z
       - <%= $install_dir %>/data/conf/rspamd/meta_exporter:/meta_exporter:ro,z
+      - <%= $install_dir %>/data/conf/dovecot/auth/mailcowauth.php:/mailcowauth/mailcowauth.php:z
+      - <%= $install_dir %>/data/web/inc/functions.inc.php:/mailcowauth/functions.inc.php:z
+      - <%= $install_dir %>/data/web/inc/functions.auth.inc.php:/mailcowauth/functions.auth.inc.php:z
+      - <%= $install_dir %>/data/web/inc/sessions.inc.php:/mailcowauth/sessions.inc.php:z
       - sogo-web-vol-1:/usr/lib/GNUstep/SOGo/
     ports:
       - "${HTTPS_BIND:-}:${HTTPS_PORT:-443}:${HTTPS_PORT:-443}"
@@ -388,7 +438,10 @@ services:
   <% if $letsencrypt { %>
   acme-mailcow:
     depends_on:
-      - nginx-mailcow
+      nginx-mailcow:
+        condition: service_started
+      unbound-mailcow:
+        condition: service_healthy
     image: <%= $acme_image %>
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
@@ -411,6 +464,7 @@ services:
       - TZ=${TZ}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
       - SNAT_TO_SOURCE=${SNAT_TO_SOURCE:-n}
       - SNAT6_TO_SOURCE=${SNAT6_TO_SOURCE:-n}
     volumes:
@@ -429,12 +483,6 @@ services:
   netfilter-mailcow:
     image: <%= $netfilter_image %>
     stop_grace_period: 30s
-    depends_on:
-      - dovecot-mailcow
-      - postfix-mailcow
-      - sogo-mailcow
-      - php-fpm-mailcow
-      - redis-mailcow
     restart: always
     privileged: true
     environment:
@@ -445,6 +493,9 @@ services:
       - SNAT6_TO_SOURCE=${SNAT6_TO_SOURCE:-n}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
+      - MAILCOW_REPLICA_IP=${MAILCOW_REPLICA_IP:-}
+      - DISABLE_NETFILTER_ISOLATION_RULE=${DISABLE_NETFILTER_ISOLATION_RULE:-n}
     network_mode: "host"
     volumes:
       - /lib/modules:/lib/modules:ro
@@ -462,6 +513,12 @@ services:
       - postfix-vol-1:/var/spool/postfix
       - <%= $install_dir %>/data/assets/ssl:/etc/ssl/mail/:ro,z
     restart: always
+    depends_on:
+      - postfix-mailcow
+      - dovecot-mailcow
+      - mysql-mailcow
+      - acme-mailcow
+      - redis-mailcow
     environment:
       - IPV6_NETWORK=${IPV6_NETWORK:-fd4d:6169:6c63:6f77::/64}
       - LOG_LINES=${LOG_LINES:-9999}
@@ -524,6 +581,7 @@ services:
       - TZ=${TZ}
       - REDIS_SLAVEOF_IP=${REDIS_SLAVEOF_IP:-}
       - REDIS_SLAVEOF_PORT=${REDIS_SLAVEOF_PORT:-}
+      - REDISPASS=${REDISPASS}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -552,9 +610,10 @@ services:
   ofelia-mailcow:
     image: <%= $olefia_image %>
     restart: always
-    command: daemon --docker
+    command: daemon --docker -f label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}
     environment:
       - TZ=${TZ}
+      - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
     depends_on:
       - sogo-mailcow
       - dovecot-mailcow
@@ -572,6 +631,9 @@ services:
   mailcow-exporter:
     image: <%= $exporter_image %>
     restart: always
+    environment:
+      - MAILCOW_EXPORTER_HOST=${MAILCOW_HOSTNAME}
+      - MAILCOW_EXPORTER_API_KEY=${MAILCOW_EXPORTER_API_KEY}
     ports:
       - "${EXPORTER_LISTEN_ADDRESS:-127.254.254.254:63382}:9099" 
     networks:
