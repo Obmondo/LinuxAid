@@ -46,6 +46,10 @@ listen.mode = <%= @listen_mode %>
 user = <%= @user %>
 ; RPM: Keep a group allowed to write in log dir.
 group = <%= @group_final %>
+<% if @apparmor_hat -%>
+; Apparmor hat to change to
+apparmor_hat = <%= @apparmor_hat %>
+<% end -%>
 
 ; Choose how the process manager will control the number of child processes.
 ; Possible Values:
@@ -304,6 +308,7 @@ include=<%= @include %>
 ;env[TMP] = /tmp
 ;env[TMPDIR] = /tmp
 ;env[TEMP] = /tmp
+<% if @clear_env -%>
 <% @env.each do |var| -%>
 env[<%= var %>] = $<%= var %>
 <% end -%>
@@ -311,6 +316,9 @@ env[<%= var %>] = $<%= var %>
 <% if !value.empty? -%>
 env[<%= key %>] = '<%= value %>'
 <% end -%>
+<% end -%>
+<% else -%>
+clear_env = no
 <% end -%>
 
 ; Additional php.ini defines, specific to this pool of workers. These settings
@@ -370,6 +378,6 @@ php_admin_flag[<%= key %>] = <%= flag %>
 <%= line.gsub "{", "%{" %>
 <% end -%>
 
-<% if @security_limit_extensions -%>
+<% unless @security_limit_extensions.empty? -%>
 security.limit_extensions = <%= @security_limit_extensions.join(" ") %>
 <% end -%>

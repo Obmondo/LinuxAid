@@ -7,9 +7,8 @@
 #
 
 class php::repo::redhat (
-  $yum_repo = 'remi_php56',
+  String[1] $yum_repo = 'remi_php56',
 ) {
-
   $releasever = $facts['os']['name'] ? {
     /(?i:Amazon)/ => '6',
     default       => '$releasever',  # Yum var
@@ -29,7 +28,7 @@ class php::repo::redhat (
     mirrorlist => "https://rpms.remirepo.net/enterprise/${releasever}/php56/mirror",
     enabled    => 1,
     gpgcheck   => 1,
-    gpgkey     => 'https://rpms.remirepo.net/RPM-GPG-KEY-remi',
+    gpgkey     => 'https://rpms.remirepo.net/RPM-GPG-KEY-remi2023',
     priority   => 1,
   }
 }

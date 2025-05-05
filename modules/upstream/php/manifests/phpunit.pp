@@ -21,10 +21,9 @@ class php::phpunit (
   Boolean $auto_update       = true,
   Integer $max_age           = $php::params::phpunit_max_age,
 ) inherits php::params {
-
   assert_private()
 
-  ensure_packages(['wget'])
+  stdlib::ensure_packages(['wget'])
 
   exec { 'download phpunit':
     command => "wget ${source} -O ${path}",

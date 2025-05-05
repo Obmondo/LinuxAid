@@ -6,25 +6,20 @@
 #   PHP version to manage (e.g. 5.6)
 #
 class php::repo::ubuntu (
-  $version   = undef,
+  Pattern[/^\d\.\d/] $version = '5.6',
 ) {
-  include '::apt'
-
-  if($version == undef) {
-    $version_real = '5.6'
-  } else {
-    $version_real = $version
+  if $facts['os']['name'] != 'Ubuntu' {
+    fail("class php::repo::ubuntu does not work on OS ${facts['os']['name']}")
   }
+  include 'apt'
 
-  if ($version_real == '5.5') {
+  if ($version == '5.5') {
     fail('PHP 5.5 is no longer available for download')
   }
-  assert_type(Pattern[/^\d\.\d/], $version_real)
 
-  $version_repo = $version_real ? {
-    '5.4' => 'ondrej/php5-oldstable',
-    '5.6' => 'ondrej/php',
-    '7.0' => 'ondrej/php'
+  $version_repo = $version ? {
+    '5.4'   => 'ondrej/php5-oldstable',
+    default => 'ondrej/php'
   }
 
   ::apt::ppa { "ppa:${version_repo}":
