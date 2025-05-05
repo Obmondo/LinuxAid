@@ -4,7 +4,39 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v3.0.2](https://github.com/voxpupuli/puppet-filemapper/tree/v3.0.2) (2018-10-13)
+## [v4.0.0](https://github.com/voxpupuli/puppet-filemapper/tree/v4.0.0) (2023-11-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-filemapper/compare/v3.1.0...v4.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#74](https://github.com/voxpupuli/puppet-filemapper/pull/74) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add Puppet 8 support [\#75](https://github.com/voxpupuli/puppet-filemapper/pull/75) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- Correct spelling mistake [\#73](https://github.com/voxpupuli/puppet-filemapper/pull/73) ([EdwardBetts](https://github.com/EdwardBetts))
+
+## [v3.1.0](https://github.com/voxpupuli/puppet-filemapper/tree/v3.1.0) (2020-11-07)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-filemapper/compare/v3.0.2...v3.1.0)
+
+**Breaking changes:**
+
+- Drop Puppet 4 [\#64](https://github.com/voxpupuli/puppet-filemapper/pull/64) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- Add examples to filemapper to demonstrate use. [\#7](https://github.com/voxpupuli/puppet-filemapper/issues/7)
+
+**Merged pull requests:**
+
+- Remove duplicate CONTRIBUTING.md file [\#65](https://github.com/voxpupuli/puppet-filemapper/pull/65) ([dhoppe](https://github.com/dhoppe))
+
+## [v3.0.2](https://github.com/voxpupuli/puppet-filemapper/tree/v3.0.2) (2018-10-14)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-filemapper/compare/v3.0.1...v3.0.2)
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/filetype'
 
 # Forward declaration
@@ -9,6 +11,7 @@ module PuppetX::FileMapper
   # This method is necessary for the provider to be ensurable
   def create
     raise Puppet::Error, "#{self.class} is in an error state" if self.class.failed?
+
     @resource.class.validproperties.each do |property|
       @property_hash[property] = @resource.should(property) if @resource.should(property)
     end
@@ -106,7 +109,7 @@ module PuppetX::FileMapper
         h[:ensure] = :present
         new(h)
       end
-    rescue
+    rescue StandardError
       # If something failed while loading instances, mark the provider class
       # as failed and pass the exception along
       failed!
@@ -117,7 +120,7 @@ module PuppetX::FileMapper
     #
     # @raise Puppet::DevError if an expected method is unavailable
     def validate_class!
-      required_class_hooks    = [:target_files, :parse_file, :format_file]
+      required_class_hooks    = %i[target_files parse_file format_file]
       required_instance_hooks = [:select_file]
 
       required_class_hooks.each do |method|
@@ -134,7 +137,7 @@ module PuppetX::FileMapper
     #
     # @return [Array<Hash<String, Hash<Symbol, Object>>>]
     #   An array containing a set of hashes, keyed with a file path and values
-    #   being a hash containg the state of the file and the filetype associated
+    #   being a hash containing the state of the file and the filetype associated
     #   with it.
     #
     # @example
@@ -168,10 +171,10 @@ module PuppetX::FileMapper
         path = file_attrs[:filetype].path
 
         next unless path.is_a?(Pathname) || path.respond_to?(:to_str)
+
         arr = parse_file(filename, file_attrs[:filetype].read)
-        unless arr.is_a? Array
-          raise Puppet::DevError, "expected #{self}.parse_file to return an Array, got a #{arr.class}"
-        end
+        raise Puppet::DevError, "expected #{self}.parse_file to return an Array, got a #{arr.class}" unless arr.is_a? Array
+
         provider_hashes.concat arr
       end
       provider_hashes
@@ -257,9 +260,7 @@ module PuppetX::FileMapper
         return
       end
 
-      if !@mapped_files[filename][:dirty]
-        Puppet.debug "#{name} was requested to flush the file #{filename}, but it was not marked as dirty - doing nothing."
-      else
+      if @mapped_files[filename][:dirty]
         # Collect all providers that should be present and pass them to the
         # including class for formatting.
         target_providers = collect_providers_for_file(filename)
@@ -275,8 +276,10 @@ module PuppetX::FileMapper
         ensure
           post_flush_hook(filename) if respond_to? :post_flush_hook
         end
+      else
+        Puppet.debug "#{name} was requested to flush the file #{filename}, but it was not marked as dirty - doing nothing."
       end
-    rescue
+    rescue StandardError
       # If something failed during the flush process, mark the provider as failed. There's not
       # much we can do about any file that's already been flushed but we can stop smashing things.
       @failed = true
@@ -300,6 +303,7 @@ module PuppetX::FileMapper
     # @param [String] filename The file to remove
     def remove_empty_file(filename)
       return unless File.exist? filename
+
       @mapped_files[filename][:filetype] ||= Puppet::Util::FileType.filetype(filetype).new(filename)
       filetype = @mapped_files[filename][:filetype]
 
