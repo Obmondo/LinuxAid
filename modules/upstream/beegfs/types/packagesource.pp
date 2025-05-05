@@ -1,1 +1,1 @@
-type Beegfs::PackageSource = Enum['beegfs']
+type Beegfs::PackageSource = Enum['beegfs','beegfs-http']

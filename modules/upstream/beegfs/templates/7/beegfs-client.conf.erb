@@ -22,7 +22,7 @@ sysMgmtdHost                  = <%= @mgmtd_host %>
 # --- Section 1.2: [Advanced Settings] ---
 #
 
-connAuthFile                  =
+connAuthFile                  = <%= @conn_auth_file %>
 connClientPortUDP             = <%= @client_udp_port %>
 connHelperdPortTCP            = <%= @helperd_tcp_port %>
 connMgmtdPortTCP              = <%= @mgmtd_tcp_port %>
@@ -34,9 +34,9 @@ connFallbackExpirationSecs    = 900
 connInterfacesFile            = <%= @interfaces_file %>
 connMaxInternodeNum           = 12
 connMaxConcurrentAttempts     = 0
-connNetFilterFile             =
+connNetFilterFile             = <% if @networks %><%= @networks_file %><% end %>
 
-connUseRDMA                   = true
+connUseRDMA                   = <%= @enable_rdma %>
 connRDMABufNum                = 70
 connRDMABufSize               = 8192
 connRDMATypeOfService         = 0
@@ -57,10 +57,10 @@ sysTargetOfflineTimeoutSecs   = 900
 sysUpdateTargetStatesSecs     = 60
 sysXAttrsEnabled              = <%= @enable_acl %>
 
-tuneFileCacheType             = buffered
+tuneFileCacheType             = <%= @tune_file_cache_type %>
 tunePreferredMetaFile         =
 tunePreferredStorageFile      =
-tuneRemoteFSync               = true
+tuneRemoteFSync               = <%= @remote_fsync %>
 tuneUseGlobalAppendLocks      = false
 tuneUseGlobalFileLocks        = false
 
@@ -361,6 +361,9 @@ sysACLsEnabled                = <%= @enable_acl %>
 # impact.
 # Example: sysFileEventLogMask = close,trunc,setattr,link-op
 # Default: none
+<% if @sys_file_event_log_mask -%>
+sysFileEventLogMask = <%= @sys_file_event_log_mask %>
+<% end -%>
 
 # [sysRenameEbusyAsXdev]
 # Changes the semantics of rename() to return an EXDEV error if a file could not

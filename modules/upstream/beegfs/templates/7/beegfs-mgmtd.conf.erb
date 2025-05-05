@@ -26,12 +26,12 @@ sysAllowNewTargets       = <%= @allow_new_targets %>
 # --- Section 1.2: [Advanced Settings] ---
 #
 
-connAuthFile                           =
+connAuthFile                           = <%= @conn_auth_file %>
 connBacklogTCP                         = 128
 connInterfacesFile                     = <%= @interfaces_file %>
 connMgmtdPortTCP                       = <%= @mgmtd_tcp_port %>
 connMgmtdPortUDP                       = <%= @mgmtd_udp_port %>
-connNetFilterFile                      =
+connNetFilterFile                      = <% if @networks %><%= @networks_file %><% end %>
 connPortShift                          = 0
 
 logType                                = <%= @log_type %>
