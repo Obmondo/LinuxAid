@@ -108,7 +108,7 @@ class kolab::postfix (
       ;
     }
 
-    ensure_packages(['git'])
+    stdlib::ensure_packages(['git'])
 
     vcsrepo { '/usr/local/bin/spf-tools' :
       ensure   => present,

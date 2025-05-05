@@ -18,13 +18,11 @@
 #     value => 'Europe/Berlin'
 #   }
 #
-define php::config::setting(
-  $key,
-  $value,
+define php::config::setting (
+  String[1] $key,
   Stdlib::Absolutepath $file,
+  Optional[Variant[Integer, String]] $value = undef,
 ) {
-
-
   assert_private()
 
   $split_name = split($key, '/')
@@ -37,13 +35,13 @@ define php::config::setting(
   }
 
   if $value == undef {
-    $ensure = 'absent'
+    $_ensure = 'absent'
   } else {
-    $ensure = 'present'
+    $_ensure = 'present'
   }
 
   ini_setting { $name:
-    ensure  => $ensure,
+    ensure  => $_ensure,
     value   => $value,
     path    => $file,
     section => $section,

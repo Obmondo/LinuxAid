@@ -25,7 +25,7 @@ storeAllowFirstRunInit       = <%= @allow_first_run_init %>
 # --- Section 1.2: [Advanced Settings] ---
 #
 
-connAuthFile                 =
+connAuthFile                 = <%= @conn_auth_file %>
 connBacklogTCP               = 128
 connInterfacesFile           = <%= @interfaces_file %>
 connMaxInternodeNum          = 12
@@ -36,9 +36,9 @@ connStoragePortTCP           = <%= @storage_tcp_port %>
 connStoragePortUDP           = <%= @storage_udp_port %>
 connPortShift                = 0
 
-connNetFilterFile            =
+connNetFilterFile            = <% if @networks %><%= @networks_file %><% end %>
 
-connUseRDMA                  = true
+connUseRDMA                  = <%= @enable_rdma %>
 connRDMATypeOfService        = 0
 connTcpOnlyFilterFile        =
 

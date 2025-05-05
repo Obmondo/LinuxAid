@@ -4,6 +4,157 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.0.0](https://github.com/voxpupuli/puppet-python/tree/v8.0.0) (2025-04-28)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v7.4.0...v8.0.0)
+
+**Breaking changes:**
+
+- Drop EoL Ubuntu 20.04 support [\#719](https://github.com/voxpupuli/puppet-python/pull/719) ([smortex](https://github.com/smortex))
+- Drop EoL FreeBSD 11/12 support [\#718](https://github.com/voxpupuli/puppet-python/pull/718) ([smortex](https://github.com/smortex))
+- Drop EoL Ubuntu 18.04 support [\#710](https://github.com/voxpupuli/puppet-python/pull/710) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL CentOS 7/8 support [\#709](https://github.com/voxpupuli/puppet-python/pull/709) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Debian 10 support [\#708](https://github.com/voxpupuli/puppet-python/pull/708) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix bootstrapping `python::pyvenv` when Python is not installed [\#716](https://github.com/voxpupuli/puppet-python/pull/716) ([smortex](https://github.com/smortex))
+
+## [v7.4.0](https://github.com/voxpupuli/puppet-python/tree/v7.4.0) (2024-11-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v7.3.0...v7.4.0)
+
+**Implemented enhancements:**
+
+- Add Ubuntu 24.04 support [\#707](https://github.com/voxpupuli/puppet-python/pull/707) ([bastelfreak](https://github.com/bastelfreak))
+- pyvenv: Harden datatype for `$environment` [\#704](https://github.com/voxpupuli/puppet-python/pull/704) ([bastelfreak](https://github.com/bastelfreak))
+- simplify packages version detection [\#703](https://github.com/voxpupuli/puppet-python/pull/703) ([maxadamo](https://github.com/maxadamo))
+- Add support for FreeBSD 14 [\#694](https://github.com/voxpupuli/puppet-python/pull/694) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- `python::pip`'s `notreallyaversion` is not compatible with latest `pip` \(\>= 24.1\) due to changed output \(again\) [\#695](https://github.com/voxpupuli/puppet-python/issues/695)
+- Fix `python::pip` - use valid, but highly unlikely package version [\#696](https://github.com/voxpupuli/puppet-python/pull/696) ([acojocariu1-godaddy](https://github.com/acojocariu1-godaddy))
+
+**Merged pull requests:**
+
+- CI: Dont pin pip to an outdated version and don't force python3 package installation [\#706](https://github.com/voxpupuli/puppet-python/pull/706) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v7.3.0](https://github.com/voxpupuli/puppet-python/tree/v7.3.0) (2024-02-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v7.2.0...v7.3.0)
+
+**Implemented enhancements:**
+
+- Add python\_path to pyvenv class [\#686](https://github.com/voxpupuli/puppet-python/pull/686) ([wmellema](https://github.com/wmellema))
+
+## [v7.2.0](https://github.com/voxpupuli/puppet-python/tree/v7.2.0) (2024-01-01)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v7.1.0...v7.2.0)
+
+**Implemented enhancements:**
+
+- Add Support for RedHat/CentOS 9 [\#676](https://github.com/voxpupuli/puppet-python/pull/676) ([ValdrinLushaj](https://github.com/ValdrinLushaj))
+
+**Fixed bugs:**
+
+- Make latest version detection portable [\#682](https://github.com/voxpupuli/puppet-python/pull/682) ([smortex](https://github.com/smortex))
+
+## [v7.1.0](https://github.com/voxpupuli/puppet-python/tree/v7.1.0) (2023-11-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v7.0.0...v7.1.0)
+
+**Implemented enhancements:**
+
+- Add Ubuntu 22.04 support [\#679](https://github.com/voxpupuli/puppet-python/pull/679) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 12 support [\#678](https://github.com/voxpupuli/puppet-python/pull/678) ([bastelfreak](https://github.com/bastelfreak))
+- Add OracleLinux/AlmaLinux/Rocky support [\#677](https://github.com/voxpupuli/puppet-python/pull/677) ([JakeTRogers](https://github.com/JakeTRogers))
+- Bump puppet-epel to allow 5.x [\#674](https://github.com/voxpupuli/puppet-python/pull/674) ([dandunckelman](https://github.com/dandunckelman))
+- Allow to skip management of python dev package [\#669](https://github.com/voxpupuli/puppet-python/pull/669) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- Use the wheel group by default on FreeBSD [\#672](https://github.com/voxpupuli/puppet-python/pull/672) ([smortex](https://github.com/smortex))
+- If user declares their requirements.txt in Puppet, don't skip pip installation in python::requirements [\#619](https://github.com/voxpupuli/puppet-python/pull/619) ([acullenn](https://github.com/acullenn))
+
+## [v7.0.0](https://github.com/voxpupuli/puppet-python/tree/v7.0.0) (2023-07-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.4.0...v7.0.0)
+
+**Breaking changes:**
+
+- Drop Ubuntu 16.04 \(EOL\) [\#659](https://github.com/voxpupuli/puppet-python/pull/659) ([smortex](https://github.com/smortex))
+- Drop Debian 9 \(EOL\) [\#658](https://github.com/voxpupuli/puppet-python/pull/658) ([smortex](https://github.com/smortex))
+- Drop Puppet 6 support [\#656](https://github.com/voxpupuli/puppet-python/pull/656) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add Puppet 8 support [\#664](https://github.com/voxpupuli/puppet-python/pull/664) ([bastelfreak](https://github.com/bastelfreak))
+- puppetlabs/stdlib: Allow 9.x [\#663](https://github.com/voxpupuli/puppet-python/pull/663) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix pip installation on Gentoo [\#651](https://github.com/voxpupuli/puppet-python/pull/651) ([puppetjoy](https://github.com/puppetjoy))
+
+## [v6.4.0](https://github.com/voxpupuli/puppet-python/tree/v6.4.0) (2022-11-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.3.0...v6.4.0)
+
+**Implemented enhancements:**
+
+- move static data from params.pp to init.pp [\#648](https://github.com/voxpupuli/puppet-python/pull/648) ([bastelfreak](https://github.com/bastelfreak))
+- cleanup acceptance tests [\#647](https://github.com/voxpupuli/puppet-python/pull/647) ([bastelfreak](https://github.com/bastelfreak))
+- Implement Arch Linux support [\#642](https://github.com/voxpupuli/puppet-python/pull/642) ([bastelfreak](https://github.com/bastelfreak))
+- Add prompt parameter to python::pyvenv [\#641](https://github.com/voxpupuli/puppet-python/pull/641) ([ookisan](https://github.com/ookisan))
+- Add extra\_index parameter to python::pip [\#640](https://github.com/voxpupuli/puppet-python/pull/640) ([ookisan](https://github.com/ookisan))
+
+**Fixed bugs:**
+
+- use legacy pip resolver for pip versions \< 21.1 \> 20.2.4 [\#639](https://github.com/voxpupuli/puppet-python/pull/639) ([saz](https://github.com/saz))
+
+## [v6.3.0](https://github.com/voxpupuli/puppet-python/tree/v6.3.0) (2022-07-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.2.1...v6.3.0)
+
+**Implemented enhancements:**
+
+- allow puppet/epel v4 [\#634](https://github.com/voxpupuli/puppet-python/pull/634) ([vchepkov](https://github.com/vchepkov))
+- cleanup references to obsolete virtualenv parameter/command [\#633](https://github.com/voxpupuli/puppet-python/pull/633) ([vchepkov](https://github.com/vchepkov))
+
+**Fixed bugs:**
+
+- Add python-venv installation [\#579](https://github.com/voxpupuli/puppet-python/pull/579) ([crazymind1337](https://github.com/crazymind1337))
+
+## [v6.2.1](https://github.com/voxpupuli/puppet-python/tree/v6.2.1) (2021-12-10)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.2.0...v6.2.1)
+
+**Fixed bugs:**
+
+- Correct python::pip::environment parameter example [\#629](https://github.com/voxpupuli/puppet-python/pull/629) ([traylenator](https://github.com/traylenator))
+- gunicorn: RHEL8 has a different package name [\#628](https://github.com/voxpupuli/puppet-python/pull/628) ([yakatz](https://github.com/yakatz))
+- Remove duplicate arguments in the pip install command [\#627](https://github.com/voxpupuli/puppet-python/pull/627) ([zanyou](https://github.com/zanyou))
+
+**Closed issues:**
+
+- Package with provider pip3 tries installing every run. [\#626](https://github.com/voxpupuli/puppet-python/issues/626)
+
+**Merged pull requests:**
+
+- modulesync 5.1.0 & puppet-lint: fix params\_empty\_string\_assignment [\#631](https://github.com/voxpupuli/puppet-python/pull/631) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v6.2.0](https://github.com/voxpupuli/puppet-python/tree/v6.2.0) (2021-08-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.1.0...v6.2.0)
+
+**Implemented enhancements:**
+
+- Add support for Debian 11 [\#621](https://github.com/voxpupuli/puppet-python/pull/621) ([smortex](https://github.com/smortex))
+
+**Merged pull requests:**
+
+- Allow stdlib 8.0.0 [\#622](https://github.com/voxpupuli/puppet-python/pull/622) ([smortex](https://github.com/smortex))
+
 ## [v6.1.0](https://github.com/voxpupuli/puppet-python/tree/v6.1.0) (2021-06-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-python/compare/v6.0.1...v6.1.0)
@@ -178,7 +329,7 @@ Due to a bug in the release pipeline, release v6.0.1 didn't make it to the forge
 
 - Allow HTTP\_PROXY on bootstrap. [\#488](https://github.com/voxpupuli/puppet-python/pull/488) ([pillarsdotnet](https://github.com/pillarsdotnet))
 - Modern pip can install wheels without wheel installed [\#483](https://github.com/voxpupuli/puppet-python/pull/483) ([asottile](https://github.com/asottile))
-- Allow arbitrary pip providers [\#480](https://github.com/voxpupuli/puppet-python/pull/480) ([ethanhs](https://github.com/ethanhs))
+- Allow arbitrary pip providers [\#480](https://github.com/voxpupuli/puppet-python/pull/480) ([emmatyping](https://github.com/emmatyping))
 - Add manage\_scl boolean to control managing SCL [\#464](https://github.com/voxpupuli/puppet-python/pull/464) ([bodgit](https://github.com/bodgit))
 - Allow pip to work in AIX systems [\#461](https://github.com/voxpupuli/puppet-python/pull/461) ([feltra](https://github.com/feltra))
 - move pip bootstrap into a seperate class [\#460](https://github.com/voxpupuli/puppet-python/pull/460) ([feltra](https://github.com/feltra))
@@ -319,7 +470,7 @@ Due to a bug in the release pipeline, release v6.0.1 didn't make it to the forge
 
 - Fix Python version regex in install.pp [\#410](https://github.com/voxpupuli/puppet-python/pull/410) ([fklajn](https://github.com/fklajn))
 - Remove docker nodesets [\#408](https://github.com/voxpupuli/puppet-python/pull/408) ([bastelfreak](https://github.com/bastelfreak))
-- Update README compatibility section [\#405](https://github.com/voxpupuli/puppet-python/pull/405) ([rkcpi](https://github.com/rkcpi))
+- Update README compatibility section [\#405](https://github.com/voxpupuli/puppet-python/pull/405) ([sandra-thieme](https://github.com/sandra-thieme))
 - add secret for forge deployment via travis [\#404](https://github.com/voxpupuli/puppet-python/pull/404) ([bastelfreak](https://github.com/bastelfreak))
 - Add deprecation notice for the old repository [\#403](https://github.com/voxpupuli/puppet-python/pull/403) ([stankevich](https://github.com/stankevich))
 - virtualenv.pp: make creation of $venv\_dir optional [\#391](https://github.com/voxpupuli/puppet-python/pull/391) ([daylicron](https://github.com/daylicron))
@@ -516,7 +667,7 @@ Due to a bug in the release pipeline, release v6.0.1 didn't make it to the forge
 - Revert "Update virtualenv\_version.rb" [\#267](https://github.com/voxpupuli/puppet-python/pull/267) ([shivapoudel](https://github.com/shivapoudel))
 - Update virtualenv\_version.rb [\#265](https://github.com/voxpupuli/puppet-python/pull/265) ([shivapoudel](https://github.com/shivapoudel))
 - Update params.pp [\#263](https://github.com/voxpupuli/puppet-python/pull/263) ([philippeback](https://github.com/philippeback))
-- Bug virtualenv instead of virtualenv-$version [\#261](https://github.com/voxpupuli/puppet-python/pull/261) ([Asher256](https://github.com/Asher256))
+- Bug virtualenv instead of virtualenv-$version [\#261](https://github.com/voxpupuli/puppet-python/pull/261) ([ghost](https://github.com/ghost))
 - Addressing stankevich/puppet-python issue \#258. [\#260](https://github.com/voxpupuli/puppet-python/pull/260) ([rpocase](https://github.com/rpocase))
 
 ## [1.10.0](https://github.com/voxpupuli/puppet-python/tree/1.10.0) (2015-10-29)
@@ -553,7 +704,7 @@ Due to a bug in the release pipeline, release v6.0.1 didn't make it to the forge
 - Bootstrap pip installation [\#244](https://github.com/voxpupuli/puppet-python/pull/244) ([joshuaspence](https://github.com/joshuaspence))
 - Various tidying up [\#242](https://github.com/voxpupuli/puppet-python/pull/242) ([joshuaspence](https://github.com/joshuaspence))
 - Allow custom versions to be installed [\#241](https://github.com/voxpupuli/puppet-python/pull/241) ([joshuaspence](https://github.com/joshuaspence))
-- Check that we have results before returning a value [\#238](https://github.com/voxpupuli/puppet-python/pull/238) ([xaque208](https://github.com/xaque208))
+- Check that we have results before returning a value [\#238](https://github.com/voxpupuli/puppet-python/pull/238) ([zachfi](https://github.com/zachfi))
 - Adjust test code to pass syntax checker [\#237](https://github.com/voxpupuli/puppet-python/pull/237) ([fluential](https://github.com/fluential))
 
 ## [1.9.7](https://github.com/voxpupuli/puppet-python/tree/1.9.7) (2015-08-21)
@@ -718,7 +869,7 @@ Due to a bug in the release pipeline, release v6.0.1 didn't make it to the forge
 **Closed issues:**
 
 - 'system' or any other version of python doesn't work, doesn't get validated [\#129](https://github.com/voxpupuli/puppet-python/issues/129)
-- Could not look up qualified variable '::python::install::valid\_versions' [\#126](https://github.com/voxpupuli/puppet-python/issues/126)
+- Could not look up qualified variable `python::install::valid_versions` [\#126](https://github.com/voxpupuli/puppet-python/issues/126)
 
 ## [1.7.11](https://github.com/voxpupuli/puppet-python/tree/1.7.11) (2014-10-11)
 

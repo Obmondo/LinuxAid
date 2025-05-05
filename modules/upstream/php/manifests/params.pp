@@ -1,11 +1,10 @@
 # PHP params class
 #
 class php::params inherits php::globals {
-
   $ensure              = 'present'
   $fpm_service_enable  = true
   $fpm_service_ensure  = 'running'
-  $composer_source     = 'https://getcomposer.org/composer.phar'
+  $composer_source     = 'https://getcomposer.org/composer-stable.phar'
   $composer_path       = '/usr/local/bin/composer'
   $composer_max_age    = 30
   $pear_ensure         = 'present'
@@ -13,6 +12,23 @@ class php::params inherits php::globals {
   $phpunit_source      = 'https://phar.phpunit.de/phpunit.phar'
   $phpunit_path        = '/usr/local/bin/phpunit'
   $phpunit_max_age     = 30
+  $pool_purge          = false
+  $fpm_log_dir_mode    = '0770'
+
+  $fpm_pools = {
+    'www' => {
+      'catch_workers_output'      => 'no',
+      'listen'                    => '127.0.0.1:9000',
+      'listen_backlog'            => -1,
+      'pm'                        => 'dynamic',
+      'pm_max_children'           => 50,
+      'pm_max_requests'           => 0,
+      'pm_max_spare_servers'      => 35,
+      'pm_min_spare_servers'      => 5,
+      'pm_start_servers'          => 5,
+      'request_terminate_timeout' => 0,
+    },
+  }
 
   case $facts['os']['family'] {
     'Debian': {
@@ -41,18 +57,27 @@ class php::params inherits php::globals {
       $ext_tool_enable         = $php::globals::ext_tool_enable
       $ext_tool_query          = $php::globals::ext_tool_query
       $ext_tool_enabled        = true
+      $pear                    = true
 
-      case $facts['os']['name'] {
-        'Debian': {
-          $manage_repos = (versioncmp($facts['os']['release']['major'], '8') < 0)
-        }
-
-        'Ubuntu': {
-          $manage_repos = false
+      case $php::globals::flavor {
+        'zend': {
+          $manage_repos = true
         }
 
         default: {
-          $manage_repos = false
+          case $facts['os']['name'] {
+            'Debian': {
+              $manage_repos = false
+            }
+
+            'Ubuntu': {
+              $manage_repos = false
+            }
+
+            default: {
+              $manage_repos = false
+            }
+          }
         }
       }
     }
@@ -88,6 +113,8 @@ class php::params inherits php::globals {
       $ext_tool_enable         = undef
       $ext_tool_query          = undef
       $ext_tool_enabled        = false
+      $pear                    = true
+
       case $facts['os']['name'] {
         'SLES': {
           $compiler_packages = []
@@ -103,36 +130,49 @@ class php::params inherits php::globals {
     'RedHat': {
       $config_root      = $php::globals::globals_config_root
 
-      case $php::globals::rhscl_mode {
-        'remi': {
+      case $php::globals::flavor {
+        'zend': {
           $config_root_ini         = "${config_root}/php.d"
           $config_root_inifile     = "${config_root}/php.ini"
           $cli_inifile             = $config_root_inifile
           $fpm_inifile             = $config_root_inifile
           $fpm_config_file         = "${config_root}/php-fpm.conf"
           $fpm_pool_dir            = "${config_root}/php-fpm.d"
-          $php_bin_dir             = "${php::globals::rhscl_root}/bin"
         }
-        'rhscl': {
-          $config_root_ini         = "${config_root}/php.d"
-          $config_root_inifile     = "${config_root}/php.ini"
-          $cli_inifile             = "${config_root}/php-cli.ini"
-          $fpm_inifile             = "${config_root}/php-fpm.ini"
-          $fpm_config_file         = "${config_root}/php-fpm.conf"
-          $fpm_pool_dir            = "${config_root}/php-fpm.d"
-          $php_bin_dir             = "${php::globals::rhscl_root}/bin"
-        }
-        undef: {
-          # no rhscl
-          $config_root_ini         = $config_root
-          $config_root_inifile     = '/etc/php.ini'
-          $cli_inifile             = '/etc/php-cli.ini'
-          $fpm_inifile             = '/etc/php-fpm.ini'
-          $fpm_config_file         = '/etc/php-fpm.conf'
-          $fpm_pool_dir            = '/etc/php-fpm.d'
-        }
+
         default: {
-          fail("Unsupported rhscl_mode '${php::globals::rhscl_mode}'")
+          case $php::globals::rhscl_mode {
+            'remi': {
+              $config_root_ini         = "${config_root}/php.d"
+              $config_root_inifile     = "${config_root}/php.ini"
+              $cli_inifile             = $config_root_inifile
+              $fpm_inifile             = $config_root_inifile
+              $fpm_config_file         = "${config_root}/php-fpm.conf"
+              $fpm_pool_dir            = "${config_root}/php-fpm.d"
+              $php_bin_dir             = "${php::globals::rhscl_root}/bin"
+            }
+            'rhscl': {
+              $config_root_ini         = "${config_root}/php.d"
+              $config_root_inifile     = "${config_root}/php.ini"
+              $cli_inifile             = "${config_root}/php-cli.ini"
+              $fpm_inifile             = "${config_root}/php-fpm.ini"
+              $fpm_config_file         = "${config_root}/php-fpm.conf"
+              $fpm_pool_dir            = "${config_root}/php-fpm.d"
+              $php_bin_dir             = "${php::globals::rhscl_root}/bin"
+            }
+            undef: {
+              # no rhscl
+              $config_root_ini         = $config_root
+              $config_root_inifile     = '/etc/php.ini'
+              $cli_inifile             = '/etc/php-cli.ini'
+              $fpm_inifile             = '/etc/php-fpm.ini'
+              $fpm_config_file         = '/etc/php-fpm.conf'
+              $fpm_pool_dir            = '/etc/php-fpm.d'
+            }
+            default: {
+              fail("Unsupported rhscl_mode '${php::globals::rhscl_mode}'")
+            }
+          }
         }
       }
 
@@ -150,11 +190,15 @@ class php::params inherits php::globals {
       $embedded_package_suffix = 'embedded'
       $package_prefix          = pick($php::globals::package_prefix, 'php-')
       $compiler_packages       = ['gcc', 'gcc-c++', 'make']
-      $manage_repos            = false
+      $manage_repos            = $php::globals::flavor ? {
+        'zend' => true,
+        default => false,
+      }
       $root_group              = 'root'
       $ext_tool_enable         = undef
       $ext_tool_query          = undef
       $ext_tool_enabled        = false
+      $pear                    = true
     }
     'FreeBSD': {
       $config_root             = $php::globals::globals_config_root
@@ -173,18 +217,19 @@ class php::params inherits php::globals {
       $fpm_inifile             = "${config_root}/php-fpm.ini"
       $fpm_package_suffix      = undef
       $fpm_pool_dir            = "${config_root}/php-fpm.d"
-      $fpm_service_name        = 'php-fpm'
+      $fpm_service_name        = 'php_fpm'
       $fpm_user                = 'www'
       $fpm_group               = 'www'
       $embedded_package_suffix = 'embed'
       $embedded_inifile        = "${config_root}/php-embed.ini"
-      $package_prefix          = 'php56-'
+      $package_prefix          = $php::globals::package_prefix
       $compiler_packages       = ['gcc']
       $manage_repos            = false
       $root_group              = 'wheel'
       $ext_tool_enable         = undef
       $ext_tool_query          = undef
       $ext_tool_enabled        = false
+      $pear                    = true
     }
     'Archlinux': {
       $config_root_ini         = '/etc/php/conf.d'
@@ -200,8 +245,8 @@ class php::params inherits php::globals {
       $fpm_package_suffix      = 'fpm'
       $fpm_pool_dir            = '/etc/php/php-fpm.d'
       $fpm_service_name        = 'php-fpm'
-      $fpm_user                = 'root'
-      $fpm_group               = 'root'
+      $fpm_user                = 'http'
+      $fpm_group               = 'http'
       $apache_inifile          = '/etc/php/php.ini'
       $embedded_package_suffix = 'embedded'
       $embedded_inifile        = '/etc/php/php.ini'
@@ -212,6 +257,7 @@ class php::params inherits php::globals {
       $ext_tool_enable         = undef
       $ext_tool_query          = undef
       $ext_tool_enabled        = false
+      $pear                    = false
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

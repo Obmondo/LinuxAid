@@ -1,21 +1,16 @@
+# frozen_string_literal: true
 
 module Puppet::Parser::Functions
-  newfunction(:jenkins_port, type: :rvalue, doc: <<-'ENDHEREDOC') do |_args|
+  newfunction(:jenkins_port, type: :rvalue, doc: <<-ENDHEREDOC) do |_args|
     Return the configurad Jenkins port value
     (corresponds to /etc/defaults/jenkins -> JENKINS_PORT
 
     Example:
 
         $port = jenkins_port()
-    ENDHEREDOC
+  ENDHEREDOC
 
-    config_hash = lookupvar('::jenkins::config_hash')
-    if config_hash && \
-       config_hash['HTTP_PORT'] && \
-       config_hash['HTTP_PORT']['value']
-      return config_hash['HTTP_PORT']['value']
-    else
-      return lookupvar('::jenkins::params::port')
-    end
+    config_hash = lookupvar('jenkins::config_hash')
+    config_hash&.dig('JENKINS_PORT', 'value') || 8080
   end
 end

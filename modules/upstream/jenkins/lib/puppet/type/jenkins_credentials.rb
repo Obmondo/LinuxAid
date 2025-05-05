@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet/x/jenkins/type/cli'
 
 Puppet::X::Jenkins::Type::Cli.newtype(:jenkins_credentials) do
@@ -37,7 +39,6 @@ Puppet::X::Jenkins::Type::Cli.newtype(:jenkins_credentials) do
               :FileCredentialsImpl,
               :AWSCredentialsImpl,
               :GitLabApiTokenImpl,
-              :GoogleRobotPrivateKeyCredentials,
               :BrowserStackCredentials)
   end
 
@@ -102,23 +103,11 @@ Puppet::X::Jenkins::Type::Cli.newtype(:jenkins_credentials) do
     desc 'URL of phabriactor installation - ConduitCredentialsImpl'
   end
 
-  newproperty(:json_key) do
-    desc 'Prettified JSON key string - GoogleRobotPrivateKeyCredentials'
-  end
-
-  newproperty(:email_address) do
-    desc 'Email address used with a P12 key - GoogleRobotPrivateKeyCredentials'
-  end
-
-  newproperty(:p12_key) do
-    desc 'P12 key string in Base64 format without line wrapping - GoogleRobotPrivateKeyCredentials'
-  end
-
   # require all authentication & authorization related types
-  [
-    :jenkins_user,
-    :jenkins_security_realm,
-    :jenkins_authorization_strategy
+  %i[
+    jenkins_user
+    jenkins_security_realm
+    jenkins_authorization_strategy
   ].each do |type|
     autorequire(type) do
       catalog.resources.select do |r|
@@ -126,4 +115,4 @@ Puppet::X::Jenkins::Type::Cli.newtype(:jenkins_credentials) do
       end
     end
   end
-end # Puppet::X::Jenkins::Type::Cli.newtype
+end

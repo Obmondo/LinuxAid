@@ -4,7 +4,3 @@ vnc::server::packages:
   - tigervnc-xorg-extension
 vnc::client::gui::packages:
   - tigervnc-viewer
-vnc::client::novnc::packages:
-  - novnc
-  - python3-websockify
-...

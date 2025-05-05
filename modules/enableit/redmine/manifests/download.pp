@@ -9,7 +9,7 @@ class redmine::download {
   }
 
   if $redmine::provider == 'wget' {
-    ensure_packages([ 'tar', 'wget' ])
+    stdlib::ensure_packages([ 'tar', 'wget' ])
     warning('The wget provider is deprecated and will be removed in the next major version.')
     warning('Consider using a VCS like git or svn instead.')
     exec { 'redmine_source':
@@ -26,7 +26,7 @@ class redmine::download {
     # EasyRedmine
     redmine::easyredmine.include
   } else {
-    ensure_packages($redmine::params::provider_package)
+    stdlib::ensure_packages($redmine::params::provider_package)
     vcsrepo { 'redmine_source':
       revision => $redmine::params::version,
       source   => $redmine::download_url,

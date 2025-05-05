@@ -40,7 +40,6 @@ setup.  The parameters used to override default values are:
 * `cli_password`
 * `cli_password_file`
 * `cli_password_file_exists`
-* `cli_remoting_free`
 
 An example for a secured jenkins (e.g. ad connected) for LTS version
 newer then 2.46.2 (e.g. 2.60.1)
@@ -49,7 +48,6 @@ newer then 2.46.2 (e.g. 2.60.1)
 class { 'jenkins::cli::config':
   cli_username      => 'puppet',
   cli_password_file => 'thisisanactivedirectorypassword',
-  cli_remoting_free => true,
   cli_tries         => 3,
   cli_try_sleep     => 1,
 }
@@ -64,7 +62,6 @@ Note: The file /root/password_file_for_puppet with content
 class { 'jenkins::cli::config':
   cli_username             => 'puppet',
   cli_password_file        => '/root/password_file_for_puppet',
-  cli_remoting_free        => true,
   cli_password_file_exists => true,
   cli_tries                => 3,
   cli_try_sleep            => 1,
@@ -117,14 +114,12 @@ master service to be running.  Most require the presence of
 sufficiently for all providers to function.
 
 ```
-class { '::jenkins':
+class { 'jenkins':
   install_java => true,
   cli          => true,
 }
-include ::jenkins::cli_helper
+include jenkins::cli_helper
 ```
-
-The ruby gem `retries` is presently required by all providers.
 
 ### `puppetserver`
 
@@ -143,13 +138,6 @@ jruby-puppet: {
 ```
 
 See [SERVER-973](https://tickets.puppetlabs.com/browse/SERVER-973)
-
-Additionally, the `retries` gem is required.  This may be installed on the master by running:
-
-```
-/opt/puppetlabs/bin/puppetserver gem install retries
-```
-
 
 Types
 --
@@ -381,34 +369,6 @@ jenkins_credentials { '7e86e9fb-a8af-480f-b596-7191dc02bf38':
   description => 'GitLab API token',
   impl        => 'GitLabApiTokenImpl',
   api_token   => 'tokens for days',
-}
-```
-
-### `GoogleRobotPrivateKeyCredentials`
-
-Using this credential type requires that the jenkins `google-oauth-plugin` plugin
-has been installed.
-
-```puppet
-jenkins_credentials { '587690b0-f793-44e6-bc46-889cce58fb71':
-  ensure   => 'present',
-  impl     => 'GoogleRobotPrivateKeyCredentials',
-  json_key => @END
-  {
-    "client_email": "random@developer.gserviceaccount.com",
-    "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-  }
-  | END
-  ,
-}
-```
-or
-```
-jenkins_credentials { '2f867d0d-e0c7-48a6-a355-1d4fd2ac6c22':
-  ensure        => 'present',
-  impl          => 'GoogleRobotPrivateKeyCredentials',
-  email_address => 'random@developer.gserviceaccount.com',
-  p12_key       => 'LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCg==',
 }
 ```
 

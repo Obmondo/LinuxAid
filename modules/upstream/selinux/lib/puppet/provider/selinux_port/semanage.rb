@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:selinux_port).provide(:semanage) do
   desc 'Support managing SELinux custom port definitions via semanage'
 
@@ -5,10 +7,47 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
   # SELinux must be enabled. Is there a way to get a better error message?
   confine selinux: true
 
-  python_command = Facter.value(:selinux_python_command)
+  # Determine the appropriate python command
+  def self.python_command
+    @python_command ||= nil
+    return @python_command if @python_command
+
+    # Find the correct version of python on the system
+    python_paths = [
+      '/usr/libexec/platform-python',
+      'python',
+      'python3',
+      'python2'
+    ]
+
+    valid_paths = []
+
+    python_paths.each do |pypath|
+      candidate = Puppet::Util.which(pypath)
+
+      next unless candidate
+
+      valid_paths << candidate
+
+      if Puppet::Util::Execution.execute("#{candidate} -c 'import semanage'", failonfail: false).exitstatus.zero?
+        @python_command = candidate
+        break
+      end
+    end
+
+    return @python_command if @python_command
+
+    # Since this is used in 'instances', we have to shrug and hope for the
+    # best unless we want runs to fail until the system is 100% correct.
+    # So far, it does not appear to hurt anything in practice and preserves the
+    # behavior from previous releases that hard coded the path into the python
+    # script.
+    valid_paths.first
+  end
+
   # current file path is lib/puppet/provider/selinux_port/semanage.rb
   # semanage_ports.py is lib/puppet_x/voxpupuli/selinux/semanage_ports.py
-  PORTS_HELPER = File.expand_path('../../../../puppet_x/voxpupuli/selinux/semanage_ports.py', __FILE__)
+  PORTS_HELPER = File.expand_path('../../../puppet_x/voxpupuli/selinux/semanage_ports.py', __dir__)
   commands semanage: 'semanage',
            python: python_command
 
@@ -64,14 +103,14 @@ Puppet::Type.type(:selinux_port).provide(:semanage) do
     instances.each do |provider|
       resource = resources[provider.name]
       if resource
-        unless resource[:low_port].to_s == provider.low_port && resource[:high_port].to_s == provider.high_port && resource[:protocol] == provider.protocol || resource.purging?
-          raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists"
-        end
+        raise Puppet::ResourceError, "Selinux_port['#{resource[:name]}']: title does not match its port and protocol, and a conflicting resource exists" unless (resource[:low_port].to_s == provider.low_port && resource[:high_port].to_s == provider.high_port && resource[:protocol] == provider.protocol) || resource.purging?
+
         resource.provider = provider
         resource[:ensure] = :present if provider.source == :policy
       else
-        resources.values.each do |res|
+        resources.each_value do |res|
           next unless res[:low_port] == provider.low_port && res[:high_port] == provider.high_port && res[:protocol] == provider.protocol
+
           warning("Selinux_port['#{resource[:name]}']: title does not match format protocol_port")
           resource.provider = provider
           resource[:ensure] = :present if provider.source == :policy

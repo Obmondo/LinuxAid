@@ -68,8 +68,8 @@ class passenger (
           $_passenger_version = 'present'
 
           case $facts['os']['family'] {
-            'RedHat' : { ensure_packages('mod_passenger') }
-            'Debian' : { ensure_packages('libapache2-mod-passenger') }
+            'RedHat' : { stdlib::ensure_packages('mod_passenger') }
+            'Debian' : { stdlib::ensure_packages('libapache2-mod-passenger') }
             default  : { fail('Not Supported') }
           }
         }
@@ -86,7 +86,7 @@ class passenger (
               $_passenger_version = 'present'
 
               # Install passenger apache module
-              ensure_packages('rubygem-passenger-apache2-module')
+              stdlib::ensure_packages('rubygem-passenger-apache2-module')
             }
             'Debian': {
 

@@ -3,7 +3,6 @@
 #   platform specific service management on Linux or Unix type systems.
 #
 class splunk::forwarder::service::nix inherits splunk::forwarder::service {
-
   if $splunk::forwarder::boot_start {
     $accept_tos_user = 'root'
     $accept_tos_require = Exec['enable_splunkforwarder']
@@ -19,11 +18,15 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
       timeout => 0,
       notify  => Exec['enable_splunkforwarder'],
     }
-    if $splunk::params::supports_systemd and $splunk::forwarder::splunk_user == 'root' {
-      $user_args = ''
-    } else {
-      $user_args = "-user ${splunk::forwarder::splunk_user}"
+
+    $user_args = "-user ${splunk::forwarder::splunk_user}"
+
+    if $facts['kernel'] == 'SunOS' {
+      Service[$splunk::forwarder::service_name] {
+        provider => 'init',
+      }
     }
+
     # This will fail if the unit file already exists.  Splunk does not remove
     # unit files during uninstallation, so you may be required to manually
     # remove existing unit files before re-installing and enabling boot-start.
@@ -95,5 +98,4 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
     require     => $accept_tos_require,
     refreshonly => true,
   }
-
 }

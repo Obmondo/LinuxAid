@@ -55,7 +55,6 @@ define php::extension::config (
   Variant[Boolean, String] $settings_prefix = false,
   Php::Sapi                $sapi            = 'ALL',
 ) {
-
   if ! defined(Class['php']) {
     warning('php::extension::config is private')
   }
@@ -74,24 +73,29 @@ define php::extension::config (
   $ini_name = downcase($so_name)
 
   # Ensure "<extension>." prefix is present in setting keys if requested
-  $full_settings = $settings_prefix? {
+  $full_settings = $settings_prefix ? {
     true   => ensure_prefix($settings, "${so_name}."),
     false  => $settings,
     String => ensure_prefix($settings, "${settings_prefix}."),
   }
 
   if $provider != 'pear' {
-    $final_settings = deep_merge(
-      {"${extension_key}" => "${module_path}${so_name}.so"},
-      $full_settings
-    )
+    $final_settings = deep_merge({ "${extension_key}" => "${module_path}${so_name}.so" }, $full_settings)
   } else {
     $final_settings = $full_settings
   }
 
+  if $facts['os']['name'] == 'Ubuntu' and $zend != true and $name == 'mysql' {
+    # Do not manage the .ini file if it's mysql.  PHP 7.0+ do not have
+    # mysql.so.  If mysql.ini exists and version is 7.0+, then remove it.
+    $real_ensure = 'absent'
+  } else {
+    $real_ensure = $ensure
+  }
+
   $config_root_ini = pick_default($php::config_root_ini, $php::params::config_root_ini)
-  if $ensure == 'present' or $ensure == 'installed' or $ensure == 'latest' {
-    ::php::config { $title:
+  if $real_ensure != 'absent' {
+    php::config { $title:
       file   => "${config_root_ini}/${ini_prefix}${ini_name}.ini",
       config => $final_settings,
     }
@@ -104,24 +108,26 @@ define php::extension::config (
 
     if $facts['os']['family'] == 'Debian' and $ext_tool_enabled {
       $cmd = "${ext_tool_enable} -s ${sapi} ${so_name}"
+      $execname = "ext_tool_enable_${so_name}"
 
-      $_sapi = $sapi? {
+      $_sapi = $sapi ? {
         'ALL' => 'cli',
         default => $sapi,
       }
-      if has_key($final_settings, 'extension') and $final_settings[extension] {
-        exec { $cmd:
+      if $final_settings[$extension_key] {
+        exec { $execname:
+          command => $cmd,
           onlyif  => "${ext_tool_query} -s ${_sapi} -m ${so_name} | /bin/grep 'No module matches ${so_name}'",
           require => ::Php::Config[$title],
         }
 
         if $php::fpm {
-          Package[$php::fpm::package] ~> Exec[$cmd]
+          Package[$php::fpm::package] ~> Exec[$execname]
         }
       }
     }
   } else {
-    file {"${config_root_ini}/${ini_prefix}${ini_name}.ini":
+    file { "${config_root_ini}/${ini_prefix}${ini_name}.ini":
       ensure => 'absent',
     }
   }

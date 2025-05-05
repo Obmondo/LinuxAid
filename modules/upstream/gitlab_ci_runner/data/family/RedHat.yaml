@@ -1,2 +1,3 @@
 ---
 gitlab_ci_runner::xz_package_name: 'xz'
+gitlab_ci_runner::package_keysource: 'https://packages.gitlab.com/runner/gitlab-runner/gpgkey/runner-gitlab-runner-49F16C5CC3A0F81F.pub.gpg'

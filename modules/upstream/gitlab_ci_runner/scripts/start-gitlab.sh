@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ "${CHECK}" != "beaker" ]]; then
-  echo "Only starting Gitlab test container for beaker tests"
-  exit 0
-fi
-
 docker run --detach --rm \
   --name gitlab \
   --hostname gitlab \

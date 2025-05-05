@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.join(File.dirname(__FILE__), '..', '..', 'voxpupuli/splunk/util')
 
 module PuppetX
@@ -9,14 +11,14 @@ module PuppetX
 
           type.define_singleton_method(:title_patterns) do
             [
-              [%r{^([^\/]*)$}, [[:section]]],   # matches section titles without slashes, like 'tcpout:indexers'
-              [%r{^(.*\/\/.*)\/(.*)$},          # matches section titles containing '//' and a setting,
-               [                                # like: 'monitor:///var/log/messages/index'
+              [%r{^([^/]*)$}, [[:section]]], # matches section titles without slashes, like 'tcpout:indexers'
+              [%r{^(.*//.*)/(.*)$}, # matches section titles containing '//' and a setting,
+               [ # like: 'monitor:///var/log/messages/index'
                  [:section],       # where 'monitor:///var/log/messages' is the section
                  [:setting]        # and 'index' is the setting.
                ]],
-              [%r{^(.*\/\/.*)$}, [[:section]]], # matches section titles containing '//', like 'tcp://127.0.0.1:19500'
-              [%r{^(.*)\/(.*)$},                # matches plain 'section/setting' titles, like: 'tcpout:indexers/server'
+              [%r{^(.*//.*)$}, [[:section]]], # matches section titles containing '//', like 'tcp://127.0.0.1:19500'
+              [%r{^(.*)/(.*)$}, # matches plain 'section/setting' titles, like: 'tcpout:indexers/server'
                [
                  [:section],
                  [:setting]
@@ -30,10 +32,11 @@ module PuppetX
             end
             def insync?(is) # rubocop:disable Lint/NestedMethodDefinition
               secrets_file_path = File.join(provider.class.file_path, 'auth/splunk.secret')
-              if File.file?(secrets_file_path)
+              secrets_file_exist = File.file?(secrets_file_path)
+              if !should.start_with?('$7$') && secrets_file_exist
                 PuppetX::Voxpupuli::Splunk::Util.decrypt(secrets_file_path, is) == should
               else
-                Puppet.warning('Secrets file NOT found')
+                Puppet.warning("Secrets file NOT found in #{secrets_file_path}") unless secrets_file_exist
                 is == should
               end
             end

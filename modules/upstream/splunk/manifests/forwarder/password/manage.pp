@@ -21,18 +21,18 @@
 # @param secret
 #   The secret used to salt the splunk password.
 #
-# @params service
+# @param service
 #   Name of the Splunk Enterprise service that needs to be restarted after files
 #   are updated, not applicable when running in agent mode.
 #
-# @params mode
+# @param mode
 #   The class is designed to work in two ways, as a helper that is called by
 #   Class[splunk::forwarder::config] or leveraged independently from with in a
 #   Bolt Plan. The value defaults to "bolt" implicitly assuming that anytime it
 #   is used outside of Class[splunk::forwarder::config], it is being used by
 #   Bolt
 #
-class splunk::forwarder::password::manage(
+class splunk::forwarder::password::manage (
   Boolean $manage_password                   = $splunk::params::manage_password,
   Stdlib::Absolutepath $password_config_file = $splunk::params::enterprise_password_config_file,
   String[1] $password_content                = $splunk::params::password_content,
@@ -42,7 +42,6 @@ class splunk::forwarder::password::manage(
   String[1] $service                         = $splunk::params::forwarder_service,
   Enum['agent', 'bolt'] $mode                = 'bolt',
 ) inherits splunk::params {
-
   file { $secret_file:
     ensure  => file,
     owner   => $splunk_user,

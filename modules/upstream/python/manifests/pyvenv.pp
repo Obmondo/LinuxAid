@@ -10,6 +10,8 @@
 # @param mode  Optionally specify directory mode
 # @param path Specifies the PATH variable.
 # @param environment Optionally specify environment variables for pyvenv
+# @param prompt Optionally specify the virtualenv prompt (python >= 3.6)
+# @param python_path Optionally specify python path for creation of virtualenv
 #
 # @example
 #   python::pyvenv { '/var/www/project1' :
@@ -30,33 +32,33 @@ define python::pyvenv (
   String[1]                   $group       = 'root',
   Stdlib::Filemode            $mode        = '0755',
   Array[Stdlib::Absolutepath] $path        = ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin',],
-  Array                       $environment = [],
+  Array[String[1]]            $environment = [],
+  Optional[String[1]]         $prompt      = undef,
   Python::Venv::PipVersion    $pip_version = 'latest',
+  Optional[Stdlib::Absolutepath] $python_path = undef,
 ) {
   include python
 
   if $ensure == 'present' {
     $python_version = $version ? {
-      'system' => $facts['python3_version'],
+      'system' => $facts['python3_version'].lest || { $python::default_system_version },
       default  => $version,
     }
 
     $python_version_parts      = split($python_version, '[.]')
     $normalized_python_version = sprintf('%s.%s', $python_version_parts[0], $python_version_parts[1])
 
-    # Debian splits the venv module into a seperate package
-    if ( $facts['os']['family'] == 'Debian') {
-      $python3_venv_package = "python${normalized_python_version}-venv"
-      ensure_packages($python3_venv_package)
-
-      Package[$python3_venv_package] -> File[$venv_dir]
+    $local_exec_prefix = $python_path ? {
+      undef   => $python::exec_prefix,
+      default => $python_path,
     }
-
     # pyvenv is deprecated since 3.6 and will be removed in 3.8
-    if versioncmp($normalized_python_version, '3.6') >=0 {
-      $virtualenv_cmd = "${python::exec_prefix}python${normalized_python_version} -m venv"
+    if $python_path != undef {
+      $virtualenv_cmd = "${python_path} -m venv"
+    } elsif versioncmp($normalized_python_version, '3.6') >=0 {
+      $virtualenv_cmd = "${local_exec_prefix}python${normalized_python_version} -m venv"
     } else {
-      $virtualenv_cmd = "${python::exec_prefix}pyvenv-${normalized_python_version}"
+      $virtualenv_cmd = "${local_exec_prefix}pyvenv-${normalized_python_version}"
     }
 
     $_path = $python::provider ? {
@@ -70,11 +72,18 @@ define python::pyvenv (
       $system_pkgs_flag = ''
     }
 
+    if versioncmp($normalized_python_version, '3.6') >=0 and $prompt {
+      $prompt_arg = "--prompt ${shell_escape($prompt)}"
+    } else {
+      $prompt_arg = ''
+    }
+
     file { $venv_dir:
-      ensure => directory,
-      owner  => $owner,
-      group  => $group,
-      mode   => $mode,
+      ensure  => directory,
+      owner   => $owner,
+      group   => $group,
+      mode    => $mode,
+      require => Class['python::install'],
     }
 
     $pip_cmd = "${python::exec_prefix}${venv_dir}/bin/pip"
@@ -85,7 +94,7 @@ define python::pyvenv (
     }
 
     exec { "python_virtualenv_${venv_dir}":
-      command     => "${virtualenv_cmd} --clear ${system_pkgs_flag} ${venv_dir} && ${pip_cmd} --log ${venv_dir}/pip.log install ${pip_upgrade} && ${pip_cmd} --log ${venv_dir}/pip.log install --upgrade setuptools",
+      command     => "${virtualenv_cmd} --clear ${system_pkgs_flag} ${prompt_arg} ${venv_dir} && ${pip_cmd} --log ${venv_dir}/pip.log install ${pip_upgrade} && ${pip_cmd} --log ${venv_dir}/pip.log install --upgrade setuptools",
       user        => $owner,
       creates     => "${venv_dir}/bin/activate",
       path        => $_path,

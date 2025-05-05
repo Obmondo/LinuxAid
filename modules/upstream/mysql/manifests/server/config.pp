@@ -34,19 +34,24 @@ class mysql::server::config {
   }
 
   #Debian: Creating world readable directories before installing.
-  case $::operatingsystem {
+  case $facts['os']['family'] {
     'Debian': {
       if $managed_dirs {
         $managed_dirs.each | $entry | {
           $dir = $options['mysqld']["${entry}"]
+
           if ( $dir and $dir != '/usr' and $dir != '/tmp' ) {
+            $clean_dir = stdlib::shell_escape($dir)
+            $clean_package_name = stdlib::shell_escape($mysql::server::package_name)
+
             exec { "${entry}-managed_dir-mkdir":
-              command => "/bin/mkdir -p ${dir}",
-              unless  => "/usr/bin/dpkg -s ${mysql::server::package_name}",
+              command => ['/bin/mkdir', '-p', $clean_dir],
+              unless  => [['/usr/bin/dpkg', '-s', $clean_package_name]],
               notify  => Exec["${entry}-managed_dir-chmod"],
             }
+
             exec { "${entry}-managed_dir-chmod":
-              command     => "/bin/chmod 777 ${dir}",
+              command     => ['/bin/chmod', '777', $clean_dir],
               refreshonly => true,
             }
           }
@@ -56,10 +61,15 @@ class mysql::server::config {
     default: {}
   }
 
+  $parameters= {
+    'options' => $options,
+    'includedir' => $includedir,
+  }
+
   if $mysql::server::manage_config_file {
     file { 'mysql-config-file':
       path                    => $mysql::server::config_file,
-      content                 => template('mysql/my.cnf.erb'),
+      content                 => epp('mysql/my.cnf.epp', $parameters),
       mode                    => $mysql::server::config_file_mode,
       owner                   => $mysql::server::mycnf_owner,
       group                   => $mysql::server::mycnf_group,
@@ -80,13 +90,6 @@ class mysql::server::config {
           mode   => '0755',
         }
       }
-    }
-  }
-
-  if $options['mysqld']['ssl-disable'] {
-    notify { 'ssl-disable':
-      message => 'Disabling SSL is evil! You should never ever do this except
-                if you are forced to use a mysql version compiled without SSL support',
     }
   }
 }

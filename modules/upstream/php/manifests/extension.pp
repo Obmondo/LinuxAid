@@ -4,10 +4,14 @@
 #
 # [*ensure*]
 #   The ensure of the package to install
-#   Could be "latest", "installed" or a pinned version
+#   Could be "present", "absent", "latest", "installed" or a pinned version
 #
 # [*package_prefix*]
 #   Prefix to prepend to the package name for the package provider
+#
+# [*package_name*]
+#   Full package name for the package provider (e.g. php7.2-xml for
+#   simlexml extension)
 #
 # [*provider*]
 #   The provider used to install the package
@@ -67,13 +71,14 @@
 #   Array of String or Hash options to pass to the provider.
 #
 define php::extension (
-  String           $ensure                          = 'installed',
+  String           $ensure                          = $php::ensure,
   Optional[Php::Provider] $provider                 = undef,
   Optional[String] $source                          = undef,
   Optional[String] $so_name                         = undef,
   Optional[String] $ini_prefix                      = undef,
   Optional[String] $php_api_version                 = undef,
   String           $package_prefix                  = $php::package_prefix,
+  Optional[String[1]] $package_name                 = undef,
   Boolean          $zend                            = false,
   Variant[Hash, Hash[String, Hash]] $settings       = {},
   Boolean          $multifile_settings              = false,
@@ -84,7 +89,6 @@ define php::extension (
   Variant[String, Array[String]] $compiler_packages = $php::params::compiler_packages,
   Php::InstallOptions $install_options              = undef,
 ) {
-
   if ! defined(Class['php']) {
     warning('php::extension is private')
   }
@@ -95,6 +99,7 @@ define php::extension (
     source            => $source,
     responsefile      => $responsefile,
     package_prefix    => $package_prefix,
+    package_name      => $package_name,
     header_packages   => $header_packages,
     compiler_packages => $compiler_packages,
     install_options   => $install_options,

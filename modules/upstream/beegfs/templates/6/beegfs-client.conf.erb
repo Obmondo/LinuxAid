@@ -22,7 +22,7 @@ sysMgmtdHost                  = <%= @mgmtd_host %>
 # --- Section 1.2: [Advanced Settings] ---
 #
 
-connAuthFile                  =
+connAuthFile                  = <%= @conn_auth_file %>
 connClientPortUDP             = <%= @client_udp_port %>
 connHelperdPortTCP            = <%= @helperd_tcp_port %>
 connMgmtdPortTCP              = <%= @mgmtd_tcp_port %>
@@ -35,7 +35,7 @@ connInterfacesFile            = <%= @interfaces_file %>
 connMaxInternodeNum           = 12
 connNetFilterFile             =
 
-connUseRDMA                   = true
+connUseRDMA                   = <%= @enable_rdma %>
 connRDMABufNum                = 70
 connRDMABufSize               = 8192
 connRDMATypeOfService         = 0
@@ -45,8 +45,6 @@ logClientID                   = false
 logHelperdIP                  =
 logLevel                      = <%= @log_level %>
 logType                       = helperd
-
-quotaEnableEnforcement        = <%= @enable_quota %>
 
 sysCreateHardlinksAsSymlinks  = false
 sysMountSanityCheckMS         = 11000
@@ -59,13 +57,13 @@ tuneFileCacheType             = buffered
 tuneNumWorkers                = 0
 tunePreferredMetaFile         =
 tunePreferredStorageFile      =
-tuneRemoteFSync               = true
+tuneRemoteFSync               = <%= @remote_fsync %>
 tuneUseGlobalAppendLocks      = false
 tuneUseGlobalFileLocks        = false
 <% if @tune_refresh_on_get_attr == true -%>
-  tuneRefreshOnGetAttr          = true
+tuneRefreshOnGetAttr          = true
 <% else -%>
-  tuneRefreshOnGetAttr          = false
+tuneRefreshOnGetAttr          = false
 <% end -%>
 
 #

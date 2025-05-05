@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # This script uses libsemanage directly to access the ports list
 # it is *much* faster than semanage port -l
 
@@ -33,11 +32,15 @@ def print_port(kind, port):
 
 # Always list local ports afterwards so that the provider works correctly
 retval, ports = semanage.semanage_port_list(handle)
+if retval < 0:
+    raise ValueError("Could not list port config")
 
 for port in ports:
     print_port('policy', port)
 
 retval, ports = semanage.semanage_port_list_local(handle)
+if retval < 0:
+    raise ValueError("Could not list local port config")
 
 for port in ports:
     print_port('local', port)

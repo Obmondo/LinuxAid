@@ -3,46 +3,54 @@
 # @api private
 #
 class mysql::backup::mysqldump (
-  $backupuser               = '',
-  $backuppassword           = '',
-  $backupdir                = '',
-  $maxallowedpacket         = '1M',
-  $backupdirmode            = '0700',
-  $backupdirowner           = 'root',
-  $backupdirgroup           = $mysql::params::root_group,
-  $backupcompress           = true,
-  $backuprotate             = 30,
-  $backupmethod             = 'mysqldump',
-  $backup_success_file_path = undef,
-  $ignore_events            = true,
-  $delete_before_dump       = false,
-  $backupdatabases          = [],
-  $file_per_database        = false,
-  $include_triggers         = false,
-  $include_routines         = false,
-  $ensure                   = 'present',
-  $time                     = ['23', '5'],
-  $prescript                = false,
-  $postscript               = false,
-  $execpath                 = '/usr/bin:/usr/sbin:/bin:/sbin',
-  $optional_args            = [],
-  $mysqlbackupdir_ensure    = 'directory',
-  $mysqlbackupdir_target    = undef,
-  $incremental_backups      = false,
-  $install_cron             = true,
-  $compression_command      = 'bzcat -zc',
-  $compression_extension    = '.bz2'
+  String                                        $backupuser               = '',
+  Variant[String, Sensitive[String]]            $backuppassword           = '',
+  String                                        $backupdir                = '',
+  String[1]                                     $maxallowedpacket         = '1M',
+  String[1]                                     $backupdirmode            = '0700',
+  String[1]                                     $backupdirowner           = 'root',
+  String[1]                                     $backupdirgroup           = $mysql::params::root_group,
+  Boolean                                       $backupcompress           = true,
+  Variant[Integer, String[1]]                   $backuprotate             = 30,
+  String[1]                                     $backupmethod             = 'mysqldump',
+  Optional[String[1]]                           $backup_success_file_path = undef,
+  Boolean                                       $ignore_events            = true,
+  Boolean                                       $delete_before_dump       = false,
+  Array[String[1]]                              $backupdatabases          = [],
+  Boolean                                       $file_per_database        = false,
+  Boolean                                       $include_triggers         = false,
+  Boolean                                       $include_routines         = false,
+  Enum['present', 'absent']                     $ensure                   = 'present',
+  Variant[Array[String[1]], Array[Integer]]     $time                     = ['23', '5'],
+  Variant[Boolean, String[1], Array[String[1]]] $prescript                = false,
+  Variant[Boolean, String[1], Array[String[1]]] $postscript               = false,
+  String[1]                                     $execpath                 = '/usr/bin:/usr/sbin:/bin:/sbin',
+  Array[String[1]]                              $optional_args            = [],
+  String[1]                                     $mysqlbackupdir_ensure    = 'directory',
+  Optional[String[1]]                           $mysqlbackupdir_target    = undef,
+  Boolean                                       $incremental_backups      = false,
+  Boolean                                       $install_cron             = true,
+  String[1]                                     $compression_command      = 'bzcat -zc',
+  String[1]                                     $compression_extension    = '.bz2',
+  Optional[String[1]]                           $backupmethod_package     = undef,
+  Array[String]                                 $excludedatabases         = [],
 ) inherits mysql::params {
-  unless $::osfamily == 'FreeBSD' {
+  $backuppassword_unsensitive = if $backuppassword =~ Sensitive {
+    $backuppassword.unwrap
+  } else {
+    $backuppassword
+  }
+
+  unless $facts['os']['family'] == 'FreeBSD' {
     if $backupcompress and $compression_command == 'bzcat -zc' {
-      ensure_packages(['bzip2'])
+      stdlib::ensure_packages(['bzip2'])
       Package['bzip2'] -> File['mysqlbackup.sh']
     }
   }
 
   mysql_user { "${backupuser}@localhost":
     ensure        => $ensure,
-    password_hash => mysql::password($backuppassword),
+    password_hash => Deferred('mysql::password', [$backuppassword]),
     require       => Class['mysql::server::root_password'],
   }
 
@@ -61,12 +69,10 @@ class mysql::backup::mysqldump (
   }
 
   if $install_cron {
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
-      ensure_packages('crontabs')
-    } elsif $::osfamily == 'RedHat' {
-      ensure_packages('cronie')
-    } elsif $::osfamily != 'FreeBSD' {
-      ensure_packages('cron')
+    if $facts['os']['family'] == 'RedHat' {
+      stdlib::ensure_packages('cronie')
+    } elsif $facts['os']['family'] != 'FreeBSD' {
+      stdlib::ensure_packages('cron')
     }
   }
 
@@ -82,13 +88,38 @@ class mysql::backup::mysqldump (
     require  => File['mysqlbackup.sh'],
   }
 
+  $parameters = {
+    'backupuser'=> $backupuser,
+    'backuppassword_unsensitive'=> $backuppassword_unsensitive,
+    'maxallowedpacket'=> $maxallowedpacket,
+    'backupdir'=> $backupdir,
+    'backuprotate'=> $backuprotate,
+    'prescript'=> $prescript,
+    'ignore_events'=> $ignore_events,
+    'backupdatabases'=> $backupdatabases,
+    'include_triggers'=> $include_triggers,
+    'optional_args'=> $optional_args,
+    'execpath'=> $execpath,
+    'delete_before_dump'=> $delete_before_dump,
+    'excludedatabases'=> $excludedatabases,
+    'backupmethod'=> $backupmethod,
+    'backupcompress'=> $backupcompress,
+    'compression_command'=> $compression_command,
+    'compression_extension'=> $compression_extension,
+    'backup_success_file_path'=> $backup_success_file_path,
+    'postscript'=> $postscript,
+    'file_per_database'=> $file_per_database,
+    'include_routines' => $include_routines,
+  }
+
+  # TODO: use EPP instead of ERB, as EPP can handle Data of Type Sensitive without further ado
   file { 'mysqlbackup.sh':
     ensure  => $ensure,
     path    => '/usr/local/sbin/mysqlbackup.sh',
     mode    => '0700',
     owner   => 'root',
     group   => $mysql::params::root_group,
-    content => template('mysql/mysqlbackup.sh.erb'),
+    content => epp('mysql/mysqlbackup.sh.epp',$parameters),
   }
 
   if $mysqlbackupdir_target {

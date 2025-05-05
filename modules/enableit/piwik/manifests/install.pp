@@ -9,7 +9,7 @@ class piwik::install (
   Stdlib::Absolutepath $geoip_city_path,
 ) {
 
-  ensure_packages(['git', 'composer'])
+  stdlib::ensure_packages(['git', 'composer'])
 
   file { '/var/www':
     ensure => 'directory',

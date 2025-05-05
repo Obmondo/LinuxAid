@@ -54,7 +54,7 @@ function package::install (
   # Install/Remove Package
   $install_packages = package::lookup($_packages)
 
-  # Use the real resource instead of `ensure_packages` from stdlib; this makes
+  # Use the real resource instead of `stdlib::ensure_packages` from stdlib; this makes
   # it possible to set the name of the package resource to the name we use
   # internally allowing us to refer to it in e.g. metaparameters.
   $install_packages.each |$_name, $_package| {

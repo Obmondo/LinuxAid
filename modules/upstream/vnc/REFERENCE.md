@@ -8,10 +8,10 @@
 
 #### Public Classes
 
-* [`vnc::client::gui`](#vncclientgui): Install the VNC GUI clients
-* [`vnc::client::novnc`](#vncclientnovnc): Setup a websocket service for running the NoVNC interface
-* [`vnc::server`](#vncserver): Install and configure the tigervnc server
-* [`vnc::server::export::novnc`](#vncserverexportnovnc): Map defined VNC servers into NOVNC client
+* [`vnc::client::gui`](#vnc--client--gui): Install the VNC GUI clients
+* [`vnc::client::novnc`](#vnc--client--novnc): Setup a websocket service for running the NoVNC interface
+* [`vnc::server`](#vnc--server): Install and configure the tigervnc server
+* [`vnc::server::export::novnc`](#vnc--server--export--novnc): Map defined VNC servers into NOVNC client
 
 #### Private Classes
 
@@ -24,7 +24,7 @@
 
 ## Classes
 
-### <a name="vncclientgui"></a>`vnc::client::gui`
+### <a name="vnc--client--gui"></a>`vnc::client::gui`
 
 Install the VNC GUI clients
 
@@ -32,29 +32,29 @@ Install the VNC GUI clients
 
 The following parameters are available in the `vnc::client::gui` class:
 
-* [`manage_packages`](#manage_packages)
-* [`packages`](#packages)
-* [`packages_ensure`](#packages_ensure)
+* [`manage_packages`](#-vnc--client--gui--manage_packages)
+* [`packages`](#-vnc--client--gui--packages)
+* [`packages_ensure`](#-vnc--client--gui--packages_ensure)
 
-##### <a name="manage_packages"></a>`manage_packages`
+##### <a name="-vnc--client--gui--manage_packages"></a>`manage_packages`
 
 Data type: `Boolean`
 
 Should this class manage the packages
 
-##### <a name="packages"></a>`packages`
+##### <a name="-vnc--client--gui--packages"></a>`packages`
 
 Data type: `Array`
 
 List of packages to install
 
-##### <a name="packages_ensure"></a>`packages_ensure`
+##### <a name="-vnc--client--gui--packages_ensure"></a>`packages_ensure`
 
 Data type: `String`
 
 Ensure state of the vnc client packages
 
-### <a name="vncclientnovnc"></a>`vnc::client::novnc`
+### <a name="vnc--client--novnc"></a>`vnc::client::novnc`
 
 Setup a websocket service for running the NoVNC interface
 
@@ -62,220 +62,220 @@ Setup a websocket service for running the NoVNC interface
 
 The following parameters are available in the `vnc::client::novnc` class:
 
-* [`manage_packages`](#manage_packages)
-* [`packages`](#packages)
-* [`packages_ensure`](#packages_ensure)
-* [`manage_service_config`](#manage_service_config)
-* [`websockify_config_dir`](#websockify_config_dir)
-* [`websockify_config_mode`](#websockify_config_mode)
-* [`websockify_token_plugin`](#websockify_token_plugin)
-* [`websockify_token_source`](#websockify_token_source)
-* [`websockify_auth_plugin`](#websockify_auth_plugin)
-* [`websockify_auth_source`](#websockify_auth_source)
-* [`websockify_service_user`](#websockify_service_user)
-* [`websockify_service_group`](#websockify_service_group)
-* [`websockify_service_dynamicuser`](#websockify_service_dynamicuser)
-* [`make_webserver_vnc_index`](#make_webserver_vnc_index)
-* [`webserver_novnc_location`](#webserver_novnc_location)
-* [`webserver_vnc_index`](#webserver_vnc_index)
-* [`manage_service`](#manage_service)
-* [`websockify_command`](#websockify_command)
-* [`websockify_service_name`](#websockify_service_name)
-* [`websockify_service_ensure`](#websockify_service_ensure)
-* [`websockify_service_enable`](#websockify_service_enable)
-* [`websockify_port`](#websockify_port)
-* [`websockify_webroot`](#websockify_webroot)
-* [`websockify_prefer_ipv6`](#websockify_prefer_ipv6)
-* [`websockify_use_ssl`](#websockify_use_ssl)
-* [`websockify_use_ssl_only`](#websockify_use_ssl_only)
-* [`websockify_ssl_ca`](#websockify_ssl_ca)
-* [`websockify_ssl_cert`](#websockify_ssl_cert)
-* [`websockify_ssl_key`](#websockify_ssl_key)
-* [`vnc_servers`](#vnc_servers)
+* [`manage_packages`](#-vnc--client--novnc--manage_packages)
+* [`packages`](#-vnc--client--novnc--packages)
+* [`packages_ensure`](#-vnc--client--novnc--packages_ensure)
+* [`manage_service_config`](#-vnc--client--novnc--manage_service_config)
+* [`websockify_config_dir`](#-vnc--client--novnc--websockify_config_dir)
+* [`websockify_config_mode`](#-vnc--client--novnc--websockify_config_mode)
+* [`websockify_token_plugin`](#-vnc--client--novnc--websockify_token_plugin)
+* [`websockify_token_source`](#-vnc--client--novnc--websockify_token_source)
+* [`websockify_auth_plugin`](#-vnc--client--novnc--websockify_auth_plugin)
+* [`websockify_auth_source`](#-vnc--client--novnc--websockify_auth_source)
+* [`websockify_service_user`](#-vnc--client--novnc--websockify_service_user)
+* [`websockify_service_group`](#-vnc--client--novnc--websockify_service_group)
+* [`websockify_service_dynamicuser`](#-vnc--client--novnc--websockify_service_dynamicuser)
+* [`make_webserver_vnc_index`](#-vnc--client--novnc--make_webserver_vnc_index)
+* [`webserver_novnc_location`](#-vnc--client--novnc--webserver_novnc_location)
+* [`webserver_vnc_index`](#-vnc--client--novnc--webserver_vnc_index)
+* [`manage_service`](#-vnc--client--novnc--manage_service)
+* [`websockify_command`](#-vnc--client--novnc--websockify_command)
+* [`websockify_service_name`](#-vnc--client--novnc--websockify_service_name)
+* [`websockify_service_ensure`](#-vnc--client--novnc--websockify_service_ensure)
+* [`websockify_service_enable`](#-vnc--client--novnc--websockify_service_enable)
+* [`websockify_port`](#-vnc--client--novnc--websockify_port)
+* [`websockify_webroot`](#-vnc--client--novnc--websockify_webroot)
+* [`websockify_prefer_ipv6`](#-vnc--client--novnc--websockify_prefer_ipv6)
+* [`websockify_use_ssl`](#-vnc--client--novnc--websockify_use_ssl)
+* [`websockify_use_ssl_only`](#-vnc--client--novnc--websockify_use_ssl_only)
+* [`websockify_ssl_ca`](#-vnc--client--novnc--websockify_ssl_ca)
+* [`websockify_ssl_cert`](#-vnc--client--novnc--websockify_ssl_cert)
+* [`websockify_ssl_key`](#-vnc--client--novnc--websockify_ssl_key)
+* [`vnc_servers`](#-vnc--client--novnc--vnc_servers)
 
-##### <a name="manage_packages"></a>`manage_packages`
+##### <a name="-vnc--client--novnc--manage_packages"></a>`manage_packages`
 
 Data type: `Boolean`
 
 Should this class manage the packages
 
-##### <a name="packages"></a>`packages`
+##### <a name="-vnc--client--novnc--packages"></a>`packages`
 
 Data type: `Array`
 
 List of packages to install
 
-##### <a name="packages_ensure"></a>`packages_ensure`
+##### <a name="-vnc--client--novnc--packages_ensure"></a>`packages_ensure`
 
 Data type: `String`
 
 Ensure state of the vnc server packages
 
-##### <a name="manage_service_config"></a>`manage_service_config`
+##### <a name="-vnc--client--novnc--manage_service_config"></a>`manage_service_config`
 
 Data type: `Boolean`
 
-should this clas manage any config files?
+should this class manage any config files?
 
-##### <a name="websockify_config_dir"></a>`websockify_config_dir`
+##### <a name="-vnc--client--novnc--websockify_config_dir"></a>`websockify_config_dir`
 
 Data type: `Stdlib::Absolutepath`
 
 where are config files kept
 
-##### <a name="websockify_config_mode"></a>`websockify_config_mode`
+##### <a name="-vnc--client--novnc--websockify_config_mode"></a>`websockify_config_mode`
 
 Data type: `String`
 
 what should the config mode be
 
-##### <a name="websockify_token_plugin"></a>`websockify_token_plugin`
+##### <a name="-vnc--client--novnc--websockify_token_plugin"></a>`websockify_token_plugin`
 
 Data type: `String`
 
 what type of token plugin is in use
 
-##### <a name="websockify_token_source"></a>`websockify_token_source`
+##### <a name="-vnc--client--novnc--websockify_token_source"></a>`websockify_token_source`
 
 Data type: `String`
 
 what is the data source for the token plugin
 if $websockify_token_plugin == 'TokenFile' or 'ReadOnlyTokenFile', this should be the filename
 
-##### <a name="websockify_auth_plugin"></a>`websockify_auth_plugin`
+##### <a name="-vnc--client--novnc--websockify_auth_plugin"></a>`websockify_auth_plugin`
 
 Data type: `String`
 
 what type of auth plugin is in use
 
-##### <a name="websockify_auth_source"></a>`websockify_auth_source`
+##### <a name="-vnc--client--novnc--websockify_auth_source"></a>`websockify_auth_source`
 
 Data type: `String`
 
 what is the data source for the auth plugin
 
-##### <a name="websockify_service_user"></a>`websockify_service_user`
+##### <a name="-vnc--client--novnc--websockify_service_user"></a>`websockify_service_user`
 
 Data type: `String`
 
 User to run the service as
 
-##### <a name="websockify_service_group"></a>`websockify_service_group`
+##### <a name="-vnc--client--novnc--websockify_service_group"></a>`websockify_service_group`
 
 Data type: `String`
 
 Group to run the service as
 
-##### <a name="websockify_service_dynamicuser"></a>`websockify_service_dynamicuser`
+##### <a name="-vnc--client--novnc--websockify_service_dynamicuser"></a>`websockify_service_dynamicuser`
 
 Data type: `Boolean`
 
 Use systemd dynamic users for this service
 
-##### <a name="make_webserver_vnc_index"></a>`make_webserver_vnc_index`
+##### <a name="-vnc--client--novnc--make_webserver_vnc_index"></a>`make_webserver_vnc_index`
 
 Data type: `Boolean`
 
 Make a simple index file listing out known sessions
 
-##### <a name="webserver_novnc_location"></a>`webserver_novnc_location`
+##### <a name="-vnc--client--novnc--webserver_novnc_location"></a>`webserver_novnc_location`
 
 Data type: `Stdlib::Absolutepath`
 
 What is the URL base for novnc (probably /novnc)
 
-##### <a name="webserver_vnc_index"></a>`webserver_vnc_index`
+##### <a name="-vnc--client--novnc--webserver_vnc_index"></a>`webserver_vnc_index`
 
 Data type: `Stdlib::Absolutepath`
 
 Where should we write out the known session index?
 
-##### <a name="manage_service"></a>`manage_service`
+##### <a name="-vnc--client--novnc--manage_service"></a>`manage_service`
 
 Data type: `Boolean`
 
 Should this service be managed
 
-##### <a name="websockify_command"></a>`websockify_command`
+##### <a name="-vnc--client--novnc--websockify_command"></a>`websockify_command`
 
 Data type: `Stdlib::Absolutepath`
 
 where is /usr/bin/websockify?
 
-##### <a name="websockify_service_name"></a>`websockify_service_name`
+##### <a name="-vnc--client--novnc--websockify_service_name"></a>`websockify_service_name`
 
 Data type: `String`
 
 Name of service to manage
 
-##### <a name="websockify_service_ensure"></a>`websockify_service_ensure`
+##### <a name="-vnc--client--novnc--websockify_service_ensure"></a>`websockify_service_ensure`
 
 Data type: `String`
 
 Ensure for service
 
-##### <a name="websockify_service_enable"></a>`websockify_service_enable`
+##### <a name="-vnc--client--novnc--websockify_service_enable"></a>`websockify_service_enable`
 
 Data type: `Boolean`
 
 Enable for service
 
-##### <a name="websockify_port"></a>`websockify_port`
+##### <a name="-vnc--client--novnc--websockify_port"></a>`websockify_port`
 
 Data type: `Variant[String, Integer[0,65535]]`
 
 Port to listen on
 
-##### <a name="websockify_webroot"></a>`websockify_webroot`
+##### <a name="-vnc--client--novnc--websockify_webroot"></a>`websockify_webroot`
 
 Data type: `Stdlib::Absolutepath`
 
 Webroot for service to use
 
-##### <a name="websockify_prefer_ipv6"></a>`websockify_prefer_ipv6`
+##### <a name="-vnc--client--novnc--websockify_prefer_ipv6"></a>`websockify_prefer_ipv6`
 
 Data type: `Boolean`
 
 Try IPv6 before IPv4
 
-##### <a name="websockify_use_ssl"></a>`websockify_use_ssl`
+##### <a name="-vnc--client--novnc--websockify_use_ssl"></a>`websockify_use_ssl`
 
 Data type: `Boolean`
 
 Use an SSL certificate for websockify
 
-##### <a name="websockify_use_ssl_only"></a>`websockify_use_ssl_only`
+##### <a name="-vnc--client--novnc--websockify_use_ssl_only"></a>`websockify_use_ssl_only`
 
 Data type: `Boolean`
 
 Only use SSL connections
 
-##### <a name="websockify_ssl_ca"></a>`websockify_ssl_ca`
+##### <a name="-vnc--client--novnc--websockify_ssl_ca"></a>`websockify_ssl_ca`
 
 Data type: `Stdlib::Absolutepath`
 
 SSL Certificate Authority for websockify
 
-##### <a name="websockify_ssl_cert"></a>`websockify_ssl_cert`
+##### <a name="-vnc--client--novnc--websockify_ssl_cert"></a>`websockify_ssl_cert`
 
 Data type: `Stdlib::Absolutepath`
 
 SSL certificate for websockify
 
-##### <a name="websockify_ssl_key"></a>`websockify_ssl_key`
+##### <a name="-vnc--client--novnc--websockify_ssl_key"></a>`websockify_ssl_key`
 
 Data type: `Stdlib::Absolutepath`
 
 SSL key for websockify
 
-##### <a name="vnc_servers"></a>`vnc_servers`
+##### <a name="-vnc--client--novnc--vnc_servers"></a>`vnc_servers`
 
 Data type: `Hash`
 
 A hash of VNC servers to connect to.
 ie. {'session_name' => 'host:port'}
 
-### <a name="vncserver"></a>`vnc::server`
+### <a name="vnc--server"></a>`vnc::server`
 
 This class will install and configure the tigervnc
 server, setup defaults, and manage the services.
@@ -286,124 +286,140 @@ server, setup defaults, and manage the services.
 
 The following parameters are available in the `vnc::server` class:
 
-* [`manage_packages`](#manage_packages)
-* [`packages`](#packages)
-* [`packages_ensure`](#packages_ensure)
-* [`manage_config`](#manage_config)
-* [`seed_home_vnc`](#seed_home_vnc)
-* [`config_defaults_file`](#config_defaults_file)
-* [`config_defaults`](#config_defaults)
-* [`config_mandatory_file`](#config_mandatory_file)
-* [`config_mandatory`](#config_mandatory)
-* [`vncserver_users_file`](#vncserver_users_file)
-* [`polkit_file`](#polkit_file)
-* [`polkit_file_mode`](#polkit_file_mode)
-* [`manage_services`](#manage_services)
-* [`user_can_manage`](#user_can_manage)
-* [`systemd_template_startswith`](#systemd_template_startswith)
-* [`systemd_template_endswith`](#systemd_template_endswith)
-* [`vnc_servers`](#vnc_servers)
+* [`manage_packages`](#-vnc--server--manage_packages)
+* [`packages`](#-vnc--server--packages)
+* [`packages_ensure`](#-vnc--server--packages_ensure)
+* [`manage_config`](#-vnc--server--manage_config)
+* [`config_defaults_file`](#-vnc--server--config_defaults_file)
+* [`config_defaults`](#-vnc--server--config_defaults)
+* [`config_mandatory_file`](#-vnc--server--config_mandatory_file)
+* [`config_mandatory`](#-vnc--server--config_mandatory)
+* [`vncserver_users_file`](#-vnc--server--vncserver_users_file)
+* [`polkit_file`](#-vnc--server--polkit_file)
+* [`polkit_file_mode`](#-vnc--server--polkit_file_mode)
+* [`manage_services`](#-vnc--server--manage_services)
+* [`user_can_manage`](#-vnc--server--user_can_manage)
+* [`extra_users_can_manage`](#-vnc--server--extra_users_can_manage)
+* [`vnc_home_conf`](#-vnc--server--vnc_home_conf)
+* [`seed_home_vnc`](#-vnc--server--seed_home_vnc)
+* [`systemd_template_startswith`](#-vnc--server--systemd_template_startswith)
+* [`systemd_template_endswith`](#-vnc--server--systemd_template_endswith)
+* [`vnc_servers`](#-vnc--server--vnc_servers)
 
-##### <a name="manage_packages"></a>`manage_packages`
+##### <a name="-vnc--server--manage_packages"></a>`manage_packages`
 
 Data type: `Boolean`
 
 Should this class manage the packages
 
-##### <a name="packages"></a>`packages`
+##### <a name="-vnc--server--packages"></a>`packages`
 
 Data type: `Array`
 
 List of packages to install
 
-##### <a name="packages_ensure"></a>`packages_ensure`
+##### <a name="-vnc--server--packages_ensure"></a>`packages_ensure`
 
 Data type: `String`
 
 Ensure state of the vnc server packages
 
-##### <a name="manage_config"></a>`manage_config`
+##### <a name="-vnc--server--manage_config"></a>`manage_config`
 
 Data type: `Boolean`
 
 Should this class manage the config
 
-##### <a name="seed_home_vnc"></a>`seed_home_vnc`
-
-Data type: `Boolean`
-
-Should this class generate a per-user ~/.vnc if it doesn't exist?
-
-##### <a name="config_defaults_file"></a>`config_defaults_file`
+##### <a name="-vnc--server--config_defaults_file"></a>`config_defaults_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Your /etc/tigervnc/vncserver-config-defaults
 
-##### <a name="config_defaults"></a>`config_defaults`
+##### <a name="-vnc--server--config_defaults"></a>`config_defaults`
 
 Data type: `Hash[String, Variant[String, Undef]]`
 
 Settings to put in /etc/tigervnc/vncserver-config-defaults
 
-##### <a name="config_mandatory_file"></a>`config_mandatory_file`
+##### <a name="-vnc--server--config_mandatory_file"></a>`config_mandatory_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Your /etc/tigervnc/vncserver-config-mandatory
 
-##### <a name="config_mandatory"></a>`config_mandatory`
+##### <a name="-vnc--server--config_mandatory"></a>`config_mandatory`
 
 Data type: `Hash[String, Variant[String, Undef]]`
 
 Settings to put in /etc/tigervnc/vncserver-config-mandatory
 
-##### <a name="vncserver_users_file"></a>`vncserver_users_file`
+##### <a name="-vnc--server--vncserver_users_file"></a>`vncserver_users_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Your /etc/tigervnc/vncserver.users
 
-##### <a name="polkit_file"></a>`polkit_file`
+##### <a name="-vnc--server--polkit_file"></a>`polkit_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Your /etc/polkit-1/rules.d/25-puppet-vncserver.rules
 
-##### <a name="polkit_file_mode"></a>`polkit_file_mode`
+##### <a name="-vnc--server--polkit_file_mode"></a>`polkit_file_mode`
 
 Data type: `String`
 
 Your /etc/polkit-1/rules.d/25-puppet-vncserver.rules permissions
 It should pretty much always be 644
 
-##### <a name="manage_services"></a>`manage_services`
+##### <a name="-vnc--server--manage_services"></a>`manage_services`
 
 Data type: `Boolean`
 
 Should this class manage the vncserver services
 
-##### <a name="user_can_manage"></a>`user_can_manage`
+##### <a name="-vnc--server--user_can_manage"></a>`user_can_manage`
 
 Data type: `Boolean`
 
 Should users be able to manage the systemd service by default
 
-##### <a name="systemd_template_startswith"></a>`systemd_template_startswith`
+##### <a name="-vnc--server--extra_users_can_manage"></a>`extra_users_can_manage`
+
+Data type: `Array[String]`
+
+Who else should be able to manage the VNC sessions
+
+##### <a name="-vnc--server--vnc_home_conf"></a>`vnc_home_conf`
+
+Data type: `Stdlib::Absolutepath`
+
+Where does VNC keep its config (/.vnc)
+NOTE: MUST start with `/`
+NOTE: MUST NOT end with `/`
+
+##### <a name="-vnc--server--seed_home_vnc"></a>`seed_home_vnc`
+
+Data type: `Boolean`
+
+Should this class generate a per-user ~/.vnc if it doesn't exist?
+
+##### <a name="-vnc--server--systemd_template_startswith"></a>`systemd_template_startswith`
 
 Data type: `String`
 
 What does the vnc template service start with, including the '@'
 
-##### <a name="systemd_template_endswith"></a>`systemd_template_endswith`
+##### <a name="-vnc--server--systemd_template_endswith"></a>`systemd_template_endswith`
 
 Data type: `String`
 
 What does the vnc template service end with (not including the '.')
 
-##### <a name="vnc_servers"></a>`vnc_servers`
+##### <a name="-vnc--server--vnc_servers"></a>`vnc_servers`
 
-Data type: `Hash[String, Hash[Enum['displaynumber', 'user_can_manage', 'seed_home_vnc', 'comment', 'ensure', 'enable'], Variant[String, Integer, Boolean]]]`
+Data type: `Hash[String, Hash[Enum['displaynumber', 'user_can_manage', 'seed_home_vnc', 'comment', 'ensure', 'enable', 'extra_users_can_manage'], Variant[Array[String], String, Integer, Boolean, Undef]]]`
 
 A hash of VNC servers to setup  Format:
 userA:
@@ -419,7 +435,7 @@ userB:
   enable: false
   user_can_manage: false
 
-### <a name="vncserverexportnovnc"></a>`vnc::server::export::novnc`
+### <a name="vnc--server--export--novnc"></a>`vnc::server::export::novnc`
 
 Map defined VNC servers into NOVNC client
 
@@ -435,10 +451,10 @@ include vnc::server::export::novnc
 
 The following parameters are available in the `vnc::server::export::novnc` class:
 
-* [`vnc_server_hostname`](#vnc_server_hostname)
-* [`vnc_servers`](#vnc_servers)
+* [`vnc_server_hostname`](#-vnc--server--export--novnc--vnc_server_hostname)
+* [`vnc_servers`](#-vnc--server--export--novnc--vnc_servers)
 
-##### <a name="vnc_server_hostname"></a>`vnc_server_hostname`
+##### <a name="-vnc--server--export--novnc--vnc_server_hostname"></a>`vnc_server_hostname`
 
 Data type: `String`
 
@@ -446,7 +462,7 @@ Hostname to use as the default server target
 
 Default value: `'localhost'`
 
-##### <a name="vnc_servers"></a>`vnc_servers`
+##### <a name="-vnc--server--export--novnc--vnc_servers"></a>`vnc_servers`
 
 Data type: `Hash`
 

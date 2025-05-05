@@ -3,7 +3,6 @@
 #   platform specific installation steps on Linux or Unix type systems.
 #
 class splunk::enterprise::install::nix inherits splunk::enterprise::install {
-
   if $facts['kernel'] == 'SunOS' {
     $_responsefile = "${splunk::enterprise::staging_dir}/response.txt"
     $_adminfile    = '/var/sadm/install/admin/splunk-noask'
@@ -31,12 +30,16 @@ class splunk::enterprise::install::nix inherits splunk::enterprise::install {
     }
   }
 
-  # Required for splunk 7.2.4.2
-  if versioncmp($splunk::enterprise::version, '7.2.4.2') >= 0 {
-    ensure_packages(['net-tools'], {
-      'ensure' => 'present',
-      before   => Package[$splunk::enterprise::enterprise_package_name]
+  # Required for splunk from 7.2.4.2 until 8.0.0
+  if (
+    $splunk::params::manage_net_tools and
+    $facts['kernel'] == 'Linux' and
+    versioncmp($splunk::enterprise::version, '7.2.4.2') >= 0 and
+    versioncmp($splunk::enterprise::version, '8.0.0') == -1
+  ) {
+    stdlib::ensure_packages(['net-tools'], {
+        'ensure' => 'present',
     })
+    Package['net-tools'] -> Package[$splunk::enterprise::enterprise_package_name]
   }
-
 }

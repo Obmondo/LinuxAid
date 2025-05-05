@@ -54,7 +54,7 @@ define redmine::plugin (
       $provider_package = $provider
     }
   }
-  ensure_packages($provider_package)
+  stdlib::ensure_packages($provider_package)
 
   vcsrepo { $install_dir:
     ensure   => $ensure,

@@ -17,7 +17,7 @@
 # @param server
 #   The fqdn or IP address of the Splunk server.
 #
-# @param version`
+# @param version
 #   Specifies the version of Splunk Forwarder the module should install and
 #   manage.
 #
@@ -120,7 +120,7 @@
 # @param seed_password
 #   If set to true, Manage the contents of splunk.secret and user-seed.conf.
 #
-# @param reset_seed_password
+# @param reset_seeded_password
 #   If set to true, deletes `password_config_file` to trigger Splunk's password
 #   import process on restart of the Splunk services.
 #
@@ -131,6 +131,9 @@
 # @param seed_config_file
 #   Which file to place the admin password hash in so its imported by Splunk on
 #   restart.
+#
+# @param seed_user
+#   The local user (usually 'admin') imported by Splunk.
 #
 # @param password_content
 #   The hashed password username/details for the user.
@@ -147,7 +150,10 @@
 # @param addons
 #   Manage a splunk addons, see `splunk::addons`.
 #
-class splunk::forwarder(
+# @param allow_insecure
+#   Disable certificate verification when connecting to SSL hosts to download packages.
+#
+class splunk::forwarder (
   String[1] $server                          = $splunk::params::server,
   String[1] $version                         = $splunk::params::version,
   String[1] $package_name                    = $splunk::params::forwarder_package_name,
@@ -159,7 +165,10 @@ class splunk::forwarder(
   Boolean $manage_package_source             = true,
   Optional[String[1]] $package_source        = undef,
   Splunk::Fwdinstalloptions $install_options = $splunk::params::forwarder_install_options,
-  String[1] $splunk_user                     = $splunk::params::splunk_user,
+  String[1] $splunk_user                     = versioncmp($version, '9.1.0') ? {
+    -1 => $splunk::params::splunk_user,
+    default => 'splunkfwd',
+  },
   Stdlib::Absolutepath $forwarder_homedir    = $splunk::params::forwarder_homedir,
   Stdlib::Absolutepath $forwarder_confdir    = $splunk::params::forwarder_confdir,
   String[1] $service_name                    = $splunk::params::forwarder_service,
@@ -184,11 +193,12 @@ class splunk::forwarder(
   Stdlib::Absolutepath $seed_config_file     = $splunk::params::forwarder_seed_config_file,
   String[1] $password_content                = $splunk::params::password_content,
   String[1] $password_hash                   = $splunk::params::password_hash,
+  String[1] $seed_user                       = $splunk::params::seed_user,
   Stdlib::Absolutepath $secret_file          = $splunk::params::forwarder_secret_file,
   String[1] $secret                          = $splunk::params::secret,
   Hash $addons                               = {},
+  Boolean $allow_insecure                    = $splunk::params::allow_insecure,
 ) inherits splunk {
-
   if (defined(Class['splunk::enterprise'])) {
     fail('Splunk Universal Forwarder provides a subset of Splunk Enterprise capabilities, and has potentially conflicting resources when included with Splunk Enterprise on the same node.  Do not include splunk::forwarder on the same node as splunk::enterprise.  Configure Splunk Enterprise to meet your forwarding needs.'
     )
@@ -221,7 +231,7 @@ class splunk::forwarder(
   # This is a module that supports multiple platforms. For some platforms
   # there is non-generic configuration that needs to be declared in addition
   # to the agnostic resources declared here.
-  if $facts['kernel'] in ['Linux', 'SunOS'] {
+  if $facts['kernel'] in ['Linux', 'SunOS', 'FreeBSD'] {
     contain 'splunk::forwarder::service::nix'
     Class['splunk::forwarder::config']
     -> Class['splunk::forwarder::service::nix']
@@ -237,5 +247,4 @@ class splunk::forwarder(
     purge_forwarder_transforms       => $purge_transforms,
     purge_forwarder_web              => $purge_web,
   }
-
 }

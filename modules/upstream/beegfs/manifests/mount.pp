@@ -1,15 +1,20 @@
 # Define: beegfs::mount
 #
-# This module manages beegfs mounts
+# Manages beegfs mounts
+#
+# @param cfg
+# @param mnt
+# @param user
+# @param group
+# @param mounts_cfg
 #
 define beegfs::mount (
-  $cfg,
-  $mnt,
-  $user       = $beegfs::user,
-  $group      = $beegfs::group,
-  $mounts_cfg = '/etc/beegfs/beegfs-mounts.conf',
+  String               $cfg,
+  String               $mnt,
+  String               $user       = $beegfs::user,
+  String               $group      = $beegfs::group,
+  Stdlib::AbsolutePath $mounts_cfg = '/etc/beegfs/beegfs-mounts.conf',
 ) {
-
   file { $mnt:
     ensure => directory,
     owner  => $user,
@@ -22,5 +27,4 @@ define beegfs::mount (
     content => "${mnt} ${cfg}",
     require => File[$mnt],
   }
-
 }

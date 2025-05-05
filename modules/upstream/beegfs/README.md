@@ -1,14 +1,28 @@
 # puppet-beegfs
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/deric/beegfs.svg)](https://forge.puppetlabs.com/deric/beegfs) [![Static & Spec Tests](https://github.com/deric/puppet-beegfs/actions/workflows/spec.yml/badge.svg)](https://github.com/deric/puppet-beegfs/actions/workflows/spec.yml) [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/deric/beegfs.svg)](https://forge.puppetlabs.com/deric/beegfs/scores)
 
+## Upgrade from `deric-beegfs` version `0.4.x` to `0.5.x`
 
-[![Puppet
-Forge](http://img.shields.io/puppetforge/v/deric/beegfs.svg)](https://forge.puppetlabs.com/deric/beegfs) [![Build Status](https://travis-ci.org/deric/puppet-beegfs.svg?branch=master)](https://travis-ci.org/deric/puppet-beegfs) [![Puppet Forge
-Downloads](http://img.shields.io/puppetforge/dt/deric/beegfs.svg)](https://forge.puppetlabs.com/deric/beegfs/scores)
+- `beegfs::storage_directory` expects an Array instead of just String
+- parameter `beegfs::major_version` renamed to `beegfs::release`
+- `beegfs::client::client_udp` renamed to `beegfs::client::client_udp_port`
+
 
 ## Usage
 
-You need one mgmtd server:
+First of all choose which release to use, by defining:
+```yaml
+beegfs::release: '6'
+```
+valid values are:
+
+- `'2015.03'`
+- `'6'`
+- `'7'`
+- `'7.1'`
+
+You'll need one mgmtd server:
 
 ```puppet
 class { 'beegfs::mgmtd': }
@@ -41,9 +55,9 @@ beegfs::mount{ 'mnt-share':
 }
 ```
 
-### Interfaces
+### Interfaces and networks
 
-For meta and storage nodes you can specify interfaces for commutication. The passed argument must be an array.
+For meta and storage nodes you can specify interfaces for communication. The passed argument must be an array.
 
 ```puppet
 class { 'beegfs::meta':
@@ -53,6 +67,17 @@ class { 'beegfs::meta':
 class { 'beegfs::storage':
   mgmtd_host => 192.168.1.1,
   interfaces => ['eth0', 'ib0']
+}
+```
+
+In some cases, interfaces can have multiple ips, and only a subset of them should be used.
+In this case, the list of allowed subnets can be passed as the networks parameter. It should be an array if specified.
+
+```puppet
+class { 'beegfs::meta':
+  mgmtd_host => 192.168.1.1,
+  interfaces => ['eth0', 'ib0'],
+  networks => ['192.168.1.0/24'],
 }
 ```
 
@@ -115,9 +140,34 @@ beegfs::storage::interfaces:
 
 ## Requirements
 
- * Ruby 1.9 or newer
- * at least Puppet 4.0 and < 6.0
+ * Ruby 2.0 or newer
+ * at least Puppet 4.9
 
 ## License
 
 Apache License, Version 2.0
+
+## Acceptance test
+
+Run specific image using:
+```
+BEAKER_set=debian9-5.5 rake acceptance
+```
+debug mode:
+```
+BEAKER_debug=true rake acceptance
+```
+preserve Docker container after finising test:
+```
+$ BEAKER_destroy=no rake acceptance
+$ docker exec -it 98aa06308c67 bash
+$ /opt/puppetlabs/bin/puppet apply /tmp/apply_manifest.pp.OveoVG
+```
+
+
+## Rubocop
+
+Update rubocop config with given target version:
+```
+ mry --target=0.70.0 .rubocop.yml
+ ```

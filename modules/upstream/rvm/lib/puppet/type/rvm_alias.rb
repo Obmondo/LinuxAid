@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:rvm_alias) do
-  @doc = "Manage RVM Aliases."
+  @doc = 'Manage RVM Aliases.'
 
   ensurable
 
@@ -8,7 +10,7 @@ Puppet::Type.newtype(:rvm_alias) do
   end
 
   newparam(:name) do
-    desc "The name of the alias to be managed."
+    desc 'The name of the alias to be managed.'
     isnamevar
   end
 
@@ -16,5 +18,4 @@ Puppet::Type.newtype(:rvm_alias) do
     desc "The ruby version that is the target of our alias.
     For example: 'ruby-1.9.2-p290'"
   end
-
 end

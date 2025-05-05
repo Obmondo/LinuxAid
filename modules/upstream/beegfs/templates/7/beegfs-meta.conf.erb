@@ -25,7 +25,7 @@ storeAllowFirstRunInit       = <%= @allow_first_run_init %>
 # --- Section 1.2: [Advanced Settings] ---
 #
 
-connAuthFile                 =
+connAuthFile                 = <%= @conn_auth_file %>
 connBacklogTCP               = 128
 connFallbackExpirationSecs   = 900
 connInterfacesFile           = <%= @interfaces_file %>
@@ -37,9 +37,9 @@ connMgmtdPortTCP             = <%= @mgmtd_tcp_port %>
 connMgmtdPortUDP             = <%= @mgmtd_udp_port %>
 connPortShift                = 0
 
-connNetFilterFile            =
+connNetFilterFile            = <% if @networks %><%= @networks_file %><% end %>
 
-connUseRDMA                  = true
+connUseRDMA                  = <%= @enable_rdma %>
 connRDMATypeOfService        = 0
 connTcpOnlyFilterFile        =
 
@@ -60,7 +60,7 @@ storeUseExtendedAttribs      = true
 
 sysTargetAttachmentFile      =
 sysTargetOfflineTimeoutSecs  = 180
-sysAllowUserSetPattern       = false
+sysAllowUserSetPattern       = <%= @allow_user_set_pattern %>
 
 tuneBindToNumaZone           =
 tuneNumStreamListeners       = 1
@@ -336,6 +336,9 @@ tuneUsePerUserMsgQueues      = false
 #  4(create), 5(mkdir), 6(mknode), 7(create symlink), 8(rmdir), 9(unlink),
 #  10(create hardlink), 11(rename)
 # Default: <unset>
+<% if @sys_file_event_log_target -%>
+sysFileEventLogTarget = <%= @sys_file_event_log_target %>
+<% end -%>
 
 #
 # --- Section 4.6: [Tuning] ---

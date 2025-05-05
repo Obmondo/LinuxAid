@@ -1,6 +1,5 @@
 # Mysql Profile
 class profile::mysql (
-  Boolean                               $webadmin                       = false,
   Stdlib::Absolutepath                  $datadir                        = '/var/lib/mysql',
   Optional[Eit_types::Password]         $root_password                  = undef,
   Array[Stdlib::IP::Address]            $access_mysql_from              = ['0.0.0.0/0'],
@@ -151,21 +150,6 @@ class profile::mysql (
 
   class { '::mysql::client' :
     package_name => $package_client_name,
-  }
-
-  if $webadmin {
-    # user must set mysql password before phpmyadmin works!
-    class { '::profile::phpmyadmin':
-      php_runtime => 'mod_php',
-    }
-
-    unless defined(Class['profile::php']) {
-      class { 'profile::php':
-        mysql   => true,
-        ssl     => true,
-        mod_php => true,
-      }
-    }
   }
 
   # If we use systemd we can let it handle mounting any encrypted disks before

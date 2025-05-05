@@ -2,10 +2,85 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 4.0.0
+
+**Breaking Changes**
+
+- All noVNC bits have been moved into a dedicated novnc module
+-- https://forge.puppet.com/modules/jcpunk/novnc
+
+## Release 3.0.1
+
+**Features**
+
+- Permit puppet-systemd v8
+
+## Release 3.0.0
+
+**Breaking Changes**
+
+- Require stdlib 9.x
+
+## Release 2.3.7
+
+**Features**
+
+- Add hostname to static html file
+
+## Release 2.3.6
+
+**Bugfix**
+
+- Puppet 7 and Puppet 8 respond differently when using mix of `unless` and `onlyif`
+
+## Release 2.3.5
+
+**Bugfix**
+
+- Fix backwards logic on link test
+
+## Release 2.3.4
+
+**Bugfix**
+
+- Forgot to commit `,`
+
+## Release 2.3.3
+
+**Bugfix**
+
+- don't try to change mode of symbolic link
+
+## Release 2.3.2
+
+**Bugfix**
+
+- Fix doc typos
+
+## Release 2.3.1
+
+**Bugfix**
+
+- Fix doc in config files
+- Update dependencies
+
+## Release 2.3.0
+
+**Features**
+
+- Add support for setting vnc home config to ~/.local/config or something else
+
+## Release 2.2.0
+
+**Features**
+
+- Add support for extra users who can manage the service
+
 ## Release 2.1.0
 
 **Features**
-Add suse support
+
+- Add suse support
 
 ## Release 2.0.1
 

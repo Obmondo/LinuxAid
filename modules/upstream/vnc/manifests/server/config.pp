@@ -4,6 +4,10 @@
 #
 # @param manage_config
 #   Should this class manage the config
+# @param vnc_home_conf
+#   Where does VNC keep its config (/.vnc)
+#   NOTE: MUST start with `/`
+#   NOTE: MUST NOT end with `/`
 # @param seed_home_vnc
 #   Should this class generate a per-user ~/.vnc if it doesn't exist?
 # @param config_defaults_file
@@ -21,6 +25,8 @@
 #   See the server.pp documentation for structure
 # @param user_can_manage
 #   Should users be able to manage the systemd service by default
+# @param extra_users_can_manage
+#   Additional users granted access to the systemd service
 # @param polkit_file
 #   Your /etc/polkit-1/rules.d/25-puppet-vncserver.rules
 # @param polkit_file_mode
@@ -32,16 +38,18 @@
 #   What does the vnc template service end with, not including the '.'
 class vnc::server::config (
   # lint:ignore:parameter_types
-  $manage_config         = $vnc::server::manage_config,
-  $seed_home_vnc         = $vnc::server::seed_home_vnc,
-  $config_defaults_file  = $vnc::server::config_defaults_file,
-  $config_defaults       = $vnc::server::config_defaults,
-  $config_mandatory_file = $vnc::server::config_mandatory_file,
-  $config_mandatory      = $vnc::server::config_mandatory,
-  $vncserver_users_file  = $vnc::server::vncserver_users_file,
-  $user_can_manage       = $vnc::server::user_can_manage,
-  $polkit_file           = $vnc::server::polkit_file,
-  $polkit_file_mode      = $vnc::server::polkit_file_mode,
+  $manage_config          = $vnc::server::manage_config,
+  $seed_home_vnc          = $vnc::server::seed_home_vnc,
+  $vnc_home_conf          = $vnc::server::vnc_home_conf,
+  $config_defaults_file   = $vnc::server::config_defaults_file,
+  $config_defaults        = $vnc::server::config_defaults,
+  $config_mandatory_file  = $vnc::server::config_mandatory_file,
+  $config_mandatory       = $vnc::server::config_mandatory,
+  $vncserver_users_file   = $vnc::server::vncserver_users_file,
+  $user_can_manage        = $vnc::server::user_can_manage,
+  $extra_users_can_manage = $vnc::server::extra_users_can_manage,
+  $polkit_file            = $vnc::server::polkit_file,
+  $polkit_file_mode       = $vnc::server::polkit_file_mode,
 
   $systemd_template_startswith = $vnc::server::systemd_template_startswith,
   $systemd_template_endswith   = $vnc::server::systemd_template_endswith,
@@ -64,7 +72,12 @@ class vnc::server::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => epp('vnc/etc/tigervnc/config.epp', { 'settings' => $config_defaults }),
+      content => epp('vnc/etc/tigervnc/config.epp', {
+          'config_defaults_file'  => $config_defaults_file,
+          'config_mandatory_file' => $config_mandatory_file,
+          'vnc_home_conf'         => $vnc_home_conf,
+          'settings'              => $config_defaults
+      }),
       notify  => Class['Vnc::Server::Service'],
     }
 
@@ -73,7 +86,12 @@ class vnc::server::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => epp('vnc/etc/tigervnc/config.epp', { 'settings' => $config_mandatory }),
+      content => epp('vnc/etc/tigervnc/config.epp', {
+          'config_defaults_file'  => $config_defaults_file,
+          'config_mandatory_file' => $config_mandatory_file,
+          'vnc_home_conf'         => $vnc_home_conf,
+          'settings'              => $config_mandatory
+      }),
       notify  => Class['Vnc::Server::Service'],
     }
 
@@ -82,7 +100,10 @@ class vnc::server::config (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => epp('vnc/etc/tigervnc/vncserver.users.epp', { 'vnc_servers' => $vnc_servers, 'user_can_manage' => $user_can_manage }),
+      content => epp('vnc/etc/tigervnc/vncserver.users.epp', {
+          'vnc_servers'     => $vnc_servers,
+          'user_can_manage' => $user_can_manage
+      }),
     }
 
     concat { $polkit_file:
@@ -103,16 +124,22 @@ class vnc::server::config (
       }
 
       if 'user_can_manage' in $vnc_servers[$username] {
-        $user_mange_systemd_service = $vnc_servers[$username]['user_can_manage']
+        $user_manage_systemd_service = $vnc_servers[$username]['user_can_manage']
       } else {
-        $user_mange_systemd_service = $user_can_manage
+        $user_manage_systemd_service = $user_can_manage
       }
 
-      if $user_mange_systemd_service {
+      if 'extra_users_can_manage' in $vnc_servers[$username] {
+        $extra_users_to_grant = unique(flatten([$extra_users_can_manage, $vnc_servers[$username]['extra_users_can_manage']]))
+      } else {
+        $extra_users_to_grant = unique(flatten([$extra_users_can_manage]))
+      }
+
+      if $user_manage_systemd_service {
         $polkit_hash = {
           'systemd_template_startswith' => $systemd_template_startswith,
           'systemd_template_endswith'   => $systemd_template_endswith,
-          'username'                    => $username,
+          'usernames'                   => unique(flatten([$username, $extra_users_to_grant,])),
           'displaynumber'               => $vnc_servers[$username]['displaynumber'],
         }
 
@@ -130,61 +157,76 @@ class vnc::server::config (
       }
 
       if $seed_user_home_vnc {
-        exec { "create ~${username}/.vnc":
-          command  => "mkdir -p $(getent passwd ${username} | cut -d: -f6)/.vnc",
+        exec { "create ~${username}${vnc_home_conf}":
+          command  => "mkdir -p $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}",
           path     => ['/usr/bin', '/usr/sbin',],
           provider => 'shell',
           user     => $username,
           group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc",
+          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}",
           onlyif   => "getent passwd ${username}",
         }
-        exec { "chmod 700 ~${username}/.vnc":
-          command  => "chmod 700 $(getent passwd ${username} | cut -d: -f6)/.vnc",
+        exec { "chmod 700 ~${username}${vnc_home_conf}":
+          command  => "chmod 700 $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}",
           path     => ['/usr/bin', '/usr/sbin',],
           provider => 'shell',
           user     => $username,
           group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc --printf=%a|grep 700",
+          onlyif   => [
+            "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf} --printf=%F|grep -v link",
+            "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf} --printf=%a|grep -v 700",
+            "getent passwd ${username}",
+          ],
+        }
+
+        exec { "create ~${username}${vnc_home_conf}/config":
+          command  => "echo '# see also ${config_defaults}' > $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/config",
+          path     => ['/usr/bin', '/usr/sbin',],
+          provider => 'shell',
+          user     => $username,
+          group    => 'users',
+          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/config",
+          onlyif   => "getent passwd ${username}",
+        }
+        exec { "chmod 600 ~${username}${vnc_home_conf}/config":
+          command  => "chmod 600 $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/config",
+          path     => ['/usr/bin', '/usr/sbin',],
+          provider => 'shell',
+          user     => $username,
+          group    => 'users',
+          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/config --printf=%a|grep 600",
           onlyif   => "getent passwd ${username}",
         }
 
-        exec { "create ~${username}/.vnc/config":
-          command  => "echo '# see also ${config_defaults}' > $(getent passwd ${username} | cut -d: -f6)/.vnc/config",
+        exec { "create ~${username}${vnc_home_conf}/passwd":
+          command  => "head -1 /dev/urandom > $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/passwd",
           path     => ['/usr/bin', '/usr/sbin',],
           provider => 'shell',
           user     => $username,
           group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc/config",
+          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/passwd",
           onlyif   => "getent passwd ${username}",
         }
-        exec { "chmod 600 ~${username}/.vnc/config":
-          command  => "chmod 600 $(getent passwd ${username} | cut -d: -f6)/.vnc/config",
+        exec { "chmod 600 ~${username}${vnc_home_conf}/passwd":
+          command  => "chmod 600 $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/passwd",
           path     => ['/usr/bin', '/usr/sbin',],
           provider => 'shell',
           user     => $username,
           group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc/config --printf=%a|grep 600",
+          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf}/passwd --printf=%a|grep 600",
           onlyif   => "getent passwd ${username}",
         }
 
-        exec { "create ~${username}/.vnc/passwd":
-          command  => "head -1 /dev/urandom > $(getent passwd ${username} | cut -d: -f6)/.vnc/passwd",
-          path     => ['/usr/bin', '/usr/sbin',],
-          provider => 'shell',
-          user     => $username,
-          group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc/passwd",
-          onlyif   => "getent passwd ${username}",
-        }
-        exec { "chmod 600 ~${username}/.vnc/passwd":
-          command  => "chmod 600 $(getent passwd ${username} | cut -d: -f6)/.vnc/passwd",
-          path     => ['/usr/bin', '/usr/sbin',],
-          provider => 'shell',
-          user     => $username,
-          group    => 'users',
-          unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc/passwd --printf=%a|grep 600",
-          onlyif   => "getent passwd ${username}",
+        if $vnc_home_conf != '/.vnc' { # create old compat dir if needed
+          exec { "create ~${username}/.vnc link":
+            command  => "ln -s $(getent passwd ${username} | cut -d: -f6)/${vnc_home_conf} $(getent passwd ${username} | cut -d: -f6)/.vnc",
+            path     => ['/usr/bin', '/usr/sbin',],
+            provider => 'shell',
+            user     => $username,
+            group    => 'users',
+            unless   => "stat $(getent passwd ${username} | cut -d: -f6)/.vnc",
+            onlyif   => "getent passwd ${username}",
+          }
         }
       }
     }

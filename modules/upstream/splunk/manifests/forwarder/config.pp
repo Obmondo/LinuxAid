@@ -4,12 +4,12 @@
 #   Forwarder
 #
 class splunk::forwarder::config {
-
   if $splunk::forwarder::seed_password {
     class { 'splunk::forwarder::password::seed':
       reset_seeded_password => $splunk::forwarder::reset_seeded_password,
       password_config_file  => $splunk::forwarder::password_config_file,
       seed_config_file      => $splunk::forwarder::seed_config_file,
+      seed_user             => $splunk::forwarder::seed_user,
       password_hash         => $splunk::forwarder::password_hash,
       secret_file           => $splunk::forwarder::secret_file,
       secret                => $splunk::forwarder::secret,
@@ -37,25 +37,24 @@ class splunk::forwarder::config {
     }
   }
 
-
   $_forwarder_file_mode = $facts['kernel'] ? {
     'windows' => undef,
     default   => '0600',
   }
 
   file { ["${splunk::forwarder::forwarder_homedir}/etc/system/local/deploymentclient.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/outputs.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/inputs.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/props.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/transforms.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/web.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/limits.conf",
-          "${splunk::forwarder::forwarder_homedir}/etc/system/local/server.conf"]:
-    ensure => file,
-    tag    => 'splunk_forwarder',
-    owner  => $splunk::forwarder::splunk_user,
-    group  => $splunk::forwarder::splunk_user,
-    mode   => $_forwarder_file_mode,
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/outputs.conf",
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/inputs.conf",
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/props.conf",
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/transforms.conf",
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/web.conf",
+      "${splunk::forwarder::forwarder_homedir}/etc/system/local/limits.conf",
+    "${splunk::forwarder::forwarder_homedir}/etc/system/local/server.conf"]:
+      ensure => file,
+      tag    => 'splunk_forwarder',
+      owner  => $splunk::forwarder::splunk_user,
+      group  => $splunk::forwarder::splunk_user,
+      mode   => $_forwarder_file_mode,
   }
 
   if $splunk::forwarder::use_default_config {
@@ -95,5 +94,4 @@ class splunk::forwarder::config {
   File <| tag == 'splunk_forwarder' |> -> Splunkforwarder_web<||>              ~> Class['splunk::forwarder::service']
   File <| tag == 'splunk_forwarder' |> -> Splunkforwarder_limits<||>           ~> Class['splunk::forwarder::service']
   File <| tag == 'splunk_forwarder' |> -> Splunkforwarder_server<||>           ~> Class['splunk::forwarder::service']
-
 }

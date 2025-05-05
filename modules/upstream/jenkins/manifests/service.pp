@@ -1,10 +1,7 @@
-# Class: jenkins::service
-#
+# @summary Manage the Jenkins service
+# @api private
 class jenkins::service {
-
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
+  assert_private()
 
   service { 'jenkins':
     ensure     => $jenkins::service_ensure,
@@ -13,5 +10,4 @@ class jenkins::service {
     hasstatus  => true,
     hasrestart => true,
   }
-
 }

@@ -9,6 +9,10 @@
 # [*package_prefix*]
 #   Prefix to prepend to the package name for the package provider
 #
+# [*package_name*]
+#   Full package name for the package provider (e.g. php7.2-xml for
+#   simlexml extension)
+#
 # [*provider*]
 #   The provider used to install the package
 #   Could be "pecl", "apt", "dpkg" or any other OS package provider
@@ -38,12 +42,12 @@ define php::extension::install (
   Optional[Php::Provider] $provider                 = undef,
   Optional[String] $source                          = undef,
   String           $package_prefix                  = $php::package_prefix,
+  Optional[String[1]] $package_name                 = undef,
   Optional[Stdlib::AbsolutePath] $responsefile      = undef,
   Variant[String, Array[String]] $header_packages   = [],
   Variant[String, Array[String]] $compiler_packages = $php::params::compiler_packages,
   Php::InstallOptions $install_options              = undef,
 ) {
-
   if ! defined(Class['php']) {
     warning('php::extension::install is private')
   }
@@ -62,8 +66,8 @@ define php::extension::install (
       }
 
       $package_require      = [
-        Class['::php::pear'],
-        Class['::php::dev'],
+        Class['php::pear'],
+        Class['php::dev'],
       ]
     }
 
@@ -72,19 +76,24 @@ define php::extension::install (
     }
 
     default: {
-      $real_package = "${package_prefix}${title}"
+      $real_package = $package_name ? {
+        undef   => "${package_prefix}${title}",
+        default => $package_name,
+      }
       $package_require = undef
     }
   }
 
   unless $provider == 'none' {
-    package { $real_package:
-      ensure          => $ensure,
-      provider        => $provider,
-      source          => $source,
-      responsefile    => $responsefile,
-      install_options => $install_options,
-      require         => $package_require,
+    if ! defined(Package[$real_package]) {
+      package { $real_package:
+        ensure          => $ensure,
+        provider        => $provider,
+        source          => $source,
+        responsefile    => $responsefile,
+        install_options => $install_options,
+        require         => $package_require,
+      }
     }
   }
 }

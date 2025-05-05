@@ -8,12 +8,10 @@
 
 #### Public Classes
 
-* [`mysql::bindings`](#mysqlbindings): Parent class for MySQL bindings.
-* [`mysql::client`](#mysqlclient): Installs and configures the MySQL client.
-* [`mysql::server`](#mysqlserver): Installs and configures the MySQL server.
-* [`mysql::server::backup`](#mysqlserverbackup): Create and manage a MySQL backup.
-* [`mysql::server::monitor`](#mysqlservermonitor): This is a helper class to add a monitoring user to the database
-* [`mysql::server::mysqltuner`](#mysqlservermysqltuner): Manage the MySQLTuner package.
+* [`mysql::bindings`](#mysql--bindings): Parent class for MySQL bindings.
+* [`mysql::client`](#mysql--client): Installs and configures the MySQL client.
+* [`mysql::server`](#mysql--server): Installs and configures the MySQL server.
+* [`mysql::server::backup`](#mysql--server--backup): Create and manage a MySQL backup.
 
 #### Private Classes
 
@@ -40,32 +38,33 @@
 
 ### Defined types
 
-* [`mysql::db`](#mysqldb): Create and configure a MySQL database.
+* [`mysql::db`](#mysql--db): Create and configure a MySQL database.
 
 ### Resource types
 
 #### Public Resource types
 
-* [`mysql_grant`](#mysql_grant): @summary Manage a MySQL user's rights.
+* [`mysql_database`](#mysql_database): Manage a MySQL database.
+* [`mysql_grant`](#mysql_grant): Manage a MySQL user's rights.
 * [`mysql_login_path`](#mysql_login_path): Manage a MySQL login path.
 * [`mysql_plugin`](#mysql_plugin): Manage MySQL plugins.
-* [`mysql_user`](#mysql_user): @summary Manage a MySQL user. This includes management of users password as well as privileges.
+* [`mysql_user`](#mysql_user): Manage a MySQL user. This includes management of users password as well as privileges.
 
 #### Private Resource types
 
-* `mysql_database`: Manage a MySQL database.
 * `mysql_datadir`: Manage MySQL datadirs with mysql_install_db OR mysqld (5.7.6 and above).
 
 ### Functions
 
-* [`mysql::normalise_and_deepmerge`](#mysqlnormalise_and_deepmerge): Recursively merges two or more hashes together, normalises keys with differing use of dashes and underscores.
-* [`mysql::password`](#mysqlpassword): Hash a string as mysql's "PASSWORD()" function would do it
-* [`mysql::strip_hash`](#mysqlstrip_hash): When given a hash this function strips out all blank entries.
+* [`mysql::innobackupex_args`](#mysql--innobackupex_args): This function populates and returns the string of arguments which later gets injected in template. Arguments that return string holds is conditional and decided by the the input given to function.
+* [`mysql::normalise_and_deepmerge`](#mysql--normalise_and_deepmerge): Recursively merges two or more hashes together, normalises keys with differing use of dashes and underscores.
+* [`mysql::password`](#mysql--password): Hash a string as mysql's "PASSWORD()" function would do it
+* [`mysql::strip_hash`](#mysql--strip_hash): When given a hash this function strips out all blank entries.
 * [`mysql_password`](#mysql_password): DEPRECATED. Use the namespaced function [`mysql::password`](#mysqlpassword) instead.
 
 ### Data types
 
-* [`Mysql::Options`](#mysqloptions): A hash of options structured like the override_options, but not merged with the default options.
+* [`Mysql::Options`](#Mysql--Options): A hash of options structured like the override_options, but not merged with the default options.
 
 ### Tasks
 
@@ -74,7 +73,7 @@
 
 ## Classes
 
-### <a name="mysqlbindings"></a>`mysql::bindings`
+### <a name="mysql--bindings"></a>`mysql::bindings`
 
 Parent class for MySQL bindings.
 
@@ -95,269 +94,276 @@ class { 'mysql::bindings':
 
 The following parameters are available in the `mysql::bindings` class:
 
-* [`install_options`](#install_options)
-* [`java_enable`](#java_enable)
-* [`perl_enable`](#perl_enable)
-* [`php_enable`](#php_enable)
-* [`python_enable`](#python_enable)
-* [`ruby_enable`](#ruby_enable)
-* [`client_dev`](#client_dev)
-* [`daemon_dev`](#daemon_dev)
-* [`java_package_ensure`](#java_package_ensure)
-* [`java_package_name`](#java_package_name)
-* [`java_package_provider`](#java_package_provider)
-* [`perl_package_ensure`](#perl_package_ensure)
-* [`perl_package_name`](#perl_package_name)
-* [`perl_package_provider`](#perl_package_provider)
-* [`php_package_ensure`](#php_package_ensure)
-* [`php_package_name`](#php_package_name)
-* [`php_package_provider`](#php_package_provider)
-* [`python_package_ensure`](#python_package_ensure)
-* [`python_package_name`](#python_package_name)
-* [`python_package_provider`](#python_package_provider)
-* [`ruby_package_ensure`](#ruby_package_ensure)
-* [`ruby_package_name`](#ruby_package_name)
-* [`ruby_package_provider`](#ruby_package_provider)
-* [`client_dev_package_ensure`](#client_dev_package_ensure)
-* [`client_dev_package_name`](#client_dev_package_name)
-* [`client_dev_package_provider`](#client_dev_package_provider)
-* [`daemon_dev_package_ensure`](#daemon_dev_package_ensure)
-* [`daemon_dev_package_name`](#daemon_dev_package_name)
-* [`daemon_dev_package_provider`](#daemon_dev_package_provider)
+* [`install_options`](#-mysql--bindings--install_options)
+* [`java_enable`](#-mysql--bindings--java_enable)
+* [`perl_enable`](#-mysql--bindings--perl_enable)
+* [`php_enable`](#-mysql--bindings--php_enable)
+* [`python_enable`](#-mysql--bindings--python_enable)
+* [`ruby_enable`](#-mysql--bindings--ruby_enable)
+* [`client_dev`](#-mysql--bindings--client_dev)
+* [`daemon_dev`](#-mysql--bindings--daemon_dev)
+* [`java_package_ensure`](#-mysql--bindings--java_package_ensure)
+* [`java_package_name`](#-mysql--bindings--java_package_name)
+* [`java_package_provider`](#-mysql--bindings--java_package_provider)
+* [`perl_package_ensure`](#-mysql--bindings--perl_package_ensure)
+* [`perl_package_name`](#-mysql--bindings--perl_package_name)
+* [`perl_package_provider`](#-mysql--bindings--perl_package_provider)
+* [`php_package_ensure`](#-mysql--bindings--php_package_ensure)
+* [`php_package_name`](#-mysql--bindings--php_package_name)
+* [`php_package_provider`](#-mysql--bindings--php_package_provider)
+* [`python_package_ensure`](#-mysql--bindings--python_package_ensure)
+* [`python_package_name`](#-mysql--bindings--python_package_name)
+* [`python_package_provider`](#-mysql--bindings--python_package_provider)
+* [`ruby_package_ensure`](#-mysql--bindings--ruby_package_ensure)
+* [`ruby_package_name`](#-mysql--bindings--ruby_package_name)
+* [`ruby_package_provider`](#-mysql--bindings--ruby_package_provider)
+* [`client_dev_package_ensure`](#-mysql--bindings--client_dev_package_ensure)
+* [`client_dev_package_name`](#-mysql--bindings--client_dev_package_name)
+* [`client_dev_package_provider`](#-mysql--bindings--client_dev_package_provider)
+* [`daemon_dev_package_ensure`](#-mysql--bindings--daemon_dev_package_ensure)
+* [`daemon_dev_package_name`](#-mysql--bindings--daemon_dev_package_name)
+* [`daemon_dev_package_provider`](#-mysql--bindings--daemon_dev_package_provider)
 
-##### <a name="install_options"></a>`install_options`
+##### <a name="-mysql--bindings--install_options"></a>`install_options`
 
-Data type: `Any`
+Data type: `Optional[Array[String[1]]]`
 
 Passes `install_options` array to managed package resources. You must pass the [appropriate options](https://docs.puppetlabs.com/references/latest/type.html#package-attribute-install_options) for the package manager(s).
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="java_enable"></a>`java_enable`
+##### <a name="-mysql--bindings--java_enable"></a>`java_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `::mysql::bindings::java` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="perl_enable"></a>`perl_enable`
+##### <a name="-mysql--bindings--perl_enable"></a>`perl_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `mysql::bindings::perl` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="php_enable"></a>`php_enable`
+##### <a name="-mysql--bindings--php_enable"></a>`php_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `mysql::bindings::php` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="python_enable"></a>`python_enable`
+##### <a name="-mysql--bindings--python_enable"></a>`python_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `mysql::bindings::python` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="ruby_enable"></a>`ruby_enable`
+##### <a name="-mysql--bindings--ruby_enable"></a>`ruby_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `mysql::bindings::ruby` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="client_dev"></a>`client_dev`
+##### <a name="-mysql--bindings--client_dev"></a>`client_dev`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `::mysql::bindings::client_dev` should be included. Valid values are `true`', `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="daemon_dev"></a>`daemon_dev`
+##### <a name="-mysql--bindings--daemon_dev"></a>`daemon_dev`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether `::mysql::bindings::daemon_dev` should be included. Valid values are `true`, `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="java_package_ensure"></a>`java_package_ensure`
+##### <a name="-mysql--bindings--java_package_ensure"></a>`java_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `java_enable => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `java_enable => true`.
 
 Default value: `$mysql::params::java_package_ensure`
 
-##### <a name="java_package_name"></a>`java_package_name`
+##### <a name="-mysql--bindings--java_package_name"></a>`java_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the Java package to install. Only applies if `java_enable => true`.
 
 Default value: `$mysql::params::java_package_name`
 
-##### <a name="java_package_provider"></a>`java_package_provider`
+##### <a name="-mysql--bindings--java_package_provider"></a>`java_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the Java package. Only applies if `java_enable => true`.
 
 Default value: `$mysql::params::java_package_provider`
 
-##### <a name="perl_package_ensure"></a>`perl_package_ensure`
+##### <a name="-mysql--bindings--perl_package_ensure"></a>`perl_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `perl_enable => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `perl_enable => true`.
 
 Default value: `$mysql::params::perl_package_ensure`
 
-##### <a name="perl_package_name"></a>`perl_package_name`
+##### <a name="-mysql--bindings--perl_package_name"></a>`perl_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the Perl package to install. Only applies if `perl_enable => true`.
 
 Default value: `$mysql::params::perl_package_name`
 
-##### <a name="perl_package_provider"></a>`perl_package_provider`
+##### <a name="-mysql--bindings--perl_package_provider"></a>`perl_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the Perl package. Only applies if `perl_enable => true`.
 
 Default value: `$mysql::params::perl_package_provider`
 
-##### <a name="php_package_ensure"></a>`php_package_ensure`
+##### <a name="-mysql--bindings--php_package_ensure"></a>`php_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `php_enable => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `php_enable => true`.
 
 Default value: `$mysql::params::php_package_ensure`
 
-##### <a name="php_package_name"></a>`php_package_name`
+##### <a name="-mysql--bindings--php_package_name"></a>`php_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the PHP package to install. Only applies if `php_enable => true`.
 
 Default value: `$mysql::params::php_package_name`
 
-##### <a name="php_package_provider"></a>`php_package_provider`
+##### <a name="-mysql--bindings--php_package_provider"></a>`php_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the PHP package. Only applies if `php_enable => true`.
 
 Default value: `$mysql::params::php_package_provider`
 
-##### <a name="python_package_ensure"></a>`python_package_ensure`
+##### <a name="-mysql--bindings--python_package_ensure"></a>`python_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `python_enable => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `python_enable => true`.
 
 Default value: `$mysql::params::python_package_ensure`
 
-##### <a name="python_package_name"></a>`python_package_name`
+##### <a name="-mysql--bindings--python_package_name"></a>`python_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the Python package to install. Only applies if `python_enable => true`.
 
 Default value: `$mysql::params::python_package_name`
 
-##### <a name="python_package_provider"></a>`python_package_provider`
+##### <a name="-mysql--bindings--python_package_provider"></a>`python_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the Python package. Only applies if `python_enable => true`.
 
 Default value: `$mysql::params::python_package_provider`
 
-##### <a name="ruby_package_ensure"></a>`ruby_package_ensure`
+##### <a name="-mysql--bindings--ruby_package_ensure"></a>`ruby_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `ruby_enable => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `ruby_enable => true`.
 
 Default value: `$mysql::params::ruby_package_ensure`
 
-##### <a name="ruby_package_name"></a>`ruby_package_name`
+##### <a name="-mysql--bindings--ruby_package_name"></a>`ruby_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the Ruby package to install. Only applies if `ruby_enable => true`.
 
 Default value: `$mysql::params::ruby_package_name`
 
-##### <a name="ruby_package_provider"></a>`ruby_package_provider`
+##### <a name="-mysql--bindings--ruby_package_provider"></a>`ruby_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 What provider should be used to install the package.
 
 Default value: `$mysql::params::ruby_package_provider`
 
-##### <a name="client_dev_package_ensure"></a>`client_dev_package_ensure`
+##### <a name="-mysql--bindings--client_dev_package_ensure"></a>`client_dev_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `client_dev => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `client_dev => true`.
 
 Default value: `$mysql::params::client_dev_package_ensure`
 
-##### <a name="client_dev_package_name"></a>`client_dev_package_name`
+##### <a name="-mysql--bindings--client_dev_package_name"></a>`client_dev_package_name`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The name of the client_dev package to install. Only applies if `client_dev => true`.
 
 Default value: `$mysql::params::client_dev_package_name`
 
-##### <a name="client_dev_package_provider"></a>`client_dev_package_provider`
+##### <a name="-mysql--bindings--client_dev_package_provider"></a>`client_dev_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the client_dev package. Only applies if `client_dev => true`.
 
 Default value: `$mysql::params::client_dev_package_provider`
 
-##### <a name="daemon_dev_package_ensure"></a>`daemon_dev_package_ensure`
+##### <a name="-mysql--bindings--daemon_dev_package_ensure"></a>`daemon_dev_package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
-Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Only applies if `daemon_dev => true`.
+Whether the package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
+Only applies if `daemon_dev => true`.
 
 Default value: `$mysql::params::daemon_dev_package_ensure`
 
-##### <a name="daemon_dev_package_name"></a>`daemon_dev_package_name`
+##### <a name="-mysql--bindings--daemon_dev_package_name"></a>`daemon_dev_package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the daemon_dev package to install. Only applies if `daemon_dev => true`.
 
 Default value: `$mysql::params::daemon_dev_package_name`
 
-##### <a name="daemon_dev_package_provider"></a>`daemon_dev_package_provider`
+##### <a name="-mysql--bindings--daemon_dev_package_provider"></a>`daemon_dev_package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to install the daemon_dev package. Only applies if `daemon_dev => true`.
 
 Default value: `$mysql::params::daemon_dev_package_provider`
 
-### <a name="mysqlclient"></a>`mysql::client`
+### <a name="mysql--client"></a>`mysql::client`
 
 Installs and configures the MySQL client.
 
@@ -377,71 +383,71 @@ class {'::mysql::client':
 
 The following parameters are available in the `mysql::client` class:
 
-* [`bindings_enable`](#bindings_enable)
-* [`install_options`](#install_options)
-* [`package_ensure`](#package_ensure)
-* [`package_manage`](#package_manage)
-* [`package_name`](#package_name)
-* [`package_provider`](#package_provider)
-* [`package_source`](#package_source)
+* [`bindings_enable`](#-mysql--client--bindings_enable)
+* [`install_options`](#-mysql--client--install_options)
+* [`package_ensure`](#-mysql--client--package_ensure)
+* [`package_manage`](#-mysql--client--package_manage)
+* [`package_name`](#-mysql--client--package_name)
+* [`package_provider`](#-mysql--client--package_provider)
+* [`package_source`](#-mysql--client--package_source)
 
-##### <a name="bindings_enable"></a>`bindings_enable`
+##### <a name="-mysql--client--bindings_enable"></a>`bindings_enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Whether to automatically install all bindings. Valid values are `true`, `false`. Default to `false`.
 
 Default value: `$mysql::params::bindings_enable`
 
-##### <a name="install_options"></a>`install_options`
+##### <a name="-mysql--client--install_options"></a>`install_options`
 
-Data type: `Any`
+Data type: `Optional[Array[String[1]]]`
 
 Array of install options for managed package resources. You must pass the appropriate options for the package manager.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-mysql--client--package_ensure"></a>`package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
 Whether the MySQL package should be present, absent, or a specific version. Valid values are 'present', 'absent', or 'x.y.z'.
 
 Default value: `$mysql::params::client_package_ensure`
 
-##### <a name="package_manage"></a>`package_manage`
+##### <a name="-mysql--client--package_manage"></a>`package_manage`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Whether to manage the MySQL client package. Defaults to `true`.
 
 Default value: `$mysql::params::client_package_manage`
 
-##### <a name="package_name"></a>`package_name`
+##### <a name="-mysql--client--package_name"></a>`package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the MySQL client package to install.
 
 Default value: `$mysql::params::client_package_name`
 
-##### <a name="package_provider"></a>`package_provider`
+##### <a name="-mysql--client--package_provider"></a>`package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
+Specify the provider of the package. Optional. Valid value is a String.
 
+Default value: `undef`
 
-Default value: ``undef``
+##### <a name="-mysql--client--package_source"></a>`package_source`
 
-##### <a name="package_source"></a>`package_source`
+Data type: `Optional[String[1]]`
 
-Data type: `Any`
+Specify the path to the package source. Optional. Valid value is a String
 
+Default value: `undef`
 
-
-Default value: ``undef``
-
-### <a name="mysqlserver"></a>`mysql::server`
+### <a name="mysql--server"></a>`mysql::server`
 
 Installs and configures the MySQL server.
 
@@ -462,332 +468,342 @@ class { '::mysql::server':
 
 The following parameters are available in the `mysql::server` class:
 
-* [`config_file`](#config_file)
-* [`config_file_mode`](#config_file_mode)
-* [`includedir`](#includedir)
-* [`install_options`](#install_options)
-* [`install_secret_file`](#install_secret_file)
-* [`manage_config_file`](#manage_config_file)
-* [`options`](#options)
-* [`override_options`](#override_options)
-* [`package_ensure`](#package_ensure)
-* [`package_manage`](#package_manage)
-* [`package_name`](#package_name)
-* [`package_provider`](#package_provider)
-* [`package_source`](#package_source)
-* [`purge_conf_dir`](#purge_conf_dir)
-* [`remove_default_accounts`](#remove_default_accounts)
-* [`restart`](#restart)
-* [`root_group`](#root_group)
-* [`mysql_group`](#mysql_group)
-* [`mycnf_owner`](#mycnf_owner)
-* [`mycnf_group`](#mycnf_group)
-* [`root_password`](#root_password)
-* [`service_enabled`](#service_enabled)
-* [`service_manage`](#service_manage)
-* [`service_name`](#service_name)
-* [`service_provider`](#service_provider)
-* [`create_root_user`](#create_root_user)
-* [`create_root_my_cnf`](#create_root_my_cnf)
-* [`users`](#users)
-* [`grants`](#grants)
-* [`databases`](#databases)
-* [`enabled`](#enabled)
-* [`manage_service`](#manage_service)
-* [`old_root_password`](#old_root_password)
-* [`managed_dirs`](#managed_dirs)
-* [`create_root_login_file`](#create_root_login_file)
-* [`login_file`](#login_file)
+* [`config_file`](#-mysql--server--config_file)
+* [`config_file_mode`](#-mysql--server--config_file_mode)
+* [`includedir`](#-mysql--server--includedir)
+* [`install_options`](#-mysql--server--install_options)
+* [`manage_config_file`](#-mysql--server--manage_config_file)
+* [`options`](#-mysql--server--options)
+* [`override_options`](#-mysql--server--override_options)
+* [`package_ensure`](#-mysql--server--package_ensure)
+* [`package_manage`](#-mysql--server--package_manage)
+* [`package_name`](#-mysql--server--package_name)
+* [`package_provider`](#-mysql--server--package_provider)
+* [`package_source`](#-mysql--server--package_source)
+* [`purge_conf_dir`](#-mysql--server--purge_conf_dir)
+* [`remove_default_accounts`](#-mysql--server--remove_default_accounts)
+* [`restart`](#-mysql--server--restart)
+* [`root_group`](#-mysql--server--root_group)
+* [`managed_dirs`](#-mysql--server--managed_dirs)
+* [`mysql_group`](#-mysql--server--mysql_group)
+* [`mycnf_owner`](#-mysql--server--mycnf_owner)
+* [`mycnf_group`](#-mysql--server--mycnf_group)
+* [`root_password`](#-mysql--server--root_password)
+* [`service_enabled`](#-mysql--server--service_enabled)
+* [`service_manage`](#-mysql--server--service_manage)
+* [`service_name`](#-mysql--server--service_name)
+* [`service_provider`](#-mysql--server--service_provider)
+* [`create_root_user`](#-mysql--server--create_root_user)
+* [`create_root_my_cnf`](#-mysql--server--create_root_my_cnf)
+* [`create_root_login_file`](#-mysql--server--create_root_login_file)
+* [`login_file`](#-mysql--server--login_file)
+* [`users`](#-mysql--server--users)
+* [`grants`](#-mysql--server--grants)
+* [`databases`](#-mysql--server--databases)
+* [`reload_on_config_change`](#-mysql--server--reload_on_config_change)
+* [`enabled`](#-mysql--server--enabled)
+* [`manage_service`](#-mysql--server--manage_service)
+* [`old_root_password`](#-mysql--server--old_root_password)
 
-##### <a name="config_file"></a>`config_file`
+##### <a name="-mysql--server--config_file"></a>`config_file`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The location, as a path, of the MySQL configuration file.
 
 Default value: `$mysql::params::config_file`
 
-##### <a name="config_file_mode"></a>`config_file_mode`
+##### <a name="-mysql--server--config_file_mode"></a>`config_file_mode`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The MySQL configuration file's permissions mode.
 
-Default value: `$mysql::params::config_file_mode`
+Default value: `'0644'`
 
-##### <a name="includedir"></a>`includedir`
+##### <a name="-mysql--server--includedir"></a>`includedir`
 
-Data type: `Any`
+Data type: `Optional[String]`
 
 The location, as a path, of !includedir for custom configuration overrides.
 
 Default value: `$mysql::params::includedir`
 
-##### <a name="install_options"></a>`install_options`
+##### <a name="-mysql--server--install_options"></a>`install_options`
 
-Data type: `Any`
+Data type: `Optional[Array[String[1]]]`
 
 Passes [install_options](https://docs.puppetlabs.com/references/latest/type.html#package-attribute-install_options) array to managed package resources. You must pass the appropriate options for the specified package manager
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="install_secret_file"></a>`install_secret_file`
+##### <a name="-mysql--server--manage_config_file"></a>`manage_config_file`
 
-Data type: `Any`
-
-Path to secret file containing temporary root password.
-
-Default value: `$mysql::params::install_secret_file`
-
-##### <a name="manage_config_file"></a>`manage_config_file`
-
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Whether the MySQL configuration file should be managed. Valid values are `true`, `false`. Defaults to `true`.
 
-Default value: `$mysql::params::manage_config_file`
+Default value: `true`
 
-##### <a name="options"></a>`options`
+##### <a name="-mysql--server--options"></a>`options`
 
 Data type: `Mysql::Options`
 
-A hash of options structured like the override_options, but not merged with the default options. Use this if you don't want your options merged with the default options.
+A hash of options structured like the override_options, but not merged with the default options.
+Use this if you don't want your options merged with the default options.
 
 Default value: `{}`
 
-##### <a name="override_options"></a>`override_options`
+##### <a name="-mysql--server--override_options"></a>`override_options`
 
-Data type: `Any`
+Data type: `Hash`
 
 Specifies override options to pass into MySQL. Structured like a hash in the my.cnf file:  See  above for usage details.
 
 Default value: `{}`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-mysql--server--package_ensure"></a>`package_ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
 Whether the package exists or should be a specific version. Valid values are 'present', 'absent', or 'x.y.z'. Defaults to 'present'.
 
-Default value: `$mysql::params::server_package_ensure`
+Default value: `'present'`
 
-##### <a name="package_manage"></a>`package_manage`
+##### <a name="-mysql--server--package_manage"></a>`package_manage`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Whether to manage the MySQL server package. Defaults to `true`.
 
-Default value: `$mysql::params::server_package_manage`
+Default value: `true`
 
-##### <a name="package_name"></a>`package_name`
+##### <a name="-mysql--server--package_name"></a>`package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the MySQL server package to install.
 
 Default value: `$mysql::params::server_package_name`
 
-##### <a name="package_provider"></a>`package_provider`
+##### <a name="-mysql--server--package_provider"></a>`package_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Define a specific provider for package install.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="package_source"></a>`package_source`
+##### <a name="-mysql--server--package_source"></a>`package_source`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The location of the package source (require for some package provider)
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="purge_conf_dir"></a>`purge_conf_dir`
+##### <a name="-mysql--server--purge_conf_dir"></a>`purge_conf_dir`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Whether the `includedir` directory should be purged. Valid values are `true`, `false`. Defaults to `false`.
 
-Default value: `$mysql::params::purge_conf_dir`
+Default value: `false`
 
-##### <a name="remove_default_accounts"></a>`remove_default_accounts`
+##### <a name="-mysql--server--remove_default_accounts"></a>`remove_default_accounts`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Specifies whether to automatically include `mysql::server::account_security`. Valid values are `true`, `false`. Defaults to `false`.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="restart"></a>`restart`
+##### <a name="-mysql--server--restart"></a>`restart`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Whether the service should be restarted when things change. Valid values are `true`, `false`. Defaults to `false`.
 
-Default value: `$mysql::params::restart`
+Default value: `false`
 
-##### <a name="root_group"></a>`root_group`
+##### <a name="-mysql--server--root_group"></a>`root_group`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the group used for root. Can be a group name or a group ID. See more about the [group](https://docs.puppetlabs.com/references/latest/type.html#file-attribute-group).
 
 Default value: `$mysql::params::root_group`
 
-##### <a name="mysql_group"></a>`mysql_group`
+##### <a name="-mysql--server--managed_dirs"></a>`managed_dirs`
 
-Data type: `Any`
+Data type: `Optional[Array[String[1]]]`
+
+An array containing all directories to be managed.
+
+Default value: `$mysql::params::managed_dirs`
+
+##### <a name="-mysql--server--mysql_group"></a>`mysql_group`
+
+Data type: `String[1]`
 
 The name of the group of the MySQL daemon user. Can be a group name or a group ID. See more about the [group](https://docs.puppetlabs.com/references/latest/type.html#file-attribute-group).
 
 Default value: `$mysql::params::mysql_group`
 
-##### <a name="mycnf_owner"></a>`mycnf_owner`
+##### <a name="-mysql--server--mycnf_owner"></a>`mycnf_owner`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Name or user-id who owns the mysql-config-file.
 
-Default value: `$mysql::params::mycnf_owner`
+Default value: `undef`
 
-##### <a name="mycnf_group"></a>`mycnf_group`
+##### <a name="-mysql--server--mycnf_group"></a>`mycnf_group`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Name or group-id which owns the mysql-config-file.
 
-Default value: `$mysql::params::mycnf_group`
+Default value: `undef`
 
-##### <a name="root_password"></a>`root_password`
+##### <a name="-mysql--server--root_password"></a>`root_password`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
-The MySQL root password. Puppet attempts to set the root password and update `/root/.my.cnf` with it. This is required if `create_root_user` or `create_root_my_cnf` are true. If `root_password` is 'UNSET', then `create_root_user` and `create_root_my_cnf` are assumed to be false --- that is, the MySQL root user and `/root/.my.cnf` are not created. Password changes are supported; however, the old password must be set in `/root/.my.cnf`. Effectively, Puppet uses the old password, configured in `/root/my.cnf`, to set the new password in MySQL, and then updates `/root/.my.cnf` with the new password.
+The MySQL root password. Puppet attempts to set the root password and update `/root/.my.cnf` with it. This is required
+if `create_root_user` or `create_root_my_cnf` are true. If `root_password` is 'UNSET', then `create_root_user` and
+`create_root_my_cnf` are assumed to be false --- that is, the MySQL root user and `/root/.my.cnf` are not created.
+Password changes are supported; however, the old password must be set in `/root/.my.cnf`. Effectively, Puppet uses the old
+password, configured in `/root/my.cnf`, to set the new password in MySQL, and then updates `/root/.my.cnf` with the new password.
 
-Default value: `$mysql::params::root_password`
+Default value: `'UNSET'`
 
-##### <a name="service_enabled"></a>`service_enabled`
+##### <a name="-mysql--server--service_enabled"></a>`service_enabled`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Specifies whether the service should be enabled. Valid values are `true`, `false`. Defaults to `true`.
 
-Default value: `$mysql::params::server_service_enabled`
+Default value: `true`
 
-##### <a name="service_manage"></a>`service_manage`
+##### <a name="-mysql--server--service_manage"></a>`service_manage`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1]]`
 
 Specifies whether the service should be managed. Valid values are `true`, `false`. Defaults to `true`.
 
-Default value: `$mysql::params::server_service_manage`
+Default value: `true`
 
-##### <a name="service_name"></a>`service_name`
+##### <a name="-mysql--server--service_name"></a>`service_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The name of the MySQL server service. Defaults are OS dependent, defined in 'params.pp'.
 
 Default value: `$mysql::params::server_service_name`
 
-##### <a name="service_provider"></a>`service_provider`
+##### <a name="-mysql--server--service_provider"></a>`service_provider`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The provider to use to manage the service. For Ubuntu, defaults to 'upstart'; otherwise, default is undefined.
 
-Default value: `$mysql::params::server_service_provider`
+Default value: `undef`
 
-##### <a name="create_root_user"></a>`create_root_user`
+##### <a name="-mysql--server--create_root_user"></a>`create_root_user`
 
-Data type: `Any`
+Data type: `Boolean`
 
-Whether root user should be created. Valid values are `true`, `false`. Defaults to `true`. This is useful for a cluster setup with Galera. The root user has to be created only once. You can set this parameter true on one node and set it to false on the remaining nodes.
+Whether root user should be created. Valid values are `true`, `false`. Defaults to `true`.
+This is useful for a cluster setup with Galera. The root user has to be created only once.
+You can set this parameter true on one node and set it to false on the remaining nodes.
 
-Default value: `$mysql::params::create_root_user`
+Default value: `true`
 
-##### <a name="create_root_my_cnf"></a>`create_root_my_cnf`
+##### <a name="-mysql--server--create_root_my_cnf"></a>`create_root_my_cnf`
 
-Data type: `Any`
+Data type: `Boolean`
 
-Whether to create `/root/.my.cnf`. Valid values are `true`, `false`. Defaults to `true`. `create_root_my_cnf` allows creation of `/root/.my.cnf` independently of `create_root_user`. You can use this for a cluster setup with Galera where you want `/root/.my.cnf` to exist on all nodes.
+Whether to create `/root/.my.cnf`. Valid values are `true`, `false`. Defaults to `true`.
+`create_root_my_cnf` allows creation of `/root/.my.cnf` independently of `create_root_user`.
+You can use this for a cluster setup with Galera where you want `/root/.my.cnf` to exist on all nodes.
 
-Default value: `$mysql::params::create_root_my_cnf`
+Default value: `true`
 
-##### <a name="users"></a>`users`
+##### <a name="-mysql--server--create_root_login_file"></a>`create_root_login_file`
 
-Data type: `Any`
+Data type: `Boolean`
+
+Whether to create a login file for root. Valid values are 'true', 'false'.
+
+Default value: `false`
+
+##### <a name="-mysql--server--login_file"></a>`login_file`
+
+Data type: `Optional[String[1]]`
+
+Specify the login file.
+
+Default value: `undef`
+
+##### <a name="-mysql--server--users"></a>`users`
+
+Data type: `Hash`
 
 Optional hash of users to create, which are passed to [mysql_user](#mysql_user).
 
 Default value: `{}`
 
-##### <a name="grants"></a>`grants`
+##### <a name="-mysql--server--grants"></a>`grants`
 
-Data type: `Any`
+Data type: `Hash`
 
 Optional hash of grants, which are passed to [mysql_grant](#mysql_grant).
 
 Default value: `{}`
 
-##### <a name="databases"></a>`databases`
+##### <a name="-mysql--server--databases"></a>`databases`
 
-Data type: `Any`
+Data type: `Hash`
 
 Optional hash of databases to create, which are passed to [mysql_database](#mysql_database).
 
 Default value: `{}`
 
-##### <a name="enabled"></a>`enabled`
+##### <a name="-mysql--server--reload_on_config_change"></a>`reload_on_config_change`
 
-Data type: `Any`
+Data type: `Boolean`
+
+By default, a my.cnf change won't reload/restart the database. Turn this flag to true to enable it
+
+Default value: `false`
+
+##### <a name="-mysql--server--enabled"></a>`enabled`
+
+Data type: `Optional[Variant[String[1], Boolean]]`
 
 _Deprecated_
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="manage_service"></a>`manage_service`
+##### <a name="-mysql--server--manage_service"></a>`manage_service`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Boolean]]`
 
 _Deprecated_
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="old_root_password"></a>`old_root_password`
+##### <a name="-mysql--server--old_root_password"></a>`old_root_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String, Sensitive[String]]]`
 
-This parameter no longer does anything. It exists only for backwards compatibility. See the `root_password` parameter above for details on changing the root password.
+This parameter no longer does anything. It exists only for backwards compatibility.
+See the `root_password` parameter above for details on changing the root password.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="managed_dirs"></a>`managed_dirs`
-
-Data type: `Any`
-
-
-
-Default value: `$mysql::params::managed_dirs`
-
-##### <a name="create_root_login_file"></a>`create_root_login_file`
-
-Data type: `Any`
-
-
-
-Default value: `$mysql::params::create_root_login_file`
-
-##### <a name="login_file"></a>`login_file`
-
-Data type: `Any`
-
-
-
-Default value: `$mysql::params::login_file`
-
-### <a name="mysqlserverbackup"></a>`mysql::server::backup`
+### <a name="mysql--server--backup"></a>`mysql::server::backup`
 
 Create and manage a MySQL backup.
 
@@ -797,17 +813,26 @@ Create and manage a MySQL backup.
 
 ```puppet
 class { 'mysql::server':
-  root_password => 'password'
+  root_password           => 'password'
 }
 class { 'mysql::server::backup':
-  backupuser     => 'myuser',
-  backuppassword => 'mypassword',
-  backupdir      => '/tmp/backups',
+  backupuser              => 'myuser',
+  backuppassword          => 'mypassword',
+  backupdir               => '/tmp/backups',
+}
+```
+
+##### Create a basic MySQL backup using mariabackup:
+
+```puppet
+class { 'mysql::server':
+  root_password           => 'password'
 }
 class { 'mysql::server::backup':
-  backupmethod => 'mariabackup',
-  provider     => 'xtrabackup',
-  backupdir    => '/tmp/backups',
+  backupmethod            => 'mariabackup',
+  backupmethod_package    => 'mariadb-backup'
+  provider                => 'xtrabackup',
+  backupdir               => '/tmp/backups',
 }
 ```
 
@@ -815,344 +840,285 @@ class { 'mysql::server::backup':
 
 The following parameters are available in the `mysql::server::backup` class:
 
-* [`backupuser`](#backupuser)
-* [`backuppassword`](#backuppassword)
-* [`backupdir`](#backupdir)
-* [`backupdirmode`](#backupdirmode)
-* [`backupdirowner`](#backupdirowner)
-* [`backupdirgroup`](#backupdirgroup)
-* [`backupcompress`](#backupcompress)
-* [`backupmethod`](#backupmethod)
-* [`backup_success_file_path`](#backup_success_file_path)
-* [`backuprotate`](#backuprotate)
-* [`ignore_events`](#ignore_events)
-* [`delete_before_dump`](#delete_before_dump)
-* [`backupdatabases`](#backupdatabases)
-* [`file_per_database`](#file_per_database)
-* [`include_routines`](#include_routines)
-* [`include_triggers`](#include_triggers)
-* [`incremental_backups`](#incremental_backups)
-* [`ensure`](#ensure)
-* [`time`](#time)
-* [`prescript`](#prescript)
-* [`postscript`](#postscript)
-* [`execpath`](#execpath)
-* [`provider`](#provider)
-* [`maxallowedpacket`](#maxallowedpacket)
-* [`optional_args`](#optional_args)
-* [`install_cron`](#install_cron)
-* [`compression_command`](#compression_command)
-* [`compression_extension`](#compression_extension)
+* [`backupuser`](#-mysql--server--backup--backupuser)
+* [`backuppassword`](#-mysql--server--backup--backuppassword)
+* [`backupdir`](#-mysql--server--backup--backupdir)
+* [`backupdirmode`](#-mysql--server--backup--backupdirmode)
+* [`backupdirowner`](#-mysql--server--backup--backupdirowner)
+* [`backupdirgroup`](#-mysql--server--backup--backupdirgroup)
+* [`backupcompress`](#-mysql--server--backup--backupcompress)
+* [`backupmethod`](#-mysql--server--backup--backupmethod)
+* [`backup_success_file_path`](#-mysql--server--backup--backup_success_file_path)
+* [`backuprotate`](#-mysql--server--backup--backuprotate)
+* [`ignore_events`](#-mysql--server--backup--ignore_events)
+* [`delete_before_dump`](#-mysql--server--backup--delete_before_dump)
+* [`backupdatabases`](#-mysql--server--backup--backupdatabases)
+* [`file_per_database`](#-mysql--server--backup--file_per_database)
+* [`include_routines`](#-mysql--server--backup--include_routines)
+* [`include_triggers`](#-mysql--server--backup--include_triggers)
+* [`incremental_backups`](#-mysql--server--backup--incremental_backups)
+* [`ensure`](#-mysql--server--backup--ensure)
+* [`time`](#-mysql--server--backup--time)
+* [`prescript`](#-mysql--server--backup--prescript)
+* [`postscript`](#-mysql--server--backup--postscript)
+* [`execpath`](#-mysql--server--backup--execpath)
+* [`provider`](#-mysql--server--backup--provider)
+* [`maxallowedpacket`](#-mysql--server--backup--maxallowedpacket)
+* [`optional_args`](#-mysql--server--backup--optional_args)
+* [`install_cron`](#-mysql--server--backup--install_cron)
+* [`compression_command`](#-mysql--server--backup--compression_command)
+* [`compression_extension`](#-mysql--server--backup--compression_extension)
+* [`backupmethod_package`](#-mysql--server--backup--backupmethod_package)
+* [`excludedatabases`](#-mysql--server--backup--excludedatabases)
 
-##### <a name="backupuser"></a>`backupuser`
+##### <a name="-mysql--server--backup--backupuser"></a>`backupuser`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 MySQL user to create with backup administrator privileges.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="backuppassword"></a>`backuppassword`
+##### <a name="-mysql--server--backup--backuppassword"></a>`backuppassword`
 
-Data type: `Any`
+Data type: `Optional[Variant[String, Sensitive[String]]]`
 
 Password to create for `backupuser`.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="backupdir"></a>`backupdir`
+##### <a name="-mysql--server--backup--backupdir"></a>`backupdir`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Directory to store backup.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="backupdirmode"></a>`backupdirmode`
+##### <a name="-mysql--server--backup--backupdirmode"></a>`backupdirmode`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Permissions applied to the backup directory. This parameter is passed directly to the file resource.
 
 Default value: `'0700'`
 
-##### <a name="backupdirowner"></a>`backupdirowner`
+##### <a name="-mysql--server--backup--backupdirowner"></a>`backupdirowner`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Owner for the backup directory. This parameter is passed directly to the file resource.
 
 Default value: `'root'`
 
-##### <a name="backupdirgroup"></a>`backupdirgroup`
+##### <a name="-mysql--server--backup--backupdirgroup"></a>`backupdirgroup`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Group owner for the backup directory. This parameter is passed directly to the file resource.
 
 Default value: `$mysql::params::root_group`
 
-##### <a name="backupcompress"></a>`backupcompress`
+##### <a name="-mysql--server--backup--backupcompress"></a>`backupcompress`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Whether or not to compress the backup (when using the mysqldump or xtrabackup provider)
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="backupmethod"></a>`backupmethod`
+##### <a name="-mysql--server--backup--backupmethod"></a>`backupmethod`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 The execution binary for backing up. ex. mysqldump, xtrabackup, mariabackup
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="backup_success_file_path"></a>`backup_success_file_path`
+##### <a name="-mysql--server--backup--backup_success_file_path"></a>`backup_success_file_path`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Specify a path where upon successfull backup a file should be created for checking purposes.
 
 Default value: `'/tmp/mysqlbackup_success'`
 
-##### <a name="backuprotate"></a>`backuprotate`
+##### <a name="-mysql--server--backup--backuprotate"></a>`backuprotate`
 
-Data type: `Any`
+Data type: `Variant[String[1], Integer]`
 
 Backup rotation interval in 24 hour periods.
 
 Default value: `30`
 
-##### <a name="ignore_events"></a>`ignore_events`
+##### <a name="-mysql--server--backup--ignore_events"></a>`ignore_events`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Ignore the mysql.event table.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="delete_before_dump"></a>`delete_before_dump`
+##### <a name="-mysql--server--backup--delete_before_dump"></a>`delete_before_dump`
 
-Data type: `Any`
+Data type: `Boolean`
 
-Whether to delete old .sql files before backing up. Setting to true deletes old files before backing up, while setting to false deletes them after backup.
+Whether to delete old .sql files before backing up.
+Setting to true deletes old files before backing up, while setting to false deletes them after backup.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="backupdatabases"></a>`backupdatabases`
+##### <a name="-mysql--server--backup--backupdatabases"></a>`backupdatabases`
 
-Data type: `Any`
+Data type: `Array[String[1]]`
 
 Databases to backup (required if using xtrabackup provider). By default `[]` will back up all databases.
 
 Default value: `[]`
 
-##### <a name="file_per_database"></a>`file_per_database`
+##### <a name="-mysql--server--backup--file_per_database"></a>`file_per_database`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Use file per database mode creating one file per database backup.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="include_routines"></a>`include_routines`
+##### <a name="-mysql--server--backup--include_routines"></a>`include_routines`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Dump stored routines (procedures and functions) from dumped databases when doing a `file_per_database` backup.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="include_triggers"></a>`include_triggers`
+##### <a name="-mysql--server--backup--include_triggers"></a>`include_triggers`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Dump triggers for each dumped table when doing a `file_per_database` backup.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="incremental_backups"></a>`incremental_backups`
+##### <a name="-mysql--server--backup--incremental_backups"></a>`incremental_backups`
 
-Data type: `Any`
+Data type: `Boolean`
 
 A flag to activate/deactivate incremental backups. Currently only supported by the xtrabackup provider.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-mysql--server--backup--ensure"></a>`ensure`
 
-Data type: `Any`
+Data type: `Variant[Enum['present','absent'], Pattern[/(\d+)[\.](\d+)[\.](\d+)/]]`
 
 
 
 Default value: `'present'`
 
-##### <a name="time"></a>`time`
+##### <a name="-mysql--server--backup--time"></a>`time`
 
-Data type: `Any`
+Data type: `Variant[Array[String[1]], Array[Integer]]`
 
 An array of two elements to set the backup time. Allows ['23', '5'] (i.e., 23:05) or ['3', '45'] (i.e., 03:45) for HH:MM times.
 
 Default value: `['23', '5']`
 
-##### <a name="prescript"></a>`prescript`
+##### <a name="-mysql--server--backup--prescript"></a>`prescript`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1], Array[String[1]]]`
 
 A script that is executed before the backup begins.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="postscript"></a>`postscript`
+##### <a name="-mysql--server--backup--postscript"></a>`postscript`
 
-Data type: `Any`
+Data type: `Variant[Boolean, String[1], Array[String[1]]]`
 
-A script that is executed when the backup is finished. This could be used to sync the backup to a central store. This script can be either a single line that is directly executed or a number of lines supplied as an array. It could also be one or more externally managed (executable) files.
+A script that is executed when the backup is finished. This could be used to sync the backup to a central store.
+This script can be either a single line that is directly executed or a number of lines supplied as an array.
+It could also be one or more externally managed (executable) files.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="execpath"></a>`execpath`
+##### <a name="-mysql--server--backup--execpath"></a>`execpath`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Allows you to set a custom PATH should your MySQL installation be non-standard places. Defaults to `/usr/bin:/usr/sbin:/bin:/sbin`.
 
 Default value: `'/usr/bin:/usr/sbin:/bin:/sbin'`
 
-##### <a name="provider"></a>`provider`
+##### <a name="-mysql--server--backup--provider"></a>`provider`
 
-Data type: `Any`
+Data type: `Enum['xtrabackup', 'mysqldump', 'mysqlbackup']`
 
-Sets the server backup implementation. Valid values are:
+Sets the server backup implementation. Valid values are: xtrabackup, mysqldump, mysqlbackup
 
 Default value: `'mysqldump'`
 
-##### <a name="maxallowedpacket"></a>`maxallowedpacket`
+##### <a name="-mysql--server--backup--maxallowedpacket"></a>`maxallowedpacket`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Defines the maximum SQL statement size for the backup dump script. The default value is 1MB, as this is the default MySQL Server value.
 
 Default value: `'1M'`
 
-##### <a name="optional_args"></a>`optional_args`
+##### <a name="-mysql--server--backup--optional_args"></a>`optional_args`
 
-Data type: `Any`
+Data type: `Array[String[1]]`
 
-Specifies an array of optional arguments which should be passed through to the backup tool. (Supported by the xtrabackup and mysqldump providers.)
+Specifies an array of optional arguments which should be passed through to the backup tool.
+(Supported by the xtrabackup and mysqldump providers.)
 
 Default value: `[]`
 
-##### <a name="install_cron"></a>`install_cron`
+##### <a name="-mysql--server--backup--install_cron"></a>`install_cron`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Manage installation of cron package
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="compression_command"></a>`compression_command`
+##### <a name="-mysql--server--backup--compression_command"></a>`compression_command`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Configure the command used to compress the backup (when using the mysqldump provider). Make sure the command exists
 on the target system. Packages for it are NOT automatically installed.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="compression_extension"></a>`compression_extension`
+##### <a name="-mysql--server--backup--compression_extension"></a>`compression_extension`
 
-Data type: `Any`
+Data type: `Optional[String[1]]`
 
 Configure the file extension for the compressed backup (when using the mysqldump provider)
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="mysqlservermonitor"></a>`mysql::server::monitor`
+##### <a name="-mysql--server--backup--backupmethod_package"></a>`backupmethod_package`
 
-This is a helper class to add a monitoring user to the database
+Data type: `String[1]`
 
-#### Parameters
+The package which provides the binary specified by the backupmethod parameter.
 
-The following parameters are available in the `mysql::server::monitor` class:
+Default value: `$mysql::params::xtrabackup_package_name`
 
-* [`mysql_monitor_username`](#mysql_monitor_username)
-* [`mysql_monitor_password`](#mysql_monitor_password)
-* [`mysql_monitor_hostname`](#mysql_monitor_hostname)
+##### <a name="-mysql--server--backup--excludedatabases"></a>`excludedatabases`
 
-##### <a name="mysql_monitor_username"></a>`mysql_monitor_username`
+Data type: `Array[String]`
 
-Data type: `Any`
+Give a list of excluded databases when using file_per_database, e.g.: [ 'information_schema', 'performance_schema' ]
 
-The username to create for MySQL monitoring.
-
-Default value: `''`
-
-##### <a name="mysql_monitor_password"></a>`mysql_monitor_password`
-
-Data type: `Any`
-
-The password to create for MySQL monitoring.
-
-Default value: `''`
-
-##### <a name="mysql_monitor_hostname"></a>`mysql_monitor_hostname`
-
-Data type: `Any`
-
-The hostname from which the monitoring user requests are allowed access.
-
-Default value: `''`
-
-### <a name="mysqlservermysqltuner"></a>`mysql::server::mysqltuner`
-
-Manage the MySQLTuner package.
-
-#### Parameters
-
-The following parameters are available in the `mysql::server::mysqltuner` class:
-
-* [`ensure`](#ensure)
-* [`version`](#version)
-* [`source`](#source)
-* [`tuner_location`](#tuner_location)
-
-##### <a name="ensure"></a>`ensure`
-
-Data type: `Any`
-
-Ensures that the resource exists. Valid values are 'present', 'absent'. Defaults to 'present'.
-
-Default value: `'present'`
-
-##### <a name="version"></a>`version`
-
-Data type: `Any`
-
-The version to install from the major/MySQLTuner-perl github repository. Must be a valid tag. Defaults to 'v1.3.0'.
-
-Default value: `'v1.3.0'`
-
-##### <a name="source"></a>`source`
-
-Data type: `Any`
-
-Source path for the mysqltuner package.
-
-Default value: ``undef``
-
-##### <a name="tuner_location"></a>`tuner_location`
-
-Data type: `Any`
-
-Destination for the mysqltuner package.
-
-Default value: `'/usr/local/bin/mysqltuner'`
+Default value: `[]`
 
 ## Defined types
 
-### <a name="mysqldb"></a>`mysql::db`
+### <a name="mysql--db"></a>`mysql::db`
 
 Create and configure a MySQL database.
 
@@ -1173,107 +1139,116 @@ mysql::db { 'mydb':
 
 The following parameters are available in the `mysql::db` defined type:
 
-* [`user`](#user)
-* [`password`](#password)
-* [`tls_options`](#tls_options)
-* [`dbname`](#dbname)
-* [`charset`](#charset)
-* [`collate`](#collate)
-* [`host`](#host)
-* [`grant`](#grant)
-* [`grant_options`](#grant_options)
-* [`sql`](#sql)
-* [`enforce_sql`](#enforce_sql)
-* [`ensure`](#ensure)
-* [`import_timeout`](#import_timeout)
-* [`import_cat_cmd`](#import_cat_cmd)
-* [`mysql_exec_path`](#mysql_exec_path)
+* [`name`](#-mysql--db--name)
+* [`user`](#-mysql--db--user)
+* [`password`](#-mysql--db--password)
+* [`tls_options`](#-mysql--db--tls_options)
+* [`dbname`](#-mysql--db--dbname)
+* [`charset`](#-mysql--db--charset)
+* [`collate`](#-mysql--db--collate)
+* [`host`](#-mysql--db--host)
+* [`grant`](#-mysql--db--grant)
+* [`grant_options`](#-mysql--db--grant_options)
+* [`sql`](#-mysql--db--sql)
+* [`enforce_sql`](#-mysql--db--enforce_sql)
+* [`ensure`](#-mysql--db--ensure)
+* [`import_timeout`](#-mysql--db--import_timeout)
+* [`import_cat_cmd`](#-mysql--db--import_cat_cmd)
+* [`mysql_exec_path`](#-mysql--db--mysql_exec_path)
 
-##### <a name="user"></a>`user`
+##### <a name="-mysql--db--name"></a>`name`
 
-Data type: `Any`
+The name of the database to create. Database names must:
+  * not be longer than 64 characters.
+  * not contain '/' '\' or '.' characters.
+  * not contain characters that are not permitted in file names.
+  * not end with space characters.
+
+##### <a name="-mysql--db--user"></a>`user`
+
+Data type: `String[1]`
 
 The user for the database you're creating.
 
-##### <a name="password"></a>`password`
+##### <a name="-mysql--db--password"></a>`password`
 
-Data type: `Any`
+Data type: `Variant[String, Sensitive[String]]`
 
 The password for $user for the database you're creating.
 
-##### <a name="tls_options"></a>`tls_options`
+##### <a name="-mysql--db--tls_options"></a>`tls_options`
 
-Data type: `Any`
+Data type: `Optional[Array[String[1]]]`
 
 The tls_options for $user for the database you're creating.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dbname"></a>`dbname`
+##### <a name="-mysql--db--dbname"></a>`dbname`
 
-Data type: `Any`
+Data type: `String`
 
 The name of the database to create.
 
 Default value: `$name`
 
-##### <a name="charset"></a>`charset`
+##### <a name="-mysql--db--charset"></a>`charset`
 
-Data type: `Any`
+Data type: `String[1]`
 
-The character set for the database.
+The character set for the database. Must have the same value as collate to avoid corrective changes. See https://dev.mysql.com/doc/refman/8.0/en/charset-mysql.html for charset and collation pairs.
 
-Default value: `'utf8'`
+Default value: `'utf8mb3'`
 
-##### <a name="collate"></a>`collate`
+##### <a name="-mysql--db--collate"></a>`collate`
 
-Data type: `Any`
+Data type: `String[1]`
 
-The collation for the database.
+The collation for the database. Must have the same value as charset to avoid corrective changes. See https://dev.mysql.com/doc/refman/8.0/en/charset-mysql.html for charset and collation pairs.
 
-Default value: `'utf8_general_ci'`
+Default value: `'utf8mb3_general_ci'`
 
-##### <a name="host"></a>`host`
+##### <a name="-mysql--db--host"></a>`host`
 
-Data type: `Any`
+Data type: `String[1]`
 
 The host to use as part of user@host for grants.
 
 Default value: `'localhost'`
 
-##### <a name="grant"></a>`grant`
+##### <a name="-mysql--db--grant"></a>`grant`
 
-Data type: `Any`
+Data type: `Variant[String[1], Array[String[1]]]`
 
 The privileges to be granted for user@host on the database.
 
 Default value: `'ALL'`
 
-##### <a name="grant_options"></a>`grant_options`
+##### <a name="-mysql--db--grant_options"></a>`grant_options`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Array[String[1]]]]`
 
 The grant_options for the grant for user@host on the database.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="sql"></a>`sql`
+##### <a name="-mysql--db--sql"></a>`sql`
 
-Data type: `Optional[Variant[Array, Hash, String]]`
+Data type: `Optional[Array]`
 
-The path to the sqlfile you want to execute. This can be single file specified as string, or it can be an array of strings.
+The path to the sqlfile you want to execute. This can be an array containing one or more file paths.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="enforce_sql"></a>`enforce_sql`
+##### <a name="-mysql--db--enforce_sql"></a>`enforce_sql`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Specifies whether executing the sqlfiles should happen on every run. If set to false, sqlfiles only run once.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-mysql--db--ensure"></a>`ensure`
 
 Data type: `Enum['absent', 'present']`
 
@@ -1281,35 +1256,84 @@ Specifies whether to create the database. Valid values are 'present', 'absent'. 
 
 Default value: `'present'`
 
-##### <a name="import_timeout"></a>`import_timeout`
+##### <a name="-mysql--db--import_timeout"></a>`import_timeout`
 
-Data type: `Any`
+Data type: `Integer`
 
 Timeout, in seconds, for loading the sqlfiles. Defaults to 300.
 
 Default value: `300`
 
-##### <a name="import_cat_cmd"></a>`import_cat_cmd`
+##### <a name="-mysql--db--import_cat_cmd"></a>`import_cat_cmd`
 
-Data type: `Any`
+Data type: `Enum['cat', 'zcat', 'bzcat']`
 
 Command to read the sqlfile for importing the database. Useful for compressed sqlfiles. For example, you can use 'zcat' for .gz files.
 
 Default value: `'cat'`
 
-##### <a name="mysql_exec_path"></a>`mysql_exec_path`
+##### <a name="-mysql--db--mysql_exec_path"></a>`mysql_exec_path`
 
-Data type: `Any`
+Data type: `Optional[String]`
 
+Specify the path in which mysql has been installed if done in the non-standard bin/sbin path.
 
-
-Default value: ``undef``
+Default value: `undef`
 
 ## Resource types
 
+### <a name="mysql_database"></a>`mysql_database`
+
+Manage a MySQL database.
+
+#### Properties
+
+The following properties are available in the `mysql_database` type.
+
+##### `charset`
+
+Valid values: `%r{^\S+$}`
+
+The CHARACTER SET setting for the database
+
+Default value: `utf8`
+
+##### `collate`
+
+Valid values: `%r{^\S+$}`
+
+The COLLATE setting for the database
+
+Default value: `utf8_general_ci`
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+#### Parameters
+
+The following parameters are available in the `mysql_database` type.
+
+* [`name`](#-mysql_database--name)
+* [`provider`](#-mysql_database--provider)
+
+##### <a name="-mysql_database--name"></a>`name`
+
+namevar
+
+The name of the MySQL database to manage.
+
+##### <a name="-mysql_database--provider"></a>`provider`
+
+The specific backend to use for this `mysql_database` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
 ### <a name="mysql_grant"></a>`mysql_grant`
 
-@summary
 Manage a MySQL user's rights.
 
 #### Properties
@@ -1334,7 +1358,7 @@ Privileges for user
 
 ##### `table`
 
-Valid values: `%r{.*\..*}`, `%r{^[0-9a-zA-Z$_]*@[\w%\.:\-/]*$}`
+Valid values: `%r{.*\..*}`, `%r{^[0-9a-zA-Z$_]*@[\w%.:\-/]*$}`
 
 Table to apply privileges to.
 
@@ -1346,16 +1370,16 @@ User to operate on.
 
 The following parameters are available in the `mysql_grant` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
+* [`name`](#-mysql_grant--name)
+* [`provider`](#-mysql_grant--provider)
 
-##### <a name="name"></a>`name`
+##### <a name="-mysql_grant--name"></a>`name`
 
 namevar
 
 Name to describe the grant.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-mysql_grant--provider"></a>`provider`
 
 The specific backend to use for this `mysql_grant` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
@@ -1436,10 +1460,10 @@ Username to be entered into the login path.
 
 The following parameters are available in the `mysql_login_path` type.
 
-* [`name`](#name)
-* [`owner`](#owner)
+* [`name`](#-mysql_login_path--name)
+* [`owner`](#-mysql_login_path--owner)
 
-##### <a name="name"></a>`name`
+##### <a name="-mysql_login_path--name"></a>`name`
 
 namevar
 
@@ -1447,7 +1471,7 @@ Data type: `String`
 
 Name of the login path you want to manage.
 
-##### <a name="owner"></a>`owner`
+##### <a name="-mysql_login_path--owner"></a>`owner`
 
 namevar
 
@@ -1493,23 +1517,22 @@ The name of the library
 
 The following parameters are available in the `mysql_plugin` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
+* [`name`](#-mysql_plugin--name)
+* [`provider`](#-mysql_plugin--provider)
 
-##### <a name="name"></a>`name`
+##### <a name="-mysql_plugin--name"></a>`name`
 
 namevar
 
 The name of the MySQL plugin to manage.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-mysql_plugin--provider"></a>`provider`
 
 The specific backend to use for this `mysql_plugin` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
 ### <a name="mysql_user"></a>`mysql_user`
 
-@summary
 Manage a MySQL user. This includes management of users password as well as privileges.
 
 #### Properties
@@ -1568,23 +1591,66 @@ Options to that set the TLS-related REQUIRE attributes for the user.
 
 The following parameters are available in the `mysql_user` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
+* [`name`](#-mysql_user--name)
+* [`provider`](#-mysql_user--provider)
 
-##### <a name="name"></a>`name`
+##### <a name="-mysql_user--name"></a>`name`
 
 namevar
 
 The name of the user. This uses the 'username@hostname' or username@hostname.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-mysql_user--provider"></a>`provider`
 
 The specific backend to use for this `mysql_user` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
 ## Functions
 
-### <a name="mysqlnormalise_and_deepmerge"></a>`mysql::normalise_and_deepmerge`
+### <a name="mysql--innobackupex_args"></a>`mysql::innobackupex_args`
+
+Type: Ruby 4.x API
+
+This function populates and returns the string of arguments which later gets injected in template. Arguments that return string holds is conditional and decided by the the input given to function.
+
+#### `mysql::innobackupex_args(Optional[String] $backupuser, Boolean $backupcompress, Optional[Variant[String, Sensitive[String]]] $backuppassword_unsensitive, Array[String[1]] $backupdatabases, Array[String[1]] $optional_args)`
+
+The mysql::innobackupex_args function.
+
+Returns: `Variant[String]` String
+Generated on the basis of provided values.
+
+##### `backupuser`
+
+Data type: `Optional[String]`
+
+The user to use for the backup.
+
+##### `backupcompress`
+
+Data type: `Boolean`
+
+If the backup should be compressed.
+
+##### `backuppassword_unsensitive`
+
+Data type: `Optional[Variant[String, Sensitive[String]]]`
+
+The password to use for the backup.
+
+##### `backupdatabases`
+
+Data type: `Array[String[1]]`
+
+The databases to backup.
+
+##### `optional_args`
+
+Data type: `Array[String[1]]`
+
+Additional arguments to pass to innobackupex.
+
+### <a name="mysql--normalise_and_deepmerge"></a>`mysql::normalise_and_deepmerge`
 
 Type: Ruby 4.x API
 
@@ -1631,26 +1697,32 @@ Data type: `Any`
 
 Hash to be normalised
 
-### <a name="mysqlpassword"></a>`mysql::password`
+### <a name="mysql--password"></a>`mysql::password`
 
 Type: Ruby 4.x API
 
 Hash a string as mysql's "PASSWORD()" function would do it
 
-#### `mysql::password(String $password)`
+#### `mysql::password(Variant[String, Sensitive[String]] $password, Optional[Boolean] $sensitive)`
 
 Hash a string as mysql's "PASSWORD()" function would do it
 
-Returns: `String` hash
+Returns: `Variant[String, Sensitive[String]]` hash
 The mysql password hash from the clear text password.
 
 ##### `password`
 
-Data type: `String`
+Data type: `Variant[String, Sensitive[String]]`
 
 Plain text password.
 
-### <a name="mysqlstrip_hash"></a>`mysql::strip_hash`
+##### `sensitive`
+
+Data type: `Optional[Boolean]`
+
+If the mysql password hash should be of datatype Sensitive[String]
+
+### <a name="mysql--strip_hash"></a>`mysql::strip_hash`
 
 Type: Ruby 4.x API
 
@@ -1675,29 +1747,31 @@ Type: Ruby 4.x API
 
 DEPRECATED. Use the namespaced function [`mysql::password`](#mysqlpassword) instead.
 
-#### `mysql_password(String $password)`
+#### `mysql_password(Variant[String, Sensitive[String]] $password, Optional[Boolean] $sensitive)`
 
 The mysql_password function.
 
-Returns: `String` The mysql password hash from the 4.x function mysql::password.
+Returns: `Variant[String, Sensitive[String]]` The mysql password hash from the 4.x function mysql::password.
 
 ##### `password`
 
-Data type: `String`
+Data type: `Variant[String, Sensitive[String]]`
 
 Plain text password.
 
+##### `sensitive`
+
+Data type: `Optional[Boolean]`
+
+If the mysql password hash should be of datatype Sensitive[String]
+
 ## Data types
 
-### <a name="mysqloptions"></a>`Mysql::Options`
+### <a name="Mysql--Options"></a>`Mysql::Options`
 
 Use this if you don’t want your options merged with the default options.
 
-Alias of
-
-```puppet
-Hash[String, Hash]
-```
+Alias of `Hash[String, Hash]`
 
 ## Tasks
 

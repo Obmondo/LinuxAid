@@ -32,11 +32,11 @@ connMgmtdPortTCP             = <%= @mgmtd_tcp_port %>
 connMgmtdPortUDP             = <%= @mgmtd_udp_port %>
 connPortShift                = 0
 
-connAuthFile                 =
+connAuthFile                 = <%= @conn_auth_file %>
 connFallbackExpirationSecs   = 900
 connMaxInternodeNum          = 3
 connInterfacesFile           =
-connNetFilterFile            =
+connNetFilterFile            = <% if @networks %><%= @networks_file %><% end %>
 connTcpOnlyFilterFile        =
 
 logType                      = <%= @log_type %>

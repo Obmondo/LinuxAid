@@ -1,6 +1,9 @@
 {
   "description": "Unregisters a runner from a Gitlab instance.",
-  "files": ["ruby_task_helper/files/task_helper.rb"],
+  "files": [
+    "ruby_task_helper/files/task_helper.rb",
+    "gitlab_ci_runner/lib/puppet_x/gitlab/runner.rb"
+  ],
   "input_method": "stdin",
   "parameters": {
     "url": {

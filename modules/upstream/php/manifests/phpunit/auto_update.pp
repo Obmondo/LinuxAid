@@ -12,17 +12,16 @@
 #   Holds path to the phpunit executable
 #
 class php::phpunit::auto_update (
-  $max_age,
-  $source,
-  $path,
+  Integer[1] $max_age,
+  String[1] $source,
+  Stdlib::Absolutepath $path,
 ) {
-
   assert_private()
 
   exec { 'update phpunit':
     command => "wget ${source} -O ${path}",
     onlyif  => "test `find '${path}' -mtime +${max_age}`",
-    path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/', '/usr/local/bin', '/usr/local/sbin' ],
+    path    => ['/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/', '/usr/local/bin', '/usr/local/sbin'],
     require => File[$path],
   }
 }

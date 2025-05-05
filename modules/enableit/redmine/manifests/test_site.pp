@@ -3,4 +3,4 @@ class { 'epel': }
 class { 'apache::mod::passenger': }
 class { '::mysql::server': }
 class { 'redmine': }
-ensure_packages(['wget'])
+stdlib::ensure_packages(['wget'])

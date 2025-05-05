@@ -25,7 +25,7 @@ class redmine::install {
     default:    { $packages = concat($generic_packages, $redhat_packages) }
   }
 
-  ensure_packages($packages)
+  stdlib::ensure_packages($packages)
 
   Exec {
     cwd  => '/usr/src',
