@@ -1,25 +1,19 @@
-# == Define: keepalived::lvs::real_server
+# @summary
+#   Add a real server to a Linux Virtual Server with keepalived
 #
-# Add a real server to a Linux Virtual Server with keepalived
-#
-# === Parameters
-#
-# Refer to keepalived's documentation to understand the behaviour
-# of these parameters
-#
-# [*virtual_server*]
+# @param virtual_server
 #   The name of the virtual server this real server will be added to
 #
-# [*ip_address*]
+# @param ip_address
 #   The ip address of the real server
 #
-# [*port*]
+# @param port
 #   Real sever IP port.  (if ommitted the port defaults to the VIP port)
 #
-# [*options*]
+# @param options
 #   One or more options to include in the real_server block
 #
-#   Example:
+#   @example
 #     options => {
 #       inhibit_on_failure => true,
 #       SMTP_CHECK => {
@@ -36,10 +30,10 @@ define keepalived::lvs::real_server (
   Stdlib::Port $port,
   Keepalived::Options $options = {},
 ) {
-  $_name = regsubst($name, '[:\/\n]', '')
+  $_name = regsubst($name, '[:\/\n]', '', 'G')
 
   concat::fragment { "keepalived.conf_lvs_real_server_${_name}":
-    target  => "${::keepalived::config_dir}/keepalived.conf",
+    target  => "${keepalived::config_dir}/keepalived.conf",
     content => template('keepalived/lvs_real_server.erb'),
     order   => "250-${virtual_server}-${_name}",
   }

@@ -1,41 +1,47 @@
-# == Define: keepalived::vrrp::track_process
 #
-# === Parameters:
+# @summary Configure the process tracker
 #
-# $ensure::   Default: present
+# @param proc_name 
+#   process name to track
+#   use an Array configuration to specify process parameters (first element needs to
+#   be the process name).
 #
-# $proc_name:: process name to track
-#              Default: undef (error)
+# @param weight The weight that should add to the instance.
 #
-# $weight::   The weight that should add to the instance.
-#             Default: undef (see keepalived.conf(5) for default)
+# @param quorum Number of processes to expect running
 #
-# $quorum::   Number of processes to expect running
-#             Default: 1
+# @param delay this sets fork_delay and terminate_delay (for keepalived => 2.0.16), before terminate_delay
 #
-# $delay::    Time to delay after process quorum lost before
-#             considering process failed (in fractions of second)
-#             Default: undef
+# @param fork_delay time to delay after process quorum gained after fork before consider process up
 #
-# $full_command::  Match entire process cmdline
-#             Default: undef
+# @param terminate_delay time to delay after process quorum lost before consider process down
+#
+# @param full_command Match entire process cmdline
+#
+# @param param_match  Set inital if command has no parameters or use partial if first n parameters match
 #
 define keepalived::vrrp::track_process (
-  String[1] $proc_name,
+  Variant[String[1], Array[String[1],1]] $proc_name,
   Optional[Integer[0]] $weight   = undef,
   Integer[0] $quorum             = 1,
   Optional[Integer[0]] $delay    = undef,
-  Boolean $full_command           = false
+  Optional[Integer[0]] $fork_delay = undef,
+  Optional[Integer[0]] $terminate_delay = undef,
+  Boolean $full_command          = false,
+  Optional[Enum['initial','partial']] $param_match = undef
 ) {
-  concat::fragment { "keepalived.conf_vrrp_track_process_${proc_name}":
-    target  => "${::keepalived::config_dir}/keepalived.conf",
+  concat::fragment { "keepalived.conf_vrrp_track_process_${name}":
+    target  => "${keepalived::config_dir}/keepalived.conf",
     content => epp('keepalived/vrrp_track_process.epp', {
-      'name'         => $name,
-      'proc_name'    => $proc_name,
-      'weight'       => $weight,
-      'quorum'       => $quorum,
-      'delay'        => $delay,
-      'full_command' => $full_command
+        'name'            => $name,
+        'proc_name'       => $proc_name,
+        'weight'          => $weight,
+        'quorum'          => $quorum,
+        'delay'           => $delay,
+        'fork_delay'      => $fork_delay,
+        'terminate_delay' => $terminate_delay,
+        'full_command'    => $full_command,
+        'param_match'     => $param_match
     }),
     order   => '020',
   }

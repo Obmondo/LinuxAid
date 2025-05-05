@@ -1,4 +1,5 @@
-# == Class keepalived::config
+# @summary
+#   Configure keepalived module
 #
 class keepalived::config {
   File {
@@ -30,15 +31,32 @@ class keepalived::config {
   }
 
   concat { "${keepalived::config_dir}/keepalived.conf":
-    owner => $keepalived::config_owner,
-    group => $keepalived::config_group,
-    mode  => $keepalived::config_file_mode,
+    owner        => $keepalived::config_owner,
+    group        => $keepalived::config_group,
+    mode         => $keepalived::config_file_mode,
+    validate_cmd => $keepalived::config_validate_cmd,
   }
 
   concat::fragment { 'keepalived.conf_header':
     target  => "${keepalived::config_dir}/keepalived.conf",
     content => "# Managed by Puppet\n",
     order   => '001',
+  }
+
+  if $keepalived::global_defs {
+    class { 'keepalived::global_defs':
+      * => $keepalived::global_defs,
+    }
+  }
+
+  concat::fragment { 'keepalived.conf_include_external_configs':
+    target  => "${keepalived::config_dir}/keepalived.conf",
+    content => epp('keepalived/include-external-configs.epp',
+      {
+        'include_external_conf_files' => $keepalived::include_external_conf_files,
+      },
+    ),
+    order   => '998',
   }
 
   concat::fragment { 'keepalived.conf_footer':
@@ -64,6 +82,16 @@ class keepalived::config {
   }
   $keepalived::vrrp_sync_group.each |String $key, Hash $attrs| {
     keepalived::vrrp::sync_group { $key:
+      * => $attrs,
+    }
+  }
+  $keepalived::lvs_real_server.each |String $key, Hash $attrs| {
+    keepalived::lvs::real_server { $key:
+      * => $attrs,
+    }
+  }
+  $keepalived::lvs_virtual_server.each |String $key, Hash $attrs| {
+    keepalived::lvs::virtual_server { $key:
       * => $attrs,
     }
   }

@@ -22,7 +22,27 @@ vrrp_sync_group <%= @_name %> {
   # FAULT transition
   notify_fault <%= @notify_script_fault %>
   <%- end -%>
+  <%- if @notify_script_master_rx_lower_pri -%>
+  # The notify_master_rx_lower_pri script is executed if a master
+  # receives an advert with priority lower than the master's advert.
+  notify_master_rx_lower_pri "<%= @notify_script_master_rx_lower_pri %>"
+  <%- end -%>
+  <%- if not @track_script.empty? -%>
 
+  track_script {
+  <%- Array(@track_script).each do |track| -%>
+    <%= track %>
+  <%- end -%>
+  }
+  <%- end -%>
+  <%- if not @track_process.empty? -%>
+
+  track_process {
+  <%- Array(@track_process).each do |tproc| -%>
+    <%= tproc %>
+  <%- end -%>
+  }
+  <%- end -%>
   <%- if @notify_script -%>
   # for ANY state transition.
   # "notify" script is called AFTER the
@@ -35,6 +55,14 @@ vrrp_sync_group <%= @_name %> {
   # $3 = target state of transition
   #     ("MASTER"|"BACKUP"|"FAULT")
   notify <%= @notify_script %>
+  <%- end -%>
+  <%- if @track_interface -%>
+
+  track_interface {
+  <%- Array(@track_interface).each do |interface| -%>
+    <%= interface %>
+  <%- end -%>
+  }
   <%- end -%>
 
   # Send email notifcation during state transition,

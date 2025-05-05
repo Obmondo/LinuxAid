@@ -1,7 +1,7 @@
-# == Class keepalived
+# @summary
+#   Manage keepalived service
 #
 class keepalived::service {
-
   if $keepalived::service_manage == true {
     service { $keepalived::service_name:
       ensure     => $keepalived::service_ensure,
@@ -13,4 +13,3 @@ class keepalived::service {
     }
   }
 }
-

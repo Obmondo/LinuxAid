@@ -10,9 +10,9 @@
 #### Table of Contents
 
 1. [Description](#description)
-3. [Usage - Configuration options and additional functionality](#usage)
-4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
+2. [Usage - Configuration options and additional functionality](#usage)
+3. [Limitations - OS compatibility, etc.](#limitations)
+4. [Development - Guide for contributing to the module](#development)
 
 ## Description
 
@@ -25,7 +25,7 @@ The main goal of keepalived is to provide simple and robust facilities for loadb
 
 This configuration will fail-over when:
 
-a. Master node is unavailable
+1. Master node is unavailable
 
 ```puppet
 node /node01/ {
@@ -34,8 +34,8 @@ node /node01/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'MASTER',
-    virtual_router_id => '50',
-    priority          => '101',
+    virtual_router_id => 50,
+    priority          => 101,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => [ '10.0.0.1/29' ],
@@ -49,8 +49,8 @@ node /node02/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'BACKUP',
-    virtual_router_id => '50',
-    priority          => '100',
+    virtual_router_id => 50,
+    priority          => 100,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => [ '10.0.0.1/29' ],
@@ -67,8 +67,8 @@ keepalived::vrrp_instance:
   VI_50:
     interface: 'eth1'
     state: 'MASTER'
-    virtual_router_id: '50'
-    priority: '101'
+    virtual_router_id: 50
+    priority: 101
     auth_type: 'PASS'
     auth_pass: 'secret'
     virtual_ipaddress: '10.0.0.1/29'
@@ -86,13 +86,14 @@ node /node01/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'MASTER',
-    virtual_router_id => '50',
-    priority          => '101',
+    virtual_router_id => 50,
+    priority          => 101,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => [ '10.0.0.1/29' ],
-    virtual_routes    => [ { to  => '168.168.2.0/24', via => '10.0.0.2' },
-                           { to  => '168.168.3.0/24', via => '10.0.0.3' } ]
+    virtual_routes    => [ { to   => '168.168.2.0/24', via => '10.0.0.2' },
+                           { to   => '168.168.3.0/24', via => '10.0.0.3' } ],
+    virtual_rules     => [ { from => '168.168.2.42', lookup => 'customroute' } ]
   }
 }
 ```
@@ -105,8 +106,8 @@ keepalived::vrrp_instance:
   VI_50:
     interface: 'eth1'
     state: 'MASTER'
-    virtual_router_id: '50'
-    priority: '101'
+    virtual_router_id: 50
+    priority: 101
     auth_type: 'PASS'
     auth_pass: 'secret'
     virtual_ipaddress: '10.0.0.1/29'
@@ -115,18 +116,21 @@ keepalived::vrrp_instance:
         via: '10.0.0.2'
       - to: 168.168.3.0/24'
         via: '10.0.0.3'
+    virtual_rules:
+      - from: '168.168.2.42'
+        lookup: 'customroute'
 ```
 
 ### Detect application level failure
 
 This configuration will fail-over when:
 
-a. NGinX daemon is not running<br>
-b. Master node is unavailable
+1. NGinX daemon is not running
+1. Master node is unavailable
 
 ```puppet
 node /node01/ {
-  include ::keepalived
+  include keepalived
 
   keepalived::vrrp::script { 'check_nginx':
     script => '/usr/bin/killall -0 nginx',
@@ -135,8 +139,8 @@ node /node01/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'MASTER',
-    virtual_router_id => '50',
-    priority          => '101',
+    virtual_router_id => 50,
+    priority          => 101,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => '10.0.0.1/29',
@@ -145,7 +149,7 @@ node /node01/ {
 }
 
 node /node02/ {
-  include ::keepalived
+  include keepalived
 
   keepalived::vrrp::script { 'check_nginx':
     script => '/usr/bin/killall -0 nginx',
@@ -154,8 +158,8 @@ node /node02/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'BACKUP',
-    virtual_router_id => '50',
-    priority          => '100',
+    virtual_router_id => 50,
+    priority          => 100,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => '10.0.0.1/29',
@@ -176,8 +180,8 @@ keepalived::vrrp_instance:
   VI_50:
     interface: 'eth1'
     state: 'MASTER'
-    virtual_router_id: '50'
-    priority: '101'
+    virtual_router_id: 50
+    priority: 101
     auth_type: 'PASS'
     auth_pass: 'secret'
     virtual_ipaddress: '10.0.0.1/29'
@@ -188,7 +192,7 @@ or using process tracking (keepalived 2.0.11+):
 
 ```puppet
 node /node01/ {
-  include ::keepalived
+  include keepalived
 
   keepalived::vrrp::track_process { 'check_nginx':
     proc_name => 'nginx',
@@ -200,8 +204,8 @@ node /node01/ {
   keepalived::vrrp::instance { 'VI_50':
     interface         => 'eth1',
     state             => 'MASTER',
-    virtual_router_id => '50',
-    priority          => '101',
+    virtual_router_id => 50,
+    priority          => 101,
     auth_type         => 'PASS',
     auth_pass         => 'secret',
     virtual_ipaddress => '10.0.0.1/29',
@@ -214,8 +218,8 @@ node /node01/ {
 
 This configuration will fail-over both the IPv4 address and the IPv6 address when:
 
-a. NGINX daemon is not running
-b. Master node is unavailable
+1. NGINX daemon is not running
+1. Master node is unavailable
 
 It is not possible to configure both IPv4 and IPv6 addresses as
 virtual\_ipaddresses in a single vrrp\_instance; the reason is that the VRRP
@@ -235,7 +239,7 @@ Configure the vrrp\_instance with the native\_ipv6 flag to force the instance to
 use IPv6. An IPv6 vrrp\_instance without the "native\_ipv6" keyword does not
 configure the virtual IPv6 address with the "deprecated nodad" options.
 
-RFC 3484, “Default Address Selection for Internet Protocol version 6 (IPv6)”:
+RFC 3484, "Default Address Selection for Internet Protocol version 6 (IPv6)":
 Configure a /128 mask for the IPv6 address for keepliaved to set
 preferred\_lft to 0 to avoid the VI to be used for outgoing connections.
 
@@ -288,13 +292,55 @@ class { 'keepalived::global_defs':
   smtp_server             => 'localhost',
   smtp_connect_timeout    => '60',
   router_id               => 'your_router_instance_id',
+  bfd_rlimit_rttime       => 10000,
+  checker_rlimit_rttime   => 10000,
+  vrrp_rlimit_rttime      => 10000,
+  bfd_priority            => -20,
+  checker_priority        => -20,
+  vrrp_priority           => -20,
+  bfd_rt_priority         => 50,
+  checker_rt_priority     => 50,
+  vrrp_rt_priority        => 50,
+  bfd_no_swap             => true,
+  checker_no_swap         => true,
+  vrrp_no_swap            => true,
+  vrrp_version            => 3,
+  max_auto_priority       => 99,
+  vrrp_notify_fifo        => '/run/keepalived.fifo',
+  vrrp_notify_fifo_script => 'your_fifo_script_path',
 }
 ```
+or hiera:
 
+```yaml
+---
+keepalived::global_defs:
+  notification_email: 'no@spam.tld'
+  notification_email_from: 'no@spam.tld'
+  smtp_server: 'localhost'
+  smtp_connect_timeout: '60'
+  router_id: 'your_router_instance_id'
+  bfd_rlimit_rttime: 10000
+  checker_rlimit_rttime: 10000
+  vrrp_rlimit_rttime: 10000
+  bfd_priority: -20
+  checker_priority: -20
+  vrrp_priority: -20
+  bfd_rt_priority: 50
+  checker_rt_priority: 50
+  vrrp_rt_priority: 50
+  bfd_no_swap: true
+  checker_no_swap: true
+  vrrp_no_swap: true
+  vrrp_version: 3
+  max_auto_priority: 99
+  vrrp_notify_fifo: '/run/keepalived.fifo'
+  vrrp_notify_fifo_script: 'your_fifo_script_path'
+```
 ### Soft-restart the Keepalived daemon
 
 ```puppet
-class { '::keepalived':
+class { 'keepalived':
   service_restart => 'service keepalived reload',     # When using SysV Init
   # service_restart => 'systemctl reload keepalived', # When using SystemD
 }
@@ -303,18 +349,45 @@ class { '::keepalived':
 ### Opt out of having the service managed by the module
 
 ```puppet
-class { '::keepalived':
+class { 'keepalived':
   service_manage => false,
+}
+```
+
+### Opt out of having the package managed by the module
+
+```puppet
+class { 'keepalived':
+  manage_package => false,
+}
+```
+
+### Opt out include unmanaged keepalived config files
+
+If you need to include a Keepalived config fragment managed by another tool,
+include_external_conf_files takes an array of config path.
+
+**Caution: config file must be readable by Keepalived daemon**
+
+```puppet
+class { 'keepalived':
+  include_external_conf_files => ['/etc/keepalived/unmanaged-config.cfg']
 }
 ```
 
 ### Unicast instead of Multicast
 
-**caution: unicast support has only been added to Keepalived since version 1.2.8**
+**Caution: unicast support has only been added to Keepalived since version 1.2.8**
 
 By default Keepalived will use multicast packets to determine failover conditions.
 However, in many cloud environments it is not possible to use multicast because of
-network restrictions. Keepalived can be configured to use unicast in such environments:
+network restrictions.
+Keepalived can be configured to use unicast in such environments:
+
+Enable automatic unicast configuration with exported resources by setting
+parameter 'collect\_unicast\_peers => true'
+
+Automatic unicast configuration:
 
 ```puppet
   keepalived::vrrp::instance { 'VI_50':
@@ -326,13 +399,32 @@ network restrictions. Keepalived can be configured to use unicast in such enviro
     auth_pass         => 'secret',
     virtual_ipaddress => '10.0.0.1/29',
     track_script      => 'check_nginx',
+    collect_unicast_peers => true,
+  }
+```
+
+Manual unicast configuration or override auto default IP:
+
+```puppet
+  keepalived::vrrp::instance { 'VI_50':
+    interface         => 'eth1',
+    state             => 'BACKUP',
+    virtual_router_id => 50,
+    priority          => 100,
+    auth_type         => 'PASS',
+    auth_pass         => 'secret',
+    virtual_ipaddress => '10.0.0.1/29',
+    track_script      => 'check_nginx',
     unicast_source_ip => $::ipaddress_eth1,
     unicast_peers     => ['10.0.0.1', '10.0.0.2']
   }
 ```
-The 'unicast\_source\_ip' parameter is optional as Keepalived will bind to the specified interface by default.
-The 'unicast\_peers' parameter contains an array of ip addresses that correspond to the failover nodes.
 
+The 'unicast\_source\_ip' parameter is optional as Keepalived will bind to the
+specified interface by default. This value will be exported in place of the default
+when 'collect\_unicast\_peers => true'.
+The 'unicast\_peers' parameter contains an array of ip addresses that correspond
+to the failover nodes.
 
 ### Creating ip-based virtual server instances with two real servers
 
@@ -377,6 +469,39 @@ keepalived::lvs::real_server { 'example2.example.com':
 }
 ```
 
+or hiera:
+
+```yaml
+---
+keepalived::lvs_virtual_server:
+  www.example.com:
+    ip_address: '1.2.3.4'
+    port: 80
+    delay_loop: 7
+    lb_algo: 'wlc'
+    lb_kind: 'DR'
+    persistence_timeout: 86400
+    virtualhost: 'www.example.com'
+    protocol: 'TCP'
+
+keepalived::lvs_real_server:
+  example1.example.com:
+    virtual_server: 'www.example.com'
+    ip_address: '1.2.3.8'
+    port: 80
+    options:
+      weight: '1000'
+      TCP_CHECK:
+        connect_timeout: 3
+  example2.example.com:
+    virtual_server: 'www.example.com'
+    ip_address: '1.2.3.9'
+    port: 80
+    options:
+      weight: '1000'
+      TCP_CHECK:
+        connect_timeout: 3
+```
 
 ### Creating firewall mark based virtual server instances with two real servers
 
@@ -437,4 +562,3 @@ The contributing guide is in [CONTRIBUTING.md](https://github.com/voxpupuli/pupp
 Details in `CHANGELOG.md`.
 
 Migrated from https://github.com/arioch/puppet-keepalived to Vox Pupuli.
-
