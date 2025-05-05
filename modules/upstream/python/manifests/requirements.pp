@@ -36,7 +36,7 @@ define python::requirements (
   Array                                        $environment            = [],
   Boolean                                      $forceupdate            = false,
   Optional[Stdlib::Absolutepath]               $cwd                    = undef,
-  String                                       $extra_pip_args         = '',
+  Optional[String[1]]                          $extra_pip_args         = undef,
   Boolean                                      $manage_requirements    = true,
   Boolean                                      $fix_requirements_owner = true,
   Stdlib::Absolutepath                         $log_dir                = '/tmp',
@@ -89,6 +89,8 @@ define python::requirements (
       content => '# Puppet will install and/or update pip packages listed here',
     }
 
+    $local_subscribe = File[$requirements]
+  } elsif File[$requirements] and $manage_requirements == true {
     $local_subscribe = File[$requirements]
   } else {
     $local_subscribe = undef
