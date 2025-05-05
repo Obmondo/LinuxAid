@@ -12,7 +12,6 @@ define selinux::permissive (
   String $seltype = $title,
   Enum['present', 'absent'] $ensure = 'present',
 ) {
-
   include selinux
   if $ensure == 'present' {
     Anchor['selinux::module post']
@@ -24,7 +23,9 @@ define selinux::permissive (
     -> Anchor['selinux::module pre']
   }
 
-  selinux_permissive {$seltype:
-    ensure => $ensure,
+  if $facts['os']['selinux']['enabled'] {
+    selinux_permissive { $seltype:
+      ensure => $ensure,
+    }
   }
 }

@@ -24,7 +24,6 @@ define selinux::port (
   Optional[Tuple[Integer[1,65535], 2, 2]] $port_range = undef,
   Enum['present', 'absent']          $ensure = 'present',
 ) {
-
   include selinux
 
   if $ensure == 'present' {
@@ -57,8 +56,8 @@ define selinux::port (
   }
 
   # Do nothing unless SELinux is enabled
-  if $facts['selinux'] {
-    selinux_port {"${protocol}_${range[0]}-${range[1]}":
+  if $facts['os']['selinux']['enabled'] {
+    selinux_port { "${protocol}_${range[0]}-${range[1]}":
       ensure    => $ensure,
       low_port  => $range[0],
       high_port => $range[1],

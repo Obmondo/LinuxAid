@@ -7,7 +7,7 @@
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/selinux.svg)](https://forge.puppetlabs.com/puppet/selinux)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/selinux.svg)](https://forge.puppetlabs.com/puppet/selinux)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 1. [Module Description - What the module does and why it is useful](#module-description)
@@ -23,7 +23,7 @@ This class manages SELinux.
 
 ## Requirements
 
-* Puppet 5 or later
+* See `metadata.json`
 
 ## Module Description
 
@@ -56,6 +56,8 @@ running system.
 
 ## Known problems / limitations
 
+* The `selinux_python_command` fact is now deprecated and will be removed in
+  version 4 of the module.
 * If SELinux is disabled and you want to switch to permissive or enforcing you
   are required to reboot the system (limitation of SELinux). The module won't
   do this for you.
@@ -72,7 +74,8 @@ running system.
 * The `selinux_port` provider may misbehave if the title does not correspond to
   the format it expects. Users should use the `selinux::port` define instead except
   when purging resources
-* Defining port ranges that overlap with existing ranges is currently not detected, and will
+* Defining port ranges that overlap with existing ranges is currently not
+  detected, and will
   cause semanage to error when the resource is applied.
 * On Debian systems, the defined types fcontext, permissive, and port do not
   work because of [PA-2985](https://tickets.puppetlabs.com/browse/PA-2985).
@@ -152,9 +155,9 @@ selinux::boolean { 'puppetagent_manage_all_files': }
 ### Things to remember
 
 * The SELinux tools behave odd when SELinux is disabled
-    * `semanage` requires `--noreload` while in disabled mode when
+  * `semanage` requires `--noreload` while in disabled mode when
       adding or changing something
-    * Only few `--list` operations work
+  * Only few `--list` operations work
 * run acceptance tests: `./test-acceptance-with-vagrant`
 
 ### Facter facts
@@ -164,11 +167,11 @@ the config\_mode to be set, but only the boolean `enabled` is set.
 
 The most important facts:
 
-| Fact                                      | Fact (old)                | Mode: disabled | Mode: permissive                        | Mode:  enforcing                        |
-|-------------------------------------------|---------------------------|----------------|-----------------------------------------|-----------------------------------------|
-| `$facts['os']['selinux']['enabled']`      | `$::selinux`              | false          | true                                    | true                                    |
-| `$facts['os']['selinux']['config_mode']`   | `$::selinux_config_mode`  | undef          | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
-| `$facts['os']['selinux']['current_mode']` | `$::selinux_current_mode` | undef          | Value of `getenforce` downcased         | Value of `getenforce` downcased         |
+| Fact | Fact (old) | Mode: disabled | Mode: permissive | Mode: enforcing |
+|---|---|---|---|---|
+| `$facts['os']['selinux']['enabled']` | `$::selinux` | false | true | true |
+| `$facts['os']['selinux']['config_mode']` | `$::selinux_config_mode` | undef | Value of SELINUX in /etc/selinux/config | Value of SELINUX in /etc/selinux/config |
+| `$facts['os']['selinux']['current_mode']` | `$::selinux_current_mode` | undef | Value of `getenforce` downcased | Value of `getenforce` downcased |
 
 ## Authors
 

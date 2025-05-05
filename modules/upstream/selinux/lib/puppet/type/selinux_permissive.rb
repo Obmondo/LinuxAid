@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:selinux_permissive) do
   @doc = 'Manage SELinux permissive types.'
 
@@ -11,5 +13,16 @@ Puppet::Type.newtype(:selinux_permissive) do
   newparam(:local) do
     desc 'A read-only attribue indicating whether the type is locally customized'
     newvalues(true, false)
+  end
+
+  autorequire(:package) do
+    %w[
+      policycoreutils
+      policycoreutils-python
+      policycoreutils-python-utils
+      python3-policycoreutils
+      selinux-policy-dev
+      selinux-policy-devel
+    ]
   end
 end

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# DEPRECATED: Determine the path to python on the system
 Facter.add(:selinux_python_command) do
   confine osfamily: 'RedHat'
   setcode do
