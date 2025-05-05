@@ -3,8 +3,6 @@
 #
 # @param root_password The root password for the MySQL database.
 #
-# @param webadmin Boolean indicating whether to create a webadmin. Defaults to true.
-#
 # @param datadir The data directory for MySQL. Defaults to '/var/lib/mysql'.
 #
 # @param memlimit The memory limit percentage for MySQL. Defaults to 75.
@@ -37,7 +35,6 @@
 #
 class role::db::mysql (
   Eit_types::MysqlPassword              $root_password,
-  Boolean                               $webadmin                       = true,
   String                                $datadir                        = '/var/lib/mysql',
   Eit_types::Percentage                 $memlimit                       = 75,
   Boolean                               $mysql_restart_on_config_change = false,
@@ -64,7 +61,6 @@ class role::db::mysql (
   #FIXME : handle mysql on /root - using regular mysqldump at night
   #FIXME: confirm that mysqld_datadir_on_root actually checks that the datadir IS an lvm device !
   class { '::profile::mysql':
-    webadmin                       => $webadmin,
     datadir                        => $datadir,
     backup                         => $backup,
     root_password                  => $root_password,
