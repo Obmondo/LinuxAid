@@ -3,11 +3,10 @@
   delete: true
 appveyor.yml:
   delete: true
+rubocop.yml:
+  include_todos: true
 
-Gemfile:
-  optional:
-    ":development":
-    - gem: github_changelog_generator
+
 spec/spec_helper.rb:
   spec_overrides:
   - require 'spec_helper_local'
@@ -17,16 +16,19 @@ spec/spec_helper.rb:
   unmanaged: false
 .gitpod.yml:
   unmanaged: false
-.github/workflows/nightly.yml:
-  unmanaged: false
-.github/workflows/pr_test.yml:
-  unmanaged: false
 .github/workflows/auto_release.yml:
   unmanaged: false
-.github/workflows/spec.yml:
-  checks: 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop'
-  unmanaged: false
+.github/workflows/ci.yml:
+  unmanaged: true
+.github/workflows/nightly.yml:
+  unmanaged: true
 .github/workflows/release.yml:
   unmanaged: false
 .travis.yml:
   delete: true
+changelog_since_tag: 'v11.0.3'
+Rakefile:
+  changelog_max_issues: 500
+  extra_disabled_lint_checks:
+    - anchor_resource
+    - params_empty_string_assignment

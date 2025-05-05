@@ -3,62 +3,116 @@
 # @api private
 #
 class mysql::backup::xtrabackup (
-  $xtrabackup_package_name  = $mysql::params::xtrabackup_package_name,
-  $backupuser               = undef,
-  $backuppassword           = undef,
-  $backupdir                = '',
-  $maxallowedpacket         = '1M',
-  $backupmethod             = 'xtrabackup',
-  $backupdirmode            = '0700',
-  $backupdirowner           = 'root',
-  $backupdirgroup           = $mysql::params::root_group,
-  $backupcompress           = true,
-  $backuprotate             = 30,
-  $backupscript_template    = 'mysql/xtrabackup.sh.erb',
-  $backup_success_file_path = undef,
-  $ignore_events            = true,
-  $delete_before_dump       = false,
-  $backupdatabases          = [],
-  $file_per_database        = false,
-  $include_triggers         = true,
-  $include_routines         = false,
-  $ensure                   = 'present',
-  $time                     = ['23', '5'],
-  $prescript                = false,
-  $postscript               = false,
-  $execpath                 = '/usr/bin:/usr/sbin:/bin:/sbin',
-  $optional_args            = [],
-  $additional_cron_args     = '--backup',
-  $incremental_backups      = true,
-  $install_cron             = true,
-  $compression_command      = undef,
-  $compression_extension    = undef,
+  Optional[String]                              $backupuser               = undef,
+  Optional[Variant[String, Sensitive[String]]]  $backuppassword = undef,
+  String                                        $backupdir                = '',
+  String[1]                                     $maxallowedpacket         = '1M',
+  String[1]                                     $backupmethod             = 'xtrabackup',
+  String[1]                                     $backupdirmode            = '0700',
+  String[1]                                     $backupdirowner           = 'root',
+  String[1]                                     $backupdirgroup           = $mysql::params::root_group,
+  Boolean                                       $backupcompress           = true,
+  Variant[Integer, String[1]]                   $backuprotate             = 30,
+  String[1]                                     $backupscript_template    = 'mysql/xtrabackup.sh.epp',
+  Optional[String[1]]                           $backup_success_file_path = undef,
+  Boolean                                       $ignore_events            = true,
+  Boolean                                       $delete_before_dump       = false,
+  Array[String[1]]                              $backupdatabases          = [],
+  Boolean                                       $file_per_database        = false,
+  Boolean                                       $include_triggers         = true,
+  Boolean                                       $include_routines         = false,
+  Enum['present', 'absent']                     $ensure                   = 'present',
+  Variant[Array[String[1]], Array[Integer]]     $time                     = ['23', '5'],
+  Variant[Boolean, String[1], Array[String[1]]] $prescript                = false,
+  Variant[Boolean, String[1], Array[String[1]]] $postscript               = false,
+  String[1]                                     $execpath                 = '/usr/bin:/usr/sbin:/bin:/sbin',
+  Array[String[1]]                              $optional_args            = [],
+  String[1]                                     $additional_cron_args     = '--backup',
+  Boolean                                       $incremental_backups      = true,
+  Boolean                                       $install_cron             = true,
+  Optional[String[1]]                           $compression_command      = undef,
+  Optional[String[1]]                           $compression_extension    = undef,
+  String[1]                                     $backupmethod_package     = $mysql::params::xtrabackup_package_name,
+  Array[String]                                 $excludedatabases = [],
 ) inherits mysql::params {
-  ensure_packages($xtrabackup_package_name)
+  stdlib::ensure_packages($backupmethod_package)
+
+  $backuppassword_unsensitive = if $backuppassword =~ Sensitive {
+    $backuppassword.unwrap
+  } else {
+    $backuppassword
+  }
 
   if $backupuser and $backuppassword {
     mysql_user { "${backupuser}@localhost":
       ensure        => $ensure,
-      password_hash => mysql::password($backuppassword),
+      password_hash => Deferred('mysql::password', [$backuppassword]),
       require       => Class['mysql::server::root_password'],
     }
-
-    mysql_grant { "${backupuser}@localhost/*.*":
-      ensure     => $ensure,
-      user       => "${backupuser}@localhost",
-      table      => '*.*',
-      privileges => ['RELOAD', 'PROCESS', 'LOCK TABLES', 'REPLICATION CLIENT'],
-      require    => Mysql_user["${backupuser}@localhost"],
+    # Percona XtraBackup needs additional grants/privileges to work with MySQL 8
+    if versioncmp($facts['mysql_version'], '8') >= 0 and !(/(?i:mariadb)/ in $facts['mysqld_version']) {
+      if ($facts['os']['name'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') >= 0) or
+      ($facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '22.04') >= 0) {
+        mysql_grant { "${backupuser}@localhost/*.*":
+          ensure     => $ensure,
+          user       => "${backupuser}@localhost",
+          table      => '*.*',
+          privileges => ['BINLOG MONITOR', 'RELOAD', 'PROCESS', 'LOCK TABLES', 'BACKUP_ADMIN'],
+          require    => Mysql_user["${backupuser}@localhost"],
+        }
+      }
+      else {
+        mysql_grant { "${backupuser}@localhost/*.*":
+          ensure     => $ensure,
+          user       => "${backupuser}@localhost",
+          table      => '*.*',
+          privileges => ['RELOAD', 'PROCESS', 'LOCK TABLES', 'REPLICATION CLIENT', 'BACKUP_ADMIN'],
+          require    => Mysql_user["${backupuser}@localhost"],
+        }
+      }
+      mysql_grant { "${backupuser}@localhost/performance_schema.keyring_component_status":
+        ensure     => $ensure,
+        user       => "${backupuser}@localhost",
+        table      => 'performance_schema.keyring_component_status',
+        privileges => ['SELECT'],
+        require    => Mysql_user["${backupuser}@localhost"],
+      }
+      mysql_grant { "${backupuser}@localhost/performance_schema.log_status":
+        ensure     => $ensure,
+        user       => "${backupuser}@localhost",
+        table      => 'performance_schema.log_status',
+        privileges => ['SELECT'],
+        require    => Mysql_user["${backupuser}@localhost"],
+      }
+    }
+    else {
+      if ($facts['os']['name'] == 'debian' and versioncmp($facts['os']['release']['major'], '11') >= 0) or
+      ($facts['os']['name'] == 'Ubuntu' and versioncmp($facts['os']['release']['major'], '22.04') >= 0) {
+        mysql_grant { "${backupuser}@localhost/*.*":
+          ensure     => $ensure,
+          user       => "${backupuser}@localhost",
+          table      => '*.*',
+          privileges => ['BINLOG MONITOR', 'RELOAD', 'PROCESS', 'LOCK TABLES'],
+          require    => Mysql_user["${backupuser}@localhost"],
+        }
+      }
+      else {
+        mysql_grant { "${backupuser}@localhost/*.*":
+          ensure     => $ensure,
+          user       => "${backupuser}@localhost",
+          table      => '*.*',
+          privileges => ['RELOAD', 'PROCESS', 'LOCK TABLES', 'REPLICATION CLIENT'],
+          require    => Mysql_user["${backupuser}@localhost"],
+        }
+      }
     }
   }
 
   if $install_cron {
-    if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
-      ensure_packages('crontabs')
-    } elsif $::osfamily == 'RedHat' {
-      ensure_packages('cronie')
-    } elsif $::osfamily != 'FreeBSD' {
-      ensure_packages('cron')
+    if $facts['os']['family'] == 'RedHat' {
+      stdlib::ensure_packages('cronie')
+    } elsif $facts['os']['family'] != 'FreeBSD' {
+      stdlib::ensure_packages('cron')
     }
   }
 
@@ -79,12 +133,12 @@ class mysql::backup::xtrabackup (
       hour    => $time[0],
       minute  => $time[1],
       weekday => '0',
-      require => Package[$xtrabackup_package_name],
+      require => Package[$backupmethod_package],
     }
   }
 
   # Wether to use GNU or BSD date format.
-  case $::osfamily {
+  case $facts['os']['family'] {
     'FreeBSD','OpenBSD': {
       $dateformat = '$(date -v-sun +\\%F)_full'
     }
@@ -111,7 +165,7 @@ class mysql::backup::xtrabackup (
     hour    => $time[0],
     minute  => $time[1],
     weekday => $daily_cron_data['weekday'],
-    require => Package[$xtrabackup_package_name],
+    require => Package[$backupmethod_package],
   }
 
   file { $backupdir:
@@ -121,12 +175,24 @@ class mysql::backup::xtrabackup (
     group  => $backupdirgroup,
   }
 
+  # TODO: use EPP instead of ERB, as EPP can handle Data of Type Sensitive without further ado
+  $parameters = {
+    'innobackupex_args' => mysql::innobackupex_args($backupuser, $backupcompress, $backuppassword_unsensitive, $backupdatabases, $optional_args),
+    'backuprotate' => $backuprotate,
+    'backupdir' => $backupdir,
+    'backupmethod' => $backupmethod,
+    'delete_before_dump' => $delete_before_dump,
+    'prescript' => $prescript,
+    'backup_success_file_path'=> $backup_success_file_path,
+    'postscript'=> $postscript,
+  }
+
   file { 'xtrabackup.sh':
     ensure  => $ensure,
     path    => '/usr/local/sbin/xtrabackup.sh',
     mode    => '0700',
     owner   => 'root',
     group   => $mysql::params::root_group,
-    content => template($backupscript_template),
+    content => epp($backupscript_template,$parameters),
   }
 }
