@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../jenkins'
 
 module Puppet
@@ -14,6 +16,7 @@ module Puppet
         data = {}
         manifest_str.split("\n").each do |line|
           next if line.empty?
+
           # Parse out "Plugin-Version: 1.2" for example
           parts = line.split(': ')
 
@@ -41,6 +44,7 @@ module Puppet
       #   manifest data
       def self.available
         return {} unless exists?
+
         plugins = {}
         Dir.entries(Puppet::Jenkins.plugins_dir).each do |plugin|
           # Skip useless directories
@@ -58,6 +62,7 @@ module Puppet
           rescue StandardError
             # Nothing really to do about it, failing means no version which will
             # result in a new plugin if needed
+            nil
           end
         end
         plugins
@@ -70,41 +75,8 @@ module Puppet
         home = Puppet::Jenkins.home_dir
         return false if home.nil?
         return false unless File.directory? Puppet::Jenkins.plugins_dir
+
         true
-      end
-
-      # Parse the update-center.json file which Jenkins uses to maintain it's
-      # internal dependency graph for plugins
-      #
-      # This document is technically JSONP formatted so we must munge the file
-      # a bit to load the JSON bits properly
-      #
-      # @return [Hash] Parsed version of the update center JSON
-      def self.plugins_from_updatecenter(filename)
-        parser = nil
-        begin
-          # Using Kernel#require to make it easier to test this from RSpec
-          ::Kernel.require 'json'
-          parser = proc { |s| JSON.parse(s) }
-        rescue LoadError
-          # swallow the exception and embed okjson, see:
-          # <https://github.com/jenkinsci/puppet-jenkins/issues/166>
-          # <https://github.com/jenkinsci/puppet-jenkins/issues/176>
-          ::Kernel.require 'puppet/jenkins/okjson'
-          parser = proc { |s| OkJson.decode(s) }
-        end
-
-        File.open(filename, 'r') do |fd|
-          buffer = fd.read
-          return {} if buffer.nil? || buffer.empty?
-          buffer = buffer.split("\n")
-          # Trim off the first and last lines, which are the JSONP gunk
-          buffer = buffer[1...-1]
-
-          data = parser.call(buffer.join("\n"))
-          return data['plugins'] || {}
-        end
-        {}
       end
     end
   end

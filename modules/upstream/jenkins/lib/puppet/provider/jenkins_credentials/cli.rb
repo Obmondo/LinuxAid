@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/util/warnings'
 
 require 'json'
@@ -45,32 +47,27 @@ Puppet::Type.type(:jenkins_credentials).provide(:cli, parent: Puppet::X::Jenkins
       ensure: :present
     }
 
-    [:impl, :domain, :scope].each { |k| copy_key(params, info, k) }
+    %i[impl domain scope].each { |k| copy_key(params, info, k) }
 
     case info['impl']
     when 'UsernamePasswordCredentialsImpl'
-      [:description, :username, :password].each { |k| copy_key(params, info, k) }
+      %i[description username password].each { |k| copy_key(params, info, k) }
     when 'BasicSSHUserPrivateKey'
-      [:description, :username, :private_key, :passphrase].each { |k| copy_key(params, info, k) }
+      %i[description username private_key passphrase].each { |k| copy_key(params, info, k) }
     when 'StringCredentialsImpl'
-      [:description, :secret].each { |k| copy_key(params, info, k) }
+      %i[description secret].each { |k| copy_key(params, info, k) }
     when 'FileCredentialsImpl'
-      [:description, :file_name, :content].each { |k| copy_key(params, info, k) }
+      %i[description file_name content].each { |k| copy_key(params, info, k) }
     when 'CertificateCredentialsImpl'
-      [:description, :password, :key_store_implementation].each { |k| copy_key(params, info, k) }
+      %i[description password key_store_implementation].each { |k| copy_key(params, info, k) }
     when 'AWSCredentialsImpl'
-      [:description, :secret_key, :access_key].each { |k| copy_key(params, info, k) }
+      %i[description secret_key access_key].each { |k| copy_key(params, info, k) }
     when 'BrowserStackCredentials'
-      [:description, :username, :access_key].each { |k| copy_key(params, info, k) }
+      %i[description username access_key].each { |k| copy_key(params, info, k) }
     when 'GitLabApiTokenImpl'
-      [:description, :api_token].each { |k| copy_key(params, info, k) }
-    when 'GoogleRobotPrivateKeyCredentials'
-      [:json_key, :email_address, :p12_key].each { |k| copy_key(params, info, k) }
-      # Since the plugin does not allow to configure the description of the credentials,
-      # we will just hardcode it to the default value.
-      params[:description] = 'Managed by Puppet'
+      %i[description api_token].each { |k| copy_key(params, info, k) }
     when 'ConduitCredentialsImpl'
-      [:description, :token, :url].each { |k| copy_key(params, info, k) }
+      %i[description token url].each { |k| copy_key(params, info, k) }
 
       ksi = info['key_store_impl']
       params['key_store_impl'] = ksi
@@ -113,7 +110,7 @@ Puppet::Type.type(:jenkins_credentials).provide(:cli, parent: Puppet::X::Jenkins
     begin
       JSON.parse(raw)
     rescue JSON::ParserError
-      raise Puppet::Error, "unable to parse as JSON: #{raw}"
+      raise Puppet::Error, 'Unable to parse Jenkins credentials list as JSON'
     end
   end
   private_class_method :credentials_list_json

@@ -12,24 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Type jenkins::credentials
-#
-# Jenkins credentials (via the CloudBees Credentials plugin
-#
+# @summary Jenkins credentials via the CloudBees Credentials plugin
 define jenkins::credentials (
   String $password,
   String $description               = 'Managed by Puppet',
-  String $private_key_or_path       = '',
+  String $private_key_or_path       = '', # lint:ignore:params_empty_string_assignment
   Enum['present', 'absent'] $ensure = 'present',
-  String $uuid                      = '',
-){
-
+  String $uuid                      = '', # lint:ignore:params_empty_string_assignment
+) {
   include jenkins
   include jenkins::cli_helper
 
   Class['jenkins::cli_helper']
-    -> Jenkins::Credentials[$title]
-      -> Anchor['jenkins::end']
+  -> Jenkins::Credentials[$title]
+  -> Anchor['jenkins::end']
 
   case $ensure {
     'present': {
@@ -42,7 +38,7 @@ define jenkins::credentials (
           "'${description}'",
           "'${private_key_or_path}'",
         ],
-        unless  => "for i in \$(seq 1 ${::jenkins::cli_tries}); do \$HELPER_CMD credential_info ${title} && break || sleep ${::jenkins::cli_try_sleep}; done | grep ${title}", # lint:ignore:140chars
+        unless  => "for i in \$(seq 1 ${jenkins::cli_tries}); do \$HELPER_CMD credential_info ${title} && break || sleep ${jenkins::cli_try_sleep}; done | grep ${title}", # lint:ignore:140chars
       }
     }
     'absent': {

@@ -1,16 +1,13 @@
-#
-# jenkins::package handles the actual installation of the Jenkins native
-# package installation.
+# @summary Installation of the Jenkins native package.
 #
 # The package might not specify a dependency on Java, so you may need to
 # specify that yourself
+#
+# @api private
 class jenkins::package {
+  assert_private()
 
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
-
-  package { $::jenkins::package_name:
-    ensure => $::jenkins::version,
+  package { $jenkins::package_name:
+    ensure => $jenkins::version,
   }
 }

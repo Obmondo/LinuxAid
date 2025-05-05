@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'facter'
 
 require_relative '../jenkins'
@@ -11,20 +13,18 @@ class Puppet::X::Jenkins::Config
   class UnknownConfig < ArgumentError; end
 
   DEFAULTS = {
-    cli_jar: '/usr/lib/jenkins/jenkins-cli.jar',
+    cli_jar: '/usr/share/java/jenkins-cli.jar',
     url: 'http://localhost:8080',
     ssh_private_key: nil,
-    puppet_helper: '/usr/lib/jenkins/puppet_helper.groovy',
+    puppet_helper: '/usr/share/java/puppet_helper.groovy',
     cli_tries: 30,
-    cli_try_sleep: 2,
     cli_username: nil,
     cli_password: nil,
     cli_password_file: '/tmp/jenkins_credentials_for_puppet',
-    cli_password_file_exists: false,
-    cli_remoting_free: false
+    cli_password_file_exists: false
   }.freeze
-  CONFIG_CLASS = 'jenkins::cli::config'.freeze
-  FACT_PREFIX = 'jenkins_'.freeze
+  CONFIG_CLASS = 'jenkins::cli::config'
+  FACT_PREFIX = 'jenkins_'
 
   def initialize(catalog = nil)
     @catalog = catalog

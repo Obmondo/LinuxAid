@@ -29,49 +29,25 @@ See [NATIVE_TYPES_AND_PROVIDERS.md](NATIVE_TYPES_AND_PROVIDERS.md)
 
 # Jenkins 2.54 and 2.46.2 remoting free CLI and username / password CLI auth
 
-## Remoting Free CLI
-
 Jenkins refactored the CLI in 2.54 and 2.46.2 in response to several security
-incidents (See [JENKINS-41745](https://issues.jenkins-ci.org/browse/JENKINS-41745). This module has been adjusted to support the new CLI. However you
-need to tell the module if the new remoting free cli is in place. Please set
-```$::jenkins::cli_remoting_free``` to true for latest Jenkins servers.
+incidents (See [JENKINS-41745](https://issues.jenkins-ci.org/browse/JENKINS-41745).
+This module has been adjusted to support the new CLI.
 
-Note: This is not the default to support backward compatibility. This may become
-a default once this module is released in a new version.
+The CLI supports proper authentication with username and password. It's a
+requirement for supporting AD and OpenID authentications (there is no ssh key
+there). You can supply ```$jenkins::cli_username``` and
+```$jenkins::cli_password``` to use username / password based authentication.
+Then the puppet automation user can also reside in A.D
 
-Also note that the module tries to do heuristics for this setting if not specified.
-You can always set this parameter to enforce usage of old or new CLI interface.
-
-Heuristics:
-
-  * LTS:
-    * If manage_repo and repo == lts and version = latest -> true
-    * If manage_repo and repo == lts and version >= 2.46.2 -> true
-    * else false
-  * Non-LTS:
-    * If manage_repo and repo != lts and version = latest -> true
-    * If manage_repo and repo != lts and version >= 2.54 -> true
-    * else false
-
-## Username and Password Auth
-
-The new CLI also supports proper authentication with username and password. This
-has not been supported in this module for a long time, but is a requirement for
-supporting AD and OpenID authentications (there is no ssh key there). You can now
-also supply ```$::jenkins::cli_username``` and ```$::jenkins::cli_password``` to
-use username / password based authentication. Then the puppet automation user can
-also reside in A.D
-
-Note: latest jenkins (2.54++ and 2.46.2++) require a ssh username, so you must also
-provide ```$::jenkins::cli_username``` for ssh. If you specify both username/password
+Note: Jenkins requires a ssh username, so you must also provide
+```$jenkins::cli_username``` for ssh. If you specify both username/password
 and ssh key file, SSH authentication is preferred.
-
 
 # Using puppet-jenkins
 
 ## Getting Started
 ```bash
-puppet module install rtyler/jenkins
+puppet module install puppet/jenkins
 ```
 
 ```puppet
@@ -100,14 +76,6 @@ Build jobs can be managed using the `jenkins::job` define
 ```puppet
   jenkins::job { 'test-build-job':
     config => template("${templates}/test-build-job.xml.erb"),
-  }
-```
-
-#### Disabling a build job
-```puppet
-  jenkins::job { 'test-build-job':
-    enabled => 0,
-    config  => template("${templates}/test-build-job.xml.erb"),
   }
 ```
 
@@ -239,7 +207,7 @@ configuration are all driven through this script.
 When an API-based resource is defined, the Jenkins' CLI is installed and run
 against the local system (127.0.0.1). Jenkins is assumed to be listening on
 port 8080, but the module is smart enough to notice if you've configured an
-alternate port using jenkins::config_hash['HTTP_PORT'].
+alternate port using jenkins::config_hash['JENKINS_PORT'].
 
 Users and credentials are Puppet-managed, meaning that changes made to them
 from outside Puppet will be reset at the next puppet run. In this way, you can
@@ -369,7 +337,7 @@ You can also specify a UUID to use with the credentials, which will be used to
 identify the credentials from within the job config. This is necessary when setting
 credentials for use with the [git plugin](http://docs.openstack.org/infra/jenkins-job-builder/scm.html#scm.git), for example.
 
-You can either manually generate a UUID from a site like https://www.uuidgenerator.net,
+You can either manually generate a UUID from a site like [UUIDTools.com](https://www.uuidtools.com/generate/v4),
 or use the UUID from an existing user, which is accessible within the URL of the
 Jenkins console when managing an existing user's credentials.
 
@@ -399,7 +367,7 @@ If you use [librarian-puppet](https://github.com/rodjek/librarian-puppet), add
 the following to your `Puppetfile`:
 
 ```ruby
-mod "rtyler/jenkins"
+mod "puppet/jenkins"
 ```
 
 ### With the "puppet module" tool
@@ -410,7 +378,7 @@ allowing you to easily install the released version of the module
 
 To quickly try this module with the puppet module tool:
 
-    % sudo puppet module install rtyler/jenkins
+    % sudo puppet module install puppet/jenkins
     % sudo puppet apply -v -e 'include jenkins'
     info: Loading facts in facter_dot_d
     info: Loading facts in facter_dot_d

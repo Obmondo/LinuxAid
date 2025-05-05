@@ -1,11 +1,7 @@
-# Class: jenkins::users
-#
+# @summary Create Jenkins users
+# @api private
 class jenkins::users {
+  assert_private()
 
-  if $caller_module_name != $module_name {
-    fail("Use of private class ${name} by ${caller_module_name}")
-  }
-
-  create_resources('jenkins::user', $::jenkins::user_hash)
-
+  create_resources('jenkins::user', $jenkins::user_hash)
 }

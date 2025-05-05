@@ -134,17 +134,16 @@ class jenkins::slave (
   Enum['normal', 'exclusive'] $slave_mode = 'normal',
   Boolean $disable_ssl_verification       = false,
   Boolean $disable_clients_unique_id      = false,
-  Any $labels                             = undef,
-  Any $install_java                       = $jenkins::params::install_java,
+  Array[String[1]] $labels                = [],
+  Any $install_java                       = true,
   Boolean $manage_client_jar              = true,
   Enum['running', 'stopped'] $ensure      = 'running',
   Boolean $enable                         = true,
-  Any $java_args                          = undef,
-  Any $swarm_client_args                  = undef,
+  Array[String[1]] $java_args             = [],
+  Array[String[1]] $swarm_client_args     = [],
   Boolean $delete_existing_clients        = false,
   Any $java_cmd                           = '/usr/bin/java',
 ) inherits jenkins::params {
-
   if versioncmp($version, '3.0') < 0 {
     $client_jar = "swarm-client-${version}-jar-with-dependencies.jar"
   } else {
@@ -158,36 +157,6 @@ class jenkins::slave (
   $quoted_ui_user = shellquote($ui_user)
   $quoted_ui_pass = shellquote($ui_pass)
 
-  if $labels {
-    if $labels =~ Array {
-      $_combined_labels = hiera_array('jenkins::slave::labels', $labels)
-      $_real_labels = join($_combined_labels, ' ')
-    }
-    else {
-      $_real_labels = $labels
-    }
-  }
-
-  if $java_args {
-    if $java_args =~ Array {
-      $_combined_java_args = hiera_array('jenkins::slave::java_args', $java_args)
-      $_real_java_args = join($_combined_java_args, ' ')
-    }
-    else {
-      $_real_java_args = $java_args
-    }
-  }
-
-  if $swarm_client_args {
-    if $swarm_client_args =~ Array {
-      $_combined_swarm_client_args = hiera_array('jenkins::slave::swarm_client_args', $swarm_client_args)
-      $_real_swarm_client_args = join($_combined_swarm_client_args, ' ')
-    }
-    else {
-      $_real_swarm_client_args = $swarm_client_args
-    }
-  }
-
   # the "public" API for tool_locations is a space seperated string in the
   # format "<name>:<path> [<name>:<path> ...]"
   # XXX a hash would be a more reasonable interface
@@ -196,58 +165,46 @@ class jenkins::slave (
     default => regsubst($tool_locations, ':', '=', 'G'),
   }
 
-  if $install_java and ($::osfamily != 'Darwin') {
+  if $install_java and ($facts['os']['family'] != 'Darwin') {
     # Currently the puppetlabs/java module doesn't support installing Java on
     # Darwin
     include java
     Class['java'] -> Service['jenkins-slave']
   }
 
-  # customizations based on the OS family
-  case $::osfamily {
-    'Debian': {
-      $defaults_location = $::jenkins::params::sysconfdir
-
-      ensure_packages(['daemon'])
-      Package['daemon'] -> Service['jenkins-slave']
-    }
-    'Darwin': {
-      $defaults_location = $slave_home
-    }
-    default: {
-      $defaults_location = $::jenkins::params::sysconfdir
-    }
-  }
-
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       $service_name     = 'jenkins-slave'
       $defaults_user    = 'root'
       $defaults_group   = 'root'
       $manage_user_home = true
-      $sysv_init        = '/etc/init.d/jenkins-slave'
 
-      if $::systemd {
-        jenkins::systemd { 'jenkins-slave':
-          user   => $slave_user,
-          libdir => $slave_home,
-        }
-      } else {
-        file { "${slave_home}/${service_name}-run":
-          content => template("${module_name}/${service_name}-run.erb"),
-          owner   => $slave_user,
-          mode    => '0755',
-          notify  => Service[$service_name],
-        }
+      $defaults_location = $facts['os']['family'] ? {
+        'Archlinux' => '/etc/conf.d',
+        'Debian'    => '/etc/default',
+        default     => '/etc/sysconfig',
+      }
 
-        file { $sysv_init:
-          ensure  => 'file',
-          mode    => '0755',
-          owner   => 'root',
-          group   => 'root',
-          content => template("${module_name}/${service_name}.${::osfamily}.erb"),
-          notify  => Service[$service_name],
-        }
+      file { "${defaults_location}/jenkins-slave":
+        ensure  => 'file',
+        mode    => '0600',
+        owner   => $defaults_user,
+        group   => $defaults_group,
+        content => template("${module_name}/jenkins-slave-defaults.erb"),
+        notify  => Service['jenkins-slave'],
+      }
+
+      file { "${slave_home}/${service_name}-run":
+        content => template("${module_name}/${service_name}-run.erb"),
+        owner   => $slave_user,
+        mode    => '0755',
+        seltype => 'bin_t',
+        notify  => Service[$service_name],
+      }
+
+      systemd::unit_file { "${service_name}.service":
+        content => template("${module_name}/${service_name}.service.erb"),
+        notify  => Service[$service_name],
       }
     }
     'Darwin': {
@@ -256,17 +213,9 @@ class jenkins::slave (
       $defaults_group   = 'wheel'
       $manage_user_home = false
 
-      file { "${slave_home}/start-slave.sh":
-        ensure  => 'file',
-        content => template("${module_name}/start-slave.sh.erb"),
-        mode    => '0755',
-        owner   => 'root',
-        group   => 'wheel',
-      }
-
       file { '/Library/LaunchDaemons/org.jenkins-ci.slave.jnlp.plist':
         ensure  => 'file',
-        content => template("${module_name}/org.jenkins-ci.slave.jnlp.plist.erb"),
+        content => template("${module_name}/org.jenkins-ci.slave.jnlp.plist.epp"),
         mode    => '0644',
         owner   => 'root',
         group   => 'wheel',
@@ -289,7 +238,7 @@ class jenkins::slave (
         }
       }
     }
-    default: { }
+    default: {}
   }
 
   #a Add jenkins slave user if necessary.
@@ -304,15 +253,6 @@ class jenkins::slave (
       uid        => $slave_uid,
       groups     => $slave_groups,
     }
-  }
-
-  file { "${defaults_location}/jenkins-slave":
-    ensure  => 'file',
-    mode    => '0600',
-    owner   => $defaults_user,
-    group   => $defaults_group,
-    content => template("${module_name}/jenkins-slave-defaults.erb"),
-    notify  => Service['jenkins-slave'],
   }
 
   if ($manage_client_jar) {
@@ -336,6 +276,6 @@ class jenkins::slave (
 
   if $manage_slave_user and $manage_client_jar {
     User['jenkins-slave_user']
-      -> Archive['get_swarm_client']
+    -> Archive['get_swarm_client']
   }
 }
