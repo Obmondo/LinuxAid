@@ -31,6 +31,9 @@
 # @param splunkbase_source
 #   When set the add-on will be installed from a splunkbase compatible archive instead of OS packages
 #
+# @param extract_command
+#   A 'extract_command' to pass to the 'archive' that extracts a splunkbase_source package (helpful for SPL files)
+#
 # @param package_name
 #  The OS package to install if you are not installing via splunk compatible archive
 #
@@ -44,11 +47,11 @@ define splunk::addon (
   Optional[Stdlib::Absolutepath] $splunk_home = undef,
   Boolean $package_manage                     = true,
   Optional[String[1]] $splunkbase_source      = undef,
+  Optional[String[1]] $extract_command        = undef,
   Optional[String[1]] $package_name           = undef,
   String[1] $owner                            = 'splunk',
   Hash $inputs                                = {},
 ) {
-
   if defined(Class['splunk::forwarder']) {
     $mode = 'forwarder'
   } elsif defined(Class['splunk::enterprise']) {
@@ -56,7 +59,6 @@ define splunk::addon (
   } else {
     fail('Instances of Splunk::Addon require the declaration of one of either Class[splunk::enterprise] or Class[splunk::forwarder]')
   }
-
 
   if $splunk_home {
     $_splunk_home = $splunk_home
@@ -72,15 +74,16 @@ define splunk::addon (
     if $splunkbase_source {
       $archive_name = $splunkbase_source.split('/')[-1]
       archive { $name:
-        path         => "${splunk::params::staging_dir}/${archive_name}",
-        user         => $owner,
-        group        => $owner,
-        source       => $splunkbase_source,
-        extract      => true,
-        extract_path => "${_splunk_home}/etc/apps",
-        creates      => "${_splunk_home}/etc/apps/${name}",
-        cleanup      => true,
-        before       => File["${_splunk_home}/etc/apps/${name}/local"],
+        path            => "${splunk::params::staging_dir}/${archive_name}",
+        user            => $owner,
+        group           => $owner,
+        source          => $splunkbase_source,
+        extract         => true,
+        extract_path    => "${_splunk_home}/etc/apps",
+        extract_command => $extract_command,
+        creates         => "${_splunk_home}/etc/apps/${name}",
+        cleanup         => true,
+        before          => File["${_splunk_home}/etc/apps/${name}/local"],
       }
     } else {
       package { $package_name:
@@ -122,4 +125,3 @@ define splunk::addon (
     }
   }
 }
-

@@ -89,9 +89,20 @@
 # @param enterprise_installdir
 #   Optional directory in which to install and manage Splunk Enterprise
 #
+# @param default_host
+#   The host property in inputs.conf. Defaults to the server's hostname.
+#
+# @param manage_net_tools
+#   From Splunk 7.2.2+ the package `net-tools` is required to be installed on the system.
+#   By default this module manages the resource Package[net-tools], if this resource is
+#   already declared on your code base, you can disable this flag.
+#
+# @param allow_insecure
+#   Disable certificate verification when connecting to SSL hosts to download packages.
+#
 class splunk::params (
-  String[1] $version                         = '7.2.4.2',
-  String[1] $build                           = 'fb30470262e3',
+  String[1] $version                         = '9.2.0.1',
+  String[1] $build                           = 'd8ae995bf219',
   String[1] $src_root                        = 'https://download.splunk.com',
   Stdlib::Port $splunkd_port                 = 8089,
   Stdlib::Port $logging_port                 = 9997,
@@ -101,10 +112,12 @@ class splunk::params (
   Boolean $boot_start                        = true,
   String[1] $splunk_user                     = $facts['os']['family'] ? {
     'windows' => 'Administrator',
-    default => 'root'
+    default => versioncmp($version, '8.0.0') ? { -1 => 'root', default => 'splunk' },
   },
+  String[1] $default_host                    = $facts['clientcert'],
+  Boolean $manage_net_tools                  = true,
+  Boolean $allow_insecure                    = false,
 ) {
-
   # Based on the small number of inputs above, we can construct sane defaults
   # for pretty much everything else.
 
@@ -116,6 +129,7 @@ class splunk::params (
   $seed_password         = false
   $reset_seeded_password = false
   $secret                = 'hhy9DOGqli4.aZWCuGvz8stcqT2/OSJUZuyWHKc4wnJtQ6IZu2bfjeElgYmGHN9RWIT3zs5hRJcX1wGerpMNObWhFue78jZMALs3c3Mzc6CzM98/yGYdfcvWMo1HRdKn82LVeBJI5dNznlZWfzg6xdywWbeUVQZcOZtODi10hdxSJ4I3wmCv0nmkSWMVOEKHxti6QLgjfuj/MOoh8.2pM0/CqF5u6ORAzqFZ8Qf3c27uVEahy7ShxSv2K4K41z'
+  $seed_user             = 'admin'
   $password_hash         = '$6$pIE/xAyP9mvBaewv$4GYFxC0SqonT6/x8qGcZXVCRLUVKODj9drDjdu/JJQ/Iw0Gg.aTkFzCjNAbaK4zcCHbphFz1g1HK18Z2bI92M0'
   $password_content      = ":admin:${password_hash}::Administrator:admin:changeme@example.com::"
 
@@ -127,6 +141,13 @@ class splunk::params (
     $staging_dir        = '/opt/staging/splunk'
     $enterprise_homedir = pick($enterprise_installdir, '/opt/splunk')
     $forwarder_homedir  = pick($forwarder_installdir, '/opt/splunkforwarder')
+  }
+
+  $additional_windows_forwarder_install_options = if $facts['os']['family'] == 'windows' and versioncmp($version, '9.1.3') == 0 {
+    # See https://docs.splunk.com/Documentation/Forwarder/9.1.3/Forwarder/KnownIssues
+    ['USE_LOCAL_SYSTEM=1']
+  } else {
+    []
   }
 
   # Settings common to a kernel
@@ -149,8 +170,8 @@ class splunk::params (
       if $facts['service_provider'] == 'systemd' and versioncmp($version, '7.2.2') >= 0 {
         $enterprise_service      = 'Splunkd'
         $forwarder_service       = 'SplunkForwarder'
-        $enterprise_service_file = '/etc/systemd/system/multi-user.target.wants/Splunkd.service'
-        $forwarder_service_file  = '/etc/systemd/system/multi-user.target.wants/SplunkForwarder.service'
+        $enterprise_service_file = '/etc/systemd/system/Splunkd.service'
+        $forwarder_service_file  = '/etc/systemd/system/SplunkForwarder.service'
         $boot_start_args         = '-systemd-managed 1'
         $supports_systemd        = true
       }
@@ -195,6 +216,27 @@ class splunk::params (
         $supports_systemd        = false
       }
     }
+    'FreeBSD': {
+      $path_delimiter                  = '/'
+      $forwarder_src_subdir            = 'freebsd'
+      $forwarder_seed_config_file      = "${forwarder_homedir}/etc/system/local/user-seed.conf"
+      $enterprise_seed_config_file     = "${enterprise_homedir}/etc/system/local/user-seed.conf"
+      $forwarder_password_config_file  = "${forwarder_homedir}/etc/passwd"
+      $enterprise_password_config_file = "${enterprise_homedir}/etc/passwd"
+      $forwarder_secret_file           = "${forwarder_homedir}/etc/splunk.secret"
+      $enterprise_secret_file          = "${enterprise_homedir}/etc/splunk.secret"
+      $forwarder_confdir               = "${forwarder_homedir}/etc"
+      $enterprise_src_subdir           = 'freebsd'
+      $enterprise_confdir              = "${enterprise_homedir}/etc"
+      $forwarder_install_options       = ['-f'] # ignore the wrong os major version specified in the package
+      $enterprise_install_options      = []
+      $enterprise_service              = 'splunk'
+      $forwarder_service               = 'splunk'
+      $enterprise_service_file         = '/etc/rc.d/splunk'
+      $forwarder_service_file          = '/etc/rc.d/splunk'
+      $boot_start_args                 = ''
+      $supports_systemd                = false
+    }
     'windows': {
       $path_delimiter                  = '\\'
       $forwarder_src_subdir            = 'windows'
@@ -222,7 +264,7 @@ class splunk::params (
         'WINEVENTLOG_FWD_ENABLE=1',
         'WINEVENTLOG_SET_ENABLE=1',
         'ENABLEADMON=1',
-      ]
+      ] + $additional_windows_forwarder_install_options
       $enterprise_install_options     = [
         { 'INSTALLDIR' => $enterprise_homedir },
         { 'SPLUNKD_PORT' => String($splunkd_port) },
@@ -252,17 +294,26 @@ class splunk::params (
     'default_host' => {
       section      => 'default',
       setting      => 'host',
-      value        => $facts['clientcert'],
+      value        => $default_host,
       tag          => 'splunk_forwarder',
     },
   }
   # Settings common to an OS family
   case $facts['os']['family'] {
-    'RedHat':  { $package_provider = 'rpm'  }
+    'RedHat':  { $package_provider = 'rpm' }
     'Debian':  { $package_provider = 'dpkg' }
-    'Solaris': { $package_provider = 'sun'  }
+    'Solaris': { $package_provider = 'sun' }
+    'Suse':    { $package_provider = 'rpm' }
+    'FreeBSD': { $package_provider = 'pkgng' }
     'windows': { $package_provider = 'windows' }
-    default:   { $package_provider = undef  } # Don't define a $package_provider
+    default:   { $package_provider = undef } # Don't define a $package_provider
+  }
+
+  # Download URLs changed starting from 8.2.11 and 9.0.5 for RPMs.
+  # Splunk no longer includes "-linux-2.6-".
+  $linux_prefix = (versioncmp($version, '9.0.5') >= 0 or (versioncmp($version, '8.2.11') >= 0 and versioncmp($version, '9.0.0') == -1)) ? {
+    true  => '.',
+    false => '-linux-2.6-',
   }
 
   # Settings specific to an architecture as well as an OS family
@@ -273,7 +324,12 @@ class splunk::params (
       $enterprise_package_name = 'splunk'
     }
     'RedHat x86_64': {
-      $package_suffix          = "${version}-${build}-linux-2.6-x86_64.rpm"
+      $package_suffix          = "${version}-${build}${linux_prefix}x86_64.rpm"
+      $forwarder_package_name  = 'splunkforwarder'
+      $enterprise_package_name = 'splunk'
+    }
+    'RedHat ppc64le': {
+      $package_suffix          = "${version}-${build}${linux_prefix}ppc64le.rpm"
       $forwarder_package_name  = 'splunkforwarder'
       $enterprise_package_name = 'splunk'
     }
@@ -307,6 +363,16 @@ class splunk::params (
       $forwarder_package_name  = 'splunkforwarder'
       $enterprise_package_name = 'splunk'
     }
+    'Suse x86_64': {
+      $package_suffix          = "${version}-${build}${linux_prefix}x86_64.rpm"
+      $forwarder_package_name  = 'splunkforwarder'
+      $enterprise_package_name = 'splunk'
+    }
+    'FreeBSD amd64': {
+      $package_suffix          = "${version}-${build}-freebsd-11.1-amd64.txz"
+      $forwarder_package_name  = 'splunkforwarder'
+      $enterprise_package_name = 'splunk'
+    }
     default: { fail("unsupported osfamily/arch ${facts['os']['family']}/${facts['os']['architecture']}") }
   }
 
@@ -317,7 +383,6 @@ class splunk::params (
   $enterprise_package_src    = "${src_root}/products/splunk/releases/${version}/${enterprise_src_subdir}/${enterprise_src_package}"
   $forwarder_package_ensure = 'installed'
   $forwarder_package_src = "${src_root}/products/universalforwarder/releases/${version}/${forwarder_src_subdir}/${forwarder_src_package}"
-
 
   # A meta resource so providers know where splunk is installed:
   splunk_config { 'splunk':

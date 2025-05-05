@@ -91,7 +91,7 @@
 # @param splunkd_port
 #   The management port for Splunk.
 #
-# @param web_port
+# @param web_httpport
 #   The port on which to service the Splunk Web interface.
 #
 # @param purge_inputs
@@ -144,7 +144,7 @@
 # @param seed_password
 #   If set to true, Manage the contents of splunk.secret and user-seed.conf.
 #
-# @param reset_seed_password
+# @param reset_seeded_password
 #   If set to true, deletes `password_config_file` to trigger Splunk's password
 #   import process on restart of the Splunk services.
 #
@@ -155,6 +155,9 @@
 # @param seed_config_file
 #   Which file to place the admin password hash in so its imported by Splunk on
 #   restart.
+#
+# @param seed_user
+#   The local user (usually 'admin') imported by Splunk.
 #
 # @param password_content
 #   The hashed password username/details for the user.
@@ -214,10 +217,10 @@ class splunk::enterprise (
   Stdlib::Absolutepath $seed_config_file     = $splunk::params::enterprise_seed_config_file,
   String[1] $password_content                = $splunk::params::password_content,
   String[1] $password_hash                   = $splunk::params::password_hash,
+  String[1] $seed_user                       = $splunk::params::seed_user,
   Stdlib::Absolutepath $secret_file          = $splunk::params::enterprise_secret_file,
   String[1] $secret                          = $splunk::params::secret,
 ) inherits splunk {
-
   if (defined(Class['splunk::forwarder'])) {
     fail('Splunk Universal Forwarder provides a subset of Splunk Enterprise capabilities, and has potentially conflicting resources when included with Splunk Enterprise on the same node.  Do not include splunk::forwarder on the same node as splunk::enterprise.  Configure Splunk Enterprise to meet your forwarding needs.'
     )
@@ -275,5 +278,4 @@ class splunk::enterprise (
     purge_uiprefs          => $purge_uiprefs,
     purge_web              => $purge_web
   }
-
 }

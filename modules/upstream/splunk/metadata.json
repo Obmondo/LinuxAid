@@ -1,6 +1,6 @@
 {
   "name": "puppet-splunk",
-  "version": "8.0.0",
+  "version": "10.0.0",
   "author": "Vox Pupuli",
   "summary": "Manage and deploy Splunk servers and forwarders",
   "license": "Apache-2.0",
@@ -9,29 +9,52 @@
   "issues_url": "https://github.com/voxpupuli/puppet-splunk/issues",
   "operatingsystem_support": [
     {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8"
+        "10"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04"
+        "20.04",
+        "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "OpenSUSE",
+      "operatingsystemrelease": [
+        "15"
       ]
     },
     {
@@ -39,6 +62,12 @@
       "operatingsystemrelease": [
         "10",
         "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
         "12"
       ]
     },
@@ -59,25 +88,25 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5.8 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
     },
     {
       "name": "puppetlabs-inifile",
-      "version_requirement": ">= 1.4.1 < 5.0.0"
+      "version_requirement": ">= 1.4.1 < 7.0.0"
     },
     {
       "name": "puppetlabs-concat",
-      "version_requirement": ">= 4.2.1 < 7.0.0"
+      "version_requirement": ">= 4.2.1 < 10.0.0"
     },
     {
       "name": "puppet-archive",
-      "version_requirement": ">= 2.0.0 < 5.0.0"
+      "version_requirement": ">= 2.0.0 < 8.0.0"
     }
   ]
 }

@@ -4,7 +4,6 @@
 #   for successfully installing the Splunk Universal Forwarder
 #
 class splunk::forwarder::install {
-
   $_package_source = $splunk::forwarder::manage_package_source ? {
     true  => $splunk::forwarder::forwarder_package_src,
     false => $splunk::forwarder::package_source
@@ -16,15 +15,16 @@ class splunk::forwarder::install {
     $_staged_package       = join($_package_path_parts, $splunk::forwarder::path_delimiter)
 
     archive { $_staged_package:
-      source  => $_package_source,
-      extract => false,
-      before  => Package[$splunk::forwarder::forwarder_package_name],
+      source         => $_package_source,
+      extract        => false,
+      allow_insecure => $splunk::forwarder::allow_insecure,
+      before         => Package[$splunk::forwarder::forwarder_package_name],
     }
   } else {
     $_staged_package = undef
   }
 
-  Package  {
+  Package {
     source         => $splunk::forwarder::package_provider ? {
       'chocolatey' => undef,
       default      => $splunk::forwarder::manage_package_source ? {
@@ -61,12 +61,17 @@ class splunk::forwarder::install {
     }
   }
 
-  # Required for splunk 7.2.4.2
-  if ($facts['kernel'] == 'Linux' or $facts['kernel'] == 'SunOS') and (versioncmp($splunk::forwarder::version, '7.2.4.2') >= 0) {
-    ensure_packages(['net-tools'], {
-      'ensure' => 'present',
-      before   => Package[$splunk::forwarder::package_name]
+  # Required for splunk from 7.2.4.2 until 8.0.0
+  if (
+    $splunk::params::manage_net_tools and
+    $facts['kernel'] == 'Linux' and
+    versioncmp($splunk::forwarder::version, '7.2.4.2') >= 0 and
+    versioncmp($splunk::forwarder::version, '8.0.0') == -1
+  ) {
+    stdlib::ensure_packages(['net-tools'], {
+        'ensure' => 'present',
     })
+    Package['net-tools'] -> Package[$splunk::forwarder::package_name]
   }
 
   package { $splunk::forwarder::package_name:
@@ -74,5 +79,4 @@ class splunk::forwarder::install {
     provider        => $splunk::forwarder::package_provider,
     install_options => $splunk::forwarder::install_options,
   }
-
 }
