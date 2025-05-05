@@ -1,9 +1,0 @@
-fixtures:
-  repositories:
-    gcc:  git://github.com/puppetlabs/puppetlabs-gcc.git
-    stdlib:  git://github.com/puppetlabs/puppetlabs-stdlib.git
-    java:  git://github.com/puppetlabs/puppetlabs-java.git
-    wget: git://github.com/maestrodev/puppet-wget.git
-    epel: git://github.com/stahnma/puppet-module-epel.git
-  symlinks:
-    riemann: "#{source_dir}"

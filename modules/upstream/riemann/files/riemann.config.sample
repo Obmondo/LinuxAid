@@ -1,6 +1,0 @@
-(logging/init {:console true})
-(tcp-server {})
-(instrumentation {:enabled? false})
-
-(streams
- prn)
