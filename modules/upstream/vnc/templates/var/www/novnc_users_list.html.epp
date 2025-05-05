@@ -1,4 +1,5 @@
 <%- |
+  String $host = 'this host',
   Hash $vnc_sessions = {},
   Stdlib::Absolutepath $novnc_location = '/novnc',
 | -%>
@@ -9,7 +10,7 @@
 <meta charset="UTF-8" />
 </head>
 <body>
-<h1>List of NOVNC Sessions known to this host</h1>
+<h1>List of NOVNC Sessions known to <%= $host %></h1>
 <ul>
 <% $vnc_sessions.keys.sort.each | $session | { -%>
 <li><a href="<%= $novnc_location %>/vnc.html?resize=remote&path=<%= $novnc_location %>/websockify?token=<%= $vnc_sessions[$session]['token'] %>"><%= $session %></a></li>

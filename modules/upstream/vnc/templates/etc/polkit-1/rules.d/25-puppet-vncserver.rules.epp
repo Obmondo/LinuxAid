@@ -1,9 +1,10 @@
 <%- |
   String $systemd_template_startswith = 'vncserver',
   String $systemd_template_endswith = 'service',
-  String $username = 'root',
+  Array[String] $usernames = ['root'],
   Variant[String, Integer] $displaynumber,
 | -%>
+<% $usernames.each |$username| { -%>
 polkit.addRule(function(action, subject) {
     if (action.id == "org.freedesktop.systemd1.manage-units") {
         if (action.lookup("unit") == "<%= $systemd_template_startswith %>@:<%= $displaynumber %>.<%= $systemd_template_endswith %>") {
@@ -16,3 +17,4 @@ polkit.addRule(function(action, subject) {
         }
     }
 });
+<% } %>

@@ -13,12 +13,11 @@ class vnc::server::export::novnc (
   Hash $vnc_servers = $vnc::server::vnc_servers,
   # lint:endignore
 ) inherits vnc::server {
-
   $connections = $vnc_servers.reduce({}) |$memo, $user_info| {
-    $memo + {$user_info[0] => "${vnc_server_hostname}:${user_info[1]['displaynumber']}"}
+    $memo + { $user_info[0] => "${vnc_server_hostname}:${user_info[1]['displaynumber']}" }
   }
 
-  class { 'vnc::client::novnc':
+  class { 'novnc':
     vnc_servers => $connections,
   }
 }
