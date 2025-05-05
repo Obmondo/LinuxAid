@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # RVM gemset support
 Puppet::Type.type(:rvm_wrapper).provide(:wrapper) do
-  desc "RVM wrapper support."
+  desc 'RVM wrapper support.'
 
   has_command(:rvmcmd, '/usr/local/rvm/bin/rvm') do
-    environment :HOME => ENV['HOME']
+    environment HOME: ENV.fetch('HOME', nil)
   end
 
   def target_ruby
@@ -24,7 +26,7 @@ Puppet::Type.type(:rvm_wrapper).provide(:wrapper) do
   end
 
   def create
-    execute([command(:rvmcmd), "wrapper", target_ruby, prefix || "--no-prefix", wrapper_name])
+    execute([command(:rvmcmd), 'wrapper', target_ruby, prefix || '--no-prefix', wrapper_name])
   end
 
   def destroy
@@ -32,6 +34,6 @@ Puppet::Type.type(:rvm_wrapper).provide(:wrapper) do
   end
 
   def exists?
-    File.exists? wrapper_filename
+    File.exist? wrapper_filename
   end
 end
