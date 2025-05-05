@@ -21,7 +21,6 @@ class profile::elk (
   Stdlib::Port $redis_port                                        = 6379,
   Optional[Integer] $logstash_redis_to_es_workers                 = undef,
   Boolean $install_search_guard                                   = false,
-  Boolean $install_riemann                                        = true,
   Boolean $curator                                                = false,
   Integer $curator_delete_days                                    = 7,
 ) {
@@ -150,7 +149,6 @@ class profile::elk (
   file { '/var/www/status':
     ensure   => directory,
     mode     => 'ug+w,a=rx',
-    group    => 'riemann',
     selrange => 's0',
     selrole  => 'object_r',
     seltype  => 'httpd_sys_content_t',
@@ -202,44 +200,4 @@ class profile::elk (
     }
   }
 
-  # Setup Riemann
-  if $install_riemann {
-    # Setup logstash plugin
-    logstash::plugin { 'logstash-output-riemann':
-      ensure  => ensure_present($install_riemann),
-    }
-
-    class { '::profile::monitoring::riemann':
-      riemann_dash => true,
-      tools        => true,
-    }
-
-    nginx::resource::location {
-      default:
-        server   => $_http_server_name,
-        ssl      => $_ssl,
-        ssl_only => $_ssl_only,
-        ;
-
-      'es-riemann-dash':
-        location            => '~ ^/riemann-dash/.*$',
-        proxy               => 'http://localhost:4567',
-        location_cfg_append => {
-          rewrite => ' ^/riemann-dash/(.*) /$1 break',
-        },
-        ;
-
-      'es-riemann':
-        location            => '~ ^/riemann/.*$',
-        proxy               => 'http://localhost:5556',
-        location_cfg_append => {
-          rewrite            => ' ^/riemann/(.*) /$1 break',
-          proxy_http_version => '1.1',
-          proxy_set_header   => [
-            'Upgrade $http_upgrade',
-            'Connection "upgrade"',
-          ],
-        },
-    }
-  }
 }
