@@ -25,19 +25,22 @@ class resolv_conf (
   Optional[Array]               $options    = undef,
   String                        $mode       = '0644',
 ) {
-
   if $domainname == undef and $searchpath == [] {
-    $domainname_real = $::domain
+    $domainname_real = $facts['networking']['domain']
   } elsif $domainname != undef and $searchpath == [] {
     $domainname_real = $domainname
   } elsif $domainname != undef and $searchpath != [] {
-    if $::osfamily != 'Solaris' {
+    if $facts['os']['family'] != 'Solaris' {
       fail('domainname and searchpath are mutually exclusive parameters')
     }
   }
 
   if $manage_package {
-    ensure_packages([$package], {'ensure' => $package_ensure})
+    stdlib::ensure_packages([
+        $package,
+      ], {
+        'ensure' => $package_ensure,
+    })
   }
 
   if $use_resolvconf {

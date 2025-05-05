@@ -5,7 +5,7 @@ domain <%= @domainname_real %>
 <%- end -%>
 <% if !@searchpath.empty? -%>
 <% if @searchpath.kind_of? Array -%>
-search <%= @searchpath.join(" ") %>
+search <%= @searchpath.uniq().join(" ") %>
 <% else -%>
 search <%= @searchpath %>
 <% end -%>
