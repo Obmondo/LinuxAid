@@ -1,0 +1,5 @@
+---
+.travis.yml:
+  secure: "UGESupMDWK72+F8wmPUdu+d5/q//AslAedZcCi0tS7OSEcn8tRkiCoPgbbKdmH7sJmjHyz/BybIJFnyTbdOIrGeopLo0nzKxkS1JXIQ/j914vFZg6aE5oRJaUl4d0AV6YFilMEiYLFJnhyBh5QenWh4Q1Q9tgafsEU3ph2fvqC8="
+spec/spec_helper.rb:
+  mock_with: ':mocha'
