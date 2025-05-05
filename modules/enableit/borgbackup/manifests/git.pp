@@ -47,7 +47,7 @@ class borgbackup::git (
   Package<| tag =='borgbackup_git_package'  |> -> Exec["create gpg private key for ${facts['networking']['fqdn']}"]
   Package<| tag =='borgbackup_git_package'  |> -> Exec['setup git repo']
 
-  ensure_packages($packages, {'ensure' => 'present', tag => 'borgbackup_git_package' })
+  stdlib::ensure_packages($packages, {'ensure' => 'present', tag => 'borgbackup_git_package' })
 
   ##################
   #

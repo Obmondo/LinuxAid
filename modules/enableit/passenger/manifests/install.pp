@@ -14,7 +14,7 @@ class passenger::install (
     }
   }
 
-  ensure_packages($passenger_name,
+  stdlib::ensure_packages($passenger_name,
     {
       'ensure'   => $passenger_version,
       'provider' => $passenger_provider,

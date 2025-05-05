@@ -13,7 +13,7 @@ class thinlinc::install (
 )
 inherits ::thinlinc {
 
-  ensure_packages($thinlinc_dependencies, {
+  stdlib::ensure_packages($thinlinc_dependencies, {
     ensure => present,
     before => Package[$packages],
   })
@@ -27,7 +27,7 @@ inherits ::thinlinc {
     }
   }
 
-  ensure_packages($packages, {
+  stdlib::ensure_packages($packages, {
     ensure  => $::thinlinc::version,
   })
 

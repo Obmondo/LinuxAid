@@ -8,7 +8,7 @@ class passenger::repo {
       # sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
       # Key id genereted from this command `gpg --status-fd 1 --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7`
 
-      ensure_packages(['apt-transport-https', 'ca-certificates'])
+      stdlib::ensure_packages(['apt-transport-https', 'ca-certificates'])
 
       if ( ! defined(Class['apt']) ) {
         class { 'apt': }
@@ -30,7 +30,7 @@ class passenger::repo {
       # sudo yum install -y epel-release pygpgme curl
       # sudo curl --fail -sSLo /etc/yum.repos.d/passenger.repo https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
 
-      ensure_packages(['epel-release', 'pygpgme', 'curl'])
+      stdlib::ensure_packages(['epel-release', 'pygpgme', 'curl'])
 
       yumrepo { 'passenger' :
         name          => 'passenger',

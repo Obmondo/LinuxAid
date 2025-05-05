@@ -15,6 +15,6 @@ class profile::storage::block (
 ) {
 
   confine(!($facts['init_system'] in ['systemd']), 'Only systemd is supported')
-  ensure_packages(['curl'])
+  stdlib::ensure_packages(['curl'])
   create_resources('common::luks', $devices)
 }

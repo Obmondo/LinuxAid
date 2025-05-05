@@ -43,7 +43,7 @@ class passenger::gems (
       $package_dependencies = concat($package_dependencies01, $package_dependencies02)
 
       # Install dependencies packages
-      ensure_packages($package_dependencies)
+      stdlib::ensure_packages($package_dependencies)
     }
     'RedHat': {
       case $facts['os']['release']['major'] {
@@ -77,7 +77,7 @@ class passenger::gems (
       $mod_passenger          = $real_mod_passenger_location
 
       # Install development packages
-      ensure_packages($package_dependencies)
+      stdlib::ensure_packages($package_dependencies)
     }
     default: {
       fail("Operating system ${facts['os']['family']} is not supported with the Passenger module")

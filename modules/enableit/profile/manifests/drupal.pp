@@ -16,7 +16,7 @@ class profile::drupal (
 
   $installroot = '/usr/share/drupal'
 
-  ensure_packages('tar')
+  stdlib::ensure_packages('tar')
 
   if $http_server == 'apache' {
     # Pass phpfpm config, only when phpfpm is running
