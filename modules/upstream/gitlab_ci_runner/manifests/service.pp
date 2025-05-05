@@ -7,6 +7,11 @@ class gitlab_ci_runner::service (
 ) {
   assert_private()
 
+  if $facts['os']['family'] == 'Suse' {
+    exec { "${gitlab_ci_runner::binary_path} install -u ${gitlab_ci_runner::user}":
+      creates => '/etc/systemd/system/gitlab-runner.service',
+    }
+  }
   service { $package_name:
     ensure => running,
     enable => true,

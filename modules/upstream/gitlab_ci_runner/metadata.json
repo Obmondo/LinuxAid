@@ -1,6 +1,6 @@
 {
   "name": "puppet-gitlab_ci_runner",
-  "version": "2.1.0",
+  "version": "6.1.0",
   "author": "Vox Pupuli",
   "summary": "Installation and configuration of Gitlab CI Runner",
   "license": "Apache-2.0",
@@ -13,69 +13,80 @@
   ],
   "dependencies": [
     {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 6.3.0 < 10.0.0"
+    },
+    {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.0 < 7.0.0"
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 6.3.0 < 8.0.0"
+      "version_requirement": ">= 6.3.0 < 11.0.0"
     }
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "1",
-        "2"
-      ]
-    },
-    {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "8",
         "9"
       ]
     },
     {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+        "12"
+      ]
+    },
+    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04",
-        "18.04"
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12",
+        "15"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5.8 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }

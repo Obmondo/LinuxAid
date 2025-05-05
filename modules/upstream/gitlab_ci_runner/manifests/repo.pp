@@ -3,9 +3,12 @@
 # @api private
 #
 class gitlab_ci_runner::repo (
-  $repo_base_url  = $gitlab_ci_runner::repo_base_url,
-  $repo_keyserver = $gitlab_ci_runner::repo_keyserver,
-  $package_name   = $gitlab_ci_runner::package_name,
+  $repo_base_url     = $gitlab_ci_runner::repo_base_url,
+  $repo_keyserver    = $gitlab_ci_runner::repo_keyserver,
+  $repo_keysource    = $gitlab_ci_runner::repo_keysource,
+  $package_keysource = $gitlab_ci_runner::package_keysource,
+  $package_gpgcheck  = $gitlab_ci_runner::package_gpgcheck,
+  $package_name      = $gitlab_ci_runner::package_name,
 ) {
   assert_private()
   case $facts['os']['family'] {
@@ -15,7 +18,8 @@ class gitlab_ci_runner::repo (
         location => "${repo_base_url}/runner/${package_name}/${facts['os']['distro']['id'].downcase}/",
         repos    => 'main',
         key      => {
-          'id'     => 'F6403F6544A38863DAA0B6E03F01618A51312F3F',
+          'name'   => 'gitlab_ci_runner.asc',
+          'source' => $repo_keysource,
           'server' => $repo_keyserver,
         },
         include  => {
@@ -40,13 +44,14 @@ class gitlab_ci_runner::repo (
         $source_base_url = "${repo_base_url}/runner/${package_name}/el/\$releasever/SRPMS"
       }
 
+      $_gpgkeys = [$repo_keysource,$package_keysource].delete_undef_values.join(' ')
       yumrepo { "runner_${package_name}":
         ensure        => 'present',
         baseurl       => $base_url,
         descr         => "runner_${package_name}",
         enabled       => '1',
-        gpgcheck      => '0',
-        gpgkey        => "${repo_base_url}/gpg.key",
+        gpgcheck      => String(Integer($package_gpgcheck)),
+        gpgkey        => $_gpgkeys,
         repo_gpgcheck => '1',
         sslcacert     => '/etc/pki/tls/certs/ca-bundle.crt',
         sslverify     => '1',
@@ -57,8 +62,8 @@ class gitlab_ci_runner::repo (
         baseurl       => $source_base_url,
         descr         => "runner_${package_name}-source",
         enabled       => '1',
-        gpgcheck      => '0',
-        gpgkey        => "${repo_base_url}/gpg.key",
+        gpgcheck      => String(Integer($package_gpgcheck)),
+        gpgkey        => $_gpgkeys,
         repo_gpgcheck => '1',
         sslcacert     => '/etc/pki/tls/certs/ca-bundle.crt',
         sslverify     => '1',
