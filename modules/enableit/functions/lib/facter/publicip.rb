@@ -36,7 +36,11 @@ end
 
 Facter.add('publicip') do
   setcode do
-    certname = Facter.value(:puppet_settings)['main']['certname']
+    begin
+      certname = Facter.value(:obmondo_system)['certname']
+    rescue
+      certname = Facter.value(:puppet_settings)['main']['certname']
+    end
     obmondo_api("/server/#{certname}/publicip")
   end
 end
