@@ -206,6 +206,11 @@ class common::system (
       setting => 'obmondo_system.location',
       value   => $_location,
       ;
+
+    'facter certname':
+      setting => 'obmondo_system.certname',
+      value   => $trusted['certname'],
+      ;
   }
 
   #############
