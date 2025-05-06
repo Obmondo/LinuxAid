@@ -173,8 +173,6 @@ class profile::puppet (
         { 'partitions' => '1 day' },
         { 'networking' => '1 day' },
         { 'sssd' => '1 day' },
-        { 'puppet_sslpaths' => '1 day' },
-        { 'puppet_settings' => '1 day' },
       ],
       ;
 
