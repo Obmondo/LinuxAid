@@ -38,6 +38,7 @@
 class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,
+  String                      $redispass,
   Stdlib::Fqdn                $domain,
   Stdlib::Unixpath            $backup_dir               = '/opt/backup',
   Boolean                     $manage                   = true,
@@ -51,11 +52,13 @@ class role::mail::mailcow (
   Optional[Boolean]           $skip_unbound_healthcheck = false,
   String                      $exporter_image           = 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
   Eit_types::IPPort           $exporter_listen_address  = '127.254.254.254:63382',
+  String                      $exporter_api_key,
   Stdlib::IP::Address::V4::Nosubnet $http_bind  = '0.0.0.0',
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
     'dbpass',
+    'exporter_api_key',
   ]
 
 ) {
