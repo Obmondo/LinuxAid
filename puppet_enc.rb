@@ -24,7 +24,7 @@ CERTNAME = if TESTING && CERTNAME == 'puppetdb'
 MAX_TAGS = 10
 
 (hostname, customer_id) = CERTNAME.split('.', 2)
-customer_host_re = CUSTOMER_HOST_RE[customer_id]
+customer_host_re = /^[a-z0-9-]+\.[a-z0-9]{6,10}$/
 
 raise ArgumentError, "invalid hostname '#{hostname} used in ENC!" if customer_host_re && hostname.match(customer_host_re).nil?
 
