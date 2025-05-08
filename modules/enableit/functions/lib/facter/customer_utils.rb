@@ -1,7 +1,3 @@
-CUSTOMER_HOST_RE ||= {
-  '7ejidqmfi9' => /^(?<environment>[dtz])?((?<cloud>(az))(?<region>[a-z]{3})(?<company>gna|gnh)?|(?<country>(br|cn|de|dk|es|fr|hk|in|mx|sg|us))(?<city>[a-z]{3}))(?<class>[a-z0-9]+?)(?<index>[0-9]+)?$/,
-}
-
 REGIONS ||= {
   'AMER' => [
     "AI",
