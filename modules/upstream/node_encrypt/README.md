@@ -3,16 +3,16 @@
 1. [Overview](#overview)
 1. [Usage](#usage)
 1. [Ecosystem](#ecosystem)
+1. [License](#license)
 
 ## Overview
 
-Do you wish your Puppet catalogs didn't contain plain text secrets? Are you tired
-of limiting access to your Puppet reports because of the passwords clearly
-visible in the change events?
-
-This module will encrypt values for each node specifically, using their own
-certificates. This means that not only do you not have plain text secrets, but
-each node can decrypt only its own secrets.
+Do you wish your Puppet catalogs didn't contain plain text secrets? Are you
+tired of limiting access to your Puppet reports because of the passwords clearly
+visible in the change events? This module will encrypt values for each node
+specifically, using their own certificates. This means that not only do you not
+have plain text secrets in the catalog file, but each node can decrypt only its
+own secrets.
 
 <img src="assets/puppet6.png" alt="Puppet 6 logo" align="right" width="125" height="125">
 
@@ -21,8 +21,7 @@ never have your secrets exposed in the catalog, in any reports, or any other
 cached state files. Any parameter of any resource type may be encrypted  by
 simply annotating your secret string with a function call. **This relies on
 Deferred execution functions in Puppet 6**. If you're running Puppet 5 or
-below, then see the [legacy section below](#legacy-puppet-5-and-below-support)
-for backwards compatibility.
+below, then pin this module to `v0.4.1` or older for backwards compatibility.
 
 ```Puppet
 user { 'erwin':
@@ -51,12 +50,32 @@ and then decrypt it on that node. If you like, you may also paste the ciphertext
 into your manifest or Hiera datafiles and then manually invoke the `node_decrypt()`
 function as needed.
 
+## Suitability
+
+Please note that `node_encrypt` is ***not a security panacea***. It will encrypt
+your secrets in the catalog file on disk using the node's certificate, but the
+corresponding private key is also on disk in clear text. This means that if an
+attacker gains root level access to your filesystem, then they can likely read
+both the encrypted secrets and the key required to decrypt them.
+
+| ⚠️ **Warning:** |
+|-----------------|
+| *`node_encrypt` will only protect you in cases where an attacker has access to the catalog file, but not to the node's private certificate.* |
+
+Some of the cases protected by `node_encrypt` might include:
+
+* Using the catalog files for certain kinds of [impact analysis](https://dev.to/camptocamp-ops/automated-puppet-impact-analysis-1c1)
+* Making catalogs available for troubleshooting with catalog diff
+* Integrations that retrieve catalogs from [PuppetDB via API](https://puppet.com/docs/puppetdb/latest/api/query/v4/catalogs.html)
+
+If you have more stringent security requirements, we suggest integrating with a purpose
+built secret server. See [docs](https://puppet.com/docs/puppet/latest/integrations_with_secret_stores.html) for more details.
+
 
 ## Usage
 
 * `node_encrypt::secret()`
-    * On Puppet6 or above, this is likely the only use you'll need to know.
-    * This function encrypts a string on the master, and then decrypts it on the
+    * This function encrypts a string on the server, and then decrypts it on the
       agent during catalog application.
     * Example: `'secret string'.node_encrypt::secret`
 * `redact()`
@@ -68,20 +87,16 @@ function as needed.
     * This is a Puppet Face that generates encrypted ciphertext on the command line.
     * `puppet node encrypt -t testhost.example.com "encrypt some text"`
 * `puppet node decrypt`
-    * This is a Puppet Face that decrypts ciphertext on the command line. It is
-      useful in command-line scripts, or in `exec` statements.
+    * This is a Puppet Face that decrypts ciphertext on the command line. It can
+      be useful in command-line scripts.
 * `node_decrypt()`
     * This is a Puppet function used to decrypt encrypted text on the agent.
       You'll only need to use this if you save encrypted content in your manifests
       or Hiera data files.
     * Example: `content => Deferred("node_decrypt", [$encrypted_content])`
 * `node_encrypt::certificates`
-    * This class will synchronize certificates to all compile masters.
+    * This class will synchronize certificates to all compile servers.
     * Generally not needed, unless the `clientcert_pem` fact fails for some reason.
-* `node_encrypt::file`
-    * Legacy type for Puppet 5 and below.
-    * This is a defined type that wraps a standard file resource, but allows you
-      to encrypt the content in the catalog and reports.
 
 The simplest usage is like the example shown in the [Overview](#overview). This
 defined type accepts most of the standard file parameters and simply encrypts the
@@ -141,7 +156,7 @@ a type that is not `String` for the parameter you're redacting.
 
 This comes with a Puppet Face that can encrypt or decrypt on the command line.
 You can use this in your own scripts via several methods. The ciphertext can be
-generated on the CA or any compile master using the `puppet node encrypt`
+generated on the CA or any compile server using the `puppet node encrypt`
 command.
 
     # puppet node encrypt -t testhost.puppetlabs.vm "encrypt some text"
@@ -171,31 +186,28 @@ You can then decrypt this data by:
     * `cat /file/with/encrypted/blob.txt | puppet node decrypt`
 
 
-### Automatically distributing certificates to compile masters
+### Automatically distributing certificates to compile servers
 
 The agent should send its public certificate as a custom `clientcert_pem` fact,
 making this a seamless zero-config process. In the case that doesn't work, you
-can distribute certificates to your compile masters using the
+can distribute certificates to your compile servers using the
 `node_encrypt::certificates` class so that encryption works from all compile
-masters. Please be aware that **this class will create a fileserver mount on the
+servers. Please be aware that **this class will create a fileserver mount on the
 CA node** making public certificates available for download by all nodes.
 
-Classify all your masters, including the CA or Master of Masters, with this class.
-This will ensure that all masters have all agents' public certificates.
+Classify all your servers, including the CA or Primary Server, with this class.
+This will ensure that all server have all agents' public certificates.
 
 **Note**:<br />
 If this is applied to all nodes in your infrastructure then all agents will have all
 public certificates synched. This is not a security risk, as public certificates are
 designed to be shared widely, but it is something you should be aware of. If you wish
-to prevent that, just make sure to classify only your masters.
+to prevent that, just make sure to classify only your servers.
 
 Parameters:
 
 * [*ca_server*]
     * If the CA autodetection fails, then you can specify the $fqdn of the CA server here.
-
-* [*legacy*]
-    * Set to `true` if you're still using legacy `auth.conf` on Puppet 5.
 
 * [*sort_order*]
     * If you've customized your HOCON-based `auth.conf`, set the appropriate sort
@@ -203,101 +215,26 @@ Parameters:
       `300` to ensure that it overrides the default.
 
 
-### Legacy Puppet 5 and below support
+### Using on serverless infrastructures
 
-<img src="assets/puppet5.png" alt="Puppet 5 logo" align="right" width="125" height="125">
-
-Deferred functions were introduced in Puppet 6. In prior versions, `node_encrypt`
-required a custom provider for each resource type it supported. As such, we could
-only encrypt files, using a defined type wrapper like so:
-
-```Puppet
-node_encrypt::file { '/tmp/foo':
-  owner   => 'root',
-  group   => 'root',
-  mode    => '0600',
-  content => 'This string will never appear in the catalog.',
-}
-```
-
-If you'd like to pre-encrypt your data, you can pass it as the `encrypted_content`
-instead. The ciphertext can be stored directly in your manifest file, in Hiera,
-or anywhere else you'd like. Note that if you choose to do this, the ciphertext
-must be encrypted specifically for each node. You cannot share secrets amongst nodes.
-
-```Puppet
-node_encrypt::file { '/tmp/foo':
-  owner             => 'root',
-  group             => 'root',
-  encrypted_content => hiera('encrypted_foo'),
-}
-```
-
-The CLI tool can be useful when running `exec resources` with embedded secrets.
-Note the careful use of single quotes to prevent variable expansion in Puppet:
-
-```Puppet
-exec { 'set service passphrase':
-  command     => 'some-service --set-passphrase="$(puppet node decrypt --env SECRET)"',
-  path        => '/opt/puppetlabs/bin:/usr/bin',
-  environment => "SECRET=${node_encrypt('and your father smelt of elderberries')}",
-}
-```
-
-
-#### Deprecated Parameters
-
-Since public certificates are designed to be shared widely without a security
-risk, we made the decision to simplify and no longer manage a whitelist of
-compile masters allowed to access the `public_certificates` mountpoint. If you
-would like to enforce a whitelist anyway, then you can use one of the following
-methods:
-
-If you're using the legacy `auth.conf` format then you'll need to configure it
-manually by editing `$confdir/auth.conf` on the CA server. Ensure that this
-stanza comes before the existing `^/puppet/v3/file` rule and set the `whitelist`
-parameter to `false` in your classification to disable the error.
-
-```
-# Node_encrypt: Allow limited access to the 'public_certificates' mountpoint:
-path ~ ^/puppet/v3/file_(metadata|content)s?/public_certificates
-auth yes
-allow list,of,whitelisted,certnames
-```
-
-If you're using the modern HOCON based `auth.conf` format, then you can manage
-access using a Puppet resource such as the following. Ensure that the `sort_order`
-is lower than `300`, or the value you passed to `node_encrypt::certificates`.
-
-```Puppet
-puppet_authorization::rule { 'public certificates mountpoint override':
-  match_request_path   => '^/puppet/v3/file_(metadata|content)s?/public_certificates',
-  match_request_type   => 'regex',
-  match_request_method => 'get',
-  allow                => ['array', 'of', 'whitelisted', 'certnames'],
-  sort_order           => 250,
-  path                 => '/etc/puppetlabs/puppetserver/conf.d/auth.conf',
-}
-```
-
-
-### Using on masterless infrastructures
-
-For the most part, `node_encrypt` doesn't have as much value in a masterless
+For the most part, `node_encrypt` doesn't have as much value in a serverless
 setup. When the agent is compiling its own catalog, there's no cached catalog or
 network transfer. Nevertheless, there are use cases for it. For example, if you
 have a report server configured, or are submitting catalogs & reports to PuppetDB,
 you likely want to keep secrets hidden.
 
-`node_encrypt` won't work out of the box on a masterless node because it relies
+`node_encrypt` won't work out of the box on a serverless node because it relies
 on the existence of the CA certificates. But it's easy to generate these
 certificates so that it will work. Keep in mind that without the full CA
 infrastructure, no other node will be able to decrypt these secrets.
 
+Note that this functionality was moved to the `puppetserver` application
+in Puppet 6.x, so you'll need Puppet 5.x to generate this certificate.
+
 ```
-$ rm -rf $(puppet master --configprint ssldir)/*
+$ rm -rf $(puppet config print ssldir --section server)/*
 $ puppet cert list -a
-$ puppet cert --generate ${puppet master --configprint certname} --dns_alt_names "$(puppet master --configprint dns_alt_names)"
+$ puppet cert --generate ${puppet config print certname} --dns_alt_names "$(puppet config print dns_alt_names)"
 ```
 
 
@@ -336,6 +273,32 @@ This was designed to make it easy to integrate support into other tooling. For
 example, [this pull request](https://github.com/richardc/puppet-datacat/pull/17/files)
 adds transparent encryption support to _rc's popular `datacat` module.
 
+#### Testing with [Onceover](https://github.com/dylanratcliffe/onceover)
+
+If you use Onceover to test your puppet roles, you'll experience compilation failures
+when using this module as it won't be able to find the private keys it expects.
+
+```
+Evaluation Error: Error while evaluating a Resource Statement, Evaluation Error: Error while evaluating a Function Call, Not a directory @ rb_sysopen - /dev/null/ssl/private_keys/example.com.pem
+```
+
+In your onceover.yaml file, mock the `node_encrypt` function as follows.
+
+```yaml
+functions:
+  node_encrypt:
+    returns: '-----BEGIN PKCS7----- MOCKED_DATA'
+```
+
+
+
+## Limitations
+
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-node_encrypt/blob/main/metadata.json)
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 ## Disclaimer
 
@@ -343,8 +306,6 @@ I take no liability for the use of this module. As this uses standard Ruby and
 OpenSSL libraries, it should work anywhere Puppet itself does. I have not yet
 validated on anything other than CentOS, though.
 
-Contact
--------
+## Authors
 
-binford2k@gmail.com
-
+This module is a continuation of [binford2k/node_encrypt](https://forge.puppet.com/modules/binford2k/node_encrypt/readme) which was developed by [Ben Ford](https://github.com/binford2k). Thank you to all of our contributors.
