@@ -119,6 +119,7 @@ class profile::mail::mailcow (
         'DBUSER'                        => 'mailcow',
         'DBPASS'                        => $dbpass.node_encrypt::secret,
         'DBROOT'                        => $dbroot.node_encrypt::secret,
+        'REDISPASS'                     => $redispass.node_encrypt::secret,
         'HTTP_BIND'                     => $http_bind,
         'HTTPS_BIND'                    => $http_bind,
         'DOVEADM_PORT'                  => '127.0.0.1:19991',
@@ -154,7 +155,7 @@ class profile::mail::mailcow (
         'SKIP_UNBOUND_HEALTHCHECK'      => to_yn($skip_unbound_healthcheck),
         'EXPORTER_LISTEN_ADDRESS'       => $exporter_listen_address,
         'MAILCOW_EXPORTER_HOST'         => $domain,
-        'MAILCOW_EXPORTER_API_KEY'      => $exporter_api_key,
+        'MAILCOW_EXPORTER_API_KEY'      => $exporter_api_key.node_encrypt::secret,
       }),
     ;
     # NOTE: These container tag are manually maintained to have a better control

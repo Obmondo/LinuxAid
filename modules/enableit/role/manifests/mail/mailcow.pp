@@ -58,6 +58,7 @@ class role::mail::mailcow (
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
     'dbpass',
+    'redispass',
     'exporter_api_key',
   ]
 
