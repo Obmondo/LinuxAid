@@ -5,6 +5,8 @@
 #
 # @param dbpass The database password.
 #
+# @param redispass The password to connect to redis
+#
 # @param domain The fully qualified domain name.
 #
 # @param backup_dir The directory for backups. Defaults to '/opt/backup'.
@@ -30,6 +32,8 @@
 # @param exporter_image The image for the Mailcow exporter. Defaults to 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0'.
 #
 # @param exporter_listen_address The address for the exporter to listen on. Defaults to '127.254.254.254:63382'.
+#
+# @param exporter_api_key The API Key to use when accessing the mailcow API
 #
 # @param http_bind The HTTP bind address. Defaults to '0.0.0.0'.
 #
