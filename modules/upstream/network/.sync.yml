@@ -1,0 +1,9 @@
+---
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  spec_overrides: "require 'spec_helper_methods'"
+Gemfile:
+  optional:
+    ':test':
+      - gem: 'ipaddress'
+      - gem: 'rspec-its'

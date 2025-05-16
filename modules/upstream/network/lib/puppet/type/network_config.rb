@@ -1,9 +1,9 @@
 require 'puppet/property/boolean'
 
 begin
-  require 'ipaddress'
+  require 'ipaddr'
 rescue LoadError
-  Puppet.warning("#{__FILE__}:#{__LINE__}: ipaddress gem was not found")
+  Puppet.warning("#{__FILE__}:#{__LINE__}: ipaddr gem was not found")
 end
 
 Puppet::Type.newtype(:network_config) do
@@ -22,6 +22,8 @@ Puppet::Type.newtype(:network_config) do
     disruption as it may mean bringing down the interface for a short period.
   EOD
 
+  feature :startmode, 'The system can define startmode of an interface'
+
   ensurable
 
   newparam(:name) do
@@ -31,9 +33,11 @@ Puppet::Type.newtype(:network_config) do
 
   newproperty(:ipaddress) do
     desc 'The IP address of the network interfaces'
-    if defined? IPAddress
+    if defined? IPAddr
       validate do |value|
-        raise ArgumentError, "#{self.class} requires a valid ipaddress for the ipaddress property" unless IPAddress.valid? value
+        IPAddr.new value
+      rescue IPAddr::InvalidAddressError
+        raise ArgumentError, "#{self.class} requires a valid ipaddress for the ipaddress property"
         # provider.validate
       end
     end
@@ -41,9 +45,17 @@ Puppet::Type.newtype(:network_config) do
 
   newproperty(:netmask) do
     desc 'The subnet mask to apply to the interface'
-    if defined? IPAddress
+    if defined? IPAddr
       validate do |value|
-        raise ArgumentError, "#{self.class} requires a valid netmask for the netmask property" unless IPAddress.valid_ipv4_netmask? value
+        ipa = IPAddr.new '127.0.0.1'
+        ipa.mask(value)
+      rescue IPAddr::InvalidAddressError
+        begin
+          ipz = IPAddr.new '::1'
+          ipz.mask(value)
+        rescue IPAddr::InvalidAddressError
+          raise ArgumentError, "#{self.class} requires a valid netmask for the netmask property"
+        end
         # provider.validate
       end
     end
@@ -78,6 +90,11 @@ Puppet::Type.newtype(:network_config) do
     defaultto :true
   end
 
+  newproperty(:startmode, required_features: :startmode) do
+    desc 'Allow/disallow startmode support for this interface'
+    defaultto :auto
+  end
+
   newparam(:reconfigure, required_features: :reconfigurable, parent: Puppet::Property::Boolean) do
     desc 'Reconfigure the interface after the configuration has been updated'
   end
@@ -86,8 +103,11 @@ Puppet::Type.newtype(:network_config) do
     desc 'The Maximum Transmission Unit size to use for the interface'
     validate do |value|
       # reject floating point and negative integers
-      unless value.is_a?(Numeric) && value.integer?
-        raise ArgumentError, "#{value} is not a valid mtu (must be a positive integer)"
+      # XXX this lets 1500.0 pass
+      if value.is_a? Numeric
+        raise ArgumentError, "#{value} is not a valid mtu (must be a positive integer)" unless value.integer?
+      else
+        raise ArgumentError, "#{value} is not a valid mtu (must be a positive integer)" unless value =~ %r{^\d+$}
       end
 
       # Intel 82598 & 82599 chips support MTUs up to 16110; is there any
@@ -99,9 +119,7 @@ Puppet::Type.newtype(:network_config) do
       # is 42 with a 802.1q header and 46 without.
       min_mtu = 42
       max_mtu = 65_536
-      unless min_mtu <= value && value <= max_mtu
-        raise ArgumentError, "#{value} is not in the valid mtu range (#{min_mtu} .. #{max_mtu})"
-      end
+      raise ArgumentError, "#{value} is not in the valid mtu range (#{min_mtu} .. #{max_mtu})" unless (min_mtu..max_mtu).cover?(value.to_i)
     end
   end
 

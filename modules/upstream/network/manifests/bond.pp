@@ -137,29 +137,28 @@
 #
 # * Linux Ethernet Bonding Driver HOWTO, Section 2 "Bonding Driver Options" http://www.kernel.org/doc/Documentation/networking/bonding.txt
 #
-define network::bond(
+define network::bond (
   $slaves,
-  $ensure                            = present,
-  $ipaddress                         = undef,
-  $netmask                           = undef,
-  $method                            = undef,
-  $family                            = undef,
-Optional[Boolean] $onboot            = undef,
-Optional[Boolean] $hotplug           = undef,
-  $lacp_rate                         = undef,
-Network::MTU $mtu                    = undef,
-  $options                           = undef,
-  $slave_options                     = undef,
+  $ensure           = present,
+  $ipaddress        = undef,
+  $netmask          = undef,
+  $method           = undef,
+  $family           = undef,
+  $onboot           = undef,
+  $hotplug          = undef,
+  $lacp_rate        = undef,
+  $mtu              = undef,
+  $options          = undef,
+  $slave_options    = undef,
 
-  $mode                              = 'active-backup',
-Network::PositiveInteger $miimon     = 100,
-Network::PositiveInteger $downdelay  = 200,
-Network::PositiveInteger $updelay    = 200,
-  $primary                           = $slaves[0],
-  $primary_reselect                  = 'always',
-  $xmit_hash_policy                  = 'layer2',
+  $mode             = 'active-backup',
+  $miimon           = '100',
+  $downdelay        = '200',
+  $updelay          = '200',
+  $primary          = $slaves[0],
+  $primary_reselect = 'always',
+  $xmit_hash_policy = 'layer2',
 ) {
-
   require network::bond::setup
 
   kmod::alias { $name:
@@ -167,7 +166,7 @@ Network::PositiveInteger $updelay    = 200,
     source => 'bonding',
   }
 
-  case $facts['osfamily'] {
+  case $facts['os']['family'] {
     'Debian': {
       network::bond::debian { $name:
         ensure           => $ensure,
@@ -221,7 +220,7 @@ Network::PositiveInteger $updelay    = 200,
       }
     }
     default: {
-      fail("network::bond does not support osfamily '${facts['osfamily']}'")
+      fail("network::bond does not support osfamily '${facts['os']['family']}'")
     }
   }
 }

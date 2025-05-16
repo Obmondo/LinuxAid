@@ -1,29 +1,29 @@
 require 'ipaddr'
 require 'puppetx/filemapper'
 
-Puppet::Type.type(:network_route).provide(:redhat) do
-  # RHEL network_route routes provider.
+Puppet::Type.type(:network_route).provide(:sles) do
+  # SLES network_route routes provider.
   #
   # This provider uses the filemapper mixin to map the routes file to a
   # collection of network_route providers, and back.
   #
-  # @see https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s1-networkscripts-static-routes.html
+  # @see https://documentation.suse.com/sles/15-SP4/html/SLES-all/cha-network.html#sec-network-manconf-files-routes
 
   include PuppetX::FileMapper
 
-  desc 'RHEL style routes provider'
+  desc 'SLES style routes provider'
 
-  confine osfamily: :redhat
-  defaultfor osfamily: :redhat
+  confine osfamily: :suse
+  defaultfor osfamily: :suse
 
   has_feature :provider_options
 
   def select_file
-    "/etc/sysconfig/network-scripts/route-#{interface}"
+    "/etc/sysconfig/network/ifroute-#{interface}"
   end
 
-  def self.target_files(script_dir = '/etc/sysconfig/network-scripts')
-    entries = Dir.entries(script_dir).select { |entry| entry.match %r{route-.*} }
+  def self.target_files(script_dir = '/etc/sysconfig/network')
+    entries = Dir.entries(script_dir).select { |entry| entry.match %r{ifroute-.*} }
     entries.map { |entry| File.join(script_dir, entry) }
   end
 
@@ -39,26 +39,16 @@ Puppet::Type.type(:network_route).provide(:redhat) do
         next
       end
 
-      route = line.split(' ', 6)
-      raise Puppet::Error, 'Malformed redhat route file, cannot instantiate network_route resources' if route.length < 4
-
-      route = line.split(' ', 5) if route[0] == 'local'
+      route = line.split(' ', 5)
+      raise Puppet::Error, 'Malformed SLES route file, cannot instantiate network_route resources' if route.length < 4
 
       new_route = {}
 
-      if route[0] == 'local'
-        new_route[:interface] = route[3]
-        new_route[:options] = route[4] if route[4]
-      else
-        new_route[:gateway] = route[2]
-        new_route[:interface] = route[4]
-        new_route[:options] = route[5] if route[5]
-      end
+      new_route[:gateway] = route[1]
+      new_route[:interface] = route[3]
+      new_route[:options] = route[4] if route[4]
 
-      if route[0] == 'local'
-        new_route[:name] = route[1]
-        new_route[:network] = 'local'
-      elsif ['default', '0.0.0.0'].include? route[0]
+      if ['default', '0.0.0.0'].include? route[0]
         new_route[:name]    = 'default' # FIXME: Must match :name in order for changes to be detected
         new_route[:network] = 'default'
         new_route[:netmask] = '0.0.0.0'
@@ -82,19 +72,14 @@ Puppet::Type.type(:network_route).provide(:redhat) do
     contents << header
     # Build routes
     providers.sort_by(&:name).each do |provider|
-      %w[network interface].each do |prop|
+      %w[network netmask gateway interface].each do |prop|
         raise Puppet::Error, "#{provider.name} is missing the required parameter '#{prop}'." if provider.send(prop).nil?
       end
-      %w[netmask gateway].each do |prop|
-        raise Puppet::Error, "#{provider.name} is missing the required parameter '#{prop}'." if provider.send(prop).nil? && provider.send('network').to_s != 'local'
-      end
       contents << if provider.network == 'default'
-                    "#{provider.network} via #{provider.gateway} dev #{provider.interface}"
-                  elsif provider.network == 'local'
-                    "#{provider.network} #{provider.name} dev #{provider.interface}"
+                    "#{provider.network} #{provider.gateway} - #{provider.interface}"
                   else
                     ip = IPAddr.new("#{provider.network}/#{provider.netmask}")
-                    "#{ip}/#{ip.prefix} via #{provider.gateway} dev #{provider.interface}"
+                    "#{ip}/#{ip.prefix} #{provider.gateway} - #{provider.interface}"
                   end
       contents << (provider.options == :absent ? "\n" : " #{provider.options}\n")
     end
