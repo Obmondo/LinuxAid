@@ -1,35 +1,32 @@
-# = Define: kmod::alias
+# @summary Manage kernel module options
 #
-# == Example
+# @param option Option to manage
+# @param value Value of kernel module option
+# @param module Kernel module to manage
+# @param ensure State of the option
+# @param file File to manage
 #
-#     kmod::option { 'bond0':
-#       option => 'bonding',
-#     }
-#
-define kmod::option(
-  $option,
-  $value,
-  $module = $name,
-  $ensure = 'present',
-  $file   = undef,
+# @example
+#   kmod::option { 'bond0 mode':
+#     module  => 'bond0',
+#     option  => 'mode',
+#     value   => '1',
+#   }
+define kmod::option (
+  String[1]                 $option,
+  Scalar                    $value,
+  String[1]                 $module = $name,
+  Enum['present', 'absent'] $ensure = 'present',
+  Stdlib::Unixpath          $file   = "/etc/modprobe.d/${module}.conf",
 ) {
-
-  include ::kmod
-
-  $target_file = $file ? {
-    undef   => "/etc/modprobe.d/${module}.conf",
-    default => $file,
-  }
-
+  include kmod
 
   kmod::setting { "kmod::option ${title}":
     ensure   => $ensure,
     module   => $module,
     category => 'options',
-    file     => $target_file,
+    file     => $file,
     option   => $option,
     value    => $value,
   }
-
 }
-

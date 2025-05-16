@@ -1,20 +1,42 @@
-# = Define: kmod::setting
+# @summary Manage kernel module settings
 #
-# == Example
+# @param file File to manage
+# @param category Setting type
+# @param option Key to manage
+# @param value Value to manage
+# @param module Module to manage
+# @param ensure State of the setting
 #
-#
-define kmod::setting(
-  $file,
-  $category,
-  $option = undef,
-  $value = undef,
-  $module = $name,
-  $ensure = 'present',
+# @example
+#   kmod__setting { 'kmod::option bond0 mode':
+#     ensure   => 'present',
+#     module   => 'bond0',
+#     category => 'options',
+#     file     => '/etc/modprobe.d/bond0.conf',
+#     option   => 'mode',
+#     value    => '1',
+#   }
+define kmod::setting (
+  Stdlib::Unixpath          $file,
+  String[1]                 $category,
+  Optional[String]          $option = undef,
+  Optional[Scalar]          $value  = undef,
+  String[1]                 $module = $name,
+  Enum['present', 'absent'] $ensure = 'present',
 ) {
+  include kmod
 
-  include ::kmod
+  ensure_resource(
+    'file',
+    $file,
+    {
+      'ensure' => 'file',
+      'owner'  => $kmod::owner,
+      'group'  => $kmod::group,
+      'mode'   => $kmod::file_mode,
+    }
+  )
 
-  ensure_resource('file', $file, { 'ensure' => 'file'} )
   case $ensure {
     'present': {
       if $option {

@@ -1,22 +1,17 @@
+# @summary Set a kernel module as installed
 #
-# == Definition: kmod::install
+# @param ensure State of the setting
+# @param command Command associated with the kernel module
+# @param file File where the stanza is written
 #
-# Set a kernel module as installed.
-#
-# Parameters:
-# - *ensure*: present/absent;
-# - *command*: optionally, set the command associated with the kernel module;
-# - *file*: optionally, set the file where the stanza is written.
-#
-# Example usage:
-#
+# @example
 #   kmod::install { 'pcspkr': }
-#
-define kmod::install(
-  $ensure=present,
-  $command='/bin/true',
-  $file="/etc/modprobe.d/${name}.conf",
+define kmod::install (
+  Enum['present', 'absent'] $ensure  = 'present',
+  String[1]                 $command = '/bin/true',
+  Stdlib::Unixpath          $file    = "/etc/modprobe.d/${name}.conf",
 ) {
+  include kmod
 
   kmod::setting { "kmod::install ${title}":
     ensure   => $ensure,
@@ -26,5 +21,4 @@ define kmod::install(
     option   => 'command',
     value    => $command,
   }
-
 }

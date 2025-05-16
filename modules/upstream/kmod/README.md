@@ -1,10 +1,14 @@
 # Kmod Puppet module
 
-[![Puppet Forge Version](http://img.shields.io/puppetforge/v/camptocamp/kmod.svg)](https://forge.puppetlabs.com/camptocamp/kmod)
-[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/camptocamp/kmod.svg)](https://forge.puppetlabs.com/camptocamp/kmod)
-[![Build Status](https://img.shields.io/travis/camptocamp/puppet-kmod/master.svg)](https://travis-ci.org/camptocamp/puppet-kmod)
-[![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/camptocamp/kmod.svg)](https://forge.puppetlabs.com/camptocamp/kmod)
-[![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
+[![Build Status](https://github.com/voxpupuli/puppet-kmod/workflows/CI/badge.svg)](https://github.com/voxpupuli/puppet-kmod/actions?query=workflow%3ACI)
+[![Release](https://github.com/voxpupuli/puppet-kmod/actions/workflows/release.yml/badge.svg)](https://github.com/voxpupuli/puppet-kmod/actions/workflows/release.yml)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/kmod.svg)](https://forge.puppetlabs.com/puppet/kmod)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/kmod.svg)](https://forge.puppetlabs.com/puppet/kmod)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/kmod.svg)](https://forge.puppetlabs.com/puppet/kmod)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/kmod.svg)](https://forge.puppetlabs.com/puppet/kmod)
+[![puppetmodule.info docs](http://www.puppetmodule.info/images/badge.png)](http://www.puppetmodule.info/m/puppet-kmod)
+[![Apache 2 License](https://img.shields.io/github/license/voxpupuli/puppet-kmod.svg)](LICENSE)
+[![Donated by Camptocamp](https://img.shields.io/badge/donated%20by-camptocamp-fb7047.svg)](#transfer-notice)
 
 ## Description
 
@@ -41,12 +45,12 @@ Adds an alias to modprobe.conf, by default `/etc/modprobe.d/<name>.conf` is assu
 
 ```puppet
   kmod::alias { 'bond0':
-    aliasname => 'bonding',
+    source => 'bonding',
   }
 ```
 
 Params:
-* `modulename`: Name of the module to alias
+* `source`: Name of the module to alias
 * `aliasname`: Name of the alias (defaults to the resource title)
 * `file`: File to write to (see above default)
 
@@ -152,3 +156,12 @@ tracker](https://github.com/camptocamp/puppet-kmod/issues).
 For pull requests, it is very much appreciated to check your Puppet manifest
 with [puppet-lint](https://github.com/camptocamp/puppet-kmod/issues) to follow the recommended Puppet style guidelines from the
 [Puppet Labs style guide](http://docs.puppetlabs.com/guides/style_guide.html).
+
+
+## Transfer Notice
+
+This plugin was originally authored by [Camptocamp](http://www.camptocamp.com).
+The maintainer preferred that Puppet Community take ownership of the module for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute here instead of Camptocamp.
+
+Previously: https://github.com/camptocamp/puppet-kmod
