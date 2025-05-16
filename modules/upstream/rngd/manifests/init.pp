@@ -19,12 +19,11 @@ class rngd (
   String                         $package_name   = $::rngd::params::package_name,
   Boolean                        $service_manage = $::rngd::params::service_manage,
   String                         $service_name   = $::rngd::params::service_name
-) inherits ::rngd::params {
+) inherits rngd::params {
 
-  contain ::rngd::install
-  contain ::rngd::config
-  contain ::rngd::service
+  contain rngd::install
+  contain rngd::config
+  contain rngd::service
 
-  Class['::rngd::install'] -> Class['::rngd::config']
-    ~> Class['::rngd::service']
+  Class['rngd::install'] -> Class['rngd::config'] ~> Class['rngd::service']
 }

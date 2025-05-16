@@ -1,0 +1,69 @@
+---
+common:
+  disable_legacy_facts: true
+appveyor.yml:
+  delete: true
+.gitlab-ci.yml:
+  delete: true
+.rubocop.yml:
+  default_configs:
+    Layout/HashAlignment:
+      EnforcedHashRocketStyle: table
+.travis.yml:
+  includes:
+     - env: CHECK="check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop syntax lint metadata_lint"
+       stage: static
+     - env: PUPPET_GEM_VERSION="~> 5.0" CHECK=parallel_spec
+       rvm: 2.4.5
+       stage: spec
+     - env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
+       rvm: 2.5.7
+       stage: spec
+     - env: PUPPET_GEM_VERSION="~> 7.0" CHECK=parallel_spec
+       rvm: 2.7.2
+       stage: spec
+  notifications:
+    email: true
+  secure: 'Du7XQC5EQRKujrIui1Otqsdhl8HFfSS+makrXbgjTG1DG6R3ms2CUt98W5PFS7t/NkOyNeAPra4oziJhP0+j6N3oJUF+W7KE/kYJBNUHT/nJn0Xt64WtkDVwHZArlGQnaOkbLkjvSL+FKG5fOb+XZ7F9kzA/HwwsG0NrcbcY1cU='
+  simplecov: true
+  user: 'bodgit'
+.vscode/extensions.json:
+  delete: true
+.devcontainer/Dockerfile:
+  delete: true
+.devcontainer/devcontainer.json:
+  delete: true
+Gemfile:
+  required:
+    ':development':
+      - gem: 'puppet-lint-absolute_classname-check'
+      - gem: 'puppet-lint-alias-check'
+      - gem: 'puppet-lint-empty_string-check'
+      - gem: 'puppet-lint-file_ensure-check'
+      - gem: 'puppet-lint-file_source_rights-check'
+      - gem: 'puppet-lint-fileserver-check'
+        git: 'https://github.com/bodgit/puppet-lint-fileserver-check.git'
+        branch: 'puppet-lint-2.x'
+      - gem: 'puppet-lint-leading_zero-check'
+      - gem: 'puppet-lint-spaceship_operator_without_tag-check'
+      - gem: 'puppet-lint-trailing_comma-check'
+      - gem: 'puppet-lint-undef_in_function-check'
+      - gem: 'puppet-lint-unquoted_string-check'
+      - gem: 'puppet-lint-variable_contains_upcase'
+      - gem: 'puppet-lint-version_comparison-check'
+  optional:
+    ':development':
+      - gem: 'github_changelog_generator'
+        version: '~> 1.15'
+        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.3.0')"
+    ':system_tests':
+      - gem: 'beaker-vagrant'
+      - gem: 'beaker-rspec'
+      - gem: 'beaker-puppet_install_helper'
+      - gem: 'beaker-module_install_helper'
+Rakefile:
+  linter_fail_on_warnings: true
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  coverage_report: true
+  minimum_code_coverage_percentage: 100
