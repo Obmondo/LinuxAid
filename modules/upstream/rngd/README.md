@@ -1,11 +1,10 @@
 # rngd
 
-Tested with Travis CI
-
 [![Build Status](https://travis-ci.org/bodgit/puppet-rngd.svg?branch=master)](https://travis-ci.org/bodgit/puppet-rngd)
-[![Coverage Status](https://coveralls.io/repos/bodgit/puppet-rngd/badge.svg?branch=master&service=github)](https://coveralls.io/github/bodgit/puppet-rngd?branch=master)
-[![Puppet Forge](http://img.shields.io/puppetforge/v/bodgit/rngd.svg)](https://forge.puppetlabs.com/bodgit/rngd)
-[![Dependency Status](https://gemnasium.com/bodgit/puppet-rngd.svg)](https://gemnasium.com/bodgit/puppet-rngd)
+[![Codecov](https://img.shields.io/codecov/c/github/bodgit/puppet-rngd)](https://codecov.io/gh/bodgit/puppet-rngd)
+[![Puppet Forge version](http://img.shields.io/puppetforge/v/bodgit/rngd)](https://forge.puppetlabs.com/bodgit/rngd)
+[![Puppet Forge downloads](https://img.shields.io/puppetforge/dt/bodgit/rngd)](https://forge.puppetlabs.com/bodgit/rngd)
+[![Puppet Forge - PDK version](https://img.shields.io/puppetforge/pdk-version/bodgit/rngd)](https://forge.puppetlabs.com/bodgit/rngd)
 
 #### Table of Contents
 
@@ -24,8 +23,6 @@ This module manages rngd.
 The module basically makes sure the rngd daemon is installed and started,
 that's pretty much it. The rngd daemon does a good job at working out where
 the source of hardware entropy is so there's little configuration required.
-
-RHEL/CentOS, Ubuntu and Debian are supported using Puppet 4.4.0 or later.
 
 ## Setup
 
@@ -60,26 +57,28 @@ class { '::rngd':
 The reference documentation is generated with
 [puppet-strings](https://github.com/puppetlabs/puppet-strings) and the latest
 version of the documentation is hosted at
-[https://bodgit.github.io/puppet-rngd/](https://bodgit.github.io/puppet-rngd/).
+[https://bodgit.github.io/puppet-rngd/](https://bodgit.github.io/puppet-rngd/)
+and available also in the [REFERENCE.md](https://github.com/bodgit/puppet-rngd/blob/master/REFERENCE.md).
 
 ## Limitations
 
-This module has been built on and tested against Puppet 4.4.0 and higher.
+This module has been built on and tested against Puppet 5 and higher.
 
 The module has been tested on:
 
-* RedHat Enterprise Linux 5/6/7
-* Ubuntu 12.04/14.04/16.04
-* Debian 6/7/8/9
+* RedHat Enterprise Linux 6/7
+* Ubuntu 14.04/16.04
+* Debian 8/9
 
 ## Development
 
-The module has both [rspec-puppet](http://rspec-puppet.com) and
+The module relies on [PDK](https://puppet.com/docs/pdk/1.x/pdk.html) and has
+both [rspec-puppet](http://rspec-puppet.com) and
 [beaker-rspec](https://github.com/puppetlabs/beaker-rspec) tests. Run them
 with:
 
 ```
-$ bundle exec rake test
+$ bundle exec rake spec
 $ PUPPET_INSTALL_TYPE=agent PUPPET_INSTALL_VERSION=x.y.z bundle exec rake beaker:<nodeset>
 ```
 
