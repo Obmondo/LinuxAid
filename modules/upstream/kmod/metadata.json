@@ -1,63 +1,69 @@
 {
-  "name": "camptocamp-kmod",
-  "version": "2.5.0",
-  "author": "camptocamp",
+  "name": "puppet-kmod",
+  "version": "4.1.1-rc0",
+  "author": "Vox Pupuli",
   "summary": "Manage Linux kernel modules with Puppet",
   "license": "Apache-2.0",
-  "source": "https://github.com/camptocamp/puppet-kmod",
-  "project_page": "https://github.com/camptocamp/puppet-kmod",
-  "issues_url": "https://github.com/camptocamp/puppet-kmod/issues",
+  "source": "https://github.com/voxpupuli/puppet-kmod",
+  "project_page": "https://github.com/voxpupuli/puppet-kmod",
+  "issues_url": "https://github.com/voxpupuli/puppet-kmod/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.13.1 < 7.0.0"
+      "version_requirement": ">= 5.0.0 < 10.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
         "7",
         "8",
         "9"
       ]
     },
     {
-      "operatingsystem": "Ubuntu",
+      "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "12.04",
-        "14.04"
-      ]
-    },
-    {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": [
-        "11"
-      ]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "5",
-        "6",
         "7",
         "8"
       ]
     },
     {
-      "operatingsystem": "CentOS",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
         "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
@@ -69,11 +75,12 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    },
+    {
+      "name": "openvox",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
-  "description": "Manage Linux kernel modules with Puppet",
-  "pdk-version": "1.14.1",
-  "template-url": "pdk-default#1.14.1",
-  "template-ref": "1.14.1-0-g0b5b39b"
+  "description": "Manage Linux kernel modules with Puppet"
 }
