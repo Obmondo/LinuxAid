@@ -1,7 +1,7 @@
 # Puppet installation
 class common::puppet (
   Eit_types::Version   $version,
-  Stdlib::Host         $server              = "${::obmondo['customer_id']}.puppet.obmondo.com", #lint:ignore:top_scope_facts
+  Stdlib::Host         $server,
   Stdlib::Port         $server_port         = 443,
   Boolean              $configure_agent     = true,
   Boolean              $setup_agent         = true,
