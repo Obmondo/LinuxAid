@@ -457,3 +457,6 @@ common::mail::myhostname: "%{facts.networking.fqdn}"
 common::mail::mydomain: "%{facts.networking.domain}"
 
 common::puppet::server: enableit.puppet.obmondo.com
+
+common::system::dns::listen_address:
+  - "192.168.0.1"
