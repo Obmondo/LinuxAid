@@ -186,26 +186,30 @@ class common::system (
 
   $_location = $locations.map |$location, $ip_address| {
     $ip_address.map |$ip_addr| {
-      if $ip_addr == $facts['ipaddress'] {
+      if $ip_addr == $facts['networking']['ip'] {
         $location
-      } elsif stdlib::ip_in_range($facts['ipaddress'], $ip_addr) {
+      } elsif stdlib::ip_in_range($facts['networking']['ip'], $ip_addr) {
         $location
       }
     }
   }.flatten.join('')
 
   $_puppet_dir = $facts['puppet_confdir'].dirname
-  hocon_setting {
-    default:
-      ensure => present,
-      path   => "${_puppet_dir}/facter/facts.d/obmondo_system.yaml",
-      noop   => false,
-      ;
 
-    'facter location':
-      setting => 'obmondo_system.location',
-      value   => $_location,
-      ;
+  $_obmondo_system_facts = {
+    'obmondo_system' => {
+      'location' => $_location,
+      'certname' => $facts['networking']['hostname']
+    }
+  }
+
+  file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
+    ensure  => present,
+    content => to_yaml($_obmondo_system_facts),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    noop    => false,
   }
 
   #############
