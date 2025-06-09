@@ -43,8 +43,11 @@
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::computing::slurm (
-  Optional[String]               $munge_key               = undef,
   Boolean                        $__blendable,
+  Optional[Variant[
+    Eit_Files::Source,
+    String
+  ]]                             $munge_key               = undef,
   Boolean                        $enable                  = false,
   Eit_types::SimpleString        $interface               = undef,
   Array[Eit_types::IPCIDR]       $node_cidrs              = [],
