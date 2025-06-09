@@ -93,10 +93,10 @@ class profile::appeng::phpfpm (
             mode   => '0700',
           ;
           "/etc/ssl/private/${virtualhost}/cert.pem":
-            content => pick($opts['ssl_cert'], $ssl_cert.node_encrypt::secret),
+            content => pick($opts['ssl_cert'], $ssl_cert).node_encrypt::secret,
           ;
           "/etc/ssl/private/${virtualhost}/cert.key":
-            content => pick($opts['ssl_key'], $ssl_key.node_encrypt::secret),
+            content => pick($opts['ssl_key'], $ssl_key).node_encrypt::secret,
           ;
         }
       }

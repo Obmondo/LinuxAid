@@ -27,13 +27,13 @@ class profile::package_management::packagesign (
       content => anything_to_ini({
         'TOKEN' => $provider ? {
           undef   => '',
-          default => node_encrypt::secret($gitserver_token),
+          default => $gitserver_token,
         },
         'PASS'  => $packagesign ? {
-          true    => node_encrypt::secret($signing_password),
+          true    => $signing_password,
           default => '',
         },
-      }),
+      }).node_encrypt::secret,
     ;
     '/opt/obmondo/docker-compose/packagesign/docker-compose.yaml':
       ensure  => ensure_present($manage),

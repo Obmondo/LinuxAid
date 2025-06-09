@@ -28,7 +28,7 @@ class profile::storage::s3 (
       shortid     => String($_shortid),
       keys        => [{
         'access' => $_name,
-        'secret' => $opts['access_key'].node_encrypt::secret,
+        'secret' => $opts['access_key'],
       }]
     }
   }
@@ -47,7 +47,7 @@ class profile::storage::s3 (
       ensure  => ensure_present($manage),
       content => stdlib::to_json_pretty({
         accounts => $_roles,
-      }),
+      }).node_encrypt::secret,
     ;
     '/opt/obmondo/docker-compose/s3/docker-compose.yaml':
       ensure  => ensure_present($manage),
