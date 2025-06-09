@@ -141,9 +141,9 @@ class profile::db::elasticsearch::kibana (
     config => {
       'elasticsearch.hosts'                      => $elasticsearch_hosts,
       'server.ssl.enabled'                       => false,
-      'elasticsearch.username'                   => $kibana_username.node_encrypt::secret,
+      'elasticsearch.username'                   => $kibana_username,
       # # TODO: https://github.com/voxpupuli/puppet-kibana/issues/38
-      'elasticsearch.password'                   => $kibana_password.node_encrypt::secret,
+      'elasticsearch.password'                   => $kibana_password,
       'elasticsearch.ssl.verificationMode'       => 'full',
       'elasticsearch.ssl.certificate'            => "${etc_kibana}/certs/http.crt",
       'elasticsearch.ssl.certificateAuthorities' => [

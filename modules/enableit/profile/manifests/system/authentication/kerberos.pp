@@ -85,7 +85,7 @@ class profile::system::authentication::kerberos (
         domain               => $default_realm,
         ou                   => $ou,
         domain_join_user     => $join_user,
-        domain_join_password => $join_password.node_encrypt::secret,
+        domain_join_password => $join_password,
         krb_ticket_join      => false,
         manage_sssd_config   => false,
         manage_sssd_service  => false,
