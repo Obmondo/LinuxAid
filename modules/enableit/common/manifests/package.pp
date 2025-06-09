@@ -4,19 +4,58 @@ class common::package (
   Hash[
     String,
     Struct[{
-      ensure => Optional[Variant[Enum['latest', 'present', 'purge', 'absent', 'installed'], String]],
+      ensure => Optional[Stdlib::Ensure::Package],
       noop   => Optional[Boolean],
+      pin    => Optional[String],
     }]
-  ] $manage = {},
+  ]                       $manage                   = {},
   Array[String]           $default_packages         = [],
   Array[String]           $removed_packages         = [],
   Array[String]           $required_packages        = [],
 ) {
-  $manage.each | $package_name, $status | {
-    package { $package_name :
+
+  # Manage package
+  $manage.each | $package_name, $options | {
+
+    confine($options['pin'], $options['ensure'] in ['present', 'absent'] or $options['ensure'] =~ Boolean, 'Package pinning requires an explicit package version') #lint:ignore:140chars
+
+    stdlib::ensure_packages($package_name, {
       # make sure the default is installed, even if it should change
-      ensure => pick($status['ensure'], installed),
-      noop   => $status['noop'],
+      ensure => pick($options['ensure'], installed),
+      noop   => $options['noop'],
+    })
+
+    if $options['pin'] {
+      case $facts['package_provider'] {
+        'apt': {
+          apt::pin { "pin ${package_name}":
+            version  => $options['pin'],
+            priority => 999,
+            packages => $package_name,
+          }
+        }
+        /^(yum|dnf)$/: {
+          $release = split($options['pin'], '-')
+
+          yum::versionlock { $package_name:
+            ensure  => present,
+            version => $release[0],
+            # NOTE: some package has like el8_10 (8.10) and some just have el8, so * will help to catch those
+            release => "${release[1]}.el${facts['os']['release']['major']}*",
+            arch    => $facts['os']['architecture'],
+          }
+        }
+        'zypper': {
+          $full_package_name = "${package_name}-${options['pin']}-*.sles${facts['os']['release']['major']}*.${facts['os']['architecture']}"
+
+          zypprepo::versionlock { $full_package_name:
+            ensure  => present,
+          }
+        }
+        default: {
+          info('Unsupported package provider, please raise issue on github')
+        }
+      }
     }
   }
 
