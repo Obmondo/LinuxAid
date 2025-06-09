@@ -11,7 +11,10 @@ class profile::computing::slurm (
   Array[Eit_types::IPCIDR]       $node_cidrs              = $::role::computing::slurm::node_cidrs,
   Eit_types::Version             $slurm_version           = $::role::computing::slurm::slurm_version,
   Eit_types::Version             $munge_version           = $::role::computing::slurm::munge_version,
-  Optional[String]               $munge_key               = $::role::computing::slurm::munge_key,
+  Optional[Varaint[
+    Eit_Files::Source,
+    String
+  ]]                             $munge_key               = $::role::computing::slurm::munge_key,
   Boolean                        $slurmctld               = $::role::computing::slurm::slurmctld,
   Boolean                        $slurmdbd                = $::role::computing::slurm::slurmdbd,
   Boolean                        $slurmd                  = $::role::computing::slurm::slurmd,
@@ -79,7 +82,7 @@ class profile::computing::slurm (
 
     # Munge
     manage_munge              => true,
-    munge_create_key          => true,
+    munge_create_key          => false,
     munge_uid                 => 64031,
     munge_gid                 => 64031,
     munge_key_content         => $munge_key.node_encrypt::secret,
