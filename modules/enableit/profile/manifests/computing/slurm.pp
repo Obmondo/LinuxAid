@@ -11,7 +11,7 @@ class profile::computing::slurm (
   Array[Eit_types::IPCIDR]       $node_cidrs              = $::role::computing::slurm::node_cidrs,
   Eit_types::Version             $slurm_version           = $::role::computing::slurm::slurm_version,
   Eit_types::Version             $munge_version           = $::role::computing::slurm::munge_version,
-  Optional[Varaint[
+  Optional[Variant[
     Eit_Files::Source,
     String
   ]]                             $munge_key               = $::role::computing::slurm::munge_key,
@@ -50,6 +50,12 @@ class profile::computing::slurm (
     ensure => absent,
   }
 
+  # Don't encrypt if file is supplied
+  $_munge_key = type($munge_key) ? {
+    String  => { munge_key_content => $munge_key.node_encrypt::secret },
+    default => { munge_key_source => eit_files::to_file($munge_key)['resource']['source'] },
+  }
+
   class { '::slurm':
     ensure                    => ensure_present($enable),
     version                   => $slurm_version,
@@ -85,7 +91,6 @@ class profile::computing::slurm (
     munge_create_key          => false,
     munge_uid                 => 64031,
     munge_gid                 => 64031,
-    munge_key_content         => $munge_key.node_encrypt::secret,
 
     # Disable the Lua job submit plugin; broken/unnecessary
     jobsubmitplugins          => [],
@@ -96,6 +101,8 @@ class profile::computing::slurm (
     cgroup_constrainkmemspace => false,
     cgroup_constrainramspace  => false,
     cgroup_constrainswapspace => false,
+
+    *                         => $_munge_key,
   }
 
   if $enable and $slurmctld {
