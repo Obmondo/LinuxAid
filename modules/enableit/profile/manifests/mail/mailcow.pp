@@ -119,7 +119,7 @@ class profile::mail::mailcow (
         'DBUSER'                        => 'mailcow',
         'DBPASS'                        => $dbpass,
         'DBROOT'                        => $dbroot,
-        'REDISPASS'                     => $redispass.node_encrypt::secret,
+        'REDISPASS'                     => $redispass,
         'HTTP_BIND'                     => $http_bind,
         'HTTPS_BIND'                    => $http_bind,
         'DOVEADM_PORT'                  => '127.0.0.1:19991',
@@ -156,7 +156,7 @@ class profile::mail::mailcow (
         'EXPORTER_LISTEN_ADDRESS'       => $exporter_listen_address,
         'MAILCOW_EXPORTER_HOST'         => $domain,
         'MAILCOW_EXPORTER_API_KEY'      => $exporter_api_key,
-      }),
+      }).node_encrypt::secret,
     ;
     # NOTE: These container tag are manually maintained to have a better control
     # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
