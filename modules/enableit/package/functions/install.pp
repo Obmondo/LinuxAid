@@ -3,24 +3,25 @@
 # Tries to look up package names in hiera. If not found, uses package name as-is.
 #
 # @example
-#   package::install('emacs')
-#   package::install('rsync', 'absent')
-#   package::install('python-pymongo', {notify => Service['diamond']})
-#   package::install('hp-health', 'present' , '9.4.0.1.7-5.')
-#   package::install('diamond', {notify => Service['diamond']} , '4.0.471')
+# Install emacs (will be in installed state)
+# package::install('emacs')
 #
-# @param package_names One or more package names
-# @param status Package status
+# Remove the rsync package
+# package::install('rsync', 'absent')
+#
+# Install hp-health with a specific version, and notify some service
+# package::install('hp-health', {notify => Service['some-servicd']}))
+#
+# Install diamond package with a specific version, but does not set a pin
+# package::install('diamond', '4.0.471')
+#
+# @param packages One or more package names
 # @param parameters Additional parameters. These are merged with `status`.
 
 function package::install (
   Variant[String, Array[String]] $packages,
-  Variant[Boolean, Enum['present', 'absent'], Hash[String, Any], String] $parameters = {},
-  Boolean $pin = false,
+  Variant[Stdlib::Ensure::Package, Hash[String, Any]] $parameters = {},
 ) {
-
-  confine($pin, $::facts['os']['family'] != 'Debian', 'Package pinning only supported on Debian-based systems')
-  confine($pin, $parameters in ['present', 'absent'] or $parameters =~ Boolean, 'Package pinning requires an explicit package version')
 
   # Packages
   $_packages = case $packages {
@@ -39,15 +40,6 @@ function package::install (
     }
     default: {
       $parameters
-    }
-  }
-
-  if $pin {
-    $_name = join($_packages, ', ')
-    apt::pin { $_name:
-      packages => $_packages,
-      version  => $parameters,
-      priority => 999,
     }
   }
 

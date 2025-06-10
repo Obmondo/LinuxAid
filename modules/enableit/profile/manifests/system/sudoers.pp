@@ -67,7 +67,7 @@ class profile::system::sudoers (
     require  => File[$sudoers_d_dir],
   }
 
-  package::install('pam-ssh-agent-auth', $common::system::authentication::sudo::ssh_agent_auth)
+  package::install('pam-ssh-agent-auth', ensure_present($common::system::authentication::sudo::ssh_agent_auth))
 
   $sudoers.each |$name, $v| {
     profile::system::sudoers::conf { $name:
