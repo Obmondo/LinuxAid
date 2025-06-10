@@ -219,7 +219,7 @@ repository::mirror::default_configurations:
         key_ids:
           - 'F6ECB3762474EDA9D21B7022871920D1991BC93C'
           - '790BC7277767219C42C86F933B4FE6ACC0B21F32'
-        mirror_url: 'http://dk.ports.ubuntu.com/ubuntu-ports'
+        mirror_url: 'https://dk.ports.ubuntu.com/ubuntu-ports'
         package_format: 'deb'
         repodir: 'apt/ubuntu_arm64'
         architectures:
