@@ -1,0 +1,87 @@
+{
+  "name": "puppet-cassandra",
+  "version": "3.1.0",
+  "author": "Vox Pupuli",
+  "summary": "Installs Cassandra & DataStax Agent on RHEL/Ubuntu/Debian.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/puppet-cassandra",
+  "project_page": "https://github.com/voxpupuli/puppet-cassandra",
+  "issues_url": "https://github.com/voxpupuli/puppet-cassandra/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-apt",
+      "version_requirement": ">= 2.0.0 < 8.0.0"
+    },
+    {
+      "name": "puppetlabs-firewall",
+      "version_requirement": ">= 1.0.0 < 3.0.0"
+    },
+    {
+      "name": "puppetlabs-inifile",
+      "version_requirement": ">= 1.5.0 < 5.0.0"
+    },
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 3.0.0 < 7.0.0"
+    }
+  ],
+  "data_provider": null,
+  "tags": [
+    "Apache",
+    "cassandra",
+    "cluster",
+    "database",
+    "datastax",
+    "datastax-agent",
+    "nosql"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.5.8 < 7.0.0"
+    }
+  ]
+}
