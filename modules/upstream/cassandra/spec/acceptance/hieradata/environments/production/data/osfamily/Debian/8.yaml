@@ -1,0 +1,14 @@
+---
+cassandra::java::aptkey:
+  ZuluJDK:
+    id: '27BC0C8CB3D81623F59BDADCB1998361219BD9C9'
+    server: 'keyserver.ubuntu.com'
+
+cassandra::java::aptsource:
+  ZuluJDK:
+    location: 'http://repos.azulsystems.com/debian'
+    comment: 'Zulu OpenJDK 8 for Debian'
+    release: 'stable'
+    repos: 'main'
+
+cassandra::java::package_name: 'zulu-8'

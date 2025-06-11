@@ -1,0 +1,15 @@
+---
+cassandra::hints_directory_mode: '0770'
+
+cassandra::java::aptkey:
+  OpenJDK:
+    id: 'DA1A4A13543B466853BAF164EB9B1D8886F44E2A'
+    server: 'keyserver.ubuntu.com'
+
+cassandra::java::aptsource:
+  OpenJDK:
+    comment: 'OpenJDK builds (all archs)'
+    location: 'http://ppa.launchpad.net/openjdk-r/ppa/ubuntu'
+    release: 'xenial'
+
+cassandra::java::package_name: 'openjdk-8-jdk'

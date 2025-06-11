@@ -1,0 +1,9 @@
+---
+:backends:
+  - yaml
+:yaml:
+  :datadir: /etc/puppetlabs/code/environments/vagrant/hieradata
+:hierarchy:
+  - operatingsystem/%{operatingsystem}-%{operatingsystemmajrelease}
+  - operatingsystem/%{operatingsystem}
+  - common

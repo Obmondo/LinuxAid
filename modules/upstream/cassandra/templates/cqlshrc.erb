@@ -1,0 +1,7 @@
+; Managed by Puppet
+; --cqlshrc=CQLSHRC became available in 2.1 - does NOT work in 2.0
+
+[authentication]
+;; If Cassandra has auth enabled, fill out these options
+<% if @cqlsh_user != nil %>username = <%= @cqlsh_user %><% else %>; username = fred<% end %>
+<% if @cqlsh_password != nil %>password = <%= @cqlsh_password %><% else %>; password = !!bang!!$<% end %>
