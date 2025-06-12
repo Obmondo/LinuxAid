@@ -33,8 +33,8 @@ define cassandra::schema::user (
     $quote = '"'
   }
 
-  if $::cassandrarelease != undef {
-    if versioncmp($::cassandrarelease, '2.2') < 0 {
+  if $facts['cassandrarelease'] != undef {
+    if versioncmp($facts['cassandrarelease'], '2.2') < 0 {
       $operate_with_roles = false
     } else {
       $operate_with_roles = true
@@ -112,7 +112,7 @@ define cassandra::schema::user (
     exec { "Create user (${user_name})":
       command => $create_command,
       unless  => $read_command,
-      require => Exec['::cassandra::schema connection test'],
+      require => Exec['cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     if $operate_with_roles {
@@ -129,7 +129,7 @@ define cassandra::schema::user (
     exec { "Delete user (${user_name})":
       command => $delete_command,
       onlyif  => $read_command,
-      require => Exec['::cassandra::schema connection test'],
+      require => Exec['cassandra::schema connection test'],
     }
   } else {
     fail("Unknown action (${ensure}) for ensure attribute.")

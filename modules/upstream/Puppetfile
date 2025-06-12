@@ -433,3 +433,7 @@ mod 'camptocamp-subversion'
 mod 'pseiler-vsftpd'
     :git => 'https://github.com/pseiler/puppet-vsftpd'
     :ref => 'v8.1.0'
+
+mod 'cassandra'
+    :git => 'https://github.com/voxpupuli/puppet-cassandra'
+    :ref => '2f81a0b2a7c5af6b1464bef9fa7838efa41140ed'
