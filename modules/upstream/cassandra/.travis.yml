@@ -1,0 +1,49 @@
+---
+# yamllint disable rule:line-length rule:truthy
+os: linux
+dist: focal
+language: ruby
+cache: bundler
+before_install:
+  - yes | gem update --system
+  - bundle --version
+script:
+  - 'bundle exec rake $CHECK'
+jobs:
+  fast_finish: true
+  include:
+    - rvm: 2.4.4
+      bundler_args: --without system_tests development release
+      env: PUPPET_VERSION="~> 5.0" CHECK=test
+    - rvm: 2.5.3
+      bundler_args: --without system_tests development release
+      env: PUPPET_VERSION="~> 6.0" CHECK=test_with_coveralls
+    - rvm: 2.5.3
+      bundler_args: --without system_tests development release
+      env: PUPPET_VERSION="~> 6.0" CHECK=rubocop
+    - rvm: 2.4.4
+      bundler_args: --without system_tests development release
+      env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes
+branches:
+  only:
+    - master
+    - /^v\d/
+notifications:
+  email: false
+  webhooks: https://voxpupu.li/incoming/travis
+  irc:
+    on_success: always
+    on_failure: always
+    channels:
+      - "chat.freenode.org#voxpupuli-notifications"
+deploy:
+  provider: puppetforge
+  username: puppet
+  password:
+    secure: "I/IK9bG88UOVll0hpuxluGp6IY5gicLaDHug/jGwfuWlN4R3coPAqWO/sGOyaEMbc9V5/Fw0H0ThQdYY3eI3rW5M4a1r9TSg/Z9d46JximPat/XvcpLvUc0G+QxCVhTRmYqD7u0wuX5VSric0PQU6KSjH84ZbKgAA8l04NGObgUI6ugjaNBhkaoIP3glYcHY1fgn5vwER2T/iiXZ5q3qDtYboR2GWLUODLWSpXWZRy7oYvp/RGTSe1fKjDwkbtrZiFvRoyzQvDhEAr+0MFDxJiOLdoKJFeBs6BrF2lyUJ6udlOmEYV94DfKoxEhhlZbxkPCh4SedT79i3c3xkKlf9wfAsEyGSTfc9OtyYBfoHcE9GMRZIvLf2Jn2mpHMO2694Fil4d7JdhLYQ/9Gv9VgFrYosQdVlDh+RxE2CXzrO39LhA1GeOY/n1r+DdvuCJs1fZfBZ1ORb7eQNp1BknurJ8FoYCKlEgihS223IJEnGueDdYkchMSRjS6C3a/HIzBz0RvEDGXD3WgrY5edRIaGziSoSr5eXzumK7N1FFBlpfY/7j38zI1ibWN4PRakmZppeeWOb1xiuVS5JkngCLoYerxLJEEjt8+klXhwnqqJukFuObaVsyprSWp+aAu/UHD/4w/6/lC6Elv+VzccLpITOR5b7VdAuCttQ5PGse6fits="
+  on:
+    tags: true
+    # all_branches is required to use tags
+    all_branches: true
+    # Only publish the build marked with "DEPLOY_TO_FORGE"
+    condition: "$DEPLOY_TO_FORGE = yes"

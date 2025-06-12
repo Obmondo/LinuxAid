@@ -1,6 +1,0 @@
---- 
-cassandra::settings:
-  authenticator: PasswordAuthenticator
-  authorizer: CassandraAuthorizer
-  cluster_name: BEAKER
-  endpoint_snitch: GossipingPropertyFileSnitch
