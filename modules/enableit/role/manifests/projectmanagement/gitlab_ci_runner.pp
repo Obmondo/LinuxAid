@@ -27,8 +27,6 @@
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::projectmanagement::gitlab_ci_runner (
-  Eit_types::URL                   $url,
-  String                           $token,
   Optional[Enum['docker']]         $executor         = 'docker',
   Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/xenial',
   Integer[1,default]               $concurrency      = 2,
@@ -52,8 +50,6 @@ class role::projectmanagement::gitlab_ci_runner (
           '`common::network::firewall::allow_docker` must be `true`')
 
   class { 'profile::projectmanagement::gitlab_ci_runner':
-    url              => $url,
-    token            => $token,
     executor         => $executor,
     docker_image     => $docker_image,
     runners          => $runners,
