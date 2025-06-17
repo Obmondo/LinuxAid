@@ -6,10 +6,13 @@ class common::setup (
   Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
   Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
   Boolean              $noop_value = false,
+  Boolean              $jumphost = false,
 ) {
   include common::system::authentication::sudo
   contain ::common::virtualization
-
+  if $jumphost {
+    contain common::setup::jumphost
+  }
   # create obmondo dirs and copy libraries
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
