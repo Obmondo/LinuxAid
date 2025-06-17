@@ -41,6 +41,8 @@ services:
     image: <%= $registry_path %>/repository-snapshot:<%= $snapshot_tag %>
     volumes:
       - /dev/log:/dev/log
-      - <%= $basedir -%>:/var/cache/packagesign
+      - <%= $basedir -%>:<%= $basedir %>
       - /etc/obmondo/repository-mirror/repos:/etc/obmondo/repository-mirror/repos
-  <% } -%>
+    environment:
+      - REPOSRC=<%= $basedir %>
+  <% } %>
