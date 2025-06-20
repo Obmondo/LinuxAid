@@ -6,9 +6,13 @@
 #
 class role::db::cassandra (
   Hash                          $settings          = {},
-  Enum[41]                      $cassandra_version = 41,
+  Enum['41']                    $cassandra_version = '41',
   Optional[Array[Stdlib::Host]] $seeds             = [],
+  Boolean                       $backup            = true,
 ) inherits ::role::db {
-
   contain profile::db::cassandra
+
+  if $backup {
+    contain common::backup::cassandra
+  }
 }

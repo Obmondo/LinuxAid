@@ -1,0 +1,31 @@
+[cassandra]
+config_file = <%= $cassandra_config_file %>
+cql_username = <%= $cql_username %>
+cql_password = <%= $cql_password %>
+cql_host = <%= $cql_host %>
+cql_port = <%= $cql_port %>
+stop_cmd = <%= $stop_cmd %>
+start_cmd = <%= $start_cmd %>
+
+[storage]
+storage_provider = <%= $storage_provider %>
+bucket_name = <%= $bucket_name %>
+base_path = <%= $base_path %>
+max_backup_age = <%= $max_backup_age %>
+max_backup_count = <%= $max_backup_count %>
+
+[monitoring]
+monitoring_provider = <%= $monitoring_provider %>
+
+[ssh]
+username = <%= $ssh_username %>
+key_file = <%= $ssh_key_file %>
+port = <%= $ssh_port %>
+cert_file = <%= $ssh_cert_file %>
+
+[checks]
+health_check = <%= $health_check %>
+query = <%= $query %>
+
+[logging]
+level = <%= $log_level %>

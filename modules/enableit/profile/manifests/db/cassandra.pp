@@ -6,7 +6,7 @@
 #
 class profile::db::cassandra (
   Hash                          $settings          = $role::db::cassandra::settings,
-  Enum[41]                      $cassandra_version = $role::db::cassandra::cassandra_version,
+  Enum['41']                    $cassandra_version = $role::db::cassandra::cassandra_version,
   Optional[Array[Stdlib::Host]] $seeds             = $role::db::cassandra::seeds,
 ) {
   $baseline_settings = {
