@@ -233,4 +233,5 @@ class common::system (
   include common::system::cloud_init
   include common::system::selinux
   include common::system::updates
+  include common::system::jumphost
 }
