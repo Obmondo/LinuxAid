@@ -35,6 +35,7 @@ class role::projectmanagement::gitlab_ci_runner (
   Boolean                          $manage_repo      = true,
   Boolean                          $manage_docker    = true,
   Integer[0,default]               $check_interval   = 30,
+  Eit_types::IPPort                $listen_address   = '127.254.254.254:63384',
   Boolean                          $__blendable,
 
   Eit_types::Encrypt::Params $encrypt_params = [
@@ -58,5 +59,6 @@ class role::projectmanagement::gitlab_ci_runner (
     manage_repo      => $manage_repo,
     manage_docker    => $manage_docker,
     check_interval   => $check_interval,
+    listen_address   => $listen_address,
   }
 }

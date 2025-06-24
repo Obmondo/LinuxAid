@@ -2,16 +2,19 @@
 # $redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen on port 80 normally). it actually won't redirect unless external_url IS set to https://
 #
 class profile::projectmanagement::gitlab_ci_runner (
-  Optional[Enum['docker']]         $executor         = 'docker',
-  Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/noble',
-  Hash                             $runners          = {},
-  Integer[1,default]               $concurrency      = 2,
-  Hash                             $runners_defaults = {},
-  Boolean                          $manage_repo      = true,
-  Boolean                          $manage_docker    = true,
-  Integer[0,default]               $check_interval   = 30,
+  Optional[Enum['docker']]         $executor           = 'docker',
+  Optional[Eit_types::DockerImage] $docker_image       = 'ubuntu/noble',
+  Hash                             $runners            = {},
+  Integer[1,default]               $concurrency        = 2,
+  Hash                             $runners_defaults   = {},
+  Boolean                          $manage_repo        = true,
+  Boolean                          $manage_docker      = true,
+  Integer[0,default]               $check_interval     = 30,
+  Eit_types::IPPort                $listen_address     = '127.254.254.254:63384',
   Stdlib::Absolutepath             $gitlab_runner_home = '/var/lib/gitlab-runner',
 ) {
+
+  include common::monitor::exporter::gitlab_runner
 
   if $manage_docker {
     contain role::virtualization::docker
@@ -29,6 +32,7 @@ class profile::projectmanagement::gitlab_ci_runner (
     manage_repo     => $manage_repo,
     runners         => $runners,
     runner_defaults => $runners_defaults,
+    listen_address  => $listen_address,
   }
 
   file { $gitlab_runner_home:
