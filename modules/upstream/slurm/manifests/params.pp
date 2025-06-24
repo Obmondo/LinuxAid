@@ -346,7 +346,7 @@ class slurm::params {
   # }
   $cgroup_configfile = 'cgroup.conf'
   $cgroup_automount  = true
-  $cgroup_mountpoint = $facts['os']['release']['major'] ? {
+  $cgroup_mountpoint = $::facts.dig('os', 'release', 'major') ? {
     '6'     => '/cgroup',
     default => '/sys/fs/cgroup',
   }

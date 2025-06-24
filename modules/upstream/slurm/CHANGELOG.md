@@ -4,6 +4,54 @@ Changelog
 
 (unreleased)
 ------------
+- Merge tag 'v1.5.2' into devel. [Hyacinthe Cartiaux]
+
+  v1.5.2
+
+
+v1.5.2 (2025-05-05)
+-------------------
+- Merge branch 'release/1.5.2' into production. [Hyacinthe Cartiaux]
+- Bump to version '1.5.2' [Hyacinthe Cartiaux]
+- Gemfile.lock - update. [Hyacinthe Cartiaux]
+- Metadata.json - new line needed at the end of the file. [Hyacinthe
+  Cartiaux]
+- Gemfile - fixes for PDK. [Hyacinthe Cartiaux]
+- Gemfile.lock - bundle update. [Hyacinthe Cartiaux]
+- Merge pull request #82 from Aman1994/fix-package-name. [Hyacinthe
+  Cartiaux]
+
+  Changed the package name from libibmad to infiniband-diags since offi…
+- Changed the package name from libibmad to infiniband-diags since
+  official redhat has done that. [Aman Shah]
+- Merge pull request #81 from jorhett/pass_mysql_db_charset. [Hyacinthe
+  Cartiaux]
+
+  Add slurmdbd::charset and collate to override mysql module values
+- Add slurmdbd::charset and collate to override mysql module values. [Jo
+  Rhett]
+- Merge pull request #80 from jorhett/commitdelay-broken-by-reference-
+  to-dbpausd. [Hyacinthe Cartiaux]
+
+  DBD CommitDelay broken by apparent mistype
+- DBD CommitDelay broken by apparent mistype. [Jo Rhett]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
+- Merge pull request #79 from ULHPC/dependabot/bundler/rexml-3.3.9.
+  [Hyacinthe Cartiaux]
+
+  Bump rexml from 3.3.6 to 3.3.9
+- Bump rexml from 3.3.6 to 3.3.9. [dependabot[bot]]
+
+  Bumps [rexml](https://github.com/ruby/rexml) from 3.3.6 to 3.3.9.
+  - [Release notes](https://github.com/ruby/rexml/releases)
+  - [Changelog](https://github.com/ruby/rexml/blob/master/NEWS.md)
+  - [Commits](https://github.com/ruby/rexml/compare/v3.3.6...v3.3.9)
+
+  ---
+  updated-dependencies:
+  - dependency-name: rexml
+    dependency-type: indirect
+  ...
 - Merge tag 'v1.5.1' into devel. [Hyacinthe Cartiaux]
 
   v1.5.1
