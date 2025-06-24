@@ -1,3 +1,130 @@
+* Mon Nov 25 2024 Steven Pritchard <steve@sicura-us> - 8.14.4
+- Fix more use of legacy facts
+
+* Tue Jul 16 2024 Steven Pritchard <steve@sicura.us> - 8.14.3
+- Fix comparison of space_left and admin_space_left as percentages
+
+* Mon Jul 08 2024 Steven Pritchard <steve@sicura.us> - 8.14.2
+- Remove calls to deprecated parameters (for Puppet 8 compatibility)
+
+* Wed Jul 03 2024 Steven Pritchard <steve@sicura.us> - 8.14.1
+- Clean up legacy fact usage for Puppet 8 compatibility
+
+* Wed Nov 22 2023 ben <benrobertson9876@gmail.com> - 8.14.0
+- (SIMP-10744) Add purge behaviour for auditd rules
+
+* Tue Oct 24 2023 Joshua Hoblitt <josh@hoblitt.com> - 8.13.0
+- Add EL9 support
+
+* Wed Oct 11 2023 Steven Pritchard <steve@sicura.us> - 8.12.0
+- [puppetsync] Updates for Puppet 8
+  - These updates may include the following:
+    - Update Gemfile
+    - Add support for Puppet 8
+    - Drop support for Puppet 6
+    - Update module dependencies
+
+* Wed Aug 23 2023 Steven Pritchard <steve@sicura.us> - 8.11.0
+- Add AlmaLinux 8 support
+
+* Thu Aug 17 2023 Mike Riddle <mike@sicura.us> - 8.10.1
+- Add RHEL 9 hieradata
+
+* Wed Jul 12 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 8.10.0
+- Add RockyLinux 8 support
+
+* Tue Jun 13 2023 Mike Riddle <mike@sicura.us> - 8.9.1
+- All of the rule files will now have the same mode defined for /etc/audit/rules.d
+
+* Tue Nov 15 2022 Joshua Hoblitt <josh@hoblitt.com> - 8.9.0
+- do not include auditd::config::grub on hosts without grub
+- fix simp base profile to work when grub_version fact is not set
+
+* Fri Jul 29 2022 Benedikt Fischer <benedikt.fischer@noris.de> - 8.8.0
+- Make parameter backlog_wait_time optional because there are auditd versions not supporting it
+
+* Fri Jun 24 2022 Trevor Vaughan <trevor@sicura.us> - 8.8.0
+- Add support for Amazon Linux 2
+
+* Sat Jun 11 2022 Trevor Vaughan <trevor@sicura.us> - 8.7.5
+- Actually fix flapping on rotated audit log files
+
+* Fri Jun 03 2022 Trevor Vaughan <trevor@sicura.us> - 8.7.4
+- Ensure that permissions do not flap on rotated audit log files
+
+* Fri May 27 2022 Zach Schulte <zschulte@broadinstitute.org> - 8.7.3
+- Fix the permissions on `/var/log/audit`
+
+* Fri May 13 2022 Mike Riddle <mike@sicura.us> - 8.7.2
+- Changed the auditd_sample_rulesets fact to look in both
+  /usr/share/audit/sample-rules and /usr/share/doc/audit*/rules for
+  sample rulesets.
+
+* Thu Mar 24 2022 Mike Riddle <mike@sicura.us> - 8.7.1
+- Fixed a bug preventing overflow_action from being set properly
+
+* Mon Jun 14 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 8.7.0
+- Removed support for Puppet 5
+- Ensured support for Puppet 7 in requirements and stdlib
+
+* Wed May 19 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.6.5
+- Fixed
+  - Align EL8 STIG settings
+- Changed
+  - Bump supported puppet version to include 7
+  - Always add the 'head' rules (global auditd config) settings when applying
+    rule sets. These do not interfere with user-defined rules and are required
+    for proper functionality of the system.
+
+* Thu Apr 08 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 8.6.4
+- Use `-F key=` in lieu of `-k` in the STIG profile, to match scanner updates.
+
+* Sun Mar 07 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.6.3
+- Switch auditd rules to be 'always,exit' instead of 'exit,always' to match the
+  man pages and general scanner updates.
+
+* Tue Feb 02 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 8.6.3
+- Expanded simp/rsyslog dependendency range to < 9.0.0.
+
+* Thu Jan 07 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 8.6.3
+- Removed EL6 support
+
+* Mon Nov 23 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 8.6.2-0
+- Fixed a bug in which the module could not enable auditing in a system
+  with auditing already disabled in the kernel, when replication of the
+  audit logs to syslog was required.
+  - Manifest would fail to compile because of a nil `auditd_version` fact.
+
+* Wed Sep 23 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.6.1-0
+- Allow auditd space_left and admin_space_left to accept percentages on
+  supported versions
+
+* Wed Aug 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.6.0-0
+- Ensure that the auditd service is not managed if the kernel is not enforcing
+  auditing
+- Add an acceptance test for toggling disabling auditing without modifying the
+  kernel parameter
+
+* Fri Aug 07 2020 Marcel Fischer <marcel@fury.home.loc> - 8.5.3-0
+- Add `INCREMENTAL_ASYNC` to possible values for `$::auditd::flush`
+
+* Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.5.2-0
+- Ensure that facts are properly confined
+- Utilize the new simplib__auditd fact
+
+* Mon Jul 13 2020 Adam Yohrling <adam.yohrling@onyxpoint.com> - 8.5.1-0
+- Add `built_in` audit profile to the subsystem that provides ability
+  to include and manage sample rulesets to be compiled into active rules
+
+* Wed Jun 24 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.5.1-0
+- Added a File statement for /etc/audit/audit.rules.prev to prevent unnecessary
+  flapping
+- Ensure that the inspec tests don't run if there isn't a profile available
+- Ensure that kmod is audited in all STIG modes on EL7+
+
+* Mon Jun 15 2020 Jan Fickler <jan.fickler@webfleet.com> - 8.5.1-0
+- Fix regex substitution for bad path characters
+
 * Thu Oct 31 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 8.5.0-0
 - Allow users to knockout entries from arrays specified in Hiera
 - Multiple rules added based on best practices mostly pulled from

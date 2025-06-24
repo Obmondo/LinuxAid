@@ -5,8 +5,8 @@ local_events = <%= $auditd::local_events ? { false => 'no', default => 'yes' } %
 <% if defined('$auditd::verify_email') { -%>
 verify_email = <%= $auditd::verify_email ? { false => 'no', default => 'yes' } %>
 <% } -%>
-<% if defined('$auditd::overflowaction') { -%>
-overflow_action = <%= $auditd::overflowaction %>
+<% if defined('$auditd::overflow_action') { -%>
+overflow_action = <%= $auditd::overflow_action %>
 <% } -%>
 <% if defined('$auditd::q_depth') { -%>
 q_depth = <%= $auditd::q_depth %>

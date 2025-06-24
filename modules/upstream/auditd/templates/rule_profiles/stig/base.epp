@@ -2,357 +2,367 @@
 <% if $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations { -%>
 
 ## Audit unsuccessful file operations
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S creat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S creat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S creat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S creat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S open -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S open -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S open -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S open -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S open -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S open -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S openat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S openat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S openat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S openat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S openat -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S openat -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S truncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S truncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S truncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S truncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S truncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S truncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S truncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S truncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_unsuccessful_file_operations_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_passwd_cmds { -%>
 
 ## Audit the execution of password commands
--a exit,always -F path=/usr/bin/passwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/passwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/passwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
 <%   } -%>
 
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/unix_chkpwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+-a always,exit -F path=/sbin/unix_chkpwd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
 
--a exit,always -F path=/usr/bin/gpasswd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/gpasswd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
-<%   } -%>
-
--a exit,always -F path=/usr/bin/chage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/chage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/gpasswd -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/userhelper -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/sbin/userhelper -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   } -%>
+
+-a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/userhelper -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_passwd_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_priv_cmds { -%>
 
 ## Audit the execution of privilege-related commands
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/bin/su -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/bin/su -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/bin/su -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+-a always,exit -F path=/bin/su -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
 
--a exit,always -F path=/usr/bin/sudo -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/sudo -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
-<%   } -%>
-
--a exit,always -F path=/usr/bin/newgrp -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/newgrp -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/sudo -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/chsh -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/chsh -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/newgrp -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/sudoedit -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/sudoedit -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chsh -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   } -%>
+
+-a always,exit -F path=/usr/bin/sudoedit -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/sudoedit -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_priv_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_postfix_cmds { -%>
 
 ## Audit the execution of postfix-related commands
--a exit,always -F path=/usr/sbin/postdrop -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/sbin/postdrop -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
+-a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/postdrop -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/postqueue -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/sbin/postqueue -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
+-a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/postqueue -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_postfix_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd { -%>
 
 ## Audit the execution of the ssh-keysign command
--a exit,always -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd_tag %>
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_crontab_cmd { -%>
 
 ## Audit the execution of the crontab command
--a exit,always -F path=/usr/bin/crontab -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_crontab_cmd_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/crontab -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_crontab_cmd_tag %>
+-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_crontab_cmd_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/crontab -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_crontab_cmd_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd { -%>
 
 ## Audit the execution of the pam_timestamp_check command
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag %>
+-a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_selinux_cmds { -%>
 
 ## Audit selinux commands
--a exit,always -F path=/usr/sbin/semanage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/sbin/semanage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/sbin/semanage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/semanage -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/setsebool -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/sbin/setsebool -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/sbin/setsebool -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/setsebool -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/chcon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/bin/chcon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chcon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 <%   } -%>
 
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/sbin/setfiles -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/setfiles -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/setfiles -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+-a always,exit -F path=/sbin/setfiles -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 
--a exit,always -F path=/sbin/restorecon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/sbin/restorecon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+-a always,exit -F path=/sbin/restorecon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/restorecon -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_selinux_cmds_tag %>
 <%   } -%>
 <% } -%>
 
 ## Permissions auditing separated by chown, chmod, and attr
 <% if $auditd::config::audit_profiles::stig::audit_chown { -%>
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S chown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S chown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S chown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+-a always,exit -F arch=b32 -S chown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S fchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S fchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S fchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+-a always,exit -F arch=b32 -S fchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S lchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S lchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S lchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+-a always,exit -F arch=b32 -S lchown -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S fchownat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S fchownat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S fchownat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
+-a always,exit -F arch=b32 -S fchownat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chown_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_chmod { -%>
 
--a exit,always -F arch=b64 -S chmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b32 -S chmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+-a always,exit -F arch=b64 -S chmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b32 -S chmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
 <%   } -%>
 
--a exit,always -F arch=b64 -S fchmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b32 -S fchmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+-a always,exit -F arch=b64 -S fchmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b32 -S fchmod -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
 <%   } -%>
 
--a exit,always -F arch=b64 -S fchmodat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b32 -S fchmodat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+-a always,exit -F arch=b64 -S fchmodat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b32 -S fchmodat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_chmod_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_attr { -%>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S setxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S setxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S setxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S setxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S fsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S fsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S fsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S fsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S lsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S lsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S lsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S lsetxattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S removexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S removexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S removexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S removexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S fremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S fremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S fremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S fremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S lremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S lremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S lremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
+-a always,exit -F arch=b32 -S lremovexattr -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_attr_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_rename_remove { -%>
 
 ## Audit rename/removal operations
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S rename -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S rename -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S rename -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S rename -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S renameat -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S renameat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S renameat -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S renameat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S rmdir -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S rmdir -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S rmdir -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S rmdir -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S unlink -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S unlink -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S unlink -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S unlink -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S unlinkat -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S unlinkat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S unlinkat -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S unlinkat -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_rename_remove_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_suid_sgid { -%>
 
 ## Audit the execution of suid and sgid binaries.
+<%   if $facts['os']['hardware'] == 'x86_64' { -%>
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k <%= $auditd::config::audit_profiles::stig::audit_suid_tag %>
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k <%= $auditd::config::audit_profiles::stig::audit_sgid_tag %>
+<%   } -%>
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k <%= $auditd::config::audit_profiles::stig::audit_suid_tag %>
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k <%= $auditd::config::audit_profiles::stig::audit_sgid_tag %>
 <%   $auditd::config::audit_profiles::stig::_suid_sgid_cmds.each |$cmd| { -%>
--a exit,always -F path=<%= $cmd %> -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_suid_sgid_tag %>
+-a always,exit -F path=<%= $cmd %> -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_suid_sgid_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_kernel_modules { -%>
 
 ## Audit the loading and unloading of kernel modules.
-<%   if $facts['os']['release']['major'] > '6' { -%>
--w /usr/sbin/insmod -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-w /usr/bin/kmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-w /bin/kmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--w /sbin/insmod -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-w /usr/sbin/insmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   } -%>
+-w /sbin/insmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['os']['release']['major'] > '6' { -%>
--w /usr/sbin/rmmod -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-w /usr/sbin/rmmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--w /sbin/rmmod -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-w /sbin/rmmod -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['os']['release']['major'] > '6' { -%>
--w /usr/sbin/modprobe -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-w /usr/sbin/modprobe -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--w /sbin/modprobe -p x -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-w /sbin/modprobe -p x -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S create_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S create_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S create_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-a always,exit -F arch=b32 -S create_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S init_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S init_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S init_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-a always,exit -F arch=b32 -S init_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S finit_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S finit_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S finit_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-a always,exit -F arch=b32 -S finit_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S delete_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S delete_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S delete_module -k <%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
+-a always,exit -F arch=b32 -S delete_module -F key=<%= $auditd::config::audit_profiles::stig::audit_kernel_modules_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_mount { -%>
 
 ## Audit mount operations
-<%   if $facts['hardwaremodel'] == "x86_64" { -%>
--a exit,always -F arch=b64 -S mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
-<%     if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F arch=b64 -F path=/usr/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+<%   if $facts['os']['hardware'] == "x86_64" { -%>
+-a always,exit -F arch=b64 -S mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+<%     if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F arch=b64 -F path=/usr/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 <%     } -%>
--a exit,always -F arch=b64 -F path=/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+-a always,exit -F arch=b64 -F path=/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F arch=b32 -F path=/usr/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+-a always,exit -F arch=b32 -S mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F arch=b32 -F path=/usr/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -F path=/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+-a always,exit -F arch=b32 -F path=/bin/mount -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 
-<%   if $facts['os']['release']['major'] > '6' { -%>
--a exit,always -F path=/usr/bin/umount -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 <%   } -%>
--a exit,always -F path=/bin/umount -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=4294967295 -k <%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
+-a always,exit -F path=/bin/umount -F perm=x -F auid>=<%= $auditd::config::audit_profiles::stig::uid_min %> -F auid!=unset -F key=<%= $auditd::config::audit_profiles::stig::audit_mount_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_local_account { -%>
 
 ## Audit local accounts
--w /etc/passwd -p wa -k <%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
+-w /etc/passwd -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
 
--w /etc/group -p wa -k <%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
+-w /etc/group -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
 
--w /etc/gshadow -p wa -k <%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
+-w /etc/gshadow -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
 
--w /etc/shadow -p wa -k <%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
+-w /etc/shadow -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
 
--w /etc/security/opasswd -p wa -k <%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
+-w /etc/security/opasswd -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_local_account_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_login_files { -%>
 
 ## Audit login files
--w /var/log/tallylog -p wa -k <%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
+-w /var/log/tallylog -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
 
--w /var/run/faillock -p wa -k <%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
+-w /var/run/faillock -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
 
--w /var/log/lastlog -p wa -k <%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
+-w /var/log/lastlog -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_login_files_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::stig::audit_cfg_sudoers { -%>
 
 ## Audit sudoers configuration files
--w /etc/sudoers -p wa -k <%= $auditd::config::audit_profiles::stig::audit_cfg_sudoers_tag %>
--w /etc/sudoers.d/ -p wa -k <%= $auditd::config::audit_profiles::stig::audit_cfg_sudoers_tag %>
+-w /etc/sudoers -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_cfg_sudoers_tag %>
+-w /etc/sudoers.d/ -p wa -F key=<%= $auditd::config::audit_profiles::stig::audit_cfg_sudoers_tag %>
 <% } -%>

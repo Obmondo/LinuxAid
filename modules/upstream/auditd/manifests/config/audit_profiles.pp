@@ -65,15 +65,22 @@ class auditd::config::audit_profiles {
   }
 
   file { '/etc/audit/rules.d/00_head.rules':
+    mode    => $auditd::config::config_file_mode,
     content => epp("${_common_template_path}/head.epp")
   }
 
-  file { '/etc/audit/rules.d/05_default_drop.rules':
-    content => epp("${_common_template_path}/default_drop.epp")
-  }
+  # If the only profile is the 'built_in' profile, we should skip these to allow
+  # users more control/flexibility over what they want to use.
+  unless ( length($auditd::config::profiles)  == 1 ) and ( 'built_in' in $auditd::config::profiles ) {
+    file { '/etc/audit/rules.d/05_default_drop.rules':
+      mode    => $auditd::config::config_file_mode,
+      content => epp("${_common_template_path}/default_drop.epp")
+    }
 
-  file { '/etc/audit/rules.d/99_tail.rules':
-    content => epp("${_common_template_path}/tail.epp")
+    file { '/etc/audit/rules.d/99_tail.rules':
+      mode    => $auditd::config::config_file_mode,
+      content => epp("${_common_template_path}/tail.epp")
+    }
   }
 
   $auditd::config::profiles.each | String $audit_profile | {

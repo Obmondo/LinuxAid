@@ -35,7 +35,7 @@ class auditd::config::audisp (
   Integer                $priority_boost,
   Integer                $max_restarts,
   Auditd::NameFormat     $name_format,
-  String                 $specific_name    = $facts['fqdn']
+  String                 $specific_name    = $facts['networking']['fqdn']
 ) {
 
   if  versioncmp($facts['auditd_version'], '3.0') < 0 {

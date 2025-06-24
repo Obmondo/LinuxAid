@@ -75,6 +75,12 @@
 #   You can use this to augment the `$default_suid_sgid_cmds`
 #   per your site's needs.
 #
+# @param audit_suid_tag
+#   The tag to identify `setuid` command execution in an audit record
+#
+# @param audit_sgid_tag
+#   The tag to identify `setgid` command execution in an audit record
+#
 # @param audit_suid_sgid_tag
 #   The tag to identify `setuid`/`setgid` command execution in an audit record
 #
@@ -169,7 +175,9 @@ class auditd::config::audit_profiles::stig (
   Boolean          $audit_suid_sgid                        = true,
   Array[String[1]] $default_suid_sgid_cmds,                   #data in modules
   Array[String[1]] $suid_sgid_cmds                         = [],
-  String[1]        $audit_suid_sgid_tag                    = 'setuid/setgid',
+  String[1]        $audit_suid_tag                         = 'setuid',
+  String[1]        $audit_sgid_tag                         = 'setgid',
+  String[1]        $audit_suid_sgid_tag                    = "${audit_suid_tag}/${audit_sgid_tag}",
   Boolean          $audit_kernel_modules                   = true,
   String[1]        $audit_kernel_modules_tag               = 'module-change',
   Boolean          $audit_mount                            = true,
@@ -203,6 +211,7 @@ class auditd::config::audit_profiles::stig (
   $_idx = auditd::get_array_index($_short_name, $auditd::config::profiles)
 
   file { "/etc/audit/rules.d/50_${_idx}_${_short_name}_base.rules":
+    mode    => $auditd::config::config_file_mode,
     content => epp("${module_name}/rule_profiles/stig/base.epp")
   }
 }

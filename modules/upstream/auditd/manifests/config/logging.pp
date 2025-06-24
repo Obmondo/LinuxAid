@@ -10,8 +10,11 @@ class auditd::config::logging {
 #
   assert_private()
 
-  if  versioncmp($facts['auditd_version'], '3.0') < 0 {
-    contain 'auditd::config::audisp'
+  # auditd_version fact is not available until auditing is enabled in the kernel
+  if $facts['auditd_version'] {
+    if  versioncmp($facts['auditd_version'], '3.0') < 0 {
+      contain 'auditd::config::audisp'
+    }
+    contain 'auditd::config::audisp::syslog'
   }
-  contain 'auditd::config::audisp::syslog'
 }

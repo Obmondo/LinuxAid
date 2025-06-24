@@ -24,6 +24,10 @@
       * [Override All Other Profiles](#override-all-other-profiles)
       * [Prepend Before the SIMP Profile](#prepend-before-the-simp-profile)
       * [Append After the SIMP and STIG Profiles](#append-after-the-simp-and-stig-profiles)
+    * [The Built-in Profile](#the-built-in-profile)
+      * [Disabling All SIMP-provided Profiles](#disabling-all-simp-provided-profiles)
+      * [Enabling Sample Rulesets with Built-in Profile](#enabling-sample-rulesets-with-built-in-profile)
+      * [Configuring Complete Rulesets with Built-in Profile](#configuring-complete-rulesets-with-built-in-profile)
   * [Adding One-Off Rules](#adding-one-off-rules)
     * [Adding Regular Filter Rules](#adding-regular-filter-rules)
     * [Prepend and Drop Everything From a User](#prepend-and-drop-everything-from-a-user)
@@ -176,10 +180,11 @@ most generally available compliance requirements. It does not, however,
 generally appease the scanning utilities since it optimizes the rules for
 performance and most scanners cannot handle audit rule optimizations.
 
-There are two other profiles available in the system by default:
+There are three other profiles available in the system by default:
 
-* ``stig``   => Applies the rules as defined in the latest covered DISA STIG
-* ``custom`` => Allows users to define their own rules easily via Hiera
+* ``stig``     => Applies the rules as defined in the latest covered DISA STIG
+* ``custom``   => Allows users to define their own rules easily via Hiera
+* ``built_in`` => Allows usage of EL8+ included sample rulesets to configure system
 
 There are a large number of parameters exposed for each profile that are meant
 to be set via Hiera and you should take a look at the REFERENCE.md file to
@@ -199,15 +204,15 @@ For example, this (the default) would only add the ``simp`` profile:
 
 ```yaml
 auditd::default_audit_profiles:
-  - "simp"
+  - 'simp'
 ```
 
 Likewise, this would add the ``stig`` rules prior to the ``simp`` profile:
 
 ```yaml
 auditd::default_audit_profiles:
-  - "stig"
-  - "simp"
+  - 'stig'
+  - 'simp'
 ```
 
 #### The Custom Profile
@@ -231,25 +236,68 @@ examples:
 
 ```yaml
 auditd::default_audit_profiles:
-  - "custom"
+  - 'custom'
 ```
 
 ##### Prepend Before the SIMP Profile
 
 ```yaml
 auditd::default_audit_profiles:
-  - "custom"
-  - "simp"
+  - 'custom'
+  - 'simp'
 ```
 
 ##### Append After the SIMP and STIG Profiles
 
 ```yaml
 auditd::default_audit_profiles:
-  - "simp"
-  - "stig"
-  - "custom"
+  - 'simp'
+  - 'stig'
+  - 'custom'
 ```
+
+#### The Built-in Profile
+
+Starting with release 3.0.0-17 on EL8 hosts, the audit package includes a number
+of ``sample-rules`` under ``/usr/share/audit/sample-rules`` that can be used
+to configure a system fairly completely. Within these rules are sets for STIG,
+OSPP, etc. that can simply be moved to ``/etc/audit/rules.d`` and compiled with
+``augenrules`` to configure a system.
+
+##### Disabling All SIMP-provided Profiles
+
+Most likely, if using the sample rulesets from the built-in profile, you will
+want to disable included SIMP profiles (not necessary, but may include
+overlapping rules if not). To do this:
+
+```yaml
+auditd::default_audit_profiles:
+  - 'built_in'
+```
+
+##### Enabling Sample Rulesets with Built-in Profile
+
+To enable specific sample rulesets, simply include them in the built-in profile
+parameter:
+
+```yaml
+auditd::config::audit_profiles::built_in::rulesets:
+  - 'base-config'
+  - 'stig'
+  - 'finalize'
+```
+
+where the ruleset names are found via the custom fact ``auditd_sample_rulesets``
+
+##### Configuring Complete Rulesets with Built-in Profile
+
+If you are only planning to use the ``built_in`` profile and the included sample
+rulesets to configure the system, it will be worth noting that profile-specific
+sample files include configuration information within comments in the files as well.
+
+As an example, the STIG rules sample file will note that it relies on ``base-config``
+and ``finalize`` rulesets to be feature-complete. Other rulesets will contain similar
+information.
 
 ### Adding One-Off Rules
 

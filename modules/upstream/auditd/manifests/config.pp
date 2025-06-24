@@ -19,16 +19,21 @@ class auditd::config {
     $profiles = $auditd::default_audit_profiles
   }
 
-  $log_file_mode = $auditd::log_group ? {
+  $config_file_mode = $auditd::log_group ? {
     'root'  => '0600',
-    default => '0640',
+    default => '0640'
+  }
+
+  $log_file_mode = $auditd::log_group ? {
+    'root'  => 'u+rX,g-rwx,o-rwx',
+    default => 'u+rX,g+rX,g-w,o-rwx'
   }
 
   file { '/etc/audit':
     ensure  => 'directory',
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     recurse => true,
     purge   => true
   }
@@ -37,12 +42,15 @@ class auditd::config {
     ensure  => 'directory',
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     recurse => true,
-    purge   => true
+    purge   => $auditd::purge_auditd_rules
   }
 
-  file { '/etc/audit/audit.rules':
+  file { [
+    '/etc/audit/audit.rules',
+    '/etc/audit/audit.rules.prev'
+  ]:
     owner => 'root',
     group => $auditd::log_group,
     mode  => 'o-rwx'
@@ -71,9 +79,9 @@ class auditd::config {
   file { '/etc/audit/auditd.conf':
     owner   => 'root',
     group   => $auditd::log_group,
-    mode    => $log_file_mode,
+    mode    => $config_file_mode,
     content => "${_auditd_conf_common}${_auditd_conf_main}${_auditd_conf_last}\n",
-    notify  => Service['auditd']
+    notify  => Class['auditd::service']
   }
 
   if defined('$auditd::plugin_dir') {
@@ -86,26 +94,11 @@ class auditd::config {
   }
 
   file { '/var/log/audit':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => $auditd::log_group,
-    mode   => 'o-rwx'
-  }
-
-  file { $auditd::log_file:
-    owner => 'root',
-    group => $auditd::log_group,
-    mode  => $log_file_mode
-  }
-
-  if ($facts['os']['release']['major'] < '7') {
-    # make sure audit.rules is regenerated every time the
-    # service is started
-    augeas { 'auditd/USE_AUGENRULES':
-      changes => [
-        'set /files/etc/sysconfig/auditd/USE_AUGENRULES yes',
-      ],
-    }
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => $auditd::log_group,
+    mode    => $log_file_mode,
+    recurse => true
   }
 
   if $auditd::syslog {
@@ -118,5 +111,4 @@ class auditd::config {
     # notify auditd::service class
     contain 'auditd::config::audit_profiles'
   }
-
 }
