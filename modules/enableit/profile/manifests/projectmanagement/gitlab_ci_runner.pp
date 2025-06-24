@@ -3,7 +3,7 @@
 #
 class profile::projectmanagement::gitlab_ci_runner (
   Optional[Enum['docker']]         $executor         = 'docker',
-  Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/xenial',
+  Optional[Eit_types::DockerImage] $docker_image     = 'ubuntu/noble',
   Hash                             $runners          = {},
   Integer[1,default]               $concurrency      = 2,
   Hash                             $runners_defaults = {},
