@@ -1,6 +1,6 @@
 {
   "name": "simp-auditd",
-  "version": "8.5.0",
+  "version": "8.14.4",
   "author": "SIMP Team",
   "summary": "A SIMP puppet module for managing auditd and audispd",
   "license": "Apache-2.0",
@@ -15,55 +15,75 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 < 7.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 3.6.0 < 5.0.0"
+      "version_requirement": ">= 4.9.0 < 5.0.0"
     },
     {
-      "name": "herculesteam/augeasproviders_grub",
-      "version_requirement": ">= 2.4.0 < 4.0.0"
+      "name": "puppet/augeasproviders_grub",
+      "version_requirement": ">= 3.1.0 < 6.0.0"
     }
   ],
   "simp": {
     "optional_dependencies": [
       {
         "name": "simp/rsyslog",
-        "version_requirement": ">= 7.2.1 < 8.0.0"
+        "version_requirement": ">= 7.6.0 < 9.0.0"
       }
     ]
   },
   "operatingsystem_support": [
     {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2"
+      ]
+    },
+    {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7",
-        "8"
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }

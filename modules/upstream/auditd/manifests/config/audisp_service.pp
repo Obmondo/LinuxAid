@@ -14,7 +14,7 @@ class auditd::config::audisp_service {
   exec { 'Restart Audispd':
     command => '/bin/true',
     unless  => "/usr/bin/pgrep -f ${auditd::dispatcher}",
-    notify  => Service[$auditd::service_name]
+    notify  => Class['auditd::service']
   }
 
 }

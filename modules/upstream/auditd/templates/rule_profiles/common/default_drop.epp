@@ -17,15 +17,15 @@
 <% } -%>
 <% if $::auditd::ignore_time_daemons { -%>
 # Time daemons can be quite noisy
-<%   if $facts['hardwaremodel'] == 'x86_64' { -%>
-<%     if $facts['os']['release']['major'] > '6' { -%>
+<%   if $facts['os']['hardware'] == 'x86_64' { -%>
+<%     if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -a never,exit -F arch=b64 -S adjtimex -F auid=-1 -F uid=chrony -F subj_type=chronyd_t
 <%     } -%>
 <%     if $facts['os']['release']['major'] < '8' { -%>
 -a never,exit -F arch=b64 -S adjtimex -F auid=-1 -F uid=ntp -F subj_type=ntpd_t
 <%     }
      } -%>
-<%   if $facts['os']['release']['major'] > '6' { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -a never,exit -F arch=b32 -S adjtimex -F auid=-1 -F uid=chrony -F subj_type=chronyd_t
 <%   } -%>
 <%   if $facts['os']['release']['major'] < '8' { -%>

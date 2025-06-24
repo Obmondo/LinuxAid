@@ -26,6 +26,7 @@
 ## Feel free to increase this if the machine panic's
 # Default: 8192
 -b <%= $auditd::config::audit_profiles::_buffer_size %>
+<% if $auditd::backlog_wait_time { -%>
 
 ## The time to wait when the backlog limit is reached before queueing more
 ## audit events. Smaller numbers are more aggressive but may cause excessive
@@ -33,6 +34,7 @@
 # Default: 60000
 --backlog_wait_time <%= $auditd::backlog_wait_time %>
 
+<% } -%>
 ## Set failure mode
 # Default: 2
 -f <%= $auditd::failure_mode %>

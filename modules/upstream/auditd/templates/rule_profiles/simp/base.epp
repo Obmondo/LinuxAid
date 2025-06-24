@@ -2,133 +2,133 @@
 <% if $auditd::config::audit_profiles::simp::audit_32bit_operations { -%>
 # 64-bit systems should generally never call the 32-bit API. 32-bit syscalls
 # may be a sign of someone exploiting a hole in the API.
--a exit,always -F arch=b32 -S all -F key=<%= $auditd::config::audit_profiles::simp::audit_32bit_operations_tag -%>
+-a always,exit -F arch=b32 -S all -F key=<%= $auditd::config::audit_profiles::simp::audit_32bit_operations_tag -%>
 <% } -%>
 
 <% if $auditd::config::audit_profiles::simp::audit_network_ipv4_accept { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S accept -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_accept_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S accept -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_accept_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_network_ipv6_accept { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S accept -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_accept_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S accept -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_accept_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_network_ipv4_connect { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S connect -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_connect_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S connect -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_connect_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S connect -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_connect_tag %>
+-a always,exit -F arch=b32 -S connect -F a0=2 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv4_connect_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_network_ipv6_connect { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S connect -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_connect_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S connect -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_connect_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S connect -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_connect_tag %>
+-a always,exit -F arch=b32 -S connect -F a0=10 -F key=<%= $auditd::config::audit_profiles::simp::audit_network_ipv6_connect_tag %>
 <% } -%>
 
 <% if $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations  { -%>
 ## Audit unsuccessful file operations
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b64 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
--a exit,always -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F arch=b32 -S creat,mkdir,mknod,link,symlink,mkdirat,mknodat,linkat,symlinkat,openat,open_by_handle_at,open,close,rename,renameat,truncate,ftruncate,rmdir,unlink,unlinkat -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
 
--a exit,always -F perm=a -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
--a exit,always -F perm=a -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F perm=a -F exit=-EACCES -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
+-a always,exit -F perm=a -F exit=-EPERM -k <%= $auditd::config::audit_profiles::simp::audit_unsuccessful_file_operations_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_passwd_cmds  { -%>
 
 ## Audit the execution of password commands
--a exit,always -F path=/usr/bin/passwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/passwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/passwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/passwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
 <%   } -%>
 
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/usr/sbin/unix_chkpwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/unix_chkpwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+-a always,exit -F path=/sbin/unix_chkpwd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
 
--a exit,always -F path=/usr/bin/gpasswd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/gpasswd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
-<%   } -%>
-
--a exit,always -F path=/usr/bin/chage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/chage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/gpasswd -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/userhelper -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/sbin/userhelper -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+-a always,exit -F path=/usr/bin/chage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   } -%>
+
+-a always,exit -F path=/usr/sbin/userhelper -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/userhelper -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_passwd_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_priv_cmds  { -%>
 
 ## Audit the execution of privilege-related commands
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/usr/bin/su -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/bin/su -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/bin/su -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+-a always,exit -F path=/bin/su -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
 
--a exit,always -F path=/usr/bin/sudo -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/sudo -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
-<%   } -%>
-
--a exit,always -F path=/usr/bin/newgrp -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/newgrp -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/sudo -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/sudo -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/chsh -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/chsh -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/newgrp -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/newgrp -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/sudoedit -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/sudoedit -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+-a always,exit -F path=/usr/bin/chsh -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chsh -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   } -%>
+
+-a always,exit -F path=/usr/bin/sudoedit -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/sudoedit -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_priv_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_postfix_cmds  { -%>
 
 ## Audit the execution of postfix-related commands
--a exit,always -F path=/usr/sbin/postdrop -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/sbin/postdrop -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
+-a always,exit -F path=/usr/sbin/postdrop -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/postdrop -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/postqueue -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/sbin/postqueue -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
+-a always,exit -F path=/usr/sbin/postqueue -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/postqueue -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_postfix_cmds_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_ssh_keysign_cmd  { -%>
 
 ## Audit the execution of the ssh-keysign command
--a exit,always -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_ssh_keysign_cmd_tag %>
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_ssh_keysign_cmd_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_crontab_cmd  { -%>
 
 ## Audit the execution of the crontab command
--a exit,always -F path=/usr/bin/crontab -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_crontab_cmd_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/crontab -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_crontab_cmd_tag %>
+-a always,exit -F path=/usr/bin/crontab -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_crontab_cmd_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/crontab -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_crontab_cmd_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd  { -%>
 
 ## Audit the execution of the pam_timestamp_check command
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/usr/sbin/pam_timestamp_check -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/pam_timestamp_check -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd_tag %>
+-a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_selinux_cmds  { -%>
 
@@ -136,56 +136,56 @@
 # NOTE:  These rules come before the *xattr* checks, to ensure the
 #        correct tag is recorded.
 #
--a exit,always -F path=/usr/sbin/semanage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/sbin/semanage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/sbin/semanage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/semanage -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/sbin/setsebool -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/sbin/setsebool -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/sbin/setsebool -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/sbin/setsebool -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
 <%   } -%>
 
--a exit,always -F path=/usr/bin/chcon -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/bin/chcon -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+-a always,exit -F path=/usr/bin/chcon -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/bin/chcon -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
 <%   } -%>
 
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/usr/sbin/setfiles -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/sbin/setfiles -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
 <%   } -%>
--a exit,always -F path=/sbin/setfiles -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
+-a always,exit -F path=/sbin/setfiles -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_selinux_cmds_tag %>
 <% } -%>
 
 ## Permissions auditing separated by chown, chmod, and attr
 <% if $auditd::config::audit_profiles::simp::audit_chown  { -%>
 
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S chown,fchown,fchownat,lchown -k <%= $auditd::config::audit_profiles::simp::audit_chown_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -k <%= $auditd::config::audit_profiles::simp::audit_chown_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S chown,fchown,fchownat,lchown -k <%= $auditd::config::audit_profiles::simp::audit_chown_tag %>
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -k <%= $auditd::config::audit_profiles::simp::audit_chown_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_chmod  { -%>
 
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S chmod,fchmod,fchmodat -k <%= $auditd::config::audit_profiles::simp::audit_chmod_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -k <%= $auditd::config::audit_profiles::simp::audit_chmod_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S chmod,fchmod,fchmodat -k <%= $auditd::config::audit_profiles::simp::audit_chmod_tag %>
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -k <%= $auditd::config::audit_profiles::simp::audit_chmod_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_attr  { -%>
 
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k <%= $auditd::config::audit_profiles::simp::audit_attr_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k <%= $auditd::config::audit_profiles::simp::audit_attr_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k <%= $auditd::config::audit_profiles::simp::audit_attr_tag %>
+-a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr -k <%= $auditd::config::audit_profiles::simp::audit_attr_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_rename_remove  { -%>
 
 ## Audit rename/removal operations
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S rename,renameat,rmdir,unlink,unlinkat -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_rename_remove_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S rename,renameat,rmdir,unlink,unlinkat -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_rename_remove_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S rename,renameat,rmdir,unlink,unlinkat -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_rename_remove_tag %>
+-a always,exit -F arch=b32 -S rename,renameat,rmdir,unlink,unlinkat -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_rename_remove_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_su_root_activity  { -%>
 
@@ -201,104 +201,106 @@
     }
 -%>
 ## Audit useful items that someone does when su'ing to root.
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -F auid!=0 -F uid=0 -S <%= $_su_rules %> -k <%= $auditd::config::audit_profiles::simp::audit_su_root_activity_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -F auid!=0 -F uid=0 -S <%= $_su_rules %> -k <%= $auditd::config::audit_profiles::simp::audit_su_root_activity_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -F auid!=0 -F uid=0 -S <%= $_su_rules %> -k <%= $auditd::config::audit_profiles::simp::audit_su_root_activity_tag %>
+-a always,exit -F arch=b32 -F auid!=0 -F uid=0 -S <%= $_su_rules %> -k <%= $auditd::config::audit_profiles::simp::audit_su_root_activity_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_suid_sgid  { -%>
 
 ## Audit the execution of suid and sgid binaries.
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -F euid=0 -F uid!=0 -S execve -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -F euid=0 -F uid!=0 -S execve -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k <%= $auditd::config::audit_profiles::simp::audit_suid_sgid_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_kernel_modules  { -%>
 
 ## Audit the loading and unloading of kernel modules.
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /usr/bin/kmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 -w /bin/kmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <%   } -%>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /usr/sbin/insmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <%   } -%>
 -w /sbin/insmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /usr/sbin/rmmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <%   } -%>
 -w /sbin/rmmod -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /usr/sbin/modprobe -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <%   } -%>
 -w /sbin/modprobe -p x -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S create_module,init_module,finit_module,delete_module -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S create_module,init_module,finit_module,delete_module -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S create_module,init_module,finit_module,delete_module -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
+-a always,exit -F arch=b32 -S create_module,init_module,finit_module,delete_module -k <%= $auditd::config::audit_profiles::simp::audit_kernel_modules_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_time  { -%>
 
 ## Audit things that could affect time
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S adjtimex,settimeofday -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
--a exit,always -F arch=b64 -S clock_settime -F a0=0x0 -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S adjtimex,settimeofday -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
+-a always,exit -F arch=b64 -S clock_settime -F a0=0x0 -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S adjtimex,stime,settimeofday -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
--a exit,always -F arch=b32 -S clock_settime -F a0=0x0 -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
+-a always,exit -F arch=b32 -S adjtimex,stime,settimeofday -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
+-a always,exit -F arch=b32 -S clock_settime -F a0=0x0 -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
 
 -w /etc/localtime -p wa -k <%= $auditd::config::audit_profiles::simp::audit_time_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_locale  { -%>
 
 ## Audit things that could affect system locale
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S sethostname,setdomainname -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S sethostname,setdomainname -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S sethostname,setdomainname -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
+-a always,exit -F arch=b32 -S sethostname,setdomainname -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 
 -w /etc/issue -p wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 -w /etc/issue.net -p wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 -w /etc/hosts -p wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 -w /etc/hostname -p wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 -w /etc/sysconfig/network -p wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F dir=/etc/NetworkManager/ -F perm=wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F dir=/etc/NetworkManager/ -F perm=wa -k <%= $auditd::config::audit_profiles::simp::audit_locale_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_mount  { -%>
 
 ## Audit mount operations
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S mount,umount2 -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S mount,umount2 -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S mount,umount,umount2 -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+-a always,exit -F arch=b32 -S mount,umount,umount2 -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
-<%     if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F arch=b64 -F path=/usr/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+<%     if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F arch=b64 -F path=/usr/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <%     } -%>
--a exit,always -F arch=b64 -F path=/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+-a always,exit -F arch=b64 -F path=/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <%   } -%>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F arch=b32 -F path=/usr/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F arch=b32 -F path=/usr/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -F path=/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
--a exit,always -F path=/usr/bin/umount -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+-a always,exit -F arch=b32 -F path=/bin/mount -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
+-a always,exit -F path=/usr/bin/umount -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <%   } -%>
--a exit,always -F path=/bin/umount -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
+-a always,exit -F path=/bin/umount -F perm=x -k <%= $auditd::config::audit_profiles::simp::audit_mount_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_umask  { -%>
 
 ## Audit umask changes.
 # This is uselessly noisy in most cases
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S umask -k <%= $auditd::config::audit_profiles::simp::audit_umask_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S umask -k <%= $auditd::config::audit_profiles::simp::audit_umask_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S umask -k <%= $auditd::config::audit_profiles::simp::audit_umask_tag %>
+-a always,exit -F arch=b32 -S umask -k <%= $auditd::config::audit_profiles::simp::audit_umask_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_local_account  { -%>
 
@@ -363,10 +365,12 @@
 
 ## Generally good things to audit.
 <% if $auditd::config::audit_profiles::simp::_audit_cfg_grub  { -%>
-<%   if versioncmp($facts['grub_version'], '2') < 0  { -%>
+<%   if $facts['grub_version'] { -%>
+<%     if versioncmp($facts['grub_version'], '2') < 0  { -%>
 -w /boot/grub/grub.conf -p wa -k <%= $auditd::config::audit_profiles::simp::_audit_cfg_grub_tag %>
-<%   } else { -%>
+<%     } else { -%>
 -w /etc/grub.d -p wa -k <%= $auditd::config::audit_profiles::simp::_audit_cfg_grub_tag %>
+<%     } -%>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_cfg_sys  { -%>
@@ -437,31 +441,31 @@
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_yum_cmd  { -%>
 -w /usr/bin/yum -p x -k <%= $auditd::config::audit_profiles::simp::audit_yum_cmd_tag %>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /bin/yum -p x -k <%= $auditd::config::audit_profiles::simp::audit_yum_cmd_tag %>
 <%   } -%>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_rpm_cmd  { -%>
-<%   if $facts['os']['release']['major'] > '6'  { -%>
+<%   if ($facts['os']['release']['major'] > '6') or (($facts['os']['name'] == 'Amazon') and ($facts['os']['release']['major'] < '3')) { -%>
 -w /usr/bin/rpm -p x -k <%= $auditd::config::audit_profiles::simp::audit_rpm_cmd_tag %>
 <%   } -%>
 -w /bin/rpm -p x -k <%= $auditd::config::audit_profiles::simp::audit_rpm_cmd_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_ptrace  { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S ptrace -F a0=0x4 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_code_injection
--a exit,always -F arch=b64 -S ptrace -F a0=0x5 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_data_injection
--a exit,always -F arch=b64 -S ptrace -F a0=0x6 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_register_injection
--a exit,always -F arch=b64 -S ptrace -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S ptrace -F a0=0x4 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_code_injection
+-a always,exit -F arch=b64 -S ptrace -F a0=0x5 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_data_injection
+-a always,exit -F arch=b64 -S ptrace -F a0=0x6 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_register_injection
+-a always,exit -F arch=b64 -S ptrace -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S ptrace -F a0=0x4 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_code_injection
--a exit,always -F arch=b32 -S ptrace -F a0=0x5 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_data_injection
--a exit,always -F arch=b32 -S ptrace -F a0=0x6 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_register_injection
--a exit,always -F arch=b32 -S ptrace -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>
+-a always,exit -F arch=b32 -S ptrace -F a0=0x4 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_code_injection
+-a always,exit -F arch=b32 -S ptrace -F a0=0x5 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_data_injection
+-a always,exit -F arch=b32 -S ptrace -F a0=0x6 -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>_register_injection
+-a always,exit -F arch=b32 -S ptrace -k <%= $auditd::config::audit_profiles::simp::audit_ptrace_tag %>
 <% } -%>
 <% if $auditd::config::audit_profiles::simp::audit_personality  { -%>
-<%   if $facts['hardwaremodel'] == "x86_64"  { -%>
--a exit,always -F arch=b64 -S personality -k <%= $auditd::config::audit_profiles::simp::audit_personality_tag %>
+<%   if $facts['os']['hardware'] == "x86_64"  { -%>
+-a always,exit -F arch=b64 -S personality -k <%= $auditd::config::audit_profiles::simp::audit_personality_tag %>
 <%   } -%>
--a exit,always -F arch=b32 -S personality -k <%= $auditd::config::audit_profiles::simp::audit_personality_tag %>
+-a always,exit -F arch=b32 -S personality -k <%= $auditd::config::audit_profiles::simp::audit_personality_tag %>
 <% } -%>

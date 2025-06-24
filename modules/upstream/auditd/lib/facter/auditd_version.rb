@@ -4,15 +4,19 @@
 # This is useful for applying the correct configuration file options.
 #
 Facter.add('auditd_version') do
-  confine { File.exist?('/sbin/auditctl') && File.executable?('/sbin/auditctl') }
+  confine :kernel => 'Linux'
+
   setcode do
-    %x{/sbin/auditctl -v}.chomp.split(/\s+/)[-1]
+    auditd_facts = Facter.value('simplib__auditd')
+    Facter.value('simplib__auditd')['version'] if auditd_facts
   end
 end
 
 Facter.add('auditd_major_version') do
-  confine { File.exist?('/sbin/auditctl') && File.executable?('/sbin/auditctl') }
+  confine :kernel => 'Linux'
+
   setcode do
-    Facter.value(:auditd_version).split('.')[0]
+    auditd_version = Facter.value('auditd_version')
+    auditd_version.split('.').first if auditd_version
   end
 end

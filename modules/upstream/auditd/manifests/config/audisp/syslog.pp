@@ -75,22 +75,21 @@ class auditd::config::audisp::syslog (
   Boolean                         $rsyslog         = simplib::lookup('simp_options::syslog', { 'default_value' => false }),   #deprecated see @param
   String                          $package_ensure  = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
-
   if versioncmp($facts['auditd_version'], '3.0') >= 0  and $enable {
     package { $pkg_name :
-      ensure => $package_ensure
+      ensure => $package_ensure,
     }
   }
 
   file { "${auditd::plugin_dir}/syslog.conf":
-    mode    => '0644',
+    mode    => $auditd::config::config_file_mode,
     owner   => 'root',
     content => epp("${module_name}/plugins/syslog_conf", {
-      enable =>  $enable,
-      path   =>  $syslog_path,
-      type   =>  $type,
-      args   => "${priority} ${facility}"
-      })
+        enable => $enable,
+        path   => $syslog_path,
+        type   => $type,
+        args   => "${priority} ${facility}"
+    }),
   }
   #
   #  The below section is here for backwards compatability. It will be removed
@@ -112,10 +111,9 @@ class auditd::config::audisp::syslog (
       # servers and/or written to local syslog files, but you still have
       # access to the records in the local audit log files.
       rsyslog::rule::drop { 'audispd':
-        rule   => '$programname == \'audispd\''
+        rule   => '$programname == \'audispd\'',
       }
     }
   }
   # End of deprecated section.
-
 }

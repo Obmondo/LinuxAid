@@ -19,7 +19,7 @@ checks:
   oval:com.puppet.forge.simp.auditd.admin_space_left_action:
     settings:
       parameter: auditd::admin_space_left_action
-      value: SUSPEND
+      value: suspend
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
@@ -211,7 +211,7 @@ checks:
     - audit_rules_dac_modification_lchown
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_grub:
     settings:
-      parameter: auditd::config::audit_profiles::simp::audit_grub
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_grub
       value: true
     type: puppet-class-parameter
     controls:
@@ -332,7 +332,7 @@ checks:
       - AU-2
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_sudoers:
     settings:
-      parameter: auditd::config::audit_profiles::simp::audit_sudoers
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_sudoers
       value: true
     type: puppet-class-parameter
     controls:
@@ -387,7 +387,7 @@ checks:
       - AU-2
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.simp.audit_yum:
     settings:
-      parameter: auditd::config::audit_profiles::simp::audit_yum
+      parameter: auditd::config::audit_profiles::simp::audit_cfg_yum
       value: true
     type: puppet-class-parameter
     controls:
@@ -432,14 +432,17 @@ checks:
   oval:com.puppet.forge.simp.auditd.disk_error_action:
     settings:
       parameter: auditd::disk_error_action
-      value: SUSPEND
+      value: single
     type: puppet-class-parameter
     controls:
+      disa_stig: true
       nist_800_53:rev4: true
       nist_800_53:rev4:AU-4: true
       nist_800_53:rev4:AU-5:b: true
       nist_800_53:rev4:AU-11: true
     identifiers:
+      disa_stig:
+        - SRG-OS-000047-GPOS-00023
       nist_800_53:rev4:
       - AU-4
       - AU-5:b
@@ -447,7 +450,7 @@ checks:
   oval:com.puppet.forge.simp.auditd.disk_full_action:
     settings:
       parameter: auditd::disk_full_action
-      value: SUSPEND
+      value: syslog
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
@@ -525,6 +528,28 @@ checks:
       - SRG-OS-000046-GPOS-00022
       - SRG-OS-000047-GPOS-00023
       - 'CCI: CCI-000139'
+  oval:com.puppet.forge.simp.auditd.log_format.el8:
+    settings:
+      parameter: auditd::log_format
+      value: ENRICHED
+    type: puppet-class-parameter
+    controls:
+      #FIXME
+      disa_stig: true
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-4: true
+      nist_800_53:rev4:AU-11: true
+    identifiers:
+      disa_stig:
+        - SRG-OS-000255-GPOS-00096
+      nist_800_53:rev4:
+      - AU-4
+      - AU-11
+    oval-ids:
+    - auditd_log_format
+    confine:
+      os.family: RedHat
+      os.release.major: '8'
   oval:com.puppet.forge.simp.auditd.max_log_file:
     settings:
       parameter: auditd::max_log_file
@@ -540,6 +565,44 @@ checks:
       - AU-11
     oval-ids:
     - auditd_data_retention_max_log_file
+  oval:com.puppet.forge.simp.auditd.max_log_file_action:
+    settings:
+      parameter: auditd::max_log_file_action
+      value: rotate
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      nist_800_53:rev4: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-4
+      - AU-11
+    oval-ids:
+    - auditd_data_retention_max_log_file_action
+  oval:com.puppet.forge.simp.auditd.name_format:
+    settings:
+      parameter: auditd::name_format
+      value: hostname
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      ospp: true
+    identifiers:
+      ospp:
+      - FAU_GEN.1
+      disa_stig:
+      - CCE-82359-1
+      - CCE-82897-0
+      - CCI-001851
+      - RHEL-08-030062
+      - SRG-OS-000039-GPOS-00017
+      - SRG-OS-000342-GPOS-00133
+      - SRG-OS-000479-GPOS-00224
+    oval-ids:
+    - auditd_name_format
+    confine:
+      os.family: RedHat
+      os.release.major: '8'
   oval:com.puppet.forge.simp.auditd.num_logs:
     settings:
       parameter: auditd::num_logs
@@ -554,7 +617,7 @@ checks:
       - AU-4
       - AU-11
     oval-ids:
-    - auditd_data_retention_space_left_action
+    - auditd_num_logs
   oval:com.puppet.forge.simp.auditd.package_name:
     settings:
       parameter: auditd::package_name
@@ -656,10 +719,11 @@ checks:
       - SRG-OS-000042-GPOS-00021
       - CCI-000131
       - CCI-000126
-  oval:com.puppet.forge.simp.auditd.default_audit_profile:
+  oval:com.puppet.forge.simp.auditd.default_audit_profiles:
     settings:
-      parameter: auditd::default_audit_profile
-      value: simp
+      parameter: auditd::default_audit_profiles
+      value:
+        - simp
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
@@ -678,7 +742,149 @@ checks:
       - AU-12:a
       - AU-12:c
     confine:
-      osfamily: RedHat
+      os.family: RedHat
+      os.release.major: ['7','8']
+  oval:com.puppet.forge.simp.auditd.default_audit_profiles.el7:
+    settings:
+      parameter: auditd::default_audit_profiles
+      value:
+      - stig
+    type: puppet-class-parameter
+    controls:
+      disa_stig: true
+      SRG-OS-000239-GPOS-00089: true
+      SRG-OS-000241-GPOS-00090: true
+      SRG-OS-000241-GPOS-00091: true
+      cci:CCI-001403: true
+    identifiers:
+      disa_stig:
+      - SRG-OS-000239-GPOS-00089
+      - SRG-OS-000241-GPOS-00090
+      - SRG-OS-000241-GPOS-00091
+      - CCI-001403
+    confine:
+      os.family: RedHat
+      os.release.major: '7'
+  oval:com.puppet.forge.simp.auditd.default_audit_profiles.el8:
+    settings:
+      parameter: auditd::default_audit_profiles
+      value:
+        - built_in
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2:a: true
+      nist_800_53:rev4:AU-2:c: true
+      nist_800_53:rev4:AU-2:d: true
+      nist_800_53:rev4:AC-6:9: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:c: true
+      disa_stig: true
+      ospp: true
+    identifiers:
+      nist_800_53:rev4:
+      - AU-2:a
+      - AU-2:c
+      - AU-2:d
+      - AC-6:9
+      - AU-12:a
+      - AU-12:c
+    confine:
+      os.family: RedHat
+      os.release.major: '8'
+  oval:com.puppet.forge.simp.auditd.config.audit_profiles.built_in.rulesets.el8:
+    settings:
+      parameter: auditd::config::audit_profiles::built_in::rulesets
+      value:
+        - base-config
+        - loginuid
+        - ospp-v42-1-create-failed
+        - ospp-v42-1-create-success
+        - ospp-v42-2-modify-failed
+        - ospp-v42-2-modify-success
+        - ospp-v42-3-access-success
+        - ospp-v42-4-delete-failed
+        - ospp-v42-4-delete-success
+        - ospp-v42-5-perm-change-failed
+        - ospp-v42-5-perm-change-success
+        - ospp-v42-6-owner-change-failed
+        - ospp-v42-6-owner-change-success
+        - ospp-v42
+        - module-load
+    type: puppet-class-parameter
+    controls:
+      nist_800_53:rev4: true
+      nist_800_53:rev4:AU-2:a: true
+      nist_800_53:rev4:AU-2:c: true
+      nist_800_53:rev4:AU-2:d: true
+      nist_800_53:rev4:AC-6:9: true
+      nist_800_53:rev4:AU-12:a: true
+      nist_800_53:rev4:AU-12:c: true
+      disa_stig: true
+      ospp: true
+      CCE-82384-9: true
+      CCE-82385-6: true
+      CCE-82829-3: true
+      CCE-82830-1: true
+      CCE-82832-7: true
+      CCE-82834-3: true
+      CCE-82835-0: true
+      CCE-82836-8: true
+      CCE-82837-6: true
+      CCE-82838-4: true
+      FAU_GEN.1.1.c: true
+      SRG-OS-000064-GPOS-00033: true
+      SRG-OS-000458-GPOS-00203: true
+      SRG-OS-000461-GPOS-00205: true
+      SRG-OS-000462-GPOS-00206: true
+      SRG-OS-000463-GPOS-00207: true
+      SRG-OS-000465-GPOS-00209: true
+      SRG-OS-000466-GPOS-00210: true
+      SRG-OS-000467-GPOS-00211: true
+      SRG-OS-000468-GPOS-00212: true
+      SRG-OS-000471-GPOS-00216: true
+      SRG-OS-000474-GPOS-00219: true
+      SRG-OS-000475-GPOS-00220: true
+      SRG-OS-000477-GPOS-00222: true
+    identifiers:
+      disa_stig:
+      - CCE-82835-0
+      - CCE-82384-9
+      - CCE-82385-6
+      - CCE-82829-3
+      - CCE-82830-1
+      - CCE-82832-7
+      - CCE-82834-3
+      - CCE-82835-0
+      - CCE-82836-8
+      - CCE-82837-6
+      - CCE-82838-4
+      - SRG-OS-000064-GPOS-00033
+      - SRG-OS-000458-GPOS-00203
+      - SRG-OS-000461-GPOS-00205
+      - SRG-OS-000462-GPOS-00206
+      - SRG-OS-000463-GPOS-00207
+      - SRG-OS-000465-GPOS-00209
+      - SRG-OS-000466-GPOS-00210
+      - SRG-OS-000467-GPOS-00211
+      - SRG-OS-000468-GPOS-00212
+      - SRG-OS-000471-GPOS-00216
+      - SRG-OS-000474-GPOS-00219
+      - SRG-OS-000475-GPOS-00220
+      - SRG-OS-000477-GPOS-00222
+      ospp:
+      - FAU_GEN.1.1.c
+      srg:
+      nist_800_53:rev4:
+      - AU-2:a
+      - AU-2:c
+      - AU-2:d
+      - AC-6:9
+      - AU-12:a
+      - AU-12:c
+    confine:
+      os.family: RedHat
+      os.release.major: '8'
   oval:com.puppet.forge.simp.auditd.action_mail_acct:
     settings:
       parameter: auditd::action_mail_acct
@@ -695,8 +901,8 @@ checks:
       - SRG-OS-000343-GPOS-00134
       - CCI-001855
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - auditd_data_retention_action_mail_acct
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_attr:
@@ -727,8 +933,8 @@ checks:
       - RHEL-07-030480
       - RHEL-07-030490
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fremovexattr
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fsetxattr
@@ -770,8 +976,8 @@ checks:
       - RHEL-07-030480
       - RHEL-07-030490
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fremovexattr
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fsetxattr
@@ -807,8 +1013,8 @@ checks:
       - SRG-OS-000471-GPOS-00215
       - RHEL-07-030700
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - audit_rules_sysadmin_actions
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_cfg_sudoers_tag:
@@ -833,8 +1039,8 @@ checks:
       - SRG-OS-000471-GPOS-00215
       - RHEL-07-030700
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_chmod:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_chmod
@@ -857,8 +1063,8 @@ checks:
       - RHEL-07-030420
       - RHEL-07-030430
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chmod
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmod
@@ -888,8 +1094,8 @@ checks:
       - RHEL-07-030420
       - RHEL-07-030430
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chmod
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchmod
@@ -923,8 +1129,8 @@ checks:
       - RHEL-07-030390
       - RHEL-07-030400
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chown
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchown
@@ -960,8 +1166,8 @@ checks:
       - RHEL-07-030390
       - RHEL-07-030400
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_chown
     - xccdf_org:ssgproject:content_rule_audit_rules_dac_modification_fchown
@@ -993,8 +1199,8 @@ checks:
       - CCI-000135
       - RHEL-07-030800
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_crontab_cmd_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_crontab_cmd_tag
@@ -1017,8 +1223,8 @@ checks:
       - CCI-000135
       - RHEL-07-030800
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_kernel_modules:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_kernel_modules
@@ -1047,8 +1253,8 @@ checks:
       - RHEL-07-030850
       - RHEL-07-030860
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - audit_rules_kernel_module_loading
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_kernel_modules_tag:
@@ -1079,8 +1285,8 @@ checks:
       - RHEL-07-030850
       - RHEL-07-030860
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_local_account:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_local_account
@@ -1113,8 +1319,8 @@ checks:
       - RHEL-07-030873
       - RHEL-07-030874
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_local_account_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_local_account_tag
@@ -1147,8 +1353,8 @@ checks:
       - RHEL-07-030873
       - RHEL-07-030874
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_login_files:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_login_files
@@ -1171,8 +1377,8 @@ checks:
       - RHEL-07-030610
       - RHEL-07-030620
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_login_events_faillock
     - xccdf_org:ssgproject:content_rule_audit_rules_login_events_tallylog
@@ -1201,8 +1407,8 @@ checks:
       - RHEL-07-030610
       - RHEL-07-030620
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_login_events_faillock
     - xccdf_org:ssgproject:content_rule_audit_rules_login_events_tallylog
@@ -1226,8 +1432,8 @@ checks:
       - RHEL-07-030740
       - RHEL-07-030750
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - audit_rules_media_export
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_mount_tag:
@@ -1248,8 +1454,8 @@ checks:
       - RHEL-07-030740
       - RHEL-07-030750
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_pam_timestamp_check_cmd:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd
@@ -1268,8 +1474,8 @@ checks:
       - CCI-000172
       - RHEL-07-030810
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_pam_timestamp_check_cmd_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_pam_timestamp_check_cmd_tag
@@ -1288,8 +1494,8 @@ checks:
       - CCI-000172
       - RHEL-07-030810
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_passwd_cmds:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_passwd_cmds
@@ -1320,8 +1526,8 @@ checks:
       - RHEL-07-030660
       - RHEL-07-030670
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_passwd_cmds_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_passwd_cmds_tag
@@ -1352,8 +1558,8 @@ checks:
       - RHEL-07-030660
       - RHEL-07-030670
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_postfix_cmds:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_postfix_cmds
@@ -1376,8 +1582,8 @@ checks:
       - RHEL-07-030760
       - RHEL-07-030770
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_postfix_cmds_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_postfix_cmds_tag
@@ -1400,8 +1606,8 @@ checks:
       - RHEL-07-030760
       - RHEL-07-030770
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_priv_cmds:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_priv_cmds
@@ -1436,8 +1642,8 @@ checks:
       - RHEL-07-030720
       - RHEL-07-030730
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_priv_cmds_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_priv_cmds_tag
@@ -1472,8 +1678,8 @@ checks:
       - RHEL-07-030720
       - RHEL-07-030730
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_rename_remove:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_rename_remove
@@ -1502,8 +1708,8 @@ checks:
       - RHEL-07-030910
       - RHEL-07-030920
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rmdir
     - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlink
@@ -1544,8 +1750,8 @@ checks:
       - RHEL-07-030910
       - RHEL-07-030920
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_rmdir
     - xccdf_org:ssgproject:content_rule_audit_rules_file_deletion_events_unlink
@@ -1582,8 +1788,8 @@ checks:
       - RHEL-07-030580
       - RHEL-07-030590
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_selinux_cmds_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_selinux_cmds_tag
@@ -1608,8 +1814,8 @@ checks:
       - RHEL-07-030580
       - RHEL-07-030590
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_ssh_keysign_cmd:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd
@@ -1632,8 +1838,8 @@ checks:
       - CCI-000135
       - RHEL-07-030780
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_ssh_keysign_cmd_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_ssh_keysign_cmd_tag
@@ -1656,8 +1862,8 @@ checks:
       - CCI-000135
       - RHEL-07-030780
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_suid_sgid:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_suid_sgid
@@ -1672,8 +1878,8 @@ checks:
       - SRG-OS-000327-GPOS-00127
       - RHEL-07-030360
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_suid_sgid_tag:
     settings:
       parameter: auditd::config::audit_profiles::stig::audit_suid_sgid_tag
@@ -1688,8 +1894,8 @@ checks:
       - SRG-OS-000327-GPOS-00127
       - RHEL-07-030360
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - audit_rules_privileged_commands
   oval:com.puppet.forge.simp.auditd.config.audit_profiles.stig.audit_unsuccessful_file_operations:
@@ -1722,8 +1928,8 @@ checks:
       - RHEL-07-030540
       - RHEL-07-030550
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_creat
     - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open
@@ -1768,8 +1974,8 @@ checks:
       - RHEL-07-030540
       - RHEL-07-030550
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_creat
     - xccdf_org:ssgproject:content_rule_audit_rules_unsuccessful_file_modification_open
@@ -1784,43 +1990,31 @@ checks:
     - audit_rules_unsuccessful_file_modification_truncate
     - audit_rules_unsuccessful_file_modification_ftruncate
     - audit_rules_unsuccessful_file_modification
-  oval:com.puppet.forge.simp.auditd.default_audit_profile:
+  oval:com.puppet.forge.simp.auditd.space_left:
     settings:
-      parameter: auditd::default_audit_profile
-      value: 
+      parameter: auditd::space_left
+      value: '25%'
     type: puppet-class-parameter
     controls:
       disa_stig: true
-    identifiers:
-      disa_stig: []
-    confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
-  oval:com.puppet.forge.simp.auditd.default_audit_profiles:
-    settings:
-      parameter: auditd::default_audit_profiles
-      value:
-      - stig
-    type: puppet-class-parameter
-    controls:
-      disa_stig: true
-      SRG-OS-000239-GPOS-00089: true
-      SRG-OS-000241-GPOS-00090: true
-      SRG-OS-000241-GPOS-00091: true
-      cci:CCI-001403: true
+      RHEL-07-030350: true
+      SRG-OS-000343-GPOS-00134: true
+      cci:CCI-001855: true
     identifiers:
       disa_stig:
-      - SRG-OS-000239-GPOS-00089
-      - SRG-OS-000241-GPOS-00090
-      - SRG-OS-000241-GPOS-00091
-      - CCI-001403
+      - SRG-OS-000343-VMM-001240
+      - SRG-OS-000343-GPOS-00134
+      - CCI-001855
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.name:
+        - '!Amazon'
+    oval-ids:
+    - auditd_data_retention_space_left
   oval:com.puppet.forge.simp.auditd.space_left_action:
     settings:
       parameter: auditd::space_left_action
-      value: EMAIL
+      value: email
     type: puppet-class-parameter
     controls:
       disa_stig: true
@@ -1833,14 +2027,13 @@ checks:
       - SRG-OS-000343-GPOS-00134
       - CCI-001855
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
     oval-ids:
     - auditd_data_retention_space_left_action
-  oval:com.puppet.forge.simp.auditd.space_left_action:
+  oval:com.puppet.forge.simp.auditd.space_left_action.nist:
     settings:
       parameter: auditd::space_left_action
-      value: SYSLOG
+      value: syslog
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
@@ -1853,6 +2046,6 @@ checks:
       - AU-5:a
       - AU-11
     confine:
-      osfamily: RedHat
+      os.family: RedHat
     oval-ids:
     - auditd_data_retention_space_left_action
