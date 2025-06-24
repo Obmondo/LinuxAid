@@ -18,7 +18,7 @@ class slurm::accounting (
   Enum['present', 'absent'] $ensure  = $slurm::params::ensure,
   Optional[String]          $cluster = undef,
   Optional[String]          $qos     = undef,
-  Optional[Stirng]          $account = undef,
+  Optional[String]          $account = undef,
 )
 inherits slurm::params {
   ### Clusters

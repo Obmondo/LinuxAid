@@ -24,11 +24,11 @@ group :development do
   gem "deep_merge", '~> 1.0',                    require: false
   gem "voxpupuli-puppet-lint-plugins", '~> 5.0', require: false
   gem "facterdb", '~> 1.18',                     require: false
-  gem "metadata-json-lint", '~> 4.0',            require: false
+  gem "metadata-json-lint", '~> 4.1.0',          require: false
   gem "rspec-puppet-facts", '~> 3.0',            require: false
   gem "dependency_checker", '~> 1.0.0',          require: false
   gem "parallel_tests", '= 3.12.1',              require: false
-  gem "pry", '~> 0.10',                          require: false
+  gem "pry", '~> 0.10.0',                          require: false
   gem "simplecov-console", '~> 0.9',             require: false
   gem "puppet-debugger", '~> 1.0',               require: false
   gem "rubocop", '~> 1.50.0',                    require: false

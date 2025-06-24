@@ -1,6 +1,6 @@
 {
   "name": "ULHPC-slurm",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "author": "UL HPC Team",
   "summary": "Configure and manage Slurm: A Highly Scalable Resource Manager",
   "license": "Apache-2.0",
