@@ -233,4 +233,8 @@ class common::system (
   include common::system::cloud_init
   include common::system::selinux
   include common::system::updates
+
+  unless lookup('common::system::jumphost::configs', Hash, undef, {}).empty {
+    include common::system::jumphost
+  }
 }

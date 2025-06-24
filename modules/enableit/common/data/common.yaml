@@ -253,6 +253,9 @@ common::system::cloud_init::manage: false
 ### Selinux
 common::system::selinux::enable: false
 
+### Jumphost
+common::system::jumphost::enable: false
+
 common::settings::custom_config_dir: '/opt/custom'
 common::settings::pgp_keyserver: 'pgp.mit.edu'
 common::package::install_default_packages: true

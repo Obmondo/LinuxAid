@@ -9,7 +9,6 @@ class common::setup (
 ) {
   include common::system::authentication::sudo
   contain ::common::virtualization
-
   # create obmondo dirs and copy libraries
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
