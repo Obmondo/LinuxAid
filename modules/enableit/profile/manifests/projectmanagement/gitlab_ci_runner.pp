@@ -5,8 +5,14 @@ class profile::projectmanagement::gitlab_ci_runner (
   Integer[1,10]                     $concurrency      = $role::projectmanagement::gitlab_ci_runner::concurrency,
   Eit_types::Gitlab::Runner         $runners          = $role::projectmanagement::gitlab_ci_runner::runners,
   Eit_types::Gitlab::Runner::Config $runner_defaults  = $role::projectmanagement::gitlab_ci_runner::runner_defaults,
-  Boolean                           $manage_repo      = $role::projectmanagement::gitlab_ci_runner::manage_repo,
 ) {
+
+  $runners.each |$runner_name, $config| {
+    $_config = $runner_defaults + $config
+
+    confine(!$_config['url'], 'Gitlab Server URL is mandatory')
+    confine(!$_config['registration-token'], 'Gitlab Registration token is mandatory')
+  }
 
   # Find out if there is any docker or shell executor from the
   # given runner configs
@@ -65,7 +71,7 @@ class profile::projectmanagement::gitlab_ci_runner (
   class { '::gitlab_ci_runner':
     concurrent      => $concurrency,
     manage_docker   => false,
-    manage_repo     => $manage_repo,
+    manage_repo     => true,
     runners         => $runners,
     runner_defaults => $runner_defaults,
   }
