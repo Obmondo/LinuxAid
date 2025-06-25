@@ -57,7 +57,10 @@ class profile::projectmanagement::gitlab_ci_runner (
   # which means, create user and service file for now,
   # lets just manage the service file, handling user creation is for later.
   if $shell_executor and $run_as_user != 'gitlab-runner' {
-    exec { "${gitlab_ci_runner::binary_path} install -u ${run_as_user}":
+
+    # NOTE: the binary path is static, copied directly from upstream.
+    # we can try getvar or something, leaving it for next time
+    exec { "/usr/local/bin/gitlab-runner install -u ${run_as_user}":
       creates => "/etc/systemd/system/gitlab-runner-${run_as_user}.service",
     }
 
