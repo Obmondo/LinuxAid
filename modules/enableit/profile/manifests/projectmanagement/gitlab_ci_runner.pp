@@ -31,15 +31,21 @@ class profile::projectmanagement::gitlab_ci_runner (
     $_config['executor'] == 'shell'
   }
 
+  $gitlab_runner_home = '/var/lib/gitlab-runner'
+
   if $docker_executor {
     contain role::virtualization::docker
 
-    $gitlab_runner_home = '/var/lib/gitlab-runner'
-
-    user { 'gitlab-runner':
+    user { $run_as_user:
       groups     => 'docker',
       home       => $gitlab_runner_home,
       managehome => true,
+    }
+
+    file { $gitlab_runner_home:
+      ensure  => directory,
+      owner   => $run_as_user,
+      require => User[$run_as_user],
     }
 
     # https://blog.matt.wf/gitlab-runner-clean-up-caches/
@@ -64,16 +70,15 @@ class profile::projectmanagement::gitlab_ci_runner (
       creates => "/etc/systemd/system/gitlab-runner-${run_as_user}.service",
     }
 
+    file { $gitlab_runner_home:
+      ensure => directory,
+      owner  => $run_as_user,
+    }
+
     service { "gitlab-runner-${run_as_user}.service":
       ensure => running,
       enable => true,
     }
-  }
-
-  file { $gitlab_runner_home:
-    ensure  => directory,
-    owner   => 'gitlab-runner',
-    require => User['gitlab-runner'],
   }
 
   class { '::gitlab_ci_runner':
