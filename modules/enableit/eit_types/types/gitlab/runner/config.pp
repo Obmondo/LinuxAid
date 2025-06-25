@@ -1,4 +1,5 @@
 type Eit_types::Gitlab::Runner::Config = Struct[{
+  'run_as_user'        => Optional[Eit_types::UserName],
   'url'                => Optional[Stdlib::HTTPSUrl],
   'registration-token' => Optional[String],
   'executor'           => Optional[Enum['docker', 'shell']],

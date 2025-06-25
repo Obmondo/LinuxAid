@@ -1,7 +1,6 @@
 # Gitlab Runner profile
 #
 class profile::projectmanagement::gitlab_ci_runner (
-  Eit_types::UserName               $run_as_user      = $role::projectmanagement::gitlab_ci_runner::run_as_user,
   Integer[1,10]                     $concurrency      = $role::projectmanagement::gitlab_ci_runner::concurrency,
   Eit_types::Gitlab::Runner         $runners          = $role::projectmanagement::gitlab_ci_runner::runners,
   Eit_types::Gitlab::Runner::Config $runner_defaults  = $role::projectmanagement::gitlab_ci_runner::runner_defaults,
@@ -36,7 +35,8 @@ class profile::projectmanagement::gitlab_ci_runner (
   if $docker_executor {
     contain role::virtualization::docker
 
-    user { $run_as_user:
+    $user = 'gitlab-runner'
+    user { $user:
       groups     => 'docker',
       home       => $gitlab_runner_home,
       managehome => true,
@@ -44,8 +44,8 @@ class profile::projectmanagement::gitlab_ci_runner (
 
     file { $gitlab_runner_home:
       ensure  => directory,
-      owner   => $run_as_user,
-      require => User[$run_as_user],
+      owner   => $user,
+      require => User[$user],
     }
 
     # https://blog.matt.wf/gitlab-runner-clean-up-caches/
@@ -62,22 +62,33 @@ class profile::projectmanagement::gitlab_ci_runner (
   # but if the user is not gitlab-runner, then we will have to handle it ourselves.
   # which means, create user and service file for now,
   # lets just manage the service file, handling user creation is for later.
-  if $shell_executor and $run_as_user != 'gitlab-runner' {
+  if $shell_executor {
 
-    # NOTE: the binary path is static, copied directly from upstream.
-    # we can try getvar or something, leaving it for next time
-    exec { "/usr/local/bin/gitlab-runner install -u ${run_as_user}":
-      creates => "/etc/systemd/system/gitlab-runner-${run_as_user}.service",
-    }
+    $runners.each |$runner_name, $config| {
+      $_config = $runner_defaults + $config
 
-    file { $gitlab_runner_home:
-      ensure => directory,
-      owner  => $run_as_user,
-    }
+      $run_as_user = $_config['run_as_user']
 
-    service { "gitlab-runner-${run_as_user}.service":
-      ensure => running,
-      enable => true,
+      # We will not setup gitlab-runner service, since thats the default one.
+      if $run_as_user == 'gitlab-runner' {
+        next()
+      }
+
+      # NOTE: the binary path is static, copied directly from upstream.
+      # we can try getvar or something, leaving it for next time
+      exec { "/usr/local/bin/gitlab-runner install -u ${run_as_user}":
+        creates => "/etc/systemd/system/gitlab-runner-${run_as_user}.service",
+      }
+
+      file { $gitlab_runner_home:
+        ensure => directory,
+        owner  => $run_as_user,
+      }
+
+      service { "gitlab-runner-${run_as_user}.service":
+        ensure => running,
+        enable => true,
+      }
     }
 
     if !$docker_executor {
