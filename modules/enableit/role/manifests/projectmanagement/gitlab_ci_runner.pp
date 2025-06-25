@@ -1,21 +1,13 @@
 
 # @summary Class for managing the GitLab CI Runner
 #
-# @param url The URL for the GitLab instance.
-#
-# @param user The username for the Gitlab Runner should run as, works only with shell executor. Defaults to 'gitlab-runner'
-#
-# @param executor The executor type for the runner. Defaults to 'docker'.
-#
-# @param docker_image The Docker image to use for the runner. Defaults to 'ubuntu/noble'.
+# @param run_as_user The username for the Gitlab Runner should run as, works only with shell executor. Defaults to 'gitlab-runner'
 #
 # @param concurrency The number of concurrent jobs to run. Defaults to 2.
 #
 # @param runners A hash of runner-specific configurations.
 #
 # @param runner_defaults A hash of default configurations for the runners.
-#
-# @param manage_repo Flag to manage the repository settings. Defaults to true.
 #
 # @param $__blendable
 # An internal parameter.
