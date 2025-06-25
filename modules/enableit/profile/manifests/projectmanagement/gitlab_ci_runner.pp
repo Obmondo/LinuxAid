@@ -16,7 +16,7 @@ class profile::projectmanagement::gitlab_ci_runner (
 
   # Find out if there is any docker or shell executor from the
   # given runner configs
-  $docker_executor = $runners.each |$runner_name, $config| {
+  $docker_executor = $runners.any |$runner_name, $config| {
     $_config = $runner_defaults + $config
 
     # Make sure we allow Docker rules in the firewall
@@ -26,7 +26,7 @@ class profile::projectmanagement::gitlab_ci_runner (
     $_config['executor'] == 'docker'
   }
 
-  $shell_executor = $runners.each |$runner_name, $config| {
+  $shell_executor = $runners.any |$runner_name, $config| {
     $_config = $runner_defaults + $config
     $_config['executor'] == 'shell'
   }
