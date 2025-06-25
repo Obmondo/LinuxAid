@@ -79,6 +79,13 @@ class profile::projectmanagement::gitlab_ci_runner (
       ensure => running,
       enable => true,
     }
+
+    if !$docker_executor {
+      service { 'gitlab-runner.service':
+        ensure => stopped,
+        enable => false,
+      }
+    }
   }
 
   class { '::gitlab_ci_runner':
