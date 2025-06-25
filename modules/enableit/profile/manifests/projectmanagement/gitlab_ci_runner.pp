@@ -87,7 +87,7 @@ class profile::projectmanagement::gitlab_ci_runner (
         default => $_config['working_directory'],
       }
 
-      $service_name = "gitlab-runner-${run_as_user}.service"
+      $service_name = "gitlab-runner-${run_as_user}"
 
       # We will not setup gitlab-runner service, since thats the default one.
       if $run_as_user == 'gitlab-runner' {
@@ -108,7 +108,7 @@ class profile::projectmanagement::gitlab_ci_runner (
         owner  => $run_as_user,
       }
 
-      service { "gitlab-runner-${run_as_user}.service":
+      service { $service_name:
         ensure => running,
         enable => true,
       }
