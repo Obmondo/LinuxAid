@@ -1,9 +1,20 @@
 # Gitlab Runner profile
 #
+# Supports:
+# If docker or shell executor is there with gitlab-runner user
+# If docker is with gitlab-runner and shell executor with diff user
+# If just shell executor is there with gitlab-runner
+# If shell executor is there with diff runner user
+#
+# Not Supported:
+# docker with diff user is not supported, since it does not make sense.
+# Multiple runner which can talk to diff gitlab instance.
+#
 class profile::projectmanagement::gitlab_ci_runner (
   Integer[1,10]                     $concurrency      = $role::projectmanagement::gitlab_ci_runner::concurrency,
   Eit_types::Gitlab::Runner         $runners          = $role::projectmanagement::gitlab_ci_runner::runners,
   Eit_types::Gitlab::Runner::Config $runner_defaults  = $role::projectmanagement::gitlab_ci_runner::runner_defaults,
+  Eit_types::IPPort                 $listen_address   = '127.254.254.254:63384',
 ) {
 
   $runners.each |$runner_name, $config| {
@@ -30,18 +41,20 @@ class profile::projectmanagement::gitlab_ci_runner (
     $_config['executor'] == 'shell'
   }
 
-  $gitlab_runner_home = '/var/lib/gitlab-runner'
-
   if $docker_executor {
     contain role::virtualization::docker
 
     $user = 'gitlab-runner'
+    $gitlab_runner_home = '/var/lib/gitlab-runner'
+
     user { $user:
       groups     => 'docker',
       home       => $gitlab_runner_home,
       managehome => true,
     }
 
+    # NOTE: this does not matter much, since the container will be dropping files to data-dir
+    # which is set in docker daemon
     file { $gitlab_runner_home:
       ensure  => directory,
       owner   => $user,
@@ -69,18 +82,28 @@ class profile::projectmanagement::gitlab_ci_runner (
 
       $run_as_user = $_config['run_as_user']
 
+      $working_directory = $_config['working_directory'] ? {
+        under   => '/local',
+        default => $_config['working_directory'],
+      }
+
+      $service_name = "gitlab-runner-${run_as_user}.service"
+
       # We will not setup gitlab-runner service, since thats the default one.
       if $run_as_user == 'gitlab-runner' {
         next()
       }
 
-      # NOTE: the binary path is static, copied directly from upstream.
-      # we can try getvar or something, leaving it for next time
-      exec { "/usr/local/bin/gitlab-runner install -u ${run_as_user}":
-        creates => "/etc/systemd/system/gitlab-runner-${run_as_user}.service",
+      # NOTE: the binary path is static
+      # Tested only on Redhat family
+      exec { "/usr/bin/gitlab-runner install --service ${service_name} --working-directory ${working_directory} --user ${run_as_user}":
+        creates => "/etc/systemd/system/${service_name}",
       }
 
-      file { $gitlab_runner_home:
+      file { [
+        $working_directory,
+        "${working_directory}/${run_as_user}",
+      ]:
         ensure => directory,
         owner  => $run_as_user,
       }
@@ -105,6 +128,9 @@ class profile::projectmanagement::gitlab_ci_runner (
     manage_repo     => true,
     runners         => $runners,
     runner_defaults => $runner_defaults,
+    # NOTE: only default gitlab-runner metrics will be scraped.
+    # TODO: add support for this even for shell executor
+    listen_address  => $listen_address,
   }
 
   # TODO: Remove this block entirely ?
