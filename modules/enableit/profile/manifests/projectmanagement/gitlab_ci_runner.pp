@@ -18,6 +18,11 @@ class profile::projectmanagement::gitlab_ci_runner (
   # given runner configs
   $docker_executor = $runners.each |$runner_name, $config| {
     $_config = $runner_defaults + $config
+
+    # Make sure we allow Docker rules in the firewall
+    confine($_config['executor'] == 'docker', !lookup('common::network::firewall::allow_docker', Optional[Boolean], undef, undef),
+            '`common::network::firewall::allow_docker` must be `true`')
+
     $_config['executor'] == 'docker'
   }
 

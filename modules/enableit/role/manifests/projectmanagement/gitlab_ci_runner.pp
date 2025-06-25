@@ -20,10 +20,6 @@ class role::projectmanagement::gitlab_ci_runner (
   Boolean                           $__blendable,
 ) inherits ::role::projectmanagement {
 
-  # Make sure we allow Docker rules in the firewall
-  confine(!lookup('common::network::firewall::allow_docker', Optional[Boolean], undef, undef),
-          '`common::network::firewall::allow_docker` must be `true`')
-
   class { 'profile::projectmanagement::gitlab_ci_runner':
     run_as_user     => $run_as_user,
     runners         => $runners,
