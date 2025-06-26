@@ -17,6 +17,8 @@ class profile::projectmanagement::gitlab_ci_runner (
   Eit_types::IPPort                 $listen_address   = '127.254.254.254:63384',
 ) {
 
+  contain monitor::system::service::gitlab_runner
+
   $runners.each |$runner_name, $config| {
     $_config = $runner_defaults + $config
 
