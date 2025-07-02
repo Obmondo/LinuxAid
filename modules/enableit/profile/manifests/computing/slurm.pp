@@ -45,11 +45,6 @@ class profile::computing::slurm (
     })
   }
 
-  #install of slurm-20.11.9-1el7.x86_64 conflicts with file from package slurm-libs-20.11.9-1.el7.x86_64
-  package { 'slurm-libs':
-    ensure => absent,
-  }
-
   # Don't encrypt if file is supplied
   $_munge_key = type($munge_key) ? {
     String  => { munge_key_content => $munge_key.node_encrypt::secret },
