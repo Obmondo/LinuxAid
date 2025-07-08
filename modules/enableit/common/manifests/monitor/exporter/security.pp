@@ -1,4 +1,17 @@
 # Prometheus Security Exporter
+#
+# @param enable Boolean flag to enable or disable the exporter. Defaults to false.
+#
+# @param noop_value Boolean flag to run in noop mode. Defaults to false.
+#
+# @param host The host certificate name. Defaults to $trusted['certname'].
+#
+# @param listen_host The host to listen on. Defaults to '127.254.254.254'.
+#
+# @param listen_port The port to listen on. Defaults to 63396.
+#
+# @param config_file Path to the configuration YAML file. Defaults to "${::common::monitor::exporter::config_dir}/security_exporter.yaml".
+#
 class common::monitor::exporter::security (
   Boolean              $enable      = false,
   Boolean              $noop_value  = false,

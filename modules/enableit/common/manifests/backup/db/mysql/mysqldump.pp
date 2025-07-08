@@ -1,6 +1,19 @@
-# Specific settings for mysql and override for common::backup::db settings
+# @summary Class for specific settings for mysql and override for common::backup::db settings
 #
-# MysqlDump
+# @param enable Boolean for enabling or disabling mysql backup. Defaults to the value of $common::backup::db::enable.
+#
+# @param backup_user_password The password for the backup user. Defaults to the value of $common::backup::db::backup_user_password.
+#
+# @param backup_hour The hour to perform the backup. Defaults to the value of $common::backup::db::backup_hour.
+#
+# @param ignore_tables Array of tables to ignore during backup. Defaults to the value of $common::backup::db::ignore_tables.
+#
+# @param backup_user The username for the backup process. Defaults to the value of $common::backup::db::backup_user.
+#
+# @param dump_dir The directory where backups are stored. Defaults to the value of $common::backup::db::dump_dir.
+#
+# @param backup_retention The retention period for backups in days. Defaults to the value of $common::backup::db::backup_retention.
+#
 class common::backup::db::mysql::mysqldump (
   Boolean                   $enable                = $common::backup::db::enable,
   Eit_types::Password       $backup_user_password  = $common::backup::db::backup_user_password,
@@ -10,7 +23,6 @@ class common::backup::db::mysql::mysqldump (
   Stdlib::Absolutepath      $dump_dir              = $common::backup::db::dump_dir,
   Eit_types::Duration::Days $backup_retention      = $common::backup::db::backup_retention,
 ) inherits common::backup::db {
-
   $_ignore_tables = $ignore_tables.map |$table| {
     # https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ignore-table
     "--ignore-table=${table}"

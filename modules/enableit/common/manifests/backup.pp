@@ -1,4 +1,37 @@
-# Backup Class
+# @summary Class for managing backup configurations
+#
+# @param manage Whether to manage the backup setup. Defaults to true.
+#
+# @param install_client Whether to install the backup client. Defaults to false.
+#
+# @param enable Whether to enable the backup. Defaults to false.
+#
+# @param backup_user The user account used for backups. Defaults to 'obmondo-backup'.
+#
+# @param dump_dir The directory for dumps. Defaults to undef.
+#
+# @param backup_user_password The password for the backup user. Defaults to undef.
+#
+# @param keep_days Number of days to keep backups. Defaults to 30.
+#
+# @param backup_window_starthour The start hour for backup window (0-23). Defaults to undef.
+#
+# @param backup_window_lasthour The end hour for backup window (0-23). Defaults to undef.
+#
+# @param luks Whether to enable LUKS encryption. Defaults to undef.
+#
+# @param lukspass The LUKS passphrase. Defaults to undef.
+#
+# @param luks_service_name The service name that manages LUKS. Defaults to undef.
+#
+# @param lvm Whether to enable LVM. Defaults to undef.
+#
+# @param lvm_vg The LVM volume group name. Defaults to undef.
+#
+# @param lvm_extents_min_required The minimum required LVM extents percentage. Defaults to 15.
+#
+# @param push A hash for push configurations. Defaults to empty hash.
+#
 class common::backup (
   Boolean                        $manage                   = true,
   Boolean                        $install_client           = false,
@@ -29,17 +62,14 @@ class common::backup (
   }]]                            $push                     = {},
 ) {
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')
-
   confine($luks, !($lukspass or $luks_service_name),
     'A LUKS passphrase or the name of the service that starts LUKS must be defined if `luks` is enabled')
   confine($luks, $lukspass, $luks_service_name, 'Only one of `lukspass` and `luks_service_name` may be set')
-
   # TODO: this is not used anymore rdiff-backup.
   # remove it later
   unless empty($push) {
     create_resources('common::backup::push', $push)
   }
-
   if $manage {
     user { $backup_user:
       ensure         => present,
@@ -54,20 +84,16 @@ class common::backup (
       purge_ssh_keys => true,
       require        => Group['obmondo'],
     }
-
     # We only want to include borg if we actually use it
     unless lookup('common::backup::borg::repos', Hash, undef, {}).empty {
       common::backup::borg.contain
     }
-
     if lookup('common::backup::netbackup::enable', Boolean, undef, false) {
       common::backup::netbackup.contain
     }
-
     if lookup('common::backup::db::enable', Boolean, undef, false) {
       common::backup::db.contain
     }
-
     if lookup('common::backup::gitea::enable', Boolean, undef, false) {
       common::backup::gitea.contain
     }

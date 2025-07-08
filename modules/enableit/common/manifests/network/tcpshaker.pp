@@ -1,4 +1,19 @@
-# Installs and sets up tcp shaker in daemon mode on that system
+# @summary Class for installing and setting up tcp shaker in daemon mode
+#
+# @param listen_port The port to listen on. Must be a Stdlib::Port.
+#
+# @param check_interval The interval between checks in seconds. Must be an Integer.
+#
+# @param requests_per_check Number of requests per check. Must be an Integer.
+#
+# @param concurrency Concurrency level. Must be an Integer.
+#
+# @param enable Whether to enable the service. Defaults to false.
+#
+# @param tcp_addresses Array of TCP addresses to bind to. Defaults to an empty array.
+#
+# @param noop_value Optional boolean to control noop behavior. Defaults to undef.
+#
 class common::network::tcpshaker (
   Stdlib::Port      $listen_port,
   Integer           $check_interval,
@@ -8,8 +23,6 @@ class common::network::tcpshaker (
   Array[String]     $tcp_addresses = [],
   Optional[Boolean] $noop_value    = undef
 ) {
-
-
   $config_location = '/etc/tcpshaker.yaml'
   $package_name = 'tcp-shaker'
 
@@ -46,5 +59,4 @@ class common::network::tcpshaker (
   }
 
   include common::monitor::exporter::tcpshaker
-
 }

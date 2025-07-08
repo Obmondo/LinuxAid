@@ -1,26 +1,38 @@
+# @summary Class for managing common backup settings for databases
 #
-# Contains common settings for Backup of DB's
+# @param enable Boolean flag to enable or disable backup. Defaults to the value of $::common::backup::enable.
+#
+# @param backup_user_password Optional password for backup user. Defaults to the value of $::common::backup::backup_user_password.
+#
+# @param backup_user The username for backup. Defaults to the value of $::common::backup::backup_user.
+#
+# @param root_password Optional password for root user. Defaults to the value of $::common::backup::root_password.
+#
+# @param dump_dir Filesystem path for dump directory. Defaults to the value of $::common::backup::dump_dir.
+#
+# @param backup_retention Number of days to retain backups. Defaults to 30.
+#
+# @param backup_hour Hour of the day to start backup (local server time). Defaults to 3.
+#
+# @param ignore_tables Array of table names to ignore during backup. Defaults to [].
+#
+# @param host Hostname for database. Defaults to 'localhost'.
+#
+# @param backup_method Backup method to use ('mysqldump', 'mysqlbackup', 'xtrabackup'). Defaults to 'mysqldump'.
 #
 class common::backup::db (
   Boolean                       $enable                = $::common::backup::enable,
   Optional[Eit_types::Password] $backup_user_password  = $::common::backup::backup_user_password,
-  Eit_types::SimpleString       $backup_user           = $::common::backup::backup_user,
+  String                        $backup_user           = $::common::backup::backup_user,
   Optional[Eit_types::Password] $root_password         = $::common::backup::root_password,
   Stdlib::Unixpath              $dump_dir              = $::common::backup::dump_dir,
   Eit_types::Duration::Days     $backup_retention      = 30,
-  Integer[0,23]                 $backup_hour           = 3, # what hour to start backup; time is in server local time
+  Integer[0,23]                 $backup_hour           = 3,
   Array[String]                 $ignore_tables         = [],
-  Optional[Eit_types::Host]     $host                  = 'localhost',
-  Enum[
-    'mysqldump',
-    'mysqlbackup',
-    'xtrabackup'
-  ]                             $backup_method         = 'mysqldump',
-  Optional[String]              $backup_databases      = undef,
+  Optional[Eit_types::Host]       $host                  = 'localhost',
+  Enum['mysqldump', 'mysqlbackup', 'xtrabackup'] $backup_method = 'mysqldump',
 ) inherits ::common::backup {
-
   confine($enable, !$::common::backup::dump_dir, '`common::backup::dump_dir` needs to be set')
-
   # Since the mysql module only support backup from localhost.
   # For taking backup from different host we are using our own script.
   if $host != 'localhost' {
@@ -38,7 +50,6 @@ class common::backup::db (
         dump_dir             => $dump_dir,
       }),
     }
-
     common::services::systemd { 'mysql-backup.timer':
       ensure  => true,
       enable  => true,
@@ -61,7 +72,6 @@ class common::backup::db (
       },
       require => File['/opt/obmondo/bin/mysqlbackup.sh'],
     }
-
     common::services::systemd { 'mysql-backup.service':
       ensure  => 'present',
       unit    => {
@@ -73,7 +83,5 @@ class common::backup::db (
       },
       require => File['/opt/obmondo/bin/mysqlbackup.sh'],
     }
-
   }
-
 }

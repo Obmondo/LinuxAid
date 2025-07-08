@@ -1,4 +1,15 @@
-# Prometheus Mtail Exporter
+# @summary Class for managing the Prometheus Mtail Exporter
+#
+# @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+#
+# @param noop_value The noop value for resources. Defaults to false.
+#
+# @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63389'.
+#
+# @param logs An array of log file paths to monitor. Defaults to an empty array.
+#
+# @param progs The path to the programs directory. Defaults to "${common::monitor::exporter::config_dir}/mtail".
+#
 class common::monitor::exporter::mtail (
   Boolean                     $enable         = $common::monitor::exporter::enable,
   Boolean[false]              $noop_value     = false,

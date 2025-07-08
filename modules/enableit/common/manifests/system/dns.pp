@@ -1,4 +1,25 @@
-# DNS client handling
+# @summary Class for handling DNS client configuration
+#
+# @param resolver The DNS resolver to use. Valid values are 'dnsmasq', 'systemd-resolved', or 'resolv'.
+#
+# @param manage Whether to manage DNS configuration. Defaults to false.
+#
+# @param nameservers List of DNS nameservers. Defaults to an empty array.
+#
+# @param fallback_nameservers List of fallback DNS nameservers. Defaults to an empty array.
+#
+# @param searchpath DNS search path. Defaults to an empty array.
+#
+# @param dnssec Enable DNSSEC validation. Can be Boolean or 'allow-downgrade'. Defaults to false.
+#
+# @param dns_over_tls Enable DNS over TLS. Can be Boolean or 'opportunistic'. Defaults to false.
+#
+# @param listen_address List of IP addresses to listen on. Defaults to an empty array.
+#
+# @param allow_external Allow external DNS queries. Defaults to false.
+#
+# @param noop_value Value used for noop operations. Defaults to undef.
+#
 class common::system::dns (
   Enum['dnsmasq', 'systemd-resolved', 'resolv'] $resolver,
   Boolean                                       $manage               = false,

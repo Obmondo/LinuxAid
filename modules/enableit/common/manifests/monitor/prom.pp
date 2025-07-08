@@ -1,6 +1,16 @@
-# Prometheus Server
-# setup these resources in noop mode
-# and we dont allow anyone to change the noop setting
+# @summary Class for managing Prometheus server monitoring configuration
+#
+# @param noop_value 
+# Whether to run resources in noop mode. Defaults to false.
+#
+# @param install_method The installation method to use. Defaults to 'package'.
+#
+# @param env_file_path The absolute path to the environment file.
+#
+# @param bin_dir The absolute path to the binary directory.
+#
+# @param usershell The absolute path to the user's shell.
+#
 class common::monitor::prom (
   Boolean[false]       $noop_value,
   Enum['package']      $install_method,
@@ -27,11 +37,7 @@ class common::monitor::prom (
   Group {
     noop => $noop_value
   }
-
-  # The prometheus upstream module does not have the support for env_file_path on suse os family.
-  # will rase the PR for that
-
-  class { 'prometheus' :
+  class { 'prometheus':
     install_method    => $install_method,
     bin_dir           => $bin_dir,
     usershell         => $usershell,

@@ -1,8 +1,43 @@
-# Software repository management
-# If manage is true, it will manage the apt.conf/yum.conf file as well
-# and setup some default config which Obmondo sets
-# Without managing the above, one can still set the repo, by using
-# below parameters.
+# @summary Class for managing software repositories
+#
+# @param manage Boolean - If true, will manage the apt.conf/yum.conf file and set up default configs. Defaults to true.
+#
+# @param noop_value Optional[Boolean] - Specify whether to perform actions in noop mode. Defaults to undef.
+#
+# @param repos Array[Variant[String, Hash]] - List of repositories to manage. Defaults to empty array.
+#
+# @param rhrepos Array[String] - List of RedHat repositories to manage. Defaults to empty array.
+#
+# @param yumrepos Hash[String, Hash] - Specific yum repository configurations. Defaults to empty hash.
+#
+# @param zypprepos Hash[String, Struct[
+#   {
+#     url           => String,
+#     repos         => Optional[String],
+#     gpgkey        => Optional[String],
+#     gpgcontent    => Optional[String],
+#     autorefresh  => Boolean,
+#     type          => String,
+#     path          => String,
+#     keeppackages => Boolean,
+#   }
+# ]] - Specific zypper repository configurations. Defaults to empty hash.
+#
+# @param aptrepos Hash[String, Hash] - Specific apt repository configurations. Defaults to empty hash.
+#
+# @param purge Boolean - If true, will purge existing repositories. Defaults to false.
+#
+# @param upstream Boolean - If true, will set up upstream repositories. Defaults to false.
+#
+# @param source_protocol Enum['http', 'https']
+# The protocol to use for sources. Defaults to 'https'.
+#
+# @param local Boolean - If true, sets up local repositories. Defaults to false.
+#
+# @param domain Optional[Stdlib::Fqdn] - The domain for local or remote repositories. Defaults to undef.
+#
+# @param snapshot Optional[Eit_types::Date] - Date for snapshot repositories. Defaults to undef.
+#
 class common::repo (
   Boolean                   $manage          = true,
   Optional[Boolean]         $noop_value      = undef,
@@ -55,7 +90,6 @@ class common::repo (
       source_protocol => $source_protocol,
       noop_value      => $noop_value,
     }
-
     $repos.each |$repo| {
       if type($repo) =~ Type[Hash] {
         $repo.each |$k, $v| {
@@ -70,7 +104,6 @@ class common::repo (
         }
       }
     }
-
     $_snapshot_uri_fragment = if $snapshot {
       # Compare two dates, if the install date is newer then the group specific snapshot date and
       # only change the apt/yum repos location, if the install date is lower then the snapshote date
@@ -83,7 +116,6 @@ class common::repo (
         }
       }
     }
-
     $_os = $facts['os']
     $_os_major = $_os['release']['major']
     $_osfamily = $_os['family']
@@ -99,12 +131,10 @@ class common::repo (
         if $manage_update and $snapshot_repo {
           $yumrepos.each |$_name, $_parameters| {
             if $_parameters['baseurl'] !~ /\$\{snapshot\}/ and $_parameters['baseurl'] !~ /freight/ {
-              fail("Repository '${_name}' is missing snapshot placeholder, which is required if automatic system updates are enabled.
-Pl  ease change the URL to contain an EPP style template.")
+              fail("Repository '${_name}' is missing snapshot placeholder, which is required if automatic system updates are enabled. Please change the URL to contain an EPP style template.")
             }
           }
         }
-
         $yumrepos.each |$key, $value| {
           yumrepo { $key:
             descr    => pick($value['name'], $key),
@@ -124,7 +154,6 @@ Pl  ease change the URL to contain an EPP style template.")
             }
           }
         }
-
         $rhrepos.each |$repo| {
           rh_repo { $repo:
             ensure => present,
@@ -148,7 +177,6 @@ Pl  ease change the URL to contain an EPP style template.")
               'deb' => true,
             },
           }
-
           apt::keyring { "${key}.asc":
             ensure  => present,
             source  => $value['key_source'],
@@ -185,36 +213,22 @@ Pl  ease change the URL to contain an EPP style template.")
         fail("${_osfamily} is not supported")
       }
     }
-
-    # If local is enabled, we assume that the local repo server is already setup
-    # Setup centos base, extra, updates and epel repos automatically
     if $local {
       case $_osfamily {
         'RedHat': {
-          # NOTE: delete the wanted repo on RedHat OS, which got slipped in by mistake
           if $_os['name'] == 'RedHat' {
             file { [
               '/etc/yum.repos.d/centos.repo',
               '/etc/yum.repos.d/base.repo',
               '/etc/yum.repos.d/extras.repo',
               '/etc/yum.repos.d/updates.repo',
-              ]:
-                ensure => absent,
-                noop   => $noop_value,
+              ]: ensure => absent, noop => $noop_value,
             }
           }
-
-          # Setup the base repo for CentOS only
           if $_os['name'] == 'CentOS' {
-            ['base','extras','updates'].each | $repo | {
-              $_repo = if $repo == 'base' {
-                'os'
-              } else {
-                $repo
-              }
-
-              # Base Repo
-              yumrepo { $repo :
+            ['base', 'extras', 'updates'].each |$repo| {
+              $_repo = if $repo == 'base' { 'os' } else { $repo }
+              yumrepo { $_repo:
                 ensure   => present,
                 noop     => $noop_value,
                 enabled  => 1,
@@ -224,7 +238,6 @@ Pl  ease change the URL to contain an EPP style template.")
                 baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/centos${_os_major}/${_repo}/\$basearch/",
                 target   => '/etc/yum.repos.d/centos.repo',
               }
-
               eit_repos::yum::gpgkey { $repo:
                 ensure     => present,
                 path       => "/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-${_os_major}",
@@ -233,8 +246,6 @@ Pl  ease change the URL to contain an EPP style template.")
               }
             }
           }
-
-          # EPEL
           yumrepo { 'epel_local':
             ensure   => present,
             noop     => $noop_value,
@@ -254,13 +265,11 @@ Pl  ease change the URL to contain an EPP style template.")
         }
         'Debian': {
           $_os_type = downcase($_os['distro']['id'])
-
           $feature_repo = $_os_type ? {
             ubuntu  => ['backports', 'security', 'updates'],
             debian  => ['backports', 'updates'],
             default => fail("${_os_type} not supported")
           }
-
           $feature_repo.each |$repo| {
             apt::source { "local_apt_repo_${_os_codename}-${repo}":
               ensure       => present,
@@ -277,7 +286,6 @@ Pl  ease change the URL to contain an EPP style template.")
               },
             }
           }
-
           apt::source { "local_apt_repo_${_os_codename}":
             ensure       => present,
             noop         => $noop_value,

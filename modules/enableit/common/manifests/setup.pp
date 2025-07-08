@@ -1,56 +1,69 @@
-# Setup Class
+# @summary Class for setting up common configurations
+#
+# @param obmondo_admin_user_pubkeys Array of SSH public keys for obmondo admin user.
+#
+# @param $__conf_dir
+# Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
+#
+# @param $__opt_dir
+# Absolute path to the optional directory. Defaults to '/opt/obmondo'.
+#
+# @param $__bin_dir
+# Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
+#
+# @param noop_value Boolean value to control noop execution mode. Defaults to false.
+#
 class common::setup (
-  Array[String]        $obmondo_admin_user_pubkeys,
-
+  Array[String] $obmondo_admin_user_pubkeys,
   Stdlib::Absolutepath $__conf_dir = '/etc/obmondo',
   Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
   Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
-  Boolean              $noop_value = false,
+  Boolean $noop_value = false,
 ) {
   include common::system::authentication::sudo
   contain ::common::virtualization
-  # create obmondo dirs and copy libraries
+
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
   $_home_admin_ssh = "${_home_admin}/.ssh"
 
   file {
     default:
-      ensure => directory,
-      noop   => $noop_value,
+    ensure => directory,
+    noop   => $noop_value,
       ;
 
     [$__conf_dir, $__opt_dir, $_home]:
       ;
 
     $_home_admin:
-      owner   => 'obmondo-admin',
-      group   => 'obmondo',
-      mode    => '0755',
-      require => User['obmondo-admin'],
+    owner   => 'obmondo-admin',
+    group   => 'obmondo',
+    mode    => '0755',
+    require => User['obmondo-admin'],
       ;
 
     $_home_admin_ssh:
-      ensure  => directory,
-      owner   => 'obmondo-admin',
-      group   => 'obmondo',
-      mode    => '0700',
-      require => File[$_home_admin],
+    ensure  => directory,
+    owner   => 'obmondo-admin',
+    group   => 'obmondo',
+    mode    => '0700',
+    require => File[$_home_admin],
       ;
 
-    [
-      "${__opt_dir}/share",
-      "${__opt_dir}/etc",
-    ]:
+  [
+    "${__opt_dir}/share",
+    "${__opt_dir}/etc",
+  ]:
       ;
 
-    [
-      '/etc/ssl/private/',
-      '/etc/ssl/private/letsencrypt',
-    ]:
-      mode  => '0700',
-      owner => 'root',
-      group => 'root',
+  [
+    '/etc/ssl/private/',
+    '/etc/ssl/private/letsencrypt',
+  ]:
+    mode  => '0700',
+    owner => 'root',
+    group => 'root',
       ;
   }
 

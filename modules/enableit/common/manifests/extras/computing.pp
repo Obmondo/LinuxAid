@@ -1,4 +1,7 @@
-# Extra::Computing Class for things that does not classify into anything.
+# @summary Class for extra computing-related functionalities that do not fall into other categories
+#
+# @param enable Boolean to enable computing extras. Defaults to false.
+#
 class common::extras::computing (
   Boolean $enable = false,
 ) inherits ::common::extras {

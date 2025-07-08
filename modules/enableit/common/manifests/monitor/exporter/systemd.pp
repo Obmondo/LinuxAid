@@ -1,10 +1,19 @@
-# Prometheus Systemd Exporter
+# @summary Class for managing Prometheus Systemd Exporter
+#
+# @param  enable 
+# Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+#
+# @param noop_value 
+# Whether to perform noop actions. Defaults to false.
+#
+# @param listen_address 
+# The IP and port to listen on. Defaults to '127.254.254.254:63391'.
+#
 class common::monitor::exporter::systemd (
   Boolean            $enable         = $common::monitor::exporter::enable,
   Boolean[false]     $noop_value     = false,
   Eit_types::IPPort  $listen_address = '127.254.254.254:63391',
 ) {
-
   class { 'prometheus::systemd_exporter':
     package_name      => 'obmondo-systemd-exporter',
     service_enable    => $enable,
@@ -21,7 +30,6 @@ class common::monitor::exporter::systemd (
     scrape_host       => $trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
-
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-systemd_exporter.service-systemctl-daemon-reload' |> {

@@ -1,6 +1,44 @@
-# Borg backup
+# @summary Class for setting up Borg backup and installing necessary packages
 #
-# Sets up borg and installs necessary packages.
+# @param $__dir
+# The absolute path to the backup configuration directory.
+#
+# @param $prune_keep
+# Hash defining retention periods for daily, weekly, and monthly backups. Defaults to {'daily' => 7, 'weekly' => 2, 'monthly' => 2}.
+#
+# @param $timespec
+# Hash specifying the schedule time. Defaults to { 'weekday' => undef, 'year' => '*', 'month' => '*', 'day' => '*', 'hour' => 02, 'minute' => 0, 'second' => 0 }.
+#
+# @param $randomized_delay
+# Optional delay to introduce randomness in schedule. Defaults to '10 minutes'.
+#
+# @param $remote_user
+# Optional user for remote backups. Defaults to $::common::backup::backup_user.
+#
+# @param $remote_ip
+# Optional IP address for remote backup destination.
+#
+# @param $remote_backup_root
+# Optional path for remote backup root.
+#
+# @param $backup_root
+# Path for local backup root. Defaults to $::common::backup::dump_dir.
+#
+# @param $repos
+# Hash of repositories to backup.
+#
+# @param $archives
+# Array of archive paths to include in backup.
+#
+# @param $authorized_keys
+# Optional hash of authorized keys for remote backup.
+#
+# @param $server
+# Boolean indicating whether this node is a backup server. Defaults to false.
+#
+# @param $last_borgbackup
+# Path to store last backup timestamp. Defaults to '/var/tmp'.
+#
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,
   Eit_types::Borg_prune_numbers        $prune_keep = {
@@ -28,7 +66,6 @@ class common::backup::borg (
   Boolean                                           $server             = false,
   Optional[Stdlib::Absolutepath]                    $last_borgbackup    = '/var/tmp',
 ) inherits common::backup {
-
   class { '::borgbackup' :
     configdir            => $__dir,
     last_borgbackup      => $last_borgbackup,
@@ -36,33 +73,28 @@ class common::backup::borg (
     repos                => {},
     repos_defaults       => {},
   }
-
   if $server {
     confine(!$authorized_keys, $server, 'Need authorization key to accept backup from clients')
-
     $authorized_keys.each |$authorized_keys, $param| {
+      # Content configuration for authorized keys
       file { '/etc/borg':
         ensure  => present,
         content => "BORG_PASSPHRASE=${param['password']}\nREPOSITORY=/data/borg/${authorized_keys}\nCOLLECTOR_DIR=/var/lib/node_exporter/textfile_collector\n", #lint:ignore:140chars
       }
     }
-
     package { 'obmondo-borg-exporter' :
       ensure => present
     }
-
     service { 'borg-exporter.timer' :
       ensure  => running,
       enable  => true,
-      require => Package[ 'obmondo-borg-exporter'],
+      require => Package['obmondo-borg-exporter'],
     }
-
     common::backup::borg::server { $facts['networking']['hostname'] :
       backup_root     => $backup_root,
       authorized_keys => $authorized_keys,
     }
   } else {
-
     ## services
     common::services::systemd { 'obmondo-backup-borg@.service':
       ensure  => false,
@@ -80,8 +112,6 @@ class common::backup::borg (
         'WantedBy' => 'default.target',
       },
     }
-
-
     $repos.each |$k, $v| {
       common::backup::borg::push { $k:
         * => $v,

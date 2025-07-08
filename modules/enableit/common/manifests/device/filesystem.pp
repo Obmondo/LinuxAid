@@ -1,5 +1,12 @@
-# Mount filesystems when specific paths (i.e. devices) appear, or when other
-# conditions are met
+# @summary Class for managing filesystem devices and mounting
+#
+# @param devices 
+# Array of device paths or names. Must be an array of strings or absolute paths.
+#
+# @param fs_type The filesystem type to use, e.g., 'zfs'. Defaults to 'zfs'.
+#
+# @param target The target mount point.
+#
 define common::device::filesystem (
   Array[Variant[Stdlib::Absolutepath, Eit_types::SimpleString]] $devices,
   Enum['zfs'] $fs_type,

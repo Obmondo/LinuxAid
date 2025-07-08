@@ -1,21 +1,6 @@
-# COPIED FROM
-# https://github.com/ghoneycutt/puppet-module-common/blob/master/manifests/mkdir_p.pp
+# @summary Class for providing `mkdir -p` functionality for a directory
 #
-#
-# == Define: common::mkdir_p
-#
-# Provide `mkdir -p` functionality for a directory
-#
-# Idea is to use this mkdir_p in conjunction with a file resource
-#
-# Example usage:
-#
-#  common::mkdir_p { '/some/dir/structure': }
-#
-#  file { '/some/dir/structure':
-#    ensure  => directory,
-#    require => Common::Mkdir_p['/some/dir/structure'],
-#  }
+# @param name The path of the directory to create. This parameter is required.
 #
 define common::mkdir_p () {
   validate_absolute_path($name)

@@ -1,37 +1,40 @@
-# NTP Exporter
+# @summary Class for managing NTP Exporter
+#
+# @param enable 
+# Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
+#
+# @param listen_address The IP and port to listen on, default is '127.254.254.254:9559'.
+#
+# @param noop_value Optional boolean to specify noop mode. Defaults to undef.
+#
+# @param telemetry_path The telemetry endpoint path. Defaults to '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s'.
+#
 class common::monitor::exporter::ntp (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:9559',
   Optional[Boolean] $noop_value     = undef,
   String            $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
 ) {
-
   File {
     noop => $noop_value
   }
-
   Service {
     noop => $noop_value
   }
-
   Package {
     noop => $noop_value
   }
-
   User {
     noop => $noop_value
   }
-
   Group {
     noop => $noop_value
   }
-
   $_options = [
     '-ntp.source http',
     "-web.listen-address ${listen_address}",
     "-web.telemetry-path ${telemetry_path}",
   ]
-
   prometheus::daemon { 'ntp_exporter':
     package_name      => 'obmondo-ntp-exporter',
     version           => '1.1.3',
@@ -52,7 +55,6 @@ class common::monitor::exporter::ntp (
     scrape_job_name   => 'ntp',
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
-
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-ntp_exporter.service-systemctl-daemon-reload' |> {

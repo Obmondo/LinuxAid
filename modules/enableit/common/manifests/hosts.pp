@@ -1,25 +1,17 @@
-# Host entry
-# Eg No 1:
-# common::hosts::entries:
-#  '127.0.0.1':
-#    host_aliases:
-#      - 'cphapp.rema1000.dk'
-#      - 'cphapplinuxprodtest.rema1000.dk'
-#      - 'cphapplinuxtest.rema1000.dk'
+# @summary Class for managing host entries
 #
-# common::hosts::entries:
-#  '127.0.0.1':
-#    - 'cphapp.rema1000.dk'
-#    - 'cphapplinuxprodtest.rema1000.dk'
-#    - 'cphapplinuxtest.rema1000.dk'
+# @param entries A hash of IP addresses mapped to host entries. Defaults to an empty hash.
+#
 class common::hosts (
   Hash[
     Eit_types::IP,
     Variant[
-      Struct[{
-        ensure       => Optional[Boolean],
-        host_aliases => Array,
-      }],
+      Struct[
+        {
+          ensure       => Optional[Boolean],
+          host_aliases => Array,
+        }
+      ],
       Array,
     ]
   ] $entries = {},

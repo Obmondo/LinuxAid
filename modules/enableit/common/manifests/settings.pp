@@ -1,4 +1,13 @@
-# Common setting for per customers
+# @summary Class for common settings for per customers
+#
+# @param pgp_keyserver The PGP keyserver hostname or URL.
+#
+# @param custom_config_dir The absolute path to the custom configuration directory.
+#
+# @param publicips Optional array of IPs for public interfaces. Defaults to undef.
+#
+# @param pgp_key_ids Array of GPG key IDs. Defaults to an empty array.
+#
 class common::settings (
   Eit_types::Hostname            $pgp_keyserver,
   Stdlib::Absolutepath           $custom_config_dir,

@@ -1,4 +1,59 @@
-# Common postfix setup for all servers
+# @summary Class for managing common postfix mail setup
+#
+# @param manage Boolean flag to manage the mail configuration. Defaults to false.
+#
+# @param inet_interfaces The network interfaces. Defaults to 'localhost'.
+#
+# @param myhostname The server's hostname.
+#
+# @param mydomain Optional domain name.
+#
+# @param relayhost Optional relay host. Defaults to undef.
+#
+# @param smtp_sasl_auth Boolean to enable SMTP SASL authentication. Defaults to false.
+#
+# @param smtp_sasl_password_maps Optional SMTP SASL password maps. Defaults to undef.
+#
+# @param smtp_sasl_security_options Optional SMTP SASL security options. Defaults to undef.
+#
+# @param default_destination_concurrency_limit Maximum number of concurrent delivery attempts. Defaults to 20.
+#
+# @param soft_bounce Boolean to enable soft bounce. Defaults to false.
+#
+# @param smtp_connection_cache_destinations Array of destinations for SMTP connection caching. Defaults to empty array.
+#
+# @param smtp_tls_security_level TLS security level. Defaults to 'encrypt'.
+#
+# @param smtp_tls_loglevel TLS log level. Defaults to 1.
+#
+# @param smtpd_tls_auth_only Whether TLS authentication is required. Defaults to 'yes'.
+#
+# @param tls_ssl_options SSL options for TLS. Defaults to 'NO_COMPRESSION'.
+#
+# @param smtpd_tls_protocols TLS protocols for SMTP daemon. Defaults to '!SSLv2,!SSLv3'.
+#
+# @param smtpd_tls_mandatory_protocols Mandatory TLS protocols. Defaults to '!SSLv2,!SSLv3'.
+#
+# @param smtpd_tls_mandatory_ciphers Ciphers for mandatory TLS. Defaults to 'high'.
+#
+# @param smtpd_tls_eecdh_grade ECDH grade for TLS. Defaults to 'ultra'.
+#
+# @param tls_preempt_cipherlist Whether to preempt cipher list. Defaults to 'yes'.
+#
+# @param tls_high_cipherlist Cipher list for high security cipher suites. Defaults to a long cipher string.
+#
+# @param stats_daemon_port Port for stats daemon. Defaults to 63777.
+#
+# @param run_newaliases Boolean to run `newaliases`. Defaults to true.
+#
+# @param aliases Hash of mail aliases. Defaults to empty hash.
+#
+# @param _extra_main_parameters Additional parameters for main config. Defaults to empty hash.
+#
+# @param maildrop_perms Permissions for maildrop directory. Defaults to 'u+rwX,g-r,g+wX'.
+#
+# @param noop_value Optional noop value. Defaults to undef.
+#
 class common::mail (
   Boolean $manage                                            = false,
   Variant[
@@ -32,7 +87,6 @@ class common::mail (
   Optional[Boolean] $noop_value                              = undef,
 ) {
   $real_soft_bounce = to_yesno($soft_bounce)
-
   if $manage {
     $has_mail_server_role = $::obmondo_classes.grep('role::mail::').size
     if $has_mail_server_role {
@@ -41,7 +95,6 @@ class common::mail (
       if $facts[os][family] == 'RedHat' {
         package::install('ssmtp', { ensure => absent })
       }
-
       class { 'postfix::server':
         myhostname                 => $myhostname,
         mydomain                   => $mydomain,
@@ -67,18 +120,13 @@ class common::mail (
         }, $_extra_main_parameters),
       }
     }
-
     if $run_newaliases {
       # Run `newaliases` if needed
       exec { '/usr/bin/newaliases':
-        # only run `newaliases` if the db is either missing or older than the
-        # aliases file
         onlyif => '/usr/bin/test \( ! -f /etc/aliases.db \) -o \( /etc/aliases.db -ot /etc/aliases \)',
       }
     }
-
-    file {
-      default:
+    file { default:
         ensure => 'directory',
         owner  => 'postfix',
         group  => 'postfix',
@@ -91,7 +139,6 @@ class common::mail (
         group => 'postdrop',
         mode  => lookup('common::mail::maildrop_perms'),
     }
-
     $aliases.map |$target, $recipient| {
       mailalias { $target:
         ensure    => present,

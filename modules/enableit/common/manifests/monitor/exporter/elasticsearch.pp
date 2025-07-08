@@ -1,10 +1,16 @@
-# Prometheus elasticsearch Exporter
+# @summary Class for managing Prometheus Elasticsearch Exporter
+#
+# @param enable Boolean flag to enable or disable the exporter. Defaults to value of $common::monitor::exporter::enable.
+#
+# @param listen_address The IP and port for the exporter to listen on. Defaults to '127.254.254.254:9105'.
+#
+# @param noop_value Boolean for noop mode. Defaults to false.
+#
 class common::monitor::exporter::elasticsearch (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:9105',
   Boolean[false]    $noop_value     = false
 ) {
-
   class { 'prometheus::elasticsearch_exporter':
     package_name      => 'obmondo-elasticsearch-exporter',
     service_name      => 'elasticsearch_exporter',
@@ -23,7 +29,6 @@ class common::monitor::exporter::elasticsearch (
     scrape_host       => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
-
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-elasticsearch_exporter.service-systemctl-daemon-reload' |> {

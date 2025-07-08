@@ -1,5 +1,21 @@
-# MongoDB backup
-# CUrrently only support mongodump
+# @summary Class for managing MongoDB backups
+#
+# @param enable Boolean to enable or disable the backup feature. Defaults to the value of $::common::backup::db::enable.
+#
+# @param backup_user The user used for the backup process. Defaults to the value of $::common::backup::db::backup_user.
+#
+# @param backup_user_password The password for the backup user. Defaults to the value of $::common::backup::db::backup_user_password.
+#
+# @param backup_hour The hour of the day (0-23) when the backup should run. Defaults to the value of $::common::backup::db::backup_hour.
+#
+# @param backup_method The method of backup, either 'snapshot' or 'dump'. Defaults to the value of $::common::backup::db::backup_method.
+#
+# @param dump_dir The directory where backups will be stored. Defaults to the value of $::common::backup::db::dump_dir.
+#
+# @param backup_databases Optional list of databases to backup. Defaults to the value of $::common::backup::db::backup_databases.
+#
+# @param backup_retention Duration to retain backups in days. Defaults to the value of $::common::backup::db::backup_retention.
+#
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,
   Eit_types::User           $backup_user           = $::common::backup::db::backup_user,
@@ -13,7 +29,6 @@ class common::backup::db::mongodb (
   Optional[String]          $backup_databases      = $::common::backup::db::backup_databases,
   Eit_types::Duration::Days $backup_retention      = $::common::backup::db::backup_retention,
 ) inherits ::common::backup::db {
-
 
   package::install ( 'obmondo-scripts-backup-mongodb' )
 
@@ -62,6 +77,4 @@ class common::backup::db::mongodb (
     roles         => ['backup'],
     require       => Class['mongodb::server'],
   }
-
 }
-
