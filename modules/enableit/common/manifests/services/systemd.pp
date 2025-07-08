@@ -1,4 +1,36 @@
-# Common script class
+# @summary Class for managing common systemd services
+#
+# @param ensure The desired state of the service. Defaults to true (present).
+#
+# @param enable Whether to enable the service. Defaults to true.
+#
+# @param unit_name The name of the systemd unit.
+#
+# @param unit The systemd unit section configuration. Defaults to {}.
+#
+# @param service The systemd service section configuration. Defaults to {}.
+#
+# @param slice The systemd slice section configuration. Defaults to {}.
+#
+# @param mount The systemd mount section configuration. Defaults to {}.
+#
+# @param path The systemd path section configuration. Defaults to {}.
+#
+# @param automount The systemd automount section configuration. Defaults to {}.
+#
+# @param install The systemd install section configuration. Defaults to {}.
+#
+# @param timer The systemd timer section configuration. Defaults to {}.
+#
+# @param script Optional. A hash of file paths to their content or source for additional script files.
+# Defaults to undef.
+#
+# @param override Optional. Whether to override existing configurations. Defaults to false.
+#
+# @param unit_file_path Optional. The specific path to the unit file. Defaults to undef.
+#
+# @param noop_value Optional. The noop setting for resource types. Defaults to undef.
+#
 define common::services::systemd (
   Variant[Eit_types::Service_Ensure, Enum['present', 'absent']] $ensure = true,
 

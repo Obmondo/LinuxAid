@@ -1,4 +1,65 @@
-# Prometheus node-exporter
+# @summary Class for managing the common::monitor::exporter::node Puppet class
+#
+# @param buddyinfo Boolean indicating whether to enable the 'buddyinfo' collector. Defaults to false.
+#
+# @param cgroups Boolean indicating whether to enable the 'cgroups' collector. Defaults to false.
+#
+# @param drbd Boolean indicating whether to enable the 'drbd' collector. Defaults to false.
+#
+# @param drm Boolean indicating whether to enable the 'drm' collector. Defaults to false.
+#
+# @param ethtool Boolean indicating whether to enable the 'ethtool' collector. Defaults to false.
+#
+# @param interrupts Boolean indicating whether to enable the 'interrupts' collector. Defaults to false.
+#
+# @param ksmd Boolean indicating whether to enable the 'ksmd' collector. Defaults to false.
+#
+# @param lnstat Boolean indicating whether to enable the 'lnstat' collector. Defaults to false.
+#
+# @param logind Boolean indicating whether to enable the 'logind' collector. Defaults to false.
+#
+# @param meminfo_numa Boolean indicating whether to enable the 'meminfo_numa' collector. Defaults to false.
+#
+# @param mountstats Boolean indicating whether to enable the 'mountstats' collector. Defaults to false.
+#
+# @param network_route Boolean indicating whether to enable the 'network_route' collector. Defaults to false.
+#
+# @param ntp Boolean indicating whether to enable the 'ntp' collector. Defaults to false.
+#
+# @param perf Boolean indicating whether to enable the 'perf' collector. Defaults to false.
+#
+# @param processes Boolean indicating whether to enable the 'processes' collector. Defaults to false.
+#
+# @param qdisc Boolean indicating whether to enable the 'qdisc' collector. Defaults to false.
+#
+# @param runit Boolean indicating whether to enable the 'runit' collector. Defaults to false.
+#
+# @param slabinfo Boolean indicating whether to enable the 'slabinfo' collector. Defaults to false.
+#
+# @param supervisord Boolean indicating whether to enable the 'supervisord' collector. Defaults to false.
+#
+# @param sysctl Boolean indicating whether to enable the 'sysctl' collector. Defaults to false.
+#
+# @param systemd Boolean indicating whether to enable the 'systemd' collector. Defaults to false.
+#
+# @param tcpstat Boolean indicating whether to enable the 'tcpstat' collector. Defaults to false.
+#
+# @param thermal_zone Boolean indicating whether to enable the 'thermal_zone' collector. Defaults to false.
+#
+# @param wifi Boolean indicating whether to enable the 'wifi' collector. Defaults to false.
+#
+# @param zoneinfo Boolean indicating whether to enable the 'zoneinfo' collector. Defaults to false.
+#
+# @param textfile_directory Absolute path for the textfile directory. Defaults to undef.
+#
+# @param lib_directory Absolute path for the library directory. Defaults to undef.
+#
+# @param listen_address The IP and port to listen on, as an Eit_types::IPPort. Defaults to undef.
+#
+# @param enable Boolean indicating whether the exporter is enabled. Defaults to true.
+#
+# @param noop_value Boolean value for noop mode. Defaults to false.
+#
 class common::monitor::exporter::node (
   Boolean      $buddyinfo,
   Boolean      $cgroups,
@@ -46,7 +107,7 @@ class common::monitor::exporter::node (
   include common::monitor::exporter::node::ssacli
 
   file { $lib_directory:
-    ensure =>  'directory',
+    ensure => 'directory',
   }
 
   file { $textfile_directory:
@@ -121,5 +182,4 @@ class common::monitor::exporter::node (
     dport    => $listen_address.split(':')[1],
     jump     => 'accept',
   }
-
 }

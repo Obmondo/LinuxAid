@@ -1,4 +1,41 @@
-# nsswitch
+# @summary Class for managing the nsswitch configuration
+#
+# @param ethers An array of ethers entries.
+#
+# @param group An array of group entries.
+#
+# @param hosts An array of hosts entries.
+#
+# @param networks An array of networks entries.
+#
+# @param passwd An array of passwd entries.
+#
+# @param protocols An array of protocol entries.
+#
+# @param rpc An array of rpc entries.
+#
+# @param services An array of services entries.
+#
+# @param shadow An array of shadow entries.
+#
+# @param sudoers An array of sudoers entries.
+#
+# @param manage Boolean indicating whether to manage the resource. Defaults to true.
+#
+# @param aliases An array of aliases. Defaults to empty array.
+#
+# @param automount An array of automount entries. Defaults to empty array.
+#
+# @param bootparams An array of bootparams entries. Defaults to empty array.
+#
+# @param gshadow An array of gshadow entries. Defaults to empty array.
+#
+# @param netgroup An array of netgroup entries. Defaults to empty array.
+#
+# @param netmasks An array of netmasks entries. Defaults to empty array.
+#
+# @param publickey An array of publickey entries. Defaults to empty array.
+#
 class common::system::nsswitch (
   Array[String] $ethers,
   Array[String] $group,
@@ -11,8 +48,6 @@ class common::system::nsswitch (
   Array[String] $shadow,
   Array[String] $sudoers,
   Boolean       $manage     = true,
-  # non-essential options have defaults set; don't set defaults for the
-  # remaining options unless you're sure it won't break things!
   Array[String] $aliases    = [],
   Array[String] $automount  = [],
   Array[String] $bootparams = [],
@@ -21,7 +56,6 @@ class common::system::nsswitch (
   Array[String] $netmasks   = [],
   Array[String] $publickey  = [],
 ) {
-
   if $manage {
     class { '::nsswitch':
       aliases    => $aliases.undef_if_empty,
@@ -43,5 +77,4 @@ class common::system::nsswitch (
       sudoers    => $sudoers.undef_if_empty,
     }
   }
-
 }

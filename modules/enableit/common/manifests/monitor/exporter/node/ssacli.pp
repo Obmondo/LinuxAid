@@ -1,4 +1,9 @@
-# Prometheus SSacli
+# @summary Class for managing the common::monitor::exporter::node::ssacli
+#
+# @param enable Boolean to enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
+#
+# @param noop_value Optional[Boolean], the noop value for resources. Defaults to false.
+#
 class common::monitor::exporter::node::ssacli (
   Boolean           $enable         = $common::monitor::exporter::node::enable,
   Optional[Boolean] $noop_value     = false,

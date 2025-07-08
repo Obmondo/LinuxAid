@@ -1,4 +1,17 @@
-# Microsoft Defender for Endpoint
+# @summary Class for managing Microsoft Defender for Endpoint installation and configuration
+#
+# @param manage Whether to manage the Microsoft Defender for Endpoint installation. Defaults to false.
+#
+# @param enable Whether to enable Microsoft Defender for Endpoint. Defaults to false.
+#
+# @param noop_value Optional value for noop mode. Defaults to undef.
+#
+# @param version The installed version of Microsoft Defender for Endpoint. Defaults to 'latest'.
+#
+# @param exclusions Exclusions configuration for Microsoft Defender for Endpoint. Defaults to an empty hash.
+#
+# @param onboard_config Optional onboard configuration source. Defaults to undef.
+#
 class common::software::microsoft_mde (
   Boolean                                $manage         = false,
   Boolean                                $enable         = false,
@@ -10,9 +23,7 @@ class common::software::microsoft_mde (
   # truncated file.
   Optional[Eit_Files::Source]            $onboard_config = undef,
 ) inherits common {
-
   confine($enable, !$onboard_config, 'Onboarding config must be provided if enabled.')
-
   if $manage {
     contain profile::software::microsoft_mde
   }

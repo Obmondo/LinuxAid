@@ -1,4 +1,11 @@
-# Prometheus wireguard Exporter
+# @summary Class for managing the Prometheus Wireguard Exporter
+#
+# @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+#
+# @param listen_address The IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63390'.
+#
+# @param noop_value Whether to run in noop mode. Defaults to false.
+#
 class common::monitor::exporter::wireguard (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:63390',
@@ -27,7 +34,6 @@ class common::monitor::exporter::wireguard (
 
   $_address = $listen_address.split(':')[0]
   $_port = $listen_address.split(':')[1]
-
   $_options = [
     "--address=${_address}",
     "--port=${_port}",
@@ -44,7 +50,7 @@ class common::monitor::exporter::wireguard (
     tag               => $::trusted['certname'],
     user              => 'wireguard_exporter',
     group             => 'wireguard_exporter',
-    notify_service    => Service[ 'wireguard_exporter' ],
+    notify_service    => Service['wireguard_exporter'],
     real_download_url => 'https://github.com/MindFlavor/prometheus_wireguard_exporter',
     export_scrape_job => $enable,
     options           => $_options.join(' '),
@@ -55,7 +61,7 @@ class common::monitor::exporter::wireguard (
   }
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
-  # upstream module cant handle noop. (which is correct)
+  # upstream module can't handle noop. (which is correct)
   Exec <| tag == 'systemd-wireguard_exporter.service-systemctl-daemon-reload' |> {
     noop => $noop_value,
   }

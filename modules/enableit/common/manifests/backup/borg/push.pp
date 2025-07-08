@@ -1,5 +1,19 @@
 # Borg Push (Client) Server
-# Which is going to push backup to borg::server
+#
+# @param archives Array of absolute paths to archives to backup.
+#
+# @param remote_user Optional remote user for SSH. Defaults to $::common::backup::borg::remote_user.
+#
+# @param remote_ip Remote IP address or FQDN. Defaults to $::common::backup::borg::remote_ip.
+#
+# @param password Optional password for the remote backup. Defaults to undef.
+#
+# @param remote_backup_root The root directory for remote backups. Defaults to $::common::backup::borg::remote_backup_root.
+#
+# @param randomized_delay Optional delay to randomize backup timing. Defaults to $::common::backup::borg::randomized_delay.
+#
+# @param timespec Scheduled time for backups. Defaults to $::common::backup::borg::timespec.
+#
 define common::backup::borg::push (
   Array[Stdlib::Absolutepath]             $archives,
   Optional[Eit_types::User]               $remote_user        = $::common::backup::borg::remote_user,
@@ -9,16 +23,13 @@ define common::backup::borg::push (
   Optional[Eit_types::SystemdTimeSpan]    $randomized_delay   = $::common::backup::borg::randomized_delay,
   Optional[Eit_types::SystemdTime]        $timespec           = $::common::backup::borg::timespec,
 ) {
-
   $_ssh_key_file = '/etc/obmondo/borg/borg_id_rsa'
   $_reponame     = $name
   $_backup_root  = "${remote_backup_root}/${facts['networking']['hostname']}"
-
   ::borgbackup::archive { $_reponame :
     reponame        => $_reponame,
     create_includes => $archives,
   }
-
   ::borgbackup::repo { $_reponame:
     reponame       => $_reponame,
     remote_user    => $remote_user,

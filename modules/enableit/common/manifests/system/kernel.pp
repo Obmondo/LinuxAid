@@ -1,4 +1,11 @@
-# Kernel
+# @summary Class for managing the common system kernel configuration
+#
+# @param modules A hash defining modules to blacklist, install, or load.
+# Defaults to an empty hash.
+#
+# @param sysctl A hash for sysctl configurations, key-value pairs.
+# Defaults to an empty hash.
+#
 class common::system::kernel (
   Struct[{
     blacklist => Optional[Array[String]],
@@ -33,7 +40,6 @@ class common::system::kernel (
       }
     }
   }
-
   $sysctl.each |$_k, $_v| {
     sysctl::configuration { $_k:
       value => String($_v);

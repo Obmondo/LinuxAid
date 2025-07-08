@@ -1,4 +1,9 @@
-# Topprocesses Prometheus exporter
+# @summary Class for managing the Topprocesses Prometheus exporter
+#
+# @param enable Enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
+#
+# @param noop_value Optional. The value for noop attribute. Defaults to false.
+#
 class common::monitor::exporter::node::topprocesses (
   Boolean           $enable     = $common::monitor::exporter::node::enable,
   Optional[Boolean] $noop_value = false,

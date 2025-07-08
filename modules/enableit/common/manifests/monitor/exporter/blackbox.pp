@@ -1,10 +1,20 @@
-# Prometheus Blackbox Exporter
+# @summary Class for managing the Prometheus Blackbox Exporter
+#
+# @param enable Boolean to enable or disable the exporter.
+#
+# @param listen_port The port on which the exporter listens.
+#
+# @param noop_value (Optional) Boolean to indicate if operations should be in noop mode. Defaults to false.
+#
+# @param config_file The absolute path to the configuration file. Defaults to "${::common::monitor::exporter::config_dir}/blackbox.yml".
+#
+# @param targets An array of domain targets to monitor. Defaults to an empty array.
+#
 class common::monitor::exporter::blackbox (
   Boolean              $enable,
   Stdlib::Port         $listen_port,
   Boolean[false]       $noop_value  = false,
   Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
-
   Array[Eit_types::Monitor::Domains] $targets = [],
 ) {
 
@@ -14,13 +24,10 @@ class common::monitor::exporter::blackbox (
   Exec {
     noop => $noop_value,
   }
-
   File {
     noop => $noop_value,
   }
-
   include common::monitor::prom
-
   class { 'prometheus::blackbox_exporter':
     package_name      => 'obmondo-blackbox-exporter',
     package_ensure    => ensure_latest($enable),
@@ -39,7 +46,7 @@ class common::monitor::exporter::blackbox (
     export_scrape_job => $enable,
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
     modules           => {
-      'http_2xx'    => {
+      'http_2xx' => {
         'prober'  => 'http',
         'timeout' => '10s',
         'http'    => {
@@ -49,29 +56,24 @@ class common::monitor::exporter::blackbox (
       },
     }
   }
-
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
-  # upstream module cant handle noop. (which is correct)
+  # upstream module can't handle noop. (which is correct)
   Exec <| tag == 'systemd-blackbox_exporter.service-systemctl-daemon-reload' |> {
     noop => $noop_value,
   }
-
   if $targets.size > 0 {
     $targets.each |$domain| {
       monitor::domains { $domain: }
     }
   }
-
-  # Collect all the resource only on the node where blackbox is enabled.
-  # and collect resource only for their specific customer nodes
+  # Collect all the resources only on the node where blackbox is enabled
+  # and for their specific customer nodes
   if $blackbox_node == $trusted['certname'] {
-
     # Handle file resource under prometheus::scrape_job, so it can be created in noop mode
     # https://www.puppet.com/docs/puppet/7/lang_resources.html#lang_resource_syntax-adding-or-modifying-attributes
     File <| tag == 'prometheus::scrape_job' |> {
       noop => $noop_value,
     }
-
     Prometheus::Scrape_job <<| job_name == 'probe_blackbox_domains' and tag == $customer_id |>> {
       notify => Class['prometheus::service_reload'],
     }

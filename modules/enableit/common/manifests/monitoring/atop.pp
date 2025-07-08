@@ -1,7 +1,12 @@
-# atop
+# @summary Class for managing the atop monitoring service
+#
+# @param install Whether to install atop. Defaults to true.
+#
+# @param daemon Whether to run atop as a daemon. Defaults to false.
+#
 class common::monitoring::atop (
   Boolean $install = true,
-  Boolean $daemon = false,
+  Boolean $daemon  = false,
 ) {
 
   confine(!$install, $daemon,

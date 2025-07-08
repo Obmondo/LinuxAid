@@ -1,10 +1,18 @@
-# Prometheus iptables Exporter
+# @summary Class for managing the Prometheus iptables Exporter
+#
+# @param enable Boolean parameter to enable or disable the exporter.
+#
+# @param noop_value Boolean value to specify noop mode. Defaults to false.
+#
+# @param listen_address The IP and port the exporter listens on. Defaults to '127.254.254.254:63393'.
+#
 class common::monitor::exporter::iptables (
-  Boolean  $enable,
-  Boolean[false]    $noop_value     = false,
+  Boolean $enable,
+  Boolean[false] $noop_value = false,
   Eit_types::IPPort $listen_address = '127.254.254.254:63393',
 ) {
   $_enable = $enable and $facts['iptable_rules_exist']
+
   File {
     noop => $noop_value,
   }
@@ -32,6 +40,7 @@ class common::monitor::exporter::iptables (
   $_systemd_version_232_newer = $facts.dig('systemd_version').then |$_version| { Integer($_version) } >= 232
 
   $_user = if $_systemd_version_232_newer { 'iptables_exporter' } else { 'root' }
+
   $_group = if $_systemd_version_232_newer { 'iptables_exporter' } else { 'root' }
 
   prometheus::daemon { 'iptables_exporter':
@@ -66,7 +75,7 @@ class common::monitor::exporter::iptables (
         'CAP_NET_ADMIN',
         'CAP_NET_RAW',
       ],
-      'AmbientCapabilities'   => [
+      'AmbientCapabilities' => [
         'CAP_DAC_READ_SEARCH',
         'CAP_NET_ADMIN',
         'CAP_NET_RAW',
@@ -74,9 +83,9 @@ class common::monitor::exporter::iptables (
     },
   }
 
-  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
-  # upstream module cant handle noop. (which is correct)
-  Exec <| tag == 'systemd-iptables_exporter.service-systemctl-daemon-reload' |> {
+  # Note: This is a daemon-reload that can do a daemon-reload in noop mode.
+  # Upstream module can't handle noop, which is correct.
+  Exec { 'systemd-iptables_exporter.service-systemctl-daemon-reload':
     noop => $noop_value,
   }
 }

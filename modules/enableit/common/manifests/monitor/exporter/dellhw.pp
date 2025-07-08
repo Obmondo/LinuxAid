@@ -1,4 +1,13 @@
-# Prometheus dellhw Exporter
+# @summary Class for managing Prometheus dellhw exporter
+#
+# @param enable Boolean to enable or disable the exporter. Defaults to false.
+#
+# @param noop_value Boolean indicating whether to run in noop mode. Defaults to false.
+#
+# @param manage_repo Boolean to determine if repository should be managed. Defaults to false.
+#
+# @param listen_address IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63386'.
+#
 class common::monitor::exporter::dellhw (
   Boolean           $enable         = false,
   Boolean[false]    $noop_value     = false,
@@ -31,9 +40,9 @@ class common::monitor::exporter::dellhw (
     noop   => $noop_value,
   }
 
-  # NOTE: This is a temporary fix as the Dell team is working to resolve a dependency conflict where an 11.3 RPM requires another package that depends on an 11.1 RPM.
+  # NOTE: This is a temporary fix as the Dell team is working to resolve a dependency conflict where an
+  # 11.3 RPM requires another package that depends on an 11.1 RPM.
   # https://www.dell.com/community/en/conversations/systems-management-general/omsa-11300-rpms-available-but-not-completely/67ab61a31c2953253c271688?page=2
-
   if $facts['os']['family'] == 'RedHat' {
     yum::versionlock { 'srvadmin-hapi':
       ensure  => present,
@@ -41,9 +50,8 @@ class common::monitor::exporter::dellhw (
     }
   }
 
-  # NOTE: The OMSA is not supported on Debian distro. We have not added the debain repository
+  # NOTE: The OMSA is not supported on Debian distro. We have not added the Debian repository.
   # https://linux.dell.com/repo/community/openmanage/
-
   if $manage_repo {
     eit_repos::repo { 'dell':
       ensure     => $enable,
@@ -61,7 +69,7 @@ class common::monitor::exporter::dellhw (
     restart_on_change => $enable,
     export_scrape_job => $enable,
     scrape_port       => Integer($listen_address.split(':')[1]),
-    scrape_ipadress   => $listen_address.split(':')[0],
+    scrape_ipaddress  => $listen_address.split(':')[0],
     tag               => $::trusted['certname'],
     scrape_host       => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },

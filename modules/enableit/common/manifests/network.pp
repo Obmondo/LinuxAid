@@ -1,4 +1,26 @@
-# Network config
+# @summary Class for managing network configuration
+#
+# @param service_name The network service to manage. Must be one of 'systemd-networkd', 'network', or 'networking'.
+#
+# @param manage Boolean indicating whether to manage the network interfaces. Defaults to false.
+#
+# @param purge Boolean indicating whether to purge unmanaged network configs. Defaults to true.
+#
+# @param restart_on_change Boolean indicating whether to restart network service on config change. Defaults to true.
+#
+# @param ipaddress_package The package name for IP addressing tools. Defaults to undef.
+#
+# @param ipaddress_provider The provider for IP address management. Defaults to undef.
+#
+# @param interfaces Hash of interface configurations.
+#
+# @param bonded_interfaces Hash of bonded interface configurations.
+#
+# @param routes Hash of routing configurations.
+#
+# @param $__required_packages
+# Array of package names required for networking.
+#
 class common::network (
   Enum[
     'systemd-networkd',

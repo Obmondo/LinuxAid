@@ -1,4 +1,5 @@
-# Software class
+# @summary Class for managing common software installation and dependencies
+#
 class common::software {
   if lookup('common::software::dependencyagent::enable', Boolean, undef, false) {
     common::software::dependencyagent.include
@@ -33,7 +34,8 @@ class common::software {
   }
 
   if lookup('common::software::insights::manage', Boolean, undef, false) {
-    common::software::insights.include
+    common::software::insights.include    # inclu
+
   }
 
   if lookup('common::software::vncserver::manage', Boolean, undef, false) {
@@ -47,6 +49,7 @@ class common::software {
   if lookup('common::software::walinuxagent::manage', Boolean, undef, false) {
     common::software::walinuxagent.include
   }
+
   if lookup('common::software::iptables_api::manage', Boolean, undef, false) {
     common::software::iptables_api.include
   }

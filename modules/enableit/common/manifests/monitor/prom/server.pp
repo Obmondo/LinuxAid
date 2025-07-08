@@ -1,6 +1,15 @@
-# Prometheus Server
-# https://prometheus.io/blog/2021/11/16/agent/
-# https://promlabs.com/blog/2022/12/15/understanding-duplicate-samples-and-out-of-order-timestamp-errors-in-prometheus/
+# @summary Class for managing the Prometheus server
+#
+# @param version The version of Prometheus to install. Must be a Eit_types::Version.
+#
+# @param collect_scrape_jobs An array of hashes defining scrape jobs to collect. Defaults to an empty array.
+#
+# @param config_dir The absolute path to the configuration directory. Must be a Stdlib::Absolutepath.
+#
+# @param listen_address The IP and port on which the server listens. Must be of type Eit_types::IPPort.
+#
+# @param enable Boolean to enable or disable the monitoring. Defaults to true.
+#
 class common::monitor::prom::server (
   Eit_types::Version   $version,
   Array[Hash]          $collect_scrape_jobs,
@@ -29,11 +38,11 @@ class common::monitor::prom::server (
     notify  => Service['prometheus'],
   }
 
-  $customer_id = $::obmondo['customer_id'] #lint:ignore:top_scope_facts
+  $customer_id = $::obmondo['customer_id']
+  # lint:ignore:top_scope_facts
   $scrape_port = Integer($listen_address.split(':')[1])
   $scrape_host = $trusted['certname']
 
-  # Agent Mode, means no local storage on the node.
   class { 'prometheus::server':
     version                        => $version,
     storage_retention              => false,
@@ -48,7 +57,7 @@ class common::monitor::prom::server (
     restart_on_change              => true,
     package_name                   => 'obmondo-prometheus',
     bin_dir                        => '/opt/obmondo/bin',
-    extra_options                  => "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus", #lint:ignore:140chars
+    extra_options                  => "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus",
     scrape_configs                 => [{
       job_name        => 'prometheus',
       scrape_interval => '10s',
@@ -74,7 +83,6 @@ class common::monitor::prom::server (
           regex         => 'go_gc_.*',
           action        => 'drop',
         },
-        # Send only those metrics if instance ID matches the customer_id, otherwise drop the metrics
         {
           source_labels => ['certname'],
           regex         => "(.*).${customer_id}",
@@ -84,7 +92,6 @@ class common::monitor::prom::server (
     }],
   }
 
-  # Build threshold records
   Monitor::Threshold <<| tag == $::trusted['certname'] |>>
   Monitor::Alert <<| tag == $::trusted['certname'] |>>
 }

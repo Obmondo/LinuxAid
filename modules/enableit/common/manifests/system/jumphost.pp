@@ -1,4 +1,9 @@
-# class to setup reverse proxy
+# @summary Class for setting up reverse proxy
+#
+# @param configs Array of hashes containing remote host configurations.
+#
+# @param enable Boolean flag to enable or disable the service. Defaults to false.
+#
 class common::system::jumphost (
   Eit_types::Common::System::Jumphosts $configs,
   Boolean                              $enable = false,

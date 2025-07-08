@@ -1,4 +1,12 @@
-# Common script class
+# @summary Class for managing common services initscript
+#
+# @param ensure 
+# The desired state of the service. Can be 'running', 'stopped', or a Boolean. Defaults to 'running'.
+#
+# @param source The source path for the init script. Defaults to undef.
+#
+# @param content The content of the init script. Defaults to undef.
+#
 define common::services::initscript (
   Optional[
     Variant[

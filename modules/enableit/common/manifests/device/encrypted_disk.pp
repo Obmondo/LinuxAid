@@ -1,4 +1,17 @@
-# Encrypted_disk
+# @summary Class for managing the common::device::encrypted_disk resource
+#
+# @param device The absolute path to the device. This parameter is required.
+#
+# @param luks_key_service_url The URL for the LUKS key service. Defaults to undef.
+#
+# @param luks_key_service_headers Optional headers for the LUKS key service. Defaults to undef.
+#
+# @param luks_key The password for LUKS encryption. Defaults to undef.
+#
+# @param luks_key_size_b The size of the encryption key in bits. Defaults to 1024.
+#
+# @param pool_name The name of the ZFS pool, if applicable. Defaults to undef.
+#
 define common::device::encrypted_disk (
   Stdlib::Absolutepath $device,
   Optional[Eit_types::URL] $luks_key_service_url          = undef,

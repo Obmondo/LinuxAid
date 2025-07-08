@@ -1,5 +1,33 @@
-# systemd timer drop-in replacement for cron
-# https://www.freedesktop.org/software/systemd/man/systemd.time.html#
+# Puppet class for systemd timer drop-in replacement for cron
+#
+# @param enable Whether to enable the timer. Defaults to true.
+#
+# @param command The command to run. Defaults to undef.
+#
+# @param ensure Ensure state of the cron job. Defaults to 'present'.
+#
+# @param weekday Day of the week for the timer, e.g., '*'. Defaults to '*'.
+#
+# @param day Day of the month for the timer, e.g., '*'. Defaults to '*'.
+#
+# @param month Month of the year for the timer, e.g., '*'. Defaults to '*'.
+#
+# @param year Year for the timer, e.g., '*'. Defaults to '*'.
+#
+# @param hour Hour of the day for the timer, e.g., '00'. Defaults to '00'.
+#
+# @param minute Minute of the hour for the timer, e.g., '00'. Defaults to '00'.
+#
+# @param environment Array of environment variables for the timer. Defaults to [].
+#
+# @param user User to run the timer as. Defaults to 'root'.
+#
+# @param mode File mode for the timer files. Defaults to '0644'.
+#
+# @param description Optional description for the timer.
+#
+# @param noop_value Optional noop value to disable actual execution. Defaults to undef.
+#
 define common::systemd::timer (
   Boolean                          $enable      = true,
   Optional[String[1]]              $command     = undef,

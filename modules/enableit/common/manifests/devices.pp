@@ -1,9 +1,17 @@
-# Devices
+# @summary Class for managing common::devices
+#
+# @param devices Hash of device configurations. Defaults to empty hash.
+#
+# @param encrypted_devices Hash of encrypted device configurations. Defaults to empty hash.
+#
+# @param filesystems Hash of filesystem configurations. Defaults to empty hash.
+#
 class common::devices (
   Hash $devices = {},
   Hash $encrypted_devices = {},
   Hash $filesystems = {},
 ) {
+
   # we default to setting up LUKS only when we use encrypted devices
   $needs_encryption_scripts = !empty($encrypted_devices)
 
@@ -24,7 +32,6 @@ class common::devices (
 
   # We need to make sure that we have enough entropy to avoid hanging when
   # waiting for /dev/random; haveged can do this for us
-
   # https://gitlab.enableit.dk/obmondo/puppet/merge_requests/188/diffs#note_1452
   # "WE don't need haveged running it might be needed anyway for customer
   # apps. I'd prefer to only enable it, never disable"

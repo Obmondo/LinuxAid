@@ -1,7 +1,30 @@
-# Common system
+# @summary Class for managing common system configuration
+#
+# @param remove_fstrim_cron Boolean indicating whether to remove the fstrim cron job. Defaults to false.
+#
+# @param purge_root_ssh_keys Boolean indicating whether to purge SSH keys for the root user. Defaults to true.
+#
+# @param ssh_authorized_keys Hash of SSH authorized keys with parameters such as 'key', 'user', 'options', 'noop_value'. Defaults to {}.
+#
+# @param users Hash of user resources, keyed by username, with user parameters. Defaults to {}.
+#
+# @param user_groups Hash mapping usernames to array of groups they should belong to. Defaults to {}.
+#
+# @param groups Hash of group resources with parameters. Defaults to {}.
+#
+# @param services Hash of service configurations. Defaults to {}.
+#
+# @param files Hash of file resources with parameters. Defaults to {}.
+#
+# @param disable_ipv6 Optional Boolean to disable IPv6. Defaults to undef.
+#
+# @param service_oneshot Optional Hash mapping service names to their content for one-shot services. Defaults to {}.
+#
+# @param locations Hash mapping location names to arrays of IP addresses or IP ranges for location detection. Defaults to {}.
+#
 class common::system (
-  Boolean                        $remove_fstrim_cron  = false,
-  Boolean                        $purge_root_ssh_keys = true,
+  Boolean $remove_fstrim_cron = false,
+  Boolean $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
   Eit_types::Users               $users               = {},
   Hash[String,Array[String]]     $user_groups         = {},
