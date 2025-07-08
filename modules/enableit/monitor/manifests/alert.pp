@@ -1,9 +1,17 @@
 # Prometheus monitoring alert
+#
+# @param alert_id The identifier for the alert. Defaults to $title.
+#
+# @param enable Whether the alert is enabled. Defaults to true.
+#
+# @param noop_value The noop value used in monitoring. Defaults to $monitor::noop_value.
+#
+# @param disable Optional disable configuration.
+#
 define monitor::alert (
   String  $alert_id   = $title,
   Boolean $enable     = true,
   Boolean $noop_value = $monitor::noop_value,
-
   Monitor::Disable $disable = undef,
 ) {
 
@@ -12,15 +20,14 @@ define monitor::alert (
   }
 
   File {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   $default_labels = {
     certname => $::trusted['certname'],
-    alert_id => $alert_id
+    alert_id => $alert_id,
   }
 
-  # NOTE: hack around to format the prom labels in a required format
   $_labels = $default_labels.map |$k, $v| {
     "${k}=\"${v}\""
   }.join(', ')
@@ -45,7 +52,7 @@ define monitor::alert (
     # HELP obmondo_monitoring The toggle for the respective alert_id
     # TYPE obmondo_monitoring counter
     ${threshold_metric}
-    | EOT
+  | EOT
 
   file { $_filename:
     ensure  => file,

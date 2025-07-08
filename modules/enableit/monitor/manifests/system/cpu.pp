@@ -1,4 +1,21 @@
-# CPU use
+# @summary Class for monitoring system CPU usage
+#
+# @param enable Boolean indicating if monitoring is enabled. Defaults to true.
+#
+# @param enable_temp Boolean indicating if temperature monitoring is enabled. Defaults to false.
+#
+# @param usage Percentage value for CPU usage threshold. Defaults to 80.
+#
+# @param temperature Percentage value for CPU temperature threshold. Defaults to 80.
+#
+# @param disable Optional disable parameter for CPU usage monitor.
+#
+# @param disable_temp Optional disable parameter for temperature monitor.
+#
+# @param override Optional override parameter for CPU usage threshold.
+#
+# @param override_temp Optional override parameter for temperature threshold.
+#
 class monitor::system::cpu (
   Boolean               $enable        = true,
   Boolean               $enable_temp   = false,

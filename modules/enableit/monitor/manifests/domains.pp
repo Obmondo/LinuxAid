@@ -1,8 +1,14 @@
-# Monitor domains will monitor cert expiry and status code
+# @summary Class for managing monitoring of domains and certificate expiry
+#
+# @param enable Boolean flag to enable or disable the monitoring. Defaults to true.
+#
+# @param expiry_days Number of days before expiry to alert. Defaults to 25.
+#
+# @param domain The domain to monitor. Defaults to $title.
+#
 define monitor::domains (
-  Boolean       $enable      = true,
+  Boolean $enable      = true,
   Integer[1,25] $expiry_days = 25,
-
   Eit_types::Monitor::Domains $domain = $title,
 ) {
 
@@ -25,7 +31,6 @@ define monitor::domains (
   }
 
   $blackbox_node = if $enable { lookup('common::monitor::exporter::blackbox::node') }
-
   # NOTE: skip deleting the files on the actual blackbox node
   if $blackbox_node != $trusted['certname'] {
     File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
@@ -33,10 +38,10 @@ define monitor::domains (
     }
   }
 
-  @@monitor::threshold { "monitor::domains::expiry::${_domain}":
+  @@monitor::threshold { "monitor::domains::expiry::${_domain}" :
     enable => $enable,
     record => 'monitor::domains::cert_expiry_days',
-    tag    => $::trusted['certname'],
+    tag    => $trusted['certname'],
     labels => {
       'domain' => $_domain,
     },

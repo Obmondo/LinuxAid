@@ -1,7 +1,7 @@
-# Obmondo system monitoring
+# @summary Class for managing the Obmondo system monitoring
+#
 class monitor::system (
 ) {
-
   contain monitor::system::cpu
   contain monitor::system::disk
   contain monitor::system::load
