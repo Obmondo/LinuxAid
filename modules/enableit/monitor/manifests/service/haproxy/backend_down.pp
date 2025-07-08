@@ -1,4 +1,9 @@
-# haproxy backend down alert
+# @summary Class for monitoring HAProxy backend down alerts
+#
+# @param enable Whether to enable the alert monitoring. Defaults to true.
+#
+# @param ignore_backends List of backends to ignore for the alert.
+#
 class monitor::service::haproxy::backend_down (
   Boolean       $enable          = true,
   Array[String] $ignore_backends = [],
@@ -7,7 +12,6 @@ class monitor::service::haproxy::backend_down (
   @@monitor::alert { 'monitor::service::haproxy::backend_down':
     enable => $enable,
     tag    => $::trusted['certname'],
-
   }
 
   $ignore_backends.each |$backend| {
