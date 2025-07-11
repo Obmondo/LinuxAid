@@ -135,7 +135,8 @@ class prometheus::alertmanager (
   Stdlib::Absolutepath $storage_path,
   Array $templates,
   String[1] $user,
-  String[1] $version,
+  # renovate: depName=prometheus/alertmanager
+  String[1] $version                                         = '0.27.0',
   Boolean $service_enable                                    = true,
   Stdlib::Ensure::Service $service_ensure                    = 'running',
   String[1] $service_name                                    = 'alertmanager',
@@ -252,17 +253,9 @@ class prometheus::alertmanager (
       mode   => '0755',
     }
 
-    if( versioncmp($version, '0.12.0') == 1 ) {
-      $options = "--config.file=${prometheus::alertmanager::config_file} --storage.path=${prometheus::alertmanager::storage_path} ${prometheus::alertmanager::extra_options}"
-    } else {
-      $options = "-config.file=${prometheus::alertmanager::config_file} -storage.path=${prometheus::alertmanager::storage_path} ${prometheus::alertmanager::extra_options}"
-    }
+    $options = "--config.file=${prometheus::alertmanager::config_file} --storage.path=${prometheus::alertmanager::storage_path} ${prometheus::alertmanager::extra_options}"
   } else {
-    if( versioncmp($prometheus::alertmanager::version, '0.12.0') == 1 ) {
-      $options = "--config.file=${prometheus::alertmanager::config_file} ${prometheus::alertmanager::extra_options}"
-    } else {
-      $options = "-config.file=${prometheus::alertmanager::config_file} ${prometheus::alertmanager::extra_options}"
-    }
+    $options = "--config.file=${prometheus::alertmanager::config_file} ${prometheus::alertmanager::extra_options}"
   }
 
   prometheus::daemon { $service_name:

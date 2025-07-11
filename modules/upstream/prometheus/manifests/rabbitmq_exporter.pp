@@ -68,6 +68,19 @@
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @param export_scrape_job
+#   Whether to export a `prometheus::scrape_job` to puppetDB for
+#   collecting on your prometheus server.
+# @param scrape_host
+#  Hostname or IP address to scrape
+# @param scrape_port
+#  Host port to scrape
+# @param scrape_job_name
+#  Name of the scrape job to export, if export_scrape_job is true
+# @param scrape_job_labels
+#  Labels to add to the scrape job, if export_scrape_job is true
+# @note
+# This class is deprecated and will be removed in a future release.
 class prometheus::rabbitmq_exporter (
   Prometheus::Uri $download_url_base,
   Array[String] $extra_groups,
@@ -77,7 +90,6 @@ class prometheus::rabbitmq_exporter (
   String[1] $service_name,
   String $download_extension,
   String[1] $user,
-  String[1] $version,
   String[1] $rabbit_url,
   String[1] $rabbit_user,
   String[1] $rabbit_password,
@@ -85,6 +97,8 @@ class prometheus::rabbitmq_exporter (
   String[1] $queues_exclude_regex,
   Array[String] $rabbit_capabilities,
   Array[String] $rabbit_exporters,
+  # renovate: depName=kbudde/rabbitmq_exporter
+  String[1] $version                                         = '0.29.0',
   String[1] $arch                                            = $prometheus::real_arch,
   Stdlib::Absolutepath $bin_dir                              = $prometheus::bin_dir,
   Optional[Prometheus::Uri] $download_url                    = undef,
@@ -102,13 +116,33 @@ class prometheus::rabbitmq_exporter (
   Hash[String,String] $extra_env_vars                        = {},
   Boolean $export_scrape_job                                 = false,
   Optional[Stdlib::Host] $scrape_host                        = undef,
-  Stdlib::Port $scrape_port                                  = 9090,
+  Stdlib::Port $scrape_port                                  = 9419,
   String[1] $scrape_job_name                                 = 'rabbitmq',
   Optional[Hash] $scrape_job_labels                          = undef,
   Optional[String[1]] $proxy_server                          = undef,
   Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type = undef,
 ) inherits prometheus {
-  $real_download_url    = pick($download_url, "${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  deprecation(
+    'promtheus::rabbitmq_exporter',
+    'This class is deprecated and will be removed in a future release. See https://github.com/kbudde/rabbitmq_exporter/issues/383 for details',
+    false
+  )
+
+  if versioncmp($version, '1.0.0') >= 0 {
+    $extract_path = "/opt/${package_name}-${version}.${os}-${arch}"
+    $real_download_url = pick($download_url, "${download_url_base}/download/v${version}/${package_name}_${version}_${os}_${arch}.${download_extension}")
+    file { $extract_path:
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 0, # 0 instead of root because OS X uses "wheel".
+      mode   => '0555',
+      before => Prometheus::Daemon[$service_name],
+    }
+  } else {
+    $extract_path = '/opt'
+    $real_download_url = pick($download_url, "${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  }
+
   $notify_service = $restart_on_change ? {
     true    => Service[$service_name],
     default => undef,
@@ -122,11 +156,12 @@ class prometheus::rabbitmq_exporter (
     'SKIP_QUEUES'         => $queues_exclude_regex,
     'RABBIT_CAPABILITIES' => join($rabbit_capabilities, ','),
     'RABBIT_EXPORTERS'    => join($rabbit_exporters, ','),
+    'PUBLISH_PORT'        => $scrape_port,
   }
 
   $real_env_vars = stdlib::merge($env_vars, $extra_env_vars)
 
-  prometheus::daemon { 'rabbitmq_exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,
@@ -156,5 +191,6 @@ class prometheus::rabbitmq_exporter (
     scrape_job_labels  => $scrape_job_labels,
     proxy_server       => $proxy_server,
     proxy_type         => $proxy_type,
+    extract_path       => $extract_path,
   }
 }

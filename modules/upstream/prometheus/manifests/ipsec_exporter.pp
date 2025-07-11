@@ -58,7 +58,8 @@ class prometheus::ipsec_exporter (
   String[1] $package_name                                    = 'ipsec_exporter',
   String[1] $service_name                                    = 'ipsec_exporter',
   String[1] $user                                            = 'ipsec-exporter',
-  String[1] $version                                         = '0.3.2',
+  # renovate: depName=dennisstritzke/ipsec_exporter
+  String[1] $version                                         = '0.4.0',
   String[1] $os                                              = downcase($facts['kernel']),
   String $options                                            = '', # lint:ignore:params_empty_string_assignment
   Prometheus::Initstyle $init_style                          = $prometheus::init_style,
@@ -97,7 +98,7 @@ class prometheus::ipsec_exporter (
     default => undef,
   }
 
-  prometheus::daemon { 'ipsec_exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,

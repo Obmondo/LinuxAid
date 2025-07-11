@@ -1,4 +1,4 @@
-# @summary This module manages prometheus node graphite_exporter
+# @summary This module manages prometheus node iperf3_exporter
 # @param arch
 #  Architecture (amd64 or i386)
 # @param bin_dir
@@ -11,6 +11,8 @@
 #  Base URL for the binary archive
 # @param options
 #  Options added to the startup command
+# @param extra_groups
+#  Extra groups to add the binary user to
 # @param group
 #  Group under which the binary is running
 # @param init_style
@@ -38,46 +40,41 @@
 # @param service_ensure
 #  State ensured for the service (default 'running')
 # @param service_name
-#  Name of the graphite exporter service (default 'graphite_exporter')
+#  Name of the iperf3 exporter service (default 'iperf3_exporter')
 # @param user
 #  User which runs the service
 # @param version
 #  The binary release version
-# @param proxy_server
-#  Optional proxy server, with port number if needed. ie: https://example.com:8080
-# @param proxy_type
-#  Optional proxy server type (none|http|https|ftp)
-class prometheus::graphite_exporter (
-  String $download_extension                                 = 'tar.gz',
-  Prometheus::Uri $download_url_base                         = 'https://github.com/prometheus/graphite_exporter/releases',
-  String[1] $group                                           = 'graphite-exporter',
-  String[1] $package_ensure                                  = 'latest',
-  String[1] $package_name                                    = 'graphite_exporter',
-  String[1] $service_name                                    = 'graphite_exporter',
-  String[1] $user                                            = 'graphite-exporter',
-  # renovate: depName=prometheus/graphite_exporter
-  String[1] $version                                         = '0.16.0',
-  String $options                                            = '', # lint:ignore:params_empty_string_assignment
-  String[1] $os                                              = downcase($facts['kernel']),
-  Prometheus::Initstyle $init_style                          = $prometheus::init_style,
-  Prometheus::Install $install_method                        = $prometheus::install_method,
-  Optional[Prometheus::Uri] $download_url                    = undef,
-  String[1] $arch                                            = $prometheus::real_arch,
-  Stdlib::Absolutepath $bin_dir                              = $prometheus::bin_dir,
-  Boolean $export_scrape_job                                 = false,
-  Optional[Stdlib::Host] $scrape_host                        = undef,
-  Stdlib::Port $scrape_port                                  = 9108,
-  String[1] $scrape_job_name                                 = 'graphite',
-  Optional[Hash] $scrape_job_labels                          = undef,
-  Boolean $service_enable                                    = true,
-  Boolean $manage_service                                    = true,
-  Stdlib::Ensure::Service $service_ensure                    = 'running',
-  Boolean $restart_on_change                                 = true,
-  Boolean $purge_config_dir                                  = true,
-  Boolean $manage_user                                       = true,
-  Boolean $manage_group                                      = true,
-  Optional[String[1]] $proxy_server                          = undef,
-  Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type = undef,
+class prometheus::iperf3_exporter (
+  String[1] $download_extension           = 'tar.gz',
+  Prometheus::Uri $download_url_base      = 'https://github.com/edgard/iperf3_exporter/releases',
+  Array[String[1]] $extra_groups          = [],
+  String[1] $group                        = 'iperf3-exporter',
+  String[1] $package_ensure               = 'latest',
+  String[1] $package_name                 = 'iperf3_exporter',
+  String[1] $service_name                 = 'iperf3_exporter',
+  String[1] $user                         = 'iperf3-exporter',
+  # renovate: depName=edgard/iperf3_exporter
+  String[1] $version                      = '0.1.3',
+  String[1] $os                           = downcase($facts['kernel']),
+  Optional[String[1]] $options            = undef,
+  Prometheus::Initstyle $init_style       = $facts['service_provider'],
+  Prometheus::Install $install_method     = $prometheus::install_method,
+  Optional[Prometheus::Uri] $download_url = undef,
+  String[1] $arch                         = $prometheus::real_arch,
+  Stdlib::AbsolutePath $bin_dir           = $prometheus::bin_dir,
+  Boolean $export_scrape_job              = false,
+  Optional[Stdlib::Host] $scrape_host     = undef,
+  Stdlib::Port $scrape_port               = 9579,
+  String[1] $scrape_job_name              = 'iperf3',
+  Optional[Hash] $scrape_job_labels       = undef,
+  Boolean $service_enable                 = true,
+  Boolean $manage_service                 = true,
+  Stdlib::Ensure::Service $service_ensure = 'running',
+  Boolean $restart_on_change              = true,
+  Boolean $purge_config_dir               = true,
+  Boolean $manage_user                    = true,
+  Boolean $manage_group                   = true,
 ) inherits prometheus {
   $real_download_url = pick($download_url,"${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
 
@@ -86,7 +83,7 @@ class prometheus::graphite_exporter (
     default => undef,
   }
 
-  prometheus::daemon { $service_name:
+  prometheus::daemon { 'iperf3_exporter':
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,
@@ -99,6 +96,7 @@ class prometheus::graphite_exporter (
     package_ensure     => $package_ensure,
     manage_user        => $manage_user,
     user               => $user,
+    extra_groups       => $extra_groups,
     group              => $group,
     manage_group       => $manage_group,
     purge              => $purge_config_dir,
@@ -112,7 +110,5 @@ class prometheus::graphite_exporter (
     scrape_port        => $scrape_port,
     scrape_job_name    => $scrape_job_name,
     scrape_job_labels  => $scrape_job_labels,
-    proxy_server       => $proxy_server,
-    proxy_type         => $proxy_type,
   }
 }

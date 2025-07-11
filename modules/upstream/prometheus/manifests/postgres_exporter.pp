@@ -59,6 +59,10 @@
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @param web_config_file
+#  Path of file where the web-config will be saved to
+# @param web_config_content
+#  Unless empty the content of the web-config yaml which will handed over as option to the exporter
 class prometheus::postgres_exporter (
   String $download_extension = 'tar.gz',
   Prometheus::Uri $download_url_base = 'https://github.com/prometheus-community/postgres_exporter/releases',
@@ -67,7 +71,8 @@ class prometheus::postgres_exporter (
   String[1] $package_ensure = 'latest',
   String[1] $package_name = 'postgres_exporter',
   String[1] $user = 'postgres-exporter',
-  String[1] $version = '0.5.1',
+  # renovate: depName=prometheus-community/postgres_exporter
+  String[1] $version = '0.17.1',
   String[1] $data_source_uri = 'host=/var/run/postgresql/ sslmode=disable',
   Enum['custom', 'env', 'file'] $postgres_auth_method = 'env',
   Hash[String[1],String[1]] $data_source_custom              = {},
@@ -95,19 +100,48 @@ class prometheus::postgres_exporter (
   Optional[Hash] $scrape_job_labels                          = undef,
   Optional[String[1]] $proxy_server                          = undef,
   Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type = undef,
+  Stdlib::Absolutepath $web_config_file                      = '/etc/postgres_exporter_web-config.yml',
+  Prometheus::Web_config $web_config_content                 = {},
 ) inherits prometheus {
   $release = "v${version}"
 
   if versioncmp($version, '0.9.0') < 0 {
     $real_download_url = pick($download_url, "${download_url_base}/download/${release}/${package_name}_${release}_${os}-${arch}.${download_extension}")
+    $bin_path = "/opt/${package_name}_v${version}_${os}-${arch}/postgres_exporter"
   } else {
     $real_download_url = pick($download_url, "${download_url_base}/download/${release}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+    $bin_path = "/opt/${package_name}-${version}.${os}-${arch}/postgres_exporter"
   }
 
   $notify_service = $restart_on_change ? {
     true    => Service[$service_name],
     default => undef,
   }
+
+  $_web_config_ensure = $web_config_content.empty ? {
+    true    => absent,
+    default => file,
+  }
+
+  file { $web_config_file:
+    ensure  => $_web_config_ensure,
+    owner   => $user,
+    group   => $group,
+    mode    => '0640',
+    content => $web_config_content.stdlib::to_yaml,
+    notify  => $notify_service,
+  }
+
+  $_web_config = if $web_config_content.empty {
+    ''
+  } else {
+    "--web.config.file=${$web_config_file}"
+  }
+
+  $_options = [
+    $options,
+    $_web_config,
+  ].filter |$x| { !$x.empty }.join(' ')
 
   case $postgres_auth_method {
     'env': {
@@ -132,41 +166,8 @@ class prometheus::postgres_exporter (
     }
   }
 
-  if $install_method == 'url' {
-    # Not a big fan of copypasting but prometheus::daemon takes for granted
-    # a specific path embedded in the prometheus *_exporter tarball, which
-    # postgres_exporter lacks.
-    # TODO: patch prometheus::daemon to support custom extract directories
-    $exporter_install_method = 'none'
-    $install_dir = "/opt/${service_name}-${version}.${os}-${arch}"
-    file { $install_dir:
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 0, # 0 instead of root because OS X uses "wheel".
-      mode   => '0555',
-    }
-    -> archive { "/tmp/${service_name}-${version}.${download_extension}":
-      ensure          => present,
-      extract         => true,
-      extract_path    => $install_dir,
-      extract_flags   => '--strip-components=1 -xzf',
-      source          => $real_download_url,
-      checksum_verify => false,
-      creates         => "${install_dir}/${service_name}",
-      cleanup         => true,
-    }
-    -> file { "${bin_dir}/${service_name}":
-      ensure => link,
-      notify => $notify_service,
-      target => "${install_dir}/${service_name}",
-      before => Prometheus::Daemon[$service_name],
-    }
-  } else {
-    $exporter_install_method = $install_method
-  }
-
   prometheus::daemon { $service_name:
-    install_method     => $exporter_install_method,
+    install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,
     env_vars           => $env_vars,
@@ -183,7 +184,7 @@ class prometheus::postgres_exporter (
     group              => $group,
     manage_group       => $manage_group,
     purge              => $purge_config_dir,
-    options            => $options,
+    options            => $_options,
     init_style         => $init_style,
     service_ensure     => $service_ensure,
     service_enable     => $service_enable,
@@ -195,5 +196,6 @@ class prometheus::postgres_exporter (
     scrape_job_labels  => $scrape_job_labels,
     proxy_server       => $proxy_server,
     proxy_type         => $proxy_type,
+    archive_bin_path   => $bin_path,
   }
 }

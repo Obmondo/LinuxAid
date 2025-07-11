@@ -59,7 +59,8 @@ class prometheus::ssl_exporter (
   Stdlib::Absolutepath $config_file                          = '/etc/ssl_exporter.yaml',
   String[1] $package_name                                    = 'ssl_exporter',
   String $download_extension                                 = 'tar.gz',
-  String[1] $version                                         = '2.2.1',
+  # renovate: depName=ribbybibby/ssl_exporter
+  String[1] $version                                         = '2.4.3',
   String[1] $package_ensure                                  = 'latest',
   String[1] $user                                            = 'ssl-exporter',
   String[1] $group                                           = 'ssl-exporter',
