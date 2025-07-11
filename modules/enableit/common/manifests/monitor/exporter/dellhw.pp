@@ -69,7 +69,7 @@ class common::monitor::exporter::dellhw (
     restart_on_change => $enable,
     export_scrape_job => $enable,
     scrape_port       => Integer($listen_address.split(':')[1]),
-    scrape_ipaddress  => $listen_address.split(':')[0],
+    scrape_ipadress   => $listen_address.split(':')[0],
     tag               => $::trusted['certname'],
     scrape_host       => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
