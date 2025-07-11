@@ -85,7 +85,7 @@ class common::monitor::exporter::iptables (
 
   # Note: This is a daemon-reload that can do a daemon-reload in noop mode.
   # Upstream module can't handle noop, which is correct.
-  Exec { 'systemd-iptables_exporter.service-systemctl-daemon-reload':
+  Exec <| tag == 'systemd-iptables_exporter.service-systemctl-daemon-reload' |> {
     noop => $noop_value,
   }
 }
