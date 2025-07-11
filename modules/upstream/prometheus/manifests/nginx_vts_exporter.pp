@@ -51,6 +51,8 @@
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @note
+#    This class is deprecated.
 class prometheus::nginx_vts_exporter (
   String           $nginx_scrape_uri,
   String           $download_extension,
@@ -61,7 +63,8 @@ class prometheus::nginx_vts_exporter (
   String[1]        $package_name,
   String[1]        $service_name,
   String           $user,
-  String           $version,
+  # renovate: depName=hnlq715/nginx-vts-exporter
+  String           $version                                  = '0.10.3',
   Boolean          $purge_config_dir                         = true,
   Boolean          $restart_on_change                        = true,
   Boolean          $service_enable                           = true,
@@ -90,9 +93,15 @@ class prometheus::nginx_vts_exporter (
     default => undef,
   }
 
+  deprecation(
+    'prometheus::nginx_vts_exporter',
+    'nginx_vts_exporter exporter is deprecated and will be removed in the next major release. See https://github.com/sysulq/nginx-vts-exporter/issues/93',
+    false
+  )
+
   $options = "-nginx.scrape_uri=\"${nginx_scrape_uri}\" ${extra_options}"
 
-  prometheus::daemon { 'nginx-vts-exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,

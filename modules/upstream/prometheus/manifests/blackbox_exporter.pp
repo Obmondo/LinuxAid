@@ -59,10 +59,18 @@
 #  The binary release version
 # @param config_mode
 #  The permissions of the configuration files
+# @param env_vars
+#  hash with custom environment variables thats passed to the exporter via init script / unit file
+# @param env_file_path
+#  The path to the file with the environmetn variable that is read from the init script/systemd unit
 # @param proxy_server
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @param web_config_file
+#  Path of file where the web-config will be saved to
+# @param web_config_content
+#  Unless empty the content of the web-config yaml which will handed over as option to the exporter
 # @example  Example for configuring named blackbox modules via hiera
 # prometheus::blackbox_exporter::modules:
 #   simple_ssl:
@@ -84,7 +92,8 @@ class prometheus::blackbox_exporter (
   String[1] $package_ensure = 'latest',
   String[1] $package_name = 'blackbox_exporter',
   String[1] $user = 'blackbox-exporter',
-  String[1] $version = '0.17.0',
+  # renovate: depName=prometheus/blackbox_exporter
+  String[1] $version = '0.26.0',
   Boolean $restart_on_change                                 = true,
   Boolean $service_enable                                    = true,
   Stdlib::Ensure::Service $service_ensure                    = 'running',
@@ -106,15 +115,18 @@ class prometheus::blackbox_exporter (
   Stdlib::Port $scrape_port                                  = 9115,
   String[1] $scrape_job_name                                 = 'blackbox',
   Optional[Hash] $scrape_job_labels                          = undef,
+  Hash[String[1], Scalar] $env_vars                          = {},
+  Stdlib::Absolutepath $env_file_path                        = $prometheus::env_file_path,
   Optional[String[1]] $proxy_server                          = undef,
   Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type = undef,
+  Stdlib::Absolutepath $web_config_file                      = '/etc/blackbox_exporter_web-config.yml',
+  Prometheus::Web_config $web_config_content                 = {},
 ) inherits prometheus {
   # Prometheus added a 'v' on the release name at 0.1.0 of blackbox
-  if versioncmp ($version, '0.1.0') >= 0 {
-    $release = "v${version}"
-  }
-  else {
-    $release = $version
+  $release = if versioncmp ($version, '0.1.0') >= 0 {
+    "v${version}"
+  } else {
+    $version
   }
   $real_download_url = pick($download_url,"${download_url_base}/download/${release}/${package_name}-${version}.${os}-${arch}.${download_extension}")
   $notify_service = $restart_on_change ? {
@@ -122,7 +134,31 @@ class prometheus::blackbox_exporter (
     default => undef,
   }
 
-  $options = "--config.file=${config_file} ${extra_options}"
+  $_web_config_ensure = $web_config_content.empty ? {
+    true    => absent,
+    default => file,
+  }
+
+  file { $web_config_file:
+    ensure  => $_web_config_ensure,
+    owner   => $user,
+    group   => $group,
+    mode    => '0640',
+    content => $web_config_content.stdlib::to_yaml,
+    notify  => $notify_service,
+  }
+
+  $_web_config = if $web_config_content.empty {
+    ''
+  } else {
+    "--web.config.file=${$web_config_file}"
+  }
+
+  $options = [
+    "--config.file=${config_file}",
+    $extra_options,
+    $_web_config,
+  ].filter |$x| { !$x.empty }.join(' ')
 
   file { $config_file:
     ensure  => file,
@@ -159,6 +195,8 @@ class prometheus::blackbox_exporter (
     scrape_port        => $scrape_port,
     scrape_job_name    => $scrape_job_name,
     scrape_job_labels  => $scrape_job_labels,
+    env_vars           => $env_vars,
+    env_file_path      => $env_file_path,
     proxy_server       => $proxy_server,
     proxy_type         => $proxy_type,
   }

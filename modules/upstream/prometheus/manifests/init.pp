@@ -67,12 +67,19 @@
 #  Prometheus rule files
 # @param scrape_configs
 #  Prometheus scrape configs
+# @param scrape_config_files
+#  Specifies an Array of file globs. Scrape configs are read from all matching files and appended to
+#  the list of scrape configs.
 # @param include_default_scrape_configs
 #  Include the module default scrape configs
 # @param remote_read_configs
 #  Prometheus remote_read config to scrape prometheus 1.8+ instances
 # @param remote_write_configs
 #  Prometheus remote_write config to scrape prometheus 1.8+ instances
+# @param enable_tracing
+#  Prometheus enables experimental tracing in Prometheus config file
+# @param tracing_config
+#  Prometheus tracing configuration for the Prometheus config file
 # @param alerts
 #  alert rules to put in alerts.rules
 # @param extra_alerts
@@ -95,7 +102,7 @@
 #  Only collect scrape jobs tagged with this label. Allowing to split jobs over multiple prometheuses.
 # @param collect_scrape_jobs
 #  Array of scrape_configs. Format, e.g.:
-#  - job_name: some_exporter
+#  - job_name: node (for node_exporter; use redis for redis_exporter and so on)
 #    scheme: https
 #  The jobs defined here will be used to collect resources exported via prometheus::daemon,
 #  creating the appropriate prometheus scrape configs for each endpoint. All scrape_config
@@ -179,10 +186,6 @@
 # @param alertmanager_timeout
 #  --alertmanager.timeout=10s
 #  Timeout for sending alerts to Alertmanager.
-# @param alertmanager_url
-#  [REMOVED, v1 ONLY] -alertmanager.url
-#  Comma-separated list of Alertmanager URLs to send notifications to.
-#  In Prometheus v2, Alertmanager must be discovered via service discovery
 # @param query_lookback_delta
 #  --query.lookback-delta=5m
 #  The maximum lookback duration for retrieving metrics during expression evaluations.
@@ -197,19 +200,10 @@
 #  Maximum number of samples a single query can load into memory. Note that queries will fail
 #  if they try to load more samples than this into memory, so this also limits the number of
 #  samples a query can return.
-# @param query_staleness_delta
-#  [REMOVED, v1 ONLY] -query.staleness-delta=5m0s
-#  Staleness delta allowance during expression evaluations.
-# @param web_telemetry_path
-#  [REMOVED, v1 ONLY] -web.telemetry-path="/metrics"
-#  Path under which to expose metrics
-# @param web_enable_remote_shutdown
-#  [REMOVED, v1 ONLY] -web.enable-remote-shutdown=false
 #  Enable remote service shutdown.
 # @param log_level
 #  --log.level=info
 #  Only log messages with the given severity or above. One of: [debug, info, warn, error]
-#  Value of 'fatal' is also allowed in prometheus v1
 # @param log_format
 #  --log.format=logfmt
 #  Output format of log messages. One of: [logfmt, json]
@@ -220,6 +214,15 @@
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @param systemd_service_options
+#  Options for the service section of prometheus systemd unit file. Can be used to add custom options
+#  or to override default. Only used when init_style is set to systemd.
+# @param systemd_unit_options
+#  Options for the unit section of prometheus systemd unit file. Can be used to add custom options
+#  or to override default. Only used when init_style is set to systemd.
+# @param systemd_install_options
+#  Options for the install section of prometheus systemd unit file. Can be used to add custom options
+#  or to override default. Only used when init_style is set to systemd.
 class prometheus (
   Stdlib::Absolutepath $env_file_path,
   Array $extra_groups = [],
@@ -228,8 +231,11 @@ class prometheus (
   String $package_name = 'prometheus',
   Array $rule_files = [],
   Array $scrape_configs = [],
+  Optional[Array] $scrape_config_files = undef,
   Array $remote_read_configs = [],
   Array $remote_write_configs = [],
+  Boolean $enable_tracing = false,
+  Hash $tracing_config = {},
   Stdlib::Absolutepath $shared_dir = '/usr/local/share/prometheus',
   String $storage_retention = '360h',
   String $user = 'prometheus',
@@ -242,13 +248,13 @@ class prometheus (
   String $config_dir = '/etc/prometheus',
   Boolean $manage_config_dir = true,
   Boolean $manage_init_file = true,
-  Variant[Array,Hash] $alerts = {},
+  Hash $alerts = {},
   Boolean $manage_config = true,
   String $group = 'prometheus',
   Stdlib::Absolutepath $localstorage = '/var/lib/prometheus',
   Boolean $manage_localstorage                                                  = true,
   Stdlib::Absolutepath $bin_dir                                                 = '/usr/local/bin',
-  String $version                                                               = '2.30.3',
+  String $version                                                               = '2.52.0',
   String $install_method                                                        = 'url',
   String $service_name                                                          = 'prometheus',
   Boolean $manage_prometheus_server                                             = false,
@@ -278,15 +284,11 @@ class prometheus (
   Optional[String[1]] $alert_resend_delay                                       = undef,
   Optional[String[1]] $alertmanager_notification_queue_capacity                 = undef,
   Optional[String[1]] $alertmanager_timeout                                     = undef,
-  Optional[String[1]] $alertmanager_url                                         = undef, #v1 only
   Optional[String[1]] $query_lookback_delta                                     = undef,
   Optional[String[1]] $query_timeout                                            = undef,
   Optional[String[1]] $query_max_concurrency                                    = undef,
   Optional[String[1]] $query_max_samples                                        = undef,
-  Optional[String[1]] $query_staleness_delta                                    = undef, #v1 only
-  Optional[String[1]] $web_telemetry_path                                       = undef, #v1 only
-  Boolean $web_enable_remote_shutdown                                           = false, #v1 only
-  Optional[Enum['debug', 'info', 'warn', 'error', 'fatal']] $log_level          = undef,
+  Optional[Enum['debug', 'info', 'warn', 'error']] $log_level                   = undef,
   Optional[Enum['logfmt', 'json']] $log_format                                  = undef,
   Hash $extra_alerts                                                            = {},
   Hash $config_hash                                                             = {},
@@ -296,6 +298,9 @@ class prometheus (
   Array[Hash[String[1], Any]] $collect_scrape_jobs                              = [],
   Optional[String[1]] $collect_tag                                              = undef,
   Optional[Integer] $max_open_files                                             = undef,
+  Systemd::Unit::Service $systemd_service_options                               = {},
+  Systemd::Unit::Unit $systemd_unit_options                                     = {},
+  Systemd::Unit::Install $systemd_install_options                               = {},
   String[1] $configname                                                         = 'prometheus.yaml',
   Boolean $service_enable                                                       = true,
   Boolean $manage_service                                                       = true,
@@ -311,17 +316,14 @@ class prometheus (
   Optional[String[1]] $proxy_server                                             = undef,
   Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type                    = undef,
 ) {
-  case $arch {
-    'x86_64', 'amd64': { $real_arch = 'amd64' }
-    'i386':            { $real_arch = '386' }
-    'aarch64':         { $real_arch = 'arm64' }
-    'armv7l':          { $real_arch = 'armv7' }
-    'armv6l':          { $real_arch = 'armv6' }
-    'armv5l':          { $real_arch = 'armv5' }
-    'ppc64le':         { $real_arch = 'ppc64le' }
-    default:           {
-      fail("Unsupported kernel architecture: ${arch}")
-    }
+  $real_arch = $arch ? {
+    'x86_64'  => 'amd64',
+    'i386'    => '386',
+    'aarch64' => 'arm64',
+    'armv7l'  => 'armv7',
+    'armv6l'  => 'armv6',
+    'armv5l'  => 'armv5',
+    default   => $arch,
   }
 
   if $manage_prometheus_server {

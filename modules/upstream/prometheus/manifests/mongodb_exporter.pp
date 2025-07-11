@@ -3,6 +3,8 @@
 #  Architecture (amd64 or i386)
 # @param bin_dir
 #  Directory where binaries are located
+# @param bin_name
+#  The name of the binary to execute
 # @param cnf_uri
 #  The URI to obtain MongoDB stats from
 # @param download_extension
@@ -65,7 +67,8 @@ class prometheus::mongodb_exporter (
   String[1] $package_name                                    = 'mongodb_exporter',
   String[1] $service_name                                    = 'mongodb_exporter',
   String[1] $user                                            = 'mongodb-exporter',
-  String[1] $version                                         = '0.20.4',
+  # renovate: depName=percona/mongodb_exporter
+  String[1] $version                                         = '0.44.0',
   Boolean $use_kingpin                                       = true,
   Boolean $purge_config_dir                                  = true,
   Boolean $restart_on_change                                 = true,
@@ -81,6 +84,7 @@ class prometheus::mongodb_exporter (
   Optional[Prometheus::Uri] $download_url                    = undef,
   String[1] $arch                                            = $prometheus::real_arch,
   Stdlib::Absolutepath $bin_dir                              = $prometheus::bin_dir,
+  String[1] $bin_name                                        = 'mongodb_exporter',
   Boolean $export_scrape_job                                 = false,
   Optional[Stdlib::Host] $scrape_host                        = undef,
   Stdlib::Port $scrape_port                                  = 9216,
@@ -110,7 +114,7 @@ class prometheus::mongodb_exporter (
 
   $options = "${flag_prefix}mongodb.uri=${cnf_uri} ${extra_options}"
 
-  prometheus::daemon { 'mongodb_exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,
@@ -118,6 +122,7 @@ class prometheus::mongodb_exporter (
     arch               => $arch,
     real_download_url  => $real_download_url,
     bin_dir            => $bin_dir,
+    bin_name           => $bin_name,
     archive_bin_path   => $archive_bin_path,
     notify_service     => $notify_service,
     package_name       => $package_name,

@@ -71,9 +71,10 @@ class prometheus::consul_exporter (
   String[1] $package_name,
   String[1] $service_name,
   String[1] $user,
-  String[1] $version,
   String[1] $web_listen_address,
   String[1] $web_telemetry_path,
+  # renovate: depName=prometheus/consul_exporter
+  String[1] $version                                         = '0.13.0',
   Boolean $purge_config_dir                                  = true,
   Boolean $restart_on_change                                 = true,
   Boolean $service_enable                                    = true,
@@ -124,7 +125,7 @@ class prometheus::consul_exporter (
     $options = "--consul.server=${consul_server} ${real_consul_health_summary} --web.listen-address=${web_listen_address} --web.telemetry-path=${web_telemetry_path} --log.level=${log_level} ${extra_options}"
   }
 
-  prometheus::daemon { 'consul_exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,

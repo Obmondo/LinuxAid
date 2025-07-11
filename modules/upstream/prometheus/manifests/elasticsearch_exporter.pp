@@ -29,6 +29,16 @@
 #  Should puppet manage the service? (default true)
 # @param manage_user
 #  Whether to create user or rely on external code for that
+# @param export_scrape_job
+#  Whether to export a scrape job for this service
+# @param scrape_host
+#  Hostname or IP address to scrape
+# @param scrape_port
+#  Host port to scrape
+# @param scrape_job_name
+#  Name of the scrape job to export, if export_scrape_job is true
+# @param scrape_job_labels
+#  Labels to add to the scrape job, if export_scrape_job is true
 # @param os
 #  Operating system (linux is the only one supported)
 # @param package_ensure
@@ -43,18 +53,20 @@
 #  Whether to enable the service from puppet (default true)
 # @param service_ensure
 #  State ensured for the service (default 'running')
+# @param service_name
+#  Name of the node exporter service
 # @param user
 #  User which runs the service
 # @param version
 #  The binary release version
-# @param use_kingpin
-#  Since version 1.1.0, the elasticsearch exporter uses kingpin, thus
-#  this param to define how we call the es.uri and es.timeout in the $options
-#  https://github.com/justwatchcom/elasticsearch_exporter/blob/v1.1.0/CHANGELOG.md
 # @param proxy_server
 #  Optional proxy server, with port number if needed. ie: https://example.com:8080
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
+# @param web_config_file
+#  Path of file where the web-config will be saved to
+# @param web_config_content
+#  Unless empty the content of the web-config yaml which will handed over as option to the exporter
 class prometheus::elasticsearch_exporter (
   String[1] $cnf_uri,
   String[1] $cnf_timeout,
@@ -66,8 +78,8 @@ class prometheus::elasticsearch_exporter (
   String[1] $package_name,
   String[1] $service_name,
   String[1] $user,
-  String[1] $version,
-  Boolean $use_kingpin,
+  # renovate: depName=prometheus-community/elasticsearch_exporter
+  String[1] $version                                         = '1.9.0',
   Boolean $purge_config_dir                                  = true,
   Boolean $restart_on_change                                 = true,
   Boolean $service_enable                                    = true,
@@ -89,8 +101,9 @@ class prometheus::elasticsearch_exporter (
   Optional[Hash] $scrape_job_labels                          = undef,
   Optional[String[1]] $proxy_server                          = undef,
   Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type = undef,
+  Stdlib::Absolutepath $web_config_file                      = '/etc/elasticsearch_exporter_web-config.yml',
+  Prometheus::Web_config $web_config_content                 = {},
 ) inherits prometheus {
-  #Please provide the download_url for versions < 0.9.0
   $real_download_url = pick($download_url,"${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
 
   $notify_service = $restart_on_change ? {
@@ -98,14 +111,34 @@ class prometheus::elasticsearch_exporter (
     default => undef,
   }
 
-  $flag_prefix = $use_kingpin ? {
-    true  => '--',
-    false => '-',
+  $_web_config_ensure = $web_config_content.empty ? {
+    true    => absent,
+    default => file,
   }
 
-  $options = "${flag_prefix}es.uri=${cnf_uri} ${flag_prefix}es.timeout=${cnf_timeout} ${extra_options}"
+  file { $web_config_file:
+    ensure  => $_web_config_ensure,
+    owner   => $user,
+    group   => $group,
+    mode    => '0640',
+    content => $web_config_content.stdlib::to_yaml,
+    notify  => $notify_service,
+  }
 
-  prometheus::daemon { 'elasticsearch_exporter':
+  $_web_config = if $web_config_content.empty {
+    ''
+  } else {
+    "--web.config.file=${$web_config_file}"
+  }
+
+  $options = [
+    "--es.uri=${cnf_uri}",
+    "--es.timeout=${cnf_timeout}",
+    $extra_options,
+    $_web_config,
+  ].filter |$x| { !$x.empty }.join(' ')
+
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,

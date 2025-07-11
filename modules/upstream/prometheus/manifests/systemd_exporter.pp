@@ -54,7 +54,8 @@ class prometheus::systemd_exporter (
   String[1] $group                        = 'systemd-exporter',
   String[1] $package_name                 = 'systemd_exporter',
   String[1] $user                         = 'systemd-exporter',
-  String[1] $version                      = '0.5.0',
+  # renovate: depName=povilasv/systemd_exporter
+  String[1] $version                      = '0.7.0',
   Boolean $purge_config_dir               = true,
   Boolean $restart_on_change              = true,
   Boolean $service_enable                 = true,
@@ -87,7 +88,7 @@ class prometheus::systemd_exporter (
   $options = $extra_options
 
   prometheus::daemon { $service_name:
-    install_method     => $install_method,
+    install_method     => 'url',
     version            => $version,
     download_extension => $download_extension,
     os                 => $os,

@@ -59,17 +59,18 @@
 # @param proxy_type
 #  Optional proxy server type (none|http|https|ftp)
 class prometheus::statsd_exporter (
-  String $download_extension,
-  Prometheus::Uri $download_url_base,
-  Array $extra_groups,
-  String[1] $group,
-  Stdlib::Absolutepath $mapping_config_path,
-  String[1] $package_ensure,
-  String[1] $package_name,
-  String[1] $service_name,
-  Array[Hash] $mappings,
-  String[1] $user,
-  String[1] $version,
+  String $download_extension = 'tar.gz',
+  Prometheus::Uri $download_url_base = 'https://github.com/prometheus/statsd_exporter/releases',
+  Array $extra_groups = [],
+  String[1] $group = 'statsd-exporter',
+  Stdlib::Absolutepath $mapping_config_path = '/etc/statsd-exporter-mapping.yaml',
+  String[1] $package_ensure = 'latest',
+  String[1] $package_name = 'statsd_exporter',
+  String[1] $service_name = 'statsd_exporter',
+  Array[Hash] $mappings = [],
+  String[1] $user = 'statsd-exporter',
+  # renovate: depName=prometheus/statsd_exporter
+  String[1] $version                                         = '0.28.0',
   String[1] $arch                                            = $prometheus::real_arch,
   Stdlib::Absolutepath $bin_dir                              = $prometheus::bin_dir,
   String[1] $config_mode                                     = $prometheus::config_mode,
@@ -122,7 +123,7 @@ class prometheus::statsd_exporter (
   }
   $options = "${option_prefix}statsd.mapping-config=\'${prometheus::statsd_exporter::mapping_config_path}\' ${prometheus::statsd_exporter::extra_options}"
 
-  prometheus::daemon { 'statsd_exporter':
+  prometheus::daemon { $service_name:
     install_method     => $install_method,
     version            => $version,
     download_extension => $download_extension,
