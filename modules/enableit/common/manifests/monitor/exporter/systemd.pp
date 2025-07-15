@@ -14,21 +14,24 @@ class common::monitor::exporter::systemd (
   Boolean[false]     $noop_value     = false,
   Eit_types::IPPort  $listen_address = '127.254.254.254:63391',
 ) {
-  class { 'prometheus::systemd_exporter':
+  prometheus::daemon { 'systemd_exporter':
     package_name      => 'obmondo-systemd-exporter',
+    version           => '0.7.0',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     manage_service    => $enable,
-    restart_on_change => $enable,
+    notify_service    => Service['systemd_exporter'],
+    real_download_url => 'https://github.com/povilasv/systemd_exporter',
     user              => 'systemd_exporter',
     group             => 'systemd_exporter',
     init_style        => if !$enable { 'none' },
     export_scrape_job => $enable,
-    extra_options     => "--web.listen-address=${listen_address} --web.max-requests=20",
+    options           => "--web.listen-address=${listen_address} --web.max-requests=20",
     tag               => $::trusted['certname'],
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
+    scrape_job_name   => 'systemd',
   }
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
