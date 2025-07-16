@@ -46,7 +46,7 @@ class role::db::pgsql (
   Optional[Eit_types::SimpleString]  $replication_username = undef,
   Optional[String]                   $replication_password = undef,
   Optional[Eit_types::SimpleString]  $application_name     = undef,
-
+  Optional[Boolean]                  $backup               = false,
   Eit_types::Encrypt::Params         $encrypt_params            = [
     'recovery_password',
     'replication_password',
@@ -68,6 +68,11 @@ class role::db::pgsql (
   confine($mode == 'primary',
     (!$replication_username or !$replication_password),
     '`replication_username` and `replication_password` is mandatory if running postgres as primary node'
+  )
+
+  confine(
+    ($backup and !$databases),
+    '`database` must be specified if backup is enabled'
   )
 
   profile::db::pgsql.contain
