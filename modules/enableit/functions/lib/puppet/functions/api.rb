@@ -7,6 +7,8 @@ require "openssl"
 SSL = true
 PORT = nil
 
+API_BASE_URL = ENV['OBMONDO_ENV'] == 'beta' ? 'api-beta.obmondo.com' : 'api.obmondo.com'
+
 class HTTPNotFound < ArgumentError
 end
 
@@ -16,7 +18,7 @@ def obmondo_api(endpoint, method = "GET", use_basic_auth = true)
 
   proto = "http#{"s" if SSL}"
   port = (":#{PORT}" if PORT)
-  uri = URI("#{proto}://api.obmondo.com#{port}/api#{endpoint}")
+  uri = URI("#{proto}://#{API_BASE_URL}#{port}/api#{endpoint}")
 
   # Direct paths for the certificate and private key
   cert_path = "/etc/puppetlabs/puppet/ssl/certs/puppet.pem"
