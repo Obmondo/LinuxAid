@@ -283,6 +283,9 @@ common::system::services:
   'rpc-svcgssd':
     enable: 'mask'
     noop: false
+  'sssd-pac':
+    enable: 'mask'
+    noop: false
 
 # Puppet
 common::puppet::version: '7.33.0'
