@@ -128,7 +128,7 @@ The hash accepts the following three values:
 Puppet example:
 ```puppet
 class { 'rsyslog::config':
-  'modules' => {
+  modules => {
     'imuxsock' => {},
     'imudp' => {
       'config' => {
@@ -235,7 +235,7 @@ A hash of hashes, they key represents the configuration setting and the value is
 Puppet example:
 ```puppet
 class { 'rsyslog::config':
-  'global_config' => {
+  global_config => {
     'umask' => {
       'value'    => '0000',
       'type'     => 'legacy',
@@ -311,7 +311,7 @@ Configures the `main_queue` object in rsyslog as a hash. eg:
 Puppet Example:
 ```puppet
 class { 'rsyslog::config':
-  'main_queue_opts' => {
+  main_queue_opts => {
     'queue.maxdiskspace'     => '1000G',
     'queue.dequeuebatchsize' => 1000,
   }
@@ -342,7 +342,7 @@ Puppet Example:
 
 ```puppet
 class { 'rsyslog::config':
-  'templates' => {
+  templates => {
     'remote' => {
       'type'   => 'string',
       'string' => '/var/log/rsyslog/logs/%fromhost-ip%.log',
@@ -388,7 +388,7 @@ Puppet example:
 
 ```puppet
 class { 'rsyslog::config':
-  'templates' => {
+  templates => {
     'plain-syslog' => {
       'type' => 'list',
       'list_descriptions' => [
@@ -543,7 +543,7 @@ Puppet example:
 
 ```puppet
 class { 'rsyslog::config':
-  'actions' => {
+  actions => {
     'all_logs' => {
       'type'     => 'omfile',
       'facility' => '*.*;auth,authpriv.none',
@@ -626,7 +626,7 @@ Puppet examples:
 
 ```puppet
 class { 'rsyslog:config':
-  'inputs' => {
+  inputs => {
     'imudp' => {
       'type'   => 'imudp',
       'config' => {
@@ -674,7 +674,7 @@ Puppet example:
 
 ```puppet
 class { 'rsyslog::config':
-  'lookup_tables' => {
+  lookup_tables => {
     'ip_lookup' => {
       'lookup_json' => {
         'version'  => 1,
@@ -754,7 +754,7 @@ Puppet Example:
 
 ```puppet
 class { 'rsyslog::config':
-  'parser' => {
+  parser => {
     'pmrfc3164_hostname_with_slashes' => {
       'type'   => 'pmrfc3164',
       'config' => {
@@ -808,7 +808,7 @@ Puppet example:
 
 ```puppet
 class { 'rsyslog::config':
-  'rulesets' => {
+  rulesets => {
     'ruleset_eth0_514_tcp' => {
       'parameters' => {
         'parser'     => 'pmrfc3164.hostname_with_slashes',
@@ -962,7 +962,7 @@ Puppet Example:
 
 ```puppet
 class { 'rsyslog::config':
-  'rulesets' => {
+  rulesets => {
     'ruleset_eth0_514_udp' => {
       'parameters' => {
         'queue.type' => 'LinkedList'
@@ -1029,7 +1029,7 @@ Puppet example with lookup tables:
 *NOTE: Good example for how to define multiple rsyslog resources in a single `rsyslog::config` class*
 ```puppet
 class { 'rsyslog::config':
-  'lookup_tables' => {
+  lookup_tables => {
     'srv-map' => {
       'lookup_json'   => {
         'version'  => 1,
@@ -1054,7 +1054,7 @@ class { 'rsyslog::config':
       'reload_on_hup' => true
     }
   },
-  'rulesets' => {
+  rulesets => {
     'ruleset_lookup_set_windows_by_ip' => {
       'rules' => [
         {
@@ -1188,7 +1188,7 @@ ruleset(name="ruleset_lookup_set_windows_by_ip"
 Puppet Example:
 ```puppet
 class { 'rsyslog::config':
-  'rulesets' => {
+  rulesets => {
     'ruleset_msg_check_for_error' => {
       'rules' => [
         {
@@ -1265,7 +1265,7 @@ Puppet Example:
 
 ```puppet
 class { 'rsyslog::config':
-  'property_filters' => {
+  property_filters => {
     'hostname_filter' => {
       'property' => 'hostname',
       'operator' => 'contains',
@@ -1357,7 +1357,7 @@ The `rsyslog::config::expression_filters` parameter is a Hash of hashes where th
 Old Syntax (still works):
 ```puppet
 class { 'rsyslog::config':
-  'expression_filters' => {
+  expression_filters => {
     'hostname_filter' => {
       'conditionals' => {
         'if' => {
@@ -1381,7 +1381,7 @@ class { 'rsyslog::config':
 New Syntax:
 ```puppet
 class { 'rsyslog::config':
-  'expression_filters' => {
+  expression_filters => {
     'hostname_filter' => {
       'conditionals' => {
         'main' => {
@@ -1451,7 +1451,7 @@ NOTE: Due to the amount of potential options available to the user, the `express
 Old Syntax (still works):
 ```puppet
 class { 'rsyslog::config':
-  'expression_filters' => {
+  expression_filters => {
     'complex_filter' => {
       'conditionals' => {
         'if' => {
@@ -1479,7 +1479,7 @@ class { 'rsyslog::config':
 New Syntax:
 ```puppet
 class { 'rsyslog::config':
-  'expression_filters' => {
+  expression_filters => {
     'complex_filter' => {
       'conditionals' => {
         'main' => {
@@ -1563,7 +1563,7 @@ Example using more than two conditions:
 #### Puppet Examples
 ```puppet
 class { 'rsyslog::config':
-  'expression_filters' => {
+  expression_filters => {
     'conditionals' => {
       'main' => {
         'expression' => '$syslogfacility-text == "local0" and $msg startswith "DEVNAME" and ($msg contains "error1" or $msg contains "error0")',
@@ -1652,7 +1652,7 @@ A hash of hashes, each hash name is used as the comment/reference for the settin
 ##### Puppet Examples
 ```puppet
 class { 'rsyslog::config':
-  'legacy_config' => {
+  legacy_config => {
     'auth_priv_rule' => {
       'key'   => 'auth,authpriv.*',
       'value' => '/var/log/auth.log',
