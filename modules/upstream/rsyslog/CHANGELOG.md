@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.3.0](https://github.com/voxpupuli/puppet-rsyslog/tree/v7.3.0) (2025-04-01)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-rsyslog/compare/v7.2.0...v7.3.0)
+
+**Implemented enhancements:**
+
+- allow puppetlabs/apt 10.x [\#260](https://github.com/voxpupuli/puppet-rsyslog/pull/260) ([jhoblitt](https://github.com/jhoblitt))
+- metadata.json: Add OpenVox [\#259](https://github.com/voxpupuli/puppet-rsyslog/pull/259) ([jstraw](https://github.com/jstraw))
+
+**Fixed bugs:**
+
+- Notify the service when there is a change in the config\_file [\#257](https://github.com/voxpupuli/puppet-rsyslog/pull/257) ([hfrog](https://github.com/hfrog))
+- README: puppet refuses to parse class attributes as strings [\#247](https://github.com/voxpupuli/puppet-rsyslog/pull/247) ([m8t](https://github.com/m8t))
+
+## [v7.2.0](https://github.com/voxpupuli/puppet-rsyslog/tree/v7.2.0) (2025-02-12)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-rsyslog/compare/v7.1.0...v7.2.0)
+
+**Closed issues:**
+
+- template list\_descriptions not rendering correctly [\#252](https://github.com/voxpupuli/puppet-rsyslog/issues/252)
+- Configuration files do not identify themselves as "Managed by Puppet, do not edit." [\#202](https://github.com/voxpupuli/puppet-rsyslog/issues/202)
+
+**Merged pull requests:**
+
+- templates/template.epp:correct formating [\#253](https://github.com/voxpupuli/puppet-rsyslog/pull/253) ([b4ldr](https://github.com/b4ldr))
+- base: rainerscript replacement for `$IncludeConfig` [\#248](https://github.com/voxpupuli/puppet-rsyslog/pull/248) ([m8t](https://github.com/m8t))
+- Remove legacy top-scope syntax [\#239](https://github.com/voxpupuli/puppet-rsyslog/pull/239) ([smortex](https://github.com/smortex))
+
 ## [v7.1.0](https://github.com/voxpupuli/puppet-rsyslog/tree/v7.1.0) (2023-10-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-rsyslog/compare/v7.0.1...v7.1.0)

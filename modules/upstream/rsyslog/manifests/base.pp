@@ -58,8 +58,12 @@ class rsyslog::base {
 
     file { $rsyslog::config_file:
       ensure  => file,
-      content => "${message}\n\$IncludeConfig ${rsyslog::confdir}/*.conf\n",
+      content => "${message}\n${rsyslog::config_file_include}\n",
       mode    => $rsyslog::global_conf_perms,
+    }
+
+    if $rsyslog::manage_service {
+      File[$rsyslog::config_file] ~> Service[$rsyslog::service_name]
     }
 
     if $rsyslog::manage_package {

@@ -85,6 +85,8 @@
 #   Set the file mode for the rsyslog.d configuration directory.
 # @param global_conf_perms
 #   Set the file mode for the /etc/rsyslog.conf
+# @param config_file_include 
+#   Override the include directive in the /etc/rsyslog.conf file.
 #
 class rsyslog (
   String            $confdir,
@@ -118,6 +120,7 @@ class rsyslog (
   Stdlib::Filemode  $conf_permissions = '0644',
   Stdlib::Filemode  $confdir_permissions = '0755',
   Stdlib::Filemode  $global_conf_perms = $conf_permissions,
+  String            $config_file_include = "include(file=\"${rsyslog::confdir}/*.conf\" mode=\"optional\")",
 ) {
   if $manage_service == true and $external_service == true {
     fail('manage_service and external_service cannot be set at the same time!')

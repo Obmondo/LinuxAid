@@ -23,7 +23,7 @@ template (name="<%= $template_name %>" type="<%= $type %>"<%-%>
 {
 <% $list_descriptions.each | $element | { -%>
   <%- $element.each |$key, $params| { -%>
-    <%= $key %>(<% $params.each |$p,$v| { -%><%= $p%>="<%= $v %>" <% }%><% } %>)
+    <%= $key %>(<% $params.each |$p,$v| { -%> <%= $p%>="<%= $v %>" <% }%>)<% } %>
 <%}-%>
 }
 <%}-%>

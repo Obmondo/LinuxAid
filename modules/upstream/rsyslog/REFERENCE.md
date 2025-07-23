@@ -157,6 +157,7 @@ The following parameters are available in the `rsyslog` class:
 * [`conf_permissions`](#-rsyslog--conf_permissions)
 * [`confdir_permissions`](#-rsyslog--confdir_permissions)
 * [`global_conf_perms`](#-rsyslog--global_conf_perms)
+* [`config_file_include`](#-rsyslog--config_file_include)
 * [`parser_priority`](#-rsyslog--parser_priority)
 
 ##### <a name="-rsyslog--confdir"></a>`confdir`
@@ -350,6 +351,14 @@ Set the file mode for the /etc/rsyslog.conf
 
 Default value: `$conf_permissions`
 
+##### <a name="-rsyslog--config_file_include"></a>`config_file_include`
+
+Data type: `String`
+
+Override the include directive in the /etc/rsyslog.conf file.
+
+Default value: `"include(file=\"${rsyslog::confdir}/*.conf\" mode=\"optional\")"`
+
 ##### <a name="-rsyslog--parser_priority"></a>`parser_priority`
 
 Data type: `Integer`
@@ -456,7 +465,7 @@ Default value: `{}`
 Data type: `Hash`
 
 Hash of rsyslog configuration in the legacy format.
-* :name (String) [undef] Na,e of the legacy configuration option.
+* :name (String) [undef] Name of the legacy configuration option.
   * :priority (Integer) [10] Sets where in the config the option will be placed in the target file.
   * :target (String) [50_rsyslog.conf] File to place the conf
   * :value (String) [] Value of the configuration item
@@ -1477,32 +1486,32 @@ Alias of
 
 ```puppet
 Array[Struct[{
-    name          => String[1],
-    type          => Rsyslog::Modules::Output,
-    facility      => Optional[String[1]],
-    action_params => Optional[Rsyslog::Actions::Parameters],
-    queue_params  => Optional[Rsyslog::Queue::Parameters],
-    output_params => Optional[Variant[
-      Rsyslog::Actions::Outputs::Omamqp1,
-      Rsyslog::Actions::Outputs::Omelasticsearch,
-      Rsyslog::Actions::Outputs::Omfile,
-      Rsyslog::Actions::Outputs::Omfwd,
-      Rsyslog::Actions::Outputs::Omhiredis,
-      Rsyslog::Actions::Outputs::Omhttpfs,
-      Rsyslog::Actions::Outputs::Omjournal,
-      Rsyslog::Actions::Outputs::Omkafka,
-      Rsyslog::Actions::Outputs::Omlibdbi,
-      Rsyslog::Actions::Outputs::Ommail,
-      Rsyslog::Actions::Outputs::Ommongodb,
-      Rsyslog::Actions::Outputs::Ommysql,
-      Rsyslog::Actions::Outputs::Ompgsql,
-      Rsyslog::Actions::Outputs::Ompipe,
-      Rsyslog::Actions::Outputs::Omprog,
-      Rsyslog::Actions::Outputs::Omrelp,
-      Rsyslog::Actions::Outputs::Omsnmp,
-      Rsyslog::Actions::Outputs::Omudpspoof,
-      Rsyslog::Actions::Outputs::Omusrmsg,
-    ]],
+      name          => String[1],
+      type          => Rsyslog::Modules::Output,
+      facility      => Optional[String[1]],
+      action_params => Optional[Rsyslog::Actions::Parameters],
+      queue_params  => Optional[Rsyslog::Queue::Parameters],
+      output_params => Optional[Variant[
+          Rsyslog::Actions::Outputs::Omamqp1,
+          Rsyslog::Actions::Outputs::Omelasticsearch,
+          Rsyslog::Actions::Outputs::Omfile,
+          Rsyslog::Actions::Outputs::Omfwd,
+          Rsyslog::Actions::Outputs::Omhiredis,
+          Rsyslog::Actions::Outputs::Omhttpfs,
+          Rsyslog::Actions::Outputs::Omjournal,
+          Rsyslog::Actions::Outputs::Omkafka,
+          Rsyslog::Actions::Outputs::Omlibdbi,
+          Rsyslog::Actions::Outputs::Ommail,
+          Rsyslog::Actions::Outputs::Ommongodb,
+          Rsyslog::Actions::Outputs::Ommysql,
+          Rsyslog::Actions::Outputs::Ompgsql,
+          Rsyslog::Actions::Outputs::Ompipe,
+          Rsyslog::Actions::Outputs::Omprog,
+          Rsyslog::Actions::Outputs::Omrelp,
+          Rsyslog::Actions::Outputs::Omsnmp,
+          Rsyslog::Actions::Outputs::Omudpspoof,
+          Rsyslog::Actions::Outputs::Omusrmsg,
+      ]],
   }]]
 ```
 
@@ -1514,15 +1523,15 @@ Alias of
 
 ```puppet
 Struct[{
-  host           => String[1],
-  target         => String[1],
-  username       => Optional[String[1]],
-  password       => Optional[String[1]],
-  template       => Optional[String[1]],
-  idletimeout    => Optional[Integer],
-  reconnectdelay => Optional[Integer],
-  maxretries     => Optional[Integer],
-  disablesasl    => Optional[Integer],
+    host           => String[1],
+    target         => String[1],
+    username       => Optional[String[1]],
+    password       => Optional[String[1]],
+    template       => Optional[String[1]],
+    idletimeout    => Optional[Integer],
+    reconnectdelay => Optional[Integer],
+    maxretries     => Optional[Integer],
+    disablesasl    => Optional[Integer],
 }]
 ```
 
@@ -1534,35 +1543,35 @@ Alias of
 
 ```puppet
 Struct[{
-  server               => Optional[Variant[Stdlib::Host, Array[Stdlib::Host]]],
-  serverport           => Optional[Stdlib::Port],
-  healthchecktimeout   => Optional[Integer],
-  searchindex          => Optional[String[1]],
-  dynsearchindex       => Optional[Enum['on', 'off']],
-  searchtype           => Optional[String[1]],
-  dynsearchtype        => Optional[Enum['on', 'off']],
-  pipelinename         => Optional[String[1]],
-  dynpipelinename      => Optional[Enum['on', 'off']],
-  usehttps             => Optional[Enum['on', 'off']],
-  timeout              => Optional[Pattern[/^([0-9]+)(ms|s|m)$/]],
-  template             => Optional[String[1]],
-  bulkmode             => Optional[Enum['on', 'off']],
-  maxbytes             => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
-  parent               => Optional[String[1]],
-  dynparent            => Optional[Enum['on', 'off']],
-  uid                  => Optional[String[1]],
-  pwd                  => Optional[String[1]],
-  errorfile            => Optional[Stdlib::Absolutepath],
-  'tls.cacert'         => Optional[Stdlib::Absolutepath],
-  'tls.mycert'         => Optional[Stdlib::Absolutepath],
-  'tls.myprivkey'      => Optional[Stdlib::Absolutepath],
-  bulkid               => Optional[String[1]],
-  dynbulkid            => Optional[Enum['on', 'off']],
-  writeoperation       => Optional[Enum['index', 'create']],
-  retryfailures        => Optional[Enum['on', 'off']],
-  retryruleset         => Optional[String[1]],
-  'ratelimit.interval' => Optional[Integer],
-  'ratelimit.burst'    => Optional[Integer],
+    server               => Optional[Variant[Stdlib::Host, Array[Stdlib::Host]]],
+    serverport           => Optional[Stdlib::Port],
+    healthchecktimeout   => Optional[Integer],
+    searchindex          => Optional[String[1]],
+    dynsearchindex       => Optional[Enum['on', 'off']],
+    searchtype           => Optional[String[1]],
+    dynsearchtype        => Optional[Enum['on', 'off']],
+    pipelinename         => Optional[String[1]],
+    dynpipelinename      => Optional[Enum['on', 'off']],
+    usehttps             => Optional[Enum['on', 'off']],
+    timeout              => Optional[Pattern[/^([0-9]+)(ms|s|m)$/]],
+    template             => Optional[String[1]],
+    bulkmode             => Optional[Enum['on', 'off']],
+    maxbytes             => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
+    parent               => Optional[String[1]],
+    dynparent            => Optional[Enum['on', 'off']],
+    uid                  => Optional[String[1]],
+    pwd                  => Optional[String[1]],
+    errorfile            => Optional[Stdlib::Absolutepath],
+    'tls.cacert'         => Optional[Stdlib::Absolutepath],
+    'tls.mycert'         => Optional[Stdlib::Absolutepath],
+    'tls.myprivkey'      => Optional[Stdlib::Absolutepath],
+    bulkid               => Optional[String[1]],
+    dynbulkid            => Optional[Enum['on', 'off']],
+    writeoperation       => Optional[Enum['index', 'create']],
+    retryfailures        => Optional[Enum['on', 'off']],
+    retryruleset         => Optional[String[1]],
+    'ratelimit.interval' => Optional[Integer],
+    'ratelimit.burst'    => Optional[Integer],
 }]
 ```
 
@@ -1574,32 +1583,32 @@ Alias of
 
 ```puppet
 Struct[{
-  file               => Optional[Stdlib::Absolutepath],
-  dynafile           => Optional[String[1]],
-  template           => Optional[String[1]],
-  closetimeout       => Optional[Integer],
-  dynafilecachesize  => Optional[Integer],
-  ziplevel           => Optional[Integer],
-  veryrobustzip      => Optional[Enum['on', 'off']],
-  flushinterval      => Optional[Integer],
-  asyncwriting       => Optional[Enum['on', 'off']],
-  flushontxend       => Optional[Enum['on', 'off']],
-  iobuffersize       => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
-  dirowner           => Optional[String[1]],
-  dirownernum        => Optional[Integer],
-  dirgroup           => Optional[String[1]],
-  dirgroupnum        => Optional[Integer],
-  fileowner          => Optional[String[1]],
-  fileownernum       => Optional[Integer],
-  filegroup          => Optional[String[1]],
-  filegroupnum       => Optional[Integer],
-  filecreatemode     => Optional[Pattern[/^(([0-7]{1,4})*)$/]],
-  dircreatemode      => Optional[Pattern[/^(([0-7]{1,4})*)$/]],
-  failonchownfailure => Optional[Enum['on', 'off']],
-  createdirs         => Optional[Enum['on', 'off']],
-  sync               => Optional[Enum['on', 'off']],
-  'sig.provider'     => Optional[Enum['ksi_ls12']],
-  'cry.provider'     => Optional[Enum['gcry']],
+    file               => Optional[Stdlib::Absolutepath],
+    dynafile           => Optional[String[1]],
+    template           => Optional[String[1]],
+    closetimeout       => Optional[Integer],
+    dynafilecachesize  => Optional[Integer],
+    ziplevel           => Optional[Integer],
+    veryrobustzip      => Optional[Enum['on', 'off']],
+    flushinterval      => Optional[Integer],
+    asyncwriting       => Optional[Enum['on', 'off']],
+    flushontxend       => Optional[Enum['on', 'off']],
+    iobuffersize       => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
+    dirowner           => Optional[String[1]],
+    dirownernum        => Optional[Integer],
+    dirgroup           => Optional[String[1]],
+    dirgroupnum        => Optional[Integer],
+    fileowner          => Optional[String[1]],
+    fileownernum       => Optional[Integer],
+    filegroup          => Optional[String[1]],
+    filegroupnum       => Optional[Integer],
+    filecreatemode     => Optional[Pattern[/^(([0-7]{1,4})*)$/]],
+    dircreatemode      => Optional[Pattern[/^(([0-7]{1,4})*)$/]],
+    failonchownfailure => Optional[Enum['on', 'off']],
+    createdirs         => Optional[Enum['on', 'off']],
+    sync               => Optional[Enum['on', 'off']],
+    'sig.provider'     => Optional[Enum['ksi_ls12']],
+    'cry.provider'     => Optional[Enum['gcry']],
 }]
 ```
 
@@ -1611,31 +1620,31 @@ Alias of
 
 ```puppet
 Struct[{
-  target                            => Optional[Stdlib::Host],
-  port                              => Optional[Stdlib::Port],
-  protocol                          => Optional[Enum['tcp', 'udp', 'ossl', 'gtls']],
-  networknamespace                  => Optional[String[1]],
-  address                           => Optional[Stdlib::IP::Address],
-  ipfreebind                        => Optional[Integer[0, 2]],
-  device                            => Optional[String[1]],
-  tcp_framing                       => Optional[Enum['traditional', 'octet-counted']],
-  tcp_framedelimiter                => Optional[Integer[0, 255]],
-  ziplevel                          => Optional[Integer[0, 9]],
-  'compression.mode'                => Optional[Enum['none', 'single', 'stream:always']],
-  'compression.stream.flushontxend' => Optional[Enum['on', 'off']],
-  rebindinterval                    => Optional[Integer],
-  keepalive                         => Optional[Enum['on', 'off']],
-  'keepalive.probes'                => Optional[Integer],
-  'keepalive.interval'              => Optional[Integer],
-  'keepalive.time'                  => Optional[Integer],
-  streamdriver                      => Optional[Enum['tcp', 'ossl', 'gtls']],
-  streamdrivermode                  => Optional[Integer],
-  streamdriverauthmode              => Optional[String[1]],
-  streamdriverpermittedpeers        => Optional[String[1]],
-  resendlastmsgonreconnect          => Optional[Enum['on', 'off']],
-  'udp.sendtoall'                   => Optional[Enum['on', 'off']],
-  'udp.senddelay'                   => Optional[Integer],
-  gnutlsprioritystring              => Optional[String[1]],
+    target                            => Optional[Stdlib::Host],
+    port                              => Optional[Stdlib::Port],
+    protocol                          => Optional[Enum['tcp', 'udp', 'ossl', 'gtls']],
+    networknamespace                  => Optional[String[1]],
+    address                           => Optional[Stdlib::IP::Address],
+    ipfreebind                        => Optional[Integer[0, 2]],
+    device                            => Optional[String[1]],
+    tcp_framing                       => Optional[Enum['traditional', 'octet-counted']],
+    tcp_framedelimiter                => Optional[Integer[0, 255]],
+    ziplevel                          => Optional[Integer[0, 9]],
+    'compression.mode'                => Optional[Enum['none', 'single', 'stream:always']],
+    'compression.stream.flushontxend' => Optional[Enum['on', 'off']],
+    rebindinterval                    => Optional[Integer],
+    keepalive                         => Optional[Enum['on', 'off']],
+    'keepalive.probes'                => Optional[Integer],
+    'keepalive.interval'              => Optional[Integer],
+    'keepalive.time'                  => Optional[Integer],
+    streamdriver                      => Optional[Enum['tcp', 'ossl', 'gtls']],
+    streamdrivermode                  => Optional[Integer],
+    streamdriverauthmode              => Optional[String[1]],
+    streamdriverpermittedpeers        => Optional[String[1]],
+    resendlastmsgonreconnect          => Optional[Enum['on', 'off']],
+    'udp.sendtoall'                   => Optional[Enum['on', 'off']],
+    'udp.senddelay'                   => Optional[Integer],
+    gnutlsprioritystring              => Optional[String[1]],
 }]
 ```
 
@@ -1647,13 +1656,13 @@ Alias of
 
 ```puppet
 Struct[{
-  server         => Optional[Stdlib::Host],
-  serverport     => Optional[Stdlib::Port],
-  serverpassword => Optional[String[1]],
-  mode           => Optional[Enum['queue', 'publish', 'template']],
-  template       => Optional[String[1]],
-  key            => Optional[String[1]],
-  userpush       => Optional[Enum['on', 'off']]
+    server         => Optional[Stdlib::Host],
+    serverport     => Optional[Stdlib::Port],
+    serverpassword => Optional[String[1]],
+    mode           => Optional[Enum['queue', 'publish', 'template']],
+    template       => Optional[String[1]],
+    key            => Optional[String[1]],
+    userpush       => Optional[Enum['on', 'off']]
 }]
 ```
 
@@ -1665,13 +1674,13 @@ Alias of
 
 ```puppet
 Struct[{
-  host      => Optional[Stdlib::Host],
-  port      => Optional[Stdlib::Port],
-  user      => Optional[String[1]],
-  https     => Optional[Enum['on', 'off']],
-  file      => String[1],
-  isdynfile => Optional[Enum['on', 'off']],
-  template  => Optional[String[1]]
+    host      => Optional[Stdlib::Host],
+    port      => Optional[Stdlib::Port],
+    user      => Optional[String[1]],
+    https     => Optional[Enum['on', 'off']],
+    file      => String[1],
+    isdynfile => Optional[Enum['on', 'off']],
+    template  => Optional[String[1]]
 }]
 ```
 
@@ -1683,7 +1692,7 @@ Alias of
 
 ```puppet
 Struct[{
-  template => Optional[String[1]],
+    template => Optional[String[1]],
 }]
 ```
 
@@ -1695,22 +1704,22 @@ Alias of
 
 ```puppet
 Struct[{
-  broker                => Optional[String[1]],
-  topic                 => String[1],
-  key                   => Optional[String[1]],
-  dynatopic             => Optional[Enum['on', 'off']],
-  'dynatopic.cachesize' => Optional[Integer],
-  'partitions.auto'     => Optional[Enum['on', 'off']],
-  'partitions.number'   => Optional[Integer],
-  'partitions.usefixed' => Optional[Integer],
-  errorfile             => Optional[String[1]],
-  confparam             => Optional[Array[String[1]]],
-  topicconfparam        => Optional[Array[String[1]]],
-  template              => Optional[String[1]],
-  closetimeout          => Optional[Integer],
-  resubmitonfailure     => Optional[Enum['on', 'off']],
-  keepfailedmessages    => Optional[Enum['on', 'off']],
-  failedmsgfile         => Optional[String[1]],
+    broker                => Optional[String[1]],
+    topic                 => String[1],
+    key                   => Optional[String[1]],
+    dynatopic             => Optional[Enum['on', 'off']],
+    'dynatopic.cachesize' => Optional[Integer],
+    'partitions.auto'     => Optional[Enum['on', 'off']],
+    'partitions.number'   => Optional[Integer],
+    'partitions.usefixed' => Optional[Integer],
+    errorfile             => Optional[String[1]],
+    confparam             => Optional[Array[String[1]]],
+    topicconfparam        => Optional[Array[String[1]]],
+    template              => Optional[String[1]],
+    closetimeout          => Optional[Integer],
+    resubmitonfailure     => Optional[Enum['on', 'off']],
+    keepfailedmessages    => Optional[Enum['on', 'off']],
+    failedmsgfile         => Optional[String[1]],
 }]
 ```
 
@@ -1722,20 +1731,20 @@ Alias of
 
 ```puppet
 Struct[{
-  driver   => Enum[
-    'firebird',
-    'ingres',
-    'msql',
-    'Oracle',
-    'sqlite',
-    'sqlite3',
-    'freetds',
-  ],
-  server   => Stdlib::Host,
-  uid      => String[1],
-  pwd      => String[1],
-  db       => String[1],
-  template => Optional[String[1]],
+    driver   => Enum[
+      'firebird',
+      'ingres',
+      'msql',
+      'Oracle',
+      'sqlite',
+      'sqlite3',
+      'freetds',
+    ],
+    server   => Stdlib::Host,
+    uid      => String[1],
+    pwd      => String[1],
+    db       => String[1],
+    template => Optional[String[1]],
 }]
 ```
 
@@ -1747,14 +1756,14 @@ Alias of
 
 ```puppet
 Struct[{
-  server             => Stdlib::Host,
-  port               => Stdlib::Port,
-  mailfrom           => Pattern[/.+@.+\..+/],
-  mailto             => Pattern[/.+@.+\..+/],
-  'subject.template' => Optional[String[1]],
-  'subject.text'     => Optional[String[1]],
-  'body.enable'      => Optional[Enum['on', 'off']],
-  template           => Optional[String[1]],
+    server             => Stdlib::Host,
+    port               => Stdlib::Port,
+    mailfrom           => Pattern[/.+@.+\..+/],
+    mailto             => Pattern[/.+@.+\..+/],
+    'subject.template' => Optional[String[1]],
+    'subject.text'     => Optional[String[1]],
+    'body.enable'      => Optional[Enum['on', 'off']],
+    template           => Optional[String[1]],
 }]
 ```
 
@@ -1766,17 +1775,17 @@ Alias of
 
 ```puppet
 Struct[{
-  uristr              => Optional[String[1]],
-  ssl_cert            => Optional[Stdlib::Absolutepath],
-  ssl_ca              => Optional[Stdlib::Absolutepath],
-  db                  => Optional[String[1]],
-  collection          => Optional[String[1]],
-  allowed_error_codes => Optional[Array[String[1]]],
-  template            => Optional[String[1]],
-  server              => Optional[Stdlib::Host],
-  serverported        => Optional[Stdlib::Port],
-  uid                 => Optional[String[1]],
-  pwd                 => Optional[String[1]],
+    uristr              => Optional[String[1]],
+    ssl_cert            => Optional[Stdlib::Absolutepath],
+    ssl_ca              => Optional[Stdlib::Absolutepath],
+    db                  => Optional[String[1]],
+    collection          => Optional[String[1]],
+    allowed_error_codes => Optional[Array[String[1]]],
+    template            => Optional[String[1]],
+    server              => Optional[Stdlib::Host],
+    serverported        => Optional[Stdlib::Port],
+    uid                 => Optional[String[1]],
+    pwd                 => Optional[String[1]],
 }]
 ```
 
@@ -1792,15 +1801,15 @@ Alias of
 
 ```puppet
 Struct[{
-  server                => Stdlib::Host,
-  socket                => Optional[Stdlib::Absolutepath],
-  db                    => String[1],
-  uid                   => String[1],
-  pwd                   => String[1],
-  serverport            => Optional[Stdlib::Port],
-  'mysqlconfig.file'    => Optional[Stdlib::Absolutepath],
-  'mysqlconfig.section' => Optional[String[1]],
-  template              => Optional[String[1]],
+    server                => Stdlib::Host,
+    socket                => Optional[Stdlib::Absolutepath],
+    db                    => String[1],
+    uid                   => String[1],
+    pwd                   => String[1],
+    serverport            => Optional[Stdlib::Port],
+    'mysqlconfig.file'    => Optional[Stdlib::Absolutepath],
+    'mysqlconfig.section' => Optional[String[1]],
+    template              => Optional[String[1]],
 }]
 ```
 
@@ -1816,12 +1825,12 @@ Alias of
 
 ```puppet
 Struct[{
-  server   => Stdlib::Host,
-  port     => Optional[Stdlib::Port],
-  db       => String[1],
-  user     => Optional[String[1]],
-  pass     => Optional[String[1]],
-  template => Optional[String[1]],
+    server   => Stdlib::Host,
+    port     => Optional[Stdlib::Port],
+    db       => String[1],
+    user     => Optional[String[1]],
+    pass     => Optional[String[1]],
+    template => Optional[String[1]],
 }]
 ```
 
@@ -1833,7 +1842,7 @@ Alias of
 
 ```puppet
 Struct[{
-  pipe => String[1],
+    pipe => String[1],
 }]
 ```
 
@@ -1845,21 +1854,21 @@ Alias of
 
 ```puppet
 Struct[{
-  template              => Optional[String[1]],
-  binary                => Stdlib::Absolutepath,
-  confirmmessages       => Optional[Enum['on', 'off']],
-  confirmtimeout        => Optional[Integer],
-  reportfailures        => Optional[Enum['on', 'off']],
-  usetransactions       => Optional[Enum['on', 'off']],
-  begintransactionmark  => Optional[String[1]],
-  committransactionmark => Optional[String[1]],
-  output                => Optional[Stdlib::Absolutepath],
-  filecreatemode        => Optional[Stdlib::Filemode],
-  'hup.signal'          => Optional[Enum['HUP', 'USR1', 'USR2', 'INT', 'TERM']],
-  signalonclose         => Optional[Enum['on', 'off']],
-  closetimeout          => Optional[Integer],
-  killunresponsive      => Optional[Enum['on', 'off']],
-  forcesingleinstance   => Optional[Enum['on', 'off']],
+    template              => Optional[String[1]],
+    binary                => Stdlib::Absolutepath,
+    confirmmessages       => Optional[Enum['on', 'off']],
+    confirmtimeout        => Optional[Integer],
+    reportfailures        => Optional[Enum['on', 'off']],
+    usetransactions       => Optional[Enum['on', 'off']],
+    begintransactionmark  => Optional[String[1]],
+    committransactionmark => Optional[String[1]],
+    output                => Optional[Stdlib::Absolutepath],
+    filecreatemode        => Optional[Stdlib::Filemode],
+    'hup.signal'          => Optional[Enum['HUP', 'USR1', 'USR2', 'INT', 'TERM']],
+    signalonclose         => Optional[Enum['on', 'off']],
+    closetimeout          => Optional[Integer],
+    killunresponsive      => Optional[Enum['on', 'off']],
+    forcesingleinstance   => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -1871,22 +1880,22 @@ Alias of
 
 ```puppet
 Struct[{
-  target               => Variant[Stdlib::Fqdn, Stdlib::IP::Address],
-  port                 => Optional[Stdlib::Port],
-  template             => Optional[String[1]],
-  timeout              => Optional[Integer],
-  'conn.timeout'       => Optional[Integer],
-  rebindinterval       => Optional[Integer],
-  windowsize           => Optional[Integer],
-  tls                  => Optional[Enum['on', 'off']],
-  'tls.compression'    => Optional[Enum['on', 'off']],
-  'tls.permittedpeer'  => Optional[Array[String[1]]],
-  'tls.automode'       => Optional[Enum['fingerprint', 'name']],
-  'tls.cacert'         => Optional[Stdlib::Absolutepath],
-  'tls.mycert'         => Optional[Stdlib::Absolutepath],
-  'tls.myprivkey'      => Optional[Stdlib::Absolutepath],
-  'tls.prioritystring' => Optional[String[1]],
-  localclientip        => Optional[Stdlib::IP::Address],
+    target               => Variant[Stdlib::Fqdn, Stdlib::IP::Address],
+    port                 => Optional[Stdlib::Port],
+    template             => Optional[String[1]],
+    timeout              => Optional[Integer],
+    'conn.timeout'       => Optional[Integer],
+    rebindinterval       => Optional[Integer],
+    windowsize           => Optional[Integer],
+    tls                  => Optional[Enum['on', 'off']],
+    'tls.compression'    => Optional[Enum['on', 'off']],
+    'tls.permittedpeer'  => Optional[Array[String[1]]],
+    'tls.automode'       => Optional[Enum['fingerprint', 'name']],
+    'tls.cacert'         => Optional[Stdlib::Absolutepath],
+    'tls.mycert'         => Optional[Stdlib::Absolutepath],
+    'tls.myprivkey'      => Optional[Stdlib::Absolutepath],
+    'tls.prioritystring' => Optional[String[1]],
+    localclientip        => Optional[Stdlib::IP::Address],
 }]
 ```
 
@@ -1898,16 +1907,16 @@ Alias of
 
 ```puppet
 Struct[{
-  server => Stdlib::Host,
-  port   => Optional[Stdlib::Port],
-  transport => Optional[String[1]],
-  version   => Optional[Integer[0,1]],
-  community => Optional[String[1]],
-  trapoid   => Optional[String[1]],
-  messageoid => Optional[String[1]],
-  enterpriseoid => Optional[String[1]],
-  specifictype  => Optional[Integer],
-  traptype      => Optional[Integer[0,6]],
+    server => Stdlib::Host,
+    port   => Optional[Stdlib::Port],
+    transport => Optional[String[1]],
+    version   => Optional[Integer[0,1]],
+    community => Optional[String[1]],
+    trapoid   => Optional[String[1]],
+    messageoid => Optional[String[1]],
+    enterpriseoid => Optional[String[1]],
+    specifictype  => Optional[Integer],
+    traptype      => Optional[Integer[0,6]],
 }]
 ```
 
@@ -1919,13 +1928,13 @@ Alias of
 
 ```puppet
 Struct[{
-  target             => Stdlib::Host,
-  port               => Optional[Stdlib::Port],
-  sourcetemplate     => Optional[String[1]],
-  'sourceport.start' => Optional[Stdlib::Port],
-  'sourceport.end'   => Optional[Stdlib::Port],
-  mtu                => Optional[Integer],
-  template           => Optional[String[1]],
+    target             => Stdlib::Host,
+    port               => Optional[Stdlib::Port],
+    sourcetemplate     => Optional[String[1]],
+    'sourceport.start' => Optional[Stdlib::Port],
+    'sourceport.end'   => Optional[Stdlib::Port],
+    mtu                => Optional[Integer],
+    template           => Optional[String[1]],
 }]
 ```
 
@@ -1937,8 +1946,8 @@ Alias of
 
 ```puppet
 Struct[{
-  users    => String[1],
-  template => Optional[String[1]],
+    users    => String[1],
+    template => Optional[String[1]],
 }]
 ```
 
@@ -1954,18 +1963,18 @@ Alias of
 
 ```puppet
 Struct[{
-  'action.writeallmarkmessages'            => Optional[Enum['on', 'off']],
-  'action.execonlyeverynthtime'            => Optional[Integer],
-  'action.execonlyeverynthtimeout'         => Optional[Integer],
-  'action.errorfile'                       => Optional[Stdlib::Absolutepath],
-  'action.execonlyonceeveryinterval'       => Optional[Integer],
-  'action.execonlywhenpreviousissuspended' => Optional[Enum['on', 'off']],
-  'action.repeatedmsgcontainsoriginalmsg'  => Optional[Enum['on', 'off']],
-  'action.resumeretrycount'                => Optional[Integer],
-  'action.resumeinterval'                  => Optional[Integer],
-  'action.reportsuspension'                => Optional[Enum['on', 'off']],
-  'action.reportsuspensioncontinuation'    => Optional[Enum['on', 'off']],
-  'action.copymsg'                         => Optional[Enum['on', 'off']]
+    'action.writeallmarkmessages'            => Optional[Enum['on', 'off']],
+    'action.execonlyeverynthtime'            => Optional[Integer],
+    'action.execonlyeverynthtimeout'         => Optional[Integer],
+    'action.errorfile'                       => Optional[Stdlib::Absolutepath],
+    'action.execonlyonceeveryinterval'       => Optional[Integer],
+    'action.execonlywhenpreviousissuspended' => Optional[Enum['on', 'off']],
+    'action.repeatedmsgcontainsoriginalmsg'  => Optional[Enum['on', 'off']],
+    'action.resumeretrycount'                => Optional[Integer],
+    'action.resumeinterval'                  => Optional[Integer],
+    'action.reportsuspension'                => Optional[Enum['on', 'off']],
+    'action.reportsuspensioncontinuation'    => Optional[Enum['on', 'off']],
+    'action.copymsg'                         => Optional[Enum['on', 'off']]
 }]
 ```
 
@@ -1977,15 +1986,15 @@ Alias of
 
 ```puppet
 Struct[{
-  reports           => String[1],
-  tag               => String[1],
-  facility          => Optional[Stdlib::Syslogfacility],
-  severity          => Optional[Rsyslog::Syslog::Severity],
-  deduplicatespaces => Optional[Enum['on', 'off']],
-  delete            => Optional[String[1]],
-  rename            => Optional[String[1]],
-  programkey        => Optional[String[1]],
-  timestampkey      => Optional[String[1]],
+    reports           => String[1],
+    tag               => String[1],
+    facility          => Optional[Stdlib::Syslogfacility],
+    severity          => Optional[Rsyslog::Syslog::Severity],
+    deduplicatespaces => Optional[Enum['on', 'off']],
+    delete            => Optional[String[1]],
+    rename            => Optional[String[1]],
+    programkey        => Optional[String[1]],
+    timestampkey      => Optional[String[1]],
 }]
 ```
 
@@ -1997,28 +2006,28 @@ Alias of
 
 ```puppet
 Struct[{
-  file                    => String[1],
-  tag                     => String[1],
-  facility                => Optional[Stdlib::Syslogfacility],
-  severity                => Optional[Rsyslog::Syslog::Severity],
-  persiststateinterval    => Optional[Integer],
-  'startmsg.regex'        => Optional[String[1]],
-  'endmsg.regex'          => Optional[String[1]],
-  readtimeout             => Optional[Integer],
-  readmode                => Optional[Integer[0, 2]],
-  escapelf                => Optional[Enum['on', 'off']],
-  maxlinesatonce          => Optional[Integer],
-  maxsubmitatonce         => Optional[Integer],
-  deletestateonfiledelete => Optional[Enum['on', 'off']],
-  ruleset                 => Optional[String[1]],
-  addmetadata             => Optional[Enum['on', 'off']],
-  addceetag               => Optional[Enum['on', 'off']],
-  reopenontruncate        => Optional[Enum['on', 'off']],
-  trimlineoverbytes       => Optional[Integer],
-  freshstarttail          => Optional[Enum['on', 'off']],
-  discardtruncatedmsg     => Optional[Enum['on', 'off']],
-  msgdiscardingerror      => Optional[Enum['on', 'off']],
-  neeparse                => Optional[Enum['on', 'off']],
+    file                    => String[1],
+    tag                     => String[1],
+    facility                => Optional[Stdlib::Syslogfacility],
+    severity                => Optional[Rsyslog::Syslog::Severity],
+    persiststateinterval    => Optional[Integer],
+    'startmsg.regex'        => Optional[String[1]],
+    'endmsg.regex'          => Optional[String[1]],
+    readtimeout             => Optional[Integer],
+    readmode                => Optional[Integer[0, 2]],
+    escapelf                => Optional[Enum['on', 'off']],
+    maxlinesatonce          => Optional[Integer],
+    maxsubmitatonce         => Optional[Integer],
+    deletestateonfiledelete => Optional[Enum['on', 'off']],
+    ruleset                 => Optional[String[1]],
+    addmetadata             => Optional[Enum['on', 'off']],
+    addceetag               => Optional[Enum['on', 'off']],
+    reopenontruncate        => Optional[Enum['on', 'off']],
+    trimlineoverbytes       => Optional[Integer],
+    freshstarttail          => Optional[Enum['on', 'off']],
+    discardtruncatedmsg     => Optional[Enum['on', 'off']],
+    msgdiscardingerror      => Optional[Enum['on', 'off']],
+    neeparse                => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2030,12 +2039,12 @@ Alias of
 
 ```puppet
 Struct[{
-  inputgssserverrun            => Optional[Stdlib::Port],
-  inputgssserverservicename    => Optional[String[1]],
-  inputgssserverpermitplaintcp => Optional[Enum['on', 'off']],
-  inputgssservermaxsessions    => Optional[Integer],
-  inputgssserverkeepalive      => Optional[Enum['on', 'off']],
-  inputgsslistenportfilename   => Optional[Stdlib::Port],
+    inputgssserverrun            => Optional[Stdlib::Port],
+    inputgssserverservicename    => Optional[String[1]],
+    inputgssserverpermitplaintcp => Optional[Enum['on', 'off']],
+    inputgssservermaxsessions    => Optional[Integer],
+    inputgssserverkeepalive      => Optional[Enum['on', 'off']],
+    inputgsslistenportfilename   => Optional[Stdlib::Port],
 }]
 ```
 
@@ -2047,12 +2056,12 @@ Alias of
 
 ```puppet
 Struct[{
-  broker        => Optional[String[1]],
-  topic         => String[1],
-  confparam     => Optional[Array[String[1]]],
-  consumergroup => Optional[String[1]],
-  ruleset       => Optional[String[1]],
-  parsehostname => Optional[Enum['on', 'off']],
+    broker        => Optional[String[1]],
+    topic         => String[1],
+    confparam     => Optional[Array[String[1]]],
+    consumergroup => Optional[String[1]],
+    ruleset       => Optional[String[1]],
+    parsehostname => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2064,14 +2073,14 @@ Alias of
 
 ```puppet
 Struct[{
-  binary           => String[1],
-  tag              => String[1],
-  facility         => Optional[Stdlib::Syslogfacility],
-  severity         => Optional[Rsyslog::Syslog::Severity],
-  confirmmessages  => Optional[Enum['on', 'off']],
-  signalonclose    => Optional[Enum['on', 'off']],
-  closetimeout     => Optional[Integer],
-  killunresponsive => Optional[Enum['on', 'off']],
+    binary           => String[1],
+    tag              => String[1],
+    facility         => Optional[Stdlib::Syslogfacility],
+    severity         => Optional[Rsyslog::Syslog::Severity],
+    confirmmessages  => Optional[Enum['on', 'off']],
+    signalonclose    => Optional[Enum['on', 'off']],
+    closetimeout     => Optional[Integer],
+    killunresponsive => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2083,38 +2092,38 @@ Alias of
 
 ```puppet
 Struct[{
-  port                       => Optional[Stdlib::Port],
-  path                       => Optional[Stdlib::Absolutepath],
-  discardtruncatedmsg        => Optional[Enum['on', 'off']],
-  fileowner                  => Optional[String[1]],
-  fileownernum               => Optional[Integer],
-  filegroup                  => Optional[String[1]],
-  filegroupnum               => Optional[Integer],
-  filecreatemode             => Optional[Stdlib::Filemode],
-  failonchownfailure         => Optional[Enum['on', 'off']],
-  unlink                     => Optional[Enum['on', 'off']],
-  name                       => Optional[String[1]],
-  ruleset                    => Optional[String[1]],
-  maxframesize               => Optional[Integer],
-  address                    => Optional[Stdlib::IP::Address::V4],
-  addtlframedelimiter        => Optional[Integer],
-  supportoctetcountetframing => Optional[Enum['on', 'off']],
-  notifyonconnectionclose    => Optional[Enum['on', 'off']],
-  notifyonconnectionopen     => Optional[Enum['on', 'off']],
-  keepalive                  => Optional[Enum['on', 'off']],
-  'keepalive.probes'         => Optional[Integer],
-  'keepalive.interval'       => Optional[Integer],
-  'keepalive.time'           => Optional[Integer],
-  'ratelimit.interval'       => Optional[Integer],
-  'ratelimit.burst'          => Optional[Integer],
-  'compression.mode'         => Optional[Enum['none', 'single', 'stream:always']],
-  flowcontrol                => Optional[Enum['on', 'off']],
-  multiline                  => Optional[Enum['on', 'off']],
-  'framing.delimiter.regex'  => Optional[String[1]],
-  socketbacklog              => Optional[Integer],
-  defaulttz                  => Optional[String[1]],
-  'framingfix.cisco.asa'     => Optional[Enum['on', 'off']],
-  listenportfilename         => Optional[String[1]],
+    port                       => Optional[Stdlib::Port],
+    path                       => Optional[Stdlib::Absolutepath],
+    discardtruncatedmsg        => Optional[Enum['on', 'off']],
+    fileowner                  => Optional[String[1]],
+    fileownernum               => Optional[Integer],
+    filegroup                  => Optional[String[1]],
+    filegroupnum               => Optional[Integer],
+    filecreatemode             => Optional[Stdlib::Filemode],
+    failonchownfailure         => Optional[Enum['on', 'off']],
+    unlink                     => Optional[Enum['on', 'off']],
+    name                       => Optional[String[1]],
+    ruleset                    => Optional[String[1]],
+    maxframesize               => Optional[Integer],
+    address                    => Optional[Stdlib::IP::Address::V4],
+    addtlframedelimiter        => Optional[Integer],
+    supportoctetcountetframing => Optional[Enum['on', 'off']],
+    notifyonconnectionclose    => Optional[Enum['on', 'off']],
+    notifyonconnectionopen     => Optional[Enum['on', 'off']],
+    keepalive                  => Optional[Enum['on', 'off']],
+    'keepalive.probes'         => Optional[Integer],
+    'keepalive.interval'       => Optional[Integer],
+    'keepalive.time'           => Optional[Integer],
+    'ratelimit.interval'       => Optional[Integer],
+    'ratelimit.burst'          => Optional[Integer],
+    'compression.mode'         => Optional[Enum['none', 'single', 'stream:always']],
+    flowcontrol                => Optional[Enum['on', 'off']],
+    multiline                  => Optional[Enum['on', 'off']],
+    'framing.delimiter.regex'  => Optional[String[1]],
+    socketbacklog              => Optional[Integer],
+    defaulttz                  => Optional[String[1]],
+    'framingfix.cisco.asa'     => Optional[Enum['on', 'off']],
+    listenportfilename         => Optional[String[1]],
 }]
 ```
 
@@ -2126,25 +2135,25 @@ Alias of
 
 ```puppet
 Struct[{
-  port                 => Stdlib::Port,
-  address              => Optional[Stdlib::IP::Address::V4],
-  name                 => Optional[String[1]],
-  ruleset              => Optional[String[1]],
-  maxdatasize          => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
-  tls                  => Optional[Enum['on', 'off']],
-  'tls.compression'    => Optional[Enum['on', 'off']],
-  'tls.dhbits'         => Optional[Integer],
-  'tls.permittedpeer'  => Optional[Array[String[1]]],
-  'tls.authmode'       => Optional[Enum['fingerprint', 'name']],
-  'tls.cacert'         => Optional[String[1]],
-  'tls.mycert'         => Optional[String[1]],
-  'tls.myprivkey'      => Optional[String[1]],
-  'tls.prioritystring'  => Optional[String[1]],
-  keepalive            => Optional[Enum['on', 'off']],
-  'keepalive.probes'   => Optional[Integer],
-  'keepalive.interval' => Optional[Integer],
-  'keepalive.time'     => Optional[Integer],
-  oversizemode         => Optional[Enum['truncate', 'abort', 'accept']],
+    port                 => Stdlib::Port,
+    address              => Optional[Stdlib::IP::Address::V4],
+    name                 => Optional[String[1]],
+    ruleset              => Optional[String[1]],
+    maxdatasize          => Optional[Pattern[/^([0-9]+)[kKmMgGtT]$/]],
+    tls                  => Optional[Enum['on', 'off']],
+    'tls.compression'    => Optional[Enum['on', 'off']],
+    'tls.dhbits'         => Optional[Integer],
+    'tls.permittedpeer'  => Optional[Array[String[1]]],
+    'tls.authmode'       => Optional[Enum['fingerprint', 'name']],
+    'tls.cacert'         => Optional[String[1]],
+    'tls.mycert'         => Optional[String[1]],
+    'tls.myprivkey'      => Optional[String[1]],
+    'tls.prioritystring'  => Optional[String[1]],
+    keepalive            => Optional[Enum['on', 'off']],
+    'keepalive.probes'   => Optional[Integer],
+    'keepalive.interval' => Optional[Integer],
+    'keepalive.time'     => Optional[Integer],
+    oversizemode         => Optional[Enum['truncate', 'abort', 'accept']],
 }]
 ```
 
@@ -2156,14 +2165,14 @@ Alias of
 
 ```puppet
 Struct[{
-  port                       => Stdlib::Port,
-  address                    => Optional[Stdlib::IP::Address::V4],
-  name                       => Optional[String[1]],
-  ruleset                    => Optional[String[1]],
-  supportoctetcountedframing => Optional[Enum['on', 'off']],
-  'ratelimit.interval'       => Optional[Integer],
-  'ratelimit.burst'          => Optional[Integer],
-  listenportfilename         => Optional[String[1]],
+    port                       => Stdlib::Port,
+    address                    => Optional[Stdlib::IP::Address::V4],
+    name                       => Optional[String[1]],
+    ruleset                    => Optional[String[1]],
+    supportoctetcountedframing => Optional[Enum['on', 'off']],
+    'ratelimit.interval'       => Optional[Integer],
+    'ratelimit.burst'          => Optional[Integer],
+    listenportfilename         => Optional[String[1]],
 }]
 ```
 
@@ -2175,13 +2184,13 @@ Alias of
 
 ```puppet
 Struct[{
-  ulogbase             => Stdlib::Absolutepath,
-  tag                  => String[1],
-  facility             => Optional[Stdlib::Syslogfacility],
-  severity             => Optional[Rsyslog::Syslog::Severity],
-  persiststateinterval => Optional[Integer],
-  maxlinesatonce       => Optional[Integer],
-  maxsubmitatonce      => Optional[Integer],
+    ulogbase             => Stdlib::Absolutepath,
+    tag                  => String[1],
+    facility             => Optional[Stdlib::Syslogfacility],
+    severity             => Optional[Rsyslog::Syslog::Severity],
+    persiststateinterval => Optional[Integer],
+    maxlinesatonce       => Optional[Integer],
+    maxsubmitatonce      => Optional[Integer],
 }]
 ```
 
@@ -2193,17 +2202,17 @@ Alias of
 
 ```puppet
 Struct[{
-  address              => Optional[Stdlib::Host],
-  port                 => Stdlib::Port,
-  ipfreebind           => Optional[Integer[0,2]],
-  device               => Optional[String[1]],
-  ruleset              => Optional[String[1]],
-  'ratelimit.interval' => Optional[Integer],
-  'ratelimit.burst'    => Optional[Integer],
-  name                 => Optional[String[1]],
-  'name.appendport'    => Optional[Enum['on', 'off']],
-  defaulttz            => Optional[String[1]],
-  rcvbufsize           => Optional[Variant[Integer, String[1]]],
+    address              => Optional[Stdlib::Host],
+    port                 => Stdlib::Port,
+    ipfreebind           => Optional[Integer[0,2]],
+    device               => Optional[String[1]],
+    ruleset              => Optional[String[1]],
+    'ratelimit.interval' => Optional[Integer],
+    'ratelimit.burst'    => Optional[Integer],
+    name                 => Optional[String[1]],
+    'name.appendport'    => Optional[Enum['on', 'off']],
+    defaulttz            => Optional[String[1]],
+    rcvbufsize           => Optional[Variant[Integer, String[1]]],
 }]
 ```
 
@@ -2215,23 +2224,23 @@ Alias of
 
 ```puppet
 Struct[{
-  ruleset              => Optional[String[1]],
-  ignoretimestamp      => Optional[Enum['on', 'off']],
-  ignoreownmessages    => Optional[Enum['on', 'off']],
-  flowcontrol          => Optional[Enum['on', 'off']],
-  'ratelimit.interval' => Optional[Integer],
-  'ratelimit.burst'    => Optional[Integer],
-  'ratelimit.severity' => Optional[Integer[0,7]],
-  usepidfromsystem     => Optional[Enum['on', 'off']],
-  usesystimestamp      => Optional[Enum['on', 'off']],
-  createpath           => Optional[Enum['on', 'off']],
-  socket               => Optional[String[1]],
-  hostname             => Optional[String[1]],
-  annotate             => Optional[Enum['on', 'off']],
-  parsetrusted         => Optional[Enum['on', 'off']],
-  unlink               => Optional[Enum['on', 'off']],
-  usespecialparser     => Optional[Enum['on', 'off']],
-  parsehostname        => Optional[Enum['on', 'off']],
+    ruleset              => Optional[String[1]],
+    ignoretimestamp      => Optional[Enum['on', 'off']],
+    ignoreownmessages    => Optional[Enum['on', 'off']],
+    flowcontrol          => Optional[Enum['on', 'off']],
+    'ratelimit.interval' => Optional[Integer],
+    'ratelimit.burst'    => Optional[Integer],
+    'ratelimit.severity' => Optional[Integer[0,7]],
+    usepidfromsystem     => Optional[Enum['on', 'off']],
+    usesystimestamp      => Optional[Enum['on', 'off']],
+    createpath           => Optional[Enum['on', 'off']],
+    socket               => Optional[String[1]],
+    hostname             => Optional[String[1]],
+    annotate             => Optional[Enum['on', 'off']],
+    parsetrusted         => Optional[Enum['on', 'off']],
+    unlink               => Optional[Enum['on', 'off']],
+    usespecialparser     => Optional[Enum['on', 'off']],
+    parsehostname        => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2249,15 +2258,15 @@ Alias of
 
 ```puppet
 Struct[{
-  dockerapiunixsockaddr    => Optional[Stdlib::Absolutepath],
-  apiversionstr            => Optional[Pattern[/^v([0-9]+)\.([0-9]+)/]],
-  pollinginterval          => Optional[Integer],
-  listcontaineroptions     => Optional[String[1]],
-  getcontainerlogoptions   => Optional[String[1]],
-  retrievenewlogsfromstart => Optional[Integer[0,1]],
-  defaultfacility          => Optional[Stdlib::Syslogfacility],
-  defaultseverity          => Optional[Rsyslog::Syslog::Severity],
-  escapelf                 => Optional[Enum['on', 'off']],
+    dockerapiunixsockaddr    => Optional[Stdlib::Absolutepath],
+    apiversionstr            => Optional[Pattern[/^v([0-9]+)\.([0-9]+)/]],
+    pollinginterval          => Optional[Integer],
+    listcontaineroptions     => Optional[String[1]],
+    getcontainerlogoptions   => Optional[String[1]],
+    retrievenewlogsfromstart => Optional[Integer[0,1]],
+    defaultfacility          => Optional[Stdlib::Syslogfacility],
+    defaultseverity          => Optional[Rsyslog::Syslog::Severity],
+    escapelf                 => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2269,11 +2278,11 @@ Alias of
 
 ```puppet
 Struct[{
-  mode               => Optional[Enum['inotify', 'polling']],
-  readtimeout        => Optional[Integer],
-  timeoutgranularity => Optional[Enum['on', 'off']],
-  sortfiles          => Optional[Enum['on', 'off']],
-  pollinginterval    => Optional[Integer],
+    mode               => Optional[Enum['inotify', 'polling']],
+    readtimeout        => Optional[Integer],
+    timeoutgranularity => Optional[Enum['on', 'off']],
+    sortfiles          => Optional[Enum['on', 'off']],
+    pollinginterval    => Optional[Integer],
 }]
 ```
 
@@ -2285,17 +2294,17 @@ Alias of
 
 ```puppet
 Struct[{
-  persiststateinterval    => Optional[Integer],
-  statefile               => Optional[Stdlib::Absolutepath],
-  'ratelimit.interval'    => Optional[Integer],
-  'ratelimit.burst'       => Optional[Integer],
-  ignorepreviousmessage   => Optional[Enum['on', 'off']],
-  defaultseverity         => Optional[Rsyslog::Syslog::Severity],
-  defaultfacility         => Optional[Stdlib::Syslogfacility],
-  usepidfromsystem        => Optional[Enum['on', 'off']],
-  usepid                  => Optional[Enum['syslog', 'system', 'both']],
-  ignorenonvalidstatefile => Optional[Enum['on', 'off']],
-  workaroundjournalbug    => Optional[Enum['on', 'off']],
+    persiststateinterval    => Optional[Integer],
+    statefile               => Optional[Stdlib::Absolutepath],
+    'ratelimit.interval'    => Optional[Integer],
+    'ratelimit.burst'       => Optional[Integer],
+    ignorepreviousmessage   => Optional[Enum['on', 'off']],
+    defaultseverity         => Optional[Rsyslog::Syslog::Severity],
+    defaultfacility         => Optional[Stdlib::Syslogfacility],
+    usepidfromsystem        => Optional[Enum['on', 'off']],
+    usepid                  => Optional[Enum['syslog', 'system', 'both']],
+    ignorenonvalidstatefile => Optional[Enum['on', 'off']],
+    workaroundjournalbug    => Optional[Enum['on', 'off']],
 }]
 ```
 
@@ -2337,32 +2346,32 @@ Alias of
 
 ```puppet
 Struct[{
-  'queue.filename'                    => Optional[String[1]],
-  'queue.spoolDirectory'              => Optional[Stdlib::Absolutepath],
-  'queue.size'                        => Optional[Integer],
-  'queue.dequeueBatchSize'            => Optional[Integer],
-  'queue.maxDiskSpace'                => Optional[Integer],
-  'queue.highWatermark'               => Optional[Integer],
-  'queue.lowWatermark'                => Optional[Integer],
-  'queue.fullDelaymark'               => Optional[Integer],
-  'queue.lightDelaymark'              => Optional[Integer],
-  'queue.discardMark'                 => Optional[Integer],
-  'queue.discardSeverity'             => Optional[Integer],
-  'queue.checkpointInterval'          => Optional[Integer],
-  'queue.syncqueuefiles'              => Optional[Enum['on', 'off']],
-  'queue.samplingInterval'            => Optional[Integer],
-  'queue.type'                        => Optional[Enum['FixedArray', 'LinkedList', 'Direct', 'Disk']],
-  'queue.workerThreads'               => Optional[Integer],
-  'queue.workerThreadMinimumMessages' => Optional[Integer],
-  'queue.timeoutWorkerthreadShutdown' => Optional[Integer],
-  'queue.timeoutshutdown'             => Optional[Integer],
-  'queue.timeoutActionCompletion'     => Optional[Integer],
-  'queue.timeoutEnqueue'              => Optional[Integer],
-  'queue.maxFileSize'                 => Optional[Pattern[/^([0-9]+)(m|M|g|G)$/]],
-  'queue.saveOnShutdown'              => Optional[Enum['on', 'off']],
-  'queue.dequeueSlowDown'             => Optional[Integer],
-  'queue.dequeueTimeBegin'            => Optional[Integer[1, 24]],
-  'queue.dequeueTimeEnd'              => Optional[Integer[1, 25]],
+    'queue.filename'                    => Optional[String[1]],
+    'queue.spoolDirectory'              => Optional[Stdlib::Absolutepath],
+    'queue.size'                        => Optional[Integer],
+    'queue.dequeueBatchSize'            => Optional[Integer],
+    'queue.maxDiskSpace'                => Optional[Integer],
+    'queue.highWatermark'               => Optional[Integer],
+    'queue.lowWatermark'                => Optional[Integer],
+    'queue.fullDelaymark'               => Optional[Integer],
+    'queue.lightDelaymark'              => Optional[Integer],
+    'queue.discardMark'                 => Optional[Integer],
+    'queue.discardSeverity'             => Optional[Integer],
+    'queue.checkpointInterval'          => Optional[Integer],
+    'queue.syncqueuefiles'              => Optional[Enum['on', 'off']],
+    'queue.samplingInterval'            => Optional[Integer],
+    'queue.type'                        => Optional[Enum['FixedArray', 'LinkedList', 'Direct', 'Disk']],
+    'queue.workerThreads'               => Optional[Integer],
+    'queue.workerThreadMinimumMessages' => Optional[Integer],
+    'queue.timeoutWorkerthreadShutdown' => Optional[Integer],
+    'queue.timeoutshutdown'             => Optional[Integer],
+    'queue.timeoutActionCompletion'     => Optional[Integer],
+    'queue.timeoutEnqueue'              => Optional[Integer],
+    'queue.maxFileSize'                 => Optional[Pattern[/^([0-9]+)(m|M|g|G)$/]],
+    'queue.saveOnShutdown'              => Optional[Enum['on', 'off']],
+    'queue.dequeueSlowDown'             => Optional[Integer],
+    'queue.dequeueTimeBegin'            => Optional[Integer[1, 24]],
+    'queue.dequeueTimeEnd'              => Optional[Integer[1, 25]],
 }]
 ```
 

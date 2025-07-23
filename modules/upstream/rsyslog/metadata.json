@@ -1,6 +1,6 @@
 {
   "name": "puppet-rsyslog",
-  "version": "7.1.0",
+  "version": "7.3.1-rc0",
   "author": "Vox Pupuli",
   "summary": "Manage rsyslog v8 configuration",
   "license": "Apache-2.0",
@@ -11,30 +11,19 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
-        "8",
         "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8",
         "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
         "8"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
       ]
     },
     {
@@ -45,21 +34,13 @@
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-
-      ]
-    },
-    {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "38"
-      ]
+      "operatingsystemrelease": []
     }
   ],
   "dependencies": [
     {
       "name": "puppetlabs-apt",
-      "version_requirement": ">= 5.0.0 < 10.0.0"
+      "version_requirement": ">= 5.0.0 < 11.0.0"
     },
     {
       "name": "puppetlabs-concat",
@@ -73,6 +54,10 @@
   "requirements": [
     {
       "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    },
+    {
+      "name": "openvox",
       "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
