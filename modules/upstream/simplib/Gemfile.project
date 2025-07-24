@@ -1,0 +1,7 @@
+group :test do
+  gem 'super_diff'
+end
+
+group :system_tests do
+  gem 'beaker-windows'
+end
