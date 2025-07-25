@@ -11,7 +11,7 @@
 #
 class common::monitor::exporter::haproxy (
   Boolean             $enable      = $common::monitor::exporter::enable,
-  Boolean[false]      $noop_value  = false,
+  Boolean             $noop_value  = false,
   Stdlib::Port        $listen_port = 63661,
   Eit_types::Certname $host        = $trusted['certname'],
 ) {

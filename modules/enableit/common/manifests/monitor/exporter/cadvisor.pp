@@ -10,7 +10,7 @@
 #
 class common::monitor::exporter::cadvisor (
   Boolean             $enable      = $common::monitor::exporter::enable,
-  Boolean[false]      $noop_value  = false,
+  Boolean             $noop_value  = false,
   Stdlib::Port        $listen_port = 63392,
   Eit_types::Certname $host        = $trusted['certname'],
 ) {

@@ -12,7 +12,7 @@
 # @param usershell The absolute path to the user's shell.
 #
 class common::monitor::prom (
-  Boolean[false]       $noop_value,
+  Boolean              $noop_value = false,
   Enum['package']      $install_method,
   Stdlib::Absolutepath $env_file_path,
   Stdlib::Absolutepath $bin_dir,

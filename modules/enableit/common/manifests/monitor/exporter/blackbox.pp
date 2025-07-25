@@ -13,7 +13,7 @@
 class common::monitor::exporter::blackbox (
   Boolean              $enable,
   Stdlib::Port         $listen_port,
-  Boolean[false]       $noop_value  = false,
+  Boolean              $noop_value  = false,
   Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
   Array[Eit_types::Monitor::Domains] $targets = [],
 ) {
