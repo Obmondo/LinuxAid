@@ -14,7 +14,7 @@
 #
 class common::monitor::exporter::filestat (
   Boolean                     $enable            = false,
-  Boolean[false]              $noop_value        = false,
+  Boolean                     $noop_value        = false,
   Stdlib::Absolutepath        $config_file       = "${common::monitor::exporter::config_dir}/filestat_exporter.yaml",
   Stdlib::Absolutepath        $working_directory = '/backup',
   Array[String]               $file_pattern      = [],

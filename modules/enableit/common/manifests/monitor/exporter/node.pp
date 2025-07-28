@@ -91,8 +91,8 @@ class common::monitor::exporter::node (
   Stdlib::AbsolutePath $lib_directory,
 
   Eit_types::IPPort $listen_address,
-  Boolean[true]     $enable,
-  Boolean[false]    $noop_value,
+  Boolean    $enable = true,
+  Boolean    $noop_value = false,
 ) {
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 

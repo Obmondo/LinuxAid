@@ -28,7 +28,7 @@ class common::monitor::exporter::mysql (
   Stdlib::Port        $mysql_port             = $::profile::mysql::mysql_port,
   String              $mysql_monitor_hostname = $::profile::mysql::mysql_monitor_hostname,
   Stdlib::Port        $listen_port            = 9104,
-  Boolean[false]      $noop_value             = false
+  Boolean             $noop_value             = false
 ) {
   class { 'prometheus::mysqld_exporter':
     package_name      => 'obmondo-mysqld-exporter',

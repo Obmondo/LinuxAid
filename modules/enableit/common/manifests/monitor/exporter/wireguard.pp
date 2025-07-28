@@ -9,7 +9,7 @@
 class common::monitor::exporter::wireguard (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:63390',
-  Boolean[false]    $noop_value     = false,
+  Boolean           $noop_value     = false,
 ) {
 
   File {

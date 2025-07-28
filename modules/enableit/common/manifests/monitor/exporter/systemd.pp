@@ -11,7 +11,7 @@
 #
 class common::monitor::exporter::systemd (
   Boolean            $enable         = $common::monitor::exporter::enable,
-  Boolean[false]     $noop_value     = false,
+  Boolean            $noop_value     = false,
   Eit_types::IPPort  $listen_address = '127.254.254.254:63391',
 ) {
   prometheus::daemon { 'systemd_exporter':

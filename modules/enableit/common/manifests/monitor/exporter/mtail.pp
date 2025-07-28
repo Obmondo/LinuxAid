@@ -12,7 +12,7 @@
 #
 class common::monitor::exporter::mtail (
   Boolean                     $enable         = $common::monitor::exporter::enable,
-  Boolean[false]              $noop_value     = false,
+  Boolean                     $noop_value     = false,
   Eit_types::IPPort           $listen_address = '127.254.254.254:63389',
   Array[Stdlib::Absolutepath] $logs           = [],
   Stdlib::Absolutepath        $progs          = "${common::monitor::exporter::config_dir}/mtail",

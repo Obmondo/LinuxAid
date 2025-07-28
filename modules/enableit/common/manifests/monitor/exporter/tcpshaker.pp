@@ -12,7 +12,7 @@ class common::monitor::exporter::tcpshaker (
   Boolean              $enable      = $common::network::tcpshaker::enable,
   Stdlib::Port         $listen_port = pick($common::network::tcpshaker::listen_port, 8785),
   Eit_types::Certname  $host        = $trusted['certname'],
-  Boolean[false]       $noop_value  = false,
+  Boolean              $noop_value  = false,
 
 ) {
 
