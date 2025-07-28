@@ -16,10 +16,13 @@ class profile::db::pgsql (
   Optional[String]                   $replication_password = $role::db::pgsql::replication_password,
   Optional[Eit_types::SimpleString]  $application_name     = $role::db::pgsql::application_name,
   Optional[Eit_types::Pgsql::Pg_hba] $pg_hba_rule          = $role::db::pgsql::pg_hba_rule,
+  Optional[Boolean]                  $backup               = $role::db::pgsql::backup,
 ) {
 
   # Backup
-  contain ::common::backup::db::pgsql
+  if $backup {
+    contain ::common::backup::db::pgsql
+  }
 
   $allow_remote_hosts.each |$host| {
     # Firewall
