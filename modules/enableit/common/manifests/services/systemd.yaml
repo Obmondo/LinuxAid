@@ -1,9 +1,0 @@
----
-name: Scripts
-description: Run custom scripts as services
-
-parameters:
-  systemdservice:
-    type: hash
-    hash:
-      name: Service
