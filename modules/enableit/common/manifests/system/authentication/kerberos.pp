@@ -28,6 +28,8 @@
 #
 # @param realms Hash specifying the Kerberos realms. Defaults to undef.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::system::authentication::kerberos (
   Boolean                       $manage         = $common::system::authentication::manage_sssd,
   Boolean                       $enable         = false,
@@ -43,6 +45,7 @@ class common::system::authentication::kerberos (
   Optional[Boolean]             $noop_value     = undef,
   Optional[Stdlib::Unixpath]    $cacert_path    = undef,
   Optional[Eit_types::Common::System::Authentication::Kerberos::Realms] $realms = undef,
+  Eit_types::Encrypt::Params    $encrypt_params = ['join_password'],
 ) {
   confine($join, !($join_user and $join_password),
           '`join_user` and `join_password` must be provided for join to work')

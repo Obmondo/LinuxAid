@@ -22,6 +22,8 @@
 #
 # @param locations Hash mapping location names to arrays of IP addresses or IP ranges for location detection. Defaults to {}.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::system (
   Boolean $remove_fstrim_cron = false,
   Boolean $purge_root_ssh_keys = true,
@@ -37,6 +39,7 @@ class common::system (
   }]]] $service_oneshot  = {},
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
+  Eit_types::Encrypt::Params    $encrypt_params           = ['ssh_authorized_keys.*.key'],
 ) {
   ############
   # Services #

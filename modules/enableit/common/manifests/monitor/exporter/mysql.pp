@@ -21,6 +21,8 @@
 # @param noop_value 
 # Whether to run in noop mode. Defaults to false.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::monitor::exporter::mysql (
   Boolean             $enable                 = $::common::monitor::exporter::enable,
   String              $username               = $::profile::mysql::mysql_monitor_username,
@@ -28,7 +30,8 @@ class common::monitor::exporter::mysql (
   Stdlib::Port        $mysql_port             = $::profile::mysql::mysql_port,
   String              $mysql_monitor_hostname = $::profile::mysql::mysql_monitor_hostname,
   Stdlib::Port        $listen_port            = 9104,
-  Boolean             $noop_value             = false
+  Boolean             $noop_value             = false,
+  Eit_types::Encrypt::Params $encrypt_params  = ['password'],
 ) {
   class { 'prometheus::mysqld_exporter':
     package_name      => 'obmondo-mysqld-exporter',

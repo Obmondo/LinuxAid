@@ -14,6 +14,8 @@
 #
 # @param backup_retention Duration (in days) to retain backups. Defaults to the value of ::common::backup::db::backup_retention.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::backup::db::mysql::xtrabackup (
   Eit_types::Password       $backup_user_password  = $::common::backup::db::backup_user_password,
   Boolean                   $enable                = $::common::backup::db::enable,
@@ -22,6 +24,7 @@ class common::backup::db::mysql::xtrabackup (
   Eit_types::SimpleString   $backup_user           = $::common::backup::db::backup_user,
   Stdlib::Absolutepath      $dump_dir              = $::common::backup::db::dump_dir,
   Eit_types::Duration::Days $backup_retention      = $::common::backup::db::backup_retention,
+  Eit_types::Encrypt::Params $encrypt_params       = ['backup_user_password'],
 ) inherits ::common::backup::db {
 
   # To support multiple borg repos, we need to see if the dump_dir and the borg archive is same.
