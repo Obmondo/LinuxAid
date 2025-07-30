@@ -9,11 +9,14 @@
 #
 # @param ca_pin Optional string for the CA pin. Defaults to undef.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::software::teleport (
   Boolean                           $enable        = false,
   Optional[Boolean]                 $noop_value    = undef,
   Optional[String]                  $join_token    = undef,
   Optional[String]                  $ca_pin        = undef,
+  Eit_types::Encrypt::Params        $encrypt_params = ['join_token','ca_pin'],
 ) inherits common {
   confine($enable, !$join_token, !$ca_pin, '`$join_token` and `$ca_pin` must be provided')
   # teleport is only support on systemd nodes

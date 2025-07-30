@@ -39,6 +39,8 @@
 # @param $last_borgbackup
 # Path to store last backup timestamp. Defaults to '/var/tmp'.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,
   Eit_types::Borg_prune_numbers        $prune_keep = {
@@ -65,6 +67,7 @@ class common::backup::borg (
   Optional[Hash]                                    $authorized_keys    = undef,
   Boolean                                           $server             = false,
   Optional[Stdlib::Absolutepath]                    $last_borgbackup    = '/var/tmp',
+  Eit_types::Encrypt::Params                        $encrypt_params     = ['repos.*.password'],
 ) inherits common::backup {
   class { '::borgbackup' :
     configdir            => $__dir,

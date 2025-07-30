@@ -20,6 +20,8 @@
 #
 # @param backup_method Backup method to use ('mysqldump', 'mysqlbackup', 'xtrabackup'). Defaults to 'mysqldump'.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::backup::db (
   Boolean                       $enable                = $::common::backup::enable,
   Optional[Eit_types::Password] $backup_user_password  = $::common::backup::backup_user_password,
@@ -31,6 +33,7 @@ class common::backup::db (
   Array[String]                 $ignore_tables         = [],
   Optional[Eit_types::Host]       $host                  = 'localhost',
   Enum['mysqldump', 'mysqlbackup', 'xtrabackup'] $backup_method = 'mysqldump',
+  Eit_types::Encrypt::Params $encrypt_params           = ['root_password','backup_user_password'],
 ) inherits ::common::backup {
   confine($enable, !$::common::backup::dump_dir, '`common::backup::dump_dir` needs to be set')
   # Since the mysql module only support backup from localhost.
