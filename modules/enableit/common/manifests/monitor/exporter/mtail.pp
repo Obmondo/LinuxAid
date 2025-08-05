@@ -41,7 +41,7 @@ class common::monitor::exporter::mtail (
   $user = 'mtail_exporter'
 
   $parse_logs = $logs.map |$x| {
-    "'-logs ${x}'"
+    "-logs ${x}"
   }.join(' ')
 
   $_address = $listen_address.split(':')[0]
@@ -56,7 +56,8 @@ class common::monitor::exporter::mtail (
     "-progs ${progs}",
     "-address ${_address}",
     "-port ${_port}",
-    "-logtostderr ${parse_logs}",
+    "-logtostderr",
+    ${parse_logs},
   ]
 
   prometheus::daemon { 'mtail_exporter':
