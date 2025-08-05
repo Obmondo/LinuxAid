@@ -57,7 +57,7 @@ class common::monitor::exporter::mtail (
     "-address ${_address}",
     "-port ${_port}",
     "-logtostderr",
-    ${parse_logs},
+    $parse_logs,
   ]
 
   prometheus::daemon { 'mtail_exporter':
