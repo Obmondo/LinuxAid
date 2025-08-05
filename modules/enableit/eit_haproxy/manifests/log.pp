@@ -34,8 +34,8 @@ class eit_haproxy::log (
     rotate        => 30,
     missingok     => true,
     ifempty       => false,
-    compress      => false,
-    delaycompress => false,
+    compress      => $log_compressed,
+    delaycompress => $log_compressed,
     sharedscripts => true,
     dateext       => true,
     postrotate    => [
