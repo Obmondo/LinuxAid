@@ -111,6 +111,7 @@ class common::monitor::exporter::security (
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-obmondo-security-exporter.service-systemctl-daemon-reload' |> {
-    noop => $noop_value,
-  }
+    noop        => $noop_value,
+    subscribe   => File["/etc/systemd/system/${service_name}.service"],
+  } ~> Service[$service_name]
 }

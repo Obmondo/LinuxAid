@@ -74,4 +74,9 @@ class common::monitor::exporter::dellhw (
     scrape_host       => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
+
+  Exec <| tag == 'systemd-dellhw_exporter.service-systemctl-daemon-reload' |> {
+    noop        => $noop_value,
+    subscribe   => File['/etc/systemd/system/dellhw_exporter.service'],
+  } ~> Service['dellhw_exporter']
 }
