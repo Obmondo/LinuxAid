@@ -59,8 +59,10 @@ class common::monitor::exporter::blackbox (
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module can't handle noop. (which is correct)
   Exec <| tag == 'systemd-blackbox_exporter.service-systemctl-daemon-reload' |> {
-    noop => $noop_value,
-  }
+    noop        => $noop_value,
+    subscribe   => File['/etc/systemd/system/blackbox_exporter.service'],
+  } ~> Service['blackbox_exporter']
+
   if $targets.size > 0 {
     $targets.each |$domain| {
       monitor::domains { $domain: }

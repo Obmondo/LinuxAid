@@ -172,8 +172,9 @@ class common::monitor::exporter::node (
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-node_exporter.service-systemctl-daemon-reload' |> {
-    noop => $noop_value,
-  }
+    noop        => $noop_value,
+    subscribe   => File['/etc/systemd/system/node_exporter.service'],
+  } ~> Service['node_exporter']
 
   firewall { '100 allow node exporter':
     ensure   => ensure_present($enable and $listen_address !~ /^127\./),

@@ -31,7 +31,8 @@ class common::monitor::exporter::process (
   }
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
-  Exec <| tag == 'systemd-process_exporter.service-systemctl-daemon-reload' |> {
-    noop => $noop_value,
-  }
+  Exec <| tag == 'systemd-process-exporter.service-systemctl-daemon-reload' |> {
+    noop        => $noop_value,
+    subscribe   => File['/etc/systemd/system/process-exporter.service'],
+  } ~> Service['process-exporter']
 }

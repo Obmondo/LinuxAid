@@ -22,19 +22,19 @@ class common::monitor::exporter::dns (
   ],
 ) {
   File {
-    noop => $noop_value
+    noop => $noop_value,
   }
   Service {
-    noop => $noop_value
+    noop => $noop_value,
   }
   Package {
-    noop => $noop_value
+    noop => $noop_value,
   }
   User {
-    noop => $noop_value
+    noop => $noop_value,
   }
   Group {
-    noop => $noop_value
+    noop => $noop_value,
   }
   $_domains = $domains
   $_options = [
@@ -65,6 +65,7 @@ class common::monitor::exporter::dns (
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-dns_exporter.service-systemctl-daemon-reload' |> {
-    noop => $noop_value,
-  }
+    noop        => $noop_value,
+    subscribe   => File['/etc/systemd/system/dns_exporter.service'],
+  } ~> Service['dns_exporter']
 }
