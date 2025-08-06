@@ -22,8 +22,8 @@ class profile::projectmanagement::gitlab_ci_runner (
   $runners.each |$runner_name, $config| {
     $_config = $runner_defaults + $config
 
-    confine(!$_config['url'], 'Gitlab Server URL is mandatory')
-    confine(!$_config['registration-token'], 'Gitlab Registration token is mandatory')
+    confine($_config['url'], 'Gitlab Server URL is mandatory')
+    confine($_config['registration-token'], 'Gitlab Registration token is mandatory')
   }
 
   # Find out if there is any docker or shell executor from the
