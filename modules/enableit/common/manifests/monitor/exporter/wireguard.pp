@@ -64,6 +64,6 @@ class common::monitor::exporter::wireguard (
   # upstream module can't handle noop. (which is correct)
   Exec <| tag == 'systemd-wireguard_exporter.service-systemctl-daemon-reload' |> {
     noop      => $noop_value,
-    subscribe => '/etc/systemd/system/wireguard_exporter.service',
+    subscribe => File['/etc/systemd/system/wireguard_exporter.service'],
   } ~> Service['wireguard_exporter']
 }
