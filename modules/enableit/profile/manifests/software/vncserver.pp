@@ -1,12 +1,13 @@
 # VNC Server
 class profile::software::vncserver (
-  Boolean                               $enable         = $common::software::vncserver::enable,
-  Optional[Boolean]                     $noop_value     = $common::software::vncserver::noop_value,
+  Boolean                             $enable         = $common::software::vncserver::enable,
+  Optional[Boolean]                   $noop_value     = $common::software::vncserver::noop_value,
   Struct[{
-    session  => Enum['gnome', 'kde', 'xfce', 'lxde'],
+    session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
     geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
-  }]                                   $config_defaults = $common::software::vncserver::config_defaults,
-  Hash[String, Stdlib::Port]           $vnc_users       = $common::software::vncserver::vnc_users,
+  }]                                  $config_defaults = $common::software::vncserver::config_defaults,
+  Hash[String, Stdlib::Port]          $vnc_users       = $common::software::vncserver::vnc_users,
+  Enum['vncserver', 'tigervncserver'] $systemd_service = $common::software::vncserver::systemd_service,
 ) {
 
   Package {
@@ -15,6 +16,18 @@ class profile::software::vncserver (
 
   File {
     noop => $noop_value,
+  }
+
+  if versioncmp($facts['os']['release']['full'], '24.04') >= 0 {
+    $_config_defaults = functions::array_to_hash(
+      $config_defaults.map |$key, $value| {
+        {
+          "\$${key}" => "'${value}';",
+        }
+      }
+    )
+  } else {
+    $_config_defaults = $config_defaults
   }
 
   # Initialize an empty hash to store aggregated VNC server configurations
@@ -31,9 +44,10 @@ class profile::software::vncserver (
 
   # Declare the vnc::server class using the aggregated VNC server configurations
   class { 'vnc::server':
-    vnc_servers     => $vnc_user_sessions,
-    manage_services => $enable,
-    config_defaults => $config_defaults,
+    vnc_servers                 => $vnc_user_sessions,
+    manage_services             => $enable,
+    config_defaults             => $_config_defaults,
+    systemd_template_startswith => $systemd_service,
   }
 
   # Manage firewall rules for each VNC session
