@@ -11,3 +11,4 @@ common::software::vncserver::systemd_service: 'tigervncserver'
 common::software::vncserver::config_defaults:
   session: "ubuntu"
   geometry: "1920x1080"
+  localhost: "no"

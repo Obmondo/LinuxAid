@@ -5,6 +5,7 @@ class profile::software::vncserver (
   Struct[{
     session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
     geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+    localhost => Optional[Enum['yes', 'no']],
   }]                                  $config_defaults = $common::software::vncserver::config_defaults,
   Hash[String, Stdlib::Port]          $vnc_users       = $common::software::vncserver::vnc_users,
   Enum['vncserver', 'tigervncserver'] $systemd_service = $common::software::vncserver::systemd_service,
