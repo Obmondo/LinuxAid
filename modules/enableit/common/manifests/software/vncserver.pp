@@ -14,8 +14,9 @@ class common::software::vncserver (
   Boolean                                  $manage           = false,
   Boolean                                  $enable           = false,
   Struct[{
-      session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
-      geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+      session   => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
+      geometry  => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+      localhost => Optional[Enum['yes', 'no']],
   }]                                       $config_defaults  = {},
   Hash[String, Stdlib::Port]               $vnc_users        = {},
   Optional[Boolean]                        $noop_value       = false,
