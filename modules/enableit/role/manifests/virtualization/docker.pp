@@ -58,6 +58,7 @@ class role::virtualization::docker (
   Hash[Eit_types::Domain, Hash]        $registry            = {},
   Boolean                              $upstream_repo       = true,
   String                               $cadvisor_image      = 'gcr.io/cadvisor/cadvisor:v0.39.0',
+  String                               $prune_duration      = '30'
 ) inherits ::role::virtualization {
 
   $_allow_docker = lookup('common::network::firewall::allow_docker', Boolean, undef, false)
