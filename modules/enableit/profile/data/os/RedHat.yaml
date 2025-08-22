@@ -49,3 +49,8 @@ profile::projectmanagement::perforce::helix_packages:
   - 'helix-broker-base'
   - 'helix-proxy-base'
   - 'helix-p4d-base-24.1'
+profile::software::nvidia_driver::packages:
+  - 'kernel-devel'
+  - 'kernel-headers'
+  - 'nvidia-driver-latest-dkms'
+  - 'cuda'
