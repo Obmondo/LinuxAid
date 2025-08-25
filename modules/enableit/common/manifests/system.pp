@@ -65,23 +65,13 @@ class common::system (
       default         => "/home/${v['user']}",
     }
 
-    $_options = if $v['options'] {
-      $v['options'].map |$ok, $ov| {
-        if empty($ov) {
-          String($ok)
-        } else {
-          "${ok}=\"${ov}\""
-        }
-      }
-    }
-
     ssh_authorized_key { $name:
       name    => pick($_ssh_key_match[3], $name),
       user    => $v['user'],
       type    => $_ssh_key_match[1],
       key     => $_ssh_key_match[2],
       noop    => $v['noop_value'],
-      options => $_options,
+      options => $v['options'],
       target  => "${home_dir_path}/.ssh/authorized_keys",
     }
   }
