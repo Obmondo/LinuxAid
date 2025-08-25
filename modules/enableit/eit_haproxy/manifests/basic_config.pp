@@ -124,13 +124,13 @@ class eit_haproxy::basic_config (
     ].delete_undef_values
 
     # Setup the Mapfile.
-    $domains_with_backend = delete_undef_values(flatten($domains.map | $x, $opts | {
+    $domains_with_backend = $domains.map | $x, $opts | {
       $all_domains = $opts['domains']
       $domain_backend = regsubst($x, /\./, '_', 'G')
       $all_domains.map |$domain| {
         "${domain} ${domain_backend}"
       }
-    }))
+    }.flatten.delete_undef_values.sort
 
     $alldomains = flatten($domains.map |$x, $opts| {
       $opts['domains']
