@@ -20,6 +20,7 @@ class common::monitor::exporter::dns (
     'vg.no',
     'example.com',
   ],
+  Optional[Hash] $scrape_job_labels              = { 'certname' => $::trusted['certname'] },
 ) {
   File {
     noop => $noop_value,
@@ -60,7 +61,7 @@ class common::monitor::exporter::dns (
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'dns',
-    scrape_job_labels => { 'certname' => $::trusted['certname'] },
+    scrape_job_labels => $scrape_job_labels,
   }
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
