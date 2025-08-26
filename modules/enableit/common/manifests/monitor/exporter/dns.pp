@@ -43,7 +43,7 @@ class common::monitor::exporter::dns (
     "-test-interval-seconds ${interval_seconds}",
   ]
   $_scrape_config = { 
-    'certname' => $::trusted['certname'] 
+    'certname' => $::trusted['certname'], 
     '__relabel__' => [
       {
         'action' => 'drop',
