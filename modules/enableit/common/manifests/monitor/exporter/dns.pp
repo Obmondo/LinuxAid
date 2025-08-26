@@ -44,7 +44,7 @@ class common::monitor::exporter::dns (
   ]
   $_scrape_config = { 
     'certname' => $::trusted['certname'], 
-    '__relabel__' => [
+    'relabel_configs' => [
       {
         'action' => 'drop',
         'source_labels' => ['result'],
