@@ -31,7 +31,7 @@ class role::web::apache (
     'vhosts.*.ssl_key',
     'vhosts.*.ssl_cert',
   ]
-) {
+) inherits role::web {
   if $manage_haproxy {
     contain role::web::haproxy
   }
