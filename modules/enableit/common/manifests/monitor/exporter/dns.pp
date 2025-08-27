@@ -44,7 +44,7 @@ class common::monitor::exporter::dns (
   ]
   $_scrape_config = { 
     'certname' => $::trusted['certname'], 
-    'relabel_configs' => '[{"action":"drop","source_labels":["result"]}]',
+    # 'relabel_configs' => '[{"action":"drop","source_labels":["result"]}]',
   }
   prometheus::daemon { 'dns_exporter':
     package_name      => 'obmondo-dns-exporter',
