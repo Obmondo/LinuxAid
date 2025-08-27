@@ -338,7 +338,7 @@ common::monitor::prom::server::collect_scrape_jobs:
   - job_name: mtail
   - job_name: filestat
   - job_name: dns
-    write_relabel_configs:
+    metric_relabel_configs:
       - source_labels: [__name__]
         regex: result
         action: labeldrop
