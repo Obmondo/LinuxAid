@@ -42,10 +42,6 @@ class common::monitor::exporter::dns (
     "-test-hosts ${_domains.join(',')}",
     "-test-interval-seconds ${interval_seconds}",
   ]
-  $_scrape_config = { 
-    'certname' => $::trusted['certname'], 
-    # 'relabel_configs' => '[{"action":"drop","source_labels":["result"]}]',
-  }
   prometheus::daemon { 'dns_exporter':
     package_name      => 'obmondo-dns-exporter',
     version           => '1.0.13',
@@ -64,7 +60,7 @@ class common::monitor::exporter::dns (
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'dns',
-    scrape_job_labels => $_scrape_config,
+    scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module cant handle noop. (which is correct)
