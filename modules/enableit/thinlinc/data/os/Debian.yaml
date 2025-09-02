@@ -6,14 +6,7 @@ thinlinc::profile_order:
   - 'xfce'
 
 thinlinc::install::packages:
-  - 'thinlinc-tladm'
-  - 'thinlinc-tlmisc'
-  - 'thinlinc-tlmisc-libs'
-  - 'thinlinc-tlmisc-libs32'
-  - 'thinlinc-tlprinter'
-  - 'thinlinc-vnc-server'
-  - 'thinlinc-vsm'
-  - 'thinlinc-webaccess'
+  - 'thinlinc-server'
 
 thinlinc::install::thinlinc_dependencies:
   - 'avahi-utils'
