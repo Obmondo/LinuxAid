@@ -44,7 +44,6 @@ thinlinc::install::thinlinc_dependencies:
   - 'libjpeg-turbo8'
   - 'libpng16-16'
   - 'libthai0'
-  - 'libtiff5'
   - 'libwayland-client0'
   - 'libwayland-server0'
   - 'libxcb1'
