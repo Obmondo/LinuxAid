@@ -1,0 +1,47 @@
+# Hiveconf configuration file - Cluster
+#
+[/subclusters]
+
+# A subcluster is a group of one or more agent servers.
+#
+# The variable agents is a space-separated list of agent server
+# hostnames that resembles the subcluster. New sessions are distributed
+# over these agent servers by the loadbalancer.
+#
+# Users are associated to a subcluster by specifying username explicitly
+# or by group. Both users and groups are space-separated lists. If both
+# users and groups are empty for a subcluster, the subcluster is used
+# for users that aren't associated with another subcluster. Number of
+# users can be limited per agent using max_users_per_agent. 0 means no
+# limit.
+#
+[/subclusters/Default]
+agents=<%= $thinlinc::vsmserver::subcluster_agents.join_ %>
+
+users=
+groups=
+max_users_per_agent=0
+
+[/agents]
+
+# Stop new sessions from being created on specific agents. Existing sessions
+# will still continue to work as before. A space-separated list of hostnames.
+draining=
+
+[/agents/weights]
+# One weight per agent, the hostname of the agent is the parameter name. The
+# default weight for each agent is 100. Users are balanced evently across
+# agents within each subcluster, given that all agents have the same weight.
+# Agents with higher weights will get more users, and lower weights will
+# result in fewer users comparatively.
+#
+# Example:
+# agent1.thinlinc.com=200
+# agent2.thinlinc.com=50
+
+[/HA]
+# Enable HA operations by setting this to 1.
+enabled=<%= $thinlinc::vsmserver::enable_ha.bool %>
+
+# A space-separated list of the nodes in the cluster
+nodes=<%= $thinlinc::vsmserver::ha_nodes.join_ %>

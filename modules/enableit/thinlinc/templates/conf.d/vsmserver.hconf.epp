@@ -59,18 +59,6 @@ explicit_agentselection=<%= $thinlinc::vsmserver::explicit_agent_selection.join_
 # some special circumstances, it might be set to another value.
 listen_port=<%= $thinlinc::vsmserver::listen_port %>
 
-<% unless $thinlinc::vsmserver::subcluster_agents == Undef { -%>
-[/vsmserver/subclusters/default]
-agents=<%= $thinlinc::vsmserver::subcluster_agents.join_ %>
-<% } -%>
-
-[/vsmserver/HA]
-# Enable HA operations by setting this to 1.
-enabled=<%= $thinlinc::vsmserver::enable_ha.bool %>
-
-# A space-separated list of the nodes in the cluster
-nodes=<%= $thinlinc::vsmserver::ha_nodes.join_ %>
-
 [/vsmserver/logging]
 log_to_file=<%= $thinlinc::vsmserver::log_to_file.bool %>
 logfile=<%= $thinlinc::vsmserver::log_dir %>/vsmserver.log

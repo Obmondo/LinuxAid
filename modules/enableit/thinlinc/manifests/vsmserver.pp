@@ -44,10 +44,18 @@ class thinlinc::vsmserver (
 
   thinlinc::ensure_log_dir($log_dir)
 
-  $_config_file = "${thinlinc::install_dir}/etc/conf.d/vsmserver.hconf"
-  file { $_config_file:
+  $vsmserver_config_file = "${thinlinc::install_dir}/etc/conf.d/vsmserver.hconf"
+  $cluster_config_file = "${thinlinc::install_dir}/etc/conf.d/cluster.hconf"
+
+  file { $vsmserver_config_file:
     ensure  => 'file',
     content => epp('thinlinc/conf.d/vsmserver.hconf.epp'),
+    notify  => Service['vsmserver'],
+  }
+
+  file { $cluster_config_file:
+    ensure  => 'file',
+    content => epp('thinlinc/conf.d/cluster.hconf.epp'),
     notify  => Service['vsmserver'],
   }
 
