@@ -338,6 +338,9 @@ common::monitor::prom::server::collect_scrape_jobs:
   - job_name: mtail
   - job_name: filestat
   - job_name: dns
+    metric_relabel_configs:
+      - regex: result
+        action: labeldrop
   - job_name: iptables
   - job_name: tcpshaker
   - job_name: haproxy
