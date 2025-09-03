@@ -21,8 +21,12 @@ def obmondo_api(endpoint, method = "GET", use_basic_auth = true)
   uri = URI("#{proto}://#{API_BASE_URL}#{port}/api#{endpoint}")
 
   # Direct paths for the certificate and private key
-  cert_path = "/etc/puppetlabs/puppet/ssl/certs/puppet.pem"
-  key_path = "/etc/puppetlabs/puppet/ssl/private_keys/puppet.pem"
+  cert_path = ENV['AUTOSIGN_CLIENT_CERT']
+  key_path = ENV['AUTOSIGN_CLIENT_KEY']
+
+  raise "AUTOSIGN_CLIENT_CERT environment variable is not set or empty" if cert_path.nil? || cert_path.empty? || cert_path.strip.empty?
+
+  raise "AUTOSIGN_CLIENT_KEY environment variable is not set or empty" if key_path.nil? || key_path.empty? || key_path.strip.empty?
 
   # Load the certificate and private key from the specified files
   cert = OpenSSL::X509::Certificate.new(File.read(cert_path))
