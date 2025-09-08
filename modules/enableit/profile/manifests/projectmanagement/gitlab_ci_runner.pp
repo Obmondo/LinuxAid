@@ -18,6 +18,7 @@ class profile::projectmanagement::gitlab_ci_runner (
 ) {
 
   contain monitor::system::service::gitlab_runner
+  include common::monitor::exporter::gitlab_runner
 
   $runners.each |$runner_name, $config| {
     $_config = $runner_defaults + $config
