@@ -5,7 +5,8 @@
 class monitor::system::service::gitlab_runner (
   Boolean $enable = true,
 ) {
-  @@monitor::alert { "${title}::error":
+  @@monitor::alert { "${title}::failure":
+
     enable => $enable,
     tag    => $::trusted['certname'],
   }
