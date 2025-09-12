@@ -12,8 +12,8 @@ $_pretty_subscription = pick($subscription, 'no')
 # $::obmondo_monitor defaults to true if there's a subscription for the given node
 # and double check so one can not toggle monitoring from hiera
 $obmondo_monitoring_status = ($facts['init_system'] == 'systemd')
-  and lookup('monitor::enable', Boolean, undef, $obmondo_monitor)
-  and $_pretty_subscription != 'no'
+and lookup('monitor::enable', Boolean, undef, $obmondo_monitor)
+and $_pretty_subscription != 'no'
 
 # Pretty Print Monitoring Status
 $_monitoring_status = $obmondo_monitoring_status ? {
@@ -51,7 +51,7 @@ info { $_info_msg: }
 if $obmondo_classes.size == 1 {
   if $_pretty_subscription == 'no' {
     $_notify_msg =@("EOT"/$n)
-
+      
     "Subscription is missing !!!
 
     The ${obmondo_classes.join(',')} will not be setup.
@@ -101,7 +101,7 @@ node default {
   # Load role when no class is present, but tag is given
   if $obmondo_classes.empty and $obmondo_tags.delete_undef_values.size == 0 {
     $_role_msg = @("EOT"/$n)
-
+      
       Missing role on ${trusted['certname']}
 
       Please add a role on https://obmondo.com/user/servers/add-server?certname=${trustedcertname}&isOldServer=true&step=2"
