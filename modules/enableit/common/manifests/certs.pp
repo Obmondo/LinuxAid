@@ -6,6 +6,8 @@
 #
 # @param ca_certs A hash of CA certificates with names as keys and their parameters as values. Defaults to empty hash.
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 class common::certs (
   Stdlib::Absolutepath $__base_dir,
   Hash[Stdlib::Fqdn, Struct[{
@@ -18,6 +20,12 @@ class common::certs (
       ensure => Eit_types::Cert::Ensure,
       source => String,
   }]] $ca_certs = {},
+  Eit_types::Encrypt::Params $encrypt_params = [
+    'manual.*.key',
+    'manual.*.cert',
+    'manual.*.ca',
+  ]
+
 ) {
   Package {
     noop => false,
