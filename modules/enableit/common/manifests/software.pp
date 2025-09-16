@@ -53,4 +53,8 @@ class common::software {
   if lookup('common::software::iptables_api::manage', Boolean, undef, false) {
     common::software::iptables_api.include
   }
+
+  if lookup('common::software::ansoftrsmservice::manage', Boolean, undef, false) {
+    common::software::ansoftrsmservice.include
+  }
 }
