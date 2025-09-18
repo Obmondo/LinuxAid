@@ -5,15 +5,22 @@ $trustedcertname = $trusted['certname']
 # https://github.com/puppetlabs/puppetlabs-puppet_agent/blob/caaa52fb3d080f277243c6e78ce842df71cdd146/manifests/install.pp#L191
 $platform_tag = undef
 
-# Pretty Print Subscription
-$_pretty_subscription = pick($subscription, 'no')
+$_monitoring_value = lookup('monitor::enable', Boolean, undef, $obmondo_monitor)
 
 # But it's only allowed with a subscription.
 # $::obmondo_monitor defaults to true if there's a subscription for the given node
 # and double check so one can not toggle monitoring from hiera
-$obmondo_monitoring_status = ($facts['init_system'] == 'systemd')
-and lookup('monitor::enable', Boolean, undef, $obmondo_monitor)
-and $_pretty_subscription != 'no'
+$obmondo_monitoring_status = case true {
+  ($facts['init_system'] == 'systemd'): {
+    $_monitoring_value
+  }
+  ($facts['os']['name'] == 'TurrisOS'): {
+    $_monitoring_value
+  }
+  default: {
+    false
+  }
+}
 
 # Pretty Print Monitoring Status
 $_monitoring_status = $obmondo_monitoring_status ? {
@@ -36,30 +43,29 @@ if 'role::monitoring' in $obmondo_classes {
   }
 }
 
-$_info_msg = @("EOT"/$n)
+if $obmondo_monitoring_status {
+  $_info_msg = @("EOT"/$n)
 
-  Host: Running on '${trusted['certname']}'.
-  Subscription Level: ${_pretty_subscription}
-  Monitoring Status: ${_monitoring_status}
-  Tags: ${obmondo_tags.delete_undef_values}
-  Role: ${obmondo_classes}
-
+    Host: Running on '${trusted['certname']}'.
+    Subscription Level: ${subscription}
+    Monitoring Status: ${_monitoring_status}
+    Tags: ${obmondo_tags.delete_undef_values}
+    Role: ${obmondo_classes}
   | EOT
 
-info { $_info_msg: }
+  notify { "$_info_msg": }
+}
 
-if $obmondo_classes.size == 1 {
-  if $_pretty_subscription == 'no' {
-    $_notify_msg =@("EOT"/$n)
-            
-    "Subscription is missing !!!
+if !$obmondo_monitoring_status {
+  $_info_msg = @("EOT"/$n)
 
-    The ${obmondo_classes.join(',')} will not be setup.
-    Please add a subscription for server ${trusted['certname']} at https://obmondo.com
+    Host: Running on '${trusted['certname']}'.
+    Monitoring Status: ${_monitoring_status}
+    Tags: ${obmondo_tags.delete_undef_values}
+    Role: ${obmondo_classes}
+  | EOT
 
-    | EOT
-    info { $_notify_msg : }
-  }
+  notify { "$_info_msg": }
 }
 
 if $obmondo_classes.count > 2 {
@@ -99,12 +105,24 @@ $obmondo_classes.filter |$_class| {
 
 node default {
   # Load role when no class is present, but tag is given
-  if $obmondo_classes.empty and $obmondo_tags.delete_undef_values.size == 0 {
+  if $obmondo_classes.empty and $obmondo_tags.delete_undef_values.size == 0 and $obmondo_monitoring_status {
     $_role_msg = @("EOT"/$n)
-            
+
       Missing role on ${trusted['certname']}
 
       Please add a role on https://obmondo.com/user/servers/add-server?certname=${trustedcertname}&isOldServer=true&step=2"
+
+    | EOT
+    info { $_role_msg : }
+  }
+
+  # Open Source Support
+  if !$obmondo_monitoring_status {
+    $_role_msg = @("EOT"/$n)
+
+      Missing role on ${trusted['certname']}
+
+      Add the role in linuxaid-config/agents/${trustedcertname}.yaml
 
     | EOT
     info { $_role_msg : }
