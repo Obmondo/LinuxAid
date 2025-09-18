@@ -1,8 +1,6 @@
 ---
 common::monitor::exporter::enable: true
-
 common::network::service_name: 'systemd-networkd'
-
 common::system::systemd::manage_resolved: true
 common::system::dns::dnssec: null
 common::system::dns::dns_over_tls: null
@@ -12,3 +10,6 @@ common::software::vncserver::config_defaults:
   session: "ubuntu"
   geometry: "1920x1080"
   localhost: "no"
+common::software::rustdesk::dependencies:
+  - libgtk-3-0t64
+  - libasound2t64
