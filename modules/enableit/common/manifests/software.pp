@@ -57,4 +57,8 @@ class common::software {
   if lookup('common::software::ansoftrsmservice::manage', Boolean, undef, false) {
     common::software::ansoftrsmservice.include
   }
+
+  if lookup('common::software::rustdesk::manage', Boolean, undef, false) {
+    common::software::rustdesk.include
+  }
 }

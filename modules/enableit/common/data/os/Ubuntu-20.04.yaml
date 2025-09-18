@@ -2,3 +2,6 @@
 common::monitor::exporter::enable: true
 common::network::service_name: 'systemd-networkd'
 common::monitor::exporter::security::enable: true
+common::software::rustdesk::dependencies:
+  - libgtk-3-0
+  - libasound2
