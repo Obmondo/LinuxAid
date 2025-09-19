@@ -26,3 +26,6 @@ modules/upstream/.tmp/
 # Ignore keys dir, so one can have keys in local repo
 .keys/
 var/
+
+# Ignore yardoc dir
+*.yardoc/
