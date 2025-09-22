@@ -27,7 +27,9 @@ class common::monitor::exporter::blackbox (
   File {
     noop => $noop_value,
   }
-  include common::monitor::prom
+
+  include common::monitor::prometheus
+
   class { 'prometheus::blackbox_exporter':
     package_name      => 'obmondo-blackbox-exporter',
     package_ensure    => ensure_latest($enable),

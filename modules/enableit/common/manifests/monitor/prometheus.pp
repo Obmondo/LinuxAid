@@ -1,6 +1,6 @@
 # @summary Class for managing Prometheus server monitoring configuration
 #
-# @param noop_value 
+# @param noop_value
 # Whether to run resources in noop mode. Defaults to false.
 #
 # @param install_method The installation method to use. Defaults to 'package'.
@@ -11,12 +11,16 @@
 #
 # @param usershell The absolute path to the user's shell.
 #
-class common::monitor::prom (
-  Boolean              $noop_value = false,
+# @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
+#
+class common::monitor::prometheus (
   Enum['package']      $install_method,
   Stdlib::Absolutepath $env_file_path,
   Stdlib::Absolutepath $bin_dir,
   Stdlib::Absolutepath $usershell,
+  Stdlib::Fqdn         $server,
+
+  Boolean              $noop_value = false,
 ) {
   File {
     noop => $noop_value

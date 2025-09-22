@@ -8,7 +8,7 @@ lookup_options:
   common::repo::yumrepos:
     merge:
       strategy: 'deep'
-  common::monitor::prom::server::collect_scrape_jobs:
+  common::monitor::prometheus::server::collect_scrape_jobs:
     merge: 'deep'
   common::system::authentication::allowed_users:
     merge:
@@ -308,15 +308,15 @@ common::monitor::exporter::ssl::enable: false
 common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315
 
-common::monitor::prom::noop_value: false
-common::monitor::prom::install_method: package
-common::monitor::prom::bin_dir: '/opt/obmondo/bin'
-common::monitor::prom::usershell: '/usr/sbin/nologin'
+common::monitor::prometheus::noop_value: false
+common::monitor::prometheus::install_method: package
+common::monitor::prometheus::bin_dir: '/opt/obmondo/bin'
+common::monitor::prometheus::usershell: '/usr/sbin/nologin'
 
-common::monitor::prom::server::version: 2.48.1
-common::monitor::prom::server::listen_address: 127.254.254.254:63400
-common::monitor::prom::server::config_dir: '/etc/prometheus'
-common::monitor::prom::server::collect_scrape_jobs:
+common::monitor::prometheus::server::version: 2.48.1
+common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
+common::monitor::prometheus::server::config_dir: '/etc/prometheus'
+common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: node
   - job_name: blackbox
   - job_name: probe_blackbox_domains

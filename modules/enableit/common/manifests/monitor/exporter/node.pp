@@ -100,7 +100,7 @@ class common::monitor::exporter::node (
     noop => $noop_value,
   }
 
-  include common::monitor::prom
+  include common::monitor::prometheus
   include common::monitor::exporter::node::smartmon
   include common::monitor::exporter::node::topprocesses
   include common::monitor::exporter::node::lsof

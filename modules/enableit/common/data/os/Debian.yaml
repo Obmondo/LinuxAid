@@ -199,5 +199,5 @@ common::system::authentication::pam::password_session_lines:
   - - 99
     - 'optional      pam_sss.so'
 
-common::monitor::prom::env_file_path: '/etc/default'
+common::monitor::prometheus::env_file_path: '/etc/default'
 common::monitor::exporter::security::enable: true
