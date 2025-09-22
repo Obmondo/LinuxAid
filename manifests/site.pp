@@ -1,6 +1,3 @@
-# Workaround for hiera accessing $trusted['certname']
-$trustedcertname = $trusted['certname']
-
 # Fix for undefined variables caused by
 # https://github.com/puppetlabs/puppetlabs-puppet_agent/blob/caaa52fb3d080f277243c6e78ce842df71cdd146/manifests/install.pp#L191
 $platform_tag = undef
@@ -46,11 +43,11 @@ $obmondo_classes.filter |$_class| {
   }
 }
 
-# User can enable monitoring, by adding settings in the hiera file
+# User can enable/disable monitoring of a node, by adding settings in the hiera file
 # ```yaml
-# monitor::enable: true
+# monitor::enable: true/false
 # ```
-$obmondo_monitoring_status = lookup('monitor::enable', Boolean, undef, $obmondo_monitor)
+$obmondo_monitoring_status = lookup('monitor::enable', Boolean, undef, true)
 
 # Pretty Print Monitoring Status
 $_monitoring_status = $obmondo_monitoring_status ? {
@@ -86,11 +83,11 @@ node default {
 
       Missing role on ${trusted['certname']}
 
-      Please add a role on https://obmondo.com/user/servers/add-server?certname=${trustedcertname}&isOldServer=true&step=2"
+      Please add a role on https://obmondo.com/user/servers/add-server?certname=${trusted['certname']}&isOldServer=true&step=2"
 
       or
 
-      Add the role in linuxaid-config/agents/${trustedcertname}.yaml
+      Add the role in linuxaid-config/agents/${trusted['certname']}.yaml
 
     | EOT
 

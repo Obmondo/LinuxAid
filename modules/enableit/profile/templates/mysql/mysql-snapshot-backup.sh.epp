@@ -146,7 +146,7 @@ DATA_DIR="<%= $::role::db::mysql::datadir %>"
 DUMP_DIR="<%= $common::backup::dump_dir %>"
 
 # Hostname
-HOSTNAME="<%= $::trustedcertname %>"
+HOSTNAME="<%= $::trusted['certname'] %>"
 
 # MySQL root user password
 ROOTPASS="<%= $::role::db::mysql::root_password %>"
