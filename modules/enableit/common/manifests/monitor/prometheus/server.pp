@@ -6,23 +6,20 @@
 #
 # @param config_dir The absolute path to the configuration directory. Must be a Stdlib::Absolutepath.
 #
-# @param promethesu_server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN.
-#
 # @param listen_address The IP and port on which the server listens. Must be of type Eit_types::IPPort.
 #
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
-class common::monitor::prom::server (
+class common::monitor::prometheus::server (
   Eit_types::Version   $version,
   Array[Hash]          $collect_scrape_jobs,
   Stdlib::Absolutepath $config_dir,
-  Stdlib::Fqdn         $prometheus_server,
   Eit_types::IPPort    $listen_address,
 
   Boolean              $enable = $common::monitor::enable,
 ) {
 
-  include common::monitor::prom
+  include common::monitor::prometheus
 
   Exec {
     noop => false,
@@ -44,8 +41,8 @@ class common::monitor::prom::server (
   $scrape_host = $trusted['certname']
   $_extra_options = "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus"
   $_prometheus_url = $::obmondo['customerid'] ? { # lint:ignore:top_scope_facts
-    undef   => "https://${prometheus_server}/api/v1/write",
-    default => "https://${prometheus_server}/${::obmondo['customerid']}/api/v1/write" # lint:ignore:top_scope_facts
+    undef   => "https://${common::monitor::prometheus::server}/api/v1/write",
+    default => "https://${common::monitor::prometheus::server}/${::obmondo['customerid']}/api/v1/write" # lint:ignore:top_scope_facts
   }
 
   class { 'prometheus::server':
