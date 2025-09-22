@@ -3,7 +3,8 @@ version: 5
 
 defaults:
   # relative path as per puppetserver on k8s, defaulting to main branch
-  datadir: ../../hiera-data/%{obmondo.customer_id}_main
+  # in case of opensource the customer_id will be empty
+  datadir: ../../hiera-data/%{obmondo.customer_id}/main
   data_hash: yaml_data
 
 hierarchy:
