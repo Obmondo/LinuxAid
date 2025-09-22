@@ -55,7 +55,12 @@ $_monitoring_status = $obmondo_monitoring_status ? {
   default => 'disabled',
 }
 
-$_tags_info = if $obmondo_tags and !$obmondo_tags.delete_undef_values.empty {
+$_has_tags = case $obmondo_tags {
+  Array   => $obmondo_tags.delete_undef_values.empty,
+  default => []
+}
+
+$_tags_info = unless $_has_tags.empty {
   @("EOT"/$n)
   Tags: ${obmondo_tags.delete_undef_values}
   | EOT
@@ -78,7 +83,7 @@ info { $_node_info_msg: }
 
 node default {
   # Load role when no class is present, but tag is given
-  if $obmondo_classes.empty and $obmondo_tags.delete_undef_values.size == 0 {
+  if $obmondo_classes.empty and $_has_tags.size == 0 {
     $_role_msg = @("EOT"/$n)
 
       Missing role on ${trusted['certname']}
