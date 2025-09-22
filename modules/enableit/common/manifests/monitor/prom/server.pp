@@ -6,6 +6,8 @@
 #
 # @param config_dir The absolute path to the configuration directory. Must be a Stdlib::Absolutepath.
 #
+# @param promethesu_server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN.
+#
 # @param listen_address The IP and port on which the server listens. Must be of type Eit_types::IPPort.
 #
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
@@ -14,10 +16,10 @@ class common::monitor::prom::server (
   Eit_types::Version   $version,
   Array[Hash]          $collect_scrape_jobs,
   Stdlib::Absolutepath $config_dir,
+  Stdlib::Fqdn         $prometheus_server,
+  Eit_types::IPPort    $listen_address,
 
-  Eit_types::IPPort $listen_address,
-
-  Boolean $enable = $common::monitor::enable,
+  Boolean              $enable = $common::monitor::enable,
 ) {
 
   include common::monitor::prom
@@ -38,10 +40,13 @@ class common::monitor::prom::server (
     notify  => Service['prometheus'],
   }
 
-  $customer_id = $::obmondo['customer_id']
-  # lint:ignore:top_scope_facts
   $scrape_port = Integer($listen_address.split(':')[1])
   $scrape_host = $trusted['certname']
+  $_extra_options = "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus"
+  $_prometheus_url = $::obmondo['customerid'] ? { # lint:ignore:top_scope_facts
+    undef   => "https://${prometheus_server}/api/v1/write",
+    default => "https://${prometheus_server}/${::obmondo['customerid']}/api/v1/write" # lint:ignore:top_scope_facts
+  }
 
   class { 'prometheus::server':
     version                        => $version,
@@ -57,7 +62,7 @@ class common::monitor::prom::server (
     restart_on_change              => true,
     package_name                   => 'obmondo-prometheus',
     bin_dir                        => '/opt/obmondo/bin',
-    extra_options                  => "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus",
+    extra_options                  => $_extra_options,
     scrape_configs                 => [{
       job_name        => 'prometheus',
       scrape_interval => '10s',
@@ -72,7 +77,7 @@ class common::monitor::prom::server (
       ],
     }],
     remote_write_configs           => [{
-      url                   => "https://prometheus.obmondo.com/${customer_id}/api/v1/write",
+      url                   => $_prometheus_url,
       tls_config            => {
         cert_file => $::facts['hostcert'],
         key_file  => $::facts['hostprivkey'],
@@ -85,7 +90,7 @@ class common::monitor::prom::server (
         },
         {
           source_labels => ['certname'],
-          regex         => "(.*).${customer_id}",
+          regex         => $trusted['certname'],
           action        => 'keep',
         },
       ],
