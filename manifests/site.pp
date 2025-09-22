@@ -53,7 +53,7 @@ $_monitoring_status = $obmondo_monitoring_status ? {
 }
 
 $_has_tags = $obmondo_tags ? {
-  Array   => $obmondo_tags.delete_undef_values.empty,
+  Array   => $obmondo_tags,
   default => []
 }
 
