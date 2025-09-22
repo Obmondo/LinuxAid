@@ -55,15 +55,15 @@ $_monitoring_status = $obmondo_monitoring_status ? {
   default => 'disabled',
 }
 
-$_tags_info = unless $obmondo_tags.delete_undef_values.empty {
+$_tags_info = if $obmondo_tags and !$obmondo_tags.delete_undef_values.empty {
   @("EOT"/$n)
-    Tags: ${obmondo_tags.delete_undef_values}
+  Tags: ${obmondo_tags.delete_undef_values}
   | EOT
 }
 
 $_subs_info = if $obmondo_monitoring_status {
   @("EOT"/$n)
-    Subscription Level: ${subscription}
+  Subscription Level: ${subscription}
   | EOT
 }
 
