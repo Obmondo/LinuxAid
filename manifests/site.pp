@@ -7,7 +7,7 @@ $platform_tag = undef
 $obmondo_classes = lookup('classes', Array[String], undef, []).functions::knockout
 
 # Check if the given class is role::monitoring only.
-# If role::monitoring is mixed with other class, then fail
+# If role::monitoring is mixed with other role, then fail
 if 'role::monitoring' in $obmondo_classes {
   if $obmondo_classes.size != 1 {
     fail("role::monitoring can not be included with other roles ${obmondo_classes.join(',')}")
@@ -19,9 +19,6 @@ if $obmondo_classes.count > 2 {
 }
 
 # Fail if more than one "unblendable" class is used at once.
-#
-# Because we're a bit special we only warn if the customer is EnableIT; however
-# we should strive to fix this so that we can properly dogfood!
 $obmondo_classes.filter |$_class| {
   !lookup("${_class}::__blendable", Boolean, undef, false)
 }.then |$_obmondo_unblendable_classes| {
@@ -55,7 +52,7 @@ $_monitoring_status = $obmondo_monitoring_status ? {
   default => 'disabled',
 }
 
-$_has_tags = case $obmondo_tags {
+$_has_tags = $obmondo_tags ? {
   Array   => $obmondo_tags.delete_undef_values.empty,
   default => []
 }
@@ -66,7 +63,7 @@ $_tags_info = unless $_has_tags.empty {
   | EOT
 }
 
-$_subs_info = if $obmondo_monitoring_status {
+$_subs_info = if $subscription {
   @("EOT"/$n)
   Subscription Level: ${subscription}
   | EOT
@@ -82,7 +79,7 @@ ${_tags_info}${_subs_info}Role: ${obmondo_classes}
 info { $_node_info_msg: }
 
 node default {
-  # Load role when no class is present, but tag is given
+  # No class or tags is given, ask user to add it
   if $obmondo_classes.empty and $_has_tags.size == 0 {
     $_role_msg = @("EOT"/$n)
 
@@ -99,9 +96,13 @@ node default {
     info { $_role_msg: }
   }
 
-  if $obmondo_classes.empty and $obmondo_tags.delete_undef_values.size > 0 {
+  # Load default role when no class is given and has no tags
+  if $obmondo_classes.empty and $_has_tags.size > 0 {
     ::role.include
-  } else {
+  }
+
+  # Load the given role give in the hiera
+  if !$obmondo_classes.empty {
     $obmondo_classes.include
   }
 }
