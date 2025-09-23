@@ -40,6 +40,7 @@ $obmondo_classes.filter |$_class| {
   }
 }
 
+# NOTE: monitoring will always be enabled by default, irrespective of the subs status
 # User can enable/disable monitoring of a node, by adding settings in the hiera file
 # ```yaml
 # monitor::enable: true/false
@@ -84,13 +85,9 @@ node default {
     $_role_msg = @("EOT"/$n)
 
       Missing role on ${trusted['certname']}
-
       Please add a role on https://obmondo.com/user/servers/add-server?certname=${trusted['certname']}&isOldServer=true&step=2"
-
       or
-
       Add the role in linuxaid-config/agents/${trusted['certname']}.yaml
-
     | EOT
 
     info { $_role_msg: }
