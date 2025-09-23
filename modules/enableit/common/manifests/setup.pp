@@ -7,5 +7,8 @@ class common::setup (
 ) {
   include ::common::system::authentication::sudo
   contain ::common::virtualization
-  contain ::common::setup::obmondo_admin
+
+  if $::subscription {
+    contain ::common::setup::obmondo_admin
+  }
 }
