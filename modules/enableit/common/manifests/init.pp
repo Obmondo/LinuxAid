@@ -52,7 +52,9 @@ class common (
     if 'role::basic' in $::obmondo_classes and !$_full_host_management {
       contain ::common::repo
       contain ::common::certs
-      contain ::common::system::updates
+      if $::subscription {
+        contain ::common::system::updates
+      }
     }
     # NOTE: full_host_management defaults to true, except for role::monitoring
     # If you need these classes, then one has to enable full_host_management
