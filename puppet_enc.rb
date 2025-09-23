@@ -23,6 +23,9 @@ CERTNAME = if TESTING && CERTNAME == 'puppetdb'
            end
 MAX_TAGS = 10
 
+# NOTE: Change this to your feature branch, if you want to test your input from hiera
+DEFAULT_HIERA_BRANCH = 'main'
+
 (hostname, customer_id) = CERTNAME.split('.', 2)
 customer_host_re = /^[a-z0-9-]+$/
 customer_customerid_re = /^[a-z0-9]{6,10}/
@@ -88,6 +91,7 @@ parameters = {
   },
   'subscription'    => (subscription['product_id'] unless subscription.nil?),
   'obmondo_monitor' => !subscription.nil?,
+  'hiera_datapath'  => customer_id + '/' + DEFAULT_HIERA_BRANCH,
   'obmondo_tags'    => tag_keys,
 }.merge(tags)
 
