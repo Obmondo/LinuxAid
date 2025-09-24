@@ -62,9 +62,9 @@ class profile::puppet (
         }
         'yum': {
           # use yum data types, otherwise assertion fails in yum::versionlock
-          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}")
+          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}") #lint:ignore:140chars
           yum::versionlock { $full_package_name:
-            ensure  => present,
+            ensure => present,
           }
         }
         'dnf': {
@@ -77,7 +77,7 @@ class profile::puppet (
           }
         }
         'zypper': {
-          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": }
+          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": } #lint:ignore:140chars
         }
         default: {
           info('Not pinning the puppet-agent package, maybe you have an older distro')
@@ -190,10 +190,4 @@ class profile::puppet (
 
   }
 
-  host { $server:
-    ensure       => 'present',
-    host_aliases => ['puppet'],
-    ip           => '95.216.30.44',
-    noop         => false,
-  }
 }
