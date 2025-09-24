@@ -18,13 +18,13 @@
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
 class common::setup::obmondo_admin (
-  Array[String]        $manager_pubkeys,
-  Array[String]        $sre_pubkeys,
-  Boolean              $allow_sre  = true,
-  Stdlib::Absolutepath $__conf_dir = '/etc/obmondo',
-  Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
-  Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
-  Boolean              $noop_value = false,
+  Optional[Array[String]] $manager_pubkeys = [],
+  Optional[Array[String]] $sre_pubkeys     = [],
+  Boolean                 $allow_sre       = true,
+  Stdlib::Absolutepath    $__conf_dir      = '/etc/obmondo',
+  Stdlib::Absolutepath    $__opt_dir       = '/opt/obmondo',
+  Stdlib::Absolutepath    $__bin_dir       = '/opt/obmondo/bin',
+  Boolean                 $noop_value      = false,
 ) {
   include common::system::authentication::sudo
   contain ::common::virtualization
@@ -100,15 +100,15 @@ class common::setup::obmondo_admin (
     noop_value => $noop_value,
   }
 
-  $all_pubkeys = $allow_sre ? {
-    true  => $manager_pubkeys + $sre_pubkeys,
-    false => $manager_pubkeys,
+  $all_pubkeys = ($allow_sre and $::obmondo_monitor) ? {
+    true    => $manager_pubkeys + $sre_pubkeys,
+    default => $manager_pubkeys,
   }
 
   $all_pubkeys.each |$key| {
     $_key = functions::split_ssh_key($key)
     ssh_authorized_key { "obmondo-admin ssh key ${_key['comment']}":
-      ensure  => present,
+      ensure  => ensure_present($::obmondo_monitor),
       type    => $_key['type'],
       key     => $_key['key'],
       user    => 'obmondo-admin',
