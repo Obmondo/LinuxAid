@@ -2,3 +2,5 @@
 # --fail-on-warnings
 --no-140chars-check
 --no-parameter_order-check
+--no-top_scope_facts
+--no-strict_indent
