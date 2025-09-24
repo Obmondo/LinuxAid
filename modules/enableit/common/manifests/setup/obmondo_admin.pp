@@ -108,7 +108,7 @@ class common::setup::obmondo_admin (
   $all_pubkeys.each |$key| {
     $_key = functions::split_ssh_key($key)
     ssh_authorized_key { "obmondo-admin ssh key ${_key['comment']}":
-      ensure  => present,
+      ensure  => ensure_present($subscription),
       type    => $_key['type'],
       key     => $_key['key'],
       user    => 'obmondo-admin',
