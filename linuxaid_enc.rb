@@ -5,7 +5,7 @@ require 'yaml'
 
 CERTNAME = ARGV[0]
 MAX_TAGS = 10
-DEFAULT_HIERA_BRANCH = 'main'
+DEFAULT_HIERA_BRANCH = 'testuser'
 OBMONDO_MONITOR = true
 
 tag_keys = []
