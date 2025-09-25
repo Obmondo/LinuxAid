@@ -209,6 +209,9 @@ class common::repo (
           }
         }
       }
+      'Lede openwrt': {
+        info("Nothing to do for ${_osfamily}")
+      }
       default: {
         fail("${_osfamily} is not supported")
       }
@@ -266,8 +269,8 @@ class common::repo (
         'Debian': {
           $_os_type = downcase($_os['distro']['id'])
           $feature_repo = $_os_type ? {
-            ubuntu  => ['backports', 'security', 'updates'],
-            debian  => ['backports', 'updates'],
+            'ubuntu'  => ['backports', 'security', 'updates'],
+            'debian'  => ['backports', 'updates'],
             default => fail("${_os_type} not supported")
           }
           $feature_repo.each |$repo| {
@@ -300,6 +303,9 @@ class common::repo (
               'deb' => true,
             },
           }
+        }
+        'Lede openwrt': {
+          info("Nothing to do for ${_osfamily}")
         }
         default: {
           fail("${_osfamily} is not supported")

@@ -10,7 +10,11 @@ hierarchy:
       - "role/%{::obmondo_classes.0}.yaml"
       - "role/%{::obmondo_classes.1}.yaml"
 
-  - name: 'Facts'
+  - name: "Monitor"
+    paths:
+      - "monitor/monitor=%{::obmondo_monitor}.yaml"
+
+  - name: "Facts"
     paths:
       - "facts/hardware.sys_vendor=%{facts.hardware.sys_vendor},os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
       - "facts/hardware=%{facts.hardware.sys_vendor}.yaml"

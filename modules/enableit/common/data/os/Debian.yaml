@@ -1,203 +1,200 @@
 ---
-common::logging::log_dir_mode: '775'
-common::mail::maildrop_perms: '1730'
+common::logging::log_dir_mode: "775"
+common::mail::maildrop_perms: "1730"
 
 common::services::disabled_services:
-  - 'kdump-tools'
+  - "kdump-tools"
 
 common::package::default_packages:
-  - 'molly-guard'
+  - "molly-guard"
 
-common::software::walinuxagent::__linux_azure_package: 'walinuxagent'
-common::software::walinuxagent::__linux_azure_service: 'walinuxagent'
+common::software::walinuxagent::__linux_azure_package: "walinuxagent"
+common::software::walinuxagent::__linux_azure_service: "walinuxagent"
 
 common::system::selinux::enable: false
 
 common::system::sshd::subsystems:
-  sftp:
-    '/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO'
+  sftp: "/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO"
 
-common::network::ipaddress_package: 'ruby-ipaddress'
-common::network::ipaddress_provider: 'apt'
+common::network::ipaddress_package: "ruby-ipaddress"
+common::network::ipaddress_provider: "apt"
 
 common::system::nsswitch::passwd:
-  - 'compat'
+  - "compat"
 common::system::nsswitch::shadow:
-  - 'compat'
+  - "compat"
 common::system::nsswitch::gshadow:
-  - 'files'
+  - "files"
 common::system::nsswitch::group:
-  - 'compat'
+  - "compat"
 common::system::nsswitch::hosts:
-  - 'files'
-  - 'dns'
+  - "files"
+  - "dns"
 common::system::nsswitch::ethers:
-  - 'db'
-  - 'files'
+  - "db"
+  - "files"
 common::system::nsswitch::networks:
-  - 'files'
+  - "files"
 common::system::nsswitch::protocols:
-  - 'db'
-  - 'files'
+  - "db"
+  - "files"
 common::system::nsswitch::rpc:
-  - 'db'
-  - 'files'
+  - "db"
+  - "files"
 common::system::nsswitch::services:
-  - 'db'
-  - 'files'
+  - "db"
+  - "files"
 common::system::nsswitch::netgroup:
-  - 'nis'
+  - "nis"
 
 common::network::__required_packages:
-  - 'ifupdown'
+  - "ifupdown"
 
 common::system::systemd::manage_resolved: true
-common::system::dns::resolver: 'systemd-resolved'
-common::system::dns::dnssec: 'allow-downgrade'
+common::system::dns::resolver: "systemd-resolved"
+common::system::dns::dnssec: "allow-downgrade"
 common::system::dns::dns_over_tls: false
 
 common::system::hardware::__multipath_packages:
-  - 'multipath-tools'
+  - "multipath-tools"
 
 common::system::authentication::pam::manage_pwquality: true
 
 common::system::authentication::pam::auth_lines:
   - - 10
-    - 'required      pam_env.so'
+    - "required      pam_env.so"
   - - 20
-    - 'required      pam_faildelay.so delay=2000000'
+    - "required      pam_faildelay.so delay=2000000"
   - - 30
-    - '[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet'
+    - "[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet"
   - - 40
-    - '[default=ignore ignore=ignore success=ok] pam_localuser.so'
+    - "[default=ignore ignore=ignore success=ok] pam_localuser.so"
   - - 50
-    - 'sufficient    pam_unix.so nullok try_first_pass'
+    - "sufficient    pam_unix.so nullok try_first_pass"
   - - 60
-    - 'requisite     pam_succeed_if.so uid >= 1000 quiet_success'
+    - "requisite     pam_succeed_if.so uid >= 1000 quiet_success"
   - - 70
-    - 'sufficient    pam_sss.so forward_pass'
+    - "sufficient    pam_sss.so forward_pass"
   - - 99
-    - 'required      pam_deny.so'
-
+    - "required      pam_deny.so"
 
 common::system::authentication::pam::account_lines:
   - - 10
-    - 'required      pam_unix.so'
+    - "required      pam_unix.so"
   - - 20
-    - 'sufficient    pam_localuser.so'
+    - "sufficient    pam_localuser.so"
   - - 30
-    - 'sufficient    pam_succeed_if.so uid < 1000 quiet'
+    - "sufficient    pam_succeed_if.so uid < 1000 quiet"
   - - 40
-    - '[default=bad success=ok user_unknown=ignore] pam_sss.so'
+    - "[default=bad success=ok user_unknown=ignore] pam_sss.so"
   - - 99
-    - 'required      pam_permit.so'
+    - "required      pam_permit.so"
 
 common::system::authentication::pam::password_lines:
   - - 10
-    - 'requisite     pam_pwquality.so try_first_pass retry=3 type='
+    - "requisite     pam_pwquality.so try_first_pass retry=3 type="
   - - 20
-    - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+    - "sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok"
   - - 30
-    - 'sufficient    pam_sss.so use_authtok'
+    - "sufficient    pam_sss.so use_authtok"
   - - 99
-    - 'required      pam_deny.so'
-
+    - "required      pam_deny.so"
 
 common::system::authentication::pam::session_lines:
   - - 10
-    - 'optional      pam_keyinit.so revoke'
+    - "optional      pam_keyinit.so revoke"
   - - 20
-    - 'required      pam_limits.so'
+    - "required      pam_limits.so"
   - - 30
-    - 'optional      pam_systemd.so'
+    - "optional      pam_systemd.so"
   - - 40
-    - 'optional      pam_oddjob_mkhomedir.so umask=0077'
+    - "optional      pam_oddjob_mkhomedir.so umask=0077"
   - - 50
-    - '[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+    - "[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid"
   - - 60
-    - 'required      pam_unix.so'
+    - "required      pam_unix.so"
   - - 99
-    - 'optional      pam_sss.so'
+    - "optional      pam_sss.so"
 
 common::system::authentication::pam::password_auth_lines:
   - - 10
-    - 'required      pam_env.so'
+    - "required      pam_env.so"
   - - 20
-    - 'required      pam_faildelay.so delay=2000000'
+    - "required      pam_faildelay.so delay=2000000"
   - - 30
-    - '[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet'
+    - "[default=1 ignore=ignore success=ok] pam_succeed_if.so uid >= 1000 quiet"
   - - 40
-    - '[default=ignore ignore=ignore success=ok] pam_localuser.so'
+    - "[default=ignore ignore=ignore success=ok] pam_localuser.so"
   - - 50
-    - 'sufficient    pam_unix.so nullok try_first_pass'
+    - "sufficient    pam_unix.so nullok try_first_pass"
   - - 60
-    - 'requisite     pam_succeed_if.so uid >= 1000 quiet_success'
+    - "requisite     pam_succeed_if.so uid >= 1000 quiet_success"
   - - 70
-    - 'sufficient    pam_sss.so forward_pass'
+    - "sufficient    pam_sss.so forward_pass"
   - - 99
-    - 'required      pam_deny.so'
+    - "required      pam_deny.so"
 
 common::system::authentication::pam::sshd_auth_lines:
   - - 10
-    - 'include       common-auth'
+    - "include       common-auth"
 
 common::system::authentication::pam::sshd_account_lines:
   - - 10
-    - 'required      pam_access.so listsep=,'
+    - "required      pam_access.so listsep=,"
   - - 30
-    - 'required      pam_nologin.so'
+    - "required      pam_nologin.so"
   - - 99
-    - 'include       common-account'
+    - "include       common-account"
 
 common::system::authentication::pam::sshd_password_lines:
   - - 10
-    - 'include       common-password'
+    - "include       common-password"
 
 common::system::authentication::pam::sshd_session_lines:
   - - 10
-    - 'required      pam_loginuid.so'
+    - "required      pam_loginuid.so"
   - - 20
-    - 'optional      pam_keyinit.so force revoke'
+    - "optional      pam_keyinit.so force revoke"
   - - 99
-    - 'include       common-session'
+    - "include       common-session"
 
 common::system::authentication::pam::password_account_lines:
   - - 10
-    - 'required      pam_unix.so'
+    - "required      pam_unix.so"
   - - 20
-    - 'sufficient    pam_localuser.so'
+    - "sufficient    pam_localuser.so"
   - - 30
-    - 'sufficient    pam_succeed_if.so uid < 1000 quiet'
+    - "sufficient    pam_succeed_if.so uid < 1000 quiet"
   - - 40
-    - '[default=bad success=ok user_unknown=ignore] pam_sss.so'
+    - "[default=bad success=ok user_unknown=ignore] pam_sss.so"
   - - 99
-    - 'required      pam_permit.so'
+    - "required      pam_permit.so"
 
 common::system::authentication::pam::password_password_lines:
   - - 20
-    - 'requisite     pam_pwquality.so try_first_pass retry=3 type='
+    - "requisite     pam_pwquality.so try_first_pass retry=3 type="
   - - 30
-    - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
+    - "sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok"
   - - 40
-    - 'sufficient    pam_sss.so use_authtok'
+    - "sufficient    pam_sss.so use_authtok"
   - - 99
-    - 'required      pam_deny.so'
+    - "required      pam_deny.so"
 
 common::system::authentication::pam::password_session_lines:
   - - 10
-    - 'optional      pam_keyinit.so revoke'
+    - "optional      pam_keyinit.so revoke"
   - - 20
-    - 'required      pam_limits.so'
+    - "required      pam_limits.so"
   - - 30
-    - 'optional      pam_systemd.so'
+    - "optional      pam_systemd.so"
   - - 40
-    - 'optional      pam_oddjob_mkhomedir.so umask=0077'
+    - "optional      pam_oddjob_mkhomedir.so umask=0077"
   - - 50
-    - '[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid'
+    - "[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid"
   - - 60
-    - 'required      pam_unix.so'
+    - "required      pam_unix.so"
   - - 99
-    - 'optional      pam_sss.so'
+    - "optional      pam_sss.so"
 
-common::monitor::prometheus::env_file_path: '/etc/default'
+common::monitor::prometheus::env_file_path: "/etc/default"
 common::monitor::exporter::security::enable: true

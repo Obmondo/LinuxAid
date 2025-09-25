@@ -23,29 +23,36 @@ class common::monitor::prometheus (
   Boolean              $noop_value = false,
 ) {
   File {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Service {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Package {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   User {
-    noop => $noop_value
+    noop => $noop_value,
   }
 
   Group {
-    noop => $noop_value
+    noop => $noop_value,
   }
+
+  $_init_style = $facts['init_system'] ? {
+    'sysvinit' => 'sysv',
+    'default' => 'systemd',
+  }
+
   class { 'prometheus':
     install_method    => $install_method,
     bin_dir           => $bin_dir,
     usershell         => $usershell,
     restart_on_change => true,
     env_file_path     => $env_file_path,
+    init_style        => $_init_style,
   }
 }

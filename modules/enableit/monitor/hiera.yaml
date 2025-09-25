@@ -21,7 +21,7 @@ hierarchy:
   - name: "OS kernel"
     path: "%{kernel}.yaml"
 
-  - name: 'Facts'
+  - name: "Facts"
     paths:
       - "facts/init_system=%{facts.init_system}.yaml"
       - "facts/virtual=%{facts.virtual}.yaml"

@@ -1,143 +1,148 @@
 ---
 lookup_options:
   common::repo::repos:
-    merge: 'unique'
+    merge: "unique"
   common::repo::aptrepos:
     merge:
-      strategy: 'deep'
+      strategy: "deep"
   common::repo::yumrepos:
     merge:
-      strategy: 'deep'
+      strategy: "deep"
   common::monitor::prometheus::server::collect_scrape_jobs:
-    merge: 'deep'
+    merge: "deep"
   common::system::authentication::allowed_users:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
   common::system::grub::parameters:
-    merge: 'deep'
+    merge: "deep"
   common::system::authentication::protected_users:
-    merge: 'unique'
+    merge: "unique"
   common::system::ssh_authorized_keys:
-    merge: 'deep'
+    merge: "deep"
   common::services::disabled_services:
-    merge: 'unique'
+    merge: "unique"
   common::package::manage:
-    merge: 'deep'
+    merge: "deep"
   common::network::firewall::rules:
-    merge: 'hash'
+    merge: "hash"
   common::network::interfaces:
-    merge: 'hash'
+    merge: "hash"
   common::package::default_packages:
-    merge: 'unique'
+    merge: "unique"
 
   common::system::authentication::sudo::sudoers:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
   common::system::files:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
   common::system::users:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!'
+      strategy: "deep"
+      knockout_prefix: "!"
   common::system::user_groups:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!'
+      strategy: "deep"
+      knockout_prefix: "!"
   common::system::authentication::sssd::domains:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!'
+      strategy: "deep"
+      knockout_prefix: "!"
   common::storage::mounts:
     merge:
-      strategy: 'hash'
+      strategy: "hash"
   common::system::kernel::sysctl:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
   common::storage::samba::shares:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::account_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::auth_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::password_account_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::password_auth_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::password_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::password_password_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::password_session_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::session_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::sshd_account_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::sshd_auth_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::sshd_password_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::authentication::pam::sshd_session_lines:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::services:
     merge:
-      strategy: 'deep'
-      knockout_prefix: '!!'
+      strategy: "deep"
+      knockout_prefix: "!!"
 
   common::system::nsswitch::passwd:
-    merge: 'unique'
+    merge: "unique"
   common::system::nsswitch::group:
-    merge: 'unique'
+    merge: "unique"
   common::system::nsswitch::shadow:
-    merge: 'unique'
+    merge: "unique"
   common::system::nsswitch::gshadow:
-    merge: 'unique'
+    merge: "unique"
   common::monitor::exporter::mtail::logs:
-    merge: 'unique'
+    merge: "unique"
+
+  common::default::classes:
+    merge: "unique"
+  common::role_basic::classes:
+    merge: "unique"
 
 ## Global settings for common class
 common::full_host_management: true
@@ -152,6 +157,13 @@ common::monitoring::manage: true
 common::extras::manage: false
 common::mail::manage: false
 
+common::default::classes:
+  - common::setup
+  - common::puppet
+  - common::monitor
+  - common::monitoring
+  - common::hosts
+
 ## System Settings
 common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false
@@ -159,20 +171,20 @@ common::system::systemd::manage_resolved: false
 ### Authentication
 common::system::authentication::manage: false
 common::system::authentication::allowed_users:
-  'root':
-    - 'ALL'
-  '(obmondo)':
-    - '109.238.49.194'
-    - '109.238.49.196'
-    - '144.76.69.71'
-    - '95.216.10.96'
-    - '95.216.10.103'
-    - 'localhost'
-  'obmondo-admin':
-    - 'ALL'
-  'ALL':
-    - 'cron'
-    - 'crond'
+  "root":
+    - "ALL"
+  "(obmondo)":
+    - "109.238.49.194"
+    - "109.238.49.196"
+    - "144.76.69.71"
+    - "95.216.10.96"
+    - "95.216.10.103"
+    - "localhost"
+  "obmondo-admin":
+    - "ALL"
+  "ALL":
+    - "cron"
+    - "crond"
 common::system::authentication::manage_nis: false
 common::system::authentication::manage_pam: false
 common::system::authentication::manage_sssd: false
@@ -180,6 +192,7 @@ common::system::authentication::ignore_expired_root_password: false
 common::system::authentication::purge_ubuntu_user: false
 common::system::authentication::purge_user: false
 
+common::system::authentication::sudo::manage: true
 common::system::authentication::sudo::purge: false
 
 ### DNS
@@ -192,7 +205,7 @@ common::system::dns::searchpath: []
 ### Kernel Modules
 common::system::kernel::modules:
   blacklist:
-    - 'floppy'
+    - "floppy"
 
 ### Keepalived Failover
 common::system::failover::enable: false
@@ -213,39 +226,39 @@ common::system::motd::enable: true
 ### Nsswitch
 common::system::nsswitch::manage: false
 common::system::nsswitch::sudoers:
-  - 'files'
+  - "files"
 
 ### SSHD
 common::system::sshd::manage: false
 common::system::sshd::kexalgorithms:
-  - 'curve25519-sha256@libssh.org'
-  - 'ecdh-sha2-nistp521'
-  - 'ecdh-sha2-nistp384'
-  - 'ecdh-sha2-nistp256'
-  - 'diffie-hellman-group-exchange-sha256'
+  - "curve25519-sha256@libssh.org"
+  - "ecdh-sha2-nistp521"
+  - "ecdh-sha2-nistp384"
+  - "ecdh-sha2-nistp256"
+  - "diffie-hellman-group-exchange-sha256"
 common::system::sshd::ciphers:
-  - 'chacha20-poly1305@openssh.com'
-  - 'aes256-gcm@openssh.com'
-  - 'aes128-gcm@openssh.com'
-  - 'aes256-ctr'
-  - 'aes192-ctr'
-  - 'aes128-ctr'
+  - "chacha20-poly1305@openssh.com"
+  - "aes256-gcm@openssh.com"
+  - "aes128-gcm@openssh.com"
+  - "aes256-ctr"
+  - "aes192-ctr"
+  - "aes128-ctr"
 common::system::sshd::macs:
-  - 'hmac-sha2-512-etm@openssh.com'
-  - 'hmac-sha2-256-etm@openssh.com'
-  - 'umac-128-etm@openssh.com'
-  - 'hmac-sha2-512'
-  - 'hmac-sha2-256'
-  - 'umac-128@openssh.com'
+  - "hmac-sha2-512-etm@openssh.com"
+  - "hmac-sha2-256-etm@openssh.com"
+  - "umac-128-etm@openssh.com"
+  - "hmac-sha2-512"
+  - "hmac-sha2-256"
+  - "umac-128@openssh.com"
 
 ### NTP
 common::system::time::manage_timezone: true
 common::system::time::manage_ntp: false
 common::system::time::ntp::servers:
-  - '0.dk.pool.ntp.org'
-  - 'tix.ns.tele.dk'
-  - '1.dk.pool.ntp.org'
-  - 'ntp.inet.tele.dk'
+  - "0.dk.pool.ntp.org"
+  - "tix.ns.tele.dk"
+  - "1.dk.pool.ntp.org"
+  - "ntp.inet.tele.dk"
 
 ### Cloud Init
 common::system::cloud_init::manage: false
@@ -256,51 +269,51 @@ common::system::selinux::enable: false
 ### Jumphost
 common::system::jumphost::enable: false
 
-common::settings::custom_config_dir: '/opt/custom'
-common::settings::pgp_keyserver: 'pgp.mit.edu'
+common::settings::custom_config_dir: "/opt/custom"
+common::settings::pgp_keyserver: "pgp.mit.edu"
 common::package::install_default_packages: true
 common::package::default_packages:
-  - 'bash-completion'
-  - 'curl'
-  - 'less'
-  - 'lsof'
-  - 'netcat'
-  - 'rsync'
-  - 'socat'
-  - 'strace'
-  - 'tcpdump'
-  - 'tmux'
-  - 'net-tools'
+  - "bash-completion"
+  - "curl"
+  - "less"
+  - "lsof"
+  - "netcat"
+  - "rsync"
+  - "socat"
+  - "strace"
+  - "tcpdump"
+  - "tmux"
+  - "net-tools"
 
-common::setup::__conf_dir: '/etc/obmondo'
+common::setup::__conf_dir: "/etc/obmondo"
 
 common::mail::stats_daemon_port: 63777
 
 common::services::disabled_services:
-  - 'smartd'
+  - "smartd"
 
 common::system::services:
-  'rpc-svcgssd':
-    enable: 'mask'
+  "rpc-svcgssd":
+    enable: "mask"
     noop: false
-  'sssd-pac':
-    enable: 'mask'
+  "sssd-pac":
+    enable: "mask"
     noop: false
 
 # Puppet
-common::puppet::version: '7.33.0'
+common::puppet::version: "7.33.0"
 common::puppet::configure_agent: true
 common::puppet::setup_agent: true
 
 # KeepAlived
 common::keepalived::global_defs:
-  notification_email: 'info@obmondo.com'
-  notification_email_from: 'keepalived@enableit.dk'
-  smtp_server: '127.0.0.1'
+  notification_email: "info@obmondo.com"
+  notification_email_from: "keepalived@enableit.dk"
+  smtp_server: "127.0.0.1"
   smtp_connect_timeout: 30
 
-common::certs::__base_dir: '/etc/ssl/private/static-certs'
-common::certs::letsencrypt::deploy_hook_command: '/opt/obmondo/bin/letsencrypt_deploy_hook.sh'
+common::certs::__base_dir: "/etc/ssl/private/static-certs"
+common::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
 common::monitor::exporter::enable: true
 common::monitor::exporter::iptables::enable: true
@@ -310,12 +323,12 @@ common::monitor::exporter::blackbox::listen_port: 63315
 
 common::monitor::prometheus::noop_value: false
 common::monitor::prometheus::install_method: package
-common::monitor::prometheus::bin_dir: '/opt/obmondo/bin'
-common::monitor::prometheus::usershell: '/usr/sbin/nologin'
+common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
+common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
 common::monitor::prometheus::server::version: 2.48.1
 common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
-common::monitor::prometheus::server::config_dir: '/etc/prometheus'
+common::monitor::prometheus::server::config_dir: "/etc/prometheus"
 common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: node
   - job_name: blackbox
@@ -349,8 +362,8 @@ common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: cadvisor
   - job_name: security
 
-common::monitor::exporter::node::lib_directory: '/var/lib/node_exporter'
-common::monitor::exporter::node::textfile_directory: '/var/lib/node_exporter/textfile_collector'
+common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
+common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
 common::monitor::exporter::node::enable: true
 common::monitor::exporter::node::noop_value: false
@@ -411,7 +424,7 @@ common::software::insights::manage: false
 
 # Logging
 common::logging::logrotate::manage: true
-common::logging::log_dir_group: 'syslog'
+common::logging::log_dir_group: "syslog"
 common::logging::rsyslog::manage: true
 common::logging::rsyslog::log_local: false
 common::logging::journal::manage: true
@@ -422,10 +435,10 @@ common::backup::gitea::enable: false
 common::backup::db::enable: false
 
 ## Borg
-common::backup::borg::__dir: '/opt/obmondo/borgbackup'
+common::backup::borg::__dir: "/opt/obmondo/borgbackup"
 
 ## PGSQL Backup
-common::backup::db::pgsql::backup_user: 'postgres'
+common::backup::db::pgsql::backup_user: "postgres"
 common::backup::db::pgsql::backup_hour: 3
 common::backup::db::pgsql::ignore_tables: []
 common::backup::db::pgsql::backup_retention: 30

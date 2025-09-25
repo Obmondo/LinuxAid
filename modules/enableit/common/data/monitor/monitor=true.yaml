@@ -1,0 +1,3 @@
+---
+common::role_basic::classes:
+  - common::system::updates
