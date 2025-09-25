@@ -198,4 +198,3 @@ common::system::authentication::pam::password_session_lines:
 
 common::monitor::prometheus::env_file_path: "/etc/default"
 common::monitor::exporter::security::enable: true
-common::system::authentication::sudo::manage: true

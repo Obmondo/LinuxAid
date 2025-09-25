@@ -192,6 +192,7 @@ common::system::authentication::ignore_expired_root_password: false
 common::system::authentication::purge_ubuntu_user: false
 common::system::authentication::purge_user: false
 
+common::system::authentication::sudo::manage: true
 common::system::authentication::sudo::purge: false
 
 ### DNS
