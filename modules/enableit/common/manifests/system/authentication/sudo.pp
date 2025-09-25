@@ -14,5 +14,7 @@ class common::system::authentication::sudo (
   Eit_types::Sudoers $sudoers = {},
   Stdlib::Absolutepath $__sudoers_d_dir = '/etc/obmondo/sudoers.d',
 ) {
-  include ::profile::system::sudoers
+  if lookup('common::system::authentication::sudo::manage', Boolean, undef, true) {
+    include profile::system::sudoers
+  }
 }

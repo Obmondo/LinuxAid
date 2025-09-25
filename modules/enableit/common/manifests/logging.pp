@@ -8,20 +8,20 @@
 # @param log_dir_mode Mode for the log directory. Defaults to '0755'.
 #
 class common::logging (
-  Boolean                    $manage        = true,
+  Boolean                    $manage,
   Optional[Eit_types::Group] $log_dir_group = undef,
   Stdlib::Filemode           $log_dir_mode  = '0755',
 ) {
   if $manage {
     if lookup('common::logging::logrotate::manage', Boolean, undef, false) {
-      contain ::common::logging::logrotate
+      contain common::logging::logrotate
     }
     if lookup('common::logging::rsyslog::manage', Boolean, undef, false) {
-      contain ::common::logging::rsyslog
+      contain common::logging::rsyslog
     }
     if lookup('common::logging::journal::manage', Boolean, undef, false) {
-      contain ::common::logging::journal
+      contain common::logging::journal
     }
-    contain ::profile::logging
+    contain profile::logging
   }
 }

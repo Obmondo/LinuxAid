@@ -1,0 +1,12 @@
+---
+common::monitor::prometheus::env_file_path: "/etc/default"
+common::system::authentication::sudo::manage: false
+common::logging::manage: false
+common::default::classes:
+  - common::convenience
+  - common::package
+  - common::system
+  - common::security
+common::role_basic::classes: []
+common::full_host_management: false
+common::repo::manage: false
