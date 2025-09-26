@@ -447,8 +447,10 @@ common::backup::db::pgsql::backup_retention: 30
 common::network::firewall::enable: false
 common::network::wireguard::enable: false
 
+# Netbird
 common::network::netbird::enable: false
-common::network::netbird::setup_key: lol
+common::network::netbird::install_method: repo
+common::network::netbird::version: 0.58.2
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
