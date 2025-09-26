@@ -1,5 +1,5 @@
 ---
-common::system::systemd::manage_journal: true
+common::system::systemd::manage_journald: true
 common::system::time::ntp::ntp_client: 'systemd-timesyncd'
 common::monitor::exporter::node::systemd: true
 
