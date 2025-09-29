@@ -44,7 +44,7 @@ class common::monitor::prometheus (
 
   $_init_style = $facts['init_system'] ? {
     'sysvinit' => 'sysv',
-    'default' => 'systemd',
+    default    => 'systemd',
   }
 
   class { 'prometheus':
