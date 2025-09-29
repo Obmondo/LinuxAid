@@ -32,7 +32,7 @@ class common (
   Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
   Stage['setup'] -> Stage['main']
   # lint:ignore:top_scope_facts
-  if $facts['obmondo_monitoring_status'] {
+  if $::obmondo_monitoring_status {
     # NOTE: Lets not allow anyone to remove our public repo, otherwise monitoring won't be setup
     eit_repos::repo { 'enableit_client':
       noop_value => false,
