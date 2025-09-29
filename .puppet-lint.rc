@@ -5,3 +5,4 @@
 --no-top_scope_facts
 # --no-strict_indent
 # --no-file_ensure
+# --no-relative_classname_inclusion
