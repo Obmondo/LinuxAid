@@ -1,6 +1,6 @@
 ---
 monitor::system::defaults:
-  - contain monitor::system::cpu
-  - contain monitor::system::disk
-  - contain monitor::system::load
-  - contain monitor::system::ram
+  - monitor::system::cpu
+  - monitor::system::disk
+  - monitor::system::load
+  - monitor::system::ram
