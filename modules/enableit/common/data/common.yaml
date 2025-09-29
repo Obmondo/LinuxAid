@@ -139,11 +139,6 @@ lookup_options:
   common::monitor::exporter::mtail::logs:
     merge: "unique"
 
-  common::default::classes:
-    merge: "unique"
-  common::role_basic::classes:
-    merge: "unique"
-
 ## Global settings for common class
 common::full_host_management: true
 common::repo::manage: true
