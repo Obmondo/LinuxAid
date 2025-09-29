@@ -43,14 +43,14 @@ monitor::noop_value: false
 monitor::domains::enable: true
 
 monitor::system::defaults:
-  - contain monitor::system::cpu
-  - contain monitor::system::disk
-  - contain monitor::system::load
-  - contain monitor::system::ram
-  - contain monitor::system::ntp
-  - contain monitor::system::psi
-  - contain monitor::system::service
-  - contain monitor::system::file_size
-  - contain monitor::system::hwmon
-  - contain monitor::system::dns
-  - contain monitor::system::docker
+  - monitor::system::cpu
+  - monitor::system::disk
+  - monitor::system::load
+  - monitor::system::ram
+  - monitor::system::ntp
+  - monitor::system::psi
+  - monitor::system::service
+  - monitor::system::file_size
+  - monitor::system::hwmon
+  - monitor::system::dns
+  - monitor::system::docker
