@@ -12,6 +12,7 @@ hierarchy:
 
   - name: "Monitor"
     paths:
+      - "monitor/monitor=%{::obmondo_monitor},os.name=%{facts.os.name}.yaml"
       - "monitor/monitor=%{::obmondo_monitor}.yaml"
 
   - name: "Facts"

@@ -77,7 +77,7 @@ class common (
       contain common::security
       contain common::extras
       # Only manage mail if not using a role that provides it
-      if $::obmondo_classes.grep('::kolab').empty or $::obmondo_classes.grep('::mailcow').empty {
+      if $::obmondo_classes.grep('::mailcow').empty {
         contain common::mail
       }
       $filepermissions.each |$path, $params| {

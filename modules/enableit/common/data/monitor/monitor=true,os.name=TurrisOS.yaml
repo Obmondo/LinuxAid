@@ -1,0 +1,2 @@
+---
+common::system::updates::enable: false
