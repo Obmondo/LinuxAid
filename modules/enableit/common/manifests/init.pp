@@ -34,9 +34,14 @@ class common (
   # lint:ignore:top_scope_facts
   if $::obmondo_monitoring_status {
     # NOTE: Lets not allow anyone to remove our public repo, otherwise monitoring won't be setup
-    eit_repos::repo { 'enableit_client':
-      noop_value => false,
+    # NOTE: For now, ignore setting up monitoring for TurrisOS, since opkg isn't supported as package provider.
+    # NOTE: Later this needs to be fixed.
+    if $facts['os']['name'] != 'TurrisOS' {
+      eit_repos::repo { 'enableit_client':
+          noop_value => false,
+      }
     }
+
     # NOTE: Need these classes to be setup as a bare minimum on all roles
     # These classes are loaded on each puppet run, and will be setup in noop
     lookup('common::default::classes').each | $role | {
