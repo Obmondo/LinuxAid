@@ -159,6 +159,22 @@ common::default::classes:
   - common::monitoring
   - common::hosts
 
+common::system::classes:
+  - common::system::authentication
+  - common::system::dns
+  - common::system::kernel
+  - common::system::grub
+  - common::system::failover
+  - common::system::hardware
+  - common::system::limits
+  - common::system::package_management
+  - common::system::motd
+  - common::system::nsswitch
+  - common::system::sshd
+  - common::system::time
+  - common::system::cloud_init
+  - common::system::selinux
+
 ## System Settings
 common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false

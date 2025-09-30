@@ -35,8 +35,8 @@ class common::system (
   Hash[String,Hash]              $files               = {},
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
-    content => Stdlib::Base64,
-  }]]] $service_oneshot  = {},
+          content => Stdlib::Base64,
+  }]]] $service_oneshot  = undef,
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
   Eit_types::Encrypt::Params    $encrypt_params           = ['ssh_authorized_keys.*.key'],
@@ -167,7 +167,7 @@ class common::system (
     $_source = $_file_parameters['source']
     # Only allow sources that the Obmondo file resource pattern
     if $_source and $_source !~ Eit_Files::Source {
-      fail("Invalid file resource
+    fail("Invalid file resource
            ${_element}")
     }
 
@@ -180,7 +180,7 @@ class common::system (
   #  Service_Oneshot
   #################
 
-  $service_oneshot.each |$name, $value| {
+  $service_oneshot.lest || {{} }.each |$name, $value| {
     profile::system::service_oneshot { $name:
       content => $value['content'],
     }
@@ -215,8 +215,8 @@ class common::system (
   $_obmondo_system_facts = {
     'obmondo_system' => {
       'location' => $_location,
-      'certname' => $facts['networking']['hostname']
-    }
+      'certname' => $facts['networking']['hostname'],
+    },
   }
 
   file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
@@ -234,22 +234,8 @@ class common::system (
 
   # NOTE: includes all these system profile, but some are set to enable
   # and some set to disable, depending on the requirement.
-  include common::system::authentication
-  include common::system::dns
-  include common::system::kernel
-  include common::system::grub
-  include common::system::failover
-  include common::system::hardware
-  include common::system::limits
-  include common::system::package_management
-  include common::system::motd
-  include common::system::nsswitch
-  include common::system::sshd
-  include common::system::time
-  include common::system::cloud_init
-  include common::system::selinux
-  if $::subscription {
-    include common::system::updates
+  lookup('common::system::classes').each | $subclass | {
+    include $subclass
   }
 
   unless lookup('common::system::jumphost::configs', Hash, undef, {}).empty {
