@@ -1,9 +1,7 @@
 ---
 common::system::updates::enable: true
-common::repo::manage: true
 common::monitoring::manage: true
 
-common::full_host_management: true
 common::logging::manage: false
 common::backup::manage: false
 common::cron::purge_unmanaged: false

@@ -139,11 +139,6 @@ lookup_options:
   common::monitor::exporter::mtail::logs:
     merge: "unique"
 
-  common::default::classes:
-    merge: "unique"
-  common::role_basic::classes:
-    merge: "unique"
-
 ## Global settings for common class
 common::full_host_management: true
 common::repo::manage: true
@@ -163,6 +158,22 @@ common::default::classes:
   - common::monitor
   - common::monitoring
   - common::hosts
+
+common::system::classes:
+  - common::system::authentication
+  - common::system::dns
+  - common::system::kernel
+  - common::system::grub
+  - common::system::failover
+  - common::system::hardware
+  - common::system::limits
+  - common::system::package_management
+  - common::system::motd
+  - common::system::nsswitch
+  - common::system::sshd
+  - common::system::time
+  - common::system::cloud_init
+  - common::system::selinux
 
 ## System Settings
 common::system::systemd::manage_journald: false
@@ -447,8 +458,10 @@ common::backup::db::pgsql::backup_retention: 30
 common::network::firewall::enable: false
 common::network::wireguard::enable: false
 
+# Netbird
 common::network::netbird::enable: false
-common::network::netbird::setup_key: lol
+common::network::netbird::install_method: repo
+common::network::netbird::version: 0.58.2
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785

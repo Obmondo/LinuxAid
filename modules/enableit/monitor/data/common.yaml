@@ -2,8 +2,6 @@
 lookup_options:
   monitor::system::service::down::blacklist:
     merge: unique
-  monitor::system::defaults:
-    merge: unique
 
 monitor::system::disk::exclude_type:
   - "cgroup"
