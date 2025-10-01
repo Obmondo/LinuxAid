@@ -70,6 +70,13 @@ class profile::network::netbird (
       noop      => $noop_value,
       subscribe => Archive['netbird'],
     }
+
+    exec { 'netbird_service_start':
+      command   => 'netbird service start',
+      path      => '/usr/bin:/usr/sbin:/bin',
+      noop      => $noop_value,
+      subscribe => Exec['netbird_service_install'],
+    }
   }
 
   if $facts['init_system'] == 'systemd' {
