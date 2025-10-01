@@ -82,7 +82,7 @@ class profile::network::netbird (
   if $facts['init_system'] == 'systemd' {
     Exec <| tag == 'systemd-netbird.service-systemctl-daemon-reload' |> {
       noop => $noop_value,
-      subscribe => Exec['netbird_service_install'],
+      subscribe => Exec['netbird_service_start'],
     }
   }
 
@@ -96,7 +96,7 @@ class profile::network::netbird (
         "NB_MANAGEMENT_URL=${server}",
       ],
       unless      => "netbird status -d | grep -i 'Management: Connected'",
-      subscribe   => Exec['netbird_service_install'],
+      subscribe   => Exec['netbird_service_start'],
       notify      => Service['netbird'],
     }
   }
