@@ -50,13 +50,14 @@ class profile::network::netbird (
   }
 
   # Install NetBird service
-  exec { 'netbird_service_install':
-    command   => 'netbird service install',
-    path      => '/usr/bin:/usr/sbin:/bin',
-    creates   => $_service_file,
-    onlyif    => $enable,
-    noop      => $noop_value,
-    subscribe => Archive['netbird'],
+  if $enable {
+    exec { 'netbird_service_install':
+      command   => 'netbird service install',
+      path      => '/usr/bin:/usr/sbin:/bin',
+      creates   => $_service_file,
+      noop      => $noop_value,
+      subscribe => Archive['netbird'],
+    }
   }
 
   if $facts['init_system'] == 'systemd' {
