@@ -30,7 +30,7 @@ class profile::network::netbird (
       'test ! -f netbird',
       "test $(netbird version) != ${version}",
     ],
-    path    => '/usr/bin:/usr/sbin:/bin',
+    path    => '/usr/bin:/usr/sbin:/bin:/sbin',
     noop    => $noop_value,
   }
 
@@ -65,7 +65,7 @@ class profile::network::netbird (
   if $enable {
     exec { 'netbird_service_install':
       command   => 'netbird service install',
-      path      => '/usr/bin:/usr/sbin:/bin',
+      path      => '/usr/bin:/usr/sbin:/bin:/sbin',
       creates   => $_service_file,
       noop      => $noop_value,
       subscribe => Archive['netbird'],
@@ -73,7 +73,7 @@ class profile::network::netbird (
 
     exec { 'netbird_service_start':
       command   => 'netbird service start',
-      path      => '/usr/bin:/usr/sbin:/bin',
+      path      => '/usr/bin:/usr/sbin:/bin:/sbin',
       noop      => $noop_value,
       subscribe => Exec['netbird_service_install'],
     }
@@ -90,7 +90,7 @@ class profile::network::netbird (
     exec { 'netbird up':
       command     => 'netbird up',
       noop        => $noop_value,
-      path        => '/usr/bin:/usr/sbin:/bin',
+      path        => '/usr/bin:/usr/sbin:/bin:/sbin',
       environment => [
         "NB_SETUP_KEY=${setup_key}",
         "NB_MANAGEMENT_URL=${server}",
