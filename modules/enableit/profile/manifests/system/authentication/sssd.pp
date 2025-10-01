@@ -136,7 +136,7 @@ class profile::system::authentication::sssd (
         enable     => $enable,
         noop_value => $noop_value,
         timer      => {
-          'OnBootSec'  => '5min',
+          'OnBootSec'  => '30min',
           'OnCalendar' => systemd_make_timespec({
             'year'   => '*',
             'month'  => '*',
