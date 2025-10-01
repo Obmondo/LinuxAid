@@ -23,6 +23,17 @@ class profile::network::netbird (
   Eit_types::Version      $version        = $common::network::netbird::version,
   Enum['package', 'repo'] $install_method = $common::network::netbird::install_method,
 ) {
+  # Version check 
+  exec { 'check_netbird_version':
+    command => '/bin/true',
+    unless  => [
+      'test ! -f netbird',
+      "test $(netbird version) != ${version}",
+    ],
+    path    => '/usr/bin:/usr/sbin:/bin',
+    noop    => $noop_value,
+  }
+
   # Include archive module for download capabilities
   include archive
 
@@ -35,11 +46,12 @@ class profile::network::netbird (
     source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
     extract      => true,
     path         => '/tmp/netbird.tar.gz',
-    extract_path => '/tmp',
+    extract_path => '/usr/bin',
     creates      => '/usr/bin/netbird',
     cleanup      => true,
     user         => 'root',
     group        => 'root',
+    subscribe    => Exec['check_netbird_version'],
     noop         => $noop_value,
   }
 
