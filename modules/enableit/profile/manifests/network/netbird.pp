@@ -27,7 +27,7 @@ class profile::network::netbird (
   include archive
 
   $_kernel = $facts['kernel'].downcase
-  $_arch   = profile::netbird_arch
+  $_arch   = profile::netbird_arch()
 
   # Download and extract NetBird binary from GitHub releases
   archive { 'netbird':
