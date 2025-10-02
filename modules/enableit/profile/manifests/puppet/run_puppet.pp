@@ -1,5 +1,7 @@
 # Run puppet on client nodes
-class profile::puppet::run_puppet {
+class profile::puppet::run_puppet (
+  Eit_types::Certname $certname = $::trusted['certname']
+) {
 
   Service {
     noop => false,
@@ -63,7 +65,7 @@ class profile::puppet::run_puppet {
       RandomizedDelaySec=${_minutes}s
       | EOT
 
-    $_service = @(EOT)
+    $_service = @("EOT"/$n)
       # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
       [Unit]
       Description=Run puppet agent based on the noop status
@@ -73,7 +75,7 @@ class profile::puppet::run_puppet {
       Type=oneshot
       EnvironmentFile=-/etc/default/run_puppet
       Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
-      ExecStart=/opt/obmondo/bin/run_puppet
+      ExecStart=/opt/obmondo/bin/run_puppet --certname ${certname}
       | EOT
 
     systemd::timer { 'run-puppet.timer':
