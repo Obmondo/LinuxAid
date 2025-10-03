@@ -53,7 +53,7 @@ class profile::network::netbird (
         ensure       => ensure_present($enable),
         source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
         extract      => true,
-        path         => '/tmp/netbird.tar.gz',
+        path         => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
         extract_path => '/usr/bin',
         cleanup      => true,
         user         => 'root',
