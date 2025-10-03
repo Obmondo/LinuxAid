@@ -461,7 +461,7 @@ common::network::wireguard::enable: false
 # Netbird
 common::network::netbird::enable: false
 common::network::netbird::install_method: repo
-common::network::netbird::version: 0.58.2
+common::network::netbird::version: 0.59.2
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
