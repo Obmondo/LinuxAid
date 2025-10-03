@@ -41,9 +41,10 @@ class profile::network::netbird (
       }
 
       package { 'kmod-tun':
-        ensure  => ensure_present($enable),
-        noop    => $noop_value,
-        require => Exec['update_package_repo'],
+        ensure   => ensure_present($enable),
+        provider => 'opkg',
+        noop     => $noop_value,
+        require  => Exec['update_package_repo'],
       }
     }
 
