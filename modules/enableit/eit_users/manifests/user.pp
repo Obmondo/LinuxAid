@@ -17,11 +17,6 @@ define eit_users::user (
   Optional[Boolean]                   $noop_value          = undef,
 ) {
 
-  $_managehome = $ensure ? {
-    'present' => true,
-    default   => false,
-  }
-
   # Make sure we don't try to set the homedir of root to `/home/root`, unless
   # the $home parameter is set
   $_homedir = pick($home, $name ? {
@@ -45,13 +40,24 @@ define eit_users::user (
     comment        => $realname,
     password       => $password_hash,
     expiry         => $expiry,
-    managehome     => $_managehome,
+    managehome     => false,
     system         => $system,
     # puppet will complain if we try to purge ssh keys for missing users
     purge_ssh_keys => $_purge_ssh_keys,
     require        => if $gid {
       Group[$gid]
     },
+  }
+
+  file { "${_homedir}":
+    ensure  => 'directory',
+    owner   => $name,
+    group   => $gid ? {
+      undef   => $name,
+      default => $gid,
+    },
+    mode    => '0700',
+    require => User[$title],
   }
 
   if $sudoroot {
@@ -88,7 +94,7 @@ define eit_users::user (
       key     => $sshkey_match['key'],
       user    => $title,
       options => $options,
-      require => User[$title],
+      require => [User[$title], File["${_homedir}"]],
     }
   }
 }
