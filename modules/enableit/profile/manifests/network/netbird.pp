@@ -35,17 +35,20 @@ class profile::network::netbird (
   if $enable {
     if $_os_name == 'TurrisOS' {
       exec { 'update_package_repo':
-        command => 'opkg update',
+        command => 'opkg update; opkg install kmod-tun',
         path    => '/usr/bin:/usr/sbin:/bin:/sbin',
         noop    => $noop_value,
       }
 
-      package { 'kmod-tun':
-        ensure   => ensure_present($enable),
-        provider => 'opkg',
-        noop     => $noop_value,
-        require  => Exec['update_package_repo'],
-      }
+      # Uncomment the following piece of code when
+      # https://github.com/OpenVoxProject/openvox/pull/221 is merged
+      # and we've migrated from Puppet to OpenVox.
+      # package { 'kmod-tun':
+      #   ensure   => ensure_present($enable),
+      #   provider => 'opkg',
+      #   noop     => $noop_value,
+      #   require  => Exec['update_package_repo'],
+      # }
     }
 
     # Download and extract NetBird binary from GitHub releases
