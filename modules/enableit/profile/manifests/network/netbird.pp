@@ -26,63 +26,86 @@ class profile::network::netbird (
   # Include archive module for download capabilities
   include archive
 
-  $_kernel = $facts['kernel'].downcase
-  $_arch   = profile::netbird_arch
-
-  # Download and extract NetBird binary from GitHub releases
-  archive { 'netbird':
-    ensure       => ensure_present($enable),
-    source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
-    extract      => true,
-    extract_path => '/tmp',
-    creates      => '/usr/bin/netbird',
-    cleanup      => true,
-    user         => 'root',
-    group        => 'root',
-    noop         => $noop_value,
-  }
-
-  # creates sysvinit script for OpenWRT
-  $_service_file = $facts['init_system'] ? {
-    'sysvinit' => '/etc/init.d/netbird',
-    'default' => '/etc/systemd/system/netbird.service',
-  }
+  $_installed_netbird_version = $facts['netbird_client_version']
+  $_os_name                   = $facts['os']['name']
+  $_kernel                    = $facts['kernel'].downcase
+  $_arch                      = profile::netbird_arch()
 
   # Install NetBird service
-  exec { 'netbird_service_install':
-    command   => 'netbird service install',
-    path      => '/usr/bin:/usr/sbin:/bin',
-    creates   => $_service_file,
-    onlyif    => $enable,
-    noop      => $noop_value,
-    subscribe => Archive['netbird'],
-  }
-
-  if $facts['init_system'] == 'systemd' {
-    Exec <| tag == 'systemd-netbird.service-systemctl-daemon-reload' |> {
-      noop => $noop_value,
-      subscribe => Exec['netbird_service_install'],
-    }
-  }
-
   if $enable {
-    exec { 'netbird up':
+    if $_os_name == 'TurrisOS' {
+      exec { 'update_package_repo':
+        command => 'opkg update; opkg install kmod-tun',
+        path    => '/usr/bin:/usr/sbin:/bin:/sbin',
+        noop    => $noop_value,
+      }
+
+      # Uncomment the following piece of code when
+      # https://github.com/OpenVoxProject/openvox/pull/221 is merged
+      # and we've migrated from Puppet to OpenVox.
+      # package { 'kmod-tun':
+      #   ensure   => ensure_present($enable),
+      #   provider => 'opkg',
+      #   noop     => $noop_value,
+      #   require  => Exec['update_package_repo'],
+      # }
+    }
+
+    # Download and extract NetBird binary from GitHub releases
+    if $_installed_netbird_version != $version {
+      archive { 'netbird':
+        ensure       => ensure_present($enable),
+        source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract      => true,
+        path         => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract_path => '/usr/bin',
+        cleanup      => true,
+        user         => 'root',
+        group        => 'root',
+        noop         => $noop_value,
+        notify       => Exec['netbird_service_install'],
+      }
+
+      # creates sysvinit script for OpenWRT
+      $_service_file = $facts['init_system'] ? {
+        'sysvinit' => '/etc/init.d/netbird',
+        'default' => '/etc/systemd/system/netbird.service',
+      }
+
+      exec { 'netbird_service_install':
+        command => 'netbird service install',
+        path    => '/usr/bin:/usr/sbin:/bin:/sbin',
+        creates => $_service_file,
+        noop    => $noop_value,
+        notify  => Service['netbird'],
+      }
+
+      if $facts['init_system'] == 'systemd' {
+        Exec <| tag == 'systemd-netbird.service-systemctl-daemon-reload' |> {
+          noop => $noop_value,
+          subscribe => Exec['netbird_service_install'],
+        }
+      }
+    }
+
+    exec { 'netbird_up':
       command     => 'netbird up',
       noop        => $noop_value,
-      path        => '/usr/bin:/usr/sbin:/bin',
+      path        => '/usr/bin:/usr/sbin:/bin:/sbin',
       environment => [
         "NB_SETUP_KEY=${setup_key}",
         "NB_MANAGEMENT_URL=${server}",
       ],
       unless      => "netbird status -d | grep -i 'Management: Connected'",
-      subscribe   => Exec['netbird_service_install'],
-      notify      => Service['netbird'],
+      require     => Service['netbird'],
     }
   }
 
   service { 'netbird':
     ensure => ensure_service($enable),
+    enable => $enable,
     noop   => $noop_value,
+    notify => Exec['netbird_up'],
   }
 
   firewall { '0001 allow netbird turn service':
