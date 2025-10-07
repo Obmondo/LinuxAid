@@ -57,7 +57,7 @@ class profile::puppet::run_puppet {
       WantedBy=timers.target
 
       [Timer]
-      OnBootSec=15m
+      OnBootSec=1m
       OnUnitActiveSec=1h
       Unit=run-puppet.service
       RandomizedDelaySec=${_minutes}s
