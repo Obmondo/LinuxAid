@@ -37,7 +37,7 @@ repository::mirror::default_configurations:
       el_openvox8:
         enable: false
         mirror_url: 'https://yum.voxpupuli.org/openvox8/el/'
-        repodir: 'openvox/yum/puppet8/el/'
+        repodir: 'openvox/yum/openvox8/el/'
         dists:
           - '7'
           - '8'
@@ -50,7 +50,7 @@ repository::mirror::default_configurations:
       sles_openvox8:
         enable: false
         mirror_url: 'https://yum.voxpupuli.org/openvox8/sles/'
-        repodir: 'openvox/sles/puppet8/'
+        repodir: 'openvox/sles/openvox8/'
         dists:
           - '15'
         package_format: 'rpm'
