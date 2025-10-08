@@ -99,8 +99,16 @@ class PuppetAgent::Runner
         obj.tag = nil if obj.respond_to?(:tag=)
       end
 
+      ruby_report = report.to_ruby
+      # check if the run is marked as failed
+      if ruby_report['status'] == 'failed'
+        return error_result(
+          'puppet_agent/agent-run-error',
+          "Puppet agent run failed: #{run_result}",
+        )
+      end
       {
-        'report'   => report.to_ruby,
+        'report'   => ruby_report,
         'exitcode' => run_result.exitstatus,
         '_output'  => run_result
       }
@@ -138,11 +146,15 @@ class PuppetAgent::Runner
   end
 
   def noop(params)
-    params['noop'] == true ? '--noop' : ''
+    (params['noop'] == true) ? '--noop' : ''
+  end
+
+  def tags(params)
+    (params['tags'] && !params['tags'].empty?) ? "--tags=#{[params['tags']].join(',')}" : ''
   end
 
   def environment(params)
-    params['environment'].length > 1 ? "--environment=#{params['environment']}" : ''
+    (params['environment'] && !params['environment'].empty?) ? "--environment=#{params['environment']}" : ''
   end
 
   # Attempts to run the Puppet agent, returning the mtime for the last run report
@@ -150,12 +162,13 @@ class PuppetAgent::Runner
   def try_run(last_run_report, params)
     start_time = get_start_time(last_run_report)
 
-    command = [puppet_bin, 'agent', '-t', '--color', 'false', noop(params), environment(params)]
+    command = [puppet_bin, 'agent', '-t', '--color', 'false', noop(params), environment(params), tags(params)]
 
     options = {
       failonfail:         false,
       custom_environment: get_env_fix_up,
-      override_locale:    false
+      override_locale:    false,
+      combine:            true # combine stdout and stderr
     }
 
     run_result = Puppet::Util::Execution.execute(command.reject(&:empty?), options)

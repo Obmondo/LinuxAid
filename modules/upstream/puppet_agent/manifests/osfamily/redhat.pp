@@ -18,12 +18,19 @@ class puppet_agent::osfamily::redhat {
         $platform_and_version = "fedora/${facts['os']['release']['major']}"
       }
       'Amazon': {
-        if ("${facts['os']['release']['major']}" == '2') {
-          $amz_el_version = '7'
-        } else {
-          $amz_el_version = '6'
+        $major_version = $facts['os']['release']['major']
+        $arch = $facts['os']['architecture']
+        $amz_el_version = "${major_version}-${arch}" ? {
+          '2-aarch64'      => '2',
+          '2-x86_64'       => '7',
+          /^(2017|2018)-/  => '6',
+          default          => $major_version,
         }
-        $platform_and_version = "el/${amz_el_version}"
+
+        $platform_and_version = "${amz_el_version}" ? {
+          /^(6|7)$/  => "el/${amz_el_version}",
+          default    => "amazon/${amz_el_version}",
+        }
       }
       default: {
         $platform_and_version = "el/${facts['os']['release']['major']}"
@@ -32,10 +39,16 @@ class puppet_agent::osfamily::redhat {
     # lint:endignore
     if ($puppet_agent::is_pe and (!$puppet_agent::use_alternate_sources)) {
       $pe_server_version = pe_build_version()
-      # Treat Amazon Linux just like Enterprise Linux
-      $pe_repo_dir = ($facts['os']['name'] == 'Amazon') ? {
-        true    => "el-${amz_el_version}-${facts['os']['architecture']}",
-        default => $facts['platform_tag'],
+      # Install amazon packages on AL2 (only aarch64) and 2023 and up (all arch)
+      if $facts['os']['name'] == 'Amazon' {
+        # lint:ignore:only_variable_string
+        $pe_repo_dir = "${amz_el_version}" ? {
+          /^(6|7)$/ => "el-${amz_el_version}-${facts['os']['architecture']}",
+          default   => $facts['platform_tag'],
+        }
+        # lint:endignore
+      } else {
+        $pe_repo_dir = $facts['platform_tag']
       }
       if $puppet_agent::source {
         $source = "${puppet_agent::source}/packages/${pe_server_version}/${pe_repo_dir}"
@@ -47,6 +60,9 @@ class puppet_agent::osfamily::redhat {
     } else {
       if $puppet_agent::collection == 'PC1' {
         $source = "${puppet_agent::yum_source}/${platform_and_version}/${puppet_agent::collection}/${puppet_agent::arch}"
+      } elsif $puppet_agent::collection =~ /core/ {
+        $_collection = regsubst($puppet_agent::collection, /core/, '')
+        $source = "https://yum-puppetcore.puppet.com/${_collection}/${platform_and_version}/${puppet_agent::arch}"
       } else {
         $source = "${puppet_agent::yum_source}/${puppet_agent::collection}/${platform_and_version}/${puppet_agent::arch}"
       }
@@ -78,13 +94,10 @@ class puppet_agent::osfamily::redhat {
     }
 
 # lint:ignore:strict_indent
-    $legacy_keyname = 'GPG-KEY-puppet'
-    $legacy_gpg_path = "/etc/pki/rpm-gpg/RPM-${legacy_keyname}"
-    $keyname = 'GPG-KEY-puppet-20250406'
+    $keyname = 'GPG-KEY-puppet'
     $gpg_path = "/etc/pki/rpm-gpg/RPM-${keyname}"
     $gpg_homedir = '/root/.gnupg'
-    $gpg_keys = "file://${legacy_gpg_path}
-  file://${gpg_path}"
+    $gpg_keys = "file://${gpg_path}"
 
     $script = @(SCRIPT/L)
 ACTION=$0
@@ -115,14 +128,6 @@ fi
       }
     }
 
-    file { $legacy_gpg_path:
-      ensure => file,
-      owner  => 0,
-      group  => 0,
-      mode   => '0644',
-      source => "puppet:///modules/puppet_agent/${legacy_keyname}",
-    }
-
     file { $gpg_path:
       ensure => file,
       owner  => 0,
@@ -131,13 +136,6 @@ fi
       source => "puppet:///modules/puppet_agent/${keyname}",
     }
 
-    exec { "import-${legacy_keyname}":
-      path      => '/bin:/usr/bin:/sbin:/usr/sbin',
-      command   => "/bin/bash -c '${script}' import ${gpg_homedir} ${legacy_gpg_path}",
-      unless    => "/bin/bash -c '${script}' check ${gpg_homedir} ${legacy_gpg_path}",
-      require   => File[$legacy_gpg_path],
-      logoutput => 'on_failure',
-    }
     exec { "import-${keyname}":
       path      => '/bin:/usr/bin:/sbin:/usr/sbin',
       command   => "/bin/bash -c '${script}' import ${gpg_homedir} ${gpg_path}",
@@ -162,6 +160,14 @@ fi
         sslclientcert       => $_sslclientcert_path,
         sslclientkey        => $_sslclientkey_path,
         skip_if_unavailable => $puppet_agent::skip_if_unavailable,
+        username            => $puppet_agent::username,
+        password            => $puppet_agent::password,
+      }
+      file { '/etc/yum.repos.d/pc_repo.repo':
+        ensure => file,
+        owner  => 0,
+        group  => 0,
+        mode   => '0600',
       }
     }
   }

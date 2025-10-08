@@ -6,6 +6,8 @@
 
 ### Classes
 
+#### Public Classes
+
 * [`puppet_agent`](#puppet_agent): Upgrades Puppet 4 and newer to the requested version.
 * [`puppet_agent::configure`](#puppet_agent--configure): Uses $puppet_agent::config to manage settings in puppet.conf.
 * [`puppet_agent::install`](#puppet_agent--install): This class is called from puppet_agent for install.
@@ -22,9 +24,12 @@
 * [`puppet_agent::osfamily::windows`](#puppet_agent--osfamily--windows): Determines the puppet-agent package location for Windows OSes.
 * [`puppet_agent::params`](#puppet_agent--params): Sets variables according to platform.
 * [`puppet_agent::prepare`](#puppet_agent--prepare): This class is called from puppet_agent to prepare for the upgrade.
-* [`puppet_agent::prepare::package`](#puppet_agent--prepare--package): Ensures correct puppet-agent package is downloaded locally.
 * [`puppet_agent::prepare::puppet_config`](#puppet_agent--prepare--puppet_config): Private class called from puppet_agent::prepare class.
 * [`puppet_agent::service`](#puppet_agent--service): Ensures that managed services are running.
+
+#### Private Classes
+
+* `puppet_agent::prepare::package`: Ensures correct puppet-agent package is downloaded locally.
 
 ### Resource types
 
@@ -98,6 +103,8 @@ The following parameters are available in the `puppet_agent` class:
 * [`version_file_path`](#-puppet_agent--version_file_path)
 * [`skip_if_unavailable`](#-puppet_agent--skip_if_unavailable)
 * [`disable_proxy`](#-puppet_agent--disable_proxy)
+* [`username`](#-puppet_agent--username)
+* [`password`](#-puppet_agent--password)
 
 ##### <a name="-puppet_agent--arch"></a>`arch`
 
@@ -111,7 +118,9 @@ Default value: `$facts['os']['architecture']`
 
 Data type: `String`
 
-The Puppet Collection to track. Defaults to 'PC1'.
+The Puppet Collection to track. Defaults to 'PC1'. Valid values are puppet7,
+puppet8, puppet, puppet7-nightly, puppet8-nightly, puppet-nightly,
+puppetcore7, puppetcore8.
 
 Default value: `$puppet_agent::params::collection`
 
@@ -371,6 +380,22 @@ Data type: `Boolean`
 
 Default value: `false`
 
+##### <a name="-puppet_agent--username"></a>`username`
+
+Data type: `Optional`
+
+The username to use when downloading from a source location requiring authentication.
+
+Default value: `undef`
+
+##### <a name="-puppet_agent--password"></a>`password`
+
+Data type: `Optional[Sensitive]`
+
+The password to use when downloading from a source location requiring authentication.
+
+Default value: `undef`
+
 ### <a name="puppet_agent--configure"></a>`puppet_agent::configure`
 
 It does not require management of the agent package.
@@ -595,24 +620,6 @@ Data type: `Optional`
 The puppet-agent version to install.
 
 Default value: `undef`
-
-### <a name="puppet_agent--prepare--package"></a>`puppet_agent::prepare::package`
-
-for installation. This is used on platforms without package managers capable of
-working with a remote https repository.
-
-#### Parameters
-
-The following parameters are available in the `puppet_agent::prepare::package` class:
-
-* [`source`](#-puppet_agent--prepare--package--source)
-
-##### <a name="-puppet_agent--prepare--package--source"></a>`source`
-
-Data type: `Variant[String, Array]`
-
-The source file for the puppet-agent package. Can use any of the data types
-and protocols that the File resource's source attribute can.
 
 ### <a name="puppet_agent--prepare--puppet_config"></a>`puppet_agent::prepare::puppet_config`
 
@@ -843,7 +850,7 @@ The version of puppet-agent to install (defaults to latest when no agent is inst
 
 ##### `collection`
 
-Data type: `Optional[Enum[puppet7, puppet8, puppet, puppet7-nightly, puppet8-nightly, puppet-nightly]]`
+Data type: `Optional[Enum[puppet7, puppet8, puppet, puppet7-nightly, puppet8-nightly, puppet-nightly, puppetcore7, puppetcore8]]`
 
 The Puppet collection to install from (defaults to puppet, which maps to the latest collection released)
 
@@ -894,6 +901,18 @@ Whether to stop the puppet agent service after install
 Data type: `Optional[Integer]`
 
 The number of retries in case of network connectivity failures
+
+##### `username`
+
+Data type: `Optional[String]`
+
+The username to use when downloading from a source location requiring authentication
+
+##### `password`
+
+Data type: `Optional[String]`
+
+The password to use when downloading from a source location requiring authentication
 
 ### <a name="install_powershell"></a>`install_powershell`
 
@@ -963,6 +982,18 @@ Data type: `Optional[Integer]`
 
 The number of retries in case of network connectivity failures
 
+##### `username`
+
+Data type: `Optional[String[1]]`
+
+The username to use when downloading from a source location requiring authentication
+
+##### `password`
+
+Data type: `Optional[Sensitive[String[1]]]`
+
+The password to use when downloading from a source location requiring authentication
+
 ### <a name="install_shell"></a>`install_shell`
 
 Install the Puppet agent package
@@ -979,7 +1010,7 @@ The version of puppet-agent to install
 
 ##### `collection`
 
-Data type: `Optional[Enum[puppet7, puppet8, puppet, puppet7-nightly, puppet8-nightly, puppet-nightly]]`
+Data type: `Optional[Enum[puppet7, puppet8, puppet, puppet7-nightly, puppet8-nightly, puppet-nightly, puppetcore7, puppetcore8]]`
 
 The Puppet collection to install from (defaults to puppet, which maps to the latest collection released)
 
@@ -1031,6 +1062,18 @@ Data type: `Optional[Integer]`
 
 The number of retries in case of network connectivity failures
 
+##### `username`
+
+Data type: `Optional[String[1]]`
+
+The username to use when downloading from a source location requiring authentication
+
+##### `password`
+
+Data type: `Optional[Sensitive[String[1]]]`
+
+The password to use when downloading from a source location requiring authentication
+
 ### <a name="run"></a>`run`
 
 Run the Puppet agent. This task may cause problems if run in Puppet Enterprise.
@@ -1050,6 +1093,12 @@ run the puppet agent with --noop
 Data type: `Optional[String[1]]`
 
 The desired puppet code environment to use
+
+##### `tags`
+
+Data type: `Optional[Variant[String[1],Array[String[1]]]]`
+
+Optional tag or array of tags that will be passed to --tags
 
 ### <a name="version"></a>`version`
 
@@ -1083,6 +1132,7 @@ The following parameters are available in the `puppet_agent::run` plan:
 * [`targets`](#-puppet_agent--run--targets)
 * [`noop`](#-puppet_agent--run--noop)
 * [`environment`](#-puppet_agent--run--environment)
+* [`tags`](#-puppet_agent--run--tags)
 
 ##### <a name="-puppet_agent--run--targets"></a>`targets`
 
@@ -1103,6 +1153,14 @@ Default value: `false`
 Data type: `Optional[String[1]]`
 
 the desired puppet code environment
+
+Default value: `undef`
+
+##### <a name="-puppet_agent--run--tags"></a>`tags`
+
+Data type: `Optional[Variant[String[1],Array[String[1]]]]`
+
+an optional string that will be passed to --tags
 
 Default value: `undef`
 
