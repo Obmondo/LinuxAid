@@ -11,7 +11,9 @@ end
 
 certname = ARGV[0]
 
+ALLOWED_PUPPETDB = [ "puppetdb", "openvoxdb" ]
+
 # Run the special block for matching customer patterns
-exit if certname == "puppetdb" || obmondo_api("/servers/puppet/certname/#{certname}", "PUT", false).nil?
+exit if ALLOWED_PUPPETDB.include?(certname) || obmondo_api("/servers/puppet/certname/#{certname}", "PUT", false).nil?
 
 exit 1
