@@ -5,3 +5,4 @@ common::system::dns::dns_over_tls: null
 common::monitor::exporter::enable: true
 common::system::authentication::pam::manage: false
 common::monitor::exporter::security::enable: true
+common::puppet::version: "7.33.0"

@@ -1,5 +1,5 @@
-# Apt Puppetlabs
-class eit_repos::apt::puppetlabs (
+# Apt openvox
+class eit_repos::apt::openvox (
   Boolean           $ensure     = true,
   Optional[Boolean] $noop_value = $eit_repos::noop_value,
 ) {
@@ -20,21 +20,21 @@ class eit_repos::apt::puppetlabs (
     default   => 'amd64',
   }
 
-  apt::source { 'obmondo_puppetlabs_7':
+  apt::source { 'obmondo_openvox8':
     ensure       => ensure_present($ensure),
-    location     => 'https://repos.obmondo.com/puppetlabs/apt',
+    location     => 'https://repos.obmondo.com/openvox/apt',
     release      => $facts['os']['distro']['codename'],
     architecture => $architecture,
-    repos        => 'puppet7',
+    repos        => 'openvox8',
     include      => {
       'src' => false,
     },
-    keyring      => '/etc/apt/keyrings/obmondo_puppetlabs.asc',
+    keyring      => '/etc/apt/keyrings/obmondo_openvox.asc',
   }
 
-  apt::keyring { 'obmondo_puppetlabs.asc':
+  apt::keyring { 'obmondo_openvox.asc':
     ensure => present,
-    source => 'puppet:///modules/eit_repos/apt/DEB-GPG-KEY-puppet-inc-release-key',
+    source => 'puppet:///modules/eit_repos/apt/GPG-KEY-openvox.pub',
     noop   => $noop_value,
   }
 }

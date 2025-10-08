@@ -312,7 +312,7 @@ common::system::services:
     noop: false
 
 # Puppet
-common::puppet::version: "7.33.0"
+common::puppet::version: "8.23.0"
 common::puppet::configure_agent: true
 common::puppet::setup_agent: true
 

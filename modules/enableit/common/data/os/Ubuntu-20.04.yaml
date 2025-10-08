@@ -5,3 +5,4 @@ common::monitor::exporter::security::enable: true
 common::software::rustdesk::dependencies:
   - libgtk-3-0
   - libasound2
+common::puppet::version: "7.33.0"

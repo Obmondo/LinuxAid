@@ -16,18 +16,6 @@ class profile::puppet (
   String               $environment            = $::common::puppet::environment,
 ) {
 
-  # TODO: remove this block if the package is uninstalled from all the nodes
-  package { 'obmondo-puppetagent-exporter':
-    ensure => absent,
-    noop   => $noop_value,
-  }
-
-  common::services::systemd { 'puppet-agent-exporter.service':
-    ensure     => absent,
-    enable     => 'mask',
-    noop_value => $noop_value,
-  }
-
   $_version = if $version == 'latest' {
     $version
   } else {
