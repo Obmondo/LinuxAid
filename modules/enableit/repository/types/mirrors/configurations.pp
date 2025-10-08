@@ -6,7 +6,7 @@ type Repository::Mirrors::Configurations = Hash[
     'docker',
     'microsoft',
     'jenkins',
-    'puppetlabs',
+    'openvox',
   ], Struct[{
     yum => Optional[Struct[{
       enable => Boolean,
