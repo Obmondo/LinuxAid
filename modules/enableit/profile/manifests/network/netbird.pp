@@ -69,7 +69,7 @@ class profile::network::netbird (
       # creates sysvinit script for OpenWRT
       $_service_file = $facts['init_system'] ? {
         'sysvinit' => '/etc/init.d/netbird',
-        'default' => '/etc/systemd/system/netbird.service',
+        default => '/etc/systemd/system/netbird.service',
       }
 
       exec { 'netbird_service_install':
