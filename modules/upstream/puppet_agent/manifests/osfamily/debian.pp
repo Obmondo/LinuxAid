@@ -59,56 +59,46 @@ class puppet_agent::osfamily::debian {
 
         # Pass in an empty content string since apt requires it even though we are removing it
         apt::setting { 'list-puppet-enterprise-installer':
-          ensure  => absent,
-          content => '',
+          ensure => absent,
         }
 
         apt::setting { 'conf-pe-repo':
           ensure   => absent,
           priority => '90',
-          content  => '',
         }
+      } elsif $puppet_agent::collection =~ /core/ {
+        $source = 'https://apt-puppetcore.puppet.com'
       } else {
         $source = $puppet_agent::apt_source
       }
-      $legacy_keyname = 'GPG-KEY-puppet'
-      $legacy_gpg_path = "/etc/pki/deb-gpg/${legacy_keyname}"
-      $keyname = 'GPG-KEY-puppet-20250406'
-      $gpg_path = "/etc/pki/deb-gpg/${keyname}"
 
-      if getvar('::puppet_agent::manage_pki_dir') == true {
-        file { ['/etc/pki', '/etc/pki/deb-gpg']:
-          ensure => directory,
+      $repo_username = getvar('puppet_agent::username')
+      $repo_password = unwrap(getvar('puppet_agent::password'))
+
+      if $repo_username and $repo_password {
+        # lint:ignore:strict_indent
+        file { "/etc/apt/auth.conf.d/apt-${puppet_agent::collection}-puppet.conf":
+          ensure  => file,
+          owner   => 0,
+          group   => 0,
+          mode    => '0600',
+          content => Sensitive(@("EOT"))
+            machine ${source}
+            login ${repo_username}
+            password ${repo_password}
+            | EOT
         }
+        # lint:endignore
       }
 
-      file { $legacy_gpg_path:
-        ensure => file,
-        owner  => 0,
-        group  => 0,
-        mode   => '0644',
-        source => "puppet:///modules/puppet_agent/${legacy_keyname}",
-      }
-
-      apt::key { 'legacy key':
-        id     => '6F6B15509CF8E59E6E469F327F438280EF8D349F',
-        source => $legacy_gpg_path,
-      }
-
-      file { $gpg_path:
-        ensure => file,
-        owner  => 0,
-        group  => 0,
-        mode   => '0644',
-        source => "puppet:///modules/puppet_agent/${keyname}",
-      }
+      $keyname = 'puppet-keyring.gpg'
 
       apt::source { 'pc_repo':
         location => $source,
-        repos    => $puppet_agent::collection,
+        repos    => regsubst($puppet_agent::collection, /core/, ''),
         key      => {
-          'id'     => 'D6811ED3ADEEB8441AF5AA8F4528B6CD9E61EF26',
-          'source' => $gpg_path,
+          'name'   => $keyname,
+          'source' => "puppet:///modules/${module_name}/${keyname}",
         },
         notify   => Exec['pc_repo_force'],
       }

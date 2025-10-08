@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -e
+
 # Install puppet-agent as a task
 #
 # From https://github.com/petems/puppet-install-shell/blob/master/install_puppet_5_agent.sh
@@ -66,19 +69,45 @@ assert_unmodified_apt_config() {
   fi
 }
 
+# Check whether apt-helper is available
+exists_apt_helper() {
+  test -x /usr/lib/apt/apt-helper
+}
+
+# Check whether python3 and urllib.request are available
+exists_python3_urllib() {
+  python3 -c 'import urllib.request' >/dev/null 2>&1
+}
+
 # Check whether perl and LWP::Simple module are installed
-exists_perl() {
-  if perl -e 'use LWP::Simple;' >/dev/null 2>&1
-  then
+exists_perl_lwp() {
+  if perl -e 'use LWP::Simple;' >/dev/null 2>&1 ; then
     return 0
-  else
-    return 1
   fi
+  return 1
+}
+
+# Check whether perl and File::Fetch module are installed
+exists_perl_ff() {
+  if perl -e 'use File::Fetch;' >/dev/null 2>&1 ; then
+    return 0
+  fi
+  return 1
 }
 
 # Get command line arguments
 if [ -n "$PT_version" ]; then
   version=$PT_version
+fi
+
+if [ -n "$PT_username" ]; then
+    username=$PT_username
+else
+    username='forge-key'
+fi
+
+if [ -n "$PT_password" ]; then
+    password=$PT_password
 fi
 
 if [ -n "$PT_collection" ]; then
@@ -94,34 +123,39 @@ else
   collection='puppet'
 fi
 
+if [[ "$collection" == "puppetcore"* && -z "$password" ]]; then
+  echo "A password parameter is required to install from puppetcore"
+  exit 1
+fi
+
 if [ -n "$PT_yum_source" ]; then
   yum_source=$PT_yum_source
+elif [[ "$collection" == "puppetcore"* ]]; then
+  yum_source='https://yum-puppetcore.puppet.com/public'
+elif [ "$nightly" = true ]; then
+  yum_source='https://artifactory.delivery.puppetlabs.net:443/artifactory/internal_nightly__local/yum'
 else
-  if [ "$nightly" = true ]; then
-    yum_source='http://nightlies.puppet.com/yum'
-  else
-    yum_source='http://yum.puppet.com'
-  fi
+  yum_source='http://yum.puppet.com'
 fi
 
 if [ -n "$PT_apt_source" ]; then
   apt_source=$PT_apt_source
+elif [[ "$collection" == "puppetcore"* ]]; then
+  apt_source='https://apt-puppetcore.puppet.com/public'
+elif [ "$nightly" = true ]; then
+  apt_source='http://nightlies.puppet.com/apt'
 else
-  if [ "$nightly" = true ]; then
-    apt_source='http://nightlies.puppet.com/apt'
-  else
-    apt_source='http://apt.puppet.com'
-  fi
+  apt_source='http://apt.puppet.com'
 fi
 
 if [ -n "$PT_mac_source" ]; then
   mac_source=$PT_mac_source
+elif [[ "$collection" == "puppetcore"* ]]; then
+  mac_source='https://artifacts-puppetcore.puppet.com/v1/download'
+elif [ "$nightly" = true ]; then
+  mac_source='http://nightlies.puppet.com/downloads'
 else
-  if [ "$nightly" = true ]; then
-    mac_source='http://nightlies.puppet.com/downloads'
-  else
-    mac_source='http://downloads.puppet.com'
-  fi
+  mac_source='http://downloads.puppet.com'
 fi
 
 if [ -n "$PT_retry" ]; then
@@ -133,7 +167,7 @@ fi
 # Track to handle puppet5 to puppet6
 if [ -f /opt/puppetlabs/puppet/VERSION ]; then
   installed_version=`cat /opt/puppetlabs/puppet/VERSION`
-elif which puppet >/dev/null 2>&1; then
+elif type -p puppet >/dev/null; then
   installed_version=`puppet --version`
 else
   installed_version=uninstalled
@@ -234,6 +268,8 @@ if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
       "11")    platform_version="11";;
       "12")    platform_version="12";;
       "13")    platform_version="13";;
+      "14")    platform_version="14";;
+      "15")    platform_version="15";;
       *) echo "No builds for platform: $major_version"
          exit 1
          ;;
@@ -271,11 +307,6 @@ case $platform in
     ;;
   "SLES")
     platform_version=$major_version
-    ;;
-  "Amzn"|"Amazon Linux")
-    case $platform_version in
-      "2") platform_version="7";;
-    esac
     ;;
 esac
 
@@ -354,16 +385,27 @@ run_cmd() {
   return $rc
 }
 
-# do_wget URL FILENAME
+# do_wget URL FILENAME [USERNAME] [PASSWORD]
 do_wget() {
   info "Trying wget..."
-  run_cmd "wget -O '$2' '$1' 2>$tmp_stderr"
+  if [[ -n "$3" && -n "$4" ]]; then
+    run_cmd "wget -O '$2' --user '$3' --password '$4' '$1' 2>$tmp_stderr"
+  else
+    run_cmd "wget -O '$2' '$1' 2>$tmp_stderr"
+  fi
   rc=$?
 
   # check for 404
   grep "ERROR 404" $tmp_stderr 2>&1 >/dev/null
   if test $? -eq 0; then
     critical "ERROR 404"
+    unable_to_retrieve_package
+  fi
+
+  # check for 401
+  grep "ERROR 401" $tmp_stderr 2>&1 >/dev/null
+  if test $? -eq 0; then
+    critical "ERROR 401"
     unable_to_retrieve_package
   fi
 
@@ -376,16 +418,27 @@ do_wget() {
   return 0
 }
 
-# do_curl URL FILENAME
+# do_curl URL FILENAME [USERNAME] [PASSWORD]
 do_curl() {
   info "Trying curl..."
-  run_cmd "curl -1 -sL -D $tmp_stderr '$1' > '$2'"
+  if [[ -n "$3" && -n "$4" ]]; then
+    run_cmd "curl -1 -sL -u'$3:$4' -D $tmp_stderr '$1' > '$2'"
+  else
+    run_cmd "curl -1 -sL -D $tmp_stderr '$1' > '$2'"
+  fi
   rc=$?
 
   # check for 404
-  grep "404 Not Found" $tmp_stderr 2>&1 >/dev/null
+  grep "HTTP/.* 404" $tmp_stderr 2>&1 >/dev/null
   if test $? -eq 0; then
     critical "ERROR 404"
+    unable_to_retrieve_package
+  fi
+
+  # check for 401
+  grep "HTTP/.* 401" $tmp_stderr 2>&1 >/dev/null
+  if test $? -eq 0; then
+    critical "ERROR 401"
     unable_to_retrieve_package
   fi
 
@@ -420,9 +473,49 @@ do_fetch() {
   return 0
 }
 
-# do_perl URL FILENAME
-do_perl() {
-  info "Trying perl..."
+do_apt_helper() {
+  info "Trying apt-helper..."
+  run_cmd "/usr/lib/apt/apt-helper download-file '$1' '$2'" 2>$tmp_stderr
+  rc=$?
+
+  # check for 404
+  grep "E: Failed to fetch .* 404 " $tmp_stderr 2>&1 >/dev/null
+  if test $? -eq 0; then
+    critical "ERROR 404"
+    unable_to_retrieve_package
+  fi
+
+  # check for bad return status or empty output
+  if test $rc -ne 0 && test ! -s "$2" ; then
+    capture_tmp_stderr "apthelper"
+    return 1
+  fi
+
+  return 0
+}
+
+do_python3_urllib() {
+  info "Trying python3 (urllib.request)..."
+  run_cmd "python3 -c 'import urllib.request ; urllib.request.urlretrieve(\"$1\", \"$2\")'" 2>$tmp_stderr
+  rc=$?
+
+  # check for 404
+  if grep "404: Not Found" $tmp_stderr 2>&1 >/dev/null ; then
+    critical "ERROR 404"
+    unable_to_retrieve_package
+  fi
+
+  if test $rc -eq 0 && test -s "$2" ; then
+    return 0
+  fi
+
+  capture_tmp_stderr "perl"
+  return 1
+}
+
+# do_perl_lwp URL FILENAME
+do_perl_lwp() {
+  info "Trying perl (LWP::Simple)..."
   run_cmd "perl -e 'use LWP::Simple; getprint(\$ARGV[0]);' '$1' > '$2' 2>$tmp_stderr"
   rc=$?
 
@@ -433,16 +526,36 @@ do_perl() {
     unable_to_retrieve_package
   fi
 
-  # check for bad return status or empty output
-  if test $rc -ne 0 || test ! -s "$2"; then
-    capture_tmp_stderr "perl"
-    return 1
+  if test $rc -eq 0 && test -s "$2" ; then
+    return 0
   fi
 
-  return 0
+  capture_tmp_stderr "perl"
+  return 1
 }
 
-# do_download URL FILENAME
+# do_perl_ff URL FILENAME
+do_perl_ff() {
+  info "Trying perl (File::Fetch)..."
+  run_cmd "perl -e 'use File::Fetch; use File::Copy; my \$ff = File::Fetch->new(uri => \$ARGV[0]); my \$outfile = \$ff->fetch() or die \$ff->server; copy(\$outfile, \$ARGV[1]) or die \"copy failed: \$!\"; unlink(\$outfile) or die \"delete failed: \$!\";' '$1' '$2' 2>>$tmp_stderr"
+  rc=$?
+
+  # check for 404
+  grep "HTTP response: 404" $tmp_stderr 2>&1 >/dev/null
+  if test $? -eq 0 ; then
+    critical "ERROR 404"
+    unable_to_retrieve_package
+  fi
+
+  if test $rc -eq 0 && test -s "$2" ; then
+    return 0
+  fi
+
+  capture_tmp_stderr "perl"
+  return 1
+}
+
+# do_download URL FILENAME [USERNAME] [PASSWORD]
 do_download() {
   info "Downloading $1"
   info "  to file $2"
@@ -451,22 +564,34 @@ do_download() {
   # perl, in particular may be present but LWP::Simple may not be installed
 
   if exists wget; then
-    do_wget $1 $2 && return 0
+    do_wget $1 $2 $3 $4 && return 0
   fi
 
   if exists curl; then
-    do_curl $1 $2 && return 0
+    do_curl $1 $2 $3 $4 && return 0
   fi
 
   if exists fetch; then
     do_fetch $1 $2 && return 0
   fi
 
-  if exists_perl; then
-    do_perl $1 $2 && return 0
+  if exists_perl_lwp; then
+    do_perl_lwp $1 $2 && return 0
   fi
 
-  critical "Cannot download package as none of wget/curl/fetch/perl-LWP-Simple is found"
+  if exists_perl_ff; then
+    do_perl_ff $1 $2 && return 0
+  fi
+
+  if exists_python3_urllib; then
+    do_python3_urllib $1 $2 && return 0
+  fi
+
+  if exists_apt_helper; then
+    do_apt_helper $1 $2 && return 0
+  fi
+
+  critical "Cannot download package as none of wget/curl/fetch/perl-LWP-Simple/perl-File-Fetch/python3/apt-helper is found"
   unable_to_retrieve_package
 }
 
@@ -489,16 +614,26 @@ install_file() {
         if echo $2 | grep $pkg; then
           info "No collection upgrade detected"
         else
-          info "Collection upgrade detected, replacing puppet${major}-release"
-          rpm -e "puppet${major}-release"
+          info "Collection upgrade detected, replacing $pkg"
+          rpm -e "$pkg"
         fi
       fi
 
+      repo="/etc/yum.repos.d/${collection/core/}-release.repo"
       rpm -Uvh --oldpackage --replacepkgs "$2"
+      if [[ "$collection" =~ core ]]; then
+        if [[ -n $username ]]; then
+          sed -i "s/^#\?username=.*/username=${username}/" "${repo}"
+        fi
+        if [[ -n $password ]]; then
+          sed -i "s/^#\?password=.*/password=${password}/" "${repo}"
+        fi
+      fi
+      exists dnf && PKGCMD=dnf || PKGCMD=yum
       if test "$version" = 'latest'; then
-        run_cmd "yum install -y puppet-agent && yum upgrade -y puppet-agent"
+        run_cmd "${PKGCMD} install -y puppet-agent && ${PKGCMD} upgrade -y puppet-agent"
       else
-        run_cmd "yum install -y 'puppet-agent-${puppet_agent_version}'"
+        run_cmd "${PKGCMD} install -y 'puppet-agent-${puppet_agent_version}'"
       fi
       ;;
     "noarch.rpm")
@@ -512,12 +647,20 @@ install_file() {
         if echo $2 | grep $pkg; then
           info "No collection upgrade detected"
         else
-          info "Collection upgrade detected, replacing puppet${major}-release"
-          zypper remove --no-confirm "puppet${major}-release"
+          info "Collection upgrade detected, replacing $pkg"
+          zypper remove --no-confirm "$pkg"
         fi
       fi
 
       run_cmd "zypper install --no-confirm '$2'"
+      if [[ "$collection" =~ core ]]; then
+        if [[ -n $username ]]; then
+          sed -i "s/^username=.*/username=${username}/" "/etc/zypp/credentials.d/PuppetcoreCreds"
+        fi
+        if [[ -n $password ]]; then
+          sed -i "s/^password=.*/password=${password}/" "/etc/zypp/credentials.d/PuppetcoreCreds"
+        fi
+      fi
       if test "$version" = "latest"; then
         run_cmd "zypper install --no-confirm 'puppet-agent'"
       else
@@ -535,23 +678,31 @@ install_file() {
         if echo $2 | grep $pkg; then
           info "No collection upgrade detected"
         else
-          info "Collection upgrade detected, replacing puppet${major}-release"
-          dpkg --purge "puppet${major}-release"
+          info "Collection upgrade detected, replacing $pkg"
+          dpkg --purge "$pkg"
         fi
       fi
 
       assert_unmodified_apt_config
 
       dpkg -i --force-confmiss "$2"
+      if [[ "$collection" =~ core ]]; then
+        auth_conf="/etc/apt/auth.conf.d/apt-puppetcore-puppet.conf"
+        sed -i "/^#?login/d" "${auth_conf}"
+        echo "login ${username}" >> "${auth_conf}"
+        sed -i "/^#?password/d" "${auth_conf}"
+        echo "password ${password}" >> "${auth_conf}"
+      fi
+      frontend="DEBIAN_FRONTEND=noninteractive"
       run_cmd 'apt-get update -y'
 
       if test "$version" = 'latest'; then
-        run_cmd "apt-get install -y puppet-agent"
+        run_cmd "${frontend} apt-get install -y puppet-agent"
       else
         if test "x$deb_codename" != "x"; then
-          run_cmd "apt-get install -y 'puppet-agent=${puppet_agent_version}-1${deb_codename}'"
+          run_cmd "${frontend} apt-get install -y 'puppet-agent=${puppet_agent_version}-1${deb_codename}'"
         else
-          run_cmd "apt-get install -y 'puppet-agent=${puppet_agent_version}'"
+          run_cmd "${frontend} apt-get install -y 'puppet-agent=${puppet_agent_version}'"
         fi
       fi
       ;;
@@ -580,34 +731,51 @@ case $platform in
     info "SLES platform! Lets get you an RPM..."
 
     if [[ $PT__noop != true ]]; then
-      for key in "puppet" "puppet-20250406"; do
-        gpg_key="${tmp_dir}/RPM-GPG-KEY-${key}"
-        do_download "https://yum.puppet.com/RPM-GPG-KEY-${key}" "$gpg_key"
-        rpm --import "$gpg_key"
-        rm -f "$gpg_key"
-      done
+      if [[ "$collection" =~ core ]]; then
+        for key in "puppet"; do
+          gpg_key="${tmp_dir}/RPM-GPG-KEY-${key}"
+          do_download "https://yum-puppetcore.puppet.com/public/RPM-GPG-KEY-${key}" "$gpg_key"
+          rpm --import "$gpg_key"
+          rm -f "$gpg_key"
+        done
+      else
+        for key in "puppet"; do
+          gpg_key="${tmp_dir}/RPM-GPG-KEY-${key}"
+          do_download "https://yum.puppet.com/RPM-GPG-KEY-${key}" "$gpg_key"
+          rpm --import "$gpg_key"
+          rm -f "$gpg_key"
+        done
+      fi
     fi
 
     filetype="noarch.rpm"
-    filename="${collection}-release-sles-${platform_version}.noarch.rpm"
+    filename="${collection/core/}-release-sles-${platform_version}.noarch.rpm"
     download_url="${yum_source}/${filename}"
     ;;
   "el")
     info "Red hat like platform! Lets get you an RPM..."
     filetype="rpm"
-    filename="${collection}-release-el-${platform_version}.noarch.rpm"
+    filename="${collection/core/}-release-el-${platform_version}.noarch.rpm"
     download_url="${yum_source}/${filename}"
     ;;
   "Amzn"|"Amazon Linux")
     info "Amazon platform! Lets get you an RPM..."
     filetype="rpm"
-    filename="${collection}-release-el-${platform_version}.noarch.rpm"
+    platform_package="el"
+    arch="$(uname -p)"
+    # Install amazon packages on AL2 (only aarch64) and 2023 and up (all arch)
+    if [[ $platform_version == 2 && $arch == 'x86_64' ]]; then
+      platform_version="7"
+    elif (( platform_version == 2 || platform_version >= 2023 )); then
+      platform_package="amazon"
+    fi
+    filename="${collection/core/}-release-${platform_package}-${platform_version}.noarch.rpm"
     download_url="${yum_source}/${filename}"
     ;;
   "Fedora")
     info "Fedora platform! Lets get the RPM..."
     filetype="rpm"
-    filename="${collection}-release-fedora-${platform_version}.noarch.rpm"
+    filename="${collection/core/}-release-fedora-${platform_version}.noarch.rpm"
     download_url="${yum_source}/${filename}"
     ;;
   "Debian")
@@ -615,9 +783,10 @@ case $platform in
     case $major_version in
       "10") deb_codename="buster";;
       "11") deb_codename="bullseye";;
+      "12") deb_codename="bookworm";;
     esac
     filetype="deb"
-    filename="${collection}-release-${deb_codename}.deb"
+    filename="${collection/core/}-release-${deb_codename}.deb"
     download_url="${apt_source}/${filename}"
     ;;
   "Linuxmint"|"LinuxMint")
@@ -626,6 +795,7 @@ case $platform in
       "3")  deb_codename="stretch";;
       "4")  deb_codename="buster";;
       "5")  deb_codename="bullseye";;
+      "6")  deb_codename="bookworm";;
       "21") deb_codename="jammy";;
       "20") deb_codename="focal";;
       "19") deb_codename="bionic";;
@@ -633,7 +803,7 @@ case $platform in
       "17") deb_codename="trusty";;
     esac
     filetype="deb"
-    filename="${collection}-release-${deb_codename}.deb"
+    filename="${collection/core/}-release-${deb_codename}.deb"
     download_url="${apt_source}/${filename}"
     ;;
   "Ubuntu")
@@ -644,9 +814,10 @@ case $platform in
       "18.04") deb_codename="bionic";;
       "20.04") deb_codename="focal";;
       "22.04") deb_codename="jammy";;
+      "24.04") deb_codename="noble";;
     esac
     filetype="deb"
-    filename="${collection}-release-${deb_codename}.deb"
+    filename="${collection/core/}-release-${deb_codename}.deb"
     download_url="${apt_source}/${filename}"
     ;;
   "mac_os_x")
@@ -662,7 +833,16 @@ case $platform in
     if [[ $(uname -p) == "arm" ]]; then
         arch="arm64"
     fi
-    download_url="${mac_source}/mac/${collection}/${platform_version}/${arch}/${filename}"
+    if [[ "$collection" =~ "puppetcore" ]]; then
+      dots=$(echo "${version}" | grep -o '\.' | wc -l)
+      if (( dots >= 3 )); then
+        download_url="${mac_source}?version=${version}&os_name=osx&os_version=${platform_version}&os_arch=${arch}&dev=true"
+      else
+        download_url="${mac_source}?version=${version}&os_name=osx&os_version=${platform_version}&os_arch=${arch}"
+      fi
+    else
+      download_url="${mac_source}/mac/${collection}/${platform_version}/${arch}/${filename}"
+    fi
     ;;
   *)
     critical "Sorry $platform is not supported yet!"
@@ -677,7 +857,7 @@ fi
 if [[ $PT__noop != true ]]; then
   download_filename="${tmp_dir}/${filename}"
 
-  do_download "$download_url" "$download_filename"
+  do_download "$download_url" "$download_filename" "$username" "$password"
 
   install_file $filetype "$download_filename"
 

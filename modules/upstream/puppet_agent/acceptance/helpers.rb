@@ -177,9 +177,9 @@ module Beaker::DSL
     # @param [String] environment The puppet environment to install the modules to, this must
     #   be a valid environment in the puppet install on the host.
     def install_puppet_agent_module_on(host, environment)
-      on(host, puppet('module', 'install', 'puppetlabs-stdlib',     '--version', '8.4.0', '--environment', environment), { acceptable_exit_codes: [0] })
-      on(host, puppet('module', 'install', 'puppetlabs-inifile',    '--version', '5.3.0', '--environment', environment), { acceptable_exit_codes: [0] })
-      on(host, puppet('module', 'install', 'puppetlabs-apt',        '--version', '9.0.0', '--environment', environment), { acceptable_exit_codes: [0] })
+      on(host, puppet('module', 'install', 'puppetlabs-stdlib',     '--version', '9.0.0', '--environment', environment), { acceptable_exit_codes: [0] })
+      on(host, puppet('module', 'install', 'puppetlabs-inifile',    '--version', '6.1.0', '--environment', environment), { acceptable_exit_codes: [0] })
+      on(host, puppet('module', 'install', 'puppetlabs-apt',        '--version', '9.4.0', '--environment', environment), { acceptable_exit_codes: [0] })
 
       install_dev_puppet_module_on(host,
                                    source: File.join(File.dirname(__FILE__), '..'),
@@ -207,9 +207,8 @@ module Beaker::DSL
     # purpose to facilitate an upgrade scenario.
     #
     # @param [Beaker::Host] host The host
-    # @param [String] initial_package_version_or_collection Either a version
-    #   of puppet-agent or the name of a puppet collection to install the agent from.
-    def set_up_initial_agent_on(host, initial_package_version_or_collection)
+    # @param [Hash] options Install options
+    def set_up_initial_agent_on(host, options)
       master_agent_version = fact_on(master, 'aio_agent_version')
       unless master_agent_version
         fail_test('Expected puppet-agent to already be installed on the master, but it was not. ' \
@@ -224,17 +223,16 @@ module Beaker::DSL
 
       step 'Set-up the agents to upgrade' do
         step '(Agent) Install the puppet-agent package' do
-          initial_package_version_or_collection ||= master_agent_version
-          agent_install_options = if %r{(^pc1$|^puppet\d+)}i.match?(initial_package_version_or_collection)
-                                    { puppet_collection: initial_package_version_or_collection }
-                                  else
-                                    {
-                                      puppet_agent_version: initial_package_version_or_collection,
-                                      puppet_collection: puppet_collection_for(:puppet_agent, initial_package_version_or_collection)
-                                    }
-                                  end
+          install_puppet_agent_on(host, options)
 
-          install_puppet_agent_on(host, agent_install_options)
+          # beaker-puppet doesn't add signing information to the apt source list, but this module does.
+          # This discrepancy causes apt to error, so we manually add signing info.
+          if %r{debian|ubuntu}.match?(host['platform'])
+            step '(Agent) Add apt signing information' do
+              on(host, "sed -e 's/^deb http/deb [signed-by=\\/etc\\/apt\\/keyrings\\/GPG-KEY-puppet.asc] http/' /etc/apt/sources.list.d/puppet*.list -i")
+            end
+          end
+
           teardowns << -> do
             remove_installed_agent(host)
           end
@@ -334,7 +332,7 @@ module Beaker::DSL
         return
       end
 
-      unless %r{windows}.match?(host['platform'])
+      unless host['platform'].include?('windows')
         step '(Agent) waiting for upgrade pid file to be created...' do
           retry_on(host, "cat #{upgrade_pidfile}", { max_retries: 5, retry_interval: 2 })
         end
@@ -355,7 +353,7 @@ module Beaker::DSL
       end
 
       step "Teardown: (Agent) Uninstall the puppet-agent package on agent #{host_to_info_s(host)}" do
-        if %r{windows}.match?(host['platform'])
+        if host['platform'].include?('windows')
           install_dir = on(host, 'facter.bat env_windows_installdir').output.tr('\\', '/').chomp
           scp_to(host, "#{SUPPORTING_FILES}/uninstall.ps1", 'uninstall.ps1')
           on(host, 'rm -rf C:/ProgramData/PuppetLabs')
