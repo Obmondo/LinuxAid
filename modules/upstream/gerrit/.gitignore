@@ -1,5 +1,0 @@
-*.swp
-.ruby-version
-.ruby-gemset
-Gemfile.lock
-pkg
