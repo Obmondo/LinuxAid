@@ -1,0 +1,30 @@
+<%- |
+  Hash $vnc_sessions = {},
+| -%>
+#
+# This file managed by Puppet - DO NOT EDIT
+#
+
+# Websockify token assignment
+#
+# This file assigns users to specific tokens to VNC display numbers.
+# The syntax is <token>: <VNC Location>. E.g.:
+#
+# U6F7msdQ: 127.0.0.1:5900
+# 1oJw2DwG: 127.0.0.1:5901
+#
+
+<% $vnc_sessions.keys.sort.each | $session | { -%>
+# <%= $session %>
+<%
+  $server = $vnc_sessions[$session]['connection'].split(':')[0]
+  $port = Integer($vnc_sessions[$session]['connection'].split(':')[1])
+  if $port < 10 {
+-%>
+<%= $vnc_sessions[$session]['token'] %>: <%= $server %>:590<%= $port %>
+<% } elsif $port < 100 { -%>
+<%= $vnc_sessions[$session]['token'] %>: <%= $server %>:59<%= $port %>
+<% } else { -%>
+<%= $vnc_sessions[$session]['token'] %>: <%= $vnc_sessions[$session]['connection'] %>
+<% } -%>
+<% } -%>

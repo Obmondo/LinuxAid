@@ -1,0 +1,6 @@
+---
+vnc::server::packages:
+  - tigervnc-standalone-server
+  - tigervnc-xorg-extension
+vnc::client::gui::packages:
+  - tigervnc-viewer

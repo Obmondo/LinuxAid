@@ -1,0 +1,5 @@
+fixtures:
+  repositories:
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+    inifile: "https://github.com/puppetlabs/puppetlabs-inifile.git"
+    puppet_authorization: "https://github.com/puppetlabs/puppetlabs-puppet_authorization.git"

@@ -1,0 +1,14 @@
+<%- | Boolean $enable,
+      String  $args,
+      String  $path,
+      String  $type
+| -%>
+# This File is managed by Puppet
+#
+# This file controls the configuration of the syslog plugin.
+active = <%= $enable ? { false => 'no', default => 'yes' } %>
+direction = out
+path = <%= $path %>
+type = <%= $type %>
+args = <%= $args %>
+format = <%= string %>

@@ -1,0 +1,53 @@
+<%-
+result = []
+if @verbosity
+  result << '-' + @verbosity.to_s
+end
+if @lock_memory
+  result << '-k'
+end
+if @real_listen
+  result << '-l ' + @real_listen.join(',')
+end
+if @tcp_port
+  result << '-p ' + @tcp_port.to_s
+end
+if @udp_port
+  result << '-U ' + @udp_port.to_s
+end
+if @max_item_size
+  result << '-I ' + @max_item_size.to_s
+end
+if @min_item_size
+  result << '-n ' + @min_item_size.to_s
+end
+if @factor
+  result << '-f ' + @factor.to_s
+end
+result << '-t ' + @processorcount
+if @max_connections
+  result << '-c ' + @max_connections
+end
+if @extended_opts
+  result << '-o ' + @extended_opts.join(',')
+end
+if @logfile
+  result << '>> ' + @logfile + ' 2>&1'
+end
+if @disable_cachedump
+  result << '-X'
+end
+if @max_reqs_per_event
+  result << '-R' + @max_reqs_per_event.to_s
+end
+if @disable_flush_all
+  result << '--disable-flush-all'
+end
+if @disable_watch
+  result << '--disable-watch'
+end
+if @memory_file
+  result << '--memory-file=' + @memory_file
+end
+-%>
+c:\memcached\memcached.exe -d runservice <%= result.join(' ') %>

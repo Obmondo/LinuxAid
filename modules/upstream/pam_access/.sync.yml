@@ -1,0 +1,43 @@
+---
+
+mock_with: ':rspec'
+
+.gitlab-ci.yml:
+  delete: true
+appveyor.yml:
+  delete: true
+
+.travis.yml:
+  user: MiamiOH
+  secure: "TQgcTTSTL5UPRrKxbEdY8G6Kn7kGZVTn3tZOOM4YshYN40XMst3upOn15QHZAJ7IcyG0oWj9ijftGWF4hsTPohGYkqCezbAj2ZyOmSQk7fzP+slYw7R9ivvMJ+lWgGz0eMN0+Z8bUmJMglrGOHnE41vrvbB6rugV0lfW4Cfzna38m9DMtZv2pAek/XfBaExnGBEq7CQXUPYIrBdHIN2nkBuwBRTl8koprHgMN6S6VR785mcI4Y154Q7mJC1mARBWWEnVaKEOhBGfMIrYSy98hf05JKuV5R8ljAY9ibqW2cLq78HnWHYp8ExQ2u/e+YtdGhrGTDzqJQN/exWFrBi0BDRM8QSAe8lneixqc4qAg3ExHGJHrJctPaC6ul8Xhg4R9cURITbGQR0VKjhz9hPJKcF96tALqPXfsGZSkNZr0mUyoYi4nmOhqFye6C/4JF8gYtmiZH4o10K3RcEEcVv6BiR6vO+M6j6nDq/MA3iU/FMY77LLfttnZYjHfXwBH9ZuPDWqmd9xJr6Oiz8qUiDUF+BWnof0ukU+lw4DVIhpuenWmznN+gKrICGAruoKL4eBMCYoggunOQ/ZONVaIXK3ZRW/SeXKk5arvML/xDdR1n7ikAoZ9q2+xRnOcINBstkm1XQRSASIMzG0wzRL/v4J8kGflrDGSJn0JyBLqPVYMcc="
+Gemfile:
+  required:
+    ':development':
+      - gem: travis
+    ':puppet_lint':
+      - gem: puppet-lint-absolute_classname-check
+      - gem: puppet-lint-absolute_template_path
+      - gem: puppet-lint-alias-check
+      - gem: puppet-lint-classes_and_types_beginning_with_digits-check
+      - gem: puppet-lint-duplicate_class_parameters-check
+      - gem: puppet-lint-empty_string-check
+      - gem: puppet-lint-extended
+      - gem: puppet-lint-file_ensure-check
+      - gem: puppet-lint-file_source_rights-check
+      - gem: puppet-lint-leading_zero-check
+      - gem: puppet-lint-numericvariable
+      - gem: puppet-lint-resource_reference_syntax
+      - gem: puppet-lint-security-plugins
+      - gem: puppet-lint-spaceship_operator_without_tag-check
+      - gem: puppet-lint-strict_indent-check
+      - gem: puppet-lint-trailing_comma-check
+      - gem: puppet-lint-trailing_newline-check
+      - gem: puppet-lint-undef_in_function-check
+      - gem: puppet-lint-unquoted_string-check
+      - gem: puppet-lint-variable_contains_upcase
+      - gem: puppet-lint-version_comparison-check
+
+Rakefile:
+  default_disabled_lint_checks:
+  - security_package_pinned_version
+  - 140chars

@@ -1,0 +1,138 @@
+name: "PE Nightly Acceptance Testing"
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  setup_matrix:
+    name: "Setup Test Matrix"
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v3
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+
+    - name: Activate Ruby 2.7
+      uses: ruby/setup-ruby@v1
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      with:
+        ruby-version: "2.7"
+        bundler-cache: true
+
+    - name: Print bundle environment
+      if: ${{ github.repository_owner == 'puppetlabs' }}
+      run: |
+        echo ::group::bundler environment
+        bundle env
+        echo ::endgroup::
+
+  Acceptance:
+    name: "Nightly"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture: [standard]
+        image: [centos-7, sles-12, sles-15, rhel-7, rhel-8]
+        include:
+          - image: centos-7
+            os: el-7-x86_64
+          - image: sles-12
+            os: sles-12-x86_64
+          - image: rhel-7
+            os: el-7-x86_64
+          - image: sles-15
+            os: sles-15-x86_64
+          - image: rhel-8
+            os: el-8-x86_64
+
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v3
+
+    - name: Activate Ruby 2.7
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "2.7"
+        bundler-cache: true
+    - name: Print bundle environment
+      run: |
+        echo ::group::bundler environment
+        bundle env
+        echo ::endgroup::
+
+    - name: 'Provision test environment'
+      timeout-minutes: 15
+      run: |
+          echo ::group::prepare
+            mkdir -p $HOME/.ssh
+            echo 'Host *'                      >  $HOME/.ssh/config
+            echo '    ServerAliveInterval 150' >> $HOME/.ssh/config
+            echo '    ServerAliveCountMax 2'   >> $HOME/.ssh/config
+            bundle exec rake spec_prep
+          echo ::endgroup::
+          echo ::group::provision
+              bundle exec bolt plan run peadm_spec::provision_test_cluster \
+                --modulepath spec/fixtures/modules \
+                provider=provision_service \
+                image=${{ matrix.image }} \
+                architecture=${{ matrix.architecture }}
+          echo ::endgroup::
+          echo ::group::info:request
+            cat request.json || true; echo
+          echo ::endgroup::
+          echo ::group::info:inventory
+            sed -e 's/password: .*/password: "[redacted]"/' < spec/fixtures/litmus_inventory.yaml || true
+          echo ::endgroup::
+
+    - name: 'Activate'
+      uses: twingate/github-action@v1
+      with:
+        service-key: ${{ secrets.TWINGATE_PUBLIC_REPO_KEY }}
+
+    - name: 'Get latest build name'
+      id: latest
+      run: |
+        echo "ver=$(curl -q https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/LATEST)" >> $GITHUB_OUTPUT
+
+    - name: 'Install PE on test cluster'
+      timeout-minutes: 120
+      run: |
+            bundle exec bolt plan run peadm_spec::install_test_cluster \
+              --inventoryfile spec/fixtures/litmus_inventory.yaml \
+              --modulepath spec/fixtures/modules \
+              permit_unsafe_versions=true \
+              code_manager_auto_configure=false \
+              download_mode="bolthost" \
+              --log-level debug \
+              architecture=${{ matrix.architecture }} \
+              pe_installer_source="https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/main/ci-ready/puppet-enterprise-${{ steps.latest.outputs.ver }}-${{ matrix.os }}.tar"
+    - name: Install module
+      run: |
+        bundle exec rake 'litmus:install_module'
+    - name: Run acceptance tests
+      run: |
+        bundle exec rake 'litmus:acceptance:parallel'
+    - name: Remove test environment
+      if: ${{ always() }}
+      continue-on-error: true
+      run: |
+        if [[ -f inventory.yaml || -f spec/fixtures/litmus_inventory.yaml ]]; then
+          bundle exec rake 'litmus:tear_down'
+          echo ::group::=== REQUEST ===
+          cat request.json || true
+          echo
+          echo ::endgroup::
+        fi
+
+    - name: Notify slack fail
+      if: failure()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel_id: C049PL6EF9S
+        status: FAILED
+        color: danger

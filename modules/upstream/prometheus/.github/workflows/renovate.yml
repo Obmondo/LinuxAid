@@ -1,0 +1,23 @@
+name: Renovate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 0'
+
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
+      - name: Renovate
+        uses: renovatebot/github-action@v43.0.4
+        with:
+          configurationFile: renovate-config.json
+          token: ${{ secrets.PCCI_PAT_PROMETHEUS_RENOVATE }}
+          renovate-image: ghcr.io/renovatebot/renovate
+          renovate-version: 39-full
+    env:
+      LOG_LEVEL: 'debug'

@@ -1,0 +1,38 @@
+<%- |
+  Stdlib::Absolutepath $config_defaults_file = '/etc/tigervnc/vncserver-config-defaults',
+  Stdlib::Absolutepath $config_mandatory_file = '/etc/tigervnc/vncserver-config-mandatory',
+  Stdlib::Absolutepath $vnc_home_conf = '/.vnc',
+  Hash[String, Variant[String, Undef]] $settings = {}
+| -%>
+#
+# This file managed by Puppet - DO NOT EDIT
+#
+
+# Default settings for VNC servers started by the vncserver service
+# are parsed in the following order:
+#
+#  <%= $config_defaults_file %>
+#  ~<%= $vnc_home_conf %>/config
+#  <%= $config_mandatory_file %>
+#
+# The settings in the default config can be changed in ~<%= $vnc_home_conf%>/config
+# To see what settings your VNC server honors run, `vncconfig -list`
+# in your VNC session.
+#
+# Folks using the default start scripts will always get the options
+# set in <%= $config_mandatory_file %>
+# However, nothing stops users from using their own start scripts
+# and bypassing it. User's *SHOULD NOT* do this as it will messup
+# their loginctl session accounting.
+#
+# See the following manpages for more details: vncserver(1) Xvnc(1)
+#
+<% $settings.keys.sort.each | $key | { -%>
+<% if $settings[$key] == nil { -%>
+<%= $key %>
+<% } elsif "${settings[$key]}" == '' { -%>
+<%= $key %>
+<% } else { -%>
+<%= $key %>=<%= $settings[$key] %>
+<% } -%>
+<% } -%>

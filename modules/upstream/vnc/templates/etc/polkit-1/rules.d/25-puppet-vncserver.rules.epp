@@ -1,0 +1,24 @@
+<%- |
+  String $systemd_template_startswith = 'vncserver',
+  String $systemd_template_endswith = 'service',
+  Array[String] $usernames = ['root'],
+  Variant[String, Integer] $displaynumber,
+| -%>
+<%#
+  org.freedesktop.systemd1.manage-units is the dbus key for enable/disable
+  however, it doesn't provide the unit name
+ -%>
+<% $usernames.each |$username| { -%>
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units") {
+        if (action.lookup("unit") == "<%= $systemd_template_startswith %>@:<%= $displaynumber %>.<%= $systemd_template_endswith %>") {
+            var verb = action.lookup("verb");
+            if (verb == "start" || verb == "stop" || verb == "restart") {
+                if (subject.user == "<%= $username %>") {
+                  return polkit.Result.YES;
+                }
+            }
+        }
+    }
+});
+<% } %>

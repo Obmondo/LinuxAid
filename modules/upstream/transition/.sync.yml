@@ -1,0 +1,46 @@
+---
+common:
+
+".gitlab-ci.yml":
+  delete: true
+appveyor.yml:
+  delete: true
+.gitpod.Dockerfile:
+  unmanaged: true
+.gitpod.yml:
+  unmanaged: true
+.github/workflows/nightly.yml:
+  unmanaged: true
+.github/workflows/pr_test.yml:
+  unmanaged: true
+.github/workflows/auto_release.yml:
+  unmanaged: true
+.github/workflows/spec.yml:
+  checks: 'syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop'
+  unmanaged: true
+.github/workflows/release.yml:
+  unmanaged: true
+.travis.yml:
+  delete: true
+spec/spec_helper.rb:
+  mock_with: ":rspec"
+  coverage_report: true
+Rakefile:
+  changelog_user: "puppetlabs"
+spec/default_facts.yml:
+  extra_facts:
+    pe_build: '2021.4.0'
+.rubocop.yml:
+  default_configs:
+    "Style/GuardClause":
+       Enabled: False
+    "Lint/EmptyWhen":
+       Enabled: False
+Gemfile:
+  optional:
+    ":development":
+    - gem: github_changelog_generator
+    - gem: 'octokit'
+      version:
+       '= 4.21.0'
+

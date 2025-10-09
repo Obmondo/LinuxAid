@@ -1,0 +1,22 @@
+---
+name: '[Daily] Unit Tests with nightly Puppet gem'
+
+on:
+  schedule:
+    - cron: '0 5 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  daily_unit_tests_with_nightly_puppet_gem:
+    uses: "puppetlabs/phoenix-github-actions/.github/workflows/unit_tests_with_nightly_puppet_gem.yaml@main"
+
+  notify-via-slack:
+    name: Notify workflow conclusion via Slack
+    if: ${{ always() }}
+    needs: daily_unit_tests_with_nightly_puppet_gem
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: luchihoratiu/notify-via-slack@main
+        with:
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

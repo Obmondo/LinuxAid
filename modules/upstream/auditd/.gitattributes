@@ -1,0 +1,11 @@
+# ------------------------------------------------------------------------------
+#         NOTICE: **This file is maintained with puppetsync**
+#
+# This file is automatically updated as part of a puppet module baseline.
+# The next baseline sync will overwrite any local changes made to this file.
+# ------------------------------------------------------------------------------
+*.erb eol=lf
+*.pp eol=lf
+*.sh eol=lf
+*.epp eol=lf
+*.rb eol=lf

@@ -1,0 +1,21 @@
+name: Run unit tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run unit tests on puppet 5
+        uses: puppets-epic-show-theatre/action-pdk-test-unit@v1
+        with:
+          puppet-version: "5"
+
+      - name: Run unit tests on puppet 6
+        uses: puppets-epic-show-theatre/action-pdk-test-unit@v1
+        with:
+          puppet-version: "6"

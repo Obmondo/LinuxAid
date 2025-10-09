@@ -1,0 +1,103 @@
+{
+  "name": "simp-simplib",
+  "version": "4.14.2",
+  "author": "SIMP Team",
+  "summary": "A collection of common SIMP functions, facts, and types",
+  "license": "Apache-2.0",
+  "source": "https://github.com/simp/pupmod-simp-simplib",
+  "project_page": "https://github.com/simp/pupmod-simp-simplib",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "functions",
+    "facts",
+    "types",
+    "alias",
+    "library"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 8.0.0 < 10.0.0"
+    },
+    {
+      "name": "simp/simpkv",
+      "version_requirement": ">= 0.7.0 < 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "AlmaLinux"
+    },
+    {
+      "operatingsystem": "Amazon"
+    },
+    {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "Darwin"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "Fedora"
+    },
+    {
+      "operatingsystem": "FreeBSD"
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "LinuxMint"
+    },
+    {
+      "operatingsystem": "OpenBSD"
+    },
+    {
+      "operatingsystem": "OpenSUSE"
+    },
+    {
+      "operatingsystem": "OracleLinux"
+    },
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "Pop!_OS"
+    },
+    {
+      "operatingsystem": "Rocky"
+    },
+    {
+      "operatingsystem": "SLES"
+    },
+    {
+      "operatingsystem": "Scientific"
+    },
+    {
+      "operatingsystem": "Solaris"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    },
+    {
+      "operatingsystem": "VirtuozzoLinux"
+    },
+    {
+      "operatingsystem": "Windows"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "package_release_version": "0"
+}

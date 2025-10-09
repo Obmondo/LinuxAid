@@ -1,0 +1,50 @@
+# For this workflow to open PR, make sure GitHub Actions can open PR in:
+# Settings > Actions > General > [X] Allow GitHub Actions to create and approve pull requests
+name: Ensure default config in data/common.yaml match upsteam defaults
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout module source
+        uses: actions/checkout@v3
+
+      - name: Prepare environment
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate data/common.yaml from current data
+        run: |
+          .github/update-data-common
+
+      - name: Open Pull Request if needed
+        run: |
+          if git diff-index --exit-code --name-only HEAD data/common.yaml
+          then
+            BRANCH="update-data-common-yml"
+            EXISTING_PR=$(gh pr list --state open --head "$BRANCH" --json number --jq ". | length")
+            if [ $EXISTING_PR -eq 0 ]
+            then
+              TITLE="Update default configuration to match upstream"
+              BODY="The OpenSearch project default configuration files got updated, sync with new defaults."
+              git switch -c "$BRANCH"
+              git commit -a -s -m "$TITLE"
+              git push --force origin "$BRANCH"
+              gh pr create --title "$TITLE" --body "$BODY" --label backwards-incompatible
+            else
+              echo "Pull Request already exists"
+            fi
+          else
+            echo "data/common.yaml is up-to-date"
+          fi

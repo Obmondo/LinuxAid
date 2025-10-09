@@ -1,0 +1,106 @@
+# @summary class to manage the actual prometheus server. This class gets called from the init.pp
+class prometheus::server (
+  String $configname                                                            = $prometheus::configname,
+  String $user                                                                  = $prometheus::user,
+  String $group                                                                 = $prometheus::group,
+  Array $extra_groups                                                           = $prometheus::extra_groups,
+  Stdlib::Absolutepath $bin_dir                                                 = $prometheus::bin_dir,
+  Stdlib::Absolutepath $shared_dir                                              = $prometheus::shared_dir,
+  String $version                                                               = $prometheus::version,
+  String $install_method                                                        = $prometheus::install_method,
+  Prometheus::Uri $download_url_base                                            = $prometheus::download_url_base,
+  String $download_extension                                                    = $prometheus::download_extension,
+  String $package_name                                                          = $prometheus::package_name,
+  String $package_ensure                                                        = $prometheus::package_ensure,
+  String $config_dir                                                            = $prometheus::config_dir,
+  Boolean $manage_config_dir                                                    = $prometheus::manage_config_dir,
+  Variant[Stdlib::Absolutepath, Boolean[false]] $localstorage                   = $prometheus::localstorage,
+  Boolean $manage_localstorage                                                  = $prometheus::manage_localstorage,
+  String $config_template                                                       = $prometheus::config_template,
+  String $config_mode                                                           = $prometheus::config_mode,
+  Hash $global_config                                                           = $prometheus::global_config,
+  Array $rule_files                                                             = $prometheus::rule_files,
+  Array $scrape_configs                                                         = $prometheus::scrape_configs,
+  Optional[Array] $scrape_config_files                                          = $prometheus::scrape_config_files,
+  Boolean $include_default_scrape_configs                                       = $prometheus::include_default_scrape_configs,
+  Array $remote_read_configs                                                    = $prometheus::remote_read_configs,
+  Array $remote_write_configs                                                   = $prometheus::remote_write_configs,
+  Boolean $enable_tracing                                                       = $prometheus::enable_tracing,
+  Hash $tracing_config                                                          = $prometheus::tracing_config,
+  Variant[Array,Hash] $alerts                                                   = $prometheus::alerts,
+  Array $alert_relabel_config                                                   = $prometheus::alert_relabel_config,
+  Array $alertmanagers_config                                                   = $prometheus::alertmanagers_config,
+  Variant[String, Boolean[false]] $storage_retention                            = $prometheus::storage_retention,
+  Stdlib::Absolutepath $env_file_path                                           = $prometheus::env_file_path,
+  Hash $extra_alerts                                                            = $prometheus::extra_alerts,
+  Boolean $service_enable                                                       = $prometheus::service_enable,
+  Stdlib::Ensure::Service $service_ensure                                       = $prometheus::service_ensure,
+  String[1] $service_name                                                       = $prometheus::service_name,
+  Boolean $manage_service                                                       = $prometheus::manage_service,
+  Boolean $restart_on_change                                                    = $prometheus::restart_on_change,
+  Prometheus::Initstyle $init_style                                             = $prometheus::init_style,
+  Optional[String[1]] $extra_options                                            = $prometheus::extra_options,
+  Hash $config_hash                                                             = $prometheus::config_hash,
+  Hash $config_defaults                                                         = $prometheus::config_defaults,
+  String[1] $os                                                                 = $prometheus::os,
+  Optional[String] $download_url                                                = $prometheus::download_url,
+  String[1] $arch                                                               = $prometheus::real_arch,
+  Boolean $manage_group                                                         = $prometheus::manage_group,
+  Boolean $purge_config_dir                                                     = $prometheus::purge_config_dir,
+  Boolean $manage_user                                                          = $prometheus::manage_user,
+  Boolean $manage_config                                                        = $prometheus::manage_config,
+  Optional[Variant[Stdlib::HTTPurl, Stdlib::Unixpath, String[1]]] $external_url = $prometheus::external_url,
+  Optional[Array[Hash[String[1], Any]]] $collect_scrape_jobs                    = $prometheus::collect_scrape_jobs,
+  Optional[String[1]] $collect_tag                                              = $prometheus::collect_tag,
+  Optional[Integer] $max_open_files                                             = $prometheus::max_open_files,
+  Stdlib::Absolutepath $usershell                                               = $prometheus::usershell,
+  Optional[String[1]] $proxy_server                                             = $prometheus::proxy_server,
+  Optional[Enum['none', 'http', 'https', 'ftp']] $proxy_type                    = $prometheus::proxy_type,
+  Boolean $manage_init_file                                                     = $prometheus::manage_init_file,
+) inherits prometheus {
+  $real_download_url = pick($download_url,
+  "${download_url_base}/download/v${version}/${package_name}-${version}.${os}-${arch}.${download_extension}")
+  $notify_service = $restart_on_change ? {
+    true    => Service[$service_name],
+    default => undef,
+  }
+
+  $config_hash_real = assert_type(Hash, deep_merge($config_defaults, $config_hash))
+
+  file { "${config_dir}/rules":
+    ensure => 'directory',
+    owner  => 'root',
+    group  => $group,
+    mode   => $config_mode,
+  }
+
+  $extra_alerts.each | String $alerts_file_name, Hash $alerts_config | {
+    prometheus::alerts { $alerts_file_name:
+      alerts  => $alerts_config,
+      bin_dir => $bin_dir,
+    }
+  }
+  $extra_rule_files = suffix(prefix(keys($extra_alerts), "${config_dir}/rules/"), '.rules')
+
+  if ! empty($alerts) {
+    prometheus::alerts { 'alert':
+      alerts   => $alerts,
+      location => $config_dir,
+      version  => $version,
+      bin_dir  => $bin_dir,
+    }
+    $_rule_files = concat(["${config_dir}/alert.rules"], $extra_rule_files, $rule_files)
+  }
+  else {
+    $_rule_files = concat($extra_rule_files, $rule_files)
+  }
+  contain prometheus::install
+  contain prometheus::config
+  contain prometheus::run_service
+  contain prometheus::service_reload
+
+  Class['prometheus::install']
+  -> Class['prometheus::config']
+  -> Class['prometheus::run_service'] # Note: config must *not* be configured here to notify run_service.  Some resources in config.pp need to notify service_reload instead
+  -> Class['prometheus::service_reload']
+}

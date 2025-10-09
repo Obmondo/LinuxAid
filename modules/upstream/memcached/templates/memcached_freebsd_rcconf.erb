@@ -1,0 +1,96 @@
+### MANAGED BY PUPPET
+### DO NOT EDIT
+
+<%-
+enabled = "YES"
+if !@service_manage
+  enabled = "NO"
+end
+
+flags = []
+# required flags
+flags << "-d -u #{@user} -P #{@pidfile} -t #{@processorcount}"
+
+# optional flags
+if @item_size
+  flags << "-I #{@item_size}"
+end
+
+if @real_listen
+  flags << "-l #{@real_listen.join(',')}"
+end
+
+if @lock_memory
+  flags << "-k"
+end
+
+if @max_connections
+  flags << "-c #{@max_connections}"
+end
+
+#TODO: wtf do we do with this?
+#if @logfile
+#end
+
+if @tcp_port
+  flags << "-p #{@tcp_port}"
+end
+
+if @udp_port
+  flags << "-U #{@udp_port}"
+end
+
+if @unix_socket
+  flags << "-s #{@unix_socket} -a #{@unix_socket_mask}"
+end
+
+if @verbosity
+  flags << "-#{@verbosity}"
+end
+
+flags << "-m #{scope.call_function('memcached::max_memory', [@max_memory])}"
+
+if @use_sasl
+  flags << "-S"
+end
+
+if @use_tls
+  flags << "-Z"
+  flags << "-o ssl_chain_cert=#{@tls_cert_chain}"
+  flags << "-o ssl_key=#{@tls_key}"
+  if @tls_ca_cert
+    flags << "-o ssl_ca_cert=#{@tls_ca_cert}"
+  end
+  flags << "-o ssl_verify_mode=#{@tls_verify_mode}"
+end
+
+if @large_mem_pages
+  flags << "-L"
+end
+
+if @disable_cachedump
+  flags << "-X"
+end
+
+if @extended_opts
+  flags << "-o #{@extended_opts.join(',')}"
+end
+
+if @max_reqs_per_event
+  flags << "-R #{@max_reqs_per_event}"
+end
+
+if @disable_flush_all
+  flags << "--disable-flush-all"
+end
+
+if @disable_watch
+  flags << "--disable-watch"
+end
+
+if @memory_file
+  flags << "--memory-file=#{@memory_file}"
+end
+-%>
+memcached_enable="<%= enabled %>"
+memcached_flags="<%= flags.join(" ") %>"

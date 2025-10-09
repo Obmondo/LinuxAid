@@ -1,0 +1,61 @@
+#!/bin/bash
+
+##
+# THIS FILE IS MANAGED BY PUPPEY
+##
+
+### config
+
+default_cfg='/etc/sysconfig/ipset.d'
+
+### functions
+
+usage() {
+cat << EOF
+Usage: ${0/*\//} [-c CONFIG_DIR]
+
+Ipset autostarter.
+
+Options:
+  -c  Configuration directory for ipsets
+  -h  Shows this help message
+EOF
+}
+
+### === main ===
+
+scd=$(dirname $(readlink -f "${BASH_SOURCE[0]}"))
+
+### cli params
+
+cfg="${default_cfg}"
+
+while getopts "c:h" OPTION; do
+    case ${OPTION} in
+      c)
+        cfg=${OPTARG}
+        ;;
+      h)
+        usage
+        exit 1
+        ;;
+    esac
+done
+
+if [ ! -d "${cfg}" ]; then
+  echo "ERROR: Config directory '${cfg}' does not exist!" >&2
+  exit 7
+fi
+
+### autostart
+
+# iterate over basenames in config directory
+for item in $(find "${cfg}" -mindepth 1 -maxdepth 1 -type f -and \( -name '*.set' -or -name '*.hdr' \) -printf '%f\n' | sed -re 's/\.[^.]+$//' | sed -e '/^$/d' | sort -u); do
+  # skip if the configuration is not complete
+  if ! ( [ -f "${cfg}/${item}.hdr" ] && [ -f "${cfg}/${item}.set" ] ); then
+    continue
+  fi
+
+  # sync
+  ${scd}/ipset_sync -c "${cfg}" -i ${item}
+done

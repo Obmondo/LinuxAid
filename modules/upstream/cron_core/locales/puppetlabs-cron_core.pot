@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018 Puppet, Inc.
+# This file is distributed under the same license as the puppetlabs-cron_core package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: puppetlabs-cron_core \n"
+"Report-Msgid-Bugs-To: docs@puppet.com\n"
+"POT-Creation-Date: 2018-12-11 19:36+0000\n"
+"PO-Revision-Date: 2018-12-11 19:36+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ../lib/puppet/provider/cron/crontab.rb:60
+msgid "Line got parsed as a crontab entry but cannot be handled. Please file a bug with the contents of your crontab"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/crontab.rb:103
+msgid "no command specified, cannot create"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:37
+msgid "Could not retrieve user %{user}: %{detail}"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:48 ../lib/puppet/provider/cron/filetype.rb:111 ../lib/puppet/provider/cron/filetype.rb:162
+msgid "The %{path} user does not exist. Treating their crontab file as empty in case Puppet creates them in the middle of the run."
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:59 ../lib/puppet/provider/cron/filetype.rb:122 ../lib/puppet/provider/cron/filetype.rb:173
+msgid "The %{path} user is not authorized to use cron. Their crontab file is treated as empty in case Puppet authorizes them in the middle of the run (by, for example, modifying the cron.deny or cron.allow files)."
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:63 ../lib/puppet/provider/cron/filetype.rb:126 ../lib/puppet/provider/cron/filetype.rb:177
+msgid "Could not read crontab for %{path}: %{detail}"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:85
+msgid "Cannot write the %{path} user's crontab: The user does not exist"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:134 ../lib/puppet/provider/cron/filetype.rb:185
+msgid "Could not remove crontab for %{path}: %{detail}"
+msgstr ""
+
+#: ../lib/puppet/provider/cron/filetype.rb:149 ../lib/puppet/provider/cron/filetype.rb:201
+msgid "Could not write crontab for %{path}: %{detail}"
+msgstr ""
+
+#: ../lib/puppet/type/cron.rb:191
+msgid "%{value} is not a valid %{name}"
+msgstr ""
+
+#: ../lib/puppet/type/cron.rb:249
+msgid "Invalid special schedule %{value}"
+msgstr ""
+
+#: ../lib/puppet/type/cron.rb:326
+msgid "Invalid environment setting %{value}"
+msgstr ""
+
+#: ../lib/puppet/type/cron.rb:420
+msgid "%{cron} cannot specify both a special schedule and a value for %{field}"
+msgstr ""

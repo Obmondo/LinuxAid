@@ -1,0 +1,4 @@
+---
+fixtures:
+  repositories:
+    augeasproviders_core: "https://github.com/voxpupuli/puppet-augeasproviders_core"

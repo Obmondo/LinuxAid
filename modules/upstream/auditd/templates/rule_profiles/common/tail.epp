@@ -1,0 +1,12 @@
+# This file is managed by Puppet (module 'auditd')
+
+<% if $::auditd::immutable { -%>
+# CCE-26612-2
+## Make the configuration immutable
+## Requires a reboot to make new rules effective
+
+-e 2
+<% } else { -%>
+# CCE-26612-2 deliberately ignored so that audit rules may be manipulated by
+# Puppet.
+<% } -%>

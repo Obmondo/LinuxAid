@@ -1,0 +1,66 @@
+{
+  "name": "saz-limits",
+  "version": "5.0.0",
+  "author": "saz",
+  "summary": "Manage user limits via puppet",
+  "description": "Manage user limits via puppet",
+  "license": "Apache-2.0",
+  "source": "https://github.com/saz/puppet-limits.git",
+  "project_page": "https://github.com/saz/puppet-limits",
+  "issues_url": "https://github.com/saz/puppet-limits/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Amazon"
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+	"12"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04",
+        "22.04",
+	"24.04"
+      ]
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "Suse"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 9.0.0 < 10.0.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 7.3.0 < 10.0.0"
+    }
+  ]
+}
