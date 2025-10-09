@@ -140,9 +140,15 @@ mod 'voxpupuli/python',
     :git => 'https://github.com/voxpupuli/puppet-python.git',
     :ref => 'v8.0.0'
 
+mod 'saz_rsyslog',
+    :git => 'https://github.com/saz/puppet-rsyslog.git',
+    :ref => '6938b3488ad1040121676c2029e5a782c9e7130d',
+    :install_path => 'modules/upstream'
+
 mod 'voxpupuli/rsyslog',
     :git => 'https://github.com/voxpupuli/puppet-rsyslog.git',
-    :ref => 'v7.3.0'
+    :ref => 'v7.3.0',
+    :install_path => 'modules/upstream'
 
 mod 'puppetlabs/ruby',
     :git => "https://github.com/puppetlabs/puppetlabs-ruby.git",
