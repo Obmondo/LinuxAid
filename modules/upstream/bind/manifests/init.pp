@@ -28,8 +28,8 @@ class bind (
   if $chroot == true {
     $packagenamesuffix = '-chroot'
     # Different service name with chroot on RHEL7+)
-    if $::osfamily == 'RedHat' and
-        versioncmp($::operatingsystemrelease, '7') >= 0 {
+    if $facts['os']['family'] == 'RedHat' and
+        versioncmp($facts['os']['release']['major'], '7') >= 0 {
       $servicenamesuffix = '-chroot'
     } else {
       $servicenamesuffix = ''

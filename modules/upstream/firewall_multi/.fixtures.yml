@@ -1,0 +1,8 @@
+# THIS FILE IS CENTRALLY MANAGED BY sync_spec.rb!
+# DO NOT EDIT IT HERE!
+
+fixtures:
+  forge_modules:
+    firewall: puppetlabs/firewall
+  symlinks:
+    firewall_multi: "#{source_dir}"

@@ -32,6 +32,10 @@
 * [`postfix::transport`](#postfix--transport): Manage the transport map of postfix
 * [`postfix::virtual`](#postfix--virtual): Manages the contents of the virtual map.
 
+### Functions
+
+* [`postfix::table_type_extension`](#postfix--table_type_extension): Returns the file extension for a table type
+
 ## Classes
 
 ### <a name="postfix"></a>`postfix`
@@ -100,7 +104,9 @@ The following parameters are available in the `postfix` class:
 * [`ldap_base`](#-postfix--ldap_base)
 * [`ldap_host`](#-postfix--ldap_host)
 * [`ldap_options`](#-postfix--ldap_options)
+* [`ldap_packages`](#-postfix--ldap_packages)
 * [`lookup_table_type`](#-postfix--lookup_table_type)
+* [`mailaliases`](#-postfix--mailaliases)
 * [`mail_user`](#-postfix--mail_user)
 * [`mailman`](#-postfix--mailman)
 * [`mailx_ensure`](#-postfix--mailx_ensure)
@@ -123,6 +129,7 @@ The following parameters are available in the `postfix` class:
 * [`masquerade_classes`](#-postfix--masquerade_classes)
 * [`masquerade_domains`](#-postfix--masquerade_domains)
 * [`masquerade_exceptions`](#-postfix--masquerade_exceptions)
+* [`mta_bin_path`](#-postfix--mta_bin_path)
 * [`mta`](#-postfix--mta)
 * [`mydestination`](#-postfix--mydestination)
 * [`mynetworks`](#-postfix--mynetworks)
@@ -257,6 +264,14 @@ Example: `start_tls = yes`.
 
 Default value: `undef`
 
+##### <a name="-postfix--ldap_packages"></a>`ldap_packages`
+
+Data type: `Array[String[1]]`
+
+An array of package names to install for LDAP support if $ldap is true.
+
+Default value: `[]`
+
 ##### <a name="-postfix--lookup_table_type"></a>`lookup_table_type`
 
 Data type: `String`
@@ -265,6 +280,16 @@ Table format type as described in http://www.postfix.org/DATABASE_README.html#ty
 Type has to be supported by system, see "postconf -m" for supported types.
 
 Default value: `'hash'`
+
+##### <a name="-postfix--mailaliases"></a>`mailaliases`
+
+Data type: `Hash`
+
+A hash of postfix::mailalias resources. The hash containing optional configuration values for main.cf.
+The values are configured using postfix::mailalias.
+Example: `{'nobody': {'ensure': 'present', 'recipient': 'root'}}`
+
+Default value: `{}`
 
 ##### <a name="-postfix--mail_user"></a>`mail_user`
 
@@ -465,6 +490,15 @@ Data type: `Optional[Array[String[1]]]`
 An array defining the masquerade_exceptions to use. This optional list of user names that are not
 subjected to address masquerading, even when their addresses match $masquerade_domains.
 Example: `['root']`
+
+Default value: `undef`
+
+##### <a name="-postfix--mta_bin_path"></a>`mta_bin_path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+An optional path for mta 'alternative'.
+Example: `'/usr/sbin/sendmail.postfix'`
 
 Default value: `undef`
 
@@ -689,12 +723,12 @@ Default value: `undef`
 
 ##### <a name="-postfix--canonical--lookup_table_suffix"></a>`lookup_table_suffix`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 Depends on the lookup table type, which is used on the postfix::hash and postfix::config resources.
-Defaults to 'db', the suffix of the "hash" type.
+Default is based on the suffix type correct for `postfix::lookup_table_type` parameter.
 
-Default value: `'db'`
+Default value: `undef`
 
 ### <a name="postfix--conffile"></a>`postfix::conffile`
 
@@ -1238,4 +1272,24 @@ If not defined "${postfix::confdir}/virtual" will be used as path.
 Example: `/etc/postfix/my_virtual_map`.
 
 Default value: `undef`
+
+## Functions
+
+### <a name="postfix--table_type_extension"></a>`postfix::table_type_extension`
+
+Type: Puppet Language
+
+Returns the file extension for a table type
+
+#### `postfix::table_type_extension(String[1] $type = 'hash')`
+
+The postfix::table_type_extension function.
+
+Returns: `Enum['cdb','dir','lmdb','db']` The file extension of the table type
+
+##### `type`
+
+Data type: `String[1]`
+
+The table type to report on
 

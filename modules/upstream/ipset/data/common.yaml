@@ -1,8 +1,0 @@
----
-ipset::packages:
-  - ipset
-ipset::service: ipset
-ipset::package_ensure: present
-ipset::service_ensure: true
-ipset::enable: true
-ipset::config_path: '/etc/ipset.d/'

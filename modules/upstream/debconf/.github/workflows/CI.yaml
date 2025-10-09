@@ -1,0 +1,57 @@
+# CI.yaml --- Check OpenVox module
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  schedule:
+    - cron: '33 2 * * 0'
+
+jobs:
+  checks:
+    name: OpenVox ${{ matrix.openvox_version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        openvox_version: [8]
+
+    container:
+      image: ghcr.io/voxpupuli/voxbox:${{ matrix.openvox_version }}
+      volumes:
+        - ${{ github.workspace }}:/repo
+        - /etc/gitconfig:/etc/gitconfig
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Syntax
+        run: rake -f /Rakefile syntax
+
+      - name: Check
+        run: rake -f /Rakefile check
+
+      - name: Lint code
+        run: rake -f /Rakefile lint
+
+      - name: Lint YAML
+        if: ${{ hashFiles('data') != '' }}
+        run: yamllint data/
+
+      - name: Lint Metadata
+        run: rake -f /Rakefile metadata_lint
+
+      - name: Rubocop
+        run: rake -f /Rakefile rubocop
+
+      - name: Unit Tests
+        run: rake -f /Rakefile spec

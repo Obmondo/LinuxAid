@@ -1,5 +1,7 @@
-require File.expand_path('../../../util/ini_file', __FILE__)
-require File.expand_path('../../../util/setting_value', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('../../util/ini_file', __dir__)
+require File.expand_path('../../util/setting_value', __dir__)
 
 Puppet::Type.type(:ini_subsetting).provide(:ruby) do
   desc '

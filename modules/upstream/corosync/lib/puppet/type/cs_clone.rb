@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:cs_clone) do
   @doc = "Type for manipulating corosync/pacemaker resource clone.
     More information on Corosync/Pacemaker colocation can be found here:
@@ -76,13 +78,38 @@ Puppet::Type.newtype(:cs_clone) do
     defaultto :absent
   end
 
+  newproperty(:promotable) do
+    desc 'If true, clone instances can perform a special role that Pacemaker will manage via the resource agent’s
+      promote and demote actions. The resource agent must support these actions. Allowed values: false, true'
+
+    newvalues(:true, :false, :absent)
+
+    defaultto :absent
+  end
+
+  newproperty(:promoted_max) do
+    desc 'If promotable is true, the number of instances that can be promoted at one time across the entire cluster'
+
+    newvalues(%r{\d+}, :absent)
+
+    defaultto :absent
+  end
+
+  newproperty(:promoted_node_max) do
+    desc 'If promotable is true and globally-unique is false, the number of clone instances can be promoted at one time on a single node'
+
+    newvalues(%r{\d+}, :absent)
+
+    defaultto :absent
+  end
+
   newparam(:cib) do
     desc "Corosync applies its configuration immediately. Using a CIB allows
       you to group multiple primitives and relationships to be applied at
       once. This can be necessary to insert complex configurations into
       Corosync correctly.
 
-      This paramater sets the CIB this colocation should be created in. A
+      This parameter sets the CIB this colocation should be created in. A
       cs_shadow resource with a title of the same name as this value should
       also be added to your manifest."
   end
@@ -108,14 +135,15 @@ Puppet::Type.newtype(:cs_clone) do
 
   def unmunge_cs_primitive(name)
     name = name.split(':')[0]
-    name = name[3..-1] if name.start_with? 'ms_'
+    name = name[3..] if name.start_with? 'ms_'
 
     name
   end
 
   validate do
     return if self[:ensure] == :absent
-    mandatory_single_properties = [:primitive, :group]
+
+    mandatory_single_properties = %i[primitive group]
     has_should = mandatory_single_properties.select { |prop| should(prop) }
     raise Puppet::Error, "You cannot specify #{has_should.join(' and ')} on this type (only one)" if has_should.length > 1
     raise Puppet::Error, "You must specify #{mandatory_single_properties.join(' or ')}" if has_should.length != 1

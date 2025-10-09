@@ -1,4 +1,7 @@
-# PRIVATE CLASS: do not call directly
+# @summary Manages mongod config
+#
+# @api private
+#
 class mongodb::server::config {
   $ensure           = $mongodb::server::ensure
   $user             = $mongodb::server::user
@@ -18,11 +21,9 @@ class mongodb::server::config {
   $fork             = $mongodb::server::fork
   $port             = $mongodb::server::port
   $journal          = $mongodb::server::journal
-  $nojournal        = $mongodb::server::nojournal
   $smallfiles       = $mongodb::server::smallfiles
   $cpu              = $mongodb::server::cpu
   $auth             = $mongodb::server::auth
-  $noath            = $mongodb::server::noauth
   $create_admin     = $mongodb::server::create_admin
   $admin_username   = $mongodb::server::admin_username
   $admin_password   = $mongodb::server::admin_password
@@ -60,31 +61,21 @@ class mongodb::server::config {
   $maxconns         = $mongodb::server::maxconns
   $set_parameter    = $mongodb::server::set_parameter
   $syslog           = $mongodb::server::syslog
-  $ssl              = $mongodb::server::ssl
-  $ssl_key          = $mongodb::server::ssl_key
-  $ssl_ca           = $mongodb::server::ssl_ca
-  $ssl_weak_cert    = $mongodb::server::ssl_weak_cert
-  $ssl_invalid_hostnames = $mongodb::server::ssl_invalid_hostnames
-  $ssl_mode         = $mongodb::server::ssl_mode
+  $tls              = $mongodb::server::tls
+  $tls_key          = $mongodb::server::tls_key
+  $tls_ca           = $mongodb::server::tls_ca
+  $tls_conn_without_cert = $mongodb::server::tls_conn_without_cert
+  $tls_invalid_hostnames = $mongodb::server::tls_invalid_hostnames
+  $tls_invalid_certificates = $mongodb::server::tls_invalid_certificates
+  $tls_mode         = $mongodb::server::tls_mode
   $storage_engine   = $mongodb::server::storage_engine
-  $version          = $mongodb::server::version
 
   File {
     owner => $user,
     group => $group,
   }
 
-  if ($logpath and $syslog) { fail('You cannot use syslog with logpath')}
-
   if ($ensure == 'present' or $ensure == true) {
-
-    # Exists for future compatibility and clarity.
-    if $auth {
-      $noauth = false
-    }
-    else {
-      $noauth = true
-    }
     if $keyfile and $key {
       file { $keyfile:
         content => $key,
@@ -100,7 +91,6 @@ class mongodb::server::config {
       $storage_engine_internal = $storage_engine
     }
 
-
     # Pick which config content to use
     if $config_content {
       $cfg_content = $config_content
@@ -108,13 +98,7 @@ class mongodb::server::config {
       # Template has available user-supplied data
       # - $config_data
       $cfg_content = template($config_template)
-    } elsif $version and (versioncmp($version, '2.6.0') >= 0) {
-      # Template has available user-supplied data
-      # - $config_data
-      $cfg_content = template('mongodb/mongodb.conf.2.6.erb')
     } else {
-      # Fall back to oldest most basic config
-      #
       # Template has available user-supplied data
       # - $config_data
       $cfg_content = template('mongodb/mongodb.conf.erb')
@@ -129,7 +113,7 @@ class mongodb::server::config {
 
     file { $dbpath:
       ensure   => directory,
-      mode     => '0755',
+      mode     => '0750',
       owner    => $user,
       group    => $group,
       selrange => 's0',
@@ -169,19 +153,18 @@ class mongodb::server::config {
     }
   }
 
+  $admin_password_unsensitive = if $admin_password =~ Sensitive[String] {
+    $admin_password.unwrap
+  } else {
+    $admin_password
+  }
   if $handle_creds {
-    if $auth and $store_creds {
-      file { $rcfile:
-        ensure  => present,
-        content => template('mongodb/mongorc.js.erb'),
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0600',
-      }
-    } else {
-      file { $rcfile:
-        ensure => absent,
-      }
+    file { $rcfile:
+      ensure  => file,
+      content => template('mongodb/mongoshrc.js.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
     }
   }
 }

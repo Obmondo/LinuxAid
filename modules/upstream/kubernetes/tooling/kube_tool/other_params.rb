@@ -24,14 +24,14 @@ class OtherParams
       cni_network_provider = 'https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml'
       cni_pod_cidr = '10.32.0.0/12'
     when 'flannel'
-      cni_network_provider = 'https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml'
+      cni_network_provider = 'https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml'
       cni_pod_cidr = '10.244.0.0/16'
     when 'calico'
       cni_network_provider = "https://docs.projectcalico.org/archive/v#{opts[:cni_provider_version]}/manifests/calico.yaml"
       cni_pod_cidr = '192.168.0.0/16'
     when 'calico-tigera'
-      cni_network_preinstall = 'https://docs.projectcalico.org/manifests/tigera-operator.yaml'
-      cni_network_provider = 'https://docs.projectcalico.org/manifests/custom-resources.yaml'
+      cni_network_preinstall = "https://raw.githubusercontent.com/projectcalico/calico/v#{opts[:cni_provider_version]}/manifests/tigera-operator.yaml"
+      cni_network_provider = "https://raw.githubusercontent.com/projectcalico/calico/v#{opts[:cni_provider_version]}/manifests/custom-resources.yaml"
       cni_pod_cidr = '192.168.0.0/16'
     when 'cilium'
       cni_pod_cidr = '10.244.0.0/16'

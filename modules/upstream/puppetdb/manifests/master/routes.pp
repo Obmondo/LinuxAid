@@ -1,18 +1,11 @@
-# Manages the routes configuration file on the master. See README.md for more
-# details.
+# @summary manages the routes configuration file on the master
+#
+# @api private
 class puppetdb::master::routes (
   $puppet_confdir = $puppetdb::params::puppet_confdir,
   $masterless     = $puppetdb::params::masterless,
-  $routes         = {
-    'master' => {
-      'facts' => {
-        'terminus' => 'puppetdb',
-        'cache'    => 'yaml',
-      }
-    }
-  }
+  $routes         = undef,
 ) inherits puppetdb::params {
-
   if $masterless {
     $routes_real = {
       'apply' => {
@@ -23,11 +16,25 @@ class puppetdb::master::routes (
         'facts'   => {
           'terminus' => 'facter',
           'cache'    => 'puppetdb_apply',
-        }
-      }
+        },
+      },
     }
-  } else {
+  } elsif $routes {
     $routes_real = $routes
+  } else {
+    if (defined('$serverversion')) and (versioncmp($serverversion, '7.0') >= 0) {
+      $default_fact_cache = 'json'
+    } else {
+      $default_fact_cache = 'yaml'
+    }
+    $routes_real = {
+      'master' => {
+        'facts' => {
+          'terminus' => 'puppetdb',
+          'cache'    => $default_fact_cache,
+        },
+      },
+    }
   }
 
   # TODO: this will overwrite any existing routes.yaml;

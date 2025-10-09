@@ -1,6 +1,10 @@
 fixtures:
   repositories:
-    'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
-    'translate': 'git://github.com/puppetlabs/puppetlabs-translate.git'
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    provision: 'https://github.com/puppetlabs/provision.git'
+    puppet_agent:
+      repo: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      ref: v4.21.0
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
   symlinks:
-    'concat': '#{source_dir}'
+    concat: '#{source_dir}'

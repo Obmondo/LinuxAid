@@ -92,8 +92,9 @@
 #   (after custom_cfg directives). NOTE: YOU are responsible for a semicolon on
 #   each line that requires one.
 # @param limit_zone
-#   Apply a limit_req_zone to the location. Expects a string indicating a
-#   previously defined limit_req_zone in the main nginx configuration
+#   Apply a limit_req_zone to the location. Expects a string or array of
+#   strings indicating a previously defined limit_req_zone in the main nginx
+#   configuration
 # @param location_custom_cfg
 #   Expects a hash with custom directives, cannot be used with other location
 #   types (proxy, fastcgi, root, or stub_status)
@@ -127,6 +128,11 @@
 #   This directive sets the time for caching different replies.
 # @param proxy_cache_lock
 #   This directive sets the locking mechanism for pouplating cache.
+# @param proxy_cache_background_update
+#   Allows starting a background subrequest to update an expired cache item
+# @param proxy_cache_convert_head
+#    Enables or disables the conversion of the “HEAD” method to “GET” for caching.
+#    When the conversion is disabled, the cache key should be configured to include the $request_method.
 # @param proxy_cache_bypass
 #   Defines conditions which the response will not be cached
 # @param proxy_method
@@ -174,6 +180,21 @@
 # @param reset_timedout_connection
 #   Enables or disables resetting timed out connections and connections closed
 #   with the non-standard code 444.
+# @param format_log
+#   Log_format to use with the defined access_log
+# @param access_log
+#   Where to write access log (log format can be set with $format_log). This
+#   can be either a string or an array; in the latter case, multiple lines will
+#   be created. Additionally, unlike the earlier behavior, setting it to
+#   'absent' in the server context will remove this directive entirely from the
+#   server stanza, rather than setting a default. Can also be disabled for this
+#   server with the string 'off'.
+# @param error_log
+#   Where to write error log. May add additional options like error level to
+#   the end. May set to 'absent', in which case it will be omitted in this
+#   server stanza (and default to nginx.conf setting)
+# @param log_not_found
+#   Enables or disables the logging of not found errors in error_log
 #
 # @example Simple example
 #   nginx::resource::location { 'test2.local-bob':
@@ -231,7 +252,7 @@ define nginx::resource::location (
   Enum['present', 'absent'] $ensure                                = 'present',
   Boolean $internal                                                = false,
   String $location                                                 = $name,
-  Variant[String[1],Array[String[1],1]] $server                    = undef,
+  Variant[String[1], Array[String[1], 1]] $server                  = undef,
   Optional[String] $www_root                                       = undef,
   Optional[String] $autoindex                                      = undef,
   Optional[Enum['on', 'off']] $autoindex_exact_size                = undef,
@@ -265,7 +286,7 @@ define nginx::resource::location (
   Boolean $ssl                                                     = false,
   Boolean $ssl_only                                                = false,
   Optional[String] $location_alias                                 = undef,
-  Optional[String[1]] $limit_zone                                  = undef,
+  Optional[Variant[String[1],Array[String[1],1]]] $limit_zone      = undef,
   Optional[Enum['any', 'all']] $location_satisfy                   = undef,
   Optional[Array] $location_allow                                  = undef,
   Optional[Array] $location_deny                                   = undef,
@@ -283,6 +304,8 @@ define nginx::resource::location (
   Optional[String] $proxy_cache_key                                = undef,
   Optional[String] $proxy_cache_use_stale                          = undef,
   Optional[Enum['on', 'off']] $proxy_cache_lock                    = undef,
+  Optional[Enum['on', 'off']] $proxy_cache_background_update       = undef,
+  Optional[Enum['on', 'off']] $proxy_cache_convert_head            = undef,
   Optional[Variant[Array, String]] $proxy_cache_valid              = undef,
   Optional[Variant[Array, String]] $proxy_cache_bypass             = undef,
   Optional[String] $proxy_method                                   = undef,
@@ -297,15 +320,19 @@ define nginx::resource::location (
   Optional[String] $auth_basic_user_file                           = undef,
   Optional[String] $auth_request                                   = undef,
   Array $rewrite_rules                                             = [],
-  Integer[401,599] $priority                                       = 500,
+  Integer[401, 599] $priority                                      = 500,
   Boolean $mp4                                                     = false,
   Boolean $flv                                                     = false,
   Optional[String] $expires                                        = undef,
   Hash $add_header                                                 = {},
   Optional[Enum['on', 'off', 'always']] $gzip_static               = undef,
   Optional[Enum['on', 'off']] $reset_timedout_connection           = undef,
+  Optional[Variant[Array[String[1], 1], String[1]]] $access_log    = undef,
+  Optional[Variant[Array[String[1], 1], String[1]]] $error_log     = undef,
+  Optional[String[1]] $format_log                                  = $nginx::http_format_log,
+  Optional[Enum['on', 'off']] $log_not_found                       = undef,
 ) {
-  if ! defined(Class['nginx']) {
+  if !defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
   }
 
@@ -331,7 +358,8 @@ define nginx::resource::location (
   # Use proxy, fastcgi or uwsgi template if $proxy is defined, otherwise use directory template.
   # fastcgi_script is deprecated
   if ($fastcgi_script != undef) {
-    warning('The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
+    warning(
+    'The $fastcgi_script parameter is deprecated; please use $fastcgi_param instead to define custom fastcgi_params!')
   }
 
   # Only try to manage these files if they're the default one (as you presumably

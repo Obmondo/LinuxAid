@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:reboot).provide :windows do
-  confine operatingsystem: :windows
-  defaultfor operatingsystem: :windows
+  confine 'os.name': :windows
+  defaultfor 'os.name': :windows
 
   has_features :manages_reboot_pending
   attr_accessor :reboot_required
 
   def self.shutdown_command
-    if File.exist?("#{ENV['SYSTEMROOT']}\\sysnative\\shutdown.exe")
-      "#{ENV['SYSTEMROOT']}\\sysnative\\shutdown.exe"
-    elsif File.exist?("#{ENV['SYSTEMROOT']}\\system32\\shutdown.exe")
-      "#{ENV['SYSTEMROOT']}\\system32\\shutdown.exe"
+    if File.exist?("#{ENV.fetch('SYSTEMROOT', nil)}\\sysnative\\shutdown.exe")
+      "#{ENV.fetch('SYSTEMROOT', nil)}\\sysnative\\shutdown.exe"
+    elsif File.exist?("#{ENV.fetch('SYSTEMROOT', nil)}\\system32\\shutdown.exe")
+      "#{ENV.fetch('SYSTEMROOT', nil)}\\system32\\shutdown.exe"
     else
       'shutdown.exe'
     end
@@ -32,6 +34,7 @@ Puppet::Type.type(:reboot).provide :windows do
 
   def when=(_value)
     return unless @resource[:when] == :pending
+
     if @resource.class.rebooting
       Puppet.debug('Reboot already scheduled; skipping')
     else
@@ -50,13 +53,12 @@ Puppet::Type.type(:reboot).provide :windows do
                       if you know exactly what you are doing. The puppet agent run will continue.')
     end
 
-    if @resource[:apply] != :finished
-      cancel_transaction
-    end
+    cancel_transaction if @resource[:apply] != :finished
 
     shutdown_path = command(:shutdown)
     unless shutdown_path
-      raise ArgumentError, _('The shutdown.exe command was not found. On Windows 2003 x64 hotfix 942589 must be installed to access the 64-bit version of shutdown.exe from 32-bit version of ruby.exe.')
+      raise ArgumentError,
+            _('The shutdown.exe command was not found. On Windows 2003 x64 hotfix 942589 must be installed to access the 64-bit version of shutdown.exe from 32-bit version of ruby.exe.')
     end
 
     # Reason code
@@ -89,9 +91,7 @@ Puppet::Type.type(:reboot).provide :windows do
       :pending_domain_join,
     ]
 
-    if @resource[:onlyif] && @resource[:unless]
-      raise ArgumentError, _("You can't specify 'onlyif' and 'unless'")
-    end
+    raise ArgumentError, _("You can't specify 'onlyif' and 'unless'") if @resource[:onlyif] && @resource[:unless]
 
     reasons = @resource[:onlyif] if @resource[:onlyif]
     reasons -= @resource[:unless] if @resource[:unless]
@@ -133,15 +133,13 @@ Puppet::Type.type(:reboot).provide :windows do
     path = 'SYSTEM\CurrentControlSet\Control\Session Manager'
     with_key(path) do |reg|
       renames = begin
-                  reg.read('PendingFileRenameOperations')
-                rescue
-                  nil
-                end
+        reg.read('PendingFileRenameOperations')
+      rescue StandardError
+        nil
+      end
       if renames
         pending = !renames[1].empty?
-        if pending
-          Puppet.debug('Pending reboot: HKLM\\PendingFileRenameOperations')
-        end
+        Puppet.debug('Pending reboot: HKLM\\PendingFileRenameOperations') if pending
       end
     end
 
@@ -154,6 +152,7 @@ Puppet::Type.type(:reboot).provide :windows do
     path = 'SOFTWARE\Microsoft\Updates'
     value = reg_value(path, 'UpdateExeVolatile')
     return false if value.nil? || value.zero?
+
     Puppet.debug("Pending reboot: HKLM\\#{path}\\UpdateExeVolatile=#{value}")
     true
   end
@@ -164,6 +163,7 @@ Puppet::Type.type(:reboot).provide :windows do
     path = 'SOFTWARE\Wow6432Node\Microsoft\Updates'
     value = reg_value(path, 'UpdateExeVolatile')
     return false if value.nil? || value.zero?
+
     Puppet.debug("Pending reboot: HKLM\\#{path}\\UpdateExeVolatile=#{value}")
     true
   end
@@ -192,7 +192,7 @@ Puppet::Type.type(:reboot).provide :windows do
 
       config = lcm.ExecMethod_('GetMetaConfiguration')
       reboot = config.MetaConfiguration.LCMState == 'PendingReboot'
-    rescue # rubocop:disable Lint/HandleExceptions
+    rescue StandardError
       # WIN32OLE errors are very bad to diagnose.  In this case any errors are ignored.
     end
 
@@ -212,7 +212,7 @@ Puppet::Type.type(:reboot).provide :windows do
 
       pending = ccm_client_utils.ExecMethod_('DetermineIfRebootPending')
       reboot = pending.ReturnValue.zero? && (pending.IsHardRebootPending || pending.RebootPending)
-    rescue # rubocop:disable Lint/HandleExceptions
+    rescue StandardError
       # WIN32OLE errors are very bad to diagnose.  In this case any errors are ignored.
     end
 
@@ -237,7 +237,7 @@ Puppet::Type.type(:reboot).provide :windows do
     end
 
     true
-  rescue
+  rescue StandardError
     false
   end
 

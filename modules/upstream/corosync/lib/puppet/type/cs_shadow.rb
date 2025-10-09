@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:cs_shadow) do
   @doc = "cs_shadow resources represent a Corosync shadow CIB. Any corosync
     resources defined with 'cib' set to the title of a cs_shadow resource
@@ -5,6 +7,7 @@ Puppet::Type.newtype(:cs_shadow) do
     value have also been applied."
 
   newparam(:cib) do
+    desc 'Name of the CIB to begin tracking changes against.'
     isnamevar
   end
 
@@ -15,6 +18,8 @@ Puppet::Type.newtype(:cs_shadow) do
   end
 
   newproperty(:epoch) do
+    desc 'Implementation detail. DO NOT SET DIRECTLY.'
+
     def sync
       provider.sync(@resource[:cib])
     end
@@ -36,6 +41,7 @@ Puppet::Type.newtype(:cs_shadow) do
 
   def generate
     return [] if self[:autocommit] != true
+
     options = { name: @title }
     [Puppet::Type.type(:cs_commit).new(options)]
   end

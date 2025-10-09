@@ -79,7 +79,10 @@
 #   Before 2.0.0, this parameter would add a newline at the end of the warn message. To improve flexibilty, this was removed. Please add
 #   it explicitly if you need it.
 #
-define concat(
+# @param create_empty_file
+#   Specifies whether to create an empty file if no fragments are defined. Defaults to true.
+#
+define concat (
   Enum['present', 'absent']          $ensure                  = 'present',
   Stdlib::Absolutepath               $path                    = $name,
   Optional[Variant[String, Integer]] $owner                   = undef,
@@ -97,11 +100,11 @@ define concat(
   Optional[String]                   $selrole                 = undef,
   Optional[String]                   $seltype                 = undef,
   Optional[String]                   $seluser                 = undef,
-  Optional[String]                   $format                  = 'plain',
-  Optional[Boolean]                  $force                   = false,
+  Boolean                            $force                   = false,
+  Boolean                            $create_empty_file       = true,
+  Enum['plain', 'yaml', 'json', 'json-array', 'json-pretty', 'json-array-pretty'] $format = 'plain',
 ) {
-
-  $safe_name            = regsubst($name, '[/:~\n\s\+\*\(\)@]', '_', 'G')
+  $safe_name            = regsubst($name, '[\\\\/:~\n\s\+\*\(\)@]', '_', 'G')
   $default_warn_message = "# This file is managed by Puppet. DO NOT EDIT.\n"
 
   case $warn {
@@ -139,6 +142,7 @@ define concat(
       validate_cmd            => $validate_cmd,
       format                  => $format,
       force                   => $force,
+      create_empty_file       => $create_empty_file,
     }
 
     if $_append_header {

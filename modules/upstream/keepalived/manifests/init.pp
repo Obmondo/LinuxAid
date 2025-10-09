@@ -13,6 +13,8 @@
 #
 # @param config_validate_cmd Input for the `validate_cmd` param of the keepalived.conf concat fragment.
 #
+# @param validate_config Boolean to enable/disable the config validation
+#
 # @param config_group
 #
 # @param config_owner
@@ -66,7 +68,8 @@ class keepalived (
   Stdlib::Absolutepath   $config_dir          = '/etc/keepalived',
   Stdlib::Filemode       $config_dir_mode     = '0755',
   Stdlib::Filemode       $config_file_mode    = '0644',
-  Variant[String, Undef] $config_validate_cmd = '/usr/sbin/keepalived -l -t -f %',
+  Stdlib::Absolutepath   $config_validate_cmd = '/usr/sbin/keepalived -l -t -f %',
+  Boolean                $validate_config     = true,
 
   Array[Stdlib::Absolutepath] $include_external_conf_files = [],
 

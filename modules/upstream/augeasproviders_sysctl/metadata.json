@@ -1,70 +1,21 @@
 {
-  "name": "herculesteam-augeasproviders_sysctl",
-  "version": "2.6.0",
-  "author": "Raphael Pinson, Trevor Vaughan",
+  "name": "puppet-augeasproviders_sysctl",
+  "version": "3.3.0",
+  "author": "Vox Pupuli",
   "summary": "Augeas-based sysctl type and provider for Puppet",
   "license": "Apache-2.0",
-  "source": "https://github.com/hercules-team/augeasproviders_sysctl",
-  "project_page": "https://github.com/hercules-team/augeasproviders_sysctl",
-  "issues_url": "https://github.com/hercules-team/augeasproviders_sysctl/issues",
-  "description": "This module provides type/provider for sysctl using the Augeas configuration API library.",
+  "source": "https://github.com/voxpupuli/puppet-augeasproviders_sysctl",
+  "project_page": "https://github.com/voxpupuli/puppet-augeasproviders_sysctl",
+  "issues_url": "https://github.com/voxpupuli/puppet-augeasproviders_sysctl/issues",
   "dependencies": [
     {
-      "name": "herculesteam/augeasproviders_core",
-      "version_requirement": ">=2.4.0 <3.0.0"
+      "name": "puppet/augeasproviders_core",
+      "version_requirement": ">= 3.2.1 < 5.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "7",
-        "8",
-        "9",
-        "10"
-      ]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "14.04",
-        "16.04",
-        "18.04",
-        "18.10"
-      ]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "6",
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "6",
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "6",
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "OpenSUSE",
-      "operatingsystemrelease": [
-        "42.2"
-      ]
-    },
-    {
-      "operatingsystem": "FreeBSD",
       "operatingsystemrelease": [
         "10",
         "11",
@@ -72,10 +23,69 @@
       ]
     },
     {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OpenSUSE",
+      "operatingsystemrelease": [
+        "15.4"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "12",
+        "13"
+      ]
+    },
+    {
       "operatingsystem": "OpenBSD",
       "operatingsystemrelease": [
-        "5",
-        "6"
+        "7"
       ]
     },
     {
@@ -83,6 +93,9 @@
     }
   ],
   "requirements": [
-    { "name": "puppet", "version_requirement": ">= 5.0.0 < 7.0.0" }
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
   ]
 }

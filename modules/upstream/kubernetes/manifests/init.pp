@@ -23,7 +23,7 @@
 # [*container_runtime*]
 #   This is the runtime that the Kubernetes cluster will use.
 #   It can only be set to "cri_containerd" or "docker"
-#   Defaults to cri_containerd
+#   Defaults to docker
 #
 # [*containerd_version*]
 #   This is the version of the containerd runtime the module will install.
@@ -703,7 +703,6 @@ class kubernetes (
   String $etcd_package_name                               = 'etcd-server',
   String $etcd_source                                     = "https://github.com/etcd-io/etcd/releases/download/v${etcd_version}/${etcd_archive}",
   String $etcd_install_method                             = 'wget',
-  Enum['overlayfs', 'zfs'] $containerd_snapshotter        = 'overlayfs',
   Optional[String] $kubernetes_apt_location               = undef,
   Optional[String] $kubernetes_apt_release                = undef,
   Optional[String] $kubernetes_apt_repos                  = undef,

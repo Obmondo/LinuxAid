@@ -1,0 +1,33 @@
+<%- |
+    Array[Hash] $addresses,
+    String[1] $interface,
+    Array[Hash[String[1], Variant[String[1], Boolean]]] $routes,
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+# based on https://dn42.dev/howto/wireguard
+[Match]
+Name=<%= $interface %>
+
+[Network]
+DHCP=no
+IPv6AcceptRA=false
+IPForward=yes
+
+# for networkd >= 244 KeepConfiguration stops networkd from
+# removing routes on this interface when restarting
+KeepConfiguration=yes
+<% $addresses.each |$address| { -%>
+
+[Address]
+<% $address.each |$key, $value| { -%>
+<%= $key %>=<%= $value %>
+<% } -%>
+<% } -%>
+<% $routes.each |$route| { -%>
+
+[Route]
+<% $route.each |$key, $value| { -%>
+<%= $key %>=<%= $value %>
+<% } -%>
+<% } -%>
+

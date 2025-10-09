@@ -1,8 +1,0 @@
-[Unit]
-Description=Remove reboot related fact files from the system
-DefaultDependencies=no
-Before=shutdown.target reboot.target halt.target
-
-[Service]
-Type=oneshot
-ExecStop=/bin/rm -rf /var/run/puppet/reboot_triggers

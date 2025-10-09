@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/pcs'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/pcs'
 end
 
@@ -12,7 +15,7 @@ Puppet::Type.type(:cs_property).provide(:pcs, parent: PuppetX::Voxpupuli::Corosy
         abstract corosync/pacemaker vs. keepalived. This provider will check the state
         of Corosync cluster configuration properties.'
 
-  defaultfor operatingsystem: [:fedora, :centos, :redhat]
+  defaultfor 'os.family' => %i[redhat debian]
 
   # Path to the pcs binary for interacting with the cluster configuration.
   commands pcs: 'pcs'
@@ -23,23 +26,21 @@ Puppet::Type.type(:cs_property).provide(:pcs, parent: PuppetX::Voxpupuli::Corosy
     instances = []
 
     cmd = [command(:pcs), 'cluster', 'cib']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     cluster_property_set = doc.root.elements["configuration/crm_config/cluster_property_set[@id='cib-bootstrap-options']"]
-    unless cluster_property_set.nil?
-      cluster_property_set.each_element do |e|
-        items = e.attributes
-        property = { name: items['name'], value: items['value'] }
+    cluster_property_set&.each_element do |e|
+      items = e.attributes
+      property = { name: items['name'], value: items['value'] }
 
-        property_instance = {
-          name:       property[:name],
-          ensure:     :present,
-          value:      property[:value],
-          provider:   name
-        }
-        instances << new(property_instance)
-      end
+      property_instance = {
+        name: property[:name],
+        ensure: :present,
+        value: property[:value],
+        provider: name
+      }
+      instances << new(property_instance)
     end
     instances
   end
@@ -48,9 +49,9 @@ Puppet::Type.type(:cs_property).provide(:pcs, parent: PuppetX::Voxpupuli::Corosy
   # of actually doing the work.
   def create
     @property_hash = {
-      name:   @resource[:name],
+      name: @resource[:name],
       ensure: :present,
-      value:  @resource[:value]
+      value: @resource[:value]
     }
   end
 
@@ -58,7 +59,7 @@ Puppet::Type.type(:cs_property).provide(:pcs, parent: PuppetX::Voxpupuli::Corosy
   def destroy
     debug('Removing cluster property')
     cmd = [command(:pcs), 'property', 'unset', (@property_hash[:name]).to_s]
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     @property_hash.clear
   end
 
@@ -86,6 +87,6 @@ Puppet::Type.type(:cs_property).provide(:pcs, parent: PuppetX::Voxpupuli::Corosy
     # clear this on properties, in case it's set from a previous
     # run of a different corosync type
     cmd = [command(:pcs), 'property', 'set', "#{@property_hash[:name]}=#{@property_hash[:value]}"]
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
   end
 end

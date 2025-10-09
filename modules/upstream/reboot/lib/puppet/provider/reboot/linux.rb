@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'pathname'
-require Pathname.new(__FILE__).dirname + '../../../' + 'puppet/provider/reboot/posix'
+require "#{Pathname.new(__FILE__).dirname}/../../../puppet/provider/reboot/posix"
 
 Puppet::Type.type(:reboot).provide :linux, parent: :posix do
   confine kernel: :linux

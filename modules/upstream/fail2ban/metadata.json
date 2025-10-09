@@ -1,56 +1,77 @@
 {
   "name": "puppet-fail2ban",
-  "version": "2.4.1",
+  "version": "5.0.2",
   "author": "Vox Pupuli",
   "summary": "This module installs, configures and manages the Fail2ban service.",
   "license": "Apache-2.0",
-  "source": "git://github.com/voxpupuli/puppet-fail2ban.git",
+  "source": "https://github.com/voxpupuli/puppet-fail2ban.git",
   "project_page": "https://github.com/voxpupuli/puppet-fail2ban",
   "issues_url": "https://github.com/voxpupuli/puppet-fail2ban/issues",
   "dependencies": [
     {
       "name": "puppet/extlib",
-      "version_requirement": ">= 2.3.0 < 4.0.0"
+      "version_requirement": ">= 3.0.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 6.0.0"
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8",
-        "9"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04"
+        "18.04",
+        "20.04",
+        "22.04",
+        "24.04"
+      ]
+    },
+    {
+      "operatingsystem": "OpenSuSE",
+      "operatingsystemrelease": [
+        "15"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "tags": [

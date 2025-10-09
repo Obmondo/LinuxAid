@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:mongodb_conn_validator) do
   @doc = "Verify that a connection can be successfully established between a node
           and the mongodb server.  Its primary use is as a precondition to
@@ -6,6 +8,7 @@ Puppet::Type.newtype(:mongodb_conn_validator) do
           purposes such as monitoring."
 
   ensurable do
+    desc 'Ensure to verify the connection to mongodb'
     defaultvalues
     defaultto :present
   end

@@ -1,16 +1,56 @@
 host <%= @host %> {
-<% if not @comment.empty? -%>
+<% if @comment -%>
   # <%= @comment %>
 <% end -%>
   hardware ethernet   <%= @mac.upcase %>;
+<% if @ip -%>
   fixed-address       <%= @ip %>;
+<% end -%>
   ddns-hostname       "<%= @ddns_hostname %>";
 <% if @ignored -%>
   ignore              booting;
+<% end -%>
+<% if @default_lease_time -%>
+  default-lease-time  <%= @default_lease_time %>;
+<% end -%>
+<% if @max_lease_time -%>
+  max-lease-time      <%= @max_lease_time %>;
+<% end -%>
+<% if @filename -%>
+  filename            "<%= @filename %>";
 <% end -%>
 <% if not @options.empty? -%>
 <% @options.keys.sort.each do |option| -%>
   option <%= option %> <%= @options[option] %>;
 <% end -%>
+<% end -%>
+<% if not @on_commit.empty? -%>
+  on commit {
+<% @on_commit.each do |statement| -%>
+    <%= statement %>;
+<% end -%>
+  }
+<% end -%>
+<% if not @on_release.empty? -%>
+  on release {
+<% @on_release.each do |statement| -%>
+    <%= statement %>;
+<% end -%>
+  }
+<% end -%>
+<% if not @on_expiry.empty? -%>
+  on expiry {
+<% @on_expiry.each do |statement| -%>
+    <%= statement %>;
+<% end -%>
+  }
+<% end -%>
+<% if @ipxe_filename and @ipxe_bootstrap -%>
+  if exists <%= @ipxe_filename %> {
+    filename "<%= @ipxe_bootstrap %>";
+  }
+  else {
+    filename "<%= @ipxe_filename %>";
+  }
 <% end -%>
 }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:reboot).provide :posix do
   desc _("POSIX provider for the reboot type.
 
@@ -35,21 +37,15 @@ Puppet::Type.type(:reboot).provide :posix do
   end
 
   def reboot
-    if @resource[:apply] != :finished
-      cancel_transaction
-    end
+    cancel_transaction if @resource[:apply] != :finished
 
     shutdown_path = command(:shutdown)
-    unless shutdown_path
-      raise ArgumentError, _('The shutdown command was not found.')
-    end
+    raise ArgumentError, _('The shutdown command was not found.') unless shutdown_path
 
     timeout = @resource[:timeout].to_i
     unless Facter.value(:kernel) == 'SunOS'
       minutes = (timeout / 60.0).ceil
-      if timeout % 60 != 0
-        Puppet.warning("Shutdown command on this system specifies time in minutes, rounding #{timeout} seconds up to #{minutes} minutes.")
-      end
+      Puppet.warning("Shutdown command on this system specifies time in minutes, rounding #{timeout} seconds up to #{minutes} minutes.") if timeout % 60 != 0
       timeout = minutes
     end
 

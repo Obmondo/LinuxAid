@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-concat",
-  "version": "6.0.0",
+  "version": "9.1.0",
   "author": "puppetlabs",
   "summary": "Construct files from multiple fragments.",
   "license": "Apache-2.0",
@@ -10,49 +10,40 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 < 7.0.0"
-    },
-    {
-      "name": "puppetlabs/translate",
-      "version_requirement": ">= 1.0.0 < 2.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "11 SP1",
         "12",
         "15"
       ]
@@ -60,54 +51,63 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8",
-        "9"
+        "10",
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04",
-        "18.04"
+        "18.04",
+        "20.04",
+        "22.04",
+        "24.04"
       ]
     },
     {
       "operatingsystem": "Solaris",
       "operatingsystemrelease": [
-        "10",
         "11"
       ]
     },
     {
       "operatingsystem": "Windows",
       "operatingsystemrelease": [
-        "2008 R2",
+        "10",
+        "2012 R2 Core",
         "2012",
         "2012 R2",
         "2016",
-        "2012 R2 Core",
-        "7",
-        "8.1",
-        "10"
+        "2022"
       ]
     },
     {
       "operatingsystem": "AIX",
       "operatingsystemrelease": [
-        "5.3",
-        "6.1",
         "7.1"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5.10 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
-  "template-url": "https://github.com/puppetlabs/pdk-templates/",
-  "template-ref": "heads/master-0-ga54df41",
-  "pdk-version": "1.10.0"
+  "template-url": "https://github.com/puppetlabs/pdk-templates.git#main",
+  "template-ref": "tags/3.2.0.4-0-g5d17ec1",
+  "pdk-version": "3.2.0"
 }

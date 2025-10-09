@@ -1,85 +1,63 @@
 {
   "name": "puppetlabs-mount_core",
-  "version": "1.0.3",
-  "author": "Puppet Labs",
+  "version": "1.3.0",
+  "author": "puppetlabs",
   "summary": "Manages mounted filesystems and mount tables.",
   "license": "Apache-2.0",
   "source": "https://github.com/puppetlabs/puppetlabs-mount_core",
   "project_page": "https://github.com/puppetlabs/puppetlabs-mount_core",
-  "issues_url": "https://tickets.puppetlabs.com/projects/MODULES",
+  "issues_url": "https://github.com/puppetlabs/puppetlabs-mount_core/issues",
   "dependencies": [
-  
+
   ],
-  "data_provider": null,
   "operatingsystem_support": [
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
-      ]
+      "operatingsystem": "CentOS"
     },
     {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "7"
-      ]
+      "operatingsystem": "OracleLinux"
     },
     {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "7"
-      ]
+      "operatingsystem": "RedHat"
     },
     {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
-      ]
+      "operatingsystem": "Scientific"
     },
     {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "8"
-      ]
+      "operatingsystem": "Debian"
     },
     {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "16.04"
-      ]
+      "operatingsystem": "Ubuntu"
     },
     {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "28"
-      ]
+      "operatingsystem": "Fedora"
     },
     {
-      "operatingsystem": "Darwin",
-      "operatingsystemrelease": [
-        "16"
-      ]
+      "operatingsystem": "macOS"
     },
     {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": [
-        "12"
-      ]
+      "operatingsystem": "SLES"
     },
     {
-      "operatingsystem": "Solaris",
-      "operatingsystemrelease": [
-        "11"
-      ]
+      "operatingsystem": "Solaris"
+    },
+    {
+      "operatingsystem": "Rocky"
+    },
+    {
+      "operatingsystem": "AlmaLinux"
+    },
+    {
+      "operatingsystem": "Amazon"
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 9.0.0"
     }
   ],
-  "pdk-version": "1.8.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates",
-  "template-ref": "heads/master-0-gd61c0a4"
+  "pdk-version": "3.0.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#3.0.1",
+  "template-ref": "tags/3.0.1-0-gd13288a"
 }

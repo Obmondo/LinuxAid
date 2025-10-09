@@ -1,28 +1,24 @@
 {
-  "name": "puppet-gitlab_ci_runner",
-  "version": "6.1.1-rc0",
+  "name": "puppet-gitlab",
+  "version": "10.3.0",
   "author": "Vox Pupuli",
-  "summary": "Installation and configuration of Gitlab CI Runner",
-  "license": "Apache-2.0",
-  "source": "https://github.com/voxpupuli/puppet-gitlab_ci_runner",
-  "project_page": "https://github.com/voxpupuli/puppet-gitlab_ci_runner",
-  "issues_url": "https://github.com/voxpupuli/puppet-gitlab_ci_runner/issues",
+  "summary": "Installation and configuration of Gitlab Omnibus",
+  "license": "BSD-3-Clause",
+  "source": "https://github.com/voxpupuli/puppet-gitlab",
+  "project_page": "https://github.com/voxpupuli/puppet-gitlab",
+  "issues_url": "https://github.com/voxpupuli/puppet-gitlab/issues",
   "tags": [
     "git",
     "gitlab"
   ],
   "dependencies": [
     {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 6.3.0 < 10.0.0"
-    },
-    {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 10.0.0"
+      "version_requirement": ">= 4.13.1 < 10.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 6.3.0 < 11.0.0"
+      "version_requirement": ">= 9.2.0 < 11.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -40,7 +36,7 @@
       ]
     },
     {
-      "operatingsystem": "Rocky",
+      "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "8",
         "9"
@@ -54,7 +50,7 @@
       ]
     },
     {
-      "operatingsystem": "OracleLinux",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8",
         "9"
@@ -63,7 +59,6 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "11",
         "12"
       ]
     },
@@ -73,13 +68,6 @@
         "20.04",
         "22.04",
         "24.04"
-      ]
-    },
-    {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": [
-        "12",
-        "15"
       ]
     }
   ],

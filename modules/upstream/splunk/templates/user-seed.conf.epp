@@ -1,5 +1,0 @@
-<%- | String $user,
-      String $hash | -%>
-[user_info]
-USERNAME=<%= $user %>
-HASHED_PASSWORD=<%= $hash %>

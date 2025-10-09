@@ -1,0 +1,14 @@
+fixtures:
+  symlinks:
+    inifile: "#{source_dir}"
+    create_ini_settings_test: "#{source_dir}/spec/fixtures/create_ini_settings_test"
+    create_multiple_ini_settings: "#{source_dir}/spec/fixtures/create_multiple_ini_settings"
+    inherit_ini_setting: "#{source_dir}/spec/fixtures/inherit_ini_setting"
+    inherit_test1: "#{source_dir}/spec/fixtures/inherit_test1"
+  repositories:
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent:
+      repo: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      ref: v4.21.0
+    provision: 'https://github.com/puppetlabs/provision.git'    

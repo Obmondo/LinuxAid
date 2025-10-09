@@ -277,6 +277,7 @@ module aims to support the current and previous major Puppet versions.
  * Amazon Linux 2
  * Debian 10
  * Debian 11
+ * Debian 12
  * Ubuntu 20.04 LTS
  * Ubuntu 22.04 LTS
  * Ubuntu 24.04 LTS

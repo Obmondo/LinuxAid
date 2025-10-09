@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:cs_group) do
-  @doc = "Type for manipulating Corosync/Pacemkaer group entries.
+  @doc = "Type for manipulating Corosync/Pacemaker group entries.
     Groups are a set or resources (primitives) that need to be
     grouped together.
 
@@ -37,7 +39,7 @@ Puppet::Type.newtype(:cs_group) do
       once. This can be necessary to insert complex configurations into
       Corosync correctly.
 
-      This paramater sets the CIB this order should be created in. A
+      This parameter sets the CIB this order should be created in. A
       cs_shadow resource with a title of the same name as this value should
       also be added to your manifest."
   end
@@ -54,10 +56,8 @@ Puppet::Type.newtype(:cs_group) do
 
   autorequire(:cs_primitive) do
     autos = []
-    if should(:primitives)
-      should(:primitives).each do |val|
-        autos << unmunge_cs_primitive(val)
-      end
+    should(:primitives)&.each do |val|
+      autos << unmunge_cs_primitive(val)
     end
 
     autos
@@ -65,7 +65,7 @@ Puppet::Type.newtype(:cs_group) do
 
   def unmunge_cs_primitive(name)
     name = name.split(':')[0]
-    name = name[3..-1] if name.start_with? 'ms_'
+    name = name[3..] if name.start_with? 'ms_'
 
     name
   end

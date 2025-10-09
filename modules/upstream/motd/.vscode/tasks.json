@@ -1,0 +1,61 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "PDK Realease checks",
+            "type": "shell",
+            "command": "pdk bundle exec rake release_checks"
+        },
+        {
+            "label": "PDK build and release",
+            "type": "shell",
+            "command": "pdk bundle exec rake module:release",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "PDK Bundle install local",
+            "type": "shell",
+            "command": "pdk bundle install --path vendor/bundle"
+        },
+        {
+            "label": "Litmus dependency check",
+            "type": "shell",
+            "command": "ruby --version && docker  --version && git --version && pdk --version",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "litmus Bundle install",
+            "type": "shell",
+            "command": "bundle install --path .bundle/gems/"
+        },
+        {
+            "label": "litmus:provision",
+            "type": "shell",
+            "command": "bundle exec rake 'litmus:provision[docker, centos:7]'"
+        },
+        {
+            "label": "litmus:install_agent",
+            "type": "shell",
+            "command": "bundle exec rake litmus:install_agent"
+        },
+        {
+            "label": "litmus:install_module",
+            "type": "shell",
+            "command": "bundle exec rake litmus:install_module"
+        },
+        {
+            "label": "litmus:acceptance:parallel",
+            "type": "shell",
+            "command": "bundle exec rake litmus:acceptance:parallel"
+        }
+
+    ]
+}

@@ -1,2 +1,0 @@
----
-prometheus::env_file_path: '/etc'

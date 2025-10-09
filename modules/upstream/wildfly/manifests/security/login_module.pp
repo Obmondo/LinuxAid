@@ -23,7 +23,7 @@
 #
 define wildfly::security::login_module($domain, $code, $flag, $module_options={}) {
 
-  wildfly::util::resource { "/subsystem=security/security-domain=${domain}/authentication=classic/login-module=${code}":
+  wildfly::resource { "/subsystem=security/security-domain=${domain}/authentication=classic/login-module=${code}":
     content => {
       'code'           => $code,
       'flag'           => $flag,

@@ -1,5 +1,0 @@
----
-vnc::server::packages:
-  - xorg-x11-Xvnc
-vnc::client::gui::packages:
-  - tigervnc

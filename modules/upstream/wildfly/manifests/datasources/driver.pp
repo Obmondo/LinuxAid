@@ -1,7 +1,12 @@
 #
 # Configures a driver
 #
-define wildfly::datasources::driver($driver_name, $driver_module_name, $driver_class_name = undef, $driver_xa_datasource_class_name = undef, $target_profile = undef) {
+define wildfly::datasources::driver(
+  $driver_name,
+  $driver_module_name,
+  $driver_class_name = undef,
+  $driver_xa_datasource_class_name = undef,
+  $target_profile = undef) {
 
   $params = {
     'driver-name' => $driver_name,
@@ -10,7 +15,7 @@ define wildfly::datasources::driver($driver_name, $driver_module_name, $driver_c
     'driver-xa-datasource-class-name' => $driver_xa_datasource_class_name
   }
 
-  wildfly::util::resource { "/subsystem=datasources/jdbc-driver=${driver_name}":
+  wildfly::resource { "/subsystem=datasources/jdbc-driver=${driver_name}":
     content => $params,
     profile => $target_profile,
   }

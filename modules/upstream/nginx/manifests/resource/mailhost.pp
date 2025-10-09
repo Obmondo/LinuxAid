@@ -17,9 +17,7 @@
 # @param ipv6_listen_port
 #   Default IPv6 Port for NGINX to listen with this server on.
 # @param ipv6_listen_options
-#   Extra options for listen directive like 'default' to catchall. Template
-#   will allways add ipv6only=on.  While issue jfryman/puppet-nginx#30 is
-#   discussed, default value is 'default'.
+#   Extra options for listen directive like 'default' to catchall.
 # @param ssl
 #   Indicates whether to setup SSL bindings for this mailhost.
 # @param ssl_cert
@@ -74,6 +72,10 @@
 #   for authorization.
 # @param xclient
 #   Whether to use xclient for smtp
+# @param proxy_protocol
+#   Wheter to use proxy_protocol, only suppported with nginx >= 1.19.8
+# @param proxy_smtp_auth
+#   Wheter to use proxy_smtp_auth, only suppported with nginx >= 1.19.4
 # @param imap_auth
 #   Sets permitted methods of authentication for IMAP clients.
 # @param imap_capabilities
@@ -113,16 +115,18 @@
 #
 # @example SMTP server definition
 #   nginx::resource::mailhost { 'domain1.example':
-#     ensure      => present,
-#     auth_http   => 'server2.example/cgi-bin/auth',
-#     protocol    => 'smtp',
-#     listen_port => 587,
-#     ssl_port    => 465,
-#     starttls    => 'only',
-#     xclient     => 'off',
-#     ssl         => true,
-#     ssl_cert    => '/tmp/server.crt',
-#     ssl_key     => '/tmp/server.pem',
+#     ensure          => present,
+#     auth_http       => 'server2.example/cgi-bin/auth',
+#     protocol        => 'smtp',
+#     listen_port     => 587,
+#     ssl_port        => 465,
+#     starttls        => 'only',
+#     xclient         => 'off',
+#     proxy_protocol  => 'off',
+#     proxy_smtp_auth => 'off',
+#     ssl             => true,
+#     ssl_cert        => '/tmp/server.crt',
+#     ssl_key         => '/tmp/server.pem',
 #   }
 #
 define nginx::resource::mailhost (
@@ -157,6 +161,8 @@ define nginx::resource::mailhost (
   Optional[String] $auth_http                    = undef,
   Optional[String] $auth_http_header             = undef,
   Enum['on', 'off'] $xclient                     = 'on',
+  Enum['on', 'off'] $proxy_protocol              = 'off',
+  Enum['on', 'off'] $proxy_smtp_auth             = 'off',
   Optional[String] $imap_auth                    = undef,
   Optional[Array] $imap_capabilities             = undef,
   Optional[String] $imap_client_buffer           = undef,
@@ -164,21 +170,57 @@ define nginx::resource::mailhost (
   Optional[Array] $pop3_capabilities             = undef,
   Optional[String] $smtp_auth                    = undef,
   Optional[Array] $smtp_capabilities             = undef,
-  Optional[Variant[Array, String]] $raw_prepend  = undef,
-  Optional[Variant[Array, String]] $raw_append   = undef,
-  Optional[Hash] $mailhost_cfg_prepend           = undef,
-  Optional[Hash] $mailhost_cfg_append            = undef,
   String $proxy_pass_error_message               = 'off',
-  Array $server_name                             = [$name]
+  Array $server_name                             = [$name],
+  Variant[Array[String], String] $raw_prepend    = [],
+  Variant[Array[String], String] $raw_append     = [],
+  Hash[String, Variant[
+      String,
+      Array[String],
+      Hash[String, Variant[String, Array[String]]],
+  ]] $mailhost_cfg_prepend                       = {},
+  Hash[String, Variant[
+      String,
+      Array[String],
+      Hash[String, Variant[String, Array[String]]],
+  ]] $mailhost_cfg_append                        = {},
 ) {
   if ! defined(Class['nginx']) {
     fail('You must include the nginx base class before using any defined resources')
+  } elsif versioncmp($facts.get('nginx_version', $nginx::nginx_version), '1.15.0') < 0 {
+    fail('The mail module requires nginx 1.15 or newer')
+  } elsif ! $nginx::mail {
+    fail('nginx mail proxy requires the nginx::mail flag to be set true')
+  }
+
+  if $nginx::mail_package_name {
+    package { $nginx::mail_package_name:
+      ensure => 'installed',
+    }
+    $mail_load_content = $facts['os']['family'] ? {
+      'ArchLinux' => "load_module /usr/lib/nginx/modules/ngx_mail_module.so;\n",
+      'RedHat'    => "load_module /usr/lib64/nginx/modules/ngx_mail_module.so;\n",
+    }
+    file { '/etc/nginx/modules-enabled/mail.conf':
+      ensure  => 'file',
+      owner   => 'root',
+      mode    => '0644',
+      content => $mail_load_content,
+      require => File['/etc/nginx/modules-enabled'],
+    }
   }
 
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
-  if ($ipv6_enable and !$facts['networking']['ip6']) {
+  $has_ipaddress6 = ($facts.get('networking.ip6') =~ Stdlib::IP::Address::V6)
+  if ($ipv6_enable and !$has_ipaddress6) {
     warning('nginx: IPv6 support is not enabled or configured properly')
+  }
+
+  if $ipv6_enable and $has_ipaddress6 {
+    $_ipv6_listen_ip = Array($ipv6_listen_ip, true)
+  } else {
+    $_ipv6_listen_ip = []
   }
 
   # Check to see if SSL Certificates are properly defined.
@@ -190,6 +232,54 @@ define nginx::resource::mailhost (
 
   $config_dir  = "${nginx::conf_dir}/conf.mail.d"
   $config_file = "${config_dir}/${name}.conf"
+
+  # Pre-render some common parts
+  $mailhost_prepend = epp('nginx/prepend_append.epp', {
+      cfg_xpend => $mailhost_cfg_prepend,
+      raw_xpend => Array($raw_prepend, true),
+  })
+  $mailhost_append = epp('nginx/prepend_append.epp', {
+      cfg_xpend => $mailhost_cfg_append,
+      raw_xpend => Array($raw_append, true),
+  })
+
+  $mailhost_ssl_settings = epp('nginx/mailhost/mailhost_ssl_settings.epp', {
+      ssl_cert                  => $ssl_cert,
+      ssl_ciphers               => $ssl_ciphers,
+      ssl_client_cert           => $ssl_client_cert,
+      ssl_crl                   => $ssl_crl,
+      ssl_dhparam               => $ssl_dhparam,
+      ssl_ecdh_curve            => $ssl_ecdh_curve,
+      ssl_key                   => $ssl_key,
+      ssl_password_file         => $ssl_password_file,
+      ssl_prefer_server_ciphers => $ssl_prefer_server_ciphers,
+      ssl_protocols             => $ssl_protocols,
+      ssl_session_cache         => $ssl_session_cache,
+      ssl_session_ticket_key    => $ssl_session_ticket_key,
+      ssl_session_tickets       => $ssl_session_tickets,
+      ssl_session_timeout       => $ssl_session_timeout,
+      ssl_trusted_cert          => $ssl_trusted_cert,
+      ssl_verify_depth          => $ssl_verify_depth,
+  })
+
+  $mailhost_common = epp('nginx/mailhost/mailhost_common.epp', {
+      auth_http                => $auth_http,
+      auth_http_header         => $auth_http_header,
+      imap_auth                => $imap_auth,
+      imap_capabilities        => $imap_capabilities,
+      imap_client_buffer       => $imap_client_buffer,
+      pop3_auth                => $pop3_auth,
+      pop3_capabilities        => $pop3_capabilities,
+      protocol                 => $protocol,
+      proxy_pass_error_message => $proxy_pass_error_message,
+      proxy_protocol           => $proxy_protocol,
+      proxy_smtp_auth          => $proxy_smtp_auth,
+      server_name              => $server_name,
+      smtp_auth                => $smtp_auth,
+      smtp_capabilities        => $smtp_capabilities,
+      xclient                  => $xclient,
+      nginx_version            => $nginx::nginx_version,
+  })
 
   concat { $config_file:
     ensure  => $ensure,
@@ -204,8 +294,21 @@ define nginx::resource::mailhost (
   if $ssl_port == undef or $listen_port != $ssl_port {
     concat::fragment { "${name}-header":
       target  => $config_file,
-      content => template('nginx/mailhost/mailhost.erb'),
       order   => '001',
+      content => epp('nginx/mailhost/mailhost.epp', {
+          ipv6_listen_ip        => $_ipv6_listen_ip,
+          ipv6_listen_options   => $ipv6_listen_options,
+          ipv6_listen_port      => $ipv6_listen_port,
+          listen_ip             => Array($listen_ip, true),
+          listen_options        => $listen_options,
+          listen_port           => $listen_port,
+          mailhost_append       => $mailhost_append,
+          mailhost_common       => $mailhost_common,
+          mailhost_prepend      => $mailhost_prepend,
+          mailhost_ssl_settings => $mailhost_ssl_settings,
+          nginx_version         => $nginx::nginx_version,
+          starttls              => $starttls,
+      }),
     }
   }
 
@@ -213,8 +316,20 @@ define nginx::resource::mailhost (
   if $ssl {
     concat::fragment { "${name}-ssl":
       target  => $config_file,
-      content => template('nginx/mailhost/mailhost_ssl.erb'),
       order   => '700',
+      content => epp('nginx/mailhost/mailhost_ssl.epp', {
+          ipv6_listen_ip        => $_ipv6_listen_ip,
+          ipv6_listen_options   => $ipv6_listen_options,
+          ipv6_listen_port      => $ipv6_listen_port,
+          listen_ip             => Array($listen_ip, true),
+          listen_options        => $listen_options,
+          mailhost_append       => $mailhost_append,
+          mailhost_common       => $mailhost_common,
+          mailhost_prepend      => $mailhost_prepend,
+          mailhost_ssl_settings => $mailhost_ssl_settings,
+          nginx_version         => $nginx::nginx_version,
+          ssl_port              => $ssl_port,
+      }),
     }
   }
 }

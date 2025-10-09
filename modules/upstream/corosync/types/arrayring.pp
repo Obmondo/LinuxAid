@@ -1,6 +1,8 @@
+# @summary Custom type for infinitely nestable arrays
+#
 type Corosync::ArrayRing = Variant[
-  Array[Stdlib::Compat::Ip_address],
+  Array[Stdlib::IP::Address],
   Array[
-    Array[Stdlib::Compat::Ip_address]
+    Array[Stdlib::IP::Address]
   ]
 ]

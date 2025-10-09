@@ -1,0 +1,7 @@
+---
+mongodb::globals::repo_version: '8.0'
+mongodb::server::user: 'mongodb'
+mongodb::server::group: 'mongodb'
+mongodb::server::dbpath: '/var/lib/mongodb'
+mongodb::mongos::service_user: 'mongodb'
+mongodb::mongos::service_group: 'mongodb'

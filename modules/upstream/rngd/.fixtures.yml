@@ -1,0 +1,7 @@
+fixtures:
+  symlinks:
+    rngd: "#{source_dir}"
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "6.6.0"

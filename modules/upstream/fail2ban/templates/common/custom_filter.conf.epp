@@ -1,6 +1,17 @@
 # Fail2ban custom filter
 # Managed by Puppet
 
+[Init]
+<% if $journalmatch { -%>
+journalmatch = <%= $journalmatch %>
+<% } -%>
+<% if $filter_maxlines { -%>
+maxlines = <%= $filter_maxlines %>
+<% } -%>
+<% if $filter_datepattern { -%>
+datepattern = <%= $filter_datepattern %>
+<% } -%>
+
 <% if $findtime { -%>
 [INCLUDES]
 <%= $filter_includes %>

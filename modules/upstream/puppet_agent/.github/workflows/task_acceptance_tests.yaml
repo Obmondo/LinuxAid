@@ -1,0 +1,49 @@
+---
+name: Task Acceptance Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  task_acceptance_tests:
+    name: On ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ 'ubuntu-20.04', 'rocky-8' ]
+
+    env:
+      ruby_version: '3.1'
+      GEM_BOLT: true
+      BEAKER_debug: true
+      BEAKER_set: docker/${{ matrix.os }}
+
+    runs-on: 'ubuntu-latest'
+    steps:
+
+      - name: Connect to Twingate
+        uses: twingate/github-action@v1
+        with:
+          service-key: ${{ secrets.TWINGATE_PUBLIC_REPO_KEY }}
+
+      - name: Checkout current PR code
+        uses: actions/checkout@v4
+
+      - name: Install docker
+        uses: docker/setup-buildx-action@v1
+        id: buildx
+        with:
+          install: true
+
+      - name: Install ruby version ${{ env.ruby_version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.ruby_version }}
+          bundler-cache: true
+
+      - name: Run task acceptance tests
+        run: |
+          cd task_spec
+          bundle exec rake task_acceptance

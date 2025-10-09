@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - ruby: "2.7"
+            puppet: "~> 7.0"
+          - ruby: "3.2"
+            puppet: "~> 8.0"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        name: Set up Ruby ${{ matrix.ruby }}
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Install bundle
+        env:
+          PUPPET_GEM_VERSION: ${{ matrix.puppet }}
+        run: |
+          bundle config set --local without system_tests
+          rm -f Gemfile.lock
+          bundle install
+
+      - name: Build and test
+        env:
+          SPEC_OPTS: "--format documentation"
+        run: |
+          bundle exec rake validate
+          bundle exec rake lint
+          bundle exec rake spec

@@ -1,0 +1,4 @@
+---
+# Debian family configuration
+
+drbd::package_name: 'drbd-utils'

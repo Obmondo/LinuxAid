@@ -31,7 +31,7 @@ define yum::plugin (
   }
 
   package { $_pkg_name:
-    ensure  => $ensure,
+    ensure => $ensure,
   }
 
   if ! defined(Yum::Config['plugins']) {

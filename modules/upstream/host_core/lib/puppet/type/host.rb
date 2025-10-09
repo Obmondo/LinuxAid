@@ -1,9 +1,10 @@
 require 'puppet/property/ordered_list'
 
 Puppet::Type.newtype(:host) do
-  @doc = "Installs and manages host entries.  For most systems, these
-      entries will just be in `/etc/hosts`, but some systems (notably OS X)
-      will have different solutions."
+  @doc = "@summary Installs and manages host entries.
+
+      For most systems, these entries will just be in `/etc/hosts`, but some
+      systems (notably OS X) will have different solutions."
 
   ensurable
 
@@ -22,7 +23,7 @@ Puppet::Type.newtype(:host) do
     end
 
     def valid_newline?(addr)
-      addr !~ %r{\n} && addr !~ %r{\r}
+      !addr.include?("\n") && !addr.include?("\r")
     end
 
     validate do |value|
@@ -46,15 +47,15 @@ Puppet::Type.newtype(:host) do
 
     validate do |value|
       # This regex already includes newline check.
-      raise Puppet::Error, _('Host aliases cannot include whitespace') if value =~ %r{\s}
-      raise Puppet::Error, _('Host aliases cannot be an empty string. Use an empty array to delete all host_aliases ') if value =~ %r{^\s*$}
+      raise Puppet::Error, _('Host aliases cannot include whitespace') if %r{\s}.match?(value)
+      raise Puppet::Error, _('Host aliases cannot be an empty string. Use an empty array to delete all host_aliases ') if %r{^\s*$}.match?(value)
     end
   end
 
   newproperty(:comment) do
     desc 'A comment that will be attached to the line with a # character.'
     validate do |value|
-      if value =~ %r{\n} || value =~ %r{\r}
+      if value.include?("\n") || value.include?("\r")
         raise Puppet::Error, _('Comment cannot include newline')
       end
     end
@@ -80,11 +81,11 @@ Puppet::Type.newtype(:host) do
 
     validate do |value|
       value.split('.').each do |hostpart|
-        if hostpart !~ %r{^([\w]+|[\w][\w\-]+[\w])$}
+        unless %r{^([\w]+|[\w][\w\-]+[\w])$}.match?(hostpart)
           raise Puppet::Error, _('Invalid host name')
         end
       end
-      if value =~ %r{\n} || value =~ %r{\r}
+      if value.include?("\n") || value.include?("\r")
         raise Puppet::Error, _('Hostname cannot include newline')
       end
     end

@@ -1,23 +1,23 @@
-if $facts['cassandrarelease'] {
-  notify { "Cassandra release: ${facts['cassandrarelease']}": }
+if $::cassandrarelease {
+  notify { "Cassandra release: ${::cassandrarelease}": }
 } else {
-  warning('cassandrarelease is not set!')
+  warning('::cassandrarelease is not set!')
 }
 
-if $facts['cassandramajorversion'] {
-  notify { "Cassandra major version: ${facts['cassandramajorversion']}": }
+if $::cassandramajorversion {
+  notify { "Cassandra major version: ${::cassandramajorversion}": }
 } else {
-  warning('cassandramajorversion is not set!')
+  warning('::cassandramajorversion is not set!')
 }
 
-if $facts['cassandraminorversion'] {
-  notify { "Cassandra minor version: ${facts['cassandraminorversion']}": }
+if $::cassandraminorversion {
+  notify { "Cassandra minor version: ${::cassandraminorversion}": }
 } else {
-  warning('cassandraminorversion is not set!')
+  warning('::cassandraminorversion is not set!')
 }
 
-if $facts['cassandrapatchversion'] {
-  notify { "Cassandra patch version: ${facts['cassandrapatchversion']}": }
+if $::cassandrapatchversion {
+  notify { "Cassandra patch version: ${::cassandrapatchversion}": }
 } else {
-  warning('cassandrapatchversion is not set!')
+  warning('::cassandrapatchversion is not set!')
 }

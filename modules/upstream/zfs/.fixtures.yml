@@ -1,0 +1,23 @@
+fixtures:
+  symlinks:
+    zfs: "#{source_dir}"
+  forge_modules:
+    augeas_core:
+      repo: "puppetlabs/augeas_core"
+      ref: "1.1.2"
+    cron_core:
+      repo: "puppetlabs/cron_core"
+      ref: "1.0.5"
+    kmod:
+      repo: "puppet/kmod"
+      ref: "3.0.0"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "7.1.0"
+    yumrepo_core:
+      repo: "puppetlabs/yumrepo_core"
+      ref: "1.0.7"
+  repositories:
+    facts: "https://github.com/puppetlabs/puppetlabs-facts.git"
+    provision: "https://github.com/puppetlabs/provision.git"
+    puppet_agent: "https://github.com/puppetlabs/puppetlabs-puppet_agent.git"

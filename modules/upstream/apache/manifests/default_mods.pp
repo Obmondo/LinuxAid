@@ -13,10 +13,7 @@ class apache::default_mods (
   case $facts['os']['family'] {
     'RedHat': {
       ::apache::mod { 'log_config': }
-      if $facts['os']['name'] != 'Amazon' and $use_systemd {
-        ::apache::mod { 'systemd': }
-      }
-      if ($facts['os']['name'] == 'Amazon' and $facts['os']['release']['full'] == '2') {
+      if $use_systemd {
         ::apache::mod { 'systemd': }
       }
       ::apache::mod { 'unixd': }
@@ -69,11 +66,8 @@ class apache::default_mods (
       'FreeBSD': {
         include apache::mod::actions
         include apache::mod::authn_core
-        include apache::mod::cache
-        include apache::mod::disk_cache
         include apache::mod::filter
         include apache::mod::headers
-        include apache::mod::info
         include apache::mod::mime_magic
         include apache::mod::reqtimeout
         include apache::mod::rewrite

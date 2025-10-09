@@ -1,11 +1,15 @@
-# == Class: fail2ban::service
+# @summary Handles the service.
+#
+# @api private
 #
 class fail2ban::service {
-  if $::fail2ban::service_name {
+  assert_private()
+
+  if $fail2ban::service_name {
     service { 'fail2ban':
-      ensure     => $::fail2ban::_service_ensure,
-      name       => $::fail2ban::service_name,
-      enable     => $::fail2ban::_service_enable,
+      ensure     => $fail2ban::_service_ensure,
+      name       => $fail2ban::service_name,
+      enable     => $fail2ban::_service_enable,
       hasrestart => true,
     }
   }

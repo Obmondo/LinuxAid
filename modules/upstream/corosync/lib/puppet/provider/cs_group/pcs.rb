@@ -1,16 +1,19 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/pcs'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/pcs'
 end
 
 Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync::Provider::Pcs) do
   desc 'Provider to add, delete, manipulate primitive groups.'
 
-  defaultfor operatingsystem: [:fedora, :centos, :redhat]
+  defaultfor 'os.family' => %i[redhat debian]
 
   # Path to the pcs binary for interacting with the cluster configuration.
   commands pcs: '/usr/sbin/pcs'
@@ -21,7 +24,7 @@ Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
     instances = []
 
     cmd = [command(:pcs), 'cluster', 'cib']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//group') do |e|
@@ -34,11 +37,11 @@ Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
       end
 
       group_instance = {
-        name:       e.attributes['id'],
-        ensure:     :present,
+        name: e.attributes['id'],
+        ensure: :present,
         primitives: primitives,
-        provider:   name,
-        new:        false
+        provider: name,
+        new: false
       }
       instances << new(group_instance)
     end
@@ -49,10 +52,10 @@ Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
   # of actually doing the work.
   def create
     @property_hash = {
-      name:       @resource[:name],
-      ensure:     :present,
+      name: @resource[:name],
+      ensure: :present,
       primitives: Array(@resource[:primitives]),
-      new:        true
+      new: true
     }
     @property_hash[:cib] = @resource[:cib] unless @resource[:cib].nil?
   end
@@ -61,7 +64,7 @@ Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
   # we need to stop the group.
   def destroy
     debug('Removing group')
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib([command(:pcs), 'resource', 'ungroup', @property_hash[:name]], @resource[:cib])
+    self.class.run_command_in_cib([command(:pcs), 'resource', 'ungroup', @property_hash[:name]], @resource[:cib])
     @property_hash.clear
   end
 
@@ -88,11 +91,11 @@ Puppet::Type.type(:cs_group).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
 
     if @property_hash[:new] == false
       debug('Removing group')
-      PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib([command(:pcs), 'resource', 'ungroup', @property_hash[:name]], @resource[:cib])
+      self.class.run_command_in_cib([command(:pcs), 'resource', 'ungroup', @property_hash[:name]], @resource[:cib])
     end
 
     cmd = [command(:pcs), 'resource', 'group', 'add', (@property_hash[:name]).to_s]
     cmd += @property_hash[:primitives]
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
   end
 end

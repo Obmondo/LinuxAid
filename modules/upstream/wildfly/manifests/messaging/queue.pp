@@ -1,7 +1,11 @@
 #
 # Configures a queue
 #
-define wildfly::messaging::queue($durable = undef, $entries = undef, $selector = undef, $target_profile = undef) {
+define wildfly::messaging::queue(
+  $entries = undef,
+  $durable = undef,
+  $selector = undef,
+  $target_profile = undef) {
 
   $params = {
     'durable' => $durable,
@@ -9,7 +13,7 @@ define wildfly::messaging::queue($durable = undef, $entries = undef, $selector =
     'selector' => $selector
   }
 
-  wildfly::util::resource { "/subsystem=messaging/hornetq-server=default/jms-queue=${name}":
+  wildfly::resource { "/subsystem=messaging/hornetq-server=default/jms-queue=${title}":
     content => $params,
     profile => $target_profile,
   }

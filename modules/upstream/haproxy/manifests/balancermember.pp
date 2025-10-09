@@ -90,7 +90,7 @@
 #
 #  @@haproxy::balancermember { 'haproxy':
 #    listening_service => 'puppet00',
-#    ports             => '8140',
+#    ports             => [8140],
 #    server_names      => $::hostname,
 #    ipaddresses       => $::ipaddress,
 #    options           => 'check',
@@ -108,7 +108,7 @@
 #
 #  haproxy::balancermember { 'haproxy':
 #    listening_service => 'puppet00',
-#    ports             => '8140',
+#    ports             => 8140,
 #    server_names      => ['server01', 'server02'],
 #    ipaddresses       => ['192.168.56.200', '192.168.56.201'],
 #    options           => 'check',
@@ -137,7 +137,7 @@
 define haproxy::balancermember (
   String                                              $listening_service,
   Enum['server', 'default-server', 'server-template'] $type               = 'server',
-  Optional[Variant[Array, String]]                    $ports              = undef,
+  Optional[Haproxy::Ports]                            $ports              = undef,
   Optional[Variant[String, Stdlib::Port]]             $port               = undef,
   Variant[String[1], Array]                           $server_names       = $facts['networking']['hostname'],
   Variant[String, Array]                              $ipaddresses        = $facts['networking']['ip'],

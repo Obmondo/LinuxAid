@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-kubernetes.svg?branch=main)](https://travis-ci.org/puppetlabs/puppetlabs-kubernetes)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppetlabs/kubernetes.svg)](https://forge.puppetlabs.com/puppetlabs/kubernetes)
 [![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/puppetlabs/kubernetes.svg)](https://forge.puppetlabs.com/puppetlabs/kubernetes)
 
@@ -17,16 +16,11 @@
    * [Defined types](#definedtypes)
    * [Parameters](#parameters)
 4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
-6. [Examples - Puppet Bolt task examples](#examples)
+5. [License](#license)
+6. [Development - Guide for contributing to the module](#development)
+7. [Examples - Puppet Bolt task examples](#examples)
 
 ## Description
-
-[<img
-src="https://github.com/cncf/artwork/blob/04763c0f5f72b23d6a20bfc9c68c88cee805dbcc/projects/kubernetes/certified-kubernetes/1.13/color/certified-kubernetes-1.13-color.png"
-align="right" width="150px" alt="certified kubernetes 1.13">][certified]
-
-[certified]: https://github.com/cncf/k8s-conformance/tree/main/v1.13/puppetlabs-kubernetes
 
 This module installs and configures [Kubernetes](https://kubernetes.io/) which is an open-source system for automating deployment, scaling, and management of containerized applications. For efficient management and discovery, containers that make up an application are grouped into logical units.
 
@@ -64,7 +58,7 @@ The above parameters are:
 * `VERSION`: The version of Kubernetes to deploy. Must follow X.Y.Z format. ([Check kubeadm regex rule](https://github.com/kubernetes/kubernetes/blob/master/cmd/kubeadm/app/util/version.go#L43) for more information)
 * `CONTAINER_RUNTIME`: The container runtime Kubernetes uses. Set this value to `docker` (officially supported) or `cri_containerd`. Advanced Kubernetes users can use `cri_containerd`, however this requires an increased understanding of Kubernetes, specifically when running applications in a HA cluster. To run a HA cluster and access your applications, an external load balancer is required in front of your cluster. Setting this up is beyond the scope of this module. For more information, see the Kubernetes [documentation](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/).
 * `CNI_PROVIDER`: The CNI network to install. Set this value to `weave`, `flannel`, `calico` or `cilium`.
-* `CNI_PROVIDER_VERSION` The CNI version to use. `calico` and `cilium` uses this variable to reference the correct deployment file. Current version `cilium` is `1.4.3`, calico is `3.18`
+* `CNI_PROVIDER_VERSION` The CNI version to use. `calico`, `calico-tigera`, and `cilium` providers use this variable to reference the correct deployment file. Current version `cilium` is `1.4.3`, calico is `3.18`, calico-tigera is `3.26.0`
 * `ETCD_INITIAL_CLUSTER`: The server hostnames and IPs in the form of `hostname:ip`. When in production, include three, five, or seven nodes for etcd.
 * `ETCD_IP`: The IP each etcd member listens on. We recommend passing the fact for the interface to be used by the cluster.
 * `KUBE_API_ADVERTISE_ADDRESS`: The IP each etcd/apiserver instance uses on each controller. We recommend passing the fact for the interface to be used by the cluster.
@@ -126,6 +120,27 @@ To make a node a worker, add the following code to the manifest:
 class {'kubernetes':
   worker => true,
 }
+```
+
+#### Network Plugins
+
+Kubernetes supports multiple [networking plugins](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) that implements the [networking model](https://kubernetes.io/docs/concepts/services-networking/#the-kubernetes-network-model).
+
+This module supports following [Container Network Interface](https://github.com/containernetworking/cni) (CNI) plugins:
+
+- `flannel`
+```yaml
+kubernetes::cni_network_provider: https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+kubernetes::cni_pod_cidr: 10.244.0.0/16
+kubernetes::cni_provider: flannel
+```
+- `weave`
+- `calico-node`
+- `cilium`
+```yaml
+kubernetes::cni_network_provider: https://raw.githubusercontent.com/cilium/cilium/1.4.3/examples/kubernetes/1.26/cilium.yaml
+kubernetes::cni_pod_cidr: 10.244.0.0/16
+kubernetes::cni_provider: cilium
 ```
 
 #### Installing Kubernetes on different OS
@@ -907,6 +922,10 @@ This module has been tested on the following operating systems:
 * Ubuntu 16.04
 
 Docker is the supported container runtime for this module.
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 ## Development
 

@@ -12,7 +12,7 @@ node 'active' {
     size         => '1G',
   }
 
-  include ::drbd
+  include drbd
 
   drbd::resource { 'drbd':
     host1         => $active_host,
@@ -39,7 +39,7 @@ node 'passive' {
     size         => '1G',
   }
 
-  include ::drbd
+  include drbd
 
   drbd::resource { 'drbd':
     host1         => $active_host,

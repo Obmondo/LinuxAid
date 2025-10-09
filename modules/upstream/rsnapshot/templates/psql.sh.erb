@@ -1,19 +1,17 @@
 #!/bin/bash
-# This file is managed by puppet
 # written by Norbert Varzariu <loomsen@gmail.com>
 # This Script is triggered by rsnapshot and dumps the specified dbs on the configured host.
 #
 host=<%=@host%>
 user=<%=@dbbackup_user%>
+pass=<%=@dbbackup_password%>
 
-dbs=( 
-      $(ssh -l <%=@backup_user-%> "$host" "PGPASSWORD='<%=@dbbackup_password%>' psql -U ${user} -Atc \"SELECT datname FROM pg_database WHERE NOT datistemplate AND NOT datname ~ '<%@ignore_dbs.each do |db|-%><%if db == @ignore_dbs.last-%><%=db-%><%else-%><%=db-%>|<%end-%><%end-%>'\"")  
-    )
+PGPASSWORD="$pass"
+dbs=( $(psql -h "$host" -U "$user" -Atc "SELECT datname FROM pg_database WHERE NOT datistemplate AND datname <> 'postgres'")  )
+
 for db in "${dbs[@]}"; do
-  ssh -l <%=@backup_user-%> "$host" "PGPASSWORD='<%=@dbbackup_password%>' <%=@dumper-%> -U ${user} <%=@dump_flags-%> ${db}" > "$db".sql
+  ssh -l root "$host" "pg_dump -U ${user} -Fc ${db}" > "$db".sql
   wait
-<% if @compress != '' -%>
-  <%=@compress-%> "$db".sql
-<%end-%>
+  pbzip2 -p3 "$db".sql
 done
 

@@ -1,50 +1,29 @@
-# This class manages configuration directories for Logstash.
+# This class is called from kibana to configure the daemon's configuration
+# file.
+# It is not meant to be called directly.
 #
-# @example Include this class to ensure its resources are available.
-#   include logstash::config
+# @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-# @author https://github.com/elastic/puppet-logstash/graphs/contributors
-#
-class logstash::config {
-  require logstash::package
-
-  File {
-    owner => 'root',
-    group => 'root',
+class kibana::config {
+  $_ensure = $kibana::ensure ? {
+    'absent' => $kibana::ensure,
+    default  => 'file',
   }
 
-  # Configuration "fragment" directories for pipeline config and pattern files.
-  # We'll keep these seperate since we may want to "purge" them. It's easy to
-  # end up with orphan files when managing config fragments with Puppet.
-  # Purging the directories resolves the problem.
+  file { '/etc/kibana/kibana.yml':
+    ensure  => $_ensure,
+    content => Sensitive(kibana::hash2yaml($kibana::config)),
+    owner   => $kibana::kibana_user,
+    group   => $kibana::kibana_group,
+    mode    => '0660',
+  }
 
-  if($logstash::ensure == 'present') {
-    file { $logstash::config_dir:
-      ensure => directory,
+  if $kibana::plugindir {
+    file { $kibana::plugindir:
+      ensure => 'directory',
+      owner  => $kibana::kibana_user,
+      group  => $kibana::kibana_group,
       mode   => '0755',
-    }
-
-    file { "${logstash::config_dir}/conf.d":
-      ensure  => directory,
-      purge   => $logstash::purge_config,
-      recurse => $logstash::purge_config,
-      mode    => '0775',
-      notify  => Service['logstash'],
-    }
-
-    file {     "${logstash::config_dir}/patterns":
-      ensure  => directory,
-      purge   => $logstash::purge_config,
-      recurse => $logstash::purge_config,
-      mode    => '0755',
-    }
-  }
-  elsif($logstash::ensure == 'absent') {
-    # Completely remove the config directory. ie. 'rm -rf /etc/logstash'
-    file { $logstash::config_dir:
-      ensure  => 'absent',
-      recurse => true,
-      force   => true,
     }
   }
 }

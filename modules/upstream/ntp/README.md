@@ -8,6 +8,7 @@
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 1. [Limitations - OS compatibility, etc.](#limitations)
+1. [License](#license)
 1. [Development - Guide for contributing to the module](#development)
 
 <a id="module-description"></a>
@@ -124,21 +125,28 @@ class { 'ntp':
 <a id="reference"></a>
 ## Reference
 
-See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-ntp/blob/master/REFERENCE.md)
+See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-ntp/blob/main/REFERENCE.md)
 
 <a id="limitations"></a>
 ## Limitations
 
 This module has been tested on [all PE-supported platforms](https://forge.puppetlabs.com/supported#compat-matrix). Additionally, it is tested (but not supported) on Solaris 10 and Fedora 20-22.
 
-For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-ntp/blob/master/metadata.json)
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-ntp/blob/main/metadata.json)
+
+<a id="license"></a> 
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 <a id="development"></a> 
 ## Development
 
+We are experimenting with a new tool for running acceptance tests. It's name is [puppet_litmus](https://github.com/puppetlabs/puppet_litmus) this replaces beaker as the test runner. To run the acceptance tests follow the instructions [here](https://github.com/puppetlabs/puppet_litmus/wiki/Tutorial:-use-Litmus-to-execute-acceptance-tests-with-a-sample-module-(MoTD)#install-the-necessary-gems-for-the-module).
+
 Puppet modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. Please follow our guidelines when contributing changes.
 
-For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
+For more information, see our [module contribution guide.](https://puppet.com/docs/puppet/latest/contributing.html)
 
 ### Contributors
 

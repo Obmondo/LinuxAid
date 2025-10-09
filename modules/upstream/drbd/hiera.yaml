@@ -1,0 +1,14 @@
+---
+version: 5
+
+defaults:
+  datadir: 'data'
+  data_hash: 'yaml_data'
+
+hierarchy:
+  - name: 'module drbd: Major OS Version'
+    path: '%{facts.os.name}-%{facts.os.release.major}.yaml'
+
+  - name: 'module drbd: OS family'
+    path: '%{facts.os.family}-family.yaml'
+

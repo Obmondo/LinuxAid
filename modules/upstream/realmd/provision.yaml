@@ -1,6 +1,0 @@
----
-default:
-  provisioner: docker
-  images:
-    - litmusimage/ubuntu:22.04
-    - litmusimage/almalinux:9

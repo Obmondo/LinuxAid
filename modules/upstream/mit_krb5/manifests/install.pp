@@ -20,7 +20,7 @@ class mit_krb5::install($packages = undef) {
     }
   } else {
     # OS-specific defaults
-    $install = $facts['os']['family'] ? {
+    $install = $::osfamily ? {
       'Archlinux' => ['krb5'],
       'Debian'    => ['krb5-user'],
       'Gentoo'    => ['mit-krb5'],
@@ -29,5 +29,5 @@ class mit_krb5::install($packages = undef) {
       'Suse'      => ['krb5-client'],
     }
   }
-  stdlib::ensure_packages($install)
+  ensure_packages($install)
 }

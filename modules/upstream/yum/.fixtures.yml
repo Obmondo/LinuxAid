@@ -1,0 +1,6 @@
+fixtures:
+  repositories:
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git
+    augeas_core: https://github.com/puppetlabs/puppetlabs-augeas_core.git
+    yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git

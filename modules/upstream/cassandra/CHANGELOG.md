@@ -721,12 +721,12 @@ bug fixes and some non-functional improvements.
 ### Features
 
 * Added the thrift_framed_transport_size_in_mb attribute to
-  cassandra.
-* Added the following attributes to cassandra::datastax_agent:
+  ::cassandra.
+* Added the following attributes to ::cassandra::datastax_agent:
   * async_pool_size
   * async_queue_size
   * service_systemd
-* Added the config_purge attribute to cassandra::opscenter.
+* Added the config_purge attribute to ::cassandra::opscenter.
 
 ### Bugfixes
 
@@ -869,7 +869,7 @@ change log documentation.
 
 ### Features
 
-* The following attributes have been added to the cassandra class to be
+* The following attributes have been added to the ::cassandra class to be
   configured into the configuration file:
 
   * client_encryption_algorithm
@@ -983,7 +983,7 @@ The following non-functional improvements were implemented:
 
 ### Summary
 
-More attributes for cassandra and cassandra::datastax_agent.  Also some
+More attributes for ::cassandra and ::cassandra::datastax_agent.  Also some
 non-functional improvements in the automated unit tests.
 
 ### Features

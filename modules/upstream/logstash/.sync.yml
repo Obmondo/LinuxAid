@@ -1,0 +1,11 @@
+---
+.puppet-lint.rc:
+  enabled_lint_checks:
+    - parameter_documentation
+    - parameter_types
+Gemfile:
+  optional:
+    ':system_tests':
+      - gem: rspec-retry
+spec/spec_helper_acceptance.rb:
+  unmanaged: false

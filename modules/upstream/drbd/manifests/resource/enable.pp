@@ -1,3 +1,17 @@
+#
+# @param manage
+# @param disk
+# @param fs_type
+# @param mkfs_opts
+# @param device
+# @param ha_primary
+# @param initial_setup
+# @param initialize
+# @param up
+# @param cluster
+# @param mountpoint
+# @param automount
+#
 define drbd::resource::enable (
   $manage,
   $disk,
@@ -6,6 +20,8 @@ define drbd::resource::enable (
   $device,
   $ha_primary,
   $initial_setup,
+  $initialize,
+  $up,
   $cluster,
   $mountpoint,
   $automount,
@@ -20,6 +36,8 @@ define drbd::resource::enable (
       disk          => $disk,
       ha_primary    => $ha_primary,
       initial_setup => $initial_setup,
+      initialize    => $initialize,
+      up            => $up,
       fs_type       => $fs_type,
       mkfs_opts     => $mkfs_opts,
       device        => $device,

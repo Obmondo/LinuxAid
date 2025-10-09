@@ -1,6 +1,12 @@
 
 # mount_core
 
+[![Modules Status](https://github.com/puppetlabs/puppetlabs-mount_core/workflows/%5BDaily%5D%20Unit%20Tests%20with%20nightly%20Puppet%20gem/badge.svg?branch=main)](https://github.com/puppetlabs/puppetlabs-mount_core/actions)
+[![Modules Status](https://github.com/puppetlabs/puppetlabs-mount_core/workflows/Static%20Code%20Analysis/badge.svg?branch=main)](https://github.com/puppetlabs/puppetlabs-mount_core/actions) 
+[![Modules Status](https://github.com/puppetlabs/puppetlabs-mount_core/workflows/Unit%20Tests%20with%20nightly%20Puppet%20gem/badge.svg?branch=main)](https://github.com/puppetlabs/puppetlabs-mount_core/actions) 
+[![Modules Status](https://github.com/puppetlabs/puppetlabs-mount_core/workflows/Unit%20Tests%20with%20released%20Puppet%20gem/badge.svg?branch=main)](https://github.com/puppetlabs/puppetlabs-mount_core/actions)
+
+
 #### Table of Contents
 
 1. [Description](#description)
@@ -72,4 +78,4 @@ Puppet Labs modules on the Puppet Forge are open projects, and community contrib
 
 We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
 
-For more information, see our [module contribution guide.](https://docs.puppetlabs.com/forge/contributing.html)
+For more information, see our [module contribution guide](https://puppet.com/docs/puppet/latest/contributing.html).

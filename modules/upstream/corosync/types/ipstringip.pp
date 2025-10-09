@@ -1,6 +1,8 @@
+# @summary Custom type for string <-> array of string variants
+#
 type Corosync::IpStringIp = Variant[
-  Stdlib::Compat::Ip_address,
+  Stdlib::IP::Address,
   Array[
-    Stdlib::Compat::Ip_address
+    Stdlib::IP::Address
   ]
 ]

@@ -47,7 +47,7 @@ class cassandra::firewall_ports (
   }
 
   # If this is a Cassandra node.
-  if defined ( Class['cassandra']) {
+  if defined ( Class['::cassandra']) {
     # Inter-node connections for Cassandra
     $inter_node_subnets_array = prefix($inter_node_subnets, '210_InterNode_')
 
@@ -64,7 +64,7 @@ class cassandra::firewall_ports (
   }
 
   # Connections for DataStax Agent
-  if defined ( Class['cassandra::datastax_agent']) or defined ( Class['cassandra::opscenter']) {
+  if defined ( Class['::cassandra::datastax_agent']) or defined ( Class['::cassandra::opscenter']) {
     $opscenter_subnets_opc_agent = prefix($opscenter_subnets, '230_OpsCenter_')
 
     cassandra::private::firewall_ports::rule { $opscenter_subnets_opc_agent:

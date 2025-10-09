@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/md5'
 
 Puppet::Type.newtype(:ini_subsetting) do
@@ -50,9 +52,7 @@ Puppet::Type.newtype(:ini_subsetting) do
   newparam(:path) do
     desc 'The ini file Puppet will ensure contains the specified setting.'
     validate do |value|
-      unless Puppet::Util.absolute_path?(value)
-        raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value })
-      end
+      raise(Puppet::Error, _("File paths must be fully qualified, not '%{value}'") % { value: value }) unless Puppet::Util.absolute_path?(value)
     end
   end
   newparam(:show_diff) do
@@ -75,9 +75,7 @@ Puppet::Type.newtype(:ini_subsetting) do
     defaultto('')
 
     validate do |value|
-      unless value.match?(%r{^["']?$})
-        raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'"))
-      end
+      raise Puppet::Error, _(%q(:quote_char valid values are '', '"' and "'")) unless value.match?(%r{^["']?$})
     end
   end
 
@@ -94,19 +92,19 @@ Puppet::Type.newtype(:ini_subsetting) do
       if @resource[:show_diff] == :true && Puppet[:show_diff]
         newvalue
       elsif @resource[:show_diff] == :md5 && Puppet[:show_diff]
-        '{md5}' + Digest::MD5.hexdigest(newvalue.to_s)
+        "{md5}#{Digest::MD5.hexdigest(newvalue.to_s)}"
       else
         '[redacted sensitive information]'
       end
     end
 
-    def is_to_s(value) # rubocop:disable Style/PredicateName : Changing breaks the code (./.bundle/gems/gems/puppet-5.3.3-universal-darwin/lib/puppet/parameter.rb:525:in `to_s')
+    def is_to_s(value) # rubocop:disable Naming/PredicateName : Changing breaks the code (./.bundle/gems/gems/puppet-5.3.3-universal-darwin/lib/puppet/parameter.rb:525:in `to_s')
       should_to_s(value)
     end
   end
 
   newparam(:insert_type) do
-    desc <<-eof
+    desc <<-DOCUMENTATION
       Where the new subsetting item should be inserted
 
       * :start  - insert at the beginning of the line.
@@ -114,7 +112,7 @@ Puppet::Type.newtype(:ini_subsetting) do
       * :before - insert before the specified element if possible.
       * :after  - insert after the specified element if possible.
       * :index  - insert at the specified index number.
-    eof
+    DOCUMENTATION
 
     newvalues(:start, :end, :before, :after, :index)
     defaultto(:end)

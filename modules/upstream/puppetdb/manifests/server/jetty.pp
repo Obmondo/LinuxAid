@@ -1,4 +1,6 @@
-# PRIVATE CLASS - do not use directly
+# @summary configures puppetdb jetty ini
+#
+# @api private
 class puppetdb::server::jetty (
   $listen_address                 = $puppetdb::params::listen_address,
   $listen_port                    = $puppetdb::params::listen_port,
@@ -14,17 +16,15 @@ class puppetdb::server::jetty (
   Optional[String] $cipher_suites = $puppetdb::params::cipher_suites,
   $confdir                        = $puppetdb::params::confdir,
   $max_threads                    = $puppetdb::params::max_threads,
-  $puppetdb_user                  = $puppetdb::params::puppetdb_user,
   $puppetdb_group                 = $puppetdb::params::puppetdb_group,
 ) inherits puppetdb::params {
-
   $jetty_ini = "${confdir}/jetty.ini"
 
   file { $jetty_ini:
     ensure => file,
-    owner  => $puppetdb_user,
+    owner  => 'root',
     group  => $puppetdb_group,
-    mode   => '0600',
+    mode   => '0640',
   }
 
   # Set the defaults
@@ -70,7 +70,6 @@ class puppetdb::server::jetty (
   }
 
   if $ssl_protocols {
-
     ini_setting { 'puppetdb_sslprotocols':
       ensure  => $ssl_setting_ensure,
       setting => 'ssl-protocols',
@@ -79,7 +78,6 @@ class puppetdb::server::jetty (
   }
 
   if $cipher_suites {
-
     ini_setting { 'puppetdb_cipher-suites':
       ensure  => $ssl_setting_ensure,
       setting => 'cipher-suites',

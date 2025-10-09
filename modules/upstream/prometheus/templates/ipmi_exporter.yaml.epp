@@ -1,3 +1,0 @@
-<%- | Hash $modules | -%>
-<%- $config = { 'modules' => $modules } -%>
-<%= stdlib::to_yaml($config) -%>

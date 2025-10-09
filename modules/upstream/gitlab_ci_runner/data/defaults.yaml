@@ -1,2 +1,0 @@
----
-gitlab_ci_runner::xz_package_name: 'xz-utils'

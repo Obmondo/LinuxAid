@@ -4,9 +4,11 @@
   <%- } -%>  
 <% } else { -%>
   <%- Array($ipaddress.flatten).unique.each |$virtual_ip| { -%>
-    <%- if String(type($ports, 'generalized')).index('Array') == 0 { -%>
+    <%- if $ports =~ Array { -%>
       <%- $ports_as_array = $ports -%>
-    <%- } elsif String(type($ports, 'generalized')).index('String') == 0 { -%>
+    <%- } elsif $ports =~ Stdlib::Port { -%>
+      <%- $ports_as_array = Array($ports,true) -%>
+    <%- } elsif $ports =~ String { -%>
       <%- $ports_as_array = Array($ports.split(",")) -%>
     <%- } else { -%>
       <%- $ports_as_array = [] -%>

@@ -1,4 +1,7 @@
 fixtures:
   repositories:
+      stdlib:
+        repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+        branch: "4.13.1"
   symlinks:
-    'wildfly': '#{source_dir}'
+    wildfly: "#{source_dir}"

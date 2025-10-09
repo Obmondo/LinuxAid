@@ -1,178 +1,233 @@
-# @summary This module installs and configures Gitlab CI Runners.
+# @summary This module installs and configures Gitlab with the Omnibus package.
 #
-# @example Simple runner registration
-#		class { 'gitlab_ci_runner':
-#		  runners => {
-#		 	 example_runner => {
-#		 		 'registration-token' => 'gitlab-token',
-#		 		 'url'                => 'https://gitlab.com',
-#		 		 'tag-list'           => 'docker,aws',
-#		 	 },
-#		  },
-#		}
-#
-# @param runners
-#   Hashkeys are used as $title in runners.pp. The subkeys have to be named as the parameter names from ´gitlab-runner register´ command cause they're later joined to one entire string using 2 hyphen to look like shell command parameters. See ´https://docs.gitlab.com/runner/register/#one-line-registration-command´ for details.
-# @param runner_defaults
-#   A hash with defaults which will be later merged with $runners.
-# @param xz_package_name
-#   The name of the 'xz' package. Needed for local docker installations.
-# @param concurrent
-#   Limits how many jobs globally can be run concurrently. The most upper limit of jobs using all defined runners. 0 does not mean unlimited!
-# @param log_level
-#   Log level (options: debug, info, warn, error, fatal, panic). Note that this setting has lower priority than level set by command line argument --debug, -l or --log-level
-# @param log_format
-#   Log format (options: runner, text, json). Note that this setting has lower priority than format set by command line argument --log-format
-# @param check_interval
-#   Defines the interval length, in seconds, between new jobs check. The default value is 3; if set to 0 or lower, the default value will be used.
-# @param shutdown_timeout
-#   Number of seconds until the forceful shutdown operation times out and exits the process.
-# @param sentry_dsn
-#   Enable tracking of all system level errors to sentry.
-# @param listen_address
-#   Address (<host>:<port>) on which the Prometheus metrics HTTP server should be listening.
-# @param session_server
-#   Session server lets users interact with jobs, for example, in the interactive web terminal.
-# @param manage_docker
-#   If docker should be installs (uses the puppetlabs-docker).
-# @param install_method
-#   If repo or binary should be installed
-# @param binary_source
-#   URL to the binary file
-# @param binary_path
-#   Absolute path where to install gitlab_runner binary
-# @param manage_user
-#   If the user should be managed.
-# @param user
-#   The user to manage.
-# @param group
-#   The group to manage.
-# @param manage_repo
-#   If the repository should be managed.
-# @param package_ensure
-#   The package 'ensure' state.
-# @param package_name
-#   The name of the package.
-# @param repo_base_url
-#   The base repository url.
-# @param repo_keyserver
-#   The keyserver which should be used to get the repository key.
-# @param config_path
-#   The path to the config file of Gitlab runner.
-# @param config_owner
-#   The user owning the config file.
-#   (and config directory if managed).
-# @param config_group
-#   The group ownership assigned to the config file
-#   (and config directory if managed).
-# @param config_mode
-#   The file permissions applied to the config file.
-# @param manage_config_dir
-#   Manage the parent directory of the config file.
-# @param config_dir_mode
-#   The file permissions applied to the config directory.
-# @param http_proxy
-#   An HTTP proxy to use whilst registering runners.
-#   This setting is only used when registering or unregistering runners and will be used for all runners in the `runners` parameter.
-#   If you have some runners that need to use a proxy and others that don't, leave `runners` and `http_proxy` unset and declare `gitlab_ci_runnner::runner` resources separately.
-#   If you do need to use an http proxy, you'll probably also want to configure other aspects of your runners to use it, (eg. setting `http_proxy` environment variables, `pre-clone-script`, `pre-build-script` etc.)
-#   Exactly how you might need to configure your runners varies between runner executors and specific use-cases.
-#   This module makes no attempt to automatically alter your runner configurations based on the value of this parameter.
-#   More information on what you might need to configure can be found [here](https://docs.gitlab.com/runner/configuration/proxy.html)
-# @param ca_file
-#   A file containing public keys of trusted certificate authorities in PEM format.
-#   This setting is only used when registering or unregistering runners and will be used for all runners in the `runners` parameter.
-#   It can be used when the certificate of the gitlab server is signed using a CA
-#   and when upon registering a runner the following error is shown:
-#   `certificate verify failed (self signed certificate in certificate chain)`
-#   Using the CA file solves https://github.com/voxpupuli/puppet-gitlab_ci_runner/issues/124.
-#   The ca_file must exist. If it doesn't, Gitlab runner token generation will be skipped. Gitlab runner will not register until either the file exists or the ca_file parameter is not specified.
-# @param repo_keysource URL to the gpg file used to sign the apt packages
-#
-class gitlab_ci_runner (
-  String                                     $xz_package_name, # Defaults in module hieradata
-  Hash                                       $runners           = {},
-  Hash                                       $runner_defaults   = {},
-  Optional[Integer]                          $concurrent        = undef,
-  Optional[Gitlab_ci_runner::Log_level]      $log_level         = undef,
-  Optional[Gitlab_ci_runner::Log_format]     $log_format        = undef,
-  Optional[Integer]                          $check_interval    = undef,
-  Optional[Integer]                          $shutdown_timeout  = undef,
-  Optional[String]                           $sentry_dsn        = undef,
-  Optional[Pattern[/.*:.+/]]                 $listen_address    = undef,
-  Optional[Gitlab_ci_runner::Session_server] $session_server    = undef,
-  Enum['repo', 'binary']                     $install_method    = 'repo',
-  Stdlib::HTTPUrl                            $binary_source     = 'https://s3.dualstack.us-east-1.amazonaws.com/gitlab-runner-downloads/latest/binaries/gitlab-runner-linux-amd64',
-  Stdlib::Absolutepath                       $binary_path       = '/usr/local/bin/gitlab-runner',
-  Boolean                                    $manage_user       = false,
-  String[1]                                  $user              = 'gitlab-runner',
-  String[1]                                  $group             = $user,
-  Boolean                                    $manage_docker     = false,
-  Boolean                                    $manage_repo       = true,
-  String                                     $package_ensure    = installed,
-  String                                     $package_name      = 'gitlab-runner',
-  Stdlib::HTTPUrl                            $repo_base_url     = 'https://packages.gitlab.com',
-  Optional[Gitlab_ci_runner::Keyserver]      $repo_keyserver    = undef,
-  String                                     $config_path       = '/etc/gitlab-runner/config.toml',
-  String[1]                                  $config_owner      = 'root',
-  String[1]                                  $config_group      = 'root',
-  Stdlib::Filemode                           $config_mode       = '0444',
-  Boolean                                    $manage_config_dir = false,
-  Optional[Stdlib::Filemode]                 $config_dir_mode   = undef,
-  Optional[Stdlib::HTTPUrl]                  $http_proxy        = undef,
-  Optional[Stdlib::Unixpath]                 $ca_file           = undef,
-  Stdlib::HTTPSUrl                           $repo_keysource    = "${repo_base_url}/gpg.key",
-  Optional[Stdlib::HTTPSUrl]                 $package_keysource = undef,
-  Boolean                                    $package_gpgcheck  = true,
+# @param package_ensure Can be used to choose exact package version to install.
+# @param service_name Name of the system service.
+# @param service_enable Run the system service on boot.
+# @param service_exec The service executable path. Provide this variable value only if the service executable path would be a subject of change in future GitLab versions for any reason.
+# @param service_ensure Should Puppet start the service?
+# @param service_manage Should Puppet manage the service?
+# @param service_provider_restart Should Puppet restart the gitlab systemd service?
+# @param service_user Owner of the config file.
+# @param service_group Group of the config file.
+# @param rake_exec The gitlab-rake executable path. You should not need to change this path.
+# @param edition **Deprecated**: See `manage_upstream_edition`
+# @param manage_upstream_edition One of [ 'ce', 'ee', 'disabled' ]. Manage the installation of an upstream Gitlab Omnibus edition to install.
+# @param config_manage Should Puppet manage the config?
+# @param config_file Path of the Gitlab Omnibus config file.
+# @param alertmanager Hash of 'alertmanager' config parameters.
+# @param ci_redis Hash of 'ci_redis' config parameters.
+# @param ci_unicorn Hash of 'ci_unicorn' config parameters.
+# @param external_url External URL of Gitlab.
+# @param external_port External PORT of Gitlab.
+# @param geo_postgresql Hash of 'geo_postgresql' config parameters.
+# @param geo_logcursor Hash of 'geo_logcursor' config parameters.
+# @param geo_primary_role Boolean to enable Geo primary role
+# @param geo_secondary Hash of 'geo_secondary' config parameters.
+# @param geo_secondary_role Boolean to enable Geo secondary role
+# @param git Hash of 'omnibus_gitconfig' config parameters.
+# @param gitaly Hash of 'omnibus_gitconfig' config parameters.
+# @param git_data_dirs Hash of git data directories
+# @param gitlab_git_http_server Hash of 'gitlab_git_http_server' config parameters.
+# @param gitlab_ci Hash of 'gitlab_ci' config parameters.
+# @param gitlab_kas Hash of 'gitlab_kas' config parameters.
+# @param gitlab_pages Hash of 'gitlab_pages' config parameters.
+# @param gitlab_rails Hash of 'gitlab_pages' config parameters.
+# @param gitlab_sshd Hash of 'gitlab_sshd' config parameters.
+# @param gitlab_workhorse Hash of 'gitlab_workhorse' config parameters.
+# @param grafana Hash of 'grafana' config parameters.
+# @param logging Hash of 'logging' config parameters.
+# @param letsencrypt Hash of 'letsencrypt' config parameters.
+# @param package Hash of 'package' config parameters.
+# @param logrotate Hash of 'logrotate' config parameters.
+# @param manage_storage_directories Hash of 'manage_storage_directories' config parameters.
+# @param manage_accounts Hash of 'manage_accounts' config parameters.
+# @param mattermost_external_url External URL of Mattermost.
+# @param mattermost Hash of 'mattmost' config parameters.
+# @param mattermost_nginx Hash of 'mattmost_nginx' config parameters.
+# @param mattermost_nginx_eq_nginx Replicate the Mattermost Nginx config from the Gitlab Nginx config.
+# @param nginx Hash of 'nginx' config parameters.
+# @param node_exporter Hash of 'node_exporter' config parameters.
+# @param redis_exporter Hash of 'redis_exporter' config parameters.
+# @param postgres_exporter Hash of 'postgres_exporter' config parameters.
+# @param pgbouncer_exporter Hash of 'pgbouncer_exporter' config parameters.
+# @param gitlab_monitor Deprecated if using Gitlab > 12.3 and < 13.0, unsupported by gitlab omnibus using Gitlab 13+. Hash of 'gitlab_monitor' config parameters.
+# @param gitlab_exporter Hash of 'gitlab_exporter' config parameters.
+# @param pages_external_url External URL of Gitlab Pages.
+# @param pages_nginx Hash of 'pages_nginx' config parameters.
+# @param pages_nginx_eq_nginx Replicate the Pages Nginx config from the Gitlab Nginx config.
+# @param praefect Hash of 'praefect' config parameters.
+# @param postgresql Hash of 'postgresql' config parameters.
+# @param prometheus Hash of 'prometheus' config parameters.
+# @param prometheus_monitoring_enable Enable/disable prometheus support.
+# @param redis Hash of 'redis' config parameters.
+# @param redis_master_role To enable Redis master role for the node.
+# @param redis_slave_role To enable Redis slave role for the node.
+# @param redis_sentinel_role To enable sentinel role for the node.
+# @param registry Hash of 'registry' config parameters.
+# @param registry_external_url External URL of Registry
+# @param registry_nginx Hash of 'registry_nginx' config parameters.
+# @param registry_nginx_eq_nginx Replicate the registry Nginx config from the Gitlab Nginx config.
+# @param roles Array of roles when using a HA or Geo enabled GitLab configuration. See: https://docs.gitlab.com/omnibus/roles/README.html for acceptable values
+# @param sentinel Hash of 'sentinel' config parameters.
+# @param shell Hash of 'gitlab_shell' config parameters.
+# @param sidekiq Hash of 'sidekiq' config parameters
+# @param sidekiq_cluster Hash of 'sidekiq_cluster' config parameters.
+# @param skip_auto_migrations Deprecated if using Gitlab > 10.6.4 and < 11.0.0, unsupported by gitlab omnibus using gitlab 11+. Use skip_auto_reconfigure
+# @param skip_auto_reconfigure Utilized for Zero Downtime Updates, See: https://docs.gitlab.com/omnibus/update/README.html#zero-downtime-updates
+# @param skip_post_deployment_migrations Adds SKIP_POST_DEPLOYMENT_MIGRATIONS=true to the execution of gitlab-ctl reconfigure. Used for zero-downtime updates
+# @param store_git_keys_in_db Enable or disable Fast Lookup of authorized SSH keys in the database. See: https://docs.gitlab.com/ee/administration/operations/fast_ssh_key_lookup.html
+# @param source_config_file Override Hiera config with path to gitlab.rb config file
+# @param unicorn Hash of 'unicorn' config parameters.
+# @param puma Hash of 'puma' config parameters.
+# @param user Hash of 'user' config parameters.
+# @param web_server Hash of 'web_server' config parameters.
+# @param high_availability Hash of 'high_availability' config parameters.
+# @param backup_cron_enable Boolean to enable the daily backup cron job
+# @param backup_cron_minute The minute when to run the daily backup cron job
+# @param backup_cron_hour The hour when to run the daily backup cron job
+# @param backup_cron_skips Array of items to skip valid values: db, uploads, repositories, builds, artifacts, lfs, registry, pages
+# @param package_hold Wether to hold the specified package version. Available options are 'hold' or 'none'. Defaults to 'none'. Available only for Debian/Solaris package managers. 
+# @param package_name The internal packaging system's name for the package. This name will automatically be changed by the gitlab::edition parameter. Can be overridden for the purposes of installing custom compiled version of gitlab-omnibus.
+# @param manage_package Should the GitLab package be managed?
+# @param repository_configuration A hash of repository types and attributes for configuraiton the gitlab package repositories. See docs in README.md
+# @param manage_omnibus_repository Set to false if you wish to manage gitlab without configuring the package repository
+# @param pgpass_file_location Path to location of .pgpass file used by consul to authenticate with pgbouncer database
+# @param pgpass_file_ensure Create .pgpass file for pgbouncer authentication. When set to present requires valid value for pgbouncer_password.
+# @param pgbouncer_password Password for the gitlab-consul database user in the pgbouncer database
+class gitlab (
+  Hash                                $repository_configuration,
+  # package configuration
+  String                              $package_ensure                  = 'installed',
+  Optional[String]                    $edition                         = undef,
+  Enum['ce', 'ee', 'disabled']        $manage_upstream_edition         = 'ce',
+  Boolean                             $manage_omnibus_repository       = true,
+  # system service configuration
+  Boolean                             $service_enable                  = true,
+  Enum['stopped', 'false', 'running', 'true'] $service_ensure        = 'running', # lint:ignore:quoted_booleans
+  Boolean                             $service_manage                  = false,
+  Boolean                             $service_provider_restart        = false,
+  String                              $service_name                    = 'gitlab-runsvdir',
+  String                              $service_exec                    = '/usr/bin/gitlab-ctl',
+  String                              $service_user                    = 'root',
+  String                              $service_group                   = 'root',
+  # gitlab specific
+  String                              $rake_exec                       = '/usr/bin/gitlab-rake',
+  Optional[Hash]                      $alertmanager                    = undef,
+  Optional[Hash]                      $ci_redis                        = undef,
+  Optional[Hash]                      $ci_unicorn                      = undef,
+  Boolean                             $config_manage                   = true,
+  Stdlib::Absolutepath                $config_file                     = '/etc/gitlab/gitlab.rb',
+  Optional[Hash]                      $consul                          = undef,
+  Stdlib::Absolutepath                $custom_hooks_dir                = '/opt/gitlab/embedded/service/gitlab-shell/hooks',
+  Stdlib::Absolutepath                $system_hooks_dir                = '/opt/gitlab/embedded/service/gitlab-rails/file_hooks',
+  Stdlib::Httpurl                     $external_url                    = "http://${facts['networking']['fqdn']}",
+  Optional[Integer[1, 65565]]         $external_port                   = undef,
+  Optional[Hash]                      $geo_postgresql                  = undef,
+  Optional[Hash]                      $geo_logcursor                   = undef,
+  Boolean                             $geo_primary_role                = false,
+  Optional[Hash]                      $geo_secondary                   = undef,
+  Boolean                             $geo_secondary_role              = false,
+  Optional[Hash]                      $git                             = undef,
+  Optional[Hash]                      $gitaly                          = undef,
+  Optional[Hash]                      $git_data_dirs                   = undef,
+  Optional[Hash]                      $gitlab_git_http_server          = undef,
+  Optional[Hash]                      $gitlab_ci                       = undef,
+  Optional[Hash]                      $gitlab_kas                      = undef,
+  Optional[Hash]                      $gitlab_pages                    = undef,
+  Optional[Hash]                      $gitlab_rails                    = undef,
+  Optional[Hash]                      $gitlab_sshd                     = undef,
+  Optional[Hash]                      $grafana                         = undef,
+  Optional[Hash]                      $high_availability               = undef,
+  Optional[Hash]                      $logging                         = undef,
+  Optional[Hash]                      $letsencrypt                     = undef,
+  Optional[Hash[String[1], Scalar]]   $package                         = undef,
+  Optional[Hash]                      $logrotate                       = undef,
+  Optional[Hash]                      $manage_storage_directories      = undef,
+  Optional[Hash]                      $manage_accounts                 = undef,
+  Boolean                             $manage_package                  = true,
+  Optional[Hash]                      $mattermost                      = undef,
+  Optional[String]                    $mattermost_external_url         = undef,
+  Optional[Hash]                      $mattermost_nginx                = undef,
+  Boolean                             $mattermost_nginx_eq_nginx       = false,
+  Optional[Hash]                      $nginx                           = undef,
+  Optional[Hash]                      $node_exporter                   = undef,
+  Optional[Hash]                      $redis_exporter                  = undef,
+  Optional[String]                    $pgbouncer_password              = undef,
+  Enum['absent', 'present']           $pgpass_file_ensure              = 'absent',
+  Stdlib::Absolutepath                $pgpass_file_location            = '/home/gitlab-consul/.pgpass',
+  Optional[Hash]                      $postgres_exporter               = undef,
+  Optional[Hash]                      $pgbouncer_exporter              = undef,
+  Optional[Hash]                      $gitlab_monitor                  = undef,
+  Optional[Hash]                      $gitlab_exporter                 = undef,
+  Enum['hold', 'none']                $package_hold                    = 'none',
+  Optional[String]                    $package_name                    = undef,
+  Optional[String]                    $pages_external_url              = undef,
+  Optional[Hash]                      $pages_nginx                     = undef,
+  Boolean                             $pages_nginx_eq_nginx            = false,
+  Optional[Hash]                      $pgbouncer                       = undef,
+  Optional[Hash]                      $postgresql                      = undef,
+  Optional[Hash]                      $praefect                        = undef,
+  Optional[Hash]                      $prometheus                      = undef,
+  Optional[Boolean]                   $prometheus_monitoring_enable    = undef,
+  Optional[Hash]                      $redis                           = undef,
+  Optional[Boolean]                   $redis_master_role               = undef,
+  Optional[Boolean]                   $redis_slave_role                = undef,
+  Optional[Boolean]                   $redis_sentinel_role             = undef,
+  Optional[Hash]                      $registry                        = undef,
+  Optional[String]                    $registry_external_url           = undef,
+  Optional[Hash]                      $registry_nginx                  = undef,
+  Boolean                             $registry_nginx_eq_nginx         = false,
+  Optional[Hash]                      $repmgr                          = undef,
+  Optional[Array]                     $roles                           = undef,
+  Optional[Hash]                      $sentinel                        = undef,
+  Boolean                             $skip_post_deployment_migrations = false,
+  Optional[Hash]                      $shell                           = undef,
+  Optional[Hash]                      $sidekiq                         = undef,
+  Optional[Hash]                      $sidekiq_cluster                 = undef,
+  Enum['present', 'absent']           $skip_auto_reconfigure           = 'absent',
+  Optional                            $skip_auto_migrations            = undef,
+  Optional[Stdlib::Absolutepath]      $source_config_file              = undef,
+  Boolean                             $store_git_keys_in_db            = false,
+  Optional[Hash]                      $unicorn                         = undef,
+  Optional[Hash]                      $puma                            = undef,
+  Optional[Hash]                      $gitlab_workhorse                = undef,
+  Optional[Hash]                      $user                            = undef,
+  Optional[Hash]                      $web_server                      = undef,
+  Boolean                             $backup_cron_enable              = false,
+  Integer[0,59]                       $backup_cron_minute              = 0,
+  Integer[0,23]                       $backup_cron_hour                = 2,
+  Array                               $backup_cron_skips               = [],
+  Hash                                $custom_hooks                    = {},
+  Hash                                $global_hooks                    = {},
+  Hash[String[1],Hash[String[1],Any]] $system_hooks                    = {},
 ) {
-  if $manage_docker {
-    # workaround for cirunner issue #1617
-    # https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/issues/1617
-    stdlib::ensure_packages($xz_package_name)
+  include gitlab::omnibus_package_repository
 
-    $docker_images = {
-      ubuntu_focal => {
-        image     => 'ubuntu',
-        image_tag => 'focal',
-      },
-    }
+  contain gitlab::host_config
+  contain gitlab::omnibus_config
+  contain gitlab::install
+  contain gitlab::service
 
-    include docker
-    class { 'docker::images':
-      images => $docker_images,
+  Class['gitlab::host_config']
+  -> Class['gitlab::omnibus_config']
+  -> Class['gitlab::install']
+  -> Class['gitlab::service']
+
+  $custom_hooks.each |$name, $options| {
+    gitlab::custom_hook { $name:
+      * => $options,
     }
   }
 
-  if $manage_repo {
-    contain gitlab_ci_runner::repo
+  $global_hooks.each |$name, $options| {
+    gitlab::global_hook { $name:
+      * => $options,
+    }
   }
 
-  contain gitlab_ci_runner::install
-  contain gitlab_ci_runner::config
-  contain gitlab_ci_runner::service
-
-  Class['gitlab_ci_runner::install']
-  -> Class['gitlab_ci_runner::config']
-  ~> Class['gitlab_ci_runner::service']
-
-  $runners.each |$runner_name,$config| {
-    $_config = $runner_defaults + $config
-    $title   = $_config['name'] ? {
-      undef   => $runner_name,
-      default => $_config['name'],
-    }
-    $_ca_file = $_config['ca_file'] ? {
-      undef   => $ca_file,
-      default => $_config['ca_file'],
-    }
-
-    gitlab_ci_runner::runner { $title:
-      ensure     => $_config['ensure'],
-      config     => $_config - ['ensure', 'name', 'ca_file'],
-      http_proxy => $http_proxy,
-      ca_file    => $_ca_file,
-      require    => Class['gitlab_ci_runner::config'],
-      notify     => Class['gitlab_ci_runner::service'],
+  $system_hooks.each |$name, $options| {
+    gitlab::system_hook { $name:
+      * => $options,
     }
   }
 }

@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v3.0.1](https://github.com/puppetlabs/puppetlabs-lvm/tree/v3.0.1) - 2025-02-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v3.0.0...v3.0.1)
+
+### Fixed
+
+- (CAT-2230) Update legacy facts [#363](https://github.com/puppetlabs/puppetlabs-lvm/pull/363) ([amitkarsale](https://github.com/amitkarsale))
+
+## [v3.0.0](https://github.com/puppetlabs/puppetlabs-lvm/tree/v3.0.0) - 2024-12-16
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v2.3.0...v3.0.0)
+
+### Changed
+
+- MAINT : Removing support for centos 7 & 8 [#346](https://github.com/puppetlabs/puppetlabs-lvm/pull/346) ([malikparvez](https://github.com/malikparvez))
+
+### Added
+
+- (CAT-2101) Add support for Debian-12 [#353](https://github.com/puppetlabs/puppetlabs-lvm/pull/353) ([skyamgarp](https://github.com/skyamgarp))
+
+### Fixed
+
+- (CAT-2158) Upgrade rexml to address CVE-2024-49761 [#359](https://github.com/puppetlabs/puppetlabs-lvm/pull/359) ([amitkarsale](https://github.com/amitkarsale))
+
+## [v2.3.0](https://github.com/puppetlabs/puppetlabs-lvm/tree/v2.3.0) - 2024-07-11
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v2.2.0...v2.3.0)
+
+### Added
+
+- CAT-1912 : Adding new getters and setters for stripes & not allowing change of stripes for an existing lvm [#343](https://github.com/puppetlabs/puppetlabs-lvm/pull/343) ([malikparvez](https://github.com/malikparvez))
+
+## [v2.2.0](https://github.com/puppetlabs/puppetlabs-lvm/tree/v2.2.0) - 2024-06-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v2.1.0...v2.2.0)
+
+### Added
+
+- Allow modifying the physical extent size for volume groups [#333](https://github.com/puppetlabs/puppetlabs-lvm/pull/333) ([glangloi](https://github.com/glangloi))
+
+### Other
+
+- Documentation cleanup [#331](https://github.com/puppetlabs/puppetlabs-lvm/pull/331) ([kenyon](https://github.com/kenyon))
+- pdk update to version 3.0.1 template-ref heads/main-0-g23c6fff [#330](https://github.com/puppetlabs/puppetlabs-lvm/pull/330) ([kenyon](https://github.com/kenyon))
+- Documentation fixes [#329](https://github.com/puppetlabs/puppetlabs-lvm/pull/329) ([kenyon](https://github.com/kenyon))
+- README, metadata: correct name of LVM in summaries [#328](https://github.com/puppetlabs/puppetlabs-lvm/pull/328) ([kenyon](https://github.com/kenyon))
+
 ## [v2.1.0](https://github.com/puppetlabs/puppetlabs-lvm/tree/v2.1.0) - 2023-09-21
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v2.0.3...v2.1.0)
@@ -46,13 +93,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-lvm/compare/v1.4.0...v2.0.0)
 
+### Changed
+
+- (maint) - Add puppet 8/Drop puppet 6 [#284](https://github.com/puppetlabs/puppetlabs-lvm/pull/284) ([jordanbreen28](https://github.com/jordanbreen28))
+
 ### Added
 
 - pdksync - (MAINT) - Allow Stdlib 9.x [#286](https://github.com/puppetlabs/puppetlabs-lvm/pull/286) ([LukasAud](https://github.com/LukasAud))
 - (CONT-974) - Add puppet module support [#283](https://github.com/puppetlabs/puppetlabs-lvm/pull/283) ([jordanbreen28](https://github.com/jordanbreen28))
-
-### Changed
-- (maint) - Add puppet 8/Drop puppet 6 [#284](https://github.com/puppetlabs/puppetlabs-lvm/pull/284) ([jordanbreen28](https://github.com/jordanbreen28))
 
 ### Fixed
 

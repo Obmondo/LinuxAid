@@ -1,6 +1,4 @@
-#
-# Wildlfy prepare class
-#
+# Manages Wildfly requirements (user, group, dirs and packages)
 class wildfly::prepare {
 
   if $wildfly::manage_user {
@@ -39,7 +37,6 @@ class wildfly::prepare {
     }
 
     ensure_resource('package', $libaiopackage, {'ensure' => $wildfly::package_ensure})
-    ensure_resource('package', 'wget', {'ensure' => $wildfly::package_ensure})
   }
 
 }

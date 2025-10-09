@@ -1,8 +1,9 @@
 # make it work on debian..
 class network::bond::setup {
-  case $facts['os']['family'] {
+
+  case $::osfamily {
     'Debian': {
-      package { 'ifenslave':
+      package { 'ifenslave-2.6':
         ensure => present,
       }
     }

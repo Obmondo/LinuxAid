@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v10.0.0](https://github.com/voxpupuli/puppet-elastic_stack/tree/v10.0.0) (2025-06-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-elastic_stack/compare/v9.0.0...v10.0.0)
+
+**Breaking changes:**
+
+- Remove EOL OSes [\#87](https://github.com/voxpupuli/puppet-elastic_stack/pull/87) ([h-haaks](https://github.com/h-haaks))
+- Move to apt keyrings because apt-key is deprecated since Debian11 [\#84](https://github.com/voxpupuli/puppet-elastic_stack/pull/84) ([philipp-h298](https://github.com/philipp-h298))
+
+**Implemented enhancements:**
+
+- Make gpg key configurable [\#27](https://github.com/voxpupuli/puppet-elastic_stack/issues/27)
+- Add RedHat/Rocky/AlmaLinux/CentOS 9 support [\#90](https://github.com/voxpupuli/puppet-elastic_stack/pull/90) ([h-haaks](https://github.com/h-haaks))
+- Add Debian 12 support [\#89](https://github.com/voxpupuli/puppet-elastic_stack/pull/89) ([h-haaks](https://github.com/h-haaks))
+- Add Ubuntu 22.04 and 24.04 support [\#88](https://github.com/voxpupuli/puppet-elastic_stack/pull/88) ([h-haaks](https://github.com/h-haaks))
+- Allow puppetlabs/apt 10.x [\#85](https://github.com/voxpupuli/puppet-elastic_stack/pull/85) ([smortex](https://github.com/smortex))
+- metadata.json: Add OpenVox [\#83](https://github.com/voxpupuli/puppet-elastic_stack/pull/83) ([jstraw](https://github.com/jstraw))
+
 ## [v9.0.0](https://github.com/voxpupuli/puppet-elastic_stack/tree/v9.0.0) (2023-08-04)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-elastic_stack/compare/v8.0.2...v9.0.0)
@@ -70,7 +88,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Default to Elastic Stack version 7 [\#26](https://github.com/voxpupuli/puppet-elastic_stack/pull/26) ([jarpy](https://github.com/jarpy))
+- Default to Elastic Stack version 7 [\#26](https://github.com/voxpupuli/puppet-elastic_stack/pull/26) ([ghost](https://github.com/ghost))
 
 ## [6.3.2](https://github.com/voxpupuli/puppet-elastic_stack/tree/6.3.2) (2019-08-13)
 
@@ -82,8 +100,8 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Release 6.3.2 [\#31](https://github.com/voxpupuli/puppet-elastic_stack/pull/31) ([jarpy](https://github.com/jarpy))
-- Do not pass facterversion to on\_supported\_os [\#30](https://github.com/voxpupuli/puppet-elastic_stack/pull/30) ([jarpy](https://github.com/jarpy))
+- Release 6.3.2 [\#31](https://github.com/voxpupuli/puppet-elastic_stack/pull/31) ([ghost](https://github.com/ghost))
+- Do not pass facterversion to on\_supported\_os [\#30](https://github.com/voxpupuli/puppet-elastic_stack/pull/30) ([ghost](https://github.com/ghost))
 - Update metadata versions [\#28](https://github.com/voxpupuli/puppet-elastic_stack/pull/28) ([pillarsdotnet](https://github.com/pillarsdotnet))
 
 ## [6.3.1](https://github.com/voxpupuli/puppet-elastic_stack/tree/6.3.1) (2019-04-17)
@@ -96,7 +114,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Support Puppet 6 [\#25](https://github.com/voxpupuli/puppet-elastic_stack/pull/25) ([jarpy](https://github.com/jarpy))
+- Support Puppet 6 [\#25](https://github.com/voxpupuli/puppet-elastic_stack/pull/25) ([ghost](https://github.com/ghost))
 
 ## [6.2.4](https://github.com/voxpupuli/puppet-elastic_stack/tree/6.2.4) (2018-09-16)
 
@@ -120,7 +138,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Allow the use of stdlib version 5 [\#16](https://github.com/voxpupuli/puppet-elastic_stack/pull/16) ([jarpy](https://github.com/jarpy))
+- Allow the use of stdlib version 5 [\#16](https://github.com/voxpupuli/puppet-elastic_stack/pull/16) ([ghost](https://github.com/ghost))
 
 ## [6.2.1](https://github.com/voxpupuli/puppet-elastic_stack/tree/6.2.1) (2018-08-14)
 

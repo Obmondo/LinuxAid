@@ -2,16 +2,9 @@
 ".gitlab-ci.yml":
   delete: true
 ".rubocop.yml":
-  default_configs:
-    inherit_from: ".rubocop_todo.yml"
+  include_todos: true
 appveyor.yml:
   delete: true
-
-Gemfile:
-  optional:
-    ":development":
-    - gem: github_changelog_generator
-      version: '= 1.15.2'
 Rakefile:
   changelog_user: puppetlabs
 spec/spec_helper.rb:

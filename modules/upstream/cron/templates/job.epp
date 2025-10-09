@@ -1,0 +1,20 @@
+################################################################################
+# This file is managed by Puppet, and is refreshed regularly.                  #
+# Edit at your own peril!                                                      #
+################################################################################
+## <%= $name %> Cron Job
+
+# Environment Settings
+<% $environment.each |$env_var| { -%>
+<%= $env_var %>
+<% } -%>
+
+# Job Definition
+<% if $description { -%>
+# <%= $description %>
+<% } -%>
+<%- if $special { -%>
+@<%= $special %> <%= $user %> <%= $command %>
+<%  } else { -%>
+<%= $minute %> <%= $hour %> <%= $date %> <%= $month %> <%= $weekday %>  <%= $user %>  <%= $command %>
+<%  } -%>

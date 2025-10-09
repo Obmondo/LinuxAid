@@ -115,7 +115,6 @@ SlurmUser=<%= scope['slurm::params::username'] %>
 
 MailProg=<%= scope['slurm::mailprog'] %>
 MailDomain=<%= scope['slurm::maildomain'] %>
-RebootProgram=/sbin/reboot
 ReturnToService=<%= scope['slurm::returntoservice'] %>
 #SallocDefaultCommand=
 SlurmctldPidFile=/var/run/slurmctld.pid
@@ -241,6 +240,11 @@ Waittime=<%= scope['slurm::waittime'] %>
 #SuspendProgram=
 <% else -%>
 SuspendProgram=<%= scope['slurm::suspendprogram'] %>
+<% end -%>
+<% if scope['slurm::rebootprogram'].empty? -%>
+#RebootProgram=
+<% else -%>
+RebootProgram=<%= scope['slurm::rebootprogram'] %>
 <% end -%>
 <% if scope['slurm::resumeprogram'].empty? -%>
 #ResumeProgram=

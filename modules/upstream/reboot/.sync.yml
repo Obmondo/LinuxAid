@@ -1,0 +1,41 @@
+---
+".gitlab-ci.yml":
+  delete: true
+".rubocop.yml":
+  include_todos: true
+  profiles:
+    strict:
+      configs:
+        Style/GlobalVars:
+          Exclude:
+          - spec/**/*
+appveyor.yml:
+  delete: true
+
+Rakefile:
+  changelog_user: puppetlabs
+  changelog_since_tag: 2.1.2
+  extras: |
+    if Rake::Task.task_defined?('spec_prep')
+      Rake::Task.tasks.each do |task|
+        next unless task.name.start_with? 'litmus:acceptance'
+        task.enhance([Rake::Task['spec_prep']])
+      end
+    end
+spec/spec_helper.rb:
+  coverage_report: true
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
+
+.github/workflows/auto_release.yml:
+  unmanaged: false
+.github/workflows/ci.yml:
+  unmanaged: false
+.github/workflows/nightly.yml:
+  unmanaged: false
+.github/workflows/release.yml:
+  unmanaged: false
+.travis.yml:
+  delete: true

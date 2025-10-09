@@ -48,12 +48,8 @@
 #  $extra_options:
 #   Hash for any additional options that must go in the 'options' declaration.
 #   Default: empty
-#  $dnssec_enable:
-#   Enable DNSSEC support. Default: 'yes'
 #  $dnssec_validation:
-#   Enable DNSSEC validation. Default: 'yes'
-#  $dnssec_lookaside:
-#   DNSSEC lookaside type. Default: 'auto'
+#   Enable DNSSEC validation. Default: 'auto'
 #  $zones:
 #   Hash of managed zones and their configuration. The key is the zone name
 #   and the value is an array of config lines. Default: empty
@@ -114,9 +110,7 @@ define bind::server::conf (
   $allow_transfer         = [],
   $check_names            = [],
   $extra_options          = {},
-  $dnssec_enable          = 'yes',
-  $dnssec_validation      = 'yes',
-  $dnssec_lookaside       = 'auto',
+  $dnssec_validation      = 'auto',
   $zones                  = {},
   $keys                   = {},
   $includes               = [],
@@ -127,6 +121,7 @@ define bind::server::conf (
   include '::bind::params'
   $file_hint = $::bind::params::file_hint
   $file_rfc1912 = $::bind::params::file_rfc1912
+  $file_bindkeys = $::bind::params::file_bindkeys
 
   # Everything is inside a single template
   file { $title:

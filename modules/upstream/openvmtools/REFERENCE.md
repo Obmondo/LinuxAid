@@ -10,7 +10,7 @@
 
 ### Functions
 
-* [`openvmtools::supported`](#openvmtoolssupported): Returns whether the currently loaded OS is supported by the module
+* [`openvmtools::supported`](#openvmtools--supported): Returns whether the currently loaded OS is supported by the module
 
 ## Classes
 
@@ -26,26 +26,34 @@ Install the Open Virtual Machine Tools.
 include openvmtools
 ```
 
+##### Force pass supported os check on OS non in supported list
+
+```puppet
+class { 'openvmtools':
+  supported => true,
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `openvmtools` class:
 
-* [`ensure`](#ensure)
-* [`autoupgrade`](#autoupgrade)
-* [`desktop_package_conflicts`](#desktop_package_conflicts)
-* [`desktop_package_name`](#desktop_package_name)
-* [`manage_epel`](#manage_epel)
-* [`package_name`](#package_name)
-* [`service_enable`](#service_enable)
-* [`service_ensure`](#service_ensure)
-* [`service_hasstatus`](#service_hasstatus)
-* [`service_name`](#service_name)
-* [`service_pattern`](#service_pattern)
-* [`uninstall_vmware_tools`](#uninstall_vmware_tools)
-* [`with_desktop`](#with_desktop)
-* [`supported`](#supported)
+* [`ensure`](#-openvmtools--ensure)
+* [`autoupgrade`](#-openvmtools--autoupgrade)
+* [`desktop_package_conflicts`](#-openvmtools--desktop_package_conflicts)
+* [`desktop_package_name`](#-openvmtools--desktop_package_name)
+* [`manage_epel`](#-openvmtools--manage_epel)
+* [`package_name`](#-openvmtools--package_name)
+* [`service_enable`](#-openvmtools--service_enable)
+* [`service_ensure`](#-openvmtools--service_ensure)
+* [`service_hasstatus`](#-openvmtools--service_hasstatus)
+* [`service_name`](#-openvmtools--service_name)
+* [`service_pattern`](#-openvmtools--service_pattern)
+* [`supported`](#-openvmtools--supported)
+* [`uninstall_vmware_tools`](#-openvmtools--uninstall_vmware_tools)
+* [`with_desktop`](#-openvmtools--with_desktop)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-openvmtools--ensure"></a>`ensure`
 
 Data type: `Enum['absent','present']`
 
@@ -53,15 +61,15 @@ Ensure if present or absent.
 
 Default value: `'present'`
 
-##### <a name="autoupgrade"></a>`autoupgrade`
+##### <a name="-openvmtools--autoupgrade"></a>`autoupgrade`
 
 Data type: `Boolean`
 
 Upgrade package automatically, if there is a newer version.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="desktop_package_conflicts"></a>`desktop_package_conflicts`
+##### <a name="-openvmtools--desktop_package_conflicts"></a>`desktop_package_conflicts`
 
 Data type: `Boolean`
 
@@ -69,9 +77,9 @@ Boolean that determines whether the desktop conflicts includes and
 conflicts with the base package. Only set this if your platform is not
 supported or you know what you are doing.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="desktop_package_name"></a>`desktop_package_name`
+##### <a name="-openvmtools--desktop_package_name"></a>`desktop_package_name`
 
 Data type: `String[1]`
 
@@ -81,16 +89,16 @@ doing.
 
 Default value: `'open-vm-tools-desktop'`
 
-##### <a name="manage_epel"></a>`manage_epel`
+##### <a name="-openvmtools--manage_epel"></a>`manage_epel`
 
 Data type: `Boolean`
 
 Boolean that determines if puppet-epel is required for packages.
 This should only needed for RedHat (EL) 6.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="package_name"></a>`package_name`
+##### <a name="-openvmtools--package_name"></a>`package_name`
 
 Data type: `String[1]`
 
@@ -100,15 +108,15 @@ doing.
 
 Default value: `'open-vm-tools'`
 
-##### <a name="service_enable"></a>`service_enable`
+##### <a name="-openvmtools--service_enable"></a>`service_enable`
 
 Data type: `Boolean`
 
 Start service at boot.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="service_ensure"></a>`service_ensure`
+##### <a name="-openvmtools--service_ensure"></a>`service_ensure`
 
 Data type: `Stdlib::Ensure::Service`
 
@@ -116,7 +124,7 @@ Ensure if service is running or stopped.
 
 Default value: `'running'`
 
-##### <a name="service_hasstatus"></a>`service_hasstatus`
+##### <a name="-openvmtools--service_hasstatus"></a>`service_hasstatus`
 
 Data type: `Boolean`
 
@@ -124,9 +132,9 @@ Service has status command.
 Only set this if your platform is not supported or you know what you are
 doing.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="service_name"></a>`service_name`
+##### <a name="-openvmtools--service_name"></a>`service_name`
 
 Data type: `Variant[String[1],Array[String[1]]]`
 
@@ -136,7 +144,7 @@ doing.
 
 Default value: `['vgauthd', 'vmtoolsd']`
 
-##### <a name="service_pattern"></a>`service_pattern`
+##### <a name="-openvmtools--service_pattern"></a>`service_pattern`
 
 Data type: `Optional[String[1]]`
 
@@ -145,36 +153,36 @@ running.
 Only set this if your platform is not supported or you know what you are
 doing.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="uninstall_vmware_tools"></a>`uninstall_vmware_tools`
+##### <a name="-openvmtools--supported"></a>`supported`
+
+Data type: `Optional[Boolean]`
+
+Boolean that overrides the result of the supported OS check
+
+Default value: `undef`
+
+##### <a name="-openvmtools--uninstall_vmware_tools"></a>`uninstall_vmware_tools`
 
 Data type: `Boolean`
 
 Boolean that determines whether the conflicting VMWare Tools package should
 be uninstalled, if present.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="with_desktop"></a>`with_desktop`
+##### <a name="-openvmtools--with_desktop"></a>`with_desktop`
 
 Data type: `Boolean`
 
 Whether or not to install the desktop/GUI support.
 
-Default value: ``false``
-
-##### <a name="supported"></a>`supported`
-
-Data type: `Optional[Boolean]`
-
-
-
-Default value: ``undef``
+Default value: `false`
 
 ## Functions
 
-### <a name="openvmtoolssupported"></a>`openvmtools::supported`
+### <a name="openvmtools--supported"></a>`openvmtools::supported`
 
 Type: Puppet Language
 

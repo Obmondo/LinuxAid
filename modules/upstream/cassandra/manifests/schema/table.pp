@@ -61,7 +61,7 @@ define cassandra::schema::table (
     }
     exec { $create_command:
       unless  => $read_command,
-      require => Exec['cassandra::schema connection test'],
+      require => Exec['::cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     $delete_script = "DROP TABLE IF EXISTS ${keyspace}.${table}"
@@ -73,7 +73,7 @@ define cassandra::schema::table (
     }
     exec { $delete_command:
       onlyif  => $read_command,
-      require => Exec['cassandra::schema connection test'],
+      require => Exec['::cassandra::schema connection test'],
     }
   } else {
     fail("Unknown action (${ensure}) for ensure attribute.")

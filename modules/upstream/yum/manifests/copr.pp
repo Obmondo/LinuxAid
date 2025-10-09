@@ -27,25 +27,26 @@ define yum::copr (
   }
 
   if $facts['package_provider'] == 'dnf' {
+    $copr_name = regsubst($copr_repo, '@', 'group_')
     case $ensure {
       'enabled': {
         exec { "dnf -y copr enable ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          unless  => "dnf copr list | egrep -q '${copr_repo}\$'",
+          unless  => "dnf copr list | egrep -q '${copr_name}\$'",
           require => Package[$prereq_plugin],
         }
       }
       'disabled': {
         exec { "dnf -y copr disable ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          unless  => "dnf copr list | egrep -q '${copr_repo} (disabled)\$'",
+          unless  => "dnf copr list | egrep -q '${copr_name} \\(disabled\\)\$'",
           require => Package[$prereq_plugin],
         }
       }
       'removed': {
         exec { "dnf -y copr remove ${copr_repo}":
           path    => '/bin:/usr/bin:/sbin/:/usr/sbin',
-          onlyif  => "dnf copr list | egrep -q '${copr_repo}'",
+          onlyif  => "dnf copr list | egrep -q '${copr_name}'",
           require => Package[$prereq_plugin],
         }
       }

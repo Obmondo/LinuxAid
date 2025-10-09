@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.2.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.2.0) - 2025-08-11
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.7...v8.2.0)
+
+### Added
+
+- (MODULES-11580) Do not combine stderr and stdout when scanning rules [#1267](https://github.com/puppetlabs/puppetlabs-firewall/pull/1267) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
+## [v8.1.7](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.7) - 2025-06-10
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.6...v8.1.7)
+
+### Other
+
+- (MODULES-11476) Fix non-idempotency of firewall table creation [#1263](https://github.com/puppetlabs/puppetlabs-firewall/pull/1263) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
+## [v8.1.6](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.6) - 2025-05-07
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.5...v8.1.6)
+
+### Fixed
+
+- Port ranges as string with hyphen as range indicator should work [#1212](https://github.com/puppetlabs/puppetlabs-firewall/pull/1212) ([2fa](https://github.com/2fa))
+
+### Other
+
+- (CAT-2296) Update github runner image to ubuntu-24.04 [#1259](https://github.com/puppetlabs/puppetlabs-firewall/pull/1259) ([shubhamshinde360](https://github.com/shubhamshinde360))
+
+## [v8.1.5](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.5) - 2025-04-15
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.4...v8.1.5)
+
+### Fixed
+
+- Query gid to prevent errors with missing users with the same id (fixes #1229) [#1251](https://github.com/puppetlabs/puppetlabs-firewall/pull/1251) ([cmusik](https://github.com/cmusik))
+
+## [v8.1.4](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.4) - 2025-02-26
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.3...v8.1.4)
+
+### Fixed
+
+- (CAT-2215) Update legacy facts [#1253](https://github.com/puppetlabs/puppetlabs-firewall/pull/1253) ([amitkarsale](https://github.com/amitkarsale))
+
 ## [v8.1.3](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.1.3) - 2024-12-05
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.2...v8.1.3)

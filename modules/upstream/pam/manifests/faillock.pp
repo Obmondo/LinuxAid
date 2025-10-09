@@ -34,7 +34,7 @@
 #   The faillock 'root_unlock_time' config option
 # @param admin_group
 #   The faillock 'admin_group' config option
-# 
+#
 class pam::faillock (
   Stdlib::Absolutepath $config_file = '/etc/security/faillock.conf',
   String[1] $config_file_owner = 'root',

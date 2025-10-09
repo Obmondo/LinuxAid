@@ -1,7 +1,6 @@
-# == Class: dhcp::params
-#
+# @summary Parameter defaults
+# @api private
 class dhcp::params {
-
   case $facts['os']['family'] {
     'Debian': {
       if ( $facts['os']['name'] == 'Ubuntu' ) {
@@ -27,14 +26,18 @@ class dhcp::params {
     }
     'FreeBSD': {
       $dhcp_dir         = '/usr/local/etc'
-      $packagename      = 'net/isc-dhcp43-server'
+      $packagename      = 'net/isc-dhcp44-server'
       $servicename      = 'isc-dhcpd'
       $package_provider = undef
       $dhcpd_binary     = undef
     }
     'RedHat': {
       $dhcp_dir         = '/etc/dhcp'
-      $packagename      = 'dhcp'
+      if Integer.new($facts['os']['release']['major']) >= 8 {
+        $packagename = 'dhcp-server'
+      } else {
+        $packagename = 'dhcp'
+      }
       $servicename      = 'dhcpd'
       $package_provider = undef
       $dhcpd_binary     = '/usr/sbin/dhcpd'

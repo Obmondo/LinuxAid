@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Author: Emilien Macchi <emilien.macchi@enovance.com>
 #
@@ -6,6 +8,7 @@ Puppet::Type.newtype(:mongodb_shard) do
   @doc = 'Manage a MongoDB Shard'
 
   ensurable do
+    desc 'Ensure the shard is either present or absent'
     defaultto :present
 
     newvalue(:present) do

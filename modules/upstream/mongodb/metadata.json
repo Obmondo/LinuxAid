@@ -1,6 +1,6 @@
 {
   "name": "puppet-mongodb",
-  "version": "2.4.1",
+  "version": "7.0.0",
   "author": "Vox Pupuli",
   "summary": "Installs MongoDB on RHEL/Ubuntu/Debian.",
   "license": "Apache-2.0",
@@ -11,45 +11,85 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04"
+        "22.04",
+        "24.04"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12",
+        "15"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    },
+    {
+      "name": "openvox",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "dependencies": [
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.1.0 < 7.0.0"
+      "version_requirement": ">= 9.2.0 < 11.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.0 < 6.0.0"
+      "version_requirement": ">= 9.0.0 < 10.0.0"
+    },
+    {
+      "name": "puppet/systemd",
+      "version_requirement": ">= 5.1.0 < 9.0.0"
+    },
+    {
+      "name": "puppet/zypprepo",
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     }
   ]
 }

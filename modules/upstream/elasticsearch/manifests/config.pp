@@ -141,27 +141,23 @@ class elasticsearch::config {
       $_tls_config = {}
     }
 
-    # # Logging file or hash
-    # if ($elasticsearch::logging_file != undef) {
-    #   $_log4j_content = undef
-    # } else {
-    #   if ($elasticsearch::logging_template != undef ) {
-    #     $_log4j_content = template($elasticsearch::logging_template)
-    #   } else {
-    #     $_log4j_content = template("${module_name}/etc/elasticsearch/log4j2.properties.erb")
-    #   }
-    #   $_logging_source = undef
-    # }
-    # file {
-    #   "${elasticsearch::configdir}/log4j2.properties":
-    #     ensure  => file,
-    #     content => $_log4j_content,
-    #     source  => $_logging_source,
-    #     mode    => '0644',
-    #     notify  => $elasticsearch::_notify_service,
-    #     require => Class['elasticsearch::package'],
-    #     before  => Class['elasticsearch::service'],
-    # }
+    # Logging file
+    if ! ($elasticsearch::logging_content =~ Undef) {
+      if $elasticsearch::logging_content =~ Array {
+        $_log4j_content = $elasticsearch::logging_content.join("\n")
+      } else {
+        $_log4j_content = $elasticsearch::logging_content
+      }
+      file { "${elasticsearch::configdir}/log4j2.properties":
+        ensure  => file,
+        content => $_log4j_content,
+        notify  => $elasticsearch::_notify_service,
+        require => Class['elasticsearch::package'],
+        owner   => 'root',
+        group   => $elasticsearch::elasticsearch_group,
+        mode    => '0640',
+      }
+    }
 
     # Generate Elasticsearch config
     $data =
@@ -172,9 +168,9 @@ class elasticsearch::config {
       content => template("${module_name}/etc/elasticsearch/elasticsearch.yml.erb"),
       notify  => $elasticsearch::_notify_service,
       require => Class['elasticsearch::package'],
-      owner   => $elasticsearch::elasticsearch_user,
+      owner   => 'root',
       group   => $elasticsearch::elasticsearch_group,
-      mode    => '0440',
+      mode    => '0640',
     }
 
     file { "${elasticsearch::configdir}/jvm.options":

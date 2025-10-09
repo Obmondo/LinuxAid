@@ -1,0 +1,11 @@
+[Unit]
+Description=Wildfly Application Server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/etc/init.d/<%= $wildfly::service::service_name %> start
+ExecStop=/etc/init.d/<%= $wildfly::service::service_name %> stop
+
+[Install]
+WantedBy=multi-user.target

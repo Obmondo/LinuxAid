@@ -1,0 +1,57 @@
+# [node-type=node-name (/node-type=node-name)*] : operation-name ['('[name=value [, name=value]*]')'] [{header (;header)*}]
+
+grammar JBossCLI
+
+  rule command
+    path? ':'? operation_name params? headers?
+  end
+
+  rule path
+    ('/' node_type '=' node_name)*
+  end
+
+  rule node_type
+    identifier
+  end
+
+  rule node_name
+    identifier
+  end
+
+  rule operation_name
+    identifier
+  end
+
+  rule params
+    '(' (param ', '?)* ')'
+  end
+
+  rule param
+    attribute '=' value
+  end
+
+  rule attribute
+    identifier
+  end
+
+  rule value
+    identifier / '[' identifier (', ' identifier )* ']' / '{' key_value_equal (', ' key_value_equal)* '}' / '{' key_value_rocket (', ' key_value_rocket)* '}'
+  end
+
+  rule key_value_equal
+    (identifier '=>' identifier)
+  end
+
+  rule key_value_rocket
+    (identifier '=' identifier)
+  end
+
+  rule headers
+    '{' (param ';'?)* '}'
+  end
+
+  rule identifier
+    ([a-zA-Z0-9_\.\-]+ / '"' [a-zA-Z0-9_\.\-:/]+ '"')
+  end
+
+end

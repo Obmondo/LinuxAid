@@ -1,9 +1,13 @@
+# 
+# @param ha_primary
+# @param service
+# @param volume
+#
 define drbd::migration (
   $ha_primary,
   $service,
   $volume
 ) {
-
   Exec {
     path => ['/sbin', '/bin', '/usr/sbin', '/usr/bin'],
   }
@@ -29,7 +33,6 @@ define drbd::migration (
       refreshonly => true,
       subscribe   => File[$name],
     }
-
   } else {
     exec { "remove ${service} data on secondary node":
       command     => "rm -r ${name}",

@@ -1,9 +1,12 @@
+# frozen_string_literal: false
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/crmsh'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/crmsh'
 end
 
@@ -17,13 +20,15 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
 
   mk_resource_methods
 
+  defaultfor 'os.family': [:ubuntu]
+
   def self.instances
     block_until_ready
 
     instances = []
 
     cmd = [command(:crm), 'configure', 'show', 'xml']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//resources//clone') do |e|
@@ -38,16 +43,15 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
         globally_unique:   items['globally-unique'],
         ordered:           items['ordered'],
         interleave:        items['interleave'],
+        promotable:        items['promotable'],
+        promoted_max:      items['promoted-max'],
+        promoted_node_max: items['promoted-node-max'],
         existing_resource: :true
       }
 
-      if e.elements['primitive']
-        clone_instance[:primitive] = e.elements['primitive'].attributes['id']
-      end
+      clone_instance[:primitive] = e.elements['primitive'].attributes['id'] if e.elements['primitive']
 
-      if e.elements['group']
-        clone_instance[:group] = e.elements['group'].attributes['id']
-      end
+      clone_instance[:group] = e.elements['group'].attributes['id'] if e.elements['group']
       instances << new(clone_instance)
     end
     instances
@@ -67,6 +71,9 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
       ordered:           @resource[:ordered],
       interleave:        @resource[:interleave],
       cib:               @resource[:cib],
+      promotable:        @resource[:promotable],
+      promoted_max:      @resource[:promoted_max],
+      promoted_node_max: @resource[:promoted_node_max],
       existing_resource: :false
     }
   end
@@ -75,9 +82,9 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
   def destroy
     debug('Removing clone')
     cmd = [command(:crm), '-w', 'resource', 'stop', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib], false)
+    self.class.run_command_in_cib(cmd, @resource[:cib], false)
     cmd = [command(:crm), 'configure', 'delete', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     @property_hash.clear
   end
 
@@ -105,7 +112,10 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
       notify_clones: 'notify',
       globally_unique: 'globally-unique',
       ordered: 'ordered',
-      interleave: 'interleave'
+      interleave: 'interleave',
+      promotable: 'promotable',
+      promoted_max: 'promoted-max',
+      promoted_node_max: 'promoted-node-max'
     }.each do |property, clone_property|
       meta << "#{clone_property}=#{@resource.should(property)}" unless @resource.should(property) == :absent
     end
@@ -115,7 +125,7 @@ Puppet::Type.type(:cs_clone).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
       tmpfile.write(updated)
       tmpfile.flush
       cmd = [command(:crm), 'configure', 'load', 'update', tmpfile.path.to_s]
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource.value(:cib))
+      self.class.run_command_in_cib(cmd, @resource.value(:cib))
     end
   end
 end

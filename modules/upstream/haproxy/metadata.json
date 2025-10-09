@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-haproxy",
-  "version": "8.0.0",
+  "version": "8.2.0",
   "author": "puppetlabs",
   "summary": "Configures HAProxy servers and manages the configuration of backend member servers.",
   "license": "Apache-2.0",
@@ -49,7 +49,8 @@
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "10",
-        "11"
+        "11",
+        "12"
       ]
     },
     {
@@ -80,6 +81,6 @@
     }
   ],
   "template-url": "https://github.com/puppetlabs/pdk-templates.git#main",
-  "template-ref": "heads/main-0-gc6d4446",
-  "pdk-version": "2.7.1"
+  "template-ref": "tags/3.2.0.4-0-g5d17ec1",
+  "pdk-version": "3.2.0"
 }

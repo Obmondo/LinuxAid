@@ -1,31 +1,47 @@
+# frozen_string_literal: true
+
 require File.join(File.dirname(__FILE__), '..', 'vcsrepo')
 
-Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) do
-  desc "Supports CVS repositories/workspaces"
+Puppet::Type.type(:vcsrepo).provide(:cvs, parent: Puppet::Provider::Vcsrepo) do
+  desc 'Supports CVS repositories/workspaces'
 
-  commands :cvs => 'cvs'
+  commands cvs: 'cvs'
   has_features :gzip_compression, :reference_tracking, :modules, :cvs_rsh, :user
 
   def create
-    if !@resource.value(:source)
-      create_repository(@resource.value(:path))
-    else
+    check_force
+    if @resource.value(:source)
       checkout_repository
+    else
+      create_repository(@resource.value(:path))
     end
     update_owner
   end
 
   def exists?
-    if @resource.value(:source)
-      directory = File.join(@resource.value(:path), 'CVS')
-    else
-      directory = File.join(@resource.value(:path), 'CVSROOT')
-    end
-    File.directory?(directory)
+    working_copy_exists?
   end
 
   def working_copy_exists?
-    File.directory?(File.join(@resource.value(:path), 'CVS'))
+    if @resource.value(:source)
+      directory = File.join(@resource.value(:path), 'CVS')
+      return false unless File.directory?(directory)
+
+      begin
+        at_path { runcvs('-nq', 'status', '-l') }
+        true
+      rescue Puppet::ExecutionFailure
+        false
+      end
+    else
+      directory = File.join(@resource.value(:path), 'CVSROOT')
+      return false unless File.directory?(directory)
+
+      config = File.join(@resource.value(:path), 'CVSROOT', 'config,v')
+      return false unless File.exist?(config)
+
+      true
+    end
   end
 
   def destroy
@@ -38,8 +54,8 @@ Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) 
       # We cannot use -P to prune empty dirs, otherwise
       # CVS would report those as "missing", regardless
       # if they have contents or updates.
-      is_current = (runcvs('-nq', 'update', '-d').strip == "")
-      if (!is_current) then Puppet.debug "There are updates available on the checkout's current branch/tag." end
+      is_current = (runcvs('-nq', 'update', '-d').strip == '')
+      Puppet.debug "There are updates available on the checkout's current branch/tag." unless is_current
       return is_current
     end
   end
@@ -49,22 +65,22 @@ Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) 
     # sets, so we can only have the current branch name (or the
     # requested one, if that differs) as the "latest" revision.
     should = @resource.value(:revision)
-    current = self.revision
-    return should != current ? should : current
+    current = revision
+    (should == current) ? current : should
   end
 
   def revision
-    if !@rev
+    unless @rev
       if File.exist?(tag_file)
         contents = File.read(tag_file).strip
-        # Note: Doesn't differentiate between N and T entries
-        @rev = contents[1..-1]
+        # NOTE: Doesn't differentiate between N and T entries
+        @rev = contents[1..]
       else
         @rev = 'HEAD'
       end
       Puppet.debug "Checkout is on branch/tag '#{@rev}'"
     end
-    return @rev
+    @rev
   end
 
   def revision=(desired)
@@ -73,6 +89,22 @@ Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) 
       update_owner
       @rev = desired
     end
+  end
+
+  def source
+    File.read(File.join(@resource.value(:path), 'CVS', 'Root')).chomp
+  end
+
+  def source=(_desired)
+    create # recreate
+  end
+
+  def module
+    File.read(File.join(@resource.value(:path), 'CVS', 'Repository')).chomp
+  end
+
+  def module=(_desired)
+    create # recreate
   end
 
   private
@@ -85,26 +117,17 @@ Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) 
     dirname, basename = File.split(@resource.value(:path))
     Dir.chdir(dirname) do
       args = ['-d', @resource.value(:source)]
-      if @resource.value(:compression)
-        args.push('-z', @resource.value(:compression))
-      end
+      args.push('-z', @resource.value(:compression)) if @resource.value(:compression)
       args.push('checkout')
-      if @resource.value(:revision)
-        args.push('-r', @resource.value(:revision))
-      end
+      args.push('-r', @resource.value(:revision)) if @resource.value(:revision)
       args.push('-d', basename, module_name)
       runcvs(*args)
     end
   end
 
-  # When the source:
-  # * Starts with ':' (eg, :pserver:...)
+  # If no module is provided, use '.', the root of the repo
   def module_name
-    if (m = @resource.value(:module))
-      m
-    elsif (source = @resource.value(:source))
-      source[0, 1] == ':' ? File.basename(source) : '.'
-    end
+    @resource.value(:module) || '.'
   end
 
   def create_repository(path)
@@ -112,24 +135,22 @@ Puppet::Type.type(:vcsrepo).provide(:cvs, :parent => Puppet::Provider::Vcsrepo) 
   end
 
   def update_owner
-    if @resource.value(:owner) or @resource.value(:group)
-      set_ownership
-    end
+    set_ownership if @resource.value(:owner) || @resource.value(:group)
   end
 
   def runcvs(*args)
     if @resource.value(:cvs_rsh)
-      Puppet.debug "Using CVS_RSH = " + @resource.value(:cvs_rsh)
-      e = { :CVS_RSH => @resource.value(:cvs_rsh) }
+      Puppet.debug "Using CVS_RSH = #{@resource.value(:cvs_rsh)}"
+      e = { CVS_RSH: @resource.value(:cvs_rsh) }
     else
       e = {}
     end
 
-    if @resource.value(:user) and @resource.value(:user) != Facter['id'].value
-      Puppet.debug "Running as user " + @resource.value(:user)
-      Puppet::Util::Execution.execute([:cvs, *args], :uid => @resource.value(:user), :custom_environment => e, :combine => true)
+    if @resource.value(:user) && @resource.value(:user) != Facter['id'].value
+      Puppet.debug "Running as user #{@resource.value(:user)}"
+      Puppet::Util::Execution.execute([:cvs, *args], uid: @resource.value(:user), custom_environment: e, combine: true, failonfail: true)
     else
-      Puppet::Util::Execution.execute([:cvs, *args], :custom_environment => e, :combine => true)
+      Puppet::Util::Execution.execute([:cvs, *args], custom_environment: e, combine: true, failonfail: true)
     end
   end
 end

@@ -36,11 +36,12 @@ define bind::server::file (
   $owner       = 'root',
   $group       = undef,
   $mode        = '0640',
-  $dirmode     = '0750',
+  $dirmode     = '0770',
   $source      = undef,
   $source_base = undef,
   $content     = undef,
   $ensure      = undef,
+  $replace     = undef,
 ) {
 
   include '::bind::params'
@@ -76,7 +77,8 @@ define bind::server::file (
     mode         => $mode,
     source       => $zone_source,
     content      => $content,
-    validate_cmd => "/usr/sbin/named-checkzone ${zonename} %",
+    replace      => $replace,
+    validate_cmd => "/usr/sbin/named-checkzone -k fail -m fail -M fail -n fail -r fail -S fail -T warn -W warn ${zonename} %",
     notify       => Class['::bind::service'],
     # For the parent directory
     require      => [

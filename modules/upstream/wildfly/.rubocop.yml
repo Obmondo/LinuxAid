@@ -1,46 +1,9 @@
-
-Style/Encoding:
-  Enabled: false
-
-Style/VariableName:
-  Description: 'Use the configured style when naming variables.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#snake-case-symbols-methods-vars'
-  Enabled: false
-
-Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
-  Enabled: false
-
-Style/RedundantSelf:
-  Description: "Don't use self where it's not needed."
-  Enabled: false
-
-Style/Blocks:
-  Description: >-
-                Avoid using {...} for multi-line blocks (multiline chaining is
-                always ugly).
-                Prefer {...} over do...end for single-line blocks.
-  Enabled: false
-
-Style/UnlessElse:
-  Description: >-
-                 Never use unless with else. Rewrite these with the positive
-                 case first.
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Description: >-
-                 Favor modifier if/unless usage when you have a
-                 single-line body.
-  Enabled: false
-
-Style/Next:
-  Description: 'Use `next` to skip iteration instead of a condition at the end.'
-  Enabled: false
+require: rubocop-rspec
 
 AllCops:
+  TargetRubyVersion: 2.1
   Exclude:
-    - 'spec/**/*'
+    - 'lib/puppet_x/wildfly/gems/**/*'
     - 'pkg/**/*'
     - 'coverage/**/*'
     - 'files/**/*'
@@ -49,6 +12,27 @@ AllCops:
     - 'Gemfile'
     - '*.markdown'
     - '*.md'
+
+Style/Encoding:
+  Enabled: true
+
+Style/VariableName:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: true
+
+Style/UnlessElse:
+  Enabled: true
+
+Style/IfUnlessModifier:
+  Enabled: true
+
+Style/Next:
+  Enabled: true
 
 Eval:
   Enabled: false
@@ -66,7 +50,7 @@ AccessorMethodName:
   Enabled: false
 
 MethodLength:
-  Max: 40
+  Max: 20
 
 Metrics/ParameterLists:
   Max: 8
@@ -79,7 +63,6 @@ Lint/UnusedMethodArgument:
 Lint/UnusedBlockArgument:
   Description: 'Checks for unused block arguments.'
   Enabled: false
-
 
 BlockNesting:
   Enabled: false

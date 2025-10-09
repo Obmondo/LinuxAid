@@ -6,11 +6,14 @@ defaults:
   data_hash: yaml_data
 
 hierarchy:
-  - name: 'Distribution Name'
-    path: "%{facts.os.name}.yaml"
-  - name: 'Operating System Family - Major version'
-    path: "%{facts.os.family}/%{facts.os.release.major}.yaml"
+  - name: 'Operating System Family - Major Release'
+    paths:
+     # Used to distinguish between Debian and Ubuntu
+      - "%{facts.os.name}/%{facts.os.release.major}.yaml"
+      - "%{facts.os.family}/%{facts.os.release.major}.yaml"
   - name: 'Operating System Family'
-    path: "%{facts.os.family}.yaml"
+    paths:
+      - "%{facts.os.name}.yaml"
+      - "%{facts.os.family}.yaml"
   - name: 'defaults'
     path: 'defaults.yaml'

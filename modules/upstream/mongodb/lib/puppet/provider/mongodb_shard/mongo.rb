@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'mongodb'))
 Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mongodb) do
   desc 'Manage mongodb sharding.'
 
-  confine true:     begin
-      require 'json'
-      true
-    rescue LoadError
-      false
-    end
+  confine true: begin
+    require 'json'
+    true
+  rescue LoadError
+    false
+  end
 
   mk_resource_methods
 
-  commands mongo: 'mongo'
+  commands mongosh: 'mongosh'
 
   def initialize(value = {})
     super(value)
@@ -68,6 +70,7 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
     Puppet.debug "Adding the shard #{name}"
     output = sh_addshard(@property_flush[:member])
     raise Puppet::Error, "sh.addShard() failed for shard #{name}: #{output['errmsg']}" if output['ok'].zero?
+
     output = sh_enablesharding(name)
     raise Puppet::Error, "sh.enableSharding() failed for shard #{name}: #{output['errmsg']}" if output['ok'].zero?
 
@@ -89,6 +92,7 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
     collection_array = []
     obj.each do |database|
       next unless database['_id'].eql?(shard_name) && !database['shards'].nil?
+
       collection_array = database['shards'].map do |collection|
         { collection.keys.first => collection.values.first['shardkey'] }
       end
@@ -98,9 +102,10 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
 
   def self.shard_properties(shard)
     properties = {}
-    output = mongo_command('sh.status()')
+    output = mongo_command('sh.status()')['value']
     output['shards'].each do |s|
       next unless s['_id'] == shard
+
       properties = {
         name: s['_id'],
         ensure: :present,
@@ -113,8 +118,10 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
   end
 
   def self.shards_properties
-    output = mongo_command('sh.status()')
-    properties = if !output['shards'].empty?
+    output = mongo_command('sh.status()')['value']
+    properties = if output['shards'].empty?
+                   []
+                 else
                    output['shards'].map do |shard|
                      {
                        name: shard['_id'],
@@ -124,8 +131,6 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
                        provider: :mongo
                      }
                    end
-                 else
-                   []
                  end
     Puppet.debug("MongoDB shard properties: #{properties.inspect}")
     properties
@@ -147,8 +152,8 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
       args = []
       args << '--quiet'
       args << ['--host', host] if host
-      args << ['--eval', "printjson(#{command})"]
-      output = mongo(args.flatten)
+      args << ['--eval', "EJSON.stringify(#{command})"]
+      output = mongosh(args.flatten)
     rescue Puppet::ExecutionFailure => e
       raise unless e =~ %r{Error: couldn't connect to server} && wait <= (2**max_wait)
 
@@ -158,64 +163,6 @@ Puppet::Type.type(:mongodb_shard).provide(:mongo, parent: Puppet::Provider::Mong
       retry
     end
 
-    # NOTE (spredzy) : sh.status()
-    # does not return a json stream
-    # we jsonify it so it is easier
-    # to parse and deal with it
-    if command == 'sh.status()'
-      myarr = output.split("\n")
-      myarr.shift
-      myarr.pop
-      myarr.pop
-      final_stream = []
-      prev_line = nil
-      in_shard_list = 0
-      in_chunk = 0
-      myarr.each do |line|
-        line.gsub!(%r{sharding version:}, '{ "sharding version":')
-        line.gsub!(%r{shards:}, ',"shards":[')
-        line.gsub!(%r{databases:}, '], "databases":[')
-        line.gsub!(%r{"clusterId" : ObjectId\("(.*)"\)}, '"clusterId" : "ObjectId(\'\1\')"')
-        line.gsub!(%r{\{  "_id" :}, ',{  "_id" :') if %r{_id} =~ prev_line
-        # Modification for shard
-        line = '' if line =~ %r{on :.*Timestamp}
-        if line =~ %r{_id} && in_shard_list == 1
-          in_shard_list = 0
-          last_line = final_stream.pop.strip
-          proper_line = "#{last_line}]},"
-          final_stream << proper_line
-        end
-        if line =~ %r{shard key} && in_shard_list == 1
-          shard_name = final_stream.pop.strip
-          proper_line = ",{\"#{shard_name}\":"
-          final_stream << proper_line
-        end
-        if line =~ %r{shard key} && in_shard_list.zero?
-          in_shard_list = 1
-          shard_name = final_stream.pop.strip
-          id_line = "#{final_stream.pop[0..-2]}, \"shards\": "
-          proper_line = "[{\"#{shard_name}\":"
-          final_stream << id_line
-          final_stream << proper_line
-        end
-        if in_chunk == 1
-          in_chunk = 0
-          line = "\"#{line.strip}\"}}"
-        end
-        in_chunk = 1 if line =~ %r{chunks} && in_chunk.zero?
-        line.gsub!(%r{shard key}, '{"shard key"')
-        line.gsub!(%r{chunks}, ',"chunks"')
-        final_stream << line unless line.empty?
-        prev_line = line
-      end
-      final_stream << ' ] }' if in_shard_list == 1
-      final_stream << ' ] }'
-      output = final_stream.join("\n")
-    end
-
-    # Hack to avoid non-json empty sets
-    output = '{}' if output == "null\n"
-    output.gsub!(%r{\s*}, '')
     JSON.parse(output)
   end
 end

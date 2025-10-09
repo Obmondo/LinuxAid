@@ -43,7 +43,7 @@ define apt::keyring (
   ensure_resource('file', $dir, { ensure => 'directory', mode => '0755', })
   if $source and $content {
     fail("Parameters 'source' and 'content' are mutually exclusive")
-  } elsif ! $source and ! $content {
+  } elsif $ensure == 'present' and ! $source and ! $content {
     fail("One of 'source' or 'content' parameters are required")
   }
 

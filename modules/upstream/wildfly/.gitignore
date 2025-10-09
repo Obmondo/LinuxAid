@@ -1,5 +1,17 @@
 pkg
 .bundle/config
 .idea
+/log
+*.iml
+*.swp
+Session.vim
 
 *.lock
+.vagrant
+*.log
+
+spec/fixtures/*
+spec/reports/*
+coverage/*
+.DS_Store
+wget_cache/

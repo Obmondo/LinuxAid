@@ -1,4 +1,6 @@
-module Puppet::Util
+# frozen_string_literal: true
+
+module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   #
   # external_iterator.rb
   #

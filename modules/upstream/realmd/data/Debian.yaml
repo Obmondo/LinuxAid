@@ -2,12 +2,16 @@
 realmd::krb_client_package_name: krb5-user
 realmd::required_packages:
   sssd-tools:
-    ensure: installed
+    ensure: present
+  sssd:
+    ensure: present
   libpam-modules:
-    ensure: installed
+    ensure: present
   libnss-sss:
-    ensure: installed
+    ensure: present
   libpam-sss:
-    ensure: installed
+    ensure: present
+  adcli:
+    ensure: present
   samba-common-bin:
-    ensure: installed
+    ensure: present

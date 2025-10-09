@@ -1,0 +1,31 @@
+################################################################################
+# This file is managed by Puppet, and is refreshed regularly.                  #
+# Edit at your own peril!                                                      #
+################################################################################
+## <%= $name %> Cron Job
+
+# Environment Settings
+<% $environment.each |$env_var| { -%>
+<%= $env_var %>
+<% } -%>
+
+<%- $jobs.each |$job| { -%>
+  <%- if ! $job['command'] { -%>
+    <%- fail("Must pass command to Cron::Jobs") -%>
+  <%- } -%>
+  <%- $minute = $job['minute'] ? { undef => '*', default => $job['minute'] } -%>
+  <%- $hour = $job['hour'] ? { undef => '*', default => $job['hour'] } -%>
+  <%- $date = $job['date'] ? { undef => '*', default => $job['date'] } -%>
+  <%- $month = $job['month'] ? { undef => '*', default => $job['month'] } -%>
+  <%- $weekday = $job['weekday'] ? { undef => '*', default => $job['weekday'] } -%>
+  <%- $user = $job['user'] ? { undef => 'root', default => $job['user'] } -%>
+<% if $job['description'] {-%>
+
+# <%= $job['description'] %>
+<% } -%>
+<%- if $job['special'] { -%>
+@<%= $job['special'] %>  <%= $user %>  <%= $job['command'] %>
+<%  } else { -%>
+<%= $minute %> <%= $hour %> <%= $date %> <%= $month %> <%= $weekday %>  <%= $user %>  <%= $job['command'] %>
+<%  } -%>
+<% } -%>

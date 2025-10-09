@@ -1,0 +1,13 @@
+---
+name: Static Code Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  static_code_analysis:
+    uses: "puppetlabs/phoenix-github-actions/.github/workflows/static_code_analysis.yaml@main"

@@ -16,11 +16,11 @@
 # @param context
 #   Specify if mapping is for http or stream context
 #
-# @example
+# @example basic map with two mappings
 #   nginx::resource::map { 'backend_pool':
 #     ensure    => present,
 #     hostnames => true,
-#     default   => 'ny-pool-1,
+#     default   => 'ny-pool-1',
 #     string    => '$http_host',
 #     mappings  => {
 #       '*.nyc.example.com' => 'ny-pool-1',
@@ -65,7 +65,7 @@
 #
 define nginx::resource::map (
   String[2] $string,
-  Variant[Array, Hash] $mappings,
+  Nginx::StringMappings $mappings = [],
   Optional[String] $default         = undef,
   Enum['absent', 'present'] $ensure = 'present',
   Array[String] $include_files      = [],
@@ -93,7 +93,14 @@ define nginx::resource::map (
     owner   => 'root',
     group   => $root_group,
     mode    => $nginx::global_mode,
-    content => template('nginx/conf.d/map.erb'),
+    content => epp('nginx/conf.d/map.epp', {
+        'default'       => $default,
+        'hostnames'     => $hostnames,
+        'include_files' => $include_files,
+        'mappings'      => $mappings,
+        'name'          => $name,
+        'string'        => $string,
+    }),
     notify  => Class['nginx::service'],
     tag     => 'nginx_config_file',
   }

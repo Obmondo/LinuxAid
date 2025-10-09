@@ -1,2 +1,0 @@
----
-systemd::nspawn_package: 'systemd-container'

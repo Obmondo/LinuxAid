@@ -1,0 +1,9 @@
+---
+
+fixtures:
+  repositories:
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+    epel: "https://github.com/voxpupuli/puppet-epel.git"
+    yumrepo_core: "https://github.com/puppetlabs/puppetlabs-yumrepo_core"
+  symlinks:
+    openvmtools: "#{source_dir}"

@@ -1,4 +1,6 @@
-# PRIVATE CLASS - do not use directly
+# @summary manage puppetdb config ini
+#
+# @api private
 class puppetdb::server::command_processing (
   $command_threads   = $puppetdb::params::command_threads,
   $concurrent_writes = $puppetdb::params::concurrent_writes,
@@ -6,7 +8,6 @@ class puppetdb::server::command_processing (
   $temp_usage        = $puppetdb::params::temp_usage,
   $confdir           = $puppetdb::params::confdir,
 ) inherits puppetdb::params {
-
   $config_ini = "${confdir}/config.ini"
 
   # Set the defaults

@@ -7,27 +7,23 @@
 # @param ensure
 #     Ensure if present or absent.
 #
+# @param hwutc
+#     Is the hardware clock set to UTC? (true or false)
+#
 # @param autoupgrade
 #     Upgrade package automatically, if there is a newer version.
 #
+# @param notify_services
+#     List of services to notify
+#
 # @param package
 #     Name of the package.
-#     Only set this, if your platform is not supported or you know, what you're doing.
-#
-# @param config_file
-#     Main configuration file.
 #     Only set this, if your platform is not supported or you know, what you're doing.
 #
 # @param zoneinfo_dir
 #     Source directory of zoneinfo files.
 #     Only set this, if your platform is not supported or you know, what you're doing.
 #     Default: auto-set, platform specific
-#
-# @param hwutc
-#     Is the hardware clock set to UTC? (true or false)
-#
-# @param notify_services
-#     List of services to notify
 #
 # @example
 #   class { 'timezone':
@@ -39,16 +35,15 @@ class timezone (
   Enum['present','absent'] $ensure                         = 'present',
   Optional[Boolean]        $hwutc                          = undef,
   Boolean                  $autoupgrade                    = false,
-  Optional[Array[String]]  $notify_services                = [],
+  Array[String]            $notify_services                = [],
   Optional[String]         $package                        = undef,
   String                   $zoneinfo_dir                   = '/usr/share/zoneinfo',
-  String                   $localtime_file                 = '/etc/localtime',
+  Optional[String]         $localtime_file                 = undef,
   Optional[String]         $timezone_file                  = undef,
-  Optional[String]         $timezone_file_template         = 'timezone/clock.erb',
+  String                   $timezone_file_template         = 'timezone/clock.erb',
   Optional[Boolean]        $timezone_file_supports_comment = undef,
   Optional[String]         $timezone_update                = undef
 ) {
-
   case $ensure {
     /(present)/: {
       if $autoupgrade == true {
@@ -100,11 +95,13 @@ class timezone (
 
   $notify = $notify_services.map |$svc| { Service[$svc] }
 
-  file { $localtime_file:
-    ensure => $localtime_ensure,
-    target => "${zoneinfo_dir}/${timezone}",
-    force  => true,
-    notify => $notify,
+  if $localtime_file {
+    file { $localtime_file:
+      ensure => $localtime_ensure,
+      target => "${zoneinfo_dir}/${timezone}",
+      force  => true,
+      notify => $notify,
+    }
   }
 
   if $timezone_file {
@@ -112,6 +109,10 @@ class timezone (
       ensure  => $timezone_ensure,
       content => template($timezone_file_template),
       notify  => $notify,
+    }
+
+    if $localtime_file {
+      File[$localtime_file] -> File[$timezone_file]
     }
 
     if $ensure == 'present' and $timezone_update {
@@ -130,7 +131,6 @@ class timezone (
         command => sprintf($timezone_update, $timezone),
         unless  => sprintf($unless_cmd, $timezone),
         path    => '/usr/bin:/usr/sbin:/bin:/sbin',
-        require => File[$localtime_file],
       }
     }
   }
@@ -153,5 +153,4 @@ class timezone (
       }
     }
   }
-
 }

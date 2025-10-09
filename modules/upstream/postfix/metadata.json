@@ -1,6 +1,6 @@
 {
   "name": "puppet-postfix",
-  "version": "4.4.0",
+  "version": "6.0.0",
   "author": "Vox Pupuli",
   "summary": "Postfix Module",
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
     },
     {
       "name": "puppet/alternatives",
-      "version_requirement": ">= 2.0.0 < 6.0.0"
+      "version_requirement": ">= 2.0.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/mailalias_core",
@@ -25,77 +25,71 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "10",
-        "11"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04",
-        "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Alpine"
     },
     {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "33",
-        "34"
-      ]
-    },
-    {
       "operatingsystem": "FreeBSD",
       "operatingsystemrelease": [
-        "12",
-        "13"
+        "13",
+        "14"
       ]
     }
   ],
   "requirements": [
     {
-      "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "name": "openvox",
+      "version_requirement": ">= 8.19.0 < 9.0.0"
     }
   ]
 }

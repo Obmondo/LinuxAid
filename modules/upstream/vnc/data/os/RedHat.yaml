@@ -1,6 +1,0 @@
----
-vnc::server::packages:
-  - tigervnc-server
-  - tigervnc-server-module
-vnc::client::gui::packages:
-  - tigervnc

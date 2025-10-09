@@ -1,12 +1,27 @@
 ---
-.travis.yml:
-  script: "\"bundle exec rake spec SPEC_OPTS='--format documentation'\""
-  extras:
-  - rvm: 1.8.7
-    env: PUPPET_GEM_VERSION="~> 2.7.0" FACTER_GEM_VERSION="~> 1.6.0"
-  - rvm: 1.8.7
-    env: PUPPET_GEM_VERSION="~> 2.7.0" FACTER_GEM_VERSION="~> 1.7.0"
-Rakefile:
-  unmanaged: true
+".gitlab-ci.yml":
+  delete: true
+".yardopts":
+  optional:
+    - "--output-dir docs/"
+appveyor.yml:
+  delete: true
+.rubocop.yml:
+  include_todos: true
 spec/spec_helper.rb:
-  unmanaged: true
+  mock_with: ":rspec"
+  coverage_report: true
+.gitpod.Dockerfile:
+  unmanaged: false
+.gitpod.yml:
+  unmanaged: false
+.github/workflows/auto_release.yml:
+  unmanaged: false
+.github/workflows/ci.yml:
+  unmanaged: false
+.github/workflows/nightly.yml:
+  unmanaged: false
+.github/workflows/release.yml:
+  unmanaged: false
+.travis.yml:
+  delete: true
