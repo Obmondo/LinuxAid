@@ -1,0 +1,5 @@
+---
+ipset::config_path: '/etc/sysconfig/ipset.d'
+ipset::packages:
+  - ipset
+  - ipset-service

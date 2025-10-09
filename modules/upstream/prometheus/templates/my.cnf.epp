@@ -1,0 +1,10 @@
+<%- |
+  Hash[String[1],Variant[Sensitive[String],String,Integer]] $settings,
+| -%>
+
+# THIS FILE IS MANAGED BY PUPPET
+[client]
+
+<% $settings.each |$key, $value| { -%>
+<%= $key %> = "<%= $value %>"
+<% } -%>

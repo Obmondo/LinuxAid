@@ -1,0 +1,21 @@
+---
+fixtures:
+  repositories:
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
+    augeasproviders_core: https://github.com/simp/augeasproviders_core.git
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub.git
+    concat: https://github.com/simp/puppetlabs-concat.git
+    logrotate: https://github.com/simp/pupmod-simp-logrotate.git
+    pki: https://github.com/simp/pupmod-simp-pki.git
+    rsyslog: https://github.com/simp/pupmod-simp-rsyslog.git
+    simp_options: https://github.com/simp/pupmod-simp-simp_options.git
+    simplib: https://github.com/simp/pupmod-simp-simplib.git
+    stdlib: https://github.com/simp/puppetlabs-stdlib.git
+    systemd: https://github.com/simp/puppet-systemd.git
+    disa_stig-el7-baseline:
+      repo: https://github.com/simp/inspec-profile-disa_stig-el7.git
+      branch:  master
+      target: spec/fixtures/inspec_deps/inspec_profiles/profiles
+    augeas_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
+      puppet_version: ">= 6.0.0"

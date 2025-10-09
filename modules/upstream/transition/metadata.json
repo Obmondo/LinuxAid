@@ -1,0 +1,112 @@
+{
+  "name": "puppetlabs-transition",
+  "version": "2.0.0",
+  "author": "puppetlabs",
+  "summary": "Provides a Puppet type and provider for describing conditional transition states.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-transition",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-transition",
+  "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "12",
+        "15"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "Windows",
+      "operatingsystemrelease": [
+        "2012",
+        "2012 R2",
+        "2016",
+        "2019",
+        "7",
+        "8.1",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "AIX",
+      "operatingsystemrelease": [
+        "7.1",
+        "7.2"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "tags": [
+    "catalog",
+    "transition"
+  ],
+  "pdk-version": "2.7.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#main",
+  "template-ref": "heads/main-0-gd05508f"
+}

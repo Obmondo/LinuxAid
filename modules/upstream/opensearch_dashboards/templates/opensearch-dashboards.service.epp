@@ -1,0 +1,20 @@
+##
+## MANAGED BY PUPPET
+##
+## All changes are gone after the next Puppet run!
+##
+
+[Unit]
+Description="OpenSearch Dashboards"
+ConditionPathExists=<%= $opensearch_dashboards::package_directory %>
+
+[Service]
+Type=simple
+User=opensearch-dashboards
+Group=opensearch-dashboards
+ExecStart=<%= $opensearch_dashboards::package_directory %>/bin/opensearch-dashboards
+WorkingDirectory=<%= $opensearch_dashboards::package_directory %>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

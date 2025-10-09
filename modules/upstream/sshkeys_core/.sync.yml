@@ -1,0 +1,54 @@
+---
+.rubocop.yml:
+  default_configs:
+    RSpec/SubjectStub:
+      Enabled: false
+    RSpec/NamedSubject:
+      Enabled: false
+    Style/Documentation:
+      Exclude:
+        - lib/puppet/parser/functions/**/*
+        - spec/**/*
+        - lib/puppet/type/**
+        - lib/puppet/provider/**
+Gemfile:
+  optional:
+    ":development":
+      - gem: beaker
+        version: '~> 6.0'
+        from_env: BEAKER_VERSION
+      - gem: beaker-abs
+        from_env: BEAKER_ABS_VERSION
+        version: '~> 1.0'
+      - gem: beaker-hostgenerator
+        from_env: BEAKER_HOSTGENERATOR_VERSION
+      - gem: beaker-rspec
+        from_env: BEAKER_RSPEC_VERSION
+      # Prevent beaker-puppet from being installed on Ruby > 3.1 until beaker-puppet supports newer Rubies (PA-6136)
+      - gem: beaker-puppet
+        from_env: BEAKER_PUPPET_VERSION
+        version: '~> 4.0'
+        condition: Gem::Requirement.create('< 3.2.0').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+      # We can unpin async when we move to Ruby 3
+      - gem: async
+        version: '~> 1'
+      - gem: beaker-module_install_helper
+      - gem: nokogiri
+    ":system_tests":
+      - gem: voxpupuli-acceptance
+
+appveyor.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.github/workflows/release.yml:
+  unmanaged: false
+.github/workflows/release_prep.yml:
+  unmanaged: false
+.gitlab-ci.yml:
+  delete: true
+# We still use the Vox acceptance Rake task instead of Litmus
+Rakefile:
+  requires:
+    - require: voxpupuli/acceptance/rake
+      conditional: Gem.loaded_specs.key? 'voxpupuli-acceptance'

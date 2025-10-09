@@ -1,0 +1,2 @@
+---
+systemd::resolved_package: 'systemd-resolved'

@@ -1,0 +1,13 @@
+<%- |
+  Variant[Array[String[1]], String[1]] $content
+|-%>
+<%
+  if $content =~ Array {
+-%>
+<%= join(strip($content).filter|$x| { !empty($x) }, "\n") %>
+<%
+  }
+  else {
+-%>
+<%= join(strip(split($content, "\n")).filter |$x| { !empty($x) }, "\n") %>
+<% } -%>

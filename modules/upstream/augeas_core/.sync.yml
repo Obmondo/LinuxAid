@@ -1,0 +1,63 @@
+.rubocop.yml:
+  default_configs:
+    Style/SignalException:
+      Enabled: false
+    Style/DoubleNegation:
+      Enabled: false
+    Style/MultipleComparison:
+      Enabled: false
+    Style/NumericPredicate:
+      Enabled: false
+    Layout/HeredocIndentation:
+      Enabled: false
+    Layout/LineLength:
+      Enabled: false
+    Metrics/BlockNesting:
+      Enabled: false
+    Naming/AccessorMethodName:
+      Enabled: false
+    Naming/PredicateName:
+      Enabled: false
+    RSpec/VariableName:
+      Enabled: false
+Gemfile:
+  optional:
+    ":development":
+      - gem: beaker
+        version: '~> 5.0'
+        from_env: BEAKER_VERSION
+      - gem: beaker-abs
+        from_env: BEAKER_ABS_VERSION
+        version: '~> 1.0'
+      - gem: beaker-hostgenerator
+        from_env: BEAKER_HOSTGENERATOR_VERSION
+      - gem: beaker-rspec
+        from_env: BEAKER_RSPEC_VERSION
+      # Prevent beaker-puppet from being installed on Ruby > 3.1 until beaker-puppet supports newer Rubies
+      - gem: beaker-puppet
+        from_env: BEAKER_PUPPET_VERSION
+        version: '~> 3.0'
+        condition: Gem::Requirement.create('< 3.1.0').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+      - gem: async
+        version: '~> 1'
+      - gem: beaker-module_install_helper
+      - gem: beaker-puppet_install_helper
+      - gem: nokogiri
+    ":system_tests":
+      - gem: voxpupuli-acceptance
+
+appveyor.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.github/workflows/release.yml:
+  unmanaged: false
+.github/workflows/release_prep.yml:
+  unmanaged: false
+.gitlab-ci.yml:
+  delete: true
+# We still use the Vox acceptance Rake task instead of Litmus
+Rakefile:
+  requires:
+    - require: voxpupuli/acceptance/rake
+      conditional: Gem.loaded_specs.key? 'voxpupuli-acceptance'

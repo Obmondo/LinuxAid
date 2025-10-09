@@ -1,0 +1,79 @@
+{
+  "name": "puppet-augeasproviders_grub",
+  "version": "5.1.2",
+  "author": "Vox Pupuli",
+  "summary": "Augeas-based grub types and providers for Puppet",
+  "license": "Apache-2.0",
+  "source": "https://github.com/voxpupuli/augeasproviders_grub",
+  "project_page": "https://github.com/voxpupuli/puppet-augeasproviders_grub",
+  "issues_url": "https://github.com/voxpupuli/augeasproviders_grub/issues",
+  "description": "This module provides types/providers for grub configuration files using the Augeas configuration API library.",
+  "dependencies": [
+    {
+      "name": "puppet/augeasproviders_core",
+      "version_requirement": ">=2.4.0 < 5.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04",
+        "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ]
+}

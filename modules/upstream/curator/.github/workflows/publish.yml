@@ -1,0 +1,22 @@
+name: Build and publish to Puppet Forge
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Clone repository
+        uses: actions/checkout@v1
+        with:
+          ref: ${{ env.RELEASE_VERSION }}
+      - name: Build and publish module
+        uses: barnumbirr/action-forge-publish@v2.6.1
+        env:
+          FORGE_API_KEY: ${{ secrets.FORGE_API_KEY }}
+          REPOSITORY_URL: https://forgeapi.puppet.com/v3/releases

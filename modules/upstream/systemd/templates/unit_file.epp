@@ -1,0 +1,74 @@
+<%- |
+ Optional[Hash] $unit_entry,
+ Optional[Hash] $slice_entry,
+ Optional[Hash] $service_entry,
+ Optional[Hash] $install_entry,
+ Optional[Hash] $timer_entry,
+ Optional[Hash] $path_entry,
+ Optional[Hash] $socket_entry,
+ Optional[Hash] $mount_entry,
+ Optional[Hash] $swap_entry,
+| -%>
+<%-
+
+ # List of possible of unit sections, should match the list of _entry variables
+ # above.
+
+ $_unit_sections = [
+   'Unit',
+   'Slice',
+   'Service',
+   'Timer',
+   'Path',
+   'Socket',
+   'Mount',
+   'Swap',
+   'Install',
+]
+
+# Directives which are pair of items to be expressed as a space seperated pair.
+$_tupled_values = [
+  'IODeviceWeight',
+  'IOReadBandwidthMax',
+  'IOWriteBandwidthMax',
+  'IOReadIOPSMax',
+  'IOWriteIOPSMax',
+]
+
+-%>
+# Deployed with puppet
+#
+<%-
+$_unit_sections.each | $_section | {
+  $_values = getvar("${downcase($_section)}_entry")
+  if $_values {
+    -%>
+
+[<%= $_section %>]
+    <%-
+
+    # De-tuple the tupled values to space seperation
+    $_myvalues = $_values.map | $_key, $_value | {
+      if $_key in $_tupled_values {
+        if $_value =~ Array[Tuple[String[1],Variant[Integer,String[1]]]] {
+          { $_key =>  $_value.map | $_inner_value | {  "${_inner_value[0]} ${_inner_value[1]}" } }
+        } else {
+          {$_key => "${_value[0]} ${_value[1]}"}
+        }
+      } else {
+        {$_key => $_value}
+      }
+    }.reduce | $_memo, $_value | { $_memo + $_value }
+
+    if $_myvalues {
+      $_myvalues.each | $_key, $_value | {
+        Array($_value, true).each | $_subvalue | {
+        -%>
+<%= $_key %>=<%= $_subvalue %>
+        <%-
+        }
+      }
+    }
+  }
+}
+-%>

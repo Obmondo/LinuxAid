@@ -1,0 +1,21 @@
+# This file is managed by Puppet (module 'auditd')
+log_file = <%= $auditd::log_file %>
+log_format = <%= $auditd::_log_format %>
+log_group = <%= $auditd::log_group %>
+priority_boost = <%= $auditd::priority_boost %>
+flush = <%= $auditd::flush %>
+freq = <%= $auditd::freq %>
+num_logs = <%= $auditd::num_logs %>
+name_format = <%= $auditd::name_format %>
+name = <%= $auditd::lname %>
+max_log_file = <%= $auditd::max_log_file %>
+max_log_file_action = <%= $auditd::max_log_file_action %>
+space_left = <%= $auditd::space_left %>
+space_left_action = <%= $auditd::space_left_action %>
+admin_space_left = <%= $auditd::admin_space_left %>
+admin_space_left_action = <%= $auditd::admin_space_left_action %>
+disk_full_action = <%= $auditd::disk_full_action %>
+disk_error_action = <%= $auditd::disk_error_action %>
+<% if defined('$auditd::_write_logs') { -%>
+write_logs = <%= $auditd::write_logs ? { false => 'no', default => 'yes' } %>
+<% } -%>

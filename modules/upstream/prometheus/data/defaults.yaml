@@ -1,0 +1,119 @@
+---
+prometheus::pushprox_client::download_extension: 'tar.gz'
+prometheus::pushprox_client::download_url_base: 'https://github.com/prometheus-community/PushProx/releases'
+prometheus::pushprox_client::extra_groups: []
+prometheus::pushprox_client::group: 'pushprox_client'
+prometheus::pushprox_client::package_ensure: 'latest'
+prometheus::pushprox_client::package_name: 'pushprox_client'
+prometheus::pushprox_client::user: 'pushprox_client'
+# renovate: depName=prometheus-community/PushProx
+prometheus::pushprox_client::version: '0.2.0'
+prometheus::pushprox_proxy::download_extension: 'tar.gz'
+prometheus::pushprox_proxy::download_url_base: 'https://github.com/prometheus-community/PushProx/releases'
+prometheus::pushprox_proxy::extra_groups: []
+prometheus::pushprox_proxy::group: 'pushprox_proxy'
+prometheus::pushprox_proxy::package_ensure: 'latest'
+prometheus::pushprox_proxy::package_name: 'pushprox_proxy'
+prometheus::pushprox_proxy::user: 'pushprox_proxy'
+# renovate: depName=prometheus-community/PushProx
+prometheus::pushprox_proxy::version: '0.2.0'
+prometheus::alertmanager::config_dir: '/etc/alertmanager'
+prometheus::alertmanager::manage_config: true
+prometheus::alertmanager::config_file: "%{hiera('prometheus::alertmanager::config_dir')}/alertmanager.yaml"
+prometheus::alertmanager::download_extension: 'tar.gz'
+prometheus::alertmanager::download_url_base: 'https://github.com/prometheus/alertmanager/releases'
+prometheus::alertmanager::extra_groups: []
+prometheus::alertmanager::global:
+  'smtp_smarthost': 'localhost:25'
+  'smtp_from': 'alertmanager@localhost'
+prometheus::alertmanager::group: 'alertmanager'
+prometheus::alertmanager::inhibit_rules:
+  - 'source_matchers':
+      - 'severity = critical'
+    'target_matchers':
+      - 'severity = warning'
+    'equal':
+      - 'alertname'
+      - 'cluster'
+      - 'service'
+prometheus::alertmanager::package_ensure: 'latest'
+prometheus::alertmanager::package_name: 'alertmanager'
+prometheus::alertmanager::receivers:
+  - 'name': 'Admin'
+    'email_configs':
+    - 'to': 'root@localhost'
+prometheus::alertmanager::route:
+  'group_by':
+    - 'alertname'
+    - 'cluster'
+    - 'service'
+  'group_wait': '30s'
+  'group_interval': '5m'
+  'repeat_interval': '3h'
+  'receiver': 'Admin'
+prometheus::alertmanager::mute_time_intervals: []
+prometheus::alertmanager::time_intervals: []
+prometheus::alertmanager::storage_path: '/var/lib/alertmanager'
+prometheus::alertmanager::templates: [ "%{lookup('prometheus::alertmanager::config_dir')}/*.tmpl" ]
+prometheus::alertmanager::user: 'alertmanager'
+prometheus::consul_exporter::consul_health_summary: true
+prometheus::consul_exporter::consul_server: 'localhost:8500'
+prometheus::consul_exporter::download_extension: 'tar.gz'
+prometheus::consul_exporter::download_url_base: 'https://github.com/prometheus/consul_exporter/releases'
+prometheus::consul_exporter::extra_groups: []
+prometheus::consul_exporter::group: 'consul-exporter'
+prometheus::consul_exporter::log_level: 'info'
+prometheus::consul_exporter::package_ensure: 'latest'
+prometheus::consul_exporter::package_name: 'consul_exporter'
+prometheus::consul_exporter::service_name: 'consul_exporter'
+prometheus::consul_exporter::user: 'consul-exporter'
+prometheus::consul_exporter::web_listen_address: ':9107'
+prometheus::consul_exporter::web_telemetry_path: '/metrics'
+prometheus::elasticsearch_exporter::cnf_uri: 'http://localhost:9200'
+prometheus::elasticsearch_exporter::cnf_timeout: '5s'
+prometheus::elasticsearch_exporter::download_extension: 'tar.gz'
+prometheus::elasticsearch_exporter::download_url_base: 'https://github.com/prometheus-community/elasticsearch_exporter/releases'
+prometheus::elasticsearch_exporter::extra_groups: []
+prometheus::elasticsearch_exporter::group: 'elasticsearch-exporter'
+prometheus::elasticsearch_exporter::package_ensure: 'latest'
+prometheus::elasticsearch_exporter::package_name: 'elasticsearch_exporter'
+prometheus::elasticsearch_exporter::service_name: 'elasticsearch_exporter'
+prometheus::elasticsearch_exporter::user: 'elasticsearch-exporter'
+prometheus::mesos_exporter::server_type: 'master'
+prometheus::mesos_exporter::cnf_scrape_uri: 'http://localhost:5050'
+prometheus::mesos_exporter::download_extension: 'tar.gz'
+prometheus::mesos_exporter::download_url_base: 'https://github.com/mesosphere/mesos_exporter/releases'
+prometheus::mesos_exporter::extra_groups: []
+prometheus::mesos_exporter::group: 'mesos-exporter'
+prometheus::mesos_exporter::user: 'mesos-exporter'
+prometheus::mesos_exporter::package_ensure: 'latest'
+prometheus::mesos_exporter::package_name: 'mesos_exporter'
+prometheus::mesos_exporter::service_name: 'mesos_exporter'
+prometheus::nginx_vts_exporter::nginx_scrape_uri: 'http://localhost/status/format/json'
+prometheus::nginx_vts_exporter::download_extension: 'tar.gz'
+prometheus::nginx_vts_exporter::download_url_base: 'https://github.com/hnlq715/nginx-vts-exporter/releases'
+prometheus::nginx_vts_exporter::extra_groups: []
+prometheus::nginx_vts_exporter::group: 'nginx-vts-exporter'
+prometheus::nginx_vts_exporter::package_ensure: 'latest'
+prometheus::nginx_vts_exporter::package_name: 'nginx-vts-exporter'
+prometheus::nginx_vts_exporter::service_name: 'nginx-vts-exporter'
+prometheus::nginx_vts_exporter::user: 'nginx-vts-exporter'
+prometheus::rabbitmq_exporter::download_extension: 'tar.gz'
+prometheus::rabbitmq_exporter::download_url_base: 'https://github.com/kbudde/rabbitmq_exporter/releases'
+prometheus::rabbitmq_exporter::extra_groups: []
+prometheus::rabbitmq_exporter::group: 'rabbitmq-exporter'
+prometheus::rabbitmq_exporter::package_ensure: 'latest'
+prometheus::rabbitmq_exporter::package_name: 'rabbitmq_exporter'
+prometheus::rabbitmq_exporter::service_name: 'rabbitmq_exporter'
+prometheus::rabbitmq_exporter::user: 'rabbitmq-exporter'
+prometheus::rabbitmq_exporter::rabbit_url: 'http://localhost:15672'
+prometheus::rabbitmq_exporter::rabbit_user: 'guest'
+prometheus::rabbitmq_exporter::rabbit_password: 'guest'
+prometheus::rabbitmq_exporter::queues_include_regex: '.*'
+prometheus::rabbitmq_exporter::queues_exclude_regex: '^$prometheus::'
+prometheus::rabbitmq_exporter::rabbit_capabilities: []
+prometheus::rabbitmq_exporter::rabbit_exporters:
+  - 'exchange'
+  - 'node'
+  - 'overview'
+  - 'queue'

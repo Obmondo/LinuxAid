@@ -1,0 +1,40 @@
+---
+vnc::server::manage_packages: true
+vnc::server::packages_ensure: installed
+
+vnc::server::packages:
+  - tigervnc-server
+vnc::client::gui::packages:
+  - tigervnc-viewer
+
+vnc::client::gui::manage_packages: true
+vnc::client::gui::packages_ensure: installed
+
+vnc::server::manage_config: true
+vnc::server::seed_home_vnc: true
+
+# vnc_home_dir MUST start with `/` or various checks fail
+# vnc_home_dir MUST NOT end with `/` or various checks fail
+vnc::server::vnc_home_conf: /.vnc
+vnc::server::extra_users_can_manage: []
+vnc::server::vncserver_users_file: /etc/tigervnc/vncserver.users
+
+vnc::server::config_defaults_file: /etc/tigervnc/vncserver-config-defaults
+vnc::server::config_defaults:
+  session: gnome
+  localhost: NULL
+
+vnc::server::config_mandatory_file: /etc/tigervnc/vncserver-config-mandatory
+vnc::server::config_mandatory: {}
+
+vnc::server::polkit_file: /etc/polkit-1/rules.d/25-puppet-vncserver.rules
+vnc::server::polkit_file_mode: '0644'
+
+vnc::server::manage_services: true
+vnc::server::user_can_manage: false
+vnc::server::systemd_template_startswith: vncserver
+vnc::server::systemd_template_endswith: service
+
+# format is:
+# vnc_servers[username][comment,displaynumber,ensure,enable,user_can_manage,seed_home_vnc] = value
+vnc::server::vnc_servers: {}

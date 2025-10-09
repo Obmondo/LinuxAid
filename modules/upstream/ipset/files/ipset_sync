@@ -1,0 +1,264 @@
+#!/bin/bash
+
+##
+# THIS FILE IS MANAGED BY PUPPET
+##
+
+### config
+
+default_cfg='/etc/sysconfig/ipset.d'
+
+### functions
+
+usage() {
+cat << EOF
+Usage: ${0/*\//} [-c CONFIG_DIR] [-d] [-v] [-n] -i SETNAME
+
+Ipset synchronization helper. Applies configured ipset to the kernel.
+
+Meant to be used together with puppet module. Puppet will take care
+of creating config files with desired content.
+
+Options:
+  -c  Configuration directory for ipsets
+  -d  Checks if in-kernel set SETNAME is in sync with set config files
+      Does not apply configured state to the kernel
+        * 0 exit code, when set is in sync
+        * non-0 exit code, when the set differs from configured state
+  -n  Do not sync ipset contents, just headers
+  -v  Verbose output
+  -h  Shows this help message
+  -i  Name of managed ipset
+EOF
+}
+
+function get_header_file() {
+  echo "${cfg}/$1.hdr"
+}
+
+function get_content_file() {
+  echo "${cfg}/$1.set"
+}
+
+function construct_ipset_dump() {
+  local id=$1
+  local alias=${2:-${id}} # alias for swapping
+  local no_content=${3:-0}
+
+  local f_header=$(get_header_file ${id})
+  local f_content=$(get_content_file ${id})
+
+  if [ ! -f "${f_header}" ]; then
+    echo "Set configuration file '${f_header}' does not exist!" >&2
+    exit 5
+  fi
+  if [ ! -f "${f_content}" ]; then
+    echo "Set configuration file '${f_content}' does not exist!" >&2
+    exit 6
+  fi
+
+  # recreate the dump format from config files manually
+  (
+    cat "${f_header}" | sed "s/^create ${id} /create ${alias} /"
+
+    if [ ${no_content} -eq 0 ]; then
+      # * skip
+      #   * comment lines
+      #   * empty lines
+      # * cleanup
+      #   * network mask suffix in complete IP (IPv4=32, IPv6=128)
+      #   * remove inline comments
+      #   * trim whitespaces
+      cat "${f_content}" | \
+        grep -v '^[[:space:]]*#' | \
+        grep -v '^[[:space:]]*$' | \
+        sed -re 's@^[[:space:]]*@@' | \
+        sed -re 's@[[:space:]]*$@@' | \
+        sed -re 's@((\.[0-9]+)/32|/128)$@\2@' | \
+        sed -re 's@[[:space:]]*#.*$@@' | \
+        sed -re "s/(.*)/add ${alias} \\1/" | \
+        LC_ALL=C sort --unique
+    fi
+  )
+}
+
+function get_ipset_dump() {
+  local id=$1
+
+  ipset save ${id} | sed -e 's/ hashsize [0-9]\+//g' -e 's/ initval 0x[0-9a-f]\+//g' -e 's/ bucketsize [0-9]\+//g' -e 's/[[:space:]]*$//' | egrep "^(add|create) ${id} " | (read hdr; echo ${hdr}; LC_ALL=C sort --unique)
+}
+
+function import_ipset() {
+  local id=$1
+  local alias=${2:-${id}}
+  local no_content=${3:-0}
+
+  ipset restore < <(construct_ipset_dump ${id} ${alias} ${no_content})
+}
+
+function ipset_exists() {
+  local id=$1
+
+  ipset list -name ${id} > /dev/null 2>&1
+}
+
+function ipset_hdr_insync() {
+  local id=$1
+
+  ipset_insync_common ${id} create
+}
+
+function ipset_set_insync() {
+  local id=$1
+
+  ipset_insync_common ${id} add
+}
+
+function ipset_insync_common() {
+  local id=$1
+  local pfx=$2
+
+
+  # compare configured and runtime config
+  tf=$(mktemp)
+  diff \
+    <(get_ipset_dump ${id} | grep ^${pfx} | sed 's/hashsize [0-9]\+ //g') \
+    <(construct_ipset_dump ${id} | grep ^${pfx} | sed 's/hashsize [0-9]\+ //g') \
+    > ${tf}
+  local rv=$?
+
+  # show differences, if requested by CLI option
+  if [ -n "${verbose_output}" ] && [ ${verbose_output} -gt 0 ]; then
+    cat "${tf}"
+  fi
+
+  # cleanup
+  rm -f "${tf}"
+
+  # return result of comparison
+  return $rv
+}
+
+
+### === main ===
+
+### cli params
+
+set_id=''
+check_only=0
+ignore_contents=0
+cfg="${default_cfg}"
+
+while getopts "vc:dhi:n" OPTION; do
+    case ${OPTION} in
+      c)
+        cfg=${OPTARG}
+        ;;
+      d)
+        check_only=1
+        ;;
+      h)
+        usage
+        exit 1
+        ;;
+      n)
+        ignore_contents=1
+        ;;
+      i)
+        set_id=${OPTARG}
+        ;;
+      v)
+        verbose_output=1
+        ;;
+    esac
+done
+
+if [ -z "${set_id}" ]; then
+  echo "ERROR: Specify set id!" >&2
+  usage
+  exit 2
+fi
+
+if [ ! -d "${cfg}" ]; then
+  echo "ERROR: Config directory '${cfg}' does not exist!" >&2
+  exit 7
+fi
+
+### sync runtime
+
+if ipset_exists ${set_id}; then
+  # check for differences
+  if ! ipset_hdr_insync ${set_id}; then
+    # loaded hdr is different
+
+    # checking for diff only
+    if [ ${check_only} -ne 0 ]; then
+      # indicate a difference
+      # and don't continue
+      exit 3
+    fi
+
+    # drop the old one
+    ipset destroy ${set_id}
+
+    # create it with content as expected
+    import_ipset ${set_id} ${set_id} ${ignore_contents}
+  else
+    # hdr is the same
+
+    # don't do anything more for dynamic sets
+    if [ ${ignore_contents} -gt 0 ]; then
+      # nothing to do
+      exit 0
+    fi
+
+    if ! ipset_set_insync ${set_id}; then
+      # loaded set is different
+
+      # checking for diff only
+      if [ ${check_only} -ne 0 ]; then
+        # indicate a difference
+        # and don't continue
+        exit 8
+      fi
+
+      swap_alias="SWAP_${set_id}"
+
+      # create a new set with expected content, to swap with old set
+      import_ipset ${set_id} ${swap_alias}
+      result=$?
+
+      if [ ${result} -eq 0 ]; then
+        # if everything went fine
+
+        # swap the contents of the sets, making it active
+        ipset swap ${swap_alias} ${set_id}
+      fi
+
+      # cleanup, drop the unused one
+      ipset destroy ${swap_alias}
+
+      if [ ${result} -eq 0 ]; then
+        # success
+        exit 0
+      else
+        # return error code, if loading went wrong
+        exit 9
+      fi
+    else
+      # no difference
+      exit 0
+    fi
+  fi
+else
+  # set not present yet
+
+  # checking for presence and the set does not exist
+  if [ ${check_only} -ne 0 ]; then
+    # indicate a difference
+    exit 4
+  fi
+
+  # create it with content as expected
+  import_ipset ${set_id} ${set_id} ${ignore_contents}
+fi

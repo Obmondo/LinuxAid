@@ -1,0 +1,16 @@
+---
+fixtures:
+  repositories:
+    haveged: https://github.com/simp/pupmod-simp-haveged.git
+    simpkv: https://github.com/simp/pupmod-simp-simpkv.git
+    stdlib: https://github.com/simp/puppetlabs-stdlib.git
+    systemd: https://github.com/simp/puppet-systemd.git
+    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
+    augeasproviders_core: https://github.com/simp/augeasproviders_core.git
+
+    # This needs to be in place for the rspec-puppet Hiera 5 hook to work
+    # No idea why, it may be because Puppet sees a custom backend and loads all
+    # of the global parts.
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
+  symlinks:
+    simplib: "#{source_dir}"

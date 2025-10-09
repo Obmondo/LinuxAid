@@ -1,0 +1,9 @@
+fixtures:
+  repositories:
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
+    augeasproviders_pam: "https://github.com/hercules-team/augeasproviders_pam"
+    augeas_core:
+      repo: 'https://github.com/puppetlabs/puppetlabs-augeas_core'
+      puppet_version: '>= 6.0.0'
+  symlinks:
+    pam_access: "#{source_dir}"

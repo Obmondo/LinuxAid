@@ -1,0 +1,47 @@
+{
+  "name": "puppet-mumble",
+  "version": "5.0.0",
+  "summary": "Install and Manage a Mumble Server",
+  "author": "Vox Pupuli",
+  "source": "https://github.com/voxpupuli/puppet-mumble.git",
+  "project_page": "https://github.com/voxpupuli/puppet-mumble",
+  "issues_url": "https://github.com/voxpupuli/puppet-mumble/issues",
+  "license": "MIT",
+  "tags": [
+    "murmurd",
+    "mumble",
+    "voice"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.1.0 < 10.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.0 < 10.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ]
+}

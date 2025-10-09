@@ -1,0 +1,28 @@
+<%- | Optional[String[1]] $firewall_service,
+  Stdlib::Absolutepath $config_path,
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+[Unit]
+Description=define and fill-in ipsets
+Documentation=https://github.com/voxpupuli/puppet-ipset
+DefaultDependencies=no
+
+<% if $firewall_service { -%>
+Before=<%= $firewall_service %>
+<% } -%>
+Before=network-pre.target iptables.service ip6tables.service netfilter-persistent.service
+Wants=network-pre.target
+
+Conflicts=shutdown.target
+Before=shutdown.target
+
+Wants=systemd-modules-load.service local-fs.target
+After=systemd-modules-load.service local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/ipset_init -c "<%= $config_path %>"
+
+[Install]
+WantedBy=multi-user.target

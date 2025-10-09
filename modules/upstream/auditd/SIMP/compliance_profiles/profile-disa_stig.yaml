@@ -1,0 +1,8 @@
+---
+version: 2.0.0
+profiles:
+  disa_stig:
+    controls:
+      disa_stig: true
+controls:
+  disa_stig: {}

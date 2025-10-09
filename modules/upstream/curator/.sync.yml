@@ -1,0 +1,11 @@
+---
+disable_legacy_facts: false
+appveyor.yml:
+  delete: true
+.gitlab-ci.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.pdkignore:
+  paths:
+    - /.github/

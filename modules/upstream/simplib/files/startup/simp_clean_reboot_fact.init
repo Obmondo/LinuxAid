@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# simp_clean_reboot_fact: Clean out the simp reboot fact storage space
+#
+# chkconfig: 2345 99 10
+# description: A simple script to clean out the simp reboot fact storage space.
+#
+### BEGIN INIT INFO
+# Provides: simp_clean_reboot_fact
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Clean out the simp reboot fact storage space
+# Description: This simply cleans out the simp reboot fact storage space at
+#              /var/run/puppet/reboot_triggers. It is only active at system shutdown time.
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+
+start() {
+  return 0
+}
+
+stop() {
+  rm -rf /var/run/puppet/reboot_triggers
+  return $?
+}
+
+restart() {
+  stop
+  start
+}
+
+status() {
+  return 0
+}
+
+case "$1" in
+  start)
+    start
+    RETVAL=$?
+    ;;
+  stop)
+    stop
+    RETVAL=$?
+    ;;
+  restart|force-reload)
+    restart
+    RETVAL=$?
+    ;;
+  status)
+    status
+    RETVAL=$?
+    ;;
+  *)
+    echo $"Usage: simp_clean_reboot_fact {start|stop|restart|status}"
+    RETVAL=2
+    ;;
+esac
+
+exit $RETVAL

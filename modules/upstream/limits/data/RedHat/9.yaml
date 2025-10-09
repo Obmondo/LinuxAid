@@ -1,0 +1,3 @@
+---
+
+limits::limits_template: 'limits.conf.rhel9'

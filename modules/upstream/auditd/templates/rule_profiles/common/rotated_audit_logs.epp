@@ -1,0 +1,14 @@
+<%- |
+  Integer[0] $num_logs,
+  Stdlib::Absolutepath $log_file
+| -%>
+# This file is managed by Puppet (module 'auditd')
+<%
+  if $num_logs > 0 {
+    range(1, $num_logs).each |$i| {
+-%>
+-w <%= $log_file %>.<%= $i %> -p rwa -k audit-logs
+<%
+    }
+  }
+-%>
