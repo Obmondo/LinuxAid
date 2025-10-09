@@ -1,8 +1,10 @@
 fixtures:
   forge_modules:
-    stdlib: 
+    stdlib:
       repo: "puppetlabs/stdlib"
-    epel: 
+    epel:
       repo: "stahnma/epel"
+    concat:
+      repo: "puppetlabs/concat"
   symlinks:
     "rsnapshot": "#{source_dir}"

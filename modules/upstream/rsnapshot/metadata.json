@@ -1,6 +1,6 @@
 {
   "name": "loomsen-rsnapshot",
-  "version": "0.5.1",
+  "version": "1.2.4",
   "author": "loomsen",
   "summary": "Configures rsnapshot.",
   "license": "Apache-2.0",
@@ -12,13 +12,10 @@
     "backup",
     "rsync"
   ],
-  "requirements": [
-    { "name": "pe", "version_requirement": ">= 4.0.0" },
-    { "name": "puppet", "version_requirement": ">= 4.0.0" }
-  ],
   "dependencies": [
-    { "name": "puppetlabs-stdlib","version_range": ">= 1.0.0" },
-    { "name": "stahnma-epel","version_range": ">= 1.0.0" }
+    { "name": "puppetlabs-stdlib","version_requirement": ">= 1.0.0" },
+    { "name": "stahnma-epel","version_requirement": ">= 1.0.0" },
+    { "name": "puppetlabs-concat","version_requirement": ">= 2.0.0 < 3.0.0" }
   ],
   "operatingsystem_support": [
     {
@@ -31,11 +28,11 @@
     },
     {
     "operatingsystem": "Ubuntu",
-    "operatingsystemrelease": [ "12.04", "10.04", "14.04" ]
+    "operatingsystemrelease": [ "12.04", "12.10", "13.04", "13.10", "14.04", "14.10", "15.04", "15.10", "16.04", "16.10", "17.04" ]
     },
     {
     "operatingsystem": "Fedora",
-    "operatingsystemrelease": [ "17", "18", "19", "20", "21", "22", "23", "24" ]
+    "operatingsystemrelease": [ "17", "18", "19", "20", "21", "22", "23", "24", "25" ]
     }
   ]
 }

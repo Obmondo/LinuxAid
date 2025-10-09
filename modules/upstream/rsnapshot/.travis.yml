@@ -2,11 +2,20 @@
 sudo: false
 language: ruby
 cache: bundler
-bundler_args: --without system_tests
-script: "bundle exec rake validate && bundle exec rake spec SPEC_OPTS='--format documentation'"
 matrix:
   fast_finish: true
   include:
+  - rvm: 2.1
     env: PUPPET_GEM_VERSION="~> 4.0"
+    script: "bundle exec rake validate"
+  - rvm: 2.1
+    env: PUPPET_GEM_VERSION="~> 4.0"
+    script: "bundle exec rake spec SPEC_OPTS='--format documentation'"
+  - rvm: 2.1
+    env: PUPPET_GEM_VERSION="~> 4.0"
+    script: "bundle exec rake beaker"
+    services: docker
+    sudo: required
 notifications:
   email: false
+

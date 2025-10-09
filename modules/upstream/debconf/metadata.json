@@ -1,6 +1,6 @@
 {
   "name": "stm-debconf",
-  "version": "7.0.1",
+  "version": "7.0.0",
   "author": "stm",
   "summary": "Manage debconf database items on Debian based systems.",
   "license": "BSD-2-Clause",
