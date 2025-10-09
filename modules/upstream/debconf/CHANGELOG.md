@@ -1,9 +1,3 @@
-## 2025-08-15 - Release 7.0.1
-
-### Features
-
-- Update CHANGELOG.md that support has been removed for Ubuntu-18.04 and not Ubuntu-24.04.
-
 ## 2025-08-14 - Release 7.0.0
 
 ### Features
@@ -13,7 +7,7 @@
 ### Breaking changes
 
 - Drop support for Debian-10.
-- Drop support for Ubuntu-18.04.
+- Drop support for Ubuntu-24.04.
 
 ## 2025-05-29 - Release 6.2.0
 
