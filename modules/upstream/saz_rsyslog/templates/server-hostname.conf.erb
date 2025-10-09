@@ -1,0 +1,51 @@
+# File is managed by puppet
+
+<% # Common header across all templates -%>
+<%= scope.function_template(['rsyslog/server/_default-header.conf.erb']) %>
+
+<% if @relay_server == false -%>
+# Log files are stored in directories matching the hostname
+<% if @enable_onefile == false -%>
+
+# Templates
+$Template dynAuthLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>auth.log"
+$Template dynSyslog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>syslog"
+$Template dynCronLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>cron.log"
+$Template dynDaemonLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>daemon.log"
+$Template dynKernLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>kern.log"
+$Template dynUserLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>user.log"
+$Template dynMailLog,"<%= @server_dir -%>/%hostname%<%= @logpath -%>mail.log"
+$Template dynDebug,"<%= @server_dir -%>/%hostname%<%= @logpath -%>debug"
+$Template dynMessages,"<%= @server_dir -%>/%hostname%<%= @logpath -%>messages"
+
+# Rules
+<% if @rules -%>
+<% @rules.flatten.compact.each do |rules| -%>
+<% if rules['selector'] and rules['selector'] != '' and rules['action'] and rules['action'] != '' -%>
+<%= rules['selector'] %> <%= rules['action'] %>
+<% end -%>
+<% end -%>
+<% else -%>
+auth,authpriv.*         ?dynAuthLog
+*.*;auth,authpriv.none,mail.none,cron.none      -?dynSyslog
+cron.*              ?dynCronLog
+daemon.*            -?dynDaemonLog
+kern.*              -?dynKernLog
+mail.*              -?dynMailLog
+user.*              -?dynUserLog
+*.=info;*.=notice;*.=warn;\
+    auth.none,authpriv.none;\
+    cron.none,daemon.none;\
+    mail.none,news.none     -?dynMessages
+<% end -%>
+<% else -%>
+# Template
+$Template dynAllMessages,"<%= @server_dir -%>/%hostname%<%= @logpath -%>messages"
+
+# Rules
+*.*                 -?dynAllMessages
+<% end -%>
+<% end -%>
+
+<% # Common footer across all templates -%>
+<%= scope.function_template(['rsyslog/server/_default-footer.conf.erb']) %>
