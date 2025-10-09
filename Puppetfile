@@ -1,5 +1,9 @@
 forge "https://forgeapi.puppetlabs.com"
 
+mod 'puppetlabs/hocon'
+    :git => "https://github.com/puppetlabs/puppetlabs-hocon.git",
+    :ref => 'v2.0.0'
+
 mod 'voxpupuli/nodejs',
     :git => "https://github.com/voxpupuli/puppet-nodejs.git",
     :ref => 'v11.0.0'
