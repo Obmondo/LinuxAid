@@ -35,14 +35,14 @@
 #   }
 #
 define sudo::conf (
-  $ensure           = present,
-  $priority         = 10,
-  $content          = undef,
-  $source           = undef,
-  $template         = undef,
-  $sudo_config_dir  = undef,
-  $sudo_file_name   = undef,
-  $sudo_syntax_path = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  Enum['present', 'absent']                      $ensure           = present,
+  Variant[String[1], Integer[0]]                 $priority         = 10,
+  Optional[Variant[Array[String[1]], String[1]]] $content          = undef,
+  Optional[String[1]]                            $source           = undef,
+  Optional[String[1]]                            $template         = undef,
+  Optional[String[1]]                            $sudo_config_dir  = undef,
+  Optional[String[1]]                            $sudo_file_name   = undef,
+  String[1]                                      $sudo_syntax_path = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 ) {
   include sudo
 
@@ -87,12 +87,6 @@ define sudo::conf (
 
   # replace whitespace in file name
   $cur_file_real = regsubst($cur_file, '\s+', '_', 'G')
-
-  if $facts['os']['family'] == 'RedHat' {
-    if (versioncmp($facts['sudoversion'], '1.7.2p1') < 0) {
-      warning("Found sudo with version ${facts['sudoversion']}, but at least version 1.7.2p1 is required!")
-    }
-  }
 
   if $content != undef {
     if $content =~ Array {

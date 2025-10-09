@@ -1,0 +1,48 @@
+<%- | String[1] $interface,
+      Stdlib::Port $dport,
+      Optional[String[1]] $table,
+      Optional[Integer] $firewall_mark,
+      Wireguard::Peers $peers,
+      Optional[String] $description,
+      Optional[Integer] $mtu,
+      Array[Stdlib::IP::Address] $default_allowlist,
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+# based on https://dn42.dev/howto/wireguard
+[NetDev]
+Name=<%= $interface %>
+Kind=wireguard
+<% if $description { -%>
+Description=<%= $description %>
+<% } -%>
+<% if $mtu { -%>
+MTUBytes=<%= $mtu %>
+<% } -%>
+
+[WireGuard]
+PrivateKeyFile=/etc/wireguard/<%= $interface %>
+ListenPort=<%= $dport %>
+<% if $table { -%>
+RouteTable=<%= $table %>
+<% } -%>
+<% if $firewall_mark { -%>
+FirewallMark=<%= $firewall_mark %>
+<% } -%>
+<% $peers.each |$peer| { -%>
+
+[WireGuardPeer]
+<% if $peer['description'] { -%>
+Description=<%= $peer['description'] %>
+<% } -%>
+PublicKey=<%= $peer['public_key'] %>
+<% if $peer['preshared_key'] { -%>
+PresharedKey=<%= $peer['preshared_key'] %>
+<% } -%>
+<% if $peer['endpoint'] { -%>
+Endpoint=<%= $peer['endpoint'] %>
+<% } -%>
+PersistentKeepalive=<%= pick($peer['persistent_keepalive'], 0) %>
+<% pick($peer['allowed_ips'], $default_allowlist).each |$allowed_ip| { -%>
+AllowedIPs=<%= $allowed_ip %>
+<% } -%>
+<% } -%>

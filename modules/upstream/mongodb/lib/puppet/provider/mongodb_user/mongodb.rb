@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'mongodb'))
 Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mongodb) do
   desc 'Manage users for a MongoDB database.'
@@ -7,41 +9,23 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
   def self.instances
     require 'json'
 
-    if db_ismaster
-      if mongo_24?
-        dbs = JSON.parse mongo_eval('printjson(db.getMongo().getDBs()["databases"].map(function(db){return db["name"]}))') || 'admin'
+    script = 'EJSON.stringify(db.system.users.find().toArray())'
+    # A hack to prevent prefetching failures until admin user is created
+    script = "try {#{script}} catch (e) { if (e.message.match(/requires authentication/) || e.message.match(/not authorized on admin/)) { 'not authorized on admin' } else {throw e}}" if auth_enabled
 
-        allusers = []
+    out = mongo_eval(script)
+    return [] if auth_enabled && (out.include?('requires authentication') || out.include?('not authorized on admin'))
 
-        dbs.each do |db|
-          users = JSON.parse mongo_eval('printjson(db.system.users.find().toArray())', db)
+    users = JSON.parse out
 
-          allusers += users.map do |user|
-            new(name: user['_id'],
-                ensure: :present,
-                username: user['user'],
-                database: db,
-                roles: user['roles'].sort,
-                password_hash: user['pwd'])
-          end
-        end
-        return allusers
-      else
-        users = JSON.parse mongo_eval('printjson(db.system.users.find().toArray())')
-
-        users.map do |user|
-          new(name: user['_id'],
-              ensure: :present,
-              username: user['user'],
-              database: user['db'],
-              roles: from_roles(user['roles'], user['db']),
-              password_hash: user['credentials']['MONGODB-CR'],
-              scram_credentials: user['credentials']['SCRAM-SHA-1'])
-        end
-      end
-    else
-      Puppet.warning 'User info is available only from master host'
-      return []
+    users.map do |user|
+      new(name: user['_id'],
+          ensure: :present,
+          username: user['user'],
+          database: user['db'],
+          roles: from_roles(user['roles'], user['db']),
+          password_hash: user['credentials']['MONGODB-CR'],
+          scram_credentials: user['credentials']['SCRAM-SHA-1'])
     end
   end
 
@@ -49,7 +33,7 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
   def self.prefetch(resources)
     users = instances
     resources.each do |name, resource|
-      provider = users.find { |user| user.username == (resource[:username]) && user.database == (resource[:database]) }
+      provider = users.find { |user| user.username == resource[:username] && user.database == resource[:database] }
       resources[name].provider = provider if provider
     end
   end
@@ -58,36 +42,28 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
 
   def create
     if db_ismaster
-      if mongo_24?
-        if @resource[:password_hash]
-          raise Puppet::Error, "password_hash can't be set on MongoDB older than 3.0; use password instead"
-        end
-        user = {
-          user: @resource[:username],
-          pwd: @resource[:password],
-          roles: @resource[:roles]
-        }
+      password_hash = @resource[:password_hash]
+      password_hash = Puppet::Util::MongodbMd5er.md5(@resource[:username], @resource[:password]) if !password_hash && @resource[:password]
 
-        mongo_eval("db.addUser(#{user.to_json})", @resource[:database])
+      command = {
+        createUser: @resource[:username],
+        customData: {
+          createdBy: "Puppet Mongodb_user['#{@resource[:name]}']"
+        },
+        roles: role_hashes(@resource[:roles], @resource[:database]),
+      }
+
+      if @resource[:auth_mechanism] == :scram_sha_256
+        command[:mechanisms] = ['SCRAM-SHA-256']
+        command[:pwd] = @resource[:password]
+        command[:digestPassword] = true
       else
-        password_hash = @resource[:password_hash]
-
-        if password_hash
-        elsif @resource[:password]
-          password_hash = Puppet::Util::MongodbMd5er.md5(@resource[:username], @resource[:password])
-        end
-        cmd_json = <<-EOS.gsub(%r{^\s*}, '').gsub(%r{$\n}, '')
-	{
-	  "createUser": "#{@resource[:username]}",
-	  "pwd": "#{password_hash}",
-	  "customData": {"createdBy": "Puppet Mongodb_user['#{@resource[:name]}']"},
-	  "roles": #{@resource[:roles].to_json},
-	  "digestPassword": false
-	}
-	EOS
-
-        mongo_eval("db.runCommand(#{cmd_json})", @resource[:database])
+        command[:mechanisms] = ['SCRAM-SHA-1']
+        command[:pwd] = password_hash
+        command[:digestPassword] = false
       end
+
+      mongo_eval("db.runCommand(#{command.to_json})", @resource[:database])
     else
       Puppet.warning 'User creation is available only from master host'
 
@@ -97,20 +73,12 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
       @property_hash[:password_hash] = ''
       @property_hash[:roles] = @resource[:roles]
 
-      exists? ? (return true) : (return false)
+      exists?
     end
   end
 
   def destroy
-    if db_ismaster
-      if mongo_24?
-        mongo_eval("db.removeUser('#{@resource[:username]}')")
-      else
-        mongo_eval("db.dropUser('#{@resource[:username]}')")
-      end
-    else
-      mongo_eval("db.dropUser('#{@resource[:username]}')")
-    end
+    mongo_eval("db.dropUser(#{@resource[:username].to_json})", @resource[:database])
   end
 
   def exists?
@@ -119,50 +87,36 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
 
   def password_hash=(_value)
     if db_ismaster
-      cmd_json = <<-EOS.gsub(%r{^\s*}, '').gsub(%r{$\n}, '')
-      {
-          "updateUser": "#{@resource[:username]}",
-          "pwd": "#{@resource[:password_hash]}",
-          "digestPassword": false
+      command = {
+        updateUser: @resource[:username],
+        pwd: @resource[:password_hash],
+        digestPassword: false
       }
-      EOS
-      mongo_eval("db.runCommand(#{cmd_json})", @resource[:database])
+
+      mongo_eval("db.runCommand(#{command.to_json})", @resource[:database])
     else
       Puppet.warning 'User password operations are available only from master host'
     end
   end
 
-  def password=(value)
-    if mongo_24? || mongo_26?
-      mongo_eval("db.changeUserPassword('#{@resource[:username]}','#{value}')", @resource[:database])
-    else
-      cmd_json = <<-EOS.gsub(%r{^\s*}, '').gsub(%r{$\n}, '')
-      {
-          "updateUser": "#{@resource[:username]}",
-          "pwd": "#{@resource[:password]}",
-          "digestpassword": true
-      }
-      EOS
+  def password=(_value)
+    command = {
+      updateUser: @resource[:username],
+      pwd: @resource[:password],
+      digestPassword: true,
+      mechanisms: @resource[:auth_mechanism] == :scram_sha_256 ? ['SCRAM-SHA-256'] : ['SCRAM-SHA-1']
+    }
 
-      mongo_eval("db.runCommand(#{cmd_json})", @resource[:database])
-    end
+    mongo_eval("db.runCommand(#{command.to_json})", @resource[:database])
   end
 
   def roles=(roles)
     if db_ismaster
-      if mongo_24?
-        mongo_eval("db.system.users.update({user:'#{@resource[:username]}'}, { $set: {roles: #{@resource[:roles].to_json}}})")
-      else
-        grant = roles - @property_hash[:roles]
-        unless grant.empty?
-          mongo_eval("db.getSiblingDB('#{@resource[:database]}').grantRolesToUser('#{@resource[:username]}', #{grant. to_json})")
-        end
+      grant = to_roles(roles, @resource[:database]) - to_roles(@property_hash[:roles], @resource[:database])
+      mongo_eval("db.getSiblingDB(#{@resource[:database].to_json}).grantRolesToUser(#{@resource[:username].to_json}, #{role_hashes(grant, @resource[:database]).to_json})") unless grant.empty?
 
-        revoke = @property_hash[:roles] - roles
-        unless revoke.empty?
-          mongo_eval("db.getSiblingDB('#{@resource[:database]}').revokeRolesFromUser('#{@resource[:username]}', #{revoke.to_json})")
-        end
-      end
+      revoke = to_roles(@property_hash[:roles], @resource[:database]) - to_roles(roles, @resource[:database])
+      mongo_eval("db.getSiblingDB(#{@resource[:database].to_json}).revokeRolesFromUser(#{@resource[:username].to_json}, #{role_hashes(revoke, @resource[:database]).to_json})") unless revoke.empty?
     else
       Puppet.warning 'User roles operations are available only from master host'
     end
@@ -172,11 +126,37 @@ Puppet::Type.type(:mongodb_user).provide(:mongodb, parent: Puppet::Provider::Mon
 
   def self.from_roles(roles, db)
     roles.map do |entry|
-      if entry['db'] == db
+      if entry['db'].empty? || entry['db'] == db
         entry['role']
       else
         "#{entry['role']}@#{entry['db']}"
       end
     end.sort
+  end
+
+  def to_roles(roles, db)
+    roles.map do |entry|
+      if entry.include? '@'
+        entry
+      else
+        "#{entry}@#{db}"
+      end
+    end
+  end
+
+  def role_hashes(roles, db)
+    roles.sort.map do |entry|
+      if entry.include? '@'
+        {
+          'role' => entry.gsub(%r{^(.*)@.*$}, '\1'),
+          'db'   => entry.gsub(%r{^.*@(.*)$}, '\1')
+        }
+      else
+        {
+          'role' => entry,
+          'db'   => db
+        }
+      end
+    end
   end
 end

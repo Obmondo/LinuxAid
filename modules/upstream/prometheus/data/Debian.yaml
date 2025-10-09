@@ -1,3 +1,0 @@
----
-prometheus::env_file_path: '/etc/default'
-prometheus::usershell: '/usr/sbin/nologin'

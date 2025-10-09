@@ -30,10 +30,12 @@ class logrotate::params {
         'Ubuntu' => 'root',
         default  => undef,
       }
+
       $default_su_group = $facts['os']['name'] ? {
-        'Ubuntu'  => 'syslog',
+        'Ubuntu'  => 'adm',
         default   => undef
       }
+
       $conf_params = {
         su       => $default_su,
         su_user  => $default_su_user,

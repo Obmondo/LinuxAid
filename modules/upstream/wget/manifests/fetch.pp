@@ -27,6 +27,7 @@ define wget::fetch (
   $cache_file         = undef,
   $flags              = undef,
   $backup             = true,
+  $group              = undef,
   $mode               = undef,
   $unless             = undef,
 ) {
@@ -171,7 +172,10 @@ define wget::fetch (
   }
 
 
-
+  # ensure that wget is installed before the exec resource
+  # but only if we manage wget....
+  Class['wget']
+  -> Exec["wget-${name}"]
 
   exec { "wget-${name}":
     command     => $command,
@@ -180,7 +184,6 @@ define wget::fetch (
     environment => $environment,
     user        => $exec_user,
     path        => $exec_path,
-    require     => Package['wget'],
     schedule    => $schedule,
   }
 
@@ -193,6 +196,7 @@ define wget::fetch (
       ensure   => file,
       source   => "${cache_dir}/${cache}",
       owner    => $execuser,
+      group    => $group,
       mode     => $mode,
       require  => Exec["wget-${name}"],
       backup   => $backup,

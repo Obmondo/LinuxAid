@@ -59,7 +59,6 @@ class kubernetes::repos (
   Boolean $create_repos                       = $kubernetes::create_repos,
 
 ) {
-
   if $create_repos {
     case $facts['os']['family'] {
       'Debian': {
@@ -69,7 +68,7 @@ class kubernetes::repos (
           repos    => pick($kubernetes_apt_repos,'main'),
           release  => pick($kubernetes_apt_release,'kubernetes-xenial'),
           key      => {
-            'name'   => pick($kubernetes_key_id, 'kubernetes-apt-keyring.gpg'),
+            'id'     => pick($kubernetes_key_id,'A362B822F6DEDC652817EA46B53DC80D13EDEF05'),
             'source' => pick($kubernetes_key_source,'https://packages.cloud.google.com/apt/doc/apt-key.gpg'),
           },
         }

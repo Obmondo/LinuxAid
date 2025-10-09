@@ -1,5 +1,5 @@
 class { 'nginx':
-  snippets_dir        => '/etc/nginx/snippets',
+  snippets_dir => '/etc/nginx/snippets',
 }
 
 # https://github.com/relud/puppet-lint-strict_indent-check/issues/20
@@ -11,7 +11,7 @@ location @custom_451_error {
 | SNIPPET
 # lint:endignore
 nginx::resource::snippet { 'test_snippet':
-  raw_content   => $snippet,
+  raw_content => $snippet,
 }
 
 nginx::resource::server { 'test.local:8080':

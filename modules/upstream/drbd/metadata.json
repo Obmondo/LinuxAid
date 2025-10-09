@@ -1,6 +1,6 @@
 {
   "name": "puppet-drbd",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "author": "Vox Pupuli",
   "license": "Apache-2.0",
   "summary": "DRBD Module",
@@ -14,39 +14,68 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "10.04",
-        "12.04",
-        "14.04"
+        "20.04",
+        "22.04",
+        "24.04"
       ]
     }
   ],
   "dependencies": [
     {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.6.0 < 5.0.0"
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 4.1.0 < 10.0.0"
     },
     {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.2.5 < 3.0.0"
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     }
   ],
   "requirements": [
     {
-      "name": "puppet",
-      "version_requirement": ">= 3.8.7 < 5.0.0"
+      "name": "openvox",
+      "version_requirement": ">= 8.19.0 < 9.0.0"
     }
   ]
 }

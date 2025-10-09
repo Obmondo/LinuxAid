@@ -16,12 +16,12 @@
     expires <%= @expires %>;
 <% end -%>
 <% if @location_allow -%>
-    <%- @location_allow.flatten.each do |allow_rule| -%>
+    <%- @location_allow.flatten.uniq.each do |allow_rule| -%>
     allow <%= allow_rule %>;
     <%- end -%>
 <% end -%>
 <% if @location_deny -%>
-    <%- @location_deny.each do |deny_rule| -%>
+    <%- @location_deny.uniq.each do |deny_rule| -%>
     deny <%= deny_rule %>;
     <%- end -%>
 <% end -%>
@@ -78,8 +78,33 @@
     <%- end -%>
 <% end -%>
 <% if @limit_zone -%>
-    limit_req zone=<%= @limit_zone %>;
+  <%- Array(@limit_zone).each do |lz| -%>
+    limit_req zone=<%= lz %>;
+  <%- end -%>
 <% end -%>
 <% if @reset_timedout_connection -%>
   reset_timedout_connection <%= @reset_timedout_connection %>;
+<% end -%>
+<% if @log_not_found -%>
+    log_not_found <%= @log_not_found %>;
+<% end -%>
+<% if @access_log -%>
+    <% if @access_log.is_a?(Array) -%>
+        <%- @access_log.each do |log_item| -%>
+    access_log            <%= log_item %><% unless @format_log.nil? -%> <%= @format_log %><% end -%>;
+        <%- end -%>
+    <% elsif @access_log == 'absent' -%>
+    <% elsif @access_log == 'off' -%>
+    access_log            off;
+    <% else -%>
+    access_log <%= @access_log %><% unless @format_log.nil? -%> <%= @format_log %><% end -%>;
+    <% end -%>
+<% end -%>
+<% if @error_log.is_a?(Array) -%>
+  <%- @error_log.each do |log_item| -%>
+    error_log             <%= log_item %>;
+  <%- end -%>
+<% elsif @error_log == 'absent' || @error_log.nil? -%>
+<% else -%>
+    error_log             <%= @error_log %>;
 <% end -%>

@@ -1,13 +1,12 @@
 #
-# Add wildfly management user
+# Manages a Management User (`mgmt-users.properties`) for Wildfly.
 #
-define wildfly::config::mgmt_user($password) {
+# @param password The user password.
+define wildfly::config::mgmt_user(String $password) {
 
-  wildfly::config::user { $name:
-    username  => $name,
+  wildfly::config::user { "${title}:ManagementRealm":
     password  => $password,
     file_name => 'mgmt-users.properties',
-    realm     => 'ManagementRealm'
   }
 
 }

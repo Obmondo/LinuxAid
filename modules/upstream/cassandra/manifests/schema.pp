@@ -67,7 +67,7 @@ class cassandra::schema (
       mode    => '0600',
       owner   => $facts['identity']['uid'],
       content => template( $cqlsh_client_tmpl ),
-      before  => Exec['cassandra::schema connection test'],
+      before  => Exec['::cassandra::schema connection test'],
     }
 
     $cmdline_login = "--cqlshrc=${cqlsh_client_config}"
@@ -92,7 +92,7 @@ class cassandra::schema (
     $connection_test = $connection_test_tmp
   }
 
-  exec { 'cassandra::schema connection test':
+  exec { '::cassandra::schema connection test':
     command   => $connection_test,
     returns   => 0,
     tries     => $connection_tries,

@@ -9,7 +9,8 @@
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
+7. [License](#license)
+8. [Development - Guide for contributing to the module](#development)
 
 ## Overview
 
@@ -239,19 +240,18 @@ This module is officially [supported](https://forge.puppetlabs.com/supported) fo
 
 OpenJDK is supported on:
 
-* Red Hat Enterprise Linux (RHEL) 6, 7
-* CentOS 6, 7
-* Oracle Linux 6, 7
-* Scientific Linux 6
-* Debian 9
-* Ubuntu 18.04, 20.04
+* Red Hat Enterprise Linux (RHEL) 7, 8, 9
+* CentOS 7, 8
+* Oracle Linux 7
+* Debian 10, 11
+* Ubuntu 18.04, 20.04, 22.04
 * Solaris 11
-* SLES 11, 12
+* SLES 12, 15
 
 Oracle Java is supported on:
 
-* CentOS 6
 * CentOS 7
+* CentOS 8
 * Red Hat Enterprise Linux (RHEL) 7
 
 AdoptOpenJDK Java is supported on:
@@ -288,6 +288,10 @@ OpenBSD packages install Java JRE/JDK in a unique directory structure, not linki
 the binaries to a standard directory. Because of that, the path to this location
 is hardcoded in the `java_version` fact. Whenever you upgrade Java to a newer
 version, you have to update the path in this fact.
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 ## Development
 

@@ -4,6 +4,52 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v9.0.0](https://github.com/voxpupuli/puppet-logrotate/tree/v9.0.0) (2025-10-07)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-logrotate/compare/v8.0.0...v9.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#254](https://github.com/voxpupuli/puppet-logrotate/pull/254) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Update default value "su\_group" to be in line with modern Ubuntu versions [\#218](https://github.com/voxpupuli/puppet-logrotate/issues/218)
+- Add Debian 13 support [\#261](https://github.com/voxpupuli/puppet-logrotate/pull/261) ([bastelfreak](https://github.com/bastelfreak))
+- Add EL10 support [\#260](https://github.com/voxpupuli/puppet-logrotate/pull/260) ([bastelfreak](https://github.com/bastelfreak))
+- puppet/systemd: Allow 9.x [\#258](https://github.com/voxpupuli/puppet-logrotate/pull/258) ([bastelfreak](https://github.com/bastelfreak))
+- Allow disabling logrotate-hourly when using systemd [\#249](https://github.com/voxpupuli/puppet-logrotate/pull/249) ([antaflos](https://github.com/antaflos))
+- metadata.json: Add OpenVox [\#247](https://github.com/voxpupuli/puppet-logrotate/pull/247) ([jstraw](https://github.com/jstraw))
+
+**Closed issues:**
+
+- Should support disabling hourly logrotation with systemd timer/service [\#248](https://github.com/voxpupuli/puppet-logrotate/issues/248)
+- `su` param missing from docs [\#177](https://github.com/voxpupuli/puppet-logrotate/issues/177)
+
+**Merged pull requests:**
+
+- Clarify why flock is used when hourly rotation is enabled [\#250](https://github.com/voxpupuli/puppet-logrotate/pull/250) ([JonasVerhofste](https://github.com/JonasVerhofste))
+- README.md: Add Hiera example [\#213](https://github.com/voxpupuli/puppet-logrotate/pull/213) ([d1nuc0m](https://github.com/d1nuc0m))
+- Update README.md to add missing `su` option [\#202](https://github.com/voxpupuli/puppet-logrotate/pull/202) ([eddyszucs](https://github.com/eddyszucs))
+
+## [v8.0.0](https://github.com/voxpupuli/puppet-logrotate/tree/v8.0.0) (2025-01-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-logrotate/compare/v7.1.0...v8.0.0)
+
+**Breaking changes:**
+
+- Drop EoL CentOS 8 support [\#243](https://github.com/voxpupuli/puppet-logrotate/pull/243) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL EL7 support [\#242](https://github.com/voxpupuli/puppet-logrotate/pull/242) ([bastelfreak](https://github.com/bastelfreak))
+- Drop EoL Ubuntu 18.04 support [\#241](https://github.com/voxpupuli/puppet-logrotate/pull/241) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add Ubuntu 20.04, 22.04, 24.04 support [\#240](https://github.com/voxpupuli/puppet-logrotate/pull/240) ([alexskr](https://github.com/alexskr))
+
+**Merged pull requests:**
+
+- puppet/systemd: allow 8.x [\#239](https://github.com/voxpupuli/puppet-logrotate/pull/239) ([jay7x](https://github.com/jay7x))
+
 ## [v7.1.0](https://github.com/voxpupuli/puppet-logrotate/tree/v7.1.0) (2024-07-23)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-logrotate/compare/v7.0.2...v7.1.0)

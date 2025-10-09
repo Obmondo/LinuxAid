@@ -3,7 +3,7 @@
 require 'English'
 
 Facter.add(:yum_reboot_required) do
-  confine osfamily: 'RedHat'
+  confine 'os.family': 'RedHat'
   setcode do
     if File.exist?('/usr/bin/needs-restarting')
       Facter::Core::Execution.execute('/usr/bin/needs-restarting --reboothint')

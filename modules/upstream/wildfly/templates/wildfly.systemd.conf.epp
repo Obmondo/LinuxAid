@@ -1,0 +1,13 @@
+<% $config = $wildfly::mode? { 'domain' => "${wildfly::domain_config} --host-config ${wildfly::host_config}", default => $wildfly::config } %>
+
+# The configuration you want to run
+WILDFLY_CONFIG="'<%= $config %> -P <%= $wildfly::dirname %>/jboss.properties'"
+
+# The mode you want to run
+WILDFLY_MODE=<%= $wildfly::mode %>
+
+# Location of WildFly
+WILDFLY_HOME="<%= $wildfly::dirname %>"
+
+# Location of JDK
+JAVA_HOME=<%= $wildfly::java_home %>

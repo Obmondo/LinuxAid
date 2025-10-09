@@ -32,6 +32,8 @@ The following parameters are available in the `elastic_stack::repo` class:
 * [`proxy`](#-elastic_stack--repo--proxy)
 * [`version`](#-elastic_stack--repo--version)
 * [`base_repo_url`](#-elastic_stack--repo--base_repo_url)
+* [`gpg_key_source`](#-elastic_stack--repo--gpg_key_source)
+* [`apt_keyring_name`](#-elastic_stack--repo--apt_keyring_name)
 
 ##### <a name="-elastic_stack--repo--oss"></a>`oss`
 
@@ -80,4 +82,22 @@ Data type: `Optional[String]`
 The base url for the repo path
 
 Default value: `undef`
+
+##### <a name="-elastic_stack--repo--gpg_key_source"></a>`gpg_key_source`
+
+Data type: `Stdlib::Filesource`
+
+The gpg key for the repo
+
+Default value: `'https://artifacts.elastic.co/GPG-KEY-elasticsearch'`
+
+##### <a name="-elastic_stack--repo--apt_keyring_name"></a>`apt_keyring_name`
+
+Data type: `String[1]`
+
+The keyring filename to create (APT only)
+The filename extention is important here.
+Use `.asc` if the key is armored and `.gpg` if it's unarmored
+
+Default value: `'elastic-keyring.asc'`
 

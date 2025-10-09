@@ -4,6 +4,82 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.0](https://github.com/voxpupuli/puppet-postfix/tree/v6.0.0) (2025-08-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-postfix/compare/v5.1.0...v6.0.0)
+
+**Breaking changes:**
+
+- Drop EOL Ubuntu 20.04 [\#432](https://github.com/voxpupuli/puppet-postfix/pull/432) ([traylenator](https://github.com/traylenator))
+- Drop puppet, update openvox minimum version to 8.19 [\#430](https://github.com/voxpupuli/puppet-postfix/pull/430) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Support RedHat, Rocky, Alma, CentOS 10 [\#431](https://github.com/voxpupuli/puppet-postfix/pull/431) ([traylenator](https://github.com/traylenator))
+- Set a default value for `postfix::params::master_os_template` [\#425](https://github.com/voxpupuli/puppet-postfix/pull/425) ([cocker-cc](https://github.com/cocker-cc))
+- feat: add hiera data for RHEL10 [\#424](https://github.com/voxpupuli/puppet-postfix/pull/424) ([vchepkov](https://github.com/vchepkov))
+- feat: make mta alternative configurable [\#423](https://github.com/voxpupuli/puppet-postfix/pull/423) ([vchepkov](https://github.com/vchepkov))
+
+## [v5.1.0](https://github.com/voxpupuli/puppet-postfix/tree/v5.1.0) (2025-04-25)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-postfix/compare/v5.0.0...v5.1.0)
+
+**Implemented enhancements:**
+
+- metadata.json: Add OpenVox [\#421](https://github.com/voxpupuli/puppet-postfix/pull/421) ([jstraw](https://github.com/jstraw))
+- Add support for Ubuntu 24.04 [\#395](https://github.com/voxpupuli/puppet-postfix/pull/395) ([sebbASF](https://github.com/sebbASF))
+
+**Closed issues:**
+
+- Can we have postlog enabled in redhat? [\#416](https://github.com/voxpupuli/puppet-postfix/issues/416)
+
+**Merged pull requests:**
+
+- update default RedHat master.cf [\#417](https://github.com/voxpupuli/puppet-postfix/pull/417) ([vchepkov](https://github.com/vchepkov))
+
+## [v5.0.0](https://github.com/voxpupuli/puppet-postfix/tree/v5.0.0) (2024-10-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-postfix/compare/v4.5.0...v5.0.0)
+
+The `5.0.0` release is identical to #413 other than the version string.  The `4.5.0` release contains breaking changes and that should have been released as `5.0.0`.
+
+## [v4.5.0](https://github.com/voxpupuli/puppet-postfix/tree/v4.5.0) (2024-10-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-postfix/compare/v4.4.0...v4.5.0)
+
+**Breaking changes:**
+
+- drop support for SLES 11 & 12 -- EOL [\#412](https://github.com/voxpupuli/puppet-postfix/pull/412) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for ubuntu 18.04 -- EOL [\#410](https://github.com/voxpupuli/puppet-postfix/pull/410) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for centos 8 -- EOL [\#409](https://github.com/voxpupuli/puppet-postfix/pull/409) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for debian 10 -- EOL [\#408](https://github.com/voxpupuli/puppet-postfix/pull/408) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for EL7 -- EOL [\#407](https://github.com/voxpupuli/puppet-postfix/pull/407) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for fedora 33 & 34 -- EOL [\#406](https://github.com/voxpupuli/puppet-postfix/pull/406) ([jhoblitt](https://github.com/jhoblitt))
+- drop support for freebsd 12 -- EOL [\#405](https://github.com/voxpupuli/puppet-postfix/pull/405) ([jhoblitt](https://github.com/jhoblitt))
+
+**Implemented enhancements:**
+
+- bump puppet-alternatives version constraint [\#404](https://github.com/voxpupuli/puppet-postfix/pull/404) ([badenerb](https://github.com/badenerb))
+- Allow `mailaliases` to be managed via hiera [\#400](https://github.com/voxpupuli/puppet-postfix/pull/400) ([peelman](https://github.com/peelman))
+- Add support for FreeBSD 14 [\#390](https://github.com/voxpupuli/puppet-postfix/pull/390) ([smortex](https://github.com/smortex))
+- Add Debian 12 support [\#374](https://github.com/voxpupuli/puppet-postfix/pull/374) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Extend canonical augeas lens regex [\#382](https://github.com/voxpupuli/puppet-postfix/pull/382) ([giacomd](https://github.com/giacomd))
+
+**Closed issues:**
+
+- missing postfix-ldap rpm on RHEL8+ distro [\#397](https://github.com/voxpupuli/puppet-postfix/issues/397)
+- maillog configuration? [\#386](https://github.com/voxpupuli/puppet-postfix/issues/386)
+- support smtpd\_forbid\_bare\_newline to mitigate smtp smuggling [\#383](https://github.com/voxpupuli/puppet-postfix/issues/383)
+- canonical map doesn't accept underscores in destination address [\#345](https://github.com/voxpupuli/puppet-postfix/issues/345)
+
+**Merged pull requests:**
+
+- postfix-ldap required for ldap lookup type on RHEL8+ [\#398](https://github.com/voxpupuli/puppet-postfix/pull/398) ([edrude](https://github.com/edrude))
+- Remove legacy top-scope syntax [\#378](https://github.com/voxpupuli/puppet-postfix/pull/378) ([smortex](https://github.com/smortex))
+
 ## [v4.4.0](https://github.com/voxpupuli/puppet-postfix/tree/v4.4.0) (2023-11-21)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-postfix/compare/v4.3.0...v4.4.0)
@@ -97,6 +173,7 @@ These should not affect the functionality of the module.
 **Implemented enhancements:**
 
 - Declare CentOS 9 Support, Install s-nail on 9 [\#322](https://github.com/voxpupuli/puppet-postfix/pull/322) ([traylenator](https://github.com/traylenator))
+- Allow parameter smtp\_listen to accept multiple IPs [\#313](https://github.com/voxpupuli/puppet-postfix/pull/313) ([ghost](https://github.com/ghost))
 - Add support for FreeBSD 13 [\#307](https://github.com/voxpupuli/puppet-postfix/pull/307) ([smortex](https://github.com/smortex))
 - allow hiera driven transport/virtual/hash/conffile [\#296](https://github.com/voxpupuli/puppet-postfix/pull/296) ([cringdahl](https://github.com/cringdahl))
 
@@ -114,8 +191,6 @@ These should not affect the functionality of the module.
 - map: handle regexp type [\#317](https://github.com/voxpupuli/puppet-postfix/pull/317) ([kenyon](https://github.com/kenyon))
 - allow creation of postfix::map resources with hiera [\#316](https://github.com/voxpupuli/puppet-postfix/pull/316) ([kenyon](https://github.com/kenyon))
 - init.pp: correct param numbers and use of optional [\#315](https://github.com/voxpupuli/puppet-postfix/pull/315) ([kenyon](https://github.com/kenyon))
-- Allow parameter smtp\_listen to accept multiple IPs [\#313](https://github.com/voxpupuli/puppet-postfix/pull/313) ([ghost](https://github.com/ghost))
-- Add manage\_mailname parameter  to README \(\#186\) [\#312](https://github.com/voxpupuli/puppet-postfix/pull/312) ([ghost](https://github.com/ghost))
 - fixtures.yml: Migrate to git URLs [\#309](https://github.com/voxpupuli/puppet-postfix/pull/309) ([bastelfreak](https://github.com/bastelfreak))
 - puppet-lint: fix top\_scope\_facts warnings [\#304](https://github.com/voxpupuli/puppet-postfix/pull/304) ([bastelfreak](https://github.com/bastelfreak))
 

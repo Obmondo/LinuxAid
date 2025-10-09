@@ -1,6 +1,7 @@
-# This validates a database connection. See README.md for more details.
+# @summary validates the read only database connection
+#
+# @api private
 class puppetdb::server::validate_read_db (
-  $database            = $puppetdb::params::database,
   $database_host       = $puppetdb::params::database_host,
   $database_port       = $puppetdb::params::database_port,
   $database_username   = $puppetdb::params::database_username,
@@ -8,18 +9,13 @@ class puppetdb::server::validate_read_db (
   $database_name       = $puppetdb::params::database_name,
   $jdbc_ssl_properties = $puppetdb::params::jdbc_ssl_properties,
 ) inherits puppetdb::params {
-
-  # Currently we only support postgres
-  if (
-    $database == 'postgres' and
-    ($database_password != undef and $jdbc_ssl_properties == false)
-  ) {
-    postgresql::validate_db_connection { 'validate puppetdb postgres (read) connection':
-      database_host     => $database_host,
-      database_port     => $database_port,
-      database_username => $database_username,
-      database_password => $database_password,
-      database_name     => $database_name,
+  if ($database_password != undef and $jdbc_ssl_properties == false) {
+    postgresql_conn_validator { 'validate puppetdb postgres (read) connection':
+      host        => $database_host,
+      port        => $database_port,
+      db_username => $database_username,
+      db_password => $database_password,
+      db_name     => $database_name,
     }
   }
 }

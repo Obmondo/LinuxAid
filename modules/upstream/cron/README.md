@@ -49,21 +49,6 @@ You can also specify a different cron package name via `package_name`.
 By default we try to select the right one for your distribution.
 But in some cases (e.g. Gentoo) you might want to overwrite it here.
 
-This class allows specifying the following parameter:
-
-   * `manage_package` - optional - defaults to "true"
-   * `package_ensure` - optional - defaults to "installed"
-   * `package_name`   - optional - defaults to OS specific default package name
-   * `service_name`   - optional - defaults to OS specific default service name
-   * `manage_service`   - optional - defaults to "true"
-   * `service_enable`   - optional - defaults to "true"
-   * `service_ensure`   - optional - defaults to "running"
-   * `manage_users_allow` - optional - defaults to false, whether to manage `/etc/cron.allow`
-   * `manage_users_deny` - optional - defaults to false, whether to manage `/etc/cron.deny`
-   * `users_allow` - optional - An array of users to add to `/etc/cron.allow`
-   * `users_deny` - optional - An array of users to add to `/etc/cron.deny`
-
-
 Examples:
 
 ```puppet
@@ -78,6 +63,14 @@ or:
   }
 ```
 
+Add custom crontab run-parts
+
+```puppet
+class { 'cron':
+  manage_crontab    => true,
+  crontab_run_parts => {'5min' => { 'user' => 'root', 'minute' => '*/5' }},
+}
+```
 
 ### cron::job
 
@@ -94,7 +87,7 @@ It allows specifying the following parameters:
   * `special`     - optional - defaults to undef
   * `user`        - optional - defaults to "root"
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
   * `description` - optional - defaults to undef
 
 Example:
@@ -141,7 +134,7 @@ It allows specifying the following parameters:
   * `ensure`      - optional - defaults to "present"
   * `jobs`        - required - an array of hashes of multiple cron jobs using a similar structure as `cron::job`-parameters
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
 
 And the keys of the jobs hash are:
 
@@ -234,7 +227,7 @@ It allows specifying the following parameters:
   * `minute`      - optional - defaults to "0"
   * `user`        - optional - defaults to "root"
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
   * `description` - optional - defaults to undef
 
 Example:
@@ -274,7 +267,7 @@ It allows specifying the following parameters:
   * `hour`        - optional - defaults to "0"
   * `user`        - optional - defaults to "root"
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
   * `description` - optional - defaults to undef
 
 Example:
@@ -314,7 +307,7 @@ It allows specifying the following parameters:
   * `weekday`     - optional - defaults to "0"
   * `user`        - optional - defaults to "root"
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
   * `description` - optional - defaults to undef
 
 Example:
@@ -356,7 +349,7 @@ It allows specifying the following parameters:
   * `date`        - optional - defaults to "1"
   * `user`        - optional - defaults to "root"
   * `environment` - optional - defaults to ""
-  * `mode`        - optional - defaults to "0644"
+  * `mode`        - optional - defaults to "0600"
   * `description` - optional - defaults to undef
 
 Example:

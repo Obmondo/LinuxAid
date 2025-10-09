@@ -1,5 +1,5 @@
+---
 fixtures:
   repositories:
-    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-  symlinks:
-    corosync: "#{source_dir}"
+    augeas_core: https://github.com/puppetlabs/puppetlabs-augeas_core.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git

@@ -1,9 +1,12 @@
+# frozen_string_literal: false
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/crmsh'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/crmsh'
 end
 
@@ -19,51 +22,39 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
   # Path to the crm binary for interacting with the cluster configuration.
   commands crm: 'crm'
 
+  defaultfor 'os.family': [:ubuntu]
+
   # given an XML element (a <primitive> from cibadmin), produce a hash suitible
   # for creating a new provider instance.
   def self.element_to_hash(e)
     hash = {
-      primitive_class:   e.attributes['class'],
-      primitive_type:    e.attributes['type'],
-      provided_by:       e.attributes['provider'],
-      name:              e.attributes['id'].to_sym,
-      ensure:            :present,
-      provider:          name,
-      parameters:        nvpairs_to_hash(e.elements['instance_attributes']),
-      operations:        [],
-      utilization:       nvpairs_to_hash(e.elements['utilization']),
-      metadata:          nvpairs_to_hash(e.elements['meta_attributes']),
+      primitive_class: e.attributes['class'],
+      primitive_type: e.attributes['type'],
+      provided_by: e.attributes['provider'],
+      name: e.attributes['id'].to_sym,
+      ensure: :present,
+      provider: name,
+      parameters: nvpairs_to_hash(e.elements['instance_attributes']),
+      operations: [],
+      utilization: nvpairs_to_hash(e.elements['utilization']),
+      metadata: nvpairs_to_hash(e.elements['meta_attributes']),
       existing_metadata: nvpairs_to_hash(e.elements['meta_attributes']),
-      ms_metadata:       {},
-      promotable:        :false
+      ms_metadata: {},
     }
 
     operations = e.elements['operations']
-    unless operations.nil?
-      operations.each_element do |o|
-        valids = o.attributes.reject { |k, _v| k == 'id' }
-        name = valids['name'].to_s
-        operation = {}
-        operation[name] = {}
-        valids.each do |k, v|
-          operation[name][k] = v.to_s if k != 'name'
-        end
-        unless o.elements['instance_attributes'].nil?
-          o.elements['instance_attributes'].each_element do |i|
-            operation[name][i.attributes['name']] = i.attributes['value']
-          end
-        end
-        hash[:operations] << operation
+    operations&.each_element do |o|
+      valids = o.attributes.reject { |k, _v| k == 'id' }
+      name = valids['name'].to_s
+      operation = {}
+      operation[name] = {}
+      valids.each do |k, v|
+        operation[name][k] = v.to_s if k != 'name'
       end
-    end
-    if e.parent.name == 'master'
-      hash[:promotable] = :true
-      unless e.parent.elements['meta_attributes'].nil?
-        e.parent.elements['meta_attributes'].each_element do |m|
-          hash[:ms_metadata][m.attributes['name']] = m.attributes['value']
-        end
+      o.elements['instance_attributes']&.each_element do |i|
+        operation[name][i.attributes['name']] = i.attributes['value']
       end
-      hash[:existing_ms_metadata] = hash[:ms_metadata].dup
+      hash[:operations] << operation
     end
 
     hash
@@ -75,7 +66,7 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
     instances = []
 
     cmd = [command(:crm), 'configure', 'show', 'xml']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//primitive') do |e|
@@ -88,18 +79,16 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
   # of actually doing the work.
   def create
     @property_hash = {
-      name:            @resource[:name],
-      ensure:          :present,
+      name: @resource[:name],
+      ensure: :present,
       primitive_class: @resource[:primitive_class],
-      provided_by:     @resource[:provided_by],
-      primitive_type:  @resource[:primitive_type],
-      promotable:      @resource[:promotable]
+      provided_by: @resource[:provided_by],
+      primitive_type: @resource[:primitive_type],
     }
     @property_hash[:parameters] = @resource[:parameters] unless @resource[:parameters].nil?
     @property_hash[:operations] = @resource[:operations] unless @resource[:operations].nil?
     @property_hash[:utilization] = @resource[:utilization] unless @resource[:utilization].nil?
     @property_hash[:metadata] = @resource[:metadata] unless @resource[:metadata].nil?
-    @property_hash[:ms_metadata] = @resource[:ms_metadata] unless @resource[:ms_metadata].nil?
     @property_hash[:cib] = @resource[:cib] unless @resource[:cib].nil?
   end
 
@@ -108,10 +97,10 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
   def destroy
     debug('Stopping primitive before removing it')
     cmd = [command(:crm), 'resource', 'stop', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     debug('Removing primitive')
     cmd = [command(:crm), 'configure', 'delete', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     @property_hash.clear
   end
 
@@ -134,14 +123,6 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
     @property_hash[:metadata]
   end
 
-  def ms_metadata
-    @property_hash[:ms_metadata]
-  end
-
-  def promotable
-    @property_hash[:promotable]
-  end
-
   # Our setters for parameters and operations.  Setters are used when the
   # resource already exists so we just update the current value in the
   # property_hash and doing this marks it to be flushed.
@@ -159,23 +140,6 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
 
   def metadata=(should)
     @property_hash[:metadata] = should
-  end
-
-  def ms_metadata=(should)
-    @property_hash[:ms_metadata] = should
-  end
-
-  def promotable=(should)
-    case should
-    when :true
-      @property_hash[:promotable] = should
-    when :false
-      @property_hash[:promotable] = should
-      cmd = [command(:crm), 'resource', 'stop', "ms_#{@resource[:name]}"]
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
-      cmd = [command(:crm), 'configure', 'delete', "ms_#{@resource[:name]}"]
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
-    end
   end
 
   # Flush is triggered on anything that has been detected as being
@@ -199,12 +163,7 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
     end
     if @resource && @resource.class.name == :cs_primitive && @resource[:unmanaged_metadata]
       @resource[:unmanaged_metadata].each do |parameter_name|
-        if @property_hash[:existing_metadata] && @property_hash[:existing_metadata][parameter_name]
-          @property_hash[:metadata][parameter_name] = @property_hash[:existing_metadata]['target-role']
-        end
-        if @property_hash[:existing_ms_metadata] && @property_hash[:existing_ms_metadata][parameter_name]
-          @property_hash[:ms_metadata][parameter_name] = @property_hash[:existing_ms_metadata]['target-role']
-        end
+        @property_hash[:metadata][parameter_name] = @property_hash[:existing_metadata]['target-role'] if @property_hash[:existing_metadata] && @property_hash[:existing_metadata][parameter_name]
       end
     end
     unless @property_hash[:parameters].empty?
@@ -233,22 +192,12 @@ Puppet::Type.type(:cs_primitive).provide(:crm, parent: PuppetX::Voxpupuli::Coros
     updated << "#{parameters} " unless parameters.nil?
     updated << "#{utilization} " unless utilization.nil?
     updated << "#{metadatas} " unless metadatas.nil?
-    if @property_hash[:promotable] == :true
-      updated << "\n"
-      updated << "ms ms_#{@property_hash[:name]} #{@property_hash[:name]} "
-      unless @property_hash[:ms_metadata].empty?
-        updated << 'meta '
-        @property_hash[:ms_metadata].each_pair do |k, v|
-          updated << "#{k}=#{v} "
-        end
-      end
-    end
     debug("Loading update: #{updated}")
     Tempfile.open('puppet_crm_update') do |tmpfile|
       tmpfile.write(updated)
       tmpfile.flush
       cmd = ['crm', '-F', 'configure', 'load', 'update', tmpfile.path.to_s]
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+      self.class.run_command_in_cib(cmd, @resource[:cib])
     end
   end
 end

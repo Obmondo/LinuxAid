@@ -1,6 +1,6 @@
 {
   "name": "puppet-elasticsearch",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "source": "https://github.com/voxpupuli/puppet-elasticsearch",
   "author": "voxpupuli@groups.io",
   "license": "Apache-2.0",
@@ -10,11 +10,11 @@
   "dependencies": [
     {
       "name": "puppet/elastic_stack",
-      "version_requirement": ">= 8.0.0 < 10.0.0"
+      "version_requirement": ">= 8.0.0 < 11.0.0"
     },
     {
       "name": "puppetlabs/java",
-      "version_requirement": ">= 1.0.0 < 11.0.0"
+      "version_requirement": ">= 1.0.0 < 12.0.0"
     },
     {
       "name": "puppetlabs/java_ks",
@@ -29,54 +29,65 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "11"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     },
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "12"
+        "15"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    },
+    {
+      "name": "openvox",
       "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]

@@ -26,11 +26,11 @@ module Puppet::Provider::Mount
   def remount
     # TRANSLATORS refers to remounting a file system
     info _('Remounting')
-    os = Facter.value(:operatingsystem)
+    os = Facter.value('os.name')
     supports_remounts = (resource[:remounts] == :true)
     if supports_remounts && os == 'AIX'
       remount_with_option('remount')
-    elsif os =~ %r{^(FreeBSD|DragonFly|OpenBSD)$}
+    elsif %r{^(FreeBSD|DragonFly|OpenBSD)$}.match?(os)
       remount_with_option('update')
     elsif supports_remounts
       mountcmd '-o', 'remount', resource[:name]
@@ -60,7 +60,7 @@ module Puppet::Provider::Mount
 
   # This only works when the mount point is synced to the fstab.
   def unmount
-    umount(resource[:name])
+    umount resource[:name]
 
     # Update property hash for future queries (e.g. refresh is called)
     case get(:ensure)

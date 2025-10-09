@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/crmsh'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/crmsh'
 end
 
@@ -18,13 +21,15 @@ Puppet::Type.type(:cs_order).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
 
   mk_resource_methods
 
+  defaultfor 'os.family': [:ubuntu]
+
   def self.instances
     block_until_ready
 
     instances = []
 
     cmd = [command(:crm), 'configure', 'show', 'xml']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     doc.root.elements['configuration'].elements['constraints'].each_element('rsc_order') do |e|
@@ -42,6 +47,8 @@ Puppet::Type.type(:cs_order).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
                  items['then']
                end
 
+      kind = items['kind'] || 'Mandatory'
+
       symmetrical = if items['symmetrical']
                       (items['symmetrical'] == 'true')
                     else
@@ -50,13 +57,14 @@ Puppet::Type.type(:cs_order).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
                     end
 
       order_instance = {
-        name:        items['id'],
-        ensure:      :present,
-        first:       first,
-        second:      second,
-        score:       items['score'],
+        name: items['id'],
+        ensure: :present,
+        first: first,
+        second: second,
+        score: items['score'],
+        kind: kind,
         symmetrical: symmetrical,
-        provider:    name
+        provider: name
       }
       instances << new(order_instance)
     end
@@ -67,21 +75,21 @@ Puppet::Type.type(:cs_order).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
   # of actually doing the work.
   def create
     @property_hash = {
-      name:        @resource[:name],
-      ensure:      :present,
-      first:       @resource[:first],
-      second:      @resource[:second],
-      score:       @resource[:score],
+      name: @resource[:name],
+      ensure: :present,
+      first: @resource[:first],
+      second: @resource[:second],
+      score: @resource[:score],
       symmetrical: @resource[:symmetrical],
-      kind:        @resource[:kind],
-      cib:         @resource[:cib]
+      kind: @resource[:kind],
+      cib: @resource[:cib]
     }
   end
 
   # Unlike create we actually immediately delete the item.
   def destroy
     debug('Removing order directive')
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib([command(:crm), 'configure', 'delete', @resource[:name]], @resource[:cib])
+    self.class.run_command_in_cib([command(:crm), 'configure', 'delete', @resource[:name]], @resource[:cib])
     @property_hash.clear
   end
 
@@ -93,14 +101,18 @@ Puppet::Type.type(:cs_order).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
     return if @property_hash.empty?
 
     updated = 'order '
-    updated << "#{@property_hash[:name]} #{@property_hash[:score]}: "
+    updated << "#{@property_hash[:name]} "
+    if @property_hash[:score]
+      updated << "#{@property_hash[:score]}: "
+    elsif feature? :kindness
+      updated << "#{@property_hash[:kind]}: "
+    end
     updated << "#{@property_hash[:first]} #{@property_hash[:second]} symmetrical=#{@property_hash[:symmetrical]}"
-    updated << " kind=#{@property_hash[:kind]}" if feature? :kindness
     debug("Loading update: #{updated}")
     Tempfile.open('puppet_crm_update') do |tmpfile|
       tmpfile.write(updated)
       tmpfile.flush
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib([command(:crm), 'configure', 'load', 'update', tmpfile.path.to_s], @resource[:cib])
+      self.class.run_command_in_cib([command(:crm), 'configure', 'load', 'update', tmpfile.path.to_s], @resource[:cib])
     end
   end
 end

@@ -1,11 +1,11 @@
-# Manage the installation of the report processor on the master. See README.md
-# for more details.
+# @summary manage the installation of the report processor on the primary
+#
+# @api private
 class puppetdb::master::report_processor (
   $puppet_conf = $puppetdb::params::puppet_conf,
   $masterless  = $puppetdb::params::masterless,
   $enable      = false
 ) inherits puppetdb::params {
-
   if $masterless {
     $puppet_conf_section = 'main'
   } else {

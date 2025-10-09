@@ -239,6 +239,7 @@
 # @param propagateresourcelimits  [Array]       Default: []
 # @param propagateresourcelimits_except [Array] Default: ['MEMLOCK']
 # @param resvoverrun              [Integer]     Default: 0
+# @param rebootprogram            [String]      Default: '/sbin/reboot'
 # @param resumefailprogram        [String]      Default: ''
 # @param resumeprogram            [String]      Default: ''
 # @param resumerate               [Integer]     Default: 300
@@ -634,6 +635,7 @@ class slurm (
   Array   $propagateresourcelimits_except = $slurm::params::propagateresourcelimits_except,
   Hash    $qos                            = $slurm::params::qos,
   Integer $resvoverrun                    = $slurm::params::resvoverrun,
+  String  $rebootprogram                  = $slurm::params::rebootprogram,
   String  $resumefailprogram              = $slurm::params::resumefailprogram,
   String  $resumeprogram                  = $slurm::params::resumeprogram,
   Integer $resumerate                     = $slurm::params::resumerate,

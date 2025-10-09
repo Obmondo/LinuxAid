@@ -2,8 +2,8 @@
 #
 # manage host configs
 class rsnapshot::config (
-  $hosts                = $rsnapshot::hosts,
-  $cron_dir             = $rsnapshot::cron_dir,
+  $hosts          = $rsnapshot::hosts,
+  $cron_dir       = $rsnapshot::cron_dir,
 ) {
 
   # these are global settings, no point in setting them per host
@@ -12,8 +12,6 @@ class rsnapshot::config (
   $conf_d                 = pick($rsnapshot::conf_d, $rsnapshot::params::conf_d, '/etc/rsnapshot')
   $snapshot_root          = pick($hosts['snapshot_root'], $rsnapshot::snapshot_root, '/backup')
   $logpath                = pick($rsnapshot::logpath, $rsnapshot::params::config_logpath)
-  $cronfile_prefix_use    = pick($rsnapshot::cronfile_prefix_use, $rsnapshot::params::config_cronfile_prefix_use, false)
-  $cronfile_prefix        = pick($rsnapshot::cronfile_prefix, $rsnapshot::params::config_cronfile_prefix, '')
   # make sure lock path and conf path exist
   file { $conf_d:
     ensure => 'directory',
@@ -33,12 +31,12 @@ class rsnapshot::config (
 
   # custom function, if only a hostname is given as a param, this is an empty hash
   # the next loop would break as puppet does not allow to reassign variables
-  # the function checks $hosts for elements like:
+  # the function checks $hosts for elements like: 
   # { foo => } and converts those to { foo => {} }
   $hosts_clean = assert_empty_hash($hosts)
 
   $hosts_clean.each |String $host, $hash | {
-    $backup_user            = pick($hash['backup_user'], $rsnapshot::backup_user, $rsnapshot::params::config_backup_user, 'root')
+    $backup_user            = pick($hash['backup_user'], $rsnapshot::params::config_backup_user)
     $default_backup_dirs    = pick($rsnapshot::default_backup, $rsnapshot::params::config_default_backup)
     $backup_levels          = pick($hash['backup_levels'], $rsnapshot::backup_levels, 'weekly')
     $backup                 = $hash['backup']
@@ -82,7 +80,7 @@ class rsnapshot::config (
     $rsync_numtries         = pick_undef($hash['rsync_numtries'], $rsnapshot::params::config_rsync_numtries)
     #$backup_scripts         = pick_undef($hash['backup_scripts'], $rsnapshot::params::config_backup_scripts)
 
-    $snapshot_dir           = "${snapshot_root}/${host}"
+    $snapshot_dir           = "${config_snapshot_root}/${host}"
     $config                 = "${conf_d}/${host}.rsnapshot.conf"
     $lockfile               = "${lockpath}/${host}.pid"
     $logfile                = "${logpath}/${host}.log"
@@ -137,22 +135,21 @@ class rsnapshot::config (
       content => template('rsnapshot/rsnapshot.erb'),
     }
 
-
-
     if has_key($hash, backup_scripts) {
-      $hash[backup_scripts].each |$script, $scriptconf| {
-        $real_script       = deep_merge($rsnapshot::params::backup_scripts[$script], $rsnapshot::backup_scripts[$script], $hash[backup_scripts][$script])
-        $dbbackup_user     = $real_script[dbbackup_user]
-        $dbbackup_password = $real_script[dbbackup_password]
-        $dumper            = $real_script[dumper]
-        $dump_flags        = $real_script[dump_flags]
-        $ignore_dbs        = $real_script[ignore_dbs]
-        $compress          = $real_script[compress]
-        $commands          = $real_script[commands]
+
+      $hash[backup_scripts].each |$script, $credentials| {
+
+        if is_hash($credentials) {
+          $dbbackup_user     = $credentials['dbbackup_user']
+          $dbbackup_password = $credentials['dbbackup_password']
+        } else {
+          $dbbackup_user     = $rsnapshot::default_backup_scripts[$script]['dbbackup_user']
+          $dbbackup_password = $rsnapshot::default_backup_scripts[$script]['dbbackup_password']
+        }
 
         concat::fragment { "${host}_${script}_backup":
-        target  => $config,
-        content => "backup_script	${conf_d}/${host}.${script}.sh	./${script}\n",
+          target  => $config,
+          content => "backup_script	${conf_d}/${host}.${script}.sh	./${script}\n",
         }
 
         file { "${conf_d}/${host}.${script}.sh":
@@ -160,44 +157,18 @@ class rsnapshot::config (
           content => template("rsnapshot/${script}.sh.erb"),
           mode    => '0755',
         }
-
+        
       }
     }
 
-    if $cronfile_prefix_use  {
-      $rsnapshot_prefix = $rsnapshot::cronfile_prefix
-    } else {
-        $rsnapshot_prefix = ''
-    }
-
-    # cron on Debian seems to ignore files that have dots in their name; replace
-    # them with underscores (issue #2)
-    case $::osfamily {
-      'Debian': {
-        $cron_name = regsubst($host, '\.', '_', 'G')
-        $cronfile = "${cron_dir}/${rsnapshot_prefix}${cron_name}"
-      }
-      'RedHat': {
-        $cronfile = "${cron_dir}/${rsnapshot_prefix}${host}"
-      }
-      default: {
-        $cronfile = "${cron_dir}/${rsnapshot_prefix}${host}"
-      }
-    }
-
+    $cronfile = "${cron_dir}/${host}"
     concat { $cronfile:
     }
     # create cron files for each backup level
     # merge possible cron definitions to one
     $real_cron = deep_merge($rsnapshot::params::cron, $rsnapshot::cron, $hash[cron])
-    concat::fragment { "mailto for ${host}":
-      content => "#This file is managed by puppet\nMAILTO=${real_cron[mailto]}\n\n",
-      target  => $cronfile,
-      order   => 1,
-    }
 
     $backup_levels.each |String $level| {
-      $mailto   = $real_cron[mailto]
       $minute   = rand_from_array($real_cron[$level][minute],   "${host}.${level}.minute")
       $hour     = rand_from_array($real_cron[$level][hour],     "${host}.${level}.hour")
       $monthday = rand_from_array($real_cron[$level][monthday], "${host}.${level}.monthday")
@@ -207,8 +178,8 @@ class rsnapshot::config (
       concat::fragment { "${host}.${level}":
         target  => $cronfile,
         content => template('rsnapshot/cron.erb'),
-        order   => 2,
       }
     }
   }
 }
+

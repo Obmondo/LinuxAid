@@ -1,0 +1,11 @@
+.bin/
+.gems/
+Gemfile.lock
+spec/fixtures/
+.vagrant/
+pkg/
+.bundle/
+vendor/
+log/
+.yardoc/
+bin/

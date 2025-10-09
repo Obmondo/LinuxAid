@@ -4,6 +4,145 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.1.0](https://github.com/voxpupuli/puppet-dhcp/tree/v6.1.0) (2024-01-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v6.0.0...v6.1.0)
+
+**Implemented enhancements:**
+
+- Add OracleLinux/Alma/Rocky support [\#281](https://github.com/voxpupuli/puppet-dhcp/pull/281) ([bastelfreak](https://github.com/bastelfreak))
+- Add Puppet 8 support [\#276](https://github.com/voxpupuli/puppet-dhcp/pull/276) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- README.md: Update badges [\#282](https://github.com/voxpupuli/puppet-dhcp/pull/282) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v6.0.0](https://github.com/voxpupuli/puppet-dhcp/tree/v6.0.0) (2023-12-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v5.0.1...v6.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#273](https://github.com/voxpupuli/puppet-dhcp/pull/273) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Support for puppetlabs/stdlib 9.x, concat 9.x, Debian 12, and Ubuntu 22.04 [\#278](https://github.com/voxpupuli/puppet-dhcp/pull/278) ([mj](https://github.com/mj))
+- Add CentOS Stream 9 and RHEL 9 support [\#272](https://github.com/voxpupuli/puppet-dhcp/pull/272) ([tobias-urdin](https://github.com/tobias-urdin))
+
+## [v5.0.1](https://github.com/voxpupuli/puppet-dhcp/tree/v5.0.1) (2022-11-03)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v5.0.0...v5.0.1)
+
+**Fixed bugs:**
+
+- Fix the type of options and parameters in pool manifest [\#267](https://github.com/voxpupuli/puppet-dhcp/pull/267) ([alexshyriaiev](https://github.com/alexshyriaiev))
+
+## [v5.0.0](https://github.com/voxpupuli/puppet-dhcp/tree/v5.0.0) (2022-05-10)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v4.0.1...v5.0.0)
+
+**Breaking changes:**
+
+- Drop support for Puppet 5 [\#256](https://github.com/voxpupuli/puppet-dhcp/pull/256) ([smortex](https://github.com/smortex))
+- Drop support for CentOS/RedHat 6, Debian 8,9 and Ubuntu 16.04 [\#254](https://github.com/voxpupuli/puppet-dhcp/pull/254) ([smortex](https://github.com/smortex))
+
+**Implemented enhancements:**
+
+- allow to override host-subnetmask for pools [\#262](https://github.com/voxpupuli/puppet-dhcp/pull/262) ([sircubbi](https://github.com/sircubbi))
+- Add support for grouping of dhcp-pools into shared-networks [\#261](https://github.com/voxpupuli/puppet-dhcp/pull/261) ([sircubbi](https://github.com/sircubbi))
+- Add support for Puppet 7 [\#257](https://github.com/voxpupuli/puppet-dhcp/pull/257) ([smortex](https://github.com/smortex))
+- Add support for Debian 11, Ubuntu 20.04 [\#255](https://github.com/voxpupuli/puppet-dhcp/pull/255) ([smortex](https://github.com/smortex))
+- Extend support for event clauses to global, pool and pool6 [\#252](https://github.com/voxpupuli/puppet-dhcp/pull/252) ([mergwyn](https://github.com/mergwyn))
+
+**Fixed bugs:**
+
+- rename fragments for dhcp6-pools [\#263](https://github.com/voxpupuli/puppet-dhcp/pull/263) ([sircubbi](https://github.com/sircubbi))
+
+**Closed issues:**
+
+- Add event handlers to main and pool config - Enhancement  [\#251](https://github.com/voxpupuli/puppet-dhcp/issues/251)
+- Add support of shared-network option [\#158](https://github.com/voxpupuli/puppet-dhcp/issues/158)
+
+**Merged pull requests:**
+
+- Bugfix: use correct title in shared-network dependency [\#264](https://github.com/voxpupuli/puppet-dhcp/pull/264) ([sircubbi](https://github.com/sircubbi))
+- Allow filename and iPXE configuration in dhcp host entries [\#259](https://github.com/voxpupuli/puppet-dhcp/pull/259) ([tom-krieger](https://github.com/tom-krieger))
+- Allow up-to-date dependencies [\#253](https://github.com/voxpupuli/puppet-dhcp/pull/253) ([smortex](https://github.com/smortex))
+- Resolve puppet-lint notices [\#248](https://github.com/voxpupuli/puppet-dhcp/pull/248) ([jcpunk](https://github.com/jcpunk))
+
+## [v4.0.1](https://github.com/voxpupuli/puppet-dhcp/tree/v4.0.1) (2020-08-23)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v4.0.0...v4.0.1)
+
+**Fixed bugs:**
+
+- pxeserver parameter no longer supports hostnames, only IP address [\#239](https://github.com/voxpupuli/puppet-dhcp/issues/239)
+- Allow indefinite lease times to be set [\#246](https://github.com/voxpupuli/puppet-dhcp/pull/246) ([alexjfisher](https://github.com/alexjfisher))
+
+**Merged pull requests:**
+
+- Use voxpupuli-acceptance [\#242](https://github.com/voxpupuli/puppet-dhcp/pull/242) ([ekohl](https://github.com/ekohl))
+
+## [v4.0.0](https://github.com/voxpupuli/puppet-dhcp/tree/v4.0.0) (2020-02-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v3.4.0...v4.0.0)
+
+**Breaking changes:**
+
+- drop Ubuntu 14.04 support [\#229](https://github.com/voxpupuli/puppet-dhcp/pull/229) ([bastelfreak](https://github.com/bastelfreak))
+- modulesync 2.5.1 & drop Puppet 4 [\#218](https://github.com/voxpupuli/puppet-dhcp/pull/218) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add support for RHEL/CentOS 8 and Debian 10 [\#235](https://github.com/voxpupuli/puppet-dhcp/pull/235) ([dhoppe](https://github.com/dhoppe))
+- Improve datatypes [\#219](https://github.com/voxpupuli/puppet-dhcp/pull/219) ([bastelfreak](https://github.com/bastelfreak))
+- allow dhcp::host to set "on EVENT" handlers [\#216](https://github.com/voxpupuli/puppet-dhcp/pull/216) ([jflorian](https://github.com/jflorian))
+- allow dhcp::host to override default- and max-lease-time [\#215](https://github.com/voxpupuli/puppet-dhcp/pull/215) ([jflorian](https://github.com/jflorian))
+- update FreeBSD pkg name [\#211](https://github.com/voxpupuli/puppet-dhcp/pull/211) ([mmoll](https://github.com/mmoll))
+- Allow host declaration without IP. [\#210](https://github.com/voxpupuli/puppet-dhcp/pull/210) ([mergwyn](https://github.com/mergwyn))
+
+**Fixed bugs:**
+
+- Allow puppetlabs/concat 6.x, puppetlabs/stdlib 6.x [\#225](https://github.com/voxpupuli/puppet-dhcp/pull/225) ([dhoppe](https://github.com/dhoppe))
+- set dhcpd\_ifaces in rc.conf on FreeBSD [\#212](https://github.com/voxpupuli/puppet-dhcp/pull/212) ([mmoll](https://github.com/mmoll))
+
+**Closed issues:**
+
+- Ubuntu 18.04 Interfaces not set [\#200](https://github.com/voxpupuli/puppet-dhcp/issues/200)
+- Insert possibility to enable host declaration without IP. [\#106](https://github.com/voxpupuli/puppet-dhcp/issues/106)
+- Configure dhcpd\_ifaces in rc.conf on FreeBSD [\#88](https://github.com/voxpupuli/puppet-dhcp/issues/88)
+
+**Merged pull requests:**
+
+- update repo links to https [\#236](https://github.com/voxpupuli/puppet-dhcp/pull/236) ([bastelfreak](https://github.com/bastelfreak))
+- Remove duplicate CONTRIBUTING.md file [\#231](https://github.com/voxpupuli/puppet-dhcp/pull/231) ([dhoppe](https://github.com/dhoppe))
+- drop Ubuntu 14.04 CI testing [\#230](https://github.com/voxpupuli/puppet-dhcp/pull/230) ([bastelfreak](https://github.com/bastelfreak))
+- Update minimum stdlib version to 4.25.0 and use some of the newer types [\#217](https://github.com/voxpupuli/puppet-dhcp/pull/217) ([alexjfisher](https://github.com/alexjfisher))
+- Add parameter to make installing the package optional [\#214](https://github.com/voxpupuli/puppet-dhcp/pull/214) ([dgivens](https://github.com/dgivens))
+
+## [v3.4.0](https://github.com/voxpupuli/puppet-dhcp/tree/v3.4.0) (2018-12-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v3.3.0...v3.4.0)
+
+**Implemented enhancements:**
+
+- add mac address validation [\#205](https://github.com/voxpupuli/puppet-dhcp/pull/205) ([tiernap](https://github.com/tiernap))
+- add debian 9 support [\#197](https://github.com/voxpupuli/puppet-dhcp/pull/197) ([bastelfreak](https://github.com/bastelfreak))
+- add ubuntu 18.04 support [\#196](https://github.com/voxpupuli/puppet-dhcp/pull/196) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Don't add a newline between each DHCP option [\#207](https://github.com/voxpupuli/puppet-dhcp/pull/207) ([bastelfreak](https://github.com/bastelfreak))
+- Purge useless trailing whitespace in template [\#206](https://github.com/voxpupuli/puppet-dhcp/pull/206) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- make main section nameservers optional [\#204](https://github.com/voxpupuli/puppet-dhcp/pull/204) ([SourceDoctor](https://github.com/SourceDoctor))
+- modulesync 2.1.0 and allow puppet 6.x [\#199](https://github.com/voxpupuli/puppet-dhcp/pull/199) ([bastelfreak](https://github.com/bastelfreak))
+- fix wrong version schema in metadata.json [\#198](https://github.com/voxpupuli/puppet-dhcp/pull/198) ([bastelfreak](https://github.com/bastelfreak))
+- enable acceptance tests [\#195](https://github.com/voxpupuli/puppet-dhcp/pull/195) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.3.0](https://github.com/voxpupuli/puppet-dhcp/tree/v3.3.0) (2018-09-07)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/v3.2.0...v3.3.0)
@@ -132,7 +271,7 @@ These should not affect the functionality of the module.
 - support for IPv6 nameservers [\#120](https://github.com/voxpupuli/puppet-dhcp/pull/120) ([aquister](https://github.com/aquister))
 - Document the define in manifests/ignoredsubnet.pp [\#118](https://github.com/voxpupuli/puppet-dhcp/pull/118) ([tobias-urdin](https://github.com/tobias-urdin))
 - added dhcpd\_conf\_filename param [\#117](https://github.com/voxpupuli/puppet-dhcp/pull/117) ([aquister](https://github.com/aquister))
-- Clarify test names [\#115](https://github.com/voxpupuli/puppet-dhcp/pull/115) ([Yuav](https://github.com/Yuav))
+- Clarify test names [\#115](https://github.com/voxpupuli/puppet-dhcp/pull/115) ([jskarpe](https://github.com/jskarpe))
 
 ## [v1.0.1](https://github.com/voxpupuli/puppet-dhcp/tree/v1.0.1) (2016-09-26)
 
@@ -151,7 +290,7 @@ These should not affect the functionality of the module.
 - Allow for dhcp host to be ignored [\#111](https://github.com/voxpupuli/puppet-dhcp/pull/111) ([charlesdunbar](https://github.com/charlesdunbar))
 - Add parameter validation to dhcp::host [\#110](https://github.com/voxpupuli/puppet-dhcp/pull/110) ([alexjfisher](https://github.com/alexjfisher))
 - correct misleading documentation for pool ranges [\#107](https://github.com/voxpupuli/puppet-dhcp/pull/107) ([dwerder](https://github.com/dwerder))
-- Added ddns-update-style option [\#101](https://github.com/voxpupuli/puppet-dhcp/pull/101) ([Yuav](https://github.com/Yuav))
+- Added ddns-update-style option [\#101](https://github.com/voxpupuli/puppet-dhcp/pull/101) ([jskarpe](https://github.com/jskarpe))
 - add mtu option [\#99](https://github.com/voxpupuli/puppet-dhcp/pull/99) ([alvin-huang](https://github.com/alvin-huang))
 
 ## [v1.0.0](https://github.com/voxpupuli/puppet-dhcp/tree/v1.0.0) (2016-08-18)
@@ -170,7 +309,7 @@ These should not affect the functionality of the module.
 - Modulesync 0.12.1 & Release 1.0.0 [\#103](https://github.com/voxpupuli/puppet-dhcp/pull/103) ([bastelfreak](https://github.com/bastelfreak))
 - modulesync 0.11.1 [\#102](https://github.com/voxpupuli/puppet-dhcp/pull/102) ([bastelfreak](https://github.com/bastelfreak))
 - modulesync 0.8.1 [\#97](https://github.com/voxpupuli/puppet-dhcp/pull/97) ([bbriggs](https://github.com/bbriggs))
-- Added option dns search domain [\#96](https://github.com/voxpupuli/puppet-dhcp/pull/96) ([Yuav](https://github.com/Yuav))
+- Added option dns search domain [\#96](https://github.com/voxpupuli/puppet-dhcp/pull/96) ([jskarpe](https://github.com/jskarpe))
 - Add 'authoritative' parameter [\#95](https://github.com/voxpupuli/puppet-dhcp/pull/95) ([domcleal](https://github.com/domcleal))
 - Use ISC default for default\_lease\_time [\#84](https://github.com/voxpupuli/puppet-dhcp/pull/84) ([domcleal](https://github.com/domcleal))
 - rubocop: fix Style/StringLiterals [\#83](https://github.com/voxpupuli/puppet-dhcp/pull/83) ([bastelfreak](https://github.com/bastelfreak))
@@ -180,7 +319,11 @@ These should not affect the functionality of the module.
 
 ## [v0.5.0](https://github.com/voxpupuli/puppet-dhcp/tree/v0.5.0) (2016-05-22)
 
-[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/0.4.0...v0.5.0)
+[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/2ff3a2c89aac13d6c73282c044552d11cd81ce25...v0.5.0)
+
+**Breaking changes:**
+
+- Set ddns-hostname instead of option host-name for host declarations [\#59](https://github.com/voxpupuli/puppet-dhcp/pull/59) ([treydock](https://github.com/treydock))
 
 **Implemented enhancements:**
 
@@ -188,6 +331,7 @@ These should not affect the functionality of the module.
 
 **Closed issues:**
 
+- add unit tests [\#24](https://github.com/voxpupuli/puppet-dhcp/issues/24)
 - Tests - Pool has a string not an array [\#18](https://github.com/voxpupuli/puppet-dhcp/issues/18)
 
 **Merged pull requests:**
@@ -196,21 +340,10 @@ These should not affect the functionality of the module.
 - \[WIP\]modulesync 0.6.1 [\#80](https://github.com/voxpupuli/puppet-dhcp/pull/80) ([bastelfreak](https://github.com/bastelfreak))
 - Fix typo in spec test [\#76](https://github.com/voxpupuli/puppet-dhcp/pull/76) ([mattkirby](https://github.com/mattkirby))
 - Add the ability to add extra configurations in plain-text [\#73](https://github.com/voxpupuli/puppet-dhcp/pull/73) ([9bryan](https://github.com/9bryan))
-- do not sort pool dns servers list [\#72](https://github.com/voxpupuli/puppet-dhcp/pull/72) ([jearls](https://github.com/jearls))
-
-## [0.4.0](https://github.com/voxpupuli/puppet-dhcp/tree/0.4.0) (2015-09-15)
-
-[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/0.3.0...0.4.0)
-
-**Breaking changes:**
-
-- Set ddns-hostname instead of option host-name for host declarations [\#59](https://github.com/voxpupuli/puppet-dhcp/pull/59) ([treydock](https://github.com/treydock))
-
-**Merged pull requests:**
-
+- do not sort pool dns servers list [\#72](https://github.com/voxpupuli/puppet-dhcp/pull/72) ([ghost](https://github.com/ghost))
 - Release 0.4.0 prep [\#70](https://github.com/voxpupuli/puppet-dhcp/pull/70) ([bmjen](https://github.com/bmjen))
 - Enable Ignore unknown clients in templating [\#68](https://github.com/voxpupuli/puppet-dhcp/pull/68) ([prizos](https://github.com/prizos))
-- properly put ""quotes around the domain-name option in pool declarations [\#67](https://github.com/voxpupuli/puppet-dhcp/pull/67) ([jearls](https://github.com/jearls))
+- properly put ""quotes around the domain-name option in pool declarations [\#67](https://github.com/voxpupuli/puppet-dhcp/pull/67) ([ghost](https://github.com/ghost))
 - Changed dhcpd.conf File dependency to Concat. [\#64](https://github.com/voxpupuli/puppet-dhcp/pull/64) ([chrisdaish](https://github.com/chrisdaish))
 - Fix in documentation for dhcp::pool. range should be array instead of string [\#63](https://github.com/voxpupuli/puppet-dhcp/pull/63) ([bjvrielink](https://github.com/bjvrielink))
 - Add omapi\_port parameter [\#62](https://github.com/voxpupuli/puppet-dhcp/pull/62) ([treydock](https://github.com/treydock))
@@ -227,29 +360,10 @@ These should not affect the functionality of the module.
 - Add ignoresubnet class [\#45](https://github.com/voxpupuli/puppet-dhcp/pull/45) ([underscorgan](https://github.com/underscorgan))
 - Added globaloptions parameter to dhcp class [\#41](https://github.com/voxpupuli/puppet-dhcp/pull/41) ([dgmorales](https://github.com/dgmorales))
 - Corrections and fixes... [\#40](https://github.com/voxpupuli/puppet-dhcp/pull/40) ([pecastro](https://github.com/pecastro))
-
-## [0.3.0](https://github.com/voxpupuli/puppet-dhcp/tree/0.3.0) (2014-07-23)
-
-[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/0.2.0...0.3.0)
-
-**Merged pull requests:**
-
 - Remove trailing whitespace :\( [\#38](https://github.com/voxpupuli/puppet-dhcp/pull/38) ([underscorgan](https://github.com/underscorgan))
 - Prep for 0.3.0 release. [\#37](https://github.com/voxpupuli/puppet-dhcp/pull/37) ([underscorgan](https://github.com/underscorgan))
 - Add patches from foreman-dhcp [\#36](https://github.com/voxpupuli/puppet-dhcp/pull/36) ([ekohl](https://github.com/ekohl))
 - Remove deprecation warnings for templates and use of concat::setup [\#32](https://github.com/voxpupuli/puppet-dhcp/pull/32) ([kscherer](https://github.com/kscherer))
-
-## [0.2.0](https://github.com/voxpupuli/puppet-dhcp/tree/0.2.0) (2014-03-25)
-
-[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/0.1.0...0.2.0)
-
-**Closed issues:**
-
-- add unit tests [\#24](https://github.com/voxpupuli/puppet-dhcp/issues/24)
-
-**Merged pull requests:**
-
-- Release 0.2.0 [\#31](https://github.com/voxpupuli/puppet-dhcp/pull/31) ([hunner](https://github.com/hunner))
 - Correct concat dependency [\#30](https://github.com/voxpupuli/puppet-dhcp/pull/30) ([hunner](https://github.com/hunner))
 - Concat update [\#28](https://github.com/voxpupuli/puppet-dhcp/pull/28) ([jhoblitt](https://github.com/jhoblitt))
 - Add apache 2.0 license. [\#26](https://github.com/voxpupuli/puppet-dhcp/pull/26) ([apenney](https://github.com/apenney))
@@ -259,13 +373,6 @@ These should not affect the functionality of the module.
 - Remove failover parameter from class dhcp [\#14](https://github.com/voxpupuli/puppet-dhcp/pull/14) ([saz](https://github.com/saz))
 - Added Redhat/CentOS package name [\#12](https://github.com/voxpupuli/puppet-dhcp/pull/12) ([crayfishx](https://github.com/crayfishx))
 - Whitespace only removal of comments [\#10](https://github.com/voxpupuli/puppet-dhcp/pull/10) ([jeffmccune](https://github.com/jeffmccune))
-
-## [0.1.0](https://github.com/voxpupuli/puppet-dhcp/tree/0.1.0) (2012-06-11)
-
-[Full Changelog](https://github.com/voxpupuli/puppet-dhcp/compare/2ff3a2c89aac13d6c73282c044552d11cd81ce25...0.1.0)
-
-**Merged pull requests:**
-
 - Send the client hostname to be used if unset [\#9](https://github.com/voxpupuli/puppet-dhcp/pull/9) ([jeffmccune](https://github.com/jeffmccune))
 - Make the dhcp module more reusable [\#8](https://github.com/voxpupuli/puppet-dhcp/pull/8) ([jeffmccune](https://github.com/jeffmccune))
 - Make all template fragments have header comments [\#7](https://github.com/voxpupuli/puppet-dhcp/pull/7) ([jeffmccune](https://github.com/jeffmccune))

@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:cs_primitive) do
@@ -7,7 +9,7 @@ Puppet::Type.newtype(:cs_primitive) do
     an application, ip address, or similar to monitor and maintain.  These
     managed primitives are maintained using what is called a resource agent.
     These resource agents have a concept of class, type, and subsystem that
-    provides the functionality.  Regretibly these pieces of vocabulary
+    provides the functionality.  Regrettably these pieces of vocabulary
     clash with those used in Puppet so to overcome the name clashing the
     property and parameter names have been qualified a bit for clarity.
 
@@ -28,21 +30,21 @@ Puppet::Type.newtype(:cs_primitive) do
 
   newparam(:primitive_class) do
     desc "Corosync class of the primitive.  Examples of classes are lsb or ocf.
-      Lsb funtions a lot like the init provider in Puppet for services, an init
+      Lsb functions a lot like the init provider in Puppet for services, an init
       script is ran periodically on each host to identify status, or to start
       and stop a particular application.  Ocf of the other hand is a script with
-      meta-data and stucture that is specific to Corosync and Pacemaker."
+      meta-data and structure that is specific to Corosync and Pacemaker."
   end
 
   newparam(:primitive_type) do
     desc "Corosync primitive type.  Type generally matches to the specific
       'thing' your managing, i.e. ip address or vhost.  Though, they can be
-      completely arbitarily named and manage any number of underlying
+      completely arbitrarily named and manage any number of underlying
       applications or resources."
   end
 
   newparam(:provided_by) do
-    desc "Corosync primitive provider.  All resource agents used in a primitve
+    desc "Corosync primitive provider.  All resource agents used in a primitive
       have something that provides them to the system, be it the Pacemaker or
       redhat plugins...they're not always obvious though so currently you're
       left to understand Corosync enough to figure it out.  Usually, if it isn't
@@ -60,7 +62,7 @@ Puppet::Type.newtype(:cs_primitive) do
       once. This can be necessary to insert complex configurations into
       Corosync correctly.
 
-      This paramater sets the CIB this primitive should be created in. A
+      This parameter sets the CIB this primitive should be created in. A
       cs_shadow resource with a title of the same name as this value should
       also be added to your manifest."
   end
@@ -75,6 +77,7 @@ Puppet::Type.newtype(:cs_primitive) do
 
     munge do |value|
       return [value] if value.is_a?(String) || value.is_a?(Symbol)
+
       value
     end
 
@@ -131,7 +134,7 @@ Puppet::Type.newtype(:cs_primitive) do
             end
           end
           if v.is_a? Array
-            Puppet.deprecation_warning 'cs_primitive.rb[operations]: Multiple operations with the same name now have to be declared as an array of hashe, not as a hash with arrays.'
+            Puppet.deprecation_warning 'cs_primitive.rb[operations]: Multiple operations with the same name now have to be declared as an array of hashes, not as a hash with arrays.'
             v.each do |p|
               operations << { k => p }
             end
@@ -190,7 +193,7 @@ Puppet::Type.newtype(:cs_primitive) do
   newproperty(:utilization) do
     desc "A hash of utilization attributes for the primitive. If nodes are
       also configured with available resources, and Pacemaker's placement
-      stratgey is set appropriately, then Pacemaker can place primitives on
+      strategy is set appropriately, then Pacemaker can place primitives on
       nodes only where resources are available.
 
       See the Pacemaker documentation:
@@ -220,9 +223,7 @@ Puppet::Type.newtype(:cs_primitive) do
       super(is.reject { |k| @resource[:unmanaged_metadata].include?(k) })
     end
 
-    # rubocop:disable Style/PredicateName
     def is_to_s(is)
-      # rubocop:enable Style/PredicateName
       super(is.reject { |k| @resource[:unmanaged_metadata].include?(k) })
     end
 
@@ -241,62 +242,6 @@ Puppet::Type.newtype(:cs_primitive) do
     # rubocop:disable Style/EmptyLiteral
     defaultto Hash.new
     # rubocop:enable Style/EmptyLiteral
-  end
-
-  newproperty(:ms_metadata) do
-    desc 'A hash of metadata for the master/slave primitive state.'
-
-    munge do |value_hash|
-      # Ruby 1.8.7 does not support each_with_object
-      # rubocop:disable Style/EachWithObject
-      value_hash.reduce({}) do |memo, (key, value)|
-        # rubocop:enable Style/EachWithObject
-        memo[key] = String(value)
-        memo
-      end
-    end
-
-    def insync?(is)
-      super(is.reject { |k| @resource[:unmanaged_metadata].include?(k) })
-    end
-
-    # rubocop:disable Style/PredicateName
-    def is_to_s(is)
-      # rubocop:enable Style/PredicateName
-      super(is.reject { |k| @resource[:unmanaged_metadata].include?(k) })
-    end
-
-    def should_to_s(should)
-      super(should.reject { |k| @resource[:unmanaged_metadata].include?(k) })
-    end
-
-    def change_to_s(currentvalue, newvalue)
-      if @resource[:unmanaged_metadata].count.zero?
-        super
-      else
-        super + " (unmanaged parameters: #{@resource[:unmanaged_metadata].join(', ')})"
-      end
-    end
-
-    validate do |value|
-      raise Puppet::Error, 'Puppet::Type::Cs_Primitive: ms_metadata property must be a hash' unless value.is_a? Hash
-    end
-    # rubocop:disable Style/EmptyLiteral
-    defaultto Hash.new
-    # rubocop:enable Style/EmptyLiteral
-  end
-
-  newproperty(:promotable) do
-    desc "Designates if the primitive is capable of being managed in a master/slave
-      state.  This will create a new ms resource in your Corosync config and add
-      this primitive to it.  Concequently Corosync will be helpful and update all
-      your colocation and order resources too but Puppet won't.  Currenlty we unmunge
-      configuraiton entries that start with ms_ so that you don't have to account for
-      name change in all our manifests."
-
-    newvalues(:true, :false)
-
-    defaultto :false
   end
 
   autorequire(:cs_shadow) do

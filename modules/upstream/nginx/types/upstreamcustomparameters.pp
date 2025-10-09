@@ -1,3 +1,4 @@
+# @summary Type Alias for Nginx::UpstreamCustomParameters
 type Nginx::UpstreamCustomParameters = Hash[String[1],
   Variant[
     String[1],

@@ -1,3 +1,0 @@
-<%- | Array $templates, Array $receivers, Hash $providers | -%>
-<%- $config = { 'templates' => $templates, 'receivers' => $receivers, 'providers' => $providers } -%>
-<%= stdlib::to_yaml($config) -%>

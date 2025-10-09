@@ -1,9 +1,16 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:cs_commit) do
-  @doc = 'This type is an implementation detail. DO NOT use it directly'
+  @doc = 'Final commit statement which triggers the synchronous application of
+          all primitive changes which reference this CIB. Do not generate more
+          than one cs_commit referencing the same CIB for a given cluster!'
 
   feature :refreshable, 'The provider can execute the commit.', methods: [:commit]
 
   newparam(:cib) do
+    desc 'Name of the CIB to commit. This value defaults to the name of
+          the cs_commit resource.'
+
     def insync?(_is)
       true
     end
@@ -12,6 +19,7 @@ Puppet::Type.newtype(:cs_commit) do
   end
 
   newparam(:name) do
+    desc 'Name of the CIB to commit. See the cib parameter for more detail.'
     isnamevar
   end
 
@@ -29,7 +37,7 @@ Puppet::Type.newtype(:cs_commit) do
     autos
   end
 
-  if Puppet::Util::Package.versioncmp(Puppet::PUPPETVERSION, '4.0') < 0
+  if Puppet::Util::Package.versioncmp(Puppet::PUPPETVERSION, '4.0').negative?
     autorequire(:cs_primitive) do
       resources_with_cib :cs_primitive
     end

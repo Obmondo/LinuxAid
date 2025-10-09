@@ -22,14 +22,10 @@ Puppet::Type.type(:network_config).provide(:redhat) do
   SCRIPT_DIRECTORY = '/etc/sysconfig/network-scripts'.freeze
 
   # The valid vlan ID range is 0-4095; 4096 is out of range
-  VLAN_RANGE_REGEX = %r{[1-3]?\d{1,3}|40[0-8]\d|409[0-5]}
-
-  # aliases are almost free game, redhat rejects some, and max total length is 15 characters
-  # 15 minus at least 2 for the interface name, and a colon leaves 12 characters for the alias
-  ALIAS_REGEX = %r{.{1,12}(?<!~|\.bak|\.old|\.orig|\.rpmnew|\.rpmorig|\.rpmsave)}
+  VLAN_RANGE_REGEX = %r{\d{1,3}|40[0-9][0-5]}
 
   # @return [Regexp] The regular expression for interface scripts on redhat systems
-  SCRIPT_REGEX = %r{\Aifcfg-[a-z]+[a-z_\d]+(?::#{ALIAS_REGEX}|\.#{VLAN_RANGE_REGEX})?\Z}
+  SCRIPT_REGEX     = %r{\Aifcfg-[a-z]+[a-z\d]+(?::\d+|\.#{VLAN_RANGE_REGEX})?\Z}
 
   NAME_MAPPINGS = {
     ipaddress: 'IPADDR',
@@ -97,11 +93,6 @@ Puppet::Type.type(:network_config).provide(:redhat) do
 
     pair_regex = %r{^\s*(.+?)\s*=\s*(.*)\s*$}
 
-    # INFO: It is valid ifcfg format to include certain functions and strings these should not be reported as errors, but silently removed before parsing
-    # https://bugs.centos.org/bug_view_page.php?bug_id=475
-    # Remove lines with no = sign
-    lines.select! { |line| line =~ %r{^.*=.*$} }
-
     # Convert the data into key/value pairs
     pairs = lines.each_with_object({}) do |line, hash|
       raise Puppet::Error, %(#{filename} is malformed; "#{line}" did not match "#{pair_regex}") unless line.match(pair_regex) do |m|
@@ -109,7 +100,6 @@ Puppet::Type.type(:network_config).provide(:redhat) do
         val = m[2].strip
         hash[key] = val
       end
-
       hash
     end
 
@@ -153,7 +143,6 @@ Puppet::Type.type(:network_config).provide(:redhat) do
     # hash with our expected label
     NAME_MAPPINGS.each_pair do |type_name, redhat_name|
       next unless (val = pairs[redhat_name])
-
       pairs.delete(redhat_name)
       props[type_name] = val
     end
@@ -170,8 +159,10 @@ Puppet::Type.type(:network_config).provide(:redhat) do
     # For all of the remaining values, blindly toss them into the options hash.
     props[:options] = pairs
 
-    %i[onboot hotplug].each do |bool_property|
-      props[bool_property] = (props[bool_property] == 'yes') unless props[bool_property].nil?
+    [:onboot, :hotplug].each do |bool_property|
+      if props[bool_property]
+        props[bool_property] = (props[bool_property] == 'yes')
+      end
     end
 
     props[:method] = 'static' unless %w[bootp dhcp].include? props[:method]
@@ -181,7 +172,6 @@ Puppet::Type.type(:network_config).provide(:redhat) do
 
   def self.format_file(filename, providers)
     return '' if providers.empty?
-
     if providers.length > 1
       raise Puppet::DevError,
             "Unable to support multiple interfaces [#{providers.map(&:name).join(',')}] in a single file #{filename}"
@@ -206,16 +196,18 @@ Puppet::Type.type(:network_config).provide(:redhat) do
 
     pairs = unmunge props
 
-    pairs.each_with_object('') do |(key, value), str|
+    content = pairs.each_with_object('') do |(key, value), str|
       str << %(#{key}=#{value}\n)
     end
+
+    content
   end
 
   def self.unmunge(props)
     pairs = {}
 
-    %i[onboot hotplug].each do |bool_property|
-      unless props[bool_property].nil?
+    [:onboot, :hotplug].each do |bool_property|
+      if props[bool_property]
         props[bool_property] = (props[bool_property] == true ? 'yes' : 'no')
       end
     end

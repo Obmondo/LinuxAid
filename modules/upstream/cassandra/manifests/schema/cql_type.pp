@@ -47,7 +47,7 @@ define cassandra::schema::cql_type (
     }
     exec { $create_command:
       unless  => $read_command,
-      require => Exec['cassandra::schema connection test'],
+      require => Exec['::cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     $delete_script = "DROP type ${keyspace}.${cql_type_name}"
@@ -59,7 +59,7 @@ define cassandra::schema::cql_type (
     }
     exec { $delete_command:
       onlyif  => $read_command,
-      require => Exec['cassandra::schema connection test'],
+      require => Exec['::cassandra::schema connection test'],
     }
   } else {
     fail("Unknown action (${ensure}) for ensure attribute.")

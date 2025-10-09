@@ -1,7 +1,5 @@
 # inifile
 
-[![Build Status](https://travis-ci.org/puppetlabs/puppetlabs-inifile.png?branch=main)](https://travis-ci.org/puppetlabs/puppetlabs-inifile)
-
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -10,6 +8,7 @@
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 1. [Limitations - OS compatibility, etc.](#limitations)
+1. [License](#license)
 1. [Development - Guide for contributing to the module](#development)
 
 <a id="overview"></a>
@@ -295,9 +294,23 @@ ini_setting { '[section1] setting3':
 See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/REFERENCE.md)
 
 <a id="limitations"></a>
+
 ## Limitations
 
+### Supported operating systems
+
 For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-inifile/blob/main/metadata.json)
+
+### create_ini_settings
+
+When using inifile::create_ini_settings it’s worth noting that namespace tags will not be applied to the resource. If you need these namespace tags we advise using the standard ini_setting resource.
+
+For more information about resource tags, please see [this article](https://puppet.com/docs/puppet/7/lang_tags.html#lang_tags-assigning-tags-to-resources).
+
+<a id="license"></a> 
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
 
 <a id="development"></a> 
 ## Development

@@ -1,4 +1,6 @@
-module Puppet::Util
+# frozen_string_literal: true
+
+module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   # This class can work with a list of subsettings inside
   # an ini file setting string to add, remove, extract and set their values.
   class SettingValue
@@ -15,11 +17,12 @@ module Puppet::Util
       @subsetting_items = []
 
       return unless @setting_value
+
       unquoted, quote_char = unquote_setting_value(setting_value)
       @quote_char = quote_char unless quote_char.empty?
       # an item can contain escaped separator
       @subsetting_items = unquoted.scan(Regexp.new("(?:(?:[^\\#{@subsetting_separator}]|\\.)+)"))
-      @subsetting_items.map! { |item| item.strip }
+      @subsetting_items.map!(&:strip)
     end
 
     # If the setting value is quoted, the quotes are
@@ -35,10 +38,10 @@ module Puppet::Util
         quote_char = "'"
       end
 
-      unquoted = if quote_char != ''
-                   setting_value[1, setting_value.length - 2]
-                 else
+      unquoted = if quote_char == ''
                    setting_value
+                 else
+                   setting_value[1, setting_value.length - 2]
                  end
 
       [unquoted, quote_char]
@@ -47,7 +50,7 @@ module Puppet::Util
     # Get the resulting setting value by joining all the
     # subsettings, separator and quote characters.
     # @return [String]
-    def get_value # rubocop:disable Style/AccessorMethodName : Unable to alter without breaking code
+    def get_value
       value = @subsetting_items.join @subsetting_separator
       @quote_char + value + @quote_char
     end
@@ -64,8 +67,9 @@ module Puppet::Util
       return nil unless index
       # the exact match is set and the item is found, the value should be true
       return true if use_exact_match == :true
+
       item = @subsetting_items[index]
-      item[(subsetting.length + @key_val_separator.length)..-1]
+      item[(subsetting.length + @key_val_separator.length)..]
     end
 
     # Add a new subsetting item to the list of existing items

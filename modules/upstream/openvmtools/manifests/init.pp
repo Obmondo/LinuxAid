@@ -47,6 +47,9 @@
 #   Only set this if your platform is not supported or you know what you are
 #   doing.
 #
+# @param supported
+#   Boolean that overrides the result of the supported OS check
+#
 # @param uninstall_vmware_tools
 #   Boolean that determines whether the conflicting VMWare Tools package should
 #   be uninstalled, if present.
@@ -56,6 +59,11 @@
 #
 # @example Default usage
 #   include openvmtools
+#
+# @example Force pass supported os check on OS non in supported list
+#   class { 'openvmtools':
+#     supported => true,
+#   }
 #
 # @author Mike Arnold <mike@razorsedge.org>
 # @author Vox Pupuli <voxpupuli@groups.io>

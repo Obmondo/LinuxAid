@@ -1,7 +1,10 @@
 #!/bin/bash
-#This file is managed by puppet
-#
-<%@commands.each do |command| -%>
-ssh -l <%=@backup_user-%> <%=@host-%> <%=command-%>
-
+# add custom stuff here 
+# FIXME: remember to concat for custom stuff after the last line of the puppet generated script
+<% if @osfamily == 'RedHat' -%>
+ssh <%=@host-%> rpm -qa --qf='%{name},' > packages.txt
 <%end-%>
+#
+#
+#
+# ++++++++++++++++++++++++++++++++++++++++++++

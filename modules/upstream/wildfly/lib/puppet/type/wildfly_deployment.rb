@@ -1,7 +1,7 @@
 require 'digest'
 
 Puppet::Type.newtype(:wildfly_deployment) do
-  @doc = 'Manages JBoss deployment'
+  desc 'Manages JBoss deployment'
 
   ensurable do
     defaultvalues
@@ -13,7 +13,7 @@ Puppet::Type.newtype(:wildfly_deployment) do
   end
 
   newparam(:source) do
-    desc 'Deployment source in URL format. (e.g. file:/tmp/file.war)'
+    desc 'Deployment source file. (e.g. /tmp/file.war)'
   end
 
   newparam(:server_group) do
@@ -34,16 +34,23 @@ Puppet::Type.newtype(:wildfly_deployment) do
   end
 
   newparam(:port) do
-    desc 'Management port. Defaults to 127.0.0.1'
+    desc 'Management port. Defaults to 9990'
     defaultto 9990
   end
 
   newparam(:timeout) do
     desc 'Operation timeout. Defaults to 120'
-    defaultto 120
+    defaultto 300
 
-    munge do |value|
-      value.to_i
+    munge(&:to_i)
+  end
+
+  newparam(:operation_headers) do
+    desc 'Operation headers.'
+    defaultto {}
+
+    validate do |value|
+      raise("#{value} is not a Hash") unless value.is_a?(Hash)
     end
   end
 
@@ -58,14 +65,11 @@ Puppet::Type.newtype(:wildfly_deployment) do
     end
 
     def sha1sum?(source)
-      source_path = source.sub('file:', '')
-      if File.exist?(source_path)
-        return Digest::SHA1.hexdigest(File.read(source_path))
-      end
+      Digest::SHA1.hexdigest(File.read(source)) if File.exist?(source)
     end
-  end
 
-  autorequire(:service) do
-    ['wildfly']
+    def change_to_s(current_value, new_value)
+      super(current_value, sha1sum?(@resource[:source]))
+    end
   end
 end

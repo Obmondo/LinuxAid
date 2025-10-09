@@ -1,0 +1,25 @@
+name: "nightly"
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  Spec:
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+    with:
+      runs_on: "ubuntu-24.04"
+    secrets: "inherit"
+
+  Acceptance:
+    needs: Spec
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_acceptance.yml@main"
+    with:
+      runs_on: "ubuntu-24.04"
+      flags: "--nightly"
+    secrets: "inherit"
+
+  Integration:
+    needs: Spec
+    uses: "./.github/workflows/integration_test.yml"

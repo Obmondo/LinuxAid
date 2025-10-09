@@ -55,6 +55,10 @@ file on an haproxy load balancer.
 * [`haproxy::sort_bind`](#haproxy--sort_bind)
 * [`haproxy::validate_ip_addr`](#haproxy--validate_ip_addr)
 
+### Data types
+
+* [`Haproxy::Ports`](#Haproxy--Ports): Port or list of ports for haproxy. Supports `,` seperated list of ports also.
+
 ## Classes
 
 ### <a name="haproxy"></a>`haproxy`
@@ -485,7 +489,7 @@ Exporting the resource for a balancer member:
 
 @@haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
-  ports             => '8140',
+  ports             => [8140],
   server_names      => $::hostname,
   ipaddresses       => $::ipaddress,
   options           => 'check',
@@ -505,7 +509,7 @@ pass to export the resources if you know the members in advance):
 
 haproxy::balancermember { 'haproxy':
   listening_service => 'puppet00',
-  ports             => '8140',
+  ports             => 8140,
   server_names      => ['server01', 'server02'],
   ipaddresses       => ['192.168.56.200', '192.168.56.201'],
   options           => 'check',
@@ -566,7 +570,7 @@ The haproxy service's instance name (or, the title of the
 
 ##### <a name="-haproxy--balancermember--ports"></a>`ports`
 
-Data type: `Optional[Variant[Array, String]]`
+Data type: `Optional[Haproxy::Ports]`
 
 An array or commas-separated list of ports for which the balancer member
  will accept connections from the load balancer. Note that cookie values
@@ -777,7 +781,7 @@ Exporting the resource for a balancer member:
 
 haproxy::frontend { 'puppet00':
   ipaddress    => $::ipaddress,
-  ports        => '18140',
+  ports        => [18140],
   mode         => 'tcp',
   bind_options => 'accept-proxy',
   options      => {
@@ -821,7 +825,7 @@ Default value: `$name`
 
 ##### <a name="-haproxy--frontend--ports"></a>`ports`
 
-Data type: `Optional[Variant[Array, String]]`
+Data type: `Optional[Haproxy::Ports]`
 
 Ports on which the proxy will listen for connections on the ip address
  specified in the ipaddress parameter. Accepts either a single
@@ -1286,7 +1290,7 @@ load balancer server.
 ```puppet
 haproxy::listen { 'puppet00':
   ipaddress => $::ipaddress,
-  ports     => '18140',
+  ports     => [18140],
   mode      => 'tcp',
   options   => {
     'option'  => [
@@ -1327,7 +1331,7 @@ Default value: `$name`
 
 ##### <a name="-haproxy--listen--ports"></a>`ports`
 
-Data type: `Optional[Variant[Array, String]]`
+Data type: `Optional[Haproxy::Ports]`
 
 Ports on which the proxy will listen for connections on the ip address
  specified in the ipaddress parameter. Accepts either a single
@@ -2084,4 +2088,12 @@ Returns: `Boolean`
 Data type: `String`
 
 
+
+## Data types
+
+### <a name="Haproxy--Ports"></a>`Haproxy::Ports`
+
+Port or list of ports for haproxy. Supports `,` seperated list of ports also.
+
+Alias of `Variant[Array[Variant[Pattern[/^[0-9]+$/],Stdlib::Port],0], Pattern[/^[0-9,]+$/], Stdlib::Port]`
 

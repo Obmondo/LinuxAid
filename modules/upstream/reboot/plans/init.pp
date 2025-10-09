@@ -27,12 +27,11 @@ plan reboot (
   }
 
   # Reboot; catch errors here because the connection may get cut out from underneath
-  $reboot_result = run_task('reboot', $targets, timeout => $reboot_delay, message => $message)
+  run_task('reboot', $targets, timeout => $reboot_delay, message => $message)
 
-  # Wait long enough for all targets to trigger reboot, plus disconnect_wait to allow for shutdown time.
-  $timeouts = $reboot_result.map |$result| { $result['timeout'] }
-  $wait = max($timeouts)
-  reboot::sleep($wait+$disconnect_wait)
+  # Use $reboot_delay as wait time, but at least 3s
+  $wait = max(3, $reboot_delay)
+  ctrl::sleep($wait+$disconnect_wait)
 
   $start_time = Timestamp()
   # Wait for reboot in a loop
@@ -40,7 +39,7 @@ plan reboot (
   ## Mark finished for targets with a new last boot time.
   ## If we still have targets check for timeout, sleep if not done.
   $wait_results = without_default_logging() || {
-    $reconnect_timeout.reduce({'pending' => $target_objects, 'ok' => []}) |$memo, $_| {
+    $reconnect_timeout.reduce({ 'pending' => $target_objects, 'ok' => [] }) |$memo, $_| {
       if ($memo['pending'].empty() or $memo['timed_out']) {
         break()
       }
@@ -76,7 +75,7 @@ plan reboot (
 
       if !$failed_targets.empty() and !$timed_out {
         # sleep for a small time before trying again
-        reboot::sleep($retry_interval)
+        ctrl::sleep($retry_interval)
 
         # wait for all targets to be available again
         $remaining_time = $reconnect_timeout - $elapsed_time_sec
@@ -85,9 +84,9 @@ plan reboot (
 
       # Build and return the memo for this iteration
       ({
-        'pending'   => $failed_targets,
-        'ok'        => $memo['ok'] + $ok_targets,
-        'timed_out' => $timed_out,
+          'pending'   => $failed_targets,
+          'ok'        => $memo['ok'] + $ok_targets,
+          'timed_out' => $timed_out,
       })
     }
   }
@@ -99,13 +98,13 @@ plan reboot (
 
   $error_set = $wait_results['pending'].map |$target| {
     Result.new($target, {
-      _output => 'failed to reboot',
-      _error  => $err,
+        _output => 'failed to reboot',
+        _error  => $err,
     })
   }
   $ok_set = $wait_results['ok'].map |$target| {
     Result.new($target, {
-      _output => 'rebooted',
+        _output => 'rebooted',
     })
   }
 

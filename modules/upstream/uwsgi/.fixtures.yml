@@ -1,6 +1,0 @@
-fixtures:
-  repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    python: "https://github.com/stankevich/puppet-python.git"
-  symlinks:
-    uwsgi: "#{source_dir}"

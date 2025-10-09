@@ -1,43 +1,47 @@
 .rubocop.yml:
   default_configs:
-    Metrics/LineLength:
+    Layout/HeredocIndentation:
       Enabled: false
-    Layout/IndentHeredoc:
+    Layout/LineLength:
       Enabled: false
 Gemfile:
   optional:
-    ':development':
-      - gem: 'github_changelog_generator'
-        git: 'https://github.com/skywinder/github-changelog-generator'
-        ref: '20ee04ba1234e9e83eb2ffb5056e23d641c7a018'
-        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')"
-  required:
-    ':system_tests':
-      - gem: 'puppet-module-posix-system-r#{minor_version}'
-        platforms: ruby
-      - gem: 'puppet-module-win-system-r#{minor_version}'
-        platforms:
-          - mswin
-          - mingw
-          - x64_mingw
+    ":development":
       - gem: beaker
-        version: '~> 3.34'
+        version: '~> 5.0'
         from_env: BEAKER_VERSION
       - gem: beaker-abs
         from_env: BEAKER_ABS_VERSION
-        version: '~> 0.5'
-      - gem: beaker-pe
+        version: '~> 1.0'
       - gem: beaker-hostgenerator
         from_env: BEAKER_HOSTGENERATOR_VERSION
       - gem: beaker-rspec
         from_env: BEAKER_RSPEC_VERSION
+      # Prevent beaker-puppet from being installed on Ruby > 3.1 until beaker-puppet supports newer Rubies (PA-6136)
       - gem: beaker-puppet
         from_env: BEAKER_PUPPET_VERSION
-        version: '~> 0.14'
-    ':development':
-      - gem: puppet-strings
+        version: '~> 3.0'
+        condition: Gem::Requirement.create('< 3.2.0').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+      - gem: async
+        version: '~> 1'
+      - gem: beaker-module_install_helper
+      - gem: beaker-puppet_install_helper
+      - gem: nokogiri
+    ":system_tests":
+      - gem: voxpupuli-acceptance
+
+appveyor.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.github/workflows/release.yml:
+  unmanaged: false
+.github/workflows/release_prep.yml:
+  unmanaged: false
 .gitlab-ci.yml:
   delete: true
-
+# We still use the Vox acceptance Rake task instead of Litmus
 Rakefile:
-  changelog_version_tag_pattern: '%s'
+  requires:
+    - require: voxpupuli/acceptance/rake
+      conditional: Gem.loaded_specs.key? 'voxpupuli-acceptance'

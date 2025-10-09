@@ -30,9 +30,7 @@
 # @param ipv6_listen_port
 #   Default IPv6 Port for NGINX to listen with this server on. Defaults to TCP 80
 # @param ipv6_listen_options
-#   Extra options for listen directive like 'default' to catchall. Template
-#   will allways add ipv6only=on.  While issue jfryman/puppet-nginx#30 is
-#   discussed, default value is 'default'.
+#   Extra options for listen directive like 'default' to catchall.
 # @param add_header
 #   Adds headers to the HTTP response when response code is equal to 200, 204,
 #   301, 302 or 304.
@@ -174,6 +172,11 @@
 #   This directive sets the time for caching different replies.
 # @param proxy_cache_lock
 #   This directive sets the locking mechanism for pouplating cache.
+# @param proxy_cache_background_update
+#   Allows starting a background subrequest to update an expired cache item
+# @param proxy_cache_convert_head
+#    Enables or disables the conversion of the “HEAD” method to “GET” for caching.
+#    When the conversion is disabled, the cache key should be configured to include the $request_method.
 # @param proxy_cache_bypass
 #   Defines conditions which the response will not be cached
 # @param proxy_method
@@ -230,9 +233,10 @@
 #   server stanza, rather than setting a default. Can also be disabled for this
 #   server with the string 'off'.
 # @param error_log
-#   Where to write error log. May add additional options like error level to
-#   the end. May set to 'absent', in which case it will be omitted in this
+#   Where to write error log. May be set to 'absent', in which case it will be omitted in this
 #   server stanza (and default to nginx.conf setting)
+# @param error_log_severity
+#   Optional error level
 # @param passenger_cgi_param
 #   Allows one to define additional CGI environment variables to pass to the backend application
 # @param passenger_set_header
@@ -272,7 +276,7 @@
 # @param locations_defaults
 #   Hash of location default settings
 #
-# @example
+# @example simple server
 #   nginx::resource::server { 'test2.local':
 #     ensure   => present,
 #     www_root => '/var/www/nginx-default',
@@ -339,6 +343,8 @@ define nginx::resource::server (
   Optional[String] $proxy_cache_use_stale                                        = undef,
   Optional[Variant[Array[String], String]] $proxy_cache_valid                    = undef,
   Optional[Enum['on', 'off']] $proxy_cache_lock                                  = undef,
+  Optional[Enum['on', 'off']] $proxy_cache_background_update                     = undef,
+  Optional[Enum['on', 'off']] $proxy_cache_convert_head                          = undef,
   Optional[Variant[Array[String], String]] $proxy_cache_bypass                   = undef,
   Optional[String] $proxy_method                                                 = undef,
   Optional[String] $proxy_http_version                                           = undef,
@@ -394,6 +400,7 @@ define nginx::resource::server (
   Optional[Array[String]] $include_files                                         = undef,
   Optional[Variant[String, Array]] $access_log                                   = undef,
   Optional[Variant[String, Array]] $error_log                                    = undef,
+  Optional[Nginx::ErrorLogSeverity] $error_log_severity                          = undef,
   Optional[String] $format_log                                                   = $nginx::http_format_log,
   Optional[Hash] $passenger_cgi_param                                            = undef,
   Optional[Hash] $passenger_set_header                                           = undef,
@@ -501,59 +508,61 @@ define nginx::resource::server (
   if (!$ssl_redirect or $ssl) and $use_default_location {
     # Create the default location reference for the server
     nginx::resource::location { "${name_sanitized}-default":
-      ensure                      => $ensure,
-      server                      => $name_sanitized,
-      ssl                         => $ssl,
-      ssl_only                    => $ssl_only,
-      location                    => '/',
-      location_satisfy            => $location_satisfy,
-      location_allow              => $location_allow,
-      location_deny               => $location_deny,
-      proxy                       => $proxy,
-      proxy_redirect              => $proxy_redirect,
-      proxy_read_timeout          => $proxy_read_timeout,
-      proxy_send_timeout          => $proxy_send_timeout,
-      proxy_connect_timeout       => $proxy_connect_timeout,
-      proxy_cache                 => $proxy_cache,
-      proxy_cache_key             => $proxy_cache_key,
-      proxy_cache_use_stale       => $proxy_cache_use_stale,
-      proxy_cache_valid           => $proxy_cache_valid,
-      proxy_method                => $proxy_method,
-      proxy_http_version          => $proxy_http_version,
-      proxy_set_header            => $proxy_set_header,
-      proxy_hide_header           => $proxy_hide_header,
-      proxy_pass_header           => $proxy_pass_header,
-      proxy_cache_lock            => $proxy_cache_lock,
-      proxy_set_body              => $proxy_set_body,
-      proxy_cache_bypass          => $proxy_cache_bypass,
-      proxy_buffering             => $proxy_buffering,
-      proxy_request_buffering     => $proxy_request_buffering,
-      proxy_busy_buffers_size     => $proxy_busy_buffers_size,
-      proxy_max_temp_file_size    => $proxy_max_temp_file_size,
-      fastcgi                     => $fastcgi,
-      fastcgi_index               => $fastcgi_index,
-      fastcgi_param               => $fastcgi_param,
-      fastcgi_params              => $fastcgi_params,
-      fastcgi_script              => $fastcgi_script,
-      uwsgi                       => $uwsgi,
-      uwsgi_params                => $uwsgi_params,
-      uwsgi_read_timeout          => $uwsgi_read_timeout,
-      try_files                   => $try_files,
-      www_root                    => $www_root,
-      autoindex                   => $autoindex,
-      autoindex_exact_size        => $autoindex_exact_size,
-      autoindex_format            => $autoindex_format,
-      autoindex_localtime         => $autoindex_localtime,
-      index_files                 => $index_files,
-      location_custom_cfg         => $location_custom_cfg,
-      location_cfg_prepend        => $location_cfg_prepend,
-      location_cfg_append         => $location_cfg_append,
-      location_custom_cfg_prepend => $location_custom_cfg_prepend,
-      location_custom_cfg_append  => $location_custom_cfg_append,
-      rewrite_rules               => $rewrite_rules,
-      raw_prepend                 => $location_raw_prepend,
-      raw_append                  => $location_raw_append,
-      notify                      => Class['nginx::service'],
+      ensure                        => $ensure,
+      server                        => $name_sanitized,
+      ssl                           => $ssl,
+      ssl_only                      => $ssl_only,
+      location                      => '/',
+      location_satisfy              => $location_satisfy,
+      location_allow                => $location_allow,
+      location_deny                 => $location_deny,
+      proxy                         => $proxy,
+      proxy_redirect                => $proxy_redirect,
+      proxy_read_timeout            => $proxy_read_timeout,
+      proxy_send_timeout            => $proxy_send_timeout,
+      proxy_connect_timeout         => $proxy_connect_timeout,
+      proxy_cache                   => $proxy_cache,
+      proxy_cache_key               => $proxy_cache_key,
+      proxy_cache_use_stale         => $proxy_cache_use_stale,
+      proxy_cache_valid             => $proxy_cache_valid,
+      proxy_method                  => $proxy_method,
+      proxy_http_version            => $proxy_http_version,
+      proxy_set_header              => $proxy_set_header,
+      proxy_hide_header             => $proxy_hide_header,
+      proxy_pass_header             => $proxy_pass_header,
+      proxy_cache_lock              => $proxy_cache_lock,
+      proxy_cache_background_update => $proxy_cache_background_update,
+      proxy_cache_convert_head      => $proxy_cache_convert_head,
+      proxy_set_body                => $proxy_set_body,
+      proxy_cache_bypass            => $proxy_cache_bypass,
+      proxy_buffering               => $proxy_buffering,
+      proxy_request_buffering       => $proxy_request_buffering,
+      proxy_busy_buffers_size       => $proxy_busy_buffers_size,
+      proxy_max_temp_file_size      => $proxy_max_temp_file_size,
+      fastcgi                       => $fastcgi,
+      fastcgi_index                 => $fastcgi_index,
+      fastcgi_param                 => $fastcgi_param,
+      fastcgi_params                => $fastcgi_params,
+      fastcgi_script                => $fastcgi_script,
+      uwsgi                         => $uwsgi,
+      uwsgi_params                  => $uwsgi_params,
+      uwsgi_read_timeout            => $uwsgi_read_timeout,
+      try_files                     => $try_files,
+      www_root                      => $www_root,
+      autoindex                     => $autoindex,
+      autoindex_exact_size          => $autoindex_exact_size,
+      autoindex_format              => $autoindex_format,
+      autoindex_localtime           => $autoindex_localtime,
+      index_files                   => $index_files,
+      location_custom_cfg           => $location_custom_cfg,
+      location_cfg_prepend          => $location_cfg_prepend,
+      location_cfg_append           => $location_cfg_append,
+      location_custom_cfg_prepend   => $location_custom_cfg_prepend,
+      location_custom_cfg_append    => $location_custom_cfg_append,
+      rewrite_rules                 => $rewrite_rules,
+      raw_prepend                   => $location_raw_prepend,
+      raw_append                    => $location_raw_append,
+      notify                        => Class['nginx::service'],
     }
     $root = undef
   } else {
@@ -632,9 +641,9 @@ define nginx::resource::server (
     }
   }
 
-  create_resources('::nginx::resource::map', $string_mappings)
-  create_resources('::nginx::resource::geo', $geo_mappings)
-  create_resources('::nginx::resource::location', $locations, {
+  create_resources('nginx::resource::map', $string_mappings)
+  create_resources('nginx::resource::geo', $geo_mappings)
+  create_resources('nginx::resource::location', $locations, {
       ensure   => $ensure,
       server   => $name_sanitized,
       ssl      => $ssl,

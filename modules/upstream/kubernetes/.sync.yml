@@ -5,12 +5,6 @@
 appveyor.yml:
   delete: true
 
-Gemfile:
-  optional:
-    ':development':
-      - gem: 'github_changelog_generator'
-        version: '= 1.15.2'
-
 Rakefile:
   changelog_user: puppetlabs
   changelog_since_tag: '4.0.0'
@@ -25,10 +19,6 @@ Rakefile:
       end
   extra_disabled_lint_checks:
     - params_empty_string_assignment
-
-.rubocop.yml:
-  include_todos:
-    inherit_from: '.rubocop_todo.yml'
   profiles:
     strict:
       configs:
@@ -41,7 +31,10 @@ Rakefile:
           - rakelib/*
           - plans/*.pp
           - tasks/*
-
+spec/default_facts.yml:
+  extra_facts:
+    networking:
+      hostname: "kubernetes.localhost"
 spec/spec_helper.rb:
   mock_with: ':rspec'
   coverage_report: true
@@ -61,4 +54,4 @@ spec/spec_helper.rb:
 .travis.yml:
   delete: true
 .rubocop.yml:
-  unmanaged: true
+  include_todos: true

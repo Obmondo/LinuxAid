@@ -1,5 +1,7 @@
 Puppet::Type.newtype(:wildfly_cli) do
-  @doc = 'Executes JBoss-CLI commmands'
+  desc 'Executes JBoss-CLI commmands'
+
+  @isomorphic = false
 
   newparam(:command, :namevar => true) do
     desc 'The actual commmand to execute'
@@ -27,7 +29,7 @@ Puppet::Type.newtype(:wildfly_cli) do
   end
 
   newparam(:port) do
-    desc 'Management port. Defaults to 127.0.0.1'
+    desc 'Management port. Defaults to 9990'
     defaultto 9990
   end
 
@@ -43,9 +45,5 @@ Puppet::Type.newtype(:wildfly_cli) do
     def sync
       provider.exec(@resource[:command])
     end
-  end
-
-  autorequire(:service) do
-    ['wildfly']
   end
 end

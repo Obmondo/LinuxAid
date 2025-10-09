@@ -1,0 +1,7 @@
+---
+fixtures:
+  repositories:
+    systemd: https://github.com/voxpupuli/puppet-systemd.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    nftables: https://github.com/voxpupuli/puppet-nftables.git
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git

@@ -1,13 +1,12 @@
 #
-# Add wildfly app user
+# Manages an Application User (`application-users.properties`) for Wildfly.
 #
-define wildfly::config::app_user($password) {
+# @param password The user password.
+define wildfly::config::app_user(String $password) {
 
-  wildfly::config::user { $name:
-    username  => $name,
+  wildfly::config::user { "${title}:ApplicationRealm":
     password  => $password,
     file_name => 'application-users.properties',
-    realm     => 'ApplicationRealm'
   }
 
 }

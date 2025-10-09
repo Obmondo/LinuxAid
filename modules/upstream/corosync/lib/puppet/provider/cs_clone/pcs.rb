@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/pcs'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/pcs'
 end
 
@@ -15,18 +18,18 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
 
   mk_resource_methods
 
-  defaultfor operatingsystem: [:fedora, :centos, :redhat]
+  defaultfor 'os.family' => %i[redhat debian]
 
   def change_clone_id(type, primitive, id, cib)
     xpath = "/cib/configuration/resources/clone[descendant::#{type}[@id='#{primitive}']]"
     cmd = [command(:cibadmin), '--query', '--xpath', xpath]
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, cib)
+    raw, = self.class.run_command_in_cib(cmd, cib)
     doc = REXML::Document.new(raw)
     return unless doc.root.attributes['id'] != id
 
     doc.root.attributes['id'] = id
-    cmd = [command(:cibadmin), '--replace', '--xpath', xpath, '--xml-text', doc.to_s.chop]
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, cib)
+    cmd = [command(:cibadmin), '--replace', '--xpath', xpath, '--xml-text', doc.to_s.chomp]
+    self.class.run_command_in_cib(cmd, cib)
   end
 
   def self.instances
@@ -35,7 +38,7 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
     instances = []
 
     cmd = [command(:pcs), 'cluster', 'cib']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//resources//clone') do |e|
@@ -49,7 +52,10 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
         notify_clones:     items['notify'],
         globally_unique:   items['globally-unique'],
         ordered:           items['ordered'],
-        interleave:        items['interleave']
+        interleave:        items['interleave'],
+        promotable:        items['promotable'],
+        promoted_max:      items['promoted-max'],
+        promoted_node_max: items['promoted-node-max']
       }
 
       if e.elements['primitive']
@@ -82,14 +88,17 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
       notify_clones:     @resource[:notify_clones],
       globally_unique:   @resource[:globally_unique],
       ordered:           @resource[:ordered],
-      interleave:        @resource[:interleave]
+      interleave:        @resource[:interleave],
+      promotable:        @resource[:promotable],
+      promoted_max:      @resource[:promoted_max],
+      promoted_node_max: @resource[:promoted_node_max]
     }
   end
 
   # Unlike create we actually immediately delete the item.
   def destroy
     debug 'Removing clone'
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib([command(:pcs), 'resource', 'unclone', @resource[:name]], @resource[:cib])
+    self.class.run_command_in_cib([command(:pcs), 'resource', 'unclone', @resource[:name]], @resource[:cib])
     @property_hash.clear
   end
 
@@ -116,7 +125,7 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
       # pcs versions earlier than 0.9.116 do not allow updating a cloned
       # resource. Being conservative, we will unclone then create a new clone
       # with the new parameters.
-      PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib([command(:pcs), 'resource', 'unclone', @property_hash[:existing_clone_element]], @resource.value(:cib))
+      self.class.run_command_in_cib([command(:pcs), 'resource', 'unclone', @property_hash[:existing_clone_element]], @resource.value(:cib))
     end
     cmd = [command(:pcs), 'resource', 'clone', target.to_s]
     {
@@ -125,11 +134,14 @@ Puppet::Type.type(:cs_clone).provide(:pcs, parent: PuppetX::Voxpupuli::Corosync:
       notify_clones: 'notify',
       globally_unique: 'globally-unique',
       ordered: 'ordered',
-      interleave: 'interleave'
+      interleave: 'interleave',
+      promotable: 'promotable',
+      promoted_max: 'promoted-max',
+      promoted_node_max: 'promoted-node-max'
     }.each do |property, clone_property|
       cmd << "#{clone_property}=#{@resource.should(property)}" unless @resource.should(property) == :absent
     end
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource.value(:cib))
+    self.class.run_command_in_cib(cmd, @resource.value(:cib))
     change_clone_id(target_type, target, @resource.value(:name), @resource.value(:cib))
   end
 end

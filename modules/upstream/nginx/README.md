@@ -11,17 +11,14 @@ This module was migrated from James Fryman <james@frymanet.com> to Vox Pupuli.
 
 ## INSTALLING OR UPGRADING
 
-**Please note**: This module is undergoing some structural maintenance.
-You may experience breaking changes between minor versions.
-
 This module manages NGINX configuration.
 
 ### Requirements
 
 * Puppet 4.6.1 or later.  Puppet 3 was supported up until release 0.6.0.
 * apt is now a soft dependency. If your system uses apt, you'll need to
-  configure an appropriate version of the apt module. Version 4.4.0 or higher is
-  recommended because of the proper handling of `apt-transport-https`.
+  configure an appropriate version of the apt module. Version 9.2.0 or higher is
+  recommended because of supporting "modern keyrings".
 
 ### Additional Documentation
 
@@ -86,15 +83,17 @@ class { 'nginx':
 }
 
 nginx::resource::mailhost { 'domain1.example':
-  auth_http   => 'server2.example/cgi-bin/auth',
-  protocol    => 'smtp',
-  listen_port => 587,
-  ssl_port    => 465,
-  starttls    => 'only',
-  xclient     => 'off',
-  ssl         => true,
-  ssl_cert    => '/tmp/server.crt',
-  ssl_key     => '/tmp/server.pem',
+  auth_http       => 'server2.example/cgi-bin/auth',
+  protocol        => 'smtp',
+  listen_port     => 587,
+  ssl_port        => 465,
+  starttls        => 'only',
+  xclient         => 'off',
+  proxy_protocol  => 'off',
+  proxy_smtp_auth => 'off',
+  ssl             => true,
+  ssl_cert        => '/tmp/server.crt',
+  ssl_key         => '/tmp/server.pem',
 }
 ```
 
@@ -348,7 +347,7 @@ define web::nginx_ssl_with_redirect (
   $www_root             = "${full_web_path}/${name}/",
   $location_cfg_append  = undef,
 ) {
-  nginx::resource::server { "${name}.${::domain}":
+  nginx::resource::server { "${name}.${facts['networking']['domain']}":
     ensure              => present,
     www_root            => "${full_web_path}/${name}/",
     location_cfg_append => {
@@ -362,7 +361,7 @@ define web::nginx_ssl_with_redirect (
     $tmp_www_root = $www_root
   }
 
-  nginx::resource::server { "${name}.${::domain} ${name}":
+  nginx::resource::server { "${name}.${facts['networking']['domain']} ${name}":
     ensure                => present,
     listen_port           => 443,
     www_root              => $tmp_www_root,
@@ -380,7 +379,7 @@ define web::nginx_ssl_with_redirect (
       ensure          => present,
       ssl             => true,
       ssl_only        => true,
-      server           => "${name}.${::domain} ${name}",
+      server           => "${name}.${facts['networking']['domain']} ${name}",
       www_root        => "${full_web_path}/${name}/",
       location        => '~ \.php$',
       index_files     => ['index.php', 'index.html', 'index.htm'],

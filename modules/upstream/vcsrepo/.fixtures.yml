@@ -1,0 +1,9 @@
+---
+fixtures:
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent:
+      repo: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      ref: v4.21.0
+    provision: 'https://github.com/puppetlabs/provision.git'
+    package: 'https://github.com/puppetlabs/puppetlabs-package.git'

@@ -4,10 +4,10 @@
 server {
   <%- if @listen_ip.is_a?(Array) then -%>
     <%- @listen_ip.each do |ip| -%>
-  listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if scope.call_function('versioncmp', [scope['nginx::nginx_version'], '1.25.1']) < 0 && @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
     <%- end -%>
   <%- else -%>
-  listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if scope.call_function('versioncmp', [scope['nginx::nginx_version'], '1.25.1']) < 0 && @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
   <%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_ipv6_listen.erb"]) %>
 <%- if @rewrite_www_to_non_www -%>
@@ -17,7 +17,28 @@ server {
   server_name  <%= s.gsub(/^www\./, '') %>;
   return       301 https://www.<%= s %>$request_uri;
 <%- end -%>
-
+<% if @access_log.is_a?(Array) -%>
+  <%- @access_log.each do |log_item| -%>
+  access_log            <%= log_item %><% if @format_log %> <%= @format_log%><% end %>;
+  <%- end -%>
+<% elsif @access_log == 'absent' -%>
+<% elsif @access_log == 'off' -%>
+  access_log            off;
+<% elsif not @access_log -%>
+  access_log            <%= scope['nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log<% if @format_log %> <%= @format_log%><% end %>;
+<% else -%>
+  access_log            <%= @access_log %><% if @format_log %> <%= @format_log%><% end %>;
+<% end -%>
+<% if @error_log.is_a?(Array) -%>
+  <%- @error_log.each do |log_item| -%>
+  error_log             <%= log_item %><% if @error_log_severity %> <%= @error_log_severity %><% end %>;
+  <%- end -%>
+<% elsif @error_log == 'absent' -%>
+<% elsif not @error_log -%>
+  error_log             <%= scope['nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log<% if @error_log_severity %> <%= @error_log_severity %><% end %>;
+<% else -%>
+  error_log             <%= @error_log %><% if @error_log_severity %> <%= @error_log_severity %><% end %>;
+<% end -%>
 <%= scope.function_template(["nginx/server/server_ssl_settings.erb"]) %>
 
 }
@@ -27,10 +48,10 @@ server {
 server {
   <%- if @listen_ip.is_a?(Array) then -%>
     <%- @listen_ip.each do |ip| -%>
-  listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if scope.call_function('versioncmp', [scope['nginx::nginx_version'], '1.25.1']) < 0 && @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
     <%- end -%>
   <%- else -%>
-  listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
+  listen       <%= @listen_ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if scope.call_function('versioncmp', [scope['nginx::nginx_version'], '1.25.1']) < 0 && @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
   <%- end -%>
 <%= scope.function_template(["nginx/server/server_ssl_ipv6_listen.erb"]) %>
 <%- if @rewrite_www_to_non_www -%>
@@ -102,19 +123,19 @@ server {
 <% elsif @access_log == 'off' -%>
   access_log            off;
 <% elsif not @access_log -%>
-  access_log            <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log<% if @format_log %> <%= @format_log%><% end %>;
+  access_log            <%= scope['nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log<% if @format_log %> <%= @format_log%><% end %>;
 <% else -%>
   access_log            <%= @access_log %><% if @format_log %> <%= @format_log%><% end %>;
 <% end -%>
 <% if @error_log.is_a?(Array) -%>
   <%- @error_log.each do |log_item| -%>
-  error_log             <%= log_item %>;
+  error_log             <%= log_item %><% if @error_log_severity %> <%= @error_log_severity %><% end %>;
   <%- end -%>
 <% elsif @error_log == 'absent' -%>
 <% elsif not @error_log -%>
-  error_log             <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log;
+  error_log             <%= scope['nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log<% if @error_log_severity %> <%= @error_log_severity %><% end %>;
 <% else -%>
-  error_log             <%= @error_log %>;
+  error_log             <%= @error_log %><% if @error_log_severity %> <%= @error_log_severity %><% end %>;
 <% end -%>
 <% if @error_pages -%>
 

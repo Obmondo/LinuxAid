@@ -1,0 +1,7 @@
+---
+fixtures:
+  repositories:
+    apt: https://github.com/puppetlabs/puppetlabs-apt.git
+    elastic_stack: https://github.com/voxpupuli/puppet-elastic-stack.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git

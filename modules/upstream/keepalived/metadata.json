@@ -1,6 +1,6 @@
 {
   "name": "puppet-keepalived",
-  "version": "5.2.0",
+  "version": "6.0.0",
   "author": "Vox Pupuli",
   "summary": "Keepalived module",
   "license": "Apache-2.0",
@@ -32,14 +32,16 @@
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "11",
-        "12"
+        "12",
+        "13"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     },
     {
@@ -47,7 +49,8 @@
       "operatingsystemrelease": [
         "7",
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
@@ -55,39 +58,39 @@
       "operatingsystemrelease": [
         "7",
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "8",
-        "9"
+        "9",
+        "10"
       ]
     }
   ],
   "requirements": [
     {
-      "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
-    },
-    {
       "name": "openvox",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 8.19.0 < 9.0.0"
     }
   ]
 }

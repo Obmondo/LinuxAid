@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:volume_group) do
+  desc 'Volume group resource type'
+
   ensurable
 
   newparam(:name) do
     desc 'The name of the volume group.'
     isnamevar
+  end
+
+  newparam(:extent_size) do
+    desc 'The physical extent size. Uses OS default if not provided. Only applicable on Linux.'
   end
 
   newproperty(:physical_volumes, array_matching: :all) do

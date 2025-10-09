@@ -1,7 +1,7 @@
 require 'puppet/provider/parsedfile'
 require_relative '../mount'
 
-fstab = case Facter.value(:osfamily)
+fstab = case Facter.value('os.family')
         when 'Solaris' then '/etc/vfstab'
         when 'AIX' then '/etc/filesystems'
         else
@@ -16,20 +16,18 @@ Puppet::Type.type(:mount).provide(
 ) do
   include Puppet::Provider::Mount
 
-  @doc = "Installs and manages host entries.  For most systems, these
-      entries will just be in `/etc/hosts`, but some systems (notably OS X)
-      will have different solutions."
+  @doc = 'Manages filesystem mounts'
 
   commands mountcmd: 'mount', umount: 'umount'
 
-  @fields = case Facter.value(:osfamily)
+  @fields = case Facter.value('os.family')
             when 'Solaris'
               [:device, :blockdevice, :name, :fstype, :pass, :atboot, :options]
             else
               [:device, :name, :fstype, :options, :dump, :pass]
             end
 
-  if Facter.value(:osfamily) == 'AIX'
+  if Facter.value('os.family') == 'AIX'
     # * is the comment character on AIX /etc/filesystems
     text_line :comment, match: %r{^\s*\*}
   else
@@ -45,7 +43,7 @@ Puppet::Type.type(:mount).provide(
   field_pattern = '(\s*(?>\S+))'
   text_line :incomplete, match: %r{^(?!#{field_pattern}{#{mandatory_fields.length}})}
 
-  case Facter.value(:osfamily)
+  case Facter.value('os.family')
   when 'AIX'
     # The only field that is actually ordered is :name. See `man filesystems` on AIX
     @fields = [:name, :account, :boot, :check, :dev, :free, :mount, :nodename,
@@ -59,7 +57,7 @@ Puppet::Type.type(:mount).provide(
       filesystem_index = 0
       ret = []
       lines.each_with_index do |line, i|
-        if line =~ %r{^\S+:}
+        if %r{^\S+:}.match?(line)
           # Begin new filesystem stanza and save the index
           ret[filesystem_index] = filesystem_stanza.join("\n") if filesystem_stanza
           filesystem_stanza = Array(line)
@@ -67,7 +65,7 @@ Puppet::Type.type(:mount).provide(
           # Eat the preceding blank line
           ret[i - 1] = nil if i > 0 && ret[i - 1] && ret[i - 1].match(%r{^\s*$})
           nil
-        elsif line =~ %r{^(\s*\*.*|\s*)$}
+        elsif %r{^(\s*\*.*|\s*)$}.match?(line)
           # Just a comment or blank line; add in place
           ret[i] = line
         else
@@ -89,7 +87,6 @@ Puppet::Type.type(:mount).provide(
                 fields: @fields,
                 separator: %r{\n},
                 block_eval: :instance do
-
       def post_parse(result)
         property_map = {
           dev: :device,
@@ -108,7 +105,7 @@ Puppet::Type.type(:mount).provide(
         special_options = []
         result[:name] = memo[:name].sub(%r{:\s*$}, '').strip
         memo.each do |_, k_v|
-          next unless k_v && k_v.is_a?(String) && k_v.match('=')
+          next unless k_v&.is_a?(String) && k_v.match('=')
           attr_name, attr_value = k_v.split('=', 2).map(&:strip)
           attr_map_name = property_map[attr_name.to_sym]
           if attr_map_name
@@ -140,10 +137,10 @@ Puppet::Type.type(:mount).provide(
       def to_line(result)
         output = []
         output << "#{result[:name]}:"
-        if result[:device] && result[:device].match(%r{^/})
+        if result[:device]&.match(%r{^/})
           output << "\tdev\t\t= #{result[:device]}"
         elsif result[:device] && result[:device] != :absent
-          if result[:device] !~ %r{^.+:/}
+          unless %r{^.+:/}.match?(result[:device])
             # Just skip this entry; it was malformed to begin with
             Puppet.err _("Mount[%{name}]: Field 'device' must be in the format of <absolute path> or <host>:<absolute path>") % { name: result[:name] }
             return result[:line]
@@ -178,14 +175,36 @@ Puppet::Type.type(:mount).provide(
           output << "\toptions\t\t= #{options.join(',')}" unless options.empty?
         end
         if result[:line] && result[:line].split("\n").sort == output.sort
-          return "\n#{result[:line]}"
+          "\n#{result[:line]}"
         else
-          return "\n#{output.join("\n")}"
+          "\n#{output.join("\n")}"
         end
       end
     end
   else
     record_line name, fields: @fields, separator: %r{\s+}, joiner: "\t", optional: optional_fields, block_eval: :instance do
+      def to_line(record)
+        # convert whitespace to ASCII before writing to fstab
+        # duplicate the record since we don't want our resource to have ASCII whitespaces
+        result = record.dup
+        [:device, :name].each do |param|
+          if record[param].is_a?(String)
+            result[param] = result[param].gsub(' ', '\\\040') if result[param].include?(' ')
+          end
+        end
+        join(result)
+      end
+
+      def post_parse(record)
+        # handle ASCII-encoded whitespaces in fstab
+        [:device, :name].each do |param|
+          if record[param].is_a?(String)
+            record[param].gsub!('\040', ' ') if record[param].include?('\040')
+          end
+        end
+        record
+      end
+
       def pre_gen(record)
         if !record[:options] || record[:options].empty?
           if Facter.value(:kernel) == 'Linux'
@@ -207,7 +226,7 @@ Puppet::Type.type(:mount).provide(
     target_records.map do |record|
       # Eat the trailing slash(es) of mountpoints in fstab
       # This mimics the behavior of munging the resource title
-      record[:name].gsub!(%r{^(.+?)/*$}, '\1') unless record[:name].nil?
+      record[:name]&.gsub!(%r{^(.+?)/*$}, '\1')
       record[:ensure] = :unmounted if record[:record_type] == :parsed
       record
     end
@@ -253,16 +272,17 @@ Puppet::Type.type(:mount).provide(
   end
 
   def self.mountinstances
-    # XXX: Will not work for mount points that have spaces in path (does fstab support this anyways?)
-    regex = case Facter.value(:osfamily)
+    regex = case Facter.value('os.family')
             when 'Darwin'
               %r{ on (?:/private/var/automount)?(\S*)}
             when 'Solaris', 'HP-UX'
               %r{^(\S*) on }
             when 'AIX'
               %r{^(?:\S*\s+\S+\s+)(\S+)}
+            when %r{FreeBSD|NetBSD}i
+              %r{ on (.*) \(}
             else
-              %r{ on (\S*)}
+              %r{ on (.*) type }
             end
     instances = []
     mount_output = mountcmd.split("\n")

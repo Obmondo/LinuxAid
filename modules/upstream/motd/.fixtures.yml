@@ -1,0 +1,11 @@
+fixtures:
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    provision: 'https://github.com/puppetlabs/provision.git'
+    puppet_agent: 
+      repo: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      ref: v4.23.0
+    registry: 'https://github.com/puppetlabs/puppetlabs-registry.git'
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+  symlinks:
+    motd: "#{source_dir}"

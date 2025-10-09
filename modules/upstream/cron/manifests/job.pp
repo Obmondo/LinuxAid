@@ -1,47 +1,24 @@
-# Type: cron::job
+# @summary This type creates a cron job via a file in /etc/cron.d
+# @param command The command to execute.
+# @param ensure The state to ensure this resource exists in. Can be absent, present.
+# @param minute The minute the cron job should fire on. Can be any valid cron.
+# @param hour The hour the cron job should fire on. Can be any valid cron hour.
+# @param date The date the cron job should fire on. Can be any valid cron date.
+# @param month The month the cron job should fire on. Can be any valid cron month.
+# @param weekday The day of the week the cron job should fire on. Can be any valid cron weekday value.
+# @param special A crontab specific keyword like 'reboot'.
+# @param environment An array of environment variable settings.
+# @param user The user the cron job should be executed as.
+# @param group the group the cron job file should by owned by.
+# @param mode The mode to set on the created job file.
+# @param description Optional short description, which will be included in the cron job file.
 #
-# This type creates a cron job via a file in /etc/cron.d
-#
-# Parameters:
-#   ensure - The state to ensure this resource exists in. Can be absent, present
-#     Defaults to 'present'
-#   minute - The minute the cron job should fire on. Can be any valid cron
-#   minute value.
-#     Defaults to '*'.
-#   hour - The hour the cron job should fire on. Can be any valid cron hour
-#   value.
-#     Defaults to '*'.
-#   date - The date the cron job should fire on. Can be any valid cron date
-#   value.
-#     Defaults to '*'.
-#   month - The month the cron job should fire on. Can be any valid cron month
-#   value.
-#     Defaults to '*'.
-#   weekday - The day of the week the cron job should fire on. Can be any valid
-#   cron weekday value.
-#     Defaults to '*'.
-#   environment - An array of environment variable settings.
-#     Defaults to an empty set ([]).
-#   mode - The mode to set on the created job file
-#     Defaults to 0644.
-#   user - The user the cron job should be executed as.
-#     Defaults to 'root'.
-#   description - Optional short description, which will be included in the
-#   cron job file.
-#     Defaults to undef.
-#   command - The command to execute.
-#
-# Actions:
-#
-# Requires:
-#
-# Sample Usage:
-#   cron::job { 'generate_puppetdoc':
-#     minute      => '01',
-#     environment => [ 'PATH="/usr/sbin:/usr/bin:/sbin:/bin"' ],
-#     command     => 'puppet doc /etc/puppet/modules >/var/www/puppet_docs.mkd',
-#   }
-#
+# @example create a cron job
+#  cron::job { 'generate_puppetdoc':
+#    minute      => '01',
+#    environment => [ 'PATH="/usr/sbin:/usr/bin:/sbin:/bin"' ],
+#    command     => 'puppet doc /etc/puppet/modules >/var/www/puppet_docs.mkd',
+#  }
 define cron::job (
   Optional[String[1]] $command     = undef,
   Cron::Job_ensure    $ensure      = 'present',
@@ -53,10 +30,10 @@ define cron::job (
   Cron::Special       $special     = undef,
   Cron::Environment   $environment = [],
   Cron::User          $user        = 'root',
-  Cron::Mode          $mode        = '0644',
+  Variant[String[1],Integer[0]] $group = 0,
+  Stdlib::Filemode    $mode        = '0600',
   Optional[String]    $description = undef,
 ) {
-
   assert_type(Cron::Jobname, $title)
 
   case $ensure {
@@ -70,10 +47,22 @@ define cron::job (
       file { "job_${title}":
         ensure  => 'file',
         owner   => 'root',
-        group   => 'root',
+        group   => $group,
         mode    => $mode,
         path    => "/etc/cron.d/${title}",
-        content => template('cron/job.erb'),
+        content => epp('cron/job.epp', {
+            name        => $name,
+            environment => $environment,
+            description => $description,
+            special     => $special,
+            user        => $user,
+            command     => $command,
+            minute      => $minute,
+            hour        => $hour,
+            date        => $date,
+            month       => $month,
+            weekday     => $weekday,
+        }),
       }
     }
   }

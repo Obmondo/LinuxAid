@@ -1,0 +1,4 @@
+---
+# RedHat family configuration
+
+drbd::package_name: 'drbd-utils'

@@ -243,6 +243,7 @@ class slurm::params {
   $propagateresourcelimits_except = ['MEMLOCK'] # see https://slurm.schedmd.com/faq.html#memlock
   $reconfigflags           = []
   $resvoverrun             = 0
+  $rebootprogram           = '/sbin/reboot'
   $resumetimeout           = 60
   $resumeprogram           = ''
   $resumefailprogram       = ''

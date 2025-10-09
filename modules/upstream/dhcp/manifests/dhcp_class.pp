@@ -1,9 +1,8 @@
-# == Define: dhcp::dhcp_class
-#
+# @summary Manage a DHCP class in the config
 define dhcp::dhcp_class (
-  Variant[Array[String], String] $parameters,
+  Variant[Array[String[1]], String[1]] $parameters,
 ) {
-  include ::dhcp::params
+  include dhcp::params
 
   $dhcp_dir = $dhcp::params::dhcp_dir
 

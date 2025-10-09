@@ -1,6 +1,17 @@
 global {
-  usage-count no;
+<%- @global_options.each do | gopt | -%>
+  <%= gopt %>;
+<%- end -%>
 }
 common {
-  protocol C;
+<%- @common_options.each do | gopt | -%>
+  <%= gopt %>;
+<%- end -%>
+<%- @common_suboptions.each do | key, gopt | -%>
+  <%= key %> {
+  <%- gopt.each do | val | %>
+    <%= val %>;
+  <%- end -%>
+  }
+<%- end -%>
 }

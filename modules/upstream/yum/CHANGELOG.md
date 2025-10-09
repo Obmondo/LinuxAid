@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.3.0](https://github.com/voxpupuli/puppet-yum/tree/v7.3.0) (2025-04-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.2.0...v7.3.0)
+
+**Implemented enhancements:**
+
+- Add support for dnf5 [\#351](https://github.com/voxpupuli/puppet-yum/pull/351) ([hboetes](https://github.com/hboetes))
+- metadata.json: Add OpenVox [\#350](https://github.com/voxpupuli/puppet-yum/pull/350) ([jstraw](https://github.com/jstraw))
+
+## [v7.2.0](https://github.com/voxpupuli/puppet-yum/tree/v7.2.0) (2024-12-12)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.1.0...v7.2.0)
+
+**Implemented enhancements:**
+
+- Add Fedora 40, OracleLinux 9, Rocky 9 [\#342](https://github.com/voxpupuli/puppet-yum/pull/342) ([jay7x](https://github.com/jay7x))
+- allow RpmNameGlob for versionlock entries [\#335](https://github.com/voxpupuli/puppet-yum/pull/335) ([kBite](https://github.com/kBite))
+- Support dnf module management - Fix \#310 [\#320](https://github.com/voxpupuli/puppet-yum/pull/320) ([EmersonPrado](https://github.com/EmersonPrado))
+
+**Fixed bugs:**
+
+- yum::copr is not always idempotent [\#340](https://github.com/voxpupuli/puppet-yum/issues/340)
+- Replace legacy facts [\#344](https://github.com/voxpupuli/puppet-yum/pull/344) ([bastelfreak](https://github.com/bastelfreak))
+- Improve yum::copr idempotency [\#341](https://github.com/voxpupuli/puppet-yum/pull/341) ([jay7x](https://github.com/jay7x))
+
+**Merged pull requests:**
+
+- Drop support for Oracle 7 [\#325](https://github.com/voxpupuli/puppet-yum/pull/325) ([traylenator](https://github.com/traylenator))
+
 ## [v7.1.0](https://github.com/voxpupuli/puppet-yum/tree/v7.1.0) (2023-06-26)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-yum/compare/v7.0.0...v7.1.0)

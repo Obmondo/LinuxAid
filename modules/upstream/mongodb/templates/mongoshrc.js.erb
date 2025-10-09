@@ -1,0 +1,47 @@
+function rsReconfigMember(member){
+  var cfg = rs.config()
+  cfg.members.forEach(function(part,index,memberArray){
+    if (member.host == part.host) {
+      for(k in member){
+        memberArray[index][k] = member[k]
+      }
+    }
+  })
+  return rs.reconfig(cfg)
+}
+
+function rsReconfigSettings(settings){
+  var cfg = rs.config()
+  cfg.settings = settings
+  return rs.reconfig(cfg)
+}
+
+<% if @auth and @store_creds -%>
+function authRequired() {
+  try {
+    return rs.status().ok != 1;
+  } catch (err) {
+    if (err.message.match(/requires authentication/) || err.message.match(/not authorized on admin/)) {
+      return true
+    }
+    return false
+  }
+}
+
+if (authRequired()) {
+  <%- if @replset -%>
+  db.getMongo().setReadPref('primaryPreferred')
+  <%- end -%>
+  try {
+    admin = db.getSiblingDB('admin')
+    admin.auth('<%= @admin_username %>', '<%= @admin_password_unsensitive.gsub('\\','\\\\\\\\').gsub("'","\\\\'") %>')
+  }
+  catch (err) {
+    // Silently ignore this error, we can't really do anything about it.
+    // If authentication fails here, that can mean 2 things:
+    // - Some error or corruption
+    // - Authentication is required, but no user is set up yet.
+    //   This is normal when setting up a new cluster/server.
+  }
+}
+<% end -%>

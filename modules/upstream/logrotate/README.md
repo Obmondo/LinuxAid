@@ -34,6 +34,8 @@ The only thing you'll need to deal with, this type configures a logrotate rule.
 Using this type will automatically include a private class that will install
 and configure logrotate for you.
 
+**Important**: in Hiera, use logrotate::rules (rule**s**, not rule)
+
 ```
 namevar         - The String name of the rule.
 path            - The path(s) to the log file(s) to be rotated.  May be a
@@ -126,6 +128,8 @@ shredcycles     - The Integer number of times shred should overwrite log files
                   before unlinking them (optional).
 start           - The Integer number to be used as the base for the extensions
                   appended to the rotated log files (optional).
+su              - A Boolean specifying whether logrotate should rotate under
+                  the specific su_owner and su_group instead of the default (optional).
 su_user         - A username String that logrotate should use to rotate a
                   log file set instead of using the default if
                   su => true (optional).
@@ -188,6 +192,8 @@ class { 'logrotate':
 
 ## Examples
 
+### Puppet
+
 ```puppet
 logrotate::conf { '/etc/logrotate.conf':
   rotate       => 10,
@@ -218,6 +224,47 @@ logrotate::rule { 'apache':
   sharedscripts => true,
   postrotate    => '/etc/init.d/httpd restart',
 }
+```
+
+### Hiera
+
+**Important**: in Hiera, use logrotate::rules (rule**s**, not rule)
+
+```yaml
+logrotate::config:
+  rotate: 10
+  rotate_every: 'week'
+  ifempty: true
+  dateext: true
+
+logrotate::rules:
+  messages:
+    path: '/var/log/messages'
+    rotate: 5
+    rotate_every: 'week'
+    postrotate: '/usr/bin/killall -HUP syslogd'
+  servicelogs:
+    path: ['/var/log/this-service.log', '/var/log/that-app.log']
+    rotate: 5
+    rotate_every: 'day'
+    postrotate: '/usr/bin/kill -HUP `cat /run/syslogd.pid`'
+  apache:
+    path: '/var/log/httpd/*.log'
+    rotate: 5
+    mail: 'test@example.com'
+    size: '100k'
+    sharedscripts: true
+    postrotate: '/etc/init.d/httpd restart'
+```
+
+### Result
+This example will create/edit these files:
+```
+├── logrotate.conf
+└── logrotate.d
+    ├── apache
+    ├── messages
+    └── servicelogs
 ```
 
 ## Authors and Module History

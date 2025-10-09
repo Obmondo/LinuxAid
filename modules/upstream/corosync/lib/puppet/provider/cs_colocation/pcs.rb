@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/pcs'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/pcs'
 end
 
@@ -13,7 +16,7 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
         of current primitive colocations on the system; add, delete, or adjust various
         aspects.'
 
-  defaultfor operatingsystem: [:fedora, :centos, :redhat]
+  defaultfor 'os.family' => %i[redhat debian]
 
   commands pcs: 'pcs'
 
@@ -23,65 +26,66 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
     instances = []
 
     cmd = [command(:pcs), 'cluster', 'cib']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
-    resource_set_options = ['sequential', 'require-all', 'action', 'role']
+    resource_set_options = %w[sequential require-all action role]
 
     constraints = doc.root.elements['configuration'].elements['constraints']
-    unless constraints.nil?
-      constraints.each_element('rsc_colocation') do |e|
-        items = e.attributes
+    constraints&.each_element('rsc_colocation') do |e|
+      items = e.attributes
 
-        if e.has_elements?
-          resource_sets = []
-          e.each_element('resource_set') do |rs|
-            resource_set = {}
-            options = {}
-            resource_set_options.each do |o|
-              options[o] = rs.attributes[o] if rs.attributes[o]
-            end
-            # rubocop:disable Style/ZeroLengthPredicate
-            resource_set['options'] = options if options.keys.size > 0
-            # rubocop:enable Style/ZeroLengthPredicate
-            resource_set['primitives'] = []
-            rs.each_element('resource_ref') do |rr|
-              resource_set['primitives'] << rr.attributes['id']
-            end
-            resource_sets << resource_set
+      if e.has_elements?
+        resource_sets = []
+        e.each_element('resource_set') do |rs|
+          resource_set = {}
+          options = {}
+          resource_set_options.each do |o|
+            options[o] = rs.attributes[o] if rs.attributes[o]
           end
-          colocation_instance = {
-            name:       items['id'],
-            ensure:     :present,
-            primitives: resource_sets,
-            score:      items['score'],
-            provider:   name,
-            new:        false
-          }
-        else
-          rsc = if items['rsc-role'] && items['rsc-role'] != 'Started'
-                  "#{items['rsc']}:#{items['rsc-role']}"
-                else
-                  items['rsc']
-                end
-
-          with_rsc = if items ['with-rsc-role'] && items['with-rsc-role'] != 'Started'
-                       "#{items['with-rsc']}:#{items['with-rsc-role']}"
-                     else
-                       items['with-rsc']
-                     end
-
-          colocation_instance = {
-            name:       items['id'],
-            ensure:     :present,
-            # Put primitives in chronological order, first 'with-rsc', then 'rsc'.
-            primitives: [with_rsc, rsc],
-            score:      items['score'],
-            provider:   name,
-            new:        false
-          }
+          resource_set['options'] = options if options.keys.size.positive?
+          resource_set['primitives'] = []
+          rs.each_element('resource_ref') do |rr|
+            resource_set['primitives'] << rr.attributes['id']
+          end
+          resource_sets << resource_set
         end
-        instances << new(colocation_instance)
+        colocation_instance = {
+          name: items['id'],
+          ensure: :present,
+          primitives: resource_sets,
+          score: items['score'],
+          provider: name,
+          new: false
+        }
+      else
+        rsc = if items['rsc-role'] && items['rsc-role'] != 'Started'
+                "#{items['rsc']}:#{items['rsc-role']}"
+              else
+                items['rsc']
+              end
+
+        with_rsc = if items['with-rsc-role']
+                     case items['with-rsc-role']
+                     when 'Promoted' then "#{items['with-rsc']}:Master"
+                     when 'Unpromoted' then "#{items['with-rsc']}:Slave"
+                     when 'Started' then items['with-rsc']
+                     else "#{items['with-rsc']}:#{items['with-rsc-role']}"
+                     end
+                   else
+                     items['with-rsc']
+                   end
+
+        colocation_instance = {
+          name: items['id'],
+          ensure: :present,
+          # Put primitives in chronological order, first 'with-rsc', then 'rsc'.
+          primitives: [with_rsc, rsc],
+          score: items['score'],
+          provider: name,
+          new: false
+        }
       end
+      instances << new(colocation_instance)
     end
     instances
   end
@@ -90,11 +94,11 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
   # of actually doing the work.
   def create
     @property_hash = {
-      name:       @resource[:name],
-      ensure:     :present,
+      name: @resource[:name],
+      ensure: :present,
       primitives: @resource[:primitives],
-      score:      @resource[:score],
-      new:        true
+      score: @resource[:score],
+      new: true
     }
   end
 
@@ -102,7 +106,7 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
   def destroy
     debug('Removing colocation')
     cmd = [command(:pcs), 'constraint', 'remove', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     @property_hash.clear
   end
 
@@ -153,16 +157,14 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
     if @property_hash[:new] == false
       debug('Removing colocation')
       cmd = [command(:pcs), 'constraint', 'remove', @resource[:name]]
-      PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+      self.class.run_command_in_cib(cmd, @resource[:cib])
     end
     first_item = @property_hash[:primitives].shift
     cmd = [command(:pcs), 'constraint', 'colocation']
     if first_item.is_a?(Array)
       cmd << 'set'
       cmd << format_resource_set(first_item)
-      until @property_hash[:primitives].empty?
-        cmd += format_resource_set(@property_hash[:primitives].shift)
-      end
+      cmd += format_resource_set(@property_hash[:primitives].shift) until @property_hash[:primitives].empty?
       cmd << 'setoptions'
       cmd << "id=#{@property_hash[:name]}"
       cmd << "score=#{@property_hash[:score]}"
@@ -196,6 +198,6 @@ Puppet::Type.type(:cs_colocation).provide(:pcs, parent: PuppetX::Voxpupuli::Coro
       cmd << @property_hash[:score]
       cmd << "id=#{@property_hash[:name]}"
     end
-    PuppetX::Voxpupuli::Corosync::Provider::Pcs.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
   end
 end

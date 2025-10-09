@@ -1,55 +1,44 @@
-#
-# Wildfly startup service class
-#
+# Manages Wildfly service.
 class wildfly::service {
 
-  file { $::wildfly::conf_file:
+  $config = service_config($wildfly::distribution, $wildfly::version, $wildfly::mode, $wildfly::init_system)
+
+  debug("${wildfly::distribution}.${wildfly::version}.${wildfly::mode}.${wildfly::init_system}: ${config}")
+
+  $conf_file = pick($wildfly::conf_file, $config['conf_file'])
+  $conf_template = pick($wildfly::conf_template, $config['conf_template'])
+  $service_name = pick($wildfly::service_name, $config['service_name'])
+  $service_file = pick($wildfly::service_file, $config['service_file'])
+
+  $systemd_template = $config['systemd_template']
+  $systemd_native = $config['systemd_native']
+
+  if !$wildfly::package_name {
+    contain "wildfly::service::${wildfly::init_system}"
+  }
+
+  $conf_dir = dirname($conf_file)
+
+  if $conf_dir != '/etc/default' {
+
+    file { $conf_dir:
+      ensure => directory,
+      before => File[$conf_file],
+    }
+
+  }
+
+  file { $conf_file:
     ensure  => present,
-    mode    => '0755',
-    owner   => 'root',
-    group   => 'root',
-    content => template('wildfly/wildfly.conf.erb'),
-    notify  => Service[$::wildfly::service_name]
+    content => epp($conf_template),
   }
-
-  if $::wildfly::custom_init {
-    # Pass custom initd script template for starting wildfly
-    file { "/etc/init.d/${::wildfly::service_name}":
-      ensure  => present,
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
-      content => template($::wildfly::custom_init),
-    }
-  } else {
-    # Use/Copy default initd script from installation
-    file { "/etc/init.d/${::wildfly::service_name}":
-      ensure => present,
-      mode   => '0755',
-      owner  => 'root',
-      group  => 'root',
-      source => "${::wildfly::dirname}/bin/init.d/${::wildfly::service_file}",
-    }
-  }
-
-  if ( $::operatingsystem in ['CentOS', 'RedHat', 'OracleLinux'] and $::operatingsystemmajrelease == '7') {
-
-    file { "/etc/systemd/system/${::wildfly::service_name}.service":
-      ensure  => present,
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
-      content => template('wildfly/wildfly.service.erb'),
-      before  => Service[$::wildfly::service_name],
-    }
-
-  }
-
-  service { $::wildfly::service_name:
-    ensure     => $::wildfly::service_ensure,
-    enable     => $::wildfly::service_enable,
+  ~>
+  service { 'wildfly':
+    ensure     => $wildfly::service_ensure,
+    name       => $service_name,
+    enable     => $wildfly::service_enable,
     hasrestart => true,
     hasstatus  => true,
-    require    => [File["/etc/init.d/${::wildfly::service_name}"], File[$::wildfly::conf_file]]
   }
+
 }

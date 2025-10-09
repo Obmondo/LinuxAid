@@ -1,0 +1,17 @@
+fixtures:
+  forge_modules:
+    stdlib: 'puppetlabs-stdlib'
+    apt: 'puppetlabs-apt'
+    powershell: 'puppetlabs-powershell'
+    reboot: 'puppetlabs-reboot'
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent:
+      repo: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+      ref: v4.13.0
+    provision: 'https://github.com/puppetlabs/provision.git'
+    yumrepo_core: 
+      repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
+      puppet_version: ">= 6.0.0"
+  symlinks:
+    docker: "#{source_dir}"

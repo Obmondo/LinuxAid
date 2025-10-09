@@ -31,7 +31,7 @@
 #   See apt::backports for documentation.
 #
 # @param confs
-#   Creates new `apt::conf` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::conf` resources.
 #
 # @param update
 #   Configures various update settings. Valid options: a hash made up from the following keys:
@@ -40,7 +40,7 @@
 #   Specifies how often to run `apt-get update`. If the exec resource `apt_update` is notified,
 #   `apt-get update` runs regardless of this value.
 #   Valid options:
-#     'always' (at every Puppet run); 
+#     'always' (at every Puppet run);
 #     'hourly' (if the value of `apt_update_last_success` is less than current epoch time minus 3600);
 #     'daily'  (if the value of `apt_update_last_success` is less than current epoch time minus 86400);
 #     'weekly' (if the value of `apt_update_last_success` is less than current epoch time minus 604800);
@@ -85,22 +85,25 @@
 #   The default proxy settings that are combined and merged with the passed `proxy` value
 #
 # @param sources
-#   Creates new `apt::source` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::source` resources.
+#
+# @param auths
+#   Creates new `apt::auth` resources. Valid options: a hash to be passed to the create_resources function linked above.
 #
 # @param keys
-#   Creates new `apt::key` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::key` resources.
 #
 # @param keyrings
 #   Hash of `apt::keyring` resources.
 #
 # @param ppas
-#   Creates new `apt::ppa` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::ppa` resources.
 #
 # @param pins
-#   Creates new `apt::pin` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::pin` resources.
 #
 # @param settings
-#   Creates new `apt::setting` resources. Valid options: a hash to be passed to the create_resources function linked above.
+#   Hash of `apt::setting` resources.
 #
 # @param manage_auth_conf
 #   Specifies whether to manage the /etc/apt/auth.conf file. When true, the file will be overwritten with the entries specified in
@@ -113,7 +116,7 @@
 #   password and no others. Specifying manage_auth_conf and not specifying this parameter will set /etc/apt/auth.conf to absent.
 #
 # @param auth_conf_owner
-#   The owner of the file /etc/apt/auth.conf. Default: '_apt' or 'root' on old releases.
+#   The owner of the file /etc/apt/auth.conf.
 #
 # @param root
 #   Specifies root directory of Apt executable.
@@ -137,58 +140,101 @@
 #   A hash made up of the various configuration files used by Apt.
 #
 # @param sources_list_force
-#   Specifies whether to perform force purge or delete. Default false.
+#   Specifies whether to perform force purge or delete.
 #
 # @param include_defaults
+#   The package types to include by default.
 #
 # @param apt_conf_d
 #   The path to the file `apt.conf.d`
+#
+# @param auth_conf_d
+#   The path to the file `auth_conf.d`
 #
 # @param source_key_defaults
 #   The fault `source_key` settings
 #
 class apt (
-  Hash $update_defaults                           = $apt::params::update_defaults,
-  Hash $purge_defaults                            = $apt::params::purge_defaults,
-  Hash $proxy_defaults                            = $apt::params::proxy_defaults,
-  Hash $include_defaults                          = $apt::params::include_defaults,
-  String $provider                                = $apt::params::provider,
-  String $keyserver                               = $apt::params::keyserver,
-  Optional[String] $key_options                   = $apt::params::key_options,
-  Optional[Array[String]] $ppa_options            = $apt::params::ppa_options,
-  Optional[String] $ppa_package                   = $apt::params::ppa_package,
-  Optional[Hash] $backports                       = $apt::params::backports,
-  Hash $confs                                     = $apt::params::confs,
-  Hash $update                                    = $apt::params::update,
-  Hash $purge                                     = $apt::params::purge,
-  Apt::Proxy $proxy                               = $apt::params::proxy,
-  Hash $sources                                   = $apt::params::sources,
-  Hash $keys                                      = $apt::params::keys,
-  Hash $keyrings                                  = {},
-  Hash $ppas                                      = $apt::params::ppas,
-  Hash $pins                                      = $apt::params::pins,
-  Hash $settings                                  = $apt::params::settings,
-  Boolean $manage_auth_conf                       = $apt::params::manage_auth_conf,
-  Array[Apt::Auth_conf_entry] $auth_conf_entries  = $apt::params::auth_conf_entries,
-  String $auth_conf_owner                         = $apt::params::auth_conf_owner,
-  String $root                                    = $apt::params::root,
-  String $sources_list                            = $apt::params::sources_list,
-  String $sources_list_d                          = $apt::params::sources_list_d,
-  String $conf_d                                  = $apt::params::conf_d,
-  String $preferences                             = $apt::params::preferences,
-  String $preferences_d                           = $apt::params::preferences_d,
-  String $apt_conf_d                              = $apt::params::apt_conf_d,
-  Hash $config_files                              = $apt::params::config_files,
-  Boolean $sources_list_force                     = $apt::params::sources_list_force,
-
+  Hash $update_defaults = {
+    'frequency' => 'reluctantly',
+    'loglevel'  => undef,
+    'timeout'   => undef,
+    'tries'     => undef,
+  },
+  Hash $purge_defaults = {
+    'sources.list'   => false,
+    'sources.list.d' => false,
+    'preferences'    => false,
+    'preferences.d'  => false,
+    'apt.conf.d'     => false,
+    'auth.conf.d'    => false,
+  },
+  Hash $proxy_defaults = {
+    'ensure'     => undef,
+    'host'       => undef,
+    'port'       => 8080,
+    'https'      => false,
+    'https_acng' => false,
+    'direct'     => false,
+  },
+  Hash $include_defaults = {
+    'deb' => true,
+    'src' => false,
+  },
+  Stdlib::Absolutepath $provider = '/usr/bin/apt-get',
+  Stdlib::Host $keyserver = 'keyserver.ubuntu.com',
+  Optional[String[1]] $key_options = undef,
+  Optional[Array[String[1]]] $ppa_options = undef,
+  Optional[String[1]] $ppa_package = undef,
+  Optional[Hash] $backports = undef,
+  Hash $confs = {},
+  Hash $update = {},
+  Hash $purge = {},
+  Apt::Proxy $proxy = {},
+  Hash $sources = {},
+  Hash $auths = {},
+  Hash $keys = {},
+  Hash $keyrings = {},
+  Hash $ppas = {},
+  Hash $pins = {},
+  Hash $settings = {},
+  Boolean $manage_auth_conf = true,
+  Array[Apt::Auth_conf_entry] $auth_conf_entries = [],
+  String[1] $auth_conf_owner = '_apt',
+  Stdlib::Absolutepath $root = '/etc/apt',
+  Stdlib::Absolutepath $sources_list = "${root}/sources.list",
+  Stdlib::Absolutepath $sources_list_d = "${root}/sources.list.d",
+  Stdlib::Absolutepath $conf_d = "${root}/apt.conf.d",
+  Stdlib::Absolutepath $preferences = "${root}/preferences",
+  Stdlib::Absolutepath $preferences_d = "${root}/preferences.d",
+  Stdlib::Absolutepath $apt_conf_d = "${root}/apt.conf.d",
+  Stdlib::Absolutepath $auth_conf_d = "${root}/auth.conf.d",
+  Hash $config_files = {
+    'conf'   => {
+      'path' => $conf_d,
+      'ext'  => '',
+    },
+    'pref'   => {
+      'path' => $preferences_d,
+      'ext'  => '.pref',
+    },
+    'list'   => {
+      'path' => $sources_list_d,
+      'ext'  => '.list',
+    },
+    'sources' => {
+      'path' => $sources_list_d,
+      'ext'  => '.sources',
+    },
+  },
+  Boolean $sources_list_force = false,
   Hash $source_key_defaults = {
     'server'  => $keyserver,
     'options' => undef,
     'content' => undef,
     'source'  => undef,
-  }
-
-) inherits apt::params {
+  },
+) {
   if $facts['os']['family'] != 'Debian' {
     fail('This module only works on Debian or derivatives like Ubuntu')
   }
@@ -227,6 +273,9 @@ class apt (
   if $purge['apt.conf.d'] {
     assert_type(Boolean, $purge['apt.conf.d'])
   }
+  if $purge['auth.conf.d'] {
+    assert_type(Boolean, $purge['auth.conf.d'])
+  }
 
   $_purge = $apt::purge_defaults + $purge
 
@@ -255,7 +304,7 @@ class apt (
 
   $confheadertmp = epp('apt/_conf_header.epp')
   $proxytmp = epp('apt/proxy.epp', { 'proxies' => $_proxy })
-  $updatestamptmp = epp('apt/15update-stamp.epp')
+  $updatestamptmp = file('apt/15update-stamp')
 
   if $_proxy['ensure'] == 'absent' or $_proxy['host'] {
     apt::setting { 'conf-proxy':
@@ -342,30 +391,56 @@ class apt (
     notify  => Class['apt::update'],
   }
 
-  if $confs {
-    create_resources('apt::conf', $confs)
+  file { 'auth.conf.d':
+    ensure  => directory,
+    path    => $apt::auth_conf_d,
+    owner   => root,
+    group   => root,
+    purge   => $_purge['auth.conf.d'],
+    recurse => $_purge['auth.conf.d'],
+    notify  => Class['apt::update'],
   }
-  # manage sources if present
-  if $sources {
-    create_resources('apt::source', $sources)
+
+  $confs.each |$key, $value| {
+    apt::conf { $key:
+      * => $value,
+    }
   }
-  # manage keys if present
-  if $keys {
-    create_resources('apt::key', $keys)
+
+  $sources.each |$key, $value| {
+    apt::source { $key:
+      * => $value,
+    }
   }
-  # manage keyrings if present
+
+  $auths.each |$key, $value| {
+    apt::auth { $key:
+      * => $value,
+    }
+  }
+
+  $keys.each |$key, $value| {
+    apt::key { $key:
+      * => $value,
+    }
+  }
+
   $keyrings.each |$key, $data| {
     apt::keyring { $key:
       * => $data,
     }
   }
-  # manage ppas if present
-  if $ppas {
-    create_resources('apt::ppa', $ppas)
+
+  $ppas.each |$key, $value| {
+    apt::ppa { $key:
+      * => $value,
+    }
   }
-  # manage settings if present
-  if $settings {
-    create_resources('apt::setting', $settings)
+
+  $settings.each |$key, $value| {
+    apt::setting { $key:
+      * => $value,
+    }
   }
 
   if $manage_auth_conf {
@@ -374,7 +449,11 @@ class apt (
       default => 'present',
     }
 
-    $auth_conf_tmp = stdlib::deferrable_epp('apt/auth_conf.epp', { 'auth_conf_entries' => $auth_conf_entries })
+    $auth_conf_tmp = stdlib::deferrable_epp('apt/auth_conf.epp',
+      {
+        'auth_conf_entries' => $auth_conf_entries,
+      },
+    )
 
     file { '/etc/apt/auth.conf':
       ensure  => $auth_conf_ensure,
@@ -386,9 +465,10 @@ class apt (
     }
   }
 
-  # manage pins if present
-  if $pins {
-    create_resources('apt::pin', $pins)
+  $pins.each |$key, $value| {
+    apt::pin { $key:
+      * => $value,
+    }
   }
 
   case $facts['os']['name'] {

@@ -4,13 +4,14 @@
 # It ensure the service is running.
 #
 class realmd::sssd::service {
-  if $realmd::manage_sssd_service {
-    $_sssd_service_name = $realmd::sssd_service_name
 
-    service { $_sssd_service_name:
-      ensure     => running,
-      enable     => true,
-      hasstatus  => true,
-      hasrestart => true,
-    }
-} }
+  $_sssd_service_name = $::realmd::sssd_service_name
+
+  service { $_sssd_service_name:
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
+  }
+
+}

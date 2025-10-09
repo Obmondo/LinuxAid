@@ -8,6 +8,7 @@ class logrotate (
   Enum[present,absent] $ensure_cron_hourly   = 'present',
   Boolean $manage_systemd_timer              = false,
   Enum[present,absent] $ensure_systemd_timer = 'absent',
+  Enum[present,absent] $ensure_systemd_timer_hourly = 'absent',
   Boolean $create_base_rules                 = true,
   Boolean $purge_configdir                   = false,
   String $package                            = 'logrotate',

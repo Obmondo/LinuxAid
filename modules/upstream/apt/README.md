@@ -10,7 +10,7 @@
     * [Add GPG keys](#add-gpg-keys)
     * [Prioritize backports](#prioritize-backports)
     * [Update the list of packages](#update-the-list-of-packages)
-    * [Pin a specific release](#pin-a-specific-release) 
+    * [Pin a specific release](#pin-a-specific-release)
     * [Add a Personal Package Archive repository](#add-a-personal-package-archive-repository)
     * [Configure Apt from Hiera](#configure-apt-from-hiera)
     * [Replace the default sources.list file](#replace-the-default-sourceslist-file)
@@ -181,7 +181,7 @@ apt::source { 'debian_unstable':
   comment  => 'This is the iWeb Debian unstable mirror',
   location => 'http://debian.mirror.iweb.ca/debian/',
   release  => 'unstable',
-  repos    => 'main contrib non-free',
+  repos    => 'main contrib non-free non-free-firmware',
   pin      => '-10',
   key      => {
     'id'     => 'A1BD8E9D78F7FE5C3E65D8AF8B48AD6246925553',
@@ -225,6 +225,27 @@ apt::source { 'puppetlabs':
 
 <a id="configure-apt-from-hiera"></a>
 
+### Generating a DEB822 .sources file
+
+You  can also generate a DEB822 format .sources file. This example covers most of the available options.
+
+Use the `source_format` parameter to choose between 'list' and 'sources' (DEB822) formats.
+```puppet
+apt::source { 'debian':
+  source_format => 'sources'
+  comment        => 'Official Debian Repository',
+  enabled        => true,
+  types          => ['deb', 'deb-src'],
+  location       => ['http://fr.debian.org/debian', 'http://de.debian.org/debian']
+  release        => ['stable', 'stable-updates', 'stable-backports'],
+  repos          => ['main', 'contrib', 'non-free'],
+  architecture   => ['amd64', 'i386'],
+  allow_unsigned => true,
+  keyring        => '/etc/apt/keyrings/debian.gpg'
+  notify_update  => false
+}
+```
+
 ### Configure Apt from Hiera
 
 Instead of specifying your sources directly as resources, you can instead just include the `apt` class, which will pick up the values automatically from hiera.
@@ -235,7 +256,7 @@ apt::sources:
     comment: 'This is the iWeb Debian unstable mirror'
     location: 'http://debian.mirror.iweb.ca/debian/'
     release: 'unstable'
-    repos: 'main contrib non-free'
+    repos: 'main contrib non-free non-free-firmware'
     pin: '-10'
     key:
       id: 'A1BD8E9D78F7FE5C3E65D8AF8B48AD6246925553'

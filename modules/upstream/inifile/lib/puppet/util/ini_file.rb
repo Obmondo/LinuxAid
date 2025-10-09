@@ -1,7 +1,9 @@
-require File.expand_path('../external_iterator', __FILE__)
-require File.expand_path('../ini_file/section', __FILE__)
+# frozen_string_literal: true
 
-module Puppet::Util
+require File.expand_path('external_iterator', __dir__)
+require File.expand_path('ini_file/section', __dir__)
+
+module Puppet::Util # rubocop:disable Style/ClassAndModuleChildren
   #
   # ini_file.rb
   #
@@ -14,7 +16,7 @@ module Puppet::Util
       @section_prefix = section_prefix
       @section_suffix = section_suffix
       @indent_char = indent_char
-      @indent_width = indent_width ? indent_width.to_i : nil
+      @indent_width = indent_width&.to_i
 
       @section_regex = section_regex
       @setting_regex = %r{^(\s*)([^#;\s]|[^#;\s].*?[^\s#{k_v_s}])(\s*#{k_v_s}[ \t]*)(.*)\s*$}
@@ -29,19 +31,9 @@ module Puppet::Util
 
     def section_regex
       # Only put in prefix/suffix if they exist
-      # Also, if the prefix is '', the negated
-      # set match should be a match all instead.
       r_string = '^\s*'
       r_string += Regexp.escape(@section_prefix)
-      r_string += '('
-      if @section_prefix != ''
-        r_string += '[^'
-        r_string += Regexp.escape(@section_prefix)
-        r_string += ']'
-      else
-        r_string += '.'
-      end
-      r_string += '*)'
+      r_string += '(.*)'
       r_string += Regexp.escape(@section_suffix)
       r_string += '\s*$'
       %r{#{r_string}}
@@ -64,7 +56,7 @@ module Puppet::Util
       @sections_hash[section_name].get_value(setting) if @sections_hash.key?(section_name)
     end
 
-    def set_value(*args) # rubocop:disable Style/AccessorMethodName : Recomended alternative is a common value name
+    def set_value(*args)
       case args.size
       when 1
         section_name = args[0]
@@ -78,11 +70,9 @@ module Puppet::Util
       complete_setting = {
         setting: setting,
         separator: separator,
-        value: value,
+        value: value
       }
-      unless @sections_hash.key?(section_name)
-        add_section(Section.new(section_name, nil, nil, nil, nil))
-      end
+      add_section(Section.new(section_name, nil, nil, nil, nil)) unless @sections_hash.key?(section_name)
 
       section = @sections_hash[section_name]
 
@@ -118,6 +108,7 @@ module Puppet::Util
     def remove_setting(section_name, setting)
       section = @sections_hash[section_name]
       return unless section.existing_setting?(setting)
+
       # If the setting is found, we have some work to do.
       # First, we remove the line from our array of lines:
       remove_line(section, setting)
@@ -133,6 +124,7 @@ module Puppet::Util
       decrement_section_line_numbers(section_index + 1)
 
       return unless section.empty?
+
       # By convention, it's time to remove this newly emptied out section
       lines.delete_at(section.start_line)
       decrement_section_line_numbers(section_index + 1)
@@ -152,9 +144,7 @@ module Puppet::Util
           whitespace_buffer = []
 
           if section.new_section? && !section.global?
-            if index == 1 && !global_empty || index > 1
-              fh.puts('')
-            end
+            fh.puts('') if (index == 1 && !global_empty) || index > 1
 
             fh.puts("#{@section_prefix}#{section.name}#{@section_suffix}")
           end
@@ -232,6 +222,7 @@ module Puppet::Util
       end_line_num = start_line
       min_indentation = nil
       empty = true
+      empty_line_count = 0
       loop do
         line, line_num = line_iter.peek
         if line_num.nil? || @section_regex.match(line)
@@ -239,7 +230,7 @@ module Puppet::Util
           # when it's empty, we must be sure it's thought of as new,
           # which is signalled with a nil ending line
           end_line_num = nil if name == '' && empty
-          return Section.new(name, start_line, end_line_num, settings, min_indentation)
+          return Section.new(name, start_line, end_line_num, settings, min_indentation, empty_line_count)
         end
         if (match = @setting_regex.match(line))
           settings[match[2]] = match[4]
@@ -247,6 +238,8 @@ module Puppet::Util
           min_indentation = [indentation, min_indentation || indentation].min
         end
         end_line_num = line_num
+        empty_line_count += 1 if line == "\n"
+
         empty = false
         line_iter.next
       end
@@ -255,18 +248,16 @@ module Puppet::Util
     def update_line(section, setting, value)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
-        if match[2] == setting
-          lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}"
-        end
+
+        lines[line_num] = "#{match[1]}#{match[2]}#{match[3]}#{value}" if match[2] == setting
       end
     end
 
     def remove_line(section, setting)
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @setting_regex.match(lines[line_num]))
-        if match[2] == setting
-          lines.delete_at(line_num)
-        end
+
+        lines.delete_at(line_num) if match[2] == setting
       end
     end
 
@@ -300,11 +291,10 @@ module Puppet::Util
     #               be used to mimic the whitespace from the comment line
     def find_commented_setting(section, setting)
       return nil if section.new_section?
+
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @commented_setting_regex.match(lines[line_num]))
-        if match[3] == setting
-          return { match: match, line_num: line_num }
-        end
+        return { match: match, line_num: line_num } if match[3] == setting
       end
       nil
     end
@@ -338,9 +328,10 @@ module Puppet::Util
       end
     end
 
-    def flush_buffer_to_file(buffer, fh)
+    def flush_buffer_to_file(buffer, file)
       return if buffer.empty?
-      buffer.each { |l| fh.puts(l) }
+
+      buffer.each { |l| file.puts(l) }
       buffer.clear
     end
   end

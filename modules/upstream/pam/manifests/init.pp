@@ -253,26 +253,6 @@ class pam (
   Boolean $common_files_create_links                        = false,
   Optional[String] $common_files_suffix                     = undef,
 ) {
-  # Fail on unsupported platforms
-  if $facts['os']['family'] == 'RedHat' and !($facts['os']['release']['major'] in ['2','5','6','7','8', '9']) {
-    fail("osfamily RedHat's os.release.major is <${::facts['os']['release']['major']}> and must be 2, 5, 6, 7, 8 or 9")
-  }
-
-  if $facts['os']['family'] == 'Solaris' and !($facts['kernelrelease'] in ['5.9','5.10','5.11']) {
-    fail("osfamily Solaris' kernelrelease is <${facts['kernelrelease']}> and must be 5.9, 5.10 or 5.11")
-  }
-
-  if $facts['os']['family'] == 'Suse' and !($facts['os']['release']['major'] in ['9','10','11','12','13','15']) {
-    fail("osfamily Suse's os.release.major is <${::facts['os']['release']['major']}> and must be 9, 10, 11, 12, 13 or 15")
-  }
-
-  if $facts['os']['name'] == 'Debian' and !($facts['os']['release']['major'] in ['7','8','9','10', '11']) {
-    fail("Debian's os.release.major is <${facts['os']['release']['major']}> and must be 7, 8, 9, 10 or 11")
-  }
-
-  if $facts['os']['name'] == 'Ubuntu' and !($facts['os']['release']['major'] in ['12.04', '14.04', '16.04', '18.04', '20.04', '22.04', '24.04']) {
-    fail("Ubuntu's os.release.major is <${facts['os']['release']['major']}> and must be 12.04, 14.04, 16.04, 18.04, 20.04, 22.04 or 24.04")
-  }
 
   if $pam_d_sshd_template == 'pam/sshd.custom.erb' {
     unless $pam_sshd_auth_lines and

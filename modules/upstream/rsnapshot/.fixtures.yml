@@ -1,0 +1,8 @@
+fixtures:
+  forge_modules:
+    stdlib: 
+      repo: "puppetlabs/stdlib"
+    epel: 
+      repo: "stahnma/epel"
+  symlinks:
+    "rsnapshot": "#{source_dir}"

@@ -73,7 +73,7 @@
 #
 #  haproxy::frontend { 'puppet00':
 #    ipaddress    => $::ipaddress,
-#    ports        => '18140',
+#    ports        => [18140],
 #    mode         => 'tcp',
 #    bind_options => 'accept-proxy',
 #    options      => {
@@ -91,7 +91,7 @@
 # Gary Larizza <gary@puppetlabs.com>
 #
 define haproxy::frontend (
-  Optional[Variant[Array, String]]        $ports                    = undef,
+  Optional[Haproxy::Ports]                $ports                    = undef,
   Optional[Variant[String, Array]]        $ipaddress                = undef,
   Optional[Hash]                          $bind                     = undef,
   Optional[Enum['tcp', 'http', 'health']] $mode                     = undef,

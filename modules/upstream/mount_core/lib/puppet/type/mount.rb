@@ -2,9 +2,9 @@ require 'puppet/property/boolean'
 
 # We want the mount to refresh when it changes.
 Puppet::Type.newtype(:mount, self_refresh: true) do
-  @doc = "Manages mounted filesystems, including putting mount
-      information into the mount table. The actual behavior depends
-      on the value of the 'ensure' parameter.
+  @doc = "@summary Manages mounted filesystems, including putting mount information into the mount table.
+
+      The actual behavior depends on the value of the 'ensure' parameter.
 
       **Refresh:** `mount` resources can respond to refresh events (via
       `notify`, `subscribe`, or the `~>` arrow). If a `mount` receives an event
@@ -124,13 +124,16 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
   end
 
   newproperty(:device) do
-    desc "The device providing the mount.  This can be whatever
-        device is supporting by the mount, including network
-        devices or devices specified by UUID rather than device
-        path, depending on the operating system."
+    desc "The device providing the mount.  This can be whatever device
+        is supporting by the mount, including network devices or
+        devices specified by UUID rather than device path, depending
+        on the operating system. On Linux systems it can contain
+        whitespace."
 
     validate do |value|
-      raise Puppet::Error, _('device must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+      unless Facter.value(:kernel) == 'Linux'
+        raise Puppet::Error, _('device must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
+      end
     end
   end
 
@@ -142,8 +145,8 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
 
     # Default to the device but with "dsk" replaced with "rdsk".
     defaultto do
-      if Facter.value(:osfamily) == 'Solaris'
-        if (device = resource[:device]) && device =~ %r{/dsk/}
+      if Facter.value('os.family') == 'Solaris'
+        if (device = resource[:device]) && device.include?('/dsk/')
           device.sub(%r{/dsk/}, '/rdsk/')
         elsif (fstype = resource[:fstype]) && fstype == 'nfs'
           '-'
@@ -156,7 +159,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
     end
 
     validate do |value|
-      raise Puppet::Error, _('blockdevice must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+      raise Puppet::Error, _('blockdevice must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
     end
   end
 
@@ -165,7 +168,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
         operating system.  This is a required option."
 
     validate do |value|
-      raise Puppet::Error, _('fstype must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+      raise Puppet::Error, _('fstype must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
       raise Puppet::Error, _('fstype must not be an empty string') if value.empty?
     end
   end
@@ -180,7 +183,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
         the list."
 
     validate do |value|
-      raise Puppet::Error, _('options must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+      raise Puppet::Error, _('options must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
       raise Puppet::Error, _('options must not be an empty string') if value.empty?
     end
   end
@@ -190,7 +193,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
 
     defaultto do
       if @resource.managed?
-        if Facter.value(:osfamily) == 'Solaris'
+        if Facter.value('os.family') == 'Solaris'
           '-'
         else
           0
@@ -217,7 +220,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
     desc "Whether to dump the mount.  Not all platform support this.
         Valid values are `1` or `0` (or `2` on FreeBSD). Default is `0`."
 
-    if Facter.value(:operatingsystem) == 'FreeBSD'
+    if Facter.value('os.name') == 'FreeBSD'
       newvalue(%r{(0|1|2)})
     else
       newvalue(%r{(0|1)})
@@ -242,12 +245,14 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
   end
 
   newparam(:name) do
-    desc 'The mount path for the mount.'
+    desc 'The mount path for the mount. On Linux systems it can contain whitespace.'
 
     isnamevar
 
     validate do |value|
-      raise Puppet::Error, _('name must not contain whitespace: %{value}') % { value: value } if value =~ %r{\s}
+      unless Facter.value(:kernel) == 'Linux'
+        raise Puppet::Error, _('name must not contain whitespace: %{value}') % { value: value } if %r{\s}.match?(value)
+      end
     end
 
     munge do |value|
@@ -262,13 +267,13 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
 
     newvalues(:true, :false)
     defaultto do
-      case Facter.value(:operatingsystem)
+      case Facter.value('os.name')
       when 'FreeBSD', 'Darwin', 'DragonFly', 'OpenBSD'
         false
       when 'AIX'
         if Facter.value(:kernelmajversion) == '5300'
           false
-        elsif resource[:device] && resource[:device].match(%r{^[^/]+:/})
+        elsif resource[:device]&.match(%r{^[^/]+:/})
           false
         else
           true
@@ -287,7 +292,7 @@ Puppet::Type.newtype(:mount, self_refresh: true) do
   def value(name)
     name = name.to_sym
     property = @parameters[name]
-    property ? property.value : nil
+    property&.value
   end
 
   # Ensure that mounts higher up in the filesystem are mounted first

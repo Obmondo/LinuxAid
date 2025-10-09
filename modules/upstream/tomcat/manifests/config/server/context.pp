@@ -1,42 +1,45 @@
-# Definition tomcat::config::server::context
+# @summary Configure a Context element in $CATALINA_BASE/conf/server.xml
 #
-# Configure a Context element in $CATALINA_BASE/conf/server.xml
-#
-# Parameters:
-# - $catalina_base is the root of the Tomcat installation
-# - $context_ensure specifies whether you are trying to add or remove the Context
-#   element. Valid values are 'true', 'false', 'present', or 'absent'. Defaults
-#   to 'present'.
-# - $doc_base is the docBase attribute of the Context.
-#   If not specified, defaults to $name.
-# - $parent_service is the Service element this Context should be nested beneath.
-#   Defaults to 'Catalina'.
-# - $parent_engine is the `name` attribute to the Engine element the Host of this Context 
-#   should be nested beneath. Only valid if $parent_host is specified.
-# - $parent_host is the `name` attribute to the Host element this Context
-#   should be nested beneath.
-# - An optional hash of $additional_attributes to add to the Context. Should be of
-#   the format 'attribute' => 'value'.
-# - An optional array of $attributes_to_remove from the Context.
+# @param catalina_base
+#   Specifies the base directory of the Tomcat installation to manage. Valid options: a string containing an absolute path.
+# @param context_ensure
+#   Specifies whether the [Context XML element](http://tomcat.apache.org/tomcat-8.0-doc/config/context.html) should exist in the configuration file.
+# @param doc_base
+#   Specifies a Document Base (or Context Root) directory or archive file. Maps to the [docBase XML attribute](http://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Common_Attributes). Valid options: a string containing a path (either an absolute path or a path relative to the appBase directory of the owning Host). `$name`.
+# @param parent_service
+#   Specifies which Service XML element the Context should nest under. Valid options: a string containing the name attribute of the Service.
+# @param parent_engine
+#   Specifies which Engine element the Context should nest under. Only valid if `parent_host` is specified. Valid options: a string containing the name attribute of the Engine.
+# @param parent_host
+#   Specifies which Host element the Context should nest under. Valid options: a string containing the name attribute of the Host.
+# @param additional_attributes
+#   Specifies any further attributes to add to the Context. Valid options: a hash of '< attribute >' => '< value >' pairs.
+# @param attributes_to_remove
+#   Specifies an array of attributes to remove from the element. Valid options: an array of strings.
+# @param server_config
+#   Specifies a server.xml file to manage. Valid options: a string containing an absolute path.
+# @param show_diff
+#   Specifies display differences when augeas changes files, defaulting to true. Valid options: true or false.
 #
 define tomcat::config::server::context (
-  $catalina_base         = $::tomcat::catalina_home,
-  $context_ensure        = 'present',
-  $doc_base              = undef,
-  $parent_service        = undef,
-  $parent_engine         = undef,
-  $parent_host           = undef,
-  $additional_attributes = {},
-  $attributes_to_remove  = [],
-  $server_config         = undef,
+  Optional[Stdlib::Absolutepath] $catalina_base         = undef,
+  Enum['present','absent']       $context_ensure        = 'present',
+  Optional[String[1]]            $doc_base              = undef,
+  Optional[String[1]]            $parent_service        = undef,
+  Optional[String[1]]            $parent_engine         = undef,
+  Optional[String[1]]            $parent_host           = undef,
+  Hash                           $additional_attributes = {},
+  Array                          $attributes_to_remove  = [],
+  Optional[Stdlib::Absolutepath] $server_config         = undef,
+  Boolean                        $show_diff             = true,
 ) {
-  if versioncmp($::augeasversion, '1.0.0') < 0 {
+  include tomcat
+  $_catalina_base = pick($catalina_base, $tomcat::catalina_home)
+  tag(sha1($_catalina_base))
+
+  if versioncmp($facts['augeas']['version'], '1.0.0') < 0 {
     fail('Server configurations require Augeas >= 1.0.0')
   }
-
-  validate_re($context_ensure, '^(present|absent|true|false)$')
-  validate_hash($additional_attributes)
-  validate_array($attributes_to_remove)
 
   if $doc_base {
     $_doc_base = $doc_base
@@ -63,9 +66,10 @@ define tomcat::config::server::context (
   if $server_config {
     $_server_config = $server_config
   } else {
-    $_server_config = "${catalina_base}/conf/server.xml"
+    $_server_config = "${_catalina_base}/conf/server.xml"
   }
 
+  # lint:ignore:140chars
   if $parent_host and ! $_parent_engine {
     $path = "Server/Service[#attribute/name='${_parent_service}']/Engine/Host[#attribute/name='${parent_host}']/Context[#attribute/docBase='${_doc_base}']"
   } elsif $parent_host and $_parent_engine {
@@ -73,8 +77,9 @@ define tomcat::config::server::context (
   } else {
     $path = "Server/Service[#attribute/name='${_parent_service}']/Engine/Host/Context[#attribute/docBase='${_doc_base}']"
   }
-  
-  if $context_ensure =~ /^(absent|false)$/ {
+  # lint:endignore
+
+  if $context_ensure == 'absent' {
     $augeaschanges = "rm ${path}"
   } else {
     $context = "set ${path}/#attribute/docBase ${_doc_base}"
@@ -94,9 +99,10 @@ define tomcat::config::server::context (
     $augeaschanges = delete_undef_values(flatten([$context, $_additional_attributes, $_attributes_to_remove]))
   }
 
-  augeas { "${catalina_base}-${_parent_service}-${_parent_engine}-${parent_host}-context-${name}":
-    lens    => 'Xml.lns',
-    incl    => $_server_config,
-    changes => $augeaschanges,
+  augeas { "${_catalina_base}-${_parent_service}-${_parent_engine}-${parent_host}-context-${name}":
+    lens      => 'Xml.lns',
+    incl      => $_server_config,
+    changes   => $augeaschanges,
+    show_diff => $show_diff,
   }
 }

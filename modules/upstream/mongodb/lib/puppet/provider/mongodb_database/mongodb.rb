@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'mongodb'))
 Puppet::Type.type(:mongodb_database).provide(:mongodb, parent: Puppet::Provider::Mongodb) do
   desc 'Manages MongoDB database.'
@@ -6,18 +8,24 @@ Puppet::Type.type(:mongodb_database).provide(:mongodb, parent: Puppet::Provider:
 
   def self.instances
     require 'json'
-    dbs = JSON.parse mongo_eval('rs.slaveOk();printjson(db.getMongo().getDBs())')
 
-    dbs['databases'].map do |db|
-      new(name: db['name'],
-          ensure: :present)
+    if db_ismaster
+      dbs = JSON.parse mongo_eval('EJSON.stringify(db.getMongo().getDBs())')
+
+      dbs['databases'].map do |db|
+        new(name: db['name'],
+            ensure: :present)
+      end
+    else
+      Puppet.warning 'Database info is available only from master host'
+      []
     end
   end
 
   # Assign prefetched dbs based on name.
   def self.prefetch(resources)
     dbs = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = dbs.find { |db| db.name == name }
       resources[name].provider = provider if provider
     end
@@ -25,7 +33,8 @@ Puppet::Type.type(:mongodb_database).provide(:mongodb, parent: Puppet::Provider:
 
   def create
     if db_ismaster
-      mongo_eval('db.dummyData.insert({"created_by_puppet": 1})', @resource[:name])
+      out = mongo_eval('db.dummyData.insertOne({"created_by_puppet": 1})', @resource[:name])
+      raise "Failed to create DB '#{@resource[:name]}'\n#{out}" if %r{writeError} =~ out
     else
       Puppet.warning 'Database creation is available only from master host'
     end
@@ -33,7 +42,8 @@ Puppet::Type.type(:mongodb_database).provide(:mongodb, parent: Puppet::Provider:
 
   def destroy
     if db_ismaster
-      mongo_eval('db.dropDatabase()', @resource[:name])
+      out = mongo_eval('db.dropDatabase()', @resource[:name])
+      raise "Failed to destroy DB '#{@resource[:name]}'\n#{out}" if %r{writeError} =~ out
     else
       Puppet.warning 'Database removal is available only from master host'
     end

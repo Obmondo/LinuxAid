@@ -12,6 +12,7 @@ Puppet::Type.newtype(:filesystem) do
   end
 
   newparam(:name) do
+    desc 'Resource name'
     isnamevar
     validate do |value|
       raise ArgumentError, 'Filesystem names must be fully qualified' unless Pathname.new(value).absolute?
@@ -138,7 +139,7 @@ Puppet::Type.newtype(:filesystem) do
   end
 
   newparam(:volume_group) do
-    desc 'Volume group that the file system should be greated on. AIX only.'
+    desc 'Volume group that the file system should be created on. AIX only.'
   end
 
   autorequire(:logical_volume) do

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/voxpupuli/corosync/provider/crmsh'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/crmsh'
 end
 
@@ -16,13 +19,15 @@ Puppet::Type.type(:cs_rsc_defaults).provide(:crm, parent: PuppetX::Voxpupuli::Co
   commands crm:           'crm'
   commands cibadmin:      'cibadmin'
 
+  defaultfor 'os.family': [:ubuntu]
+
   def self.instances
     block_until_ready
 
     instances = []
 
     cmd = [command(:crm), 'configure', 'show', 'xml']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//configuration/rsc_defaults/meta_attributes/nvpair') do |e|
@@ -30,9 +35,9 @@ Puppet::Type.type(:cs_rsc_defaults).provide(:crm, parent: PuppetX::Voxpupuli::Co
       rsc_defaults = { name: items['name'], value: items['value'] }
 
       rsc_defaults_instance = {
-        name:     rsc_defaults[:name],
-        ensure:   :present,
-        value:    rsc_defaults[:value],
+        name: rsc_defaults[:name],
+        ensure: :present,
+        value: rsc_defaults[:value],
         provider: name
       }
       instances << new(rsc_defaults_instance)
@@ -44,9 +49,9 @@ Puppet::Type.type(:cs_rsc_defaults).provide(:crm, parent: PuppetX::Voxpupuli::Co
   # of actually doing the work.
   def create
     @property_hash = {
-      name:   @resource[:name],
+      name: @resource[:name],
       ensure: :present,
-      value:  @resource[:value]
+      value: @resource[:value]
     }
   end
 
@@ -81,6 +86,6 @@ Puppet::Type.type(:cs_rsc_defaults).provide(:crm, parent: PuppetX::Voxpupuli::Co
     # clear this on properties, in case it's set from a previous
     # run of a different corosync type
     cmd = [command(:crm), 'configure', 'rsc_defaults', '$id="rsc-options"', "#{@property_hash[:name]}=#{@property_hash[:value]}"]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
   end
 end

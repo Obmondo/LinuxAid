@@ -1,94 +1,136 @@
-# PRIVATE CLASS: do not use directly
+# @api private
+#
+# @summary Manages the mongodb repository
+#
+#
+# @param ensure
+#   present or absent
+#
+# @param version
+#   The version of the mongodb repo
+#
+# @param use_enterprise_repo
+#   Wether to use the OS or Enterprise repo
+#
+# @param repo_location
+#   Location of the upstream repository
+#
+# @param keyring_location
+#   Location of the upstream keyring
+#
+# @param proxy
+#   Proxy hostnam
+#
+# @param proxy_username
+#   Proxy user name
+#
+# @param proxy_password
+#   Proxy pasword
+#
 class mongodb::repo (
-  Variant[Enum['present', 'absent'], Boolean] $ensure = 'present',
-  Optional[String] $version = undef,
-  Boolean $use_enterprise_repo = false,
-  $repo_location = undef,
-  $proxy = undef,
-  $proxy_username = undef,
-  $proxy_password = undef,
+  Enum['present', 'absent'] $ensure     = 'present',
+  Optional[String] $version             = undef,
+  Boolean $use_enterprise_repo          = false,
+  Optional[String[1]] $repo_location    = undef,
+  Optional[String[1]] $keyring_location = undef,
+  Optional[String[1]] $proxy            = undef,
+  Optional[String[1]] $proxy_username   = undef,
+  Optional[String[1]] $proxy_password   = undef,
 ) {
-  case $::osfamily {
+  if $version == undef and $repo_location == undef {
+    fail('`version` or `repo_location` is required')
+  }
+  if $version != undef and versioncmp($version, '4.4') < 0 {
+    fail('Package repositories for versions older than 4.4 are unsupported')
+  }
+
+  case $facts['os']['family'] {
     'RedHat', 'Linux': {
-      if $version != undef {
-        $mongover = split($version, '[.]')
-      }
-      if ($repo_location != undef){
-        $location = $repo_location
+      if $repo_location != undef {
+        $_repo_location = $repo_location
         $description = 'MongoDB Custom Repository'
-      } elsif $use_enterprise_repo == true {
-        $location = "https://repo.mongodb.com/yum/redhat/\$releasever/mongodb-enterprise/${mongover[0]}.${mongover[1]}/\$basearch/"
-        $description = 'MongoDB Enterprise Repository'
-      }
-      elsif $version and (versioncmp($version, '3.0.0') >= 0) {
-        $location = $::architecture ? {
-          'x86_64' => "http://repo.mongodb.org/yum/redhat/${::operatingsystemmajrelease}/mongodb-org/${mongover[0]}.${mongover[1]}/x86_64/",
-          default  => undef
+      } else {
+        if $use_enterprise_repo {
+          $_repo_location = "https://repo.mongodb.com/yum/redhat/\$releasever/mongodb-enterprise/${version}/\$basearch/"
+          $description = 'MongoDB Enterprise Repository'
+        } else {
+          $_repo_location = "https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/${version}/\$basearch/"
+          $description = 'MongoDB Repository'
         }
-        $description = 'MongoDB Repository'
-      }
-      else {
-        $location = $::architecture ? {
-          'x86_64' => 'http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/',
-          'i686'   => 'http://downloads-distro.mongodb.org/repo/redhat/os/i686/',
-          'i386'   => 'http://downloads-distro.mongodb.org/repo/redhat/os/i686/',
-          default  => undef
-        }
-        $description = 'MongoDB/10gen Repository'
       }
 
-      class { 'mongodb::repo::yum': }
+      class { 'mongodb::repo::yum':
+        ensure         => $ensure,
+        repo_location  => $_repo_location,
+        description    => $description,
+        proxy          => $proxy,
+        proxy_username => $proxy_username,
+        proxy_password => $proxy_password,
+      }
+    }
+
+    'Suse': {
+      if $repo_location {
+        $_repo_location = $repo_location
+        $description = 'MongoDB Custom Repository'
+      } else {
+        if $use_enterprise_repo {
+          $_repo_location = "https://repo.mongodb.com/zypper/suse/\$releasever_major/mongodb-enterprise/${version}/\$basearch/"
+          $description = 'MongoDB Enterprise Repository'
+        } else {
+          $_repo_location = "https://repo.mongodb.org/zypper/suse/\$releasever_major/mongodb-org/${version}/\$basearch/"
+          $description = 'MongoDB Repository'
+        }
+      }
+
+      class { 'mongodb::repo::zypper':
+        ensure        => $ensure,
+        repo_location => $_repo_location,
+        description   => $description,
+      }
     }
 
     'Debian': {
-      if ($repo_location != undef){
-        $location = $repo_location
-      }
-      elsif $version and (versioncmp($version, '3.0.0') >= 0) {
+      if $repo_location != undef {
+        $_repo_location = $repo_location
+        $_keyring_location = $keyring_location
+      } else {
         if $use_enterprise_repo == true {
-            $repo_domain = 'repo.mongodb.com'
-            $repo_path   = 'mongodb-enterprise'
+          $repo_domain = 'repo.mongodb.com'
+          $repo_path   = 'mongodb-enterprise'
         } else {
-            $repo_domain = 'repo.mongodb.org'
-            $repo_path   = 'mongodb-org'
+          $repo_domain = 'repo.mongodb.org'
+          $repo_path   = 'mongodb-org'
         }
 
-        $mongover = split($version, '[.]')
-        $location = $::operatingsystem ? {
+        $_repo_location = $facts['os']['name'] ? {
           'Debian' => "https://${repo_domain}/apt/debian",
           'Ubuntu' => "https://${repo_domain}/apt/ubuntu",
           default  => undef
         }
-        $release     = "${::lsbdistcodename}/${repo_path}/${mongover[0]}.${mongover[1]}"
-        $repos       = $::operatingsystem ? {
+        $_keyring_location = "https://www.mongodb.org/static/pgp/server-${version}.asc"
+        $release     = "${facts['os']['distro']['codename']}/${repo_path}/${version}"
+        $repos       = $facts['os']['name'] ? {
           'Debian' => 'main',
           'Ubuntu' => 'multiverse',
           default => undef
         }
-        $key = "${mongover[0]}.${mongover[1]}" ? {
-          '3.6'   => '2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5',
-          '3.4'   => '0C49F3730359A14518585931BC711F9BA15703C6',
-          '3.2'   => '42F3E95A2C4F08279C4960ADD68FA50FEA312927',
-          default => '492EAFE8CD016A07919F1D2B9ECBEC467F0CEB10'
-        }
-        $key_server = 'hkp://keyserver.ubuntu.com:80'
-      } else {
-        $location = $::operatingsystem ? {
-          'Debian' => 'http://downloads-distro.mongodb.org/repo/debian-sysvinit',
-          'Ubuntu' => 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart',
-          default  => undef
-        }
-        $release     = 'dist'
-        $repos       = '10gen'
-        $key         = '492EAFE8CD016A07919F1D2B9ECBEC467F0CEB10'
-        $key_server  = 'hkp://keyserver.ubuntu.com:80'
+        $comment = 'MongoDB Repository'
       }
-      class { 'mongodb::repo::apt': }
+
+      class { 'mongodb::repo::apt':
+        ensure           => $ensure,
+        repo_location    => $_repo_location,
+        keyring_location => $_keyring_location,
+        release          => $release,
+        repos            => $repos,
+        comment          => $comment,
+      }
     }
 
     default: {
-      if($ensure == 'present' or $ensure == true) {
-        fail("Unsupported managed repository for osfamily: ${::osfamily}, operatingsystem: ${::operatingsystem}, module ${module_name} currently only supports managing repos for osfamily RedHat, Debian and Ubuntu")
+      if($ensure == 'present') {
+        fail("Unsupported managed repository for osfamily: ${facts['os']['family']}, operatingsystem: ${facts['os']['name']}")
       }
     }
   }

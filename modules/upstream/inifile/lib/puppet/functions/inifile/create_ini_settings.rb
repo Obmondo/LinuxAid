@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @summary This function is used to create a set of ini_setting resources from a hash
 Puppet::Functions.create_function(:'inifile::create_ini_settings') do
   # @param settings
@@ -21,9 +23,9 @@ Puppet::Functions.create_function(:'inifile::create_ini_settings') do
 
       settings[section].each do |setting, value|
         res["#{path} [#{section}] #{setting}"] = {
-          'ensure'  => 'present',
+          'ensure' => 'present',
           'section' => section,
-          'setting' => setting,
+          'setting' => setting
         }.merge(if value.is_a?(Hash)
                   value
                 else

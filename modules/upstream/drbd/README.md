@@ -40,22 +40,12 @@ The `drbd::resource` is used to configure indiviual resources.
 
 ## Reference
 
-### Classes
-
-#### Public Classes
-
-#### Private Classes
-
-### Parameters
+See [Reference](REFERENCE.md).
 
 ## Limitations
 
-This module is tested on the following platforms:
-
-* Debian 7
-* Ubuntu 10.04/12.04/14.04
-* RedHat 6/7
+Please have a look into the [metadata.json](metadata.json) for all supported operating systems.
 
 ## Contributing
 
-Please read CONTRIBUTING.md for full details on contributing to this project.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for full details on contributing to this project.

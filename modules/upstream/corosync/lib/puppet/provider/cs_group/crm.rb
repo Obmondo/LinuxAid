@@ -2,8 +2,9 @@ begin
   require 'puppet_x/voxpupuli/corosync/provider/crmsh'
 rescue LoadError
   require 'pathname' # WORKAROUND #14073, #7788 and SERVER-973
-  corosync = Puppet::Module.find('corosync', Puppet[:environment].to_s)
+  corosync = Puppet::Module.find('corosync')
   raise(LoadError, "Unable to find corosync module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless corosync
+
   require File.join corosync.path, 'lib/puppet_x/voxpupuli/corosync/provider/crmsh'
 end
 
@@ -13,13 +14,15 @@ Puppet::Type.type(:cs_group).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
   # Path to the crm binary for interacting with the cluster configuration.
   commands crm: '/usr/sbin/crm'
 
+  defaultfor 'os.family': [:ubuntu]
+
   def self.instances
     block_until_ready
 
     instances = []
 
     cmd = [command(:crm), 'configure', 'show', 'xml']
-    raw, = PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd)
+    raw, = run_command_in_cib(cmd)
     doc = REXML::Document.new(raw)
 
     REXML::XPath.each(doc, '//group') do |e|
@@ -32,10 +35,10 @@ Puppet::Type.type(:cs_group).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
       end
 
       group_instance = {
-        name:       e.attributes['id'],
-        ensure:     :present,
+        name: e.attributes['id'],
+        ensure: :present,
         primitives: primitives,
-        provider:   name
+        provider: name
       }
       instances << new(group_instance)
     end
@@ -46,8 +49,8 @@ Puppet::Type.type(:cs_group).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
   # of actually doing the work.
   def create
     @property_hash = {
-      name:       @resource[:name],
-      ensure:     :present,
+      name: @resource[:name],
+      ensure: :present,
       primitives: Array(@resource[:primitives])
     }
     @property_hash[:cib] = @resource[:cib] unless @resource[:cib].nil?
@@ -58,10 +61,10 @@ Puppet::Type.type(:cs_group).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
   def destroy
     debug('Stopping group before removing it')
     cmd = [command(:crm), '-w', 'resource', 'stop', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib], false)
+    self.class.run_command_in_cib(cmd, @resource[:cib], false)
     debug('Removing group')
     cmd = [command(:crm), 'configure', 'delete', @resource[:name]]
-    PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+    self.class.run_command_in_cib(cmd, @resource[:cib])
     @property_hash.clear
   end
 
@@ -93,7 +96,7 @@ Puppet::Type.type(:cs_group).provide(:crm, parent: PuppetX::Voxpupuli::Corosync:
       tmpfile.write(updated)
       tmpfile.flush
       cmd = [command(:crm), 'configure', 'load', 'update', tmpfile.path.to_s]
-      PuppetX::Voxpupuli::Corosync::Provider::Crmsh.run_command_in_cib(cmd, @resource[:cib])
+      self.class.run_command_in_cib(cmd, @resource[:cib])
     end
   end
 end

@@ -1,0 +1,16 @@
+---
+.github/workflows/ci.yml:
+  with:
+    additional_packages: libaugeas-dev augeas-tools
+    rubocop: false
+Gemfile:
+  optional:
+    ':test':
+      - gem: ruby-augeas
+spec/spec_helper.rb:
+  spec_overrides:
+    - "require 'augeas_spec'"
+    - "# augeasproviders: setting $LOAD_PATH to work around broken type autoloading"
+    - "$LOAD_PATH.unshift(File.join(__dir__, 'fixtures/modules/augeasproviders_core/lib'))"
+spec/spec_helper_acceptance.rb:
+  unmanaged: false

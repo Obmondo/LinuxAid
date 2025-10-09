@@ -1,6 +1,6 @@
 require 'puppet/provider/parsedfile'
 
-case Facter.value(:osfamily)
+case Facter.value('os.family')
 when 'Solaris'
   hosts = '/etc/inet/hosts'
 when 'windows'

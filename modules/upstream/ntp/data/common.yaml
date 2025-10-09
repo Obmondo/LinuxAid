@@ -5,8 +5,8 @@ ntp::burst: false
 ntp::config_dir: ~
 ntp::config_file_mode: '0644'
 ntp::config: '/etc/ntp.conf'
-ntp::config_template: ~
 ntp::config_epp: ~
+ntp::daemon_extra_opts: ~
 ntp::disable_auth: false
 ntp::disable_dhclient: false
 ntp::disable_kernel: false
@@ -25,6 +25,9 @@ ntp::keys_trusted: []
 ntp::keys: []
 ntp::leapfile: ~
 ntp::logfile: ~
+ntp::logfile_user: 'ntp'
+ntp::logfile_mode: '0664'
+ntp::logfile_group: 'ntp'
 ntp::logconfig: ~
 ntp::ntpsigndsocket: ~
 ntp::maxpoll: ~
@@ -67,3 +70,4 @@ ntp::tos_orphan: ~
 ntp::tos: false
 ntp::udlc_stratum: 10
 ntp::udlc: false
+ntp::user: ~

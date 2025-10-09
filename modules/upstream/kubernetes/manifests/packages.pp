@@ -140,7 +140,6 @@ class kubernetes::packages (
   Enum['runc','nvidia']
   $containerd_default_runtime_name                      = $kubernetes::containerd_default_runtime_name,
   String $etcd_archive                                  = $kubernetes::etcd_archive,
-  Enum['overlayfs', 'zfs'] $containerd_snapshotter      = $kubernetes::containerd_snapshotter,
   Optional[String] $etcd_archive_checksum               = $kubernetes::etcd_archive_checksum,
   String $etcd_version                                  = $kubernetes::etcd_version,
   String $etcd_source                                   = $kubernetes::etcd_source,
@@ -357,7 +356,6 @@ class kubernetes::packages (
               'containerd_sandbox_image' => $containerd_sandbox_image,
               'docker_cgroup_driver' => $docker_cgroup_driver,
               'containerd_default_runtime_name' => $containerd_default_runtime_name,
-              'containerd_snapshotter' => $containerd_snapshotter,
           })
         }
         # Generate using 'containerd config default'

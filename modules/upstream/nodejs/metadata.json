@@ -1,6 +1,6 @@
 {
   "name": "puppet-nodejs",
-  "version": "7.0.1",
+  "version": "11.0.0",
   "author": "Vox Pupuli",
   "summary": "Install Node.js package and npm package provider.",
   "license": "Apache-2.0",
@@ -11,57 +11,81 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "7",
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Debian",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
         "8",
         "9"
       ]
     },
     {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+        "12"
+      ]
+    },
+    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04",
-        "18.04"
+        "20.04",
+        "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "12",
+        "13"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.5.8 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     }
   ]
 }

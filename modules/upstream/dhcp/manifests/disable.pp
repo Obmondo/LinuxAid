@@ -1,13 +1,8 @@
-# ----------
-# Remove and Disable the DHCP server
-# ----------
+# @summary Remove and Disable the DHCP server
 class dhcp::disable (
-  $packagename = $dhcp::params::packagename,
-  $servicename = $dhcp::params::servicename,
+  String[1] $packagename = $dhcp::params::packagename,
+  String[1] $servicename = $dhcp::params::servicename,
 ) inherits dhcp::params {
-
-
-
   package { $packagename:
     ensure => absent,
   }
@@ -18,6 +13,4 @@ class dhcp::disable (
     hasstatus => true,
     require   => Package[$packagename],
   }
-
 }
-

@@ -1,53 +1,71 @@
-motd
-====
+# motd
 
-Overview
---------
-This module populates `/etc/motd` with the contents of a simple template file. 
+#### Table of Contents
 
-Module Description
--------------------
-The MOTD module demonstrates how to utilize templates within a module class and provides a means with which to experiment with the puppet module tool.
+1. [Overview](#overview)
+2. [Module Description - What the module does and why it is useful](#module-description)
+3. [Setup - The basics of getting started with the motd module](#setup)
+    * [Beginning with the motd module](#beginning-with-the-motd-module)
+4. [Usage - Configuration options and additional functionality](#usage)
+5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [License](#license)
+8. [Development - Guide for contributing to the module](#development)
 
-Setup
------
+## Module Description
 
-**What MOTD affects:**
+The motd module configures a system message of the day. The module includes a default message template. Alternatively, you can specify a different template or a static string.
 
-* contents of `etc/motd`   
+## Setup
 
-Motd utilizes the contents of `motd/motd.erb` to populate `etc/motd`. You must declare the class to use it:
+### Beginning with the motd module
 
-	include motd
+To configure motd on your system, include the `motd` class: `include motd`.
 
+## Usage
 
-Usage
-------
+The motd module configures the message of the day on a wide variety of systems. The module populates either `/etc/motd`, `/etc/issue` and `/etc/issue.net` (on POSIX systems) or a registry key (on Windows systems) with the contents of a basic template file.
 
-MOTD allows you to use the default contents of the template, customize the template, drop your own template into the templates folder, or specify a template in a different location. 
+By default, the module populates motd using the included template. Alternatively, you can specify a different template or a static string. For example, to use a custom template you would set the template parameter:
 
-If you would like to change the location of the template: 
+```puppet
+class { 'motd':
+  template => 'mymodule/mytemplate.epp',
+}
+```
 
-    class { 'motd':
-      template => 'mymodule/mytemplate.erb',
-    }
+To specify a string as the message of the day:
 
-If you would like to provide a static string as the MOTD content you can use the content parameter:
+```puppet
+class { 'motd':
+  content => "Hello world!\n",
+}
+```
 
-    class { 'motd':
-      content => 'Hello!',
-    }
+## Reference
 
-Limitations
-------------
+See [REFERENCE.md](https://github.com/puppetlabs/puppetlabs-motd/blob/main/REFERENCE.md)
 
-Platforms : Linux
+## Limitations
 
-Development
-------------
+For an extensive list of supported operating systems, see [metadata.json](https://github.com/puppetlabs/puppetlabs-motd/blob/main/metadata.json)
 
-Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad of hardware, software, and deployment configurations that Puppet is intended to serve.
+Disabling dynamic motd is supported only on Debian.
 
-We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things.
+### A note on Windows
 
-You can read the complete module contribution guide [on the Puppet Labs wiki.](http://projects.puppetlabs.com/projects/module-site/wiki/Module_contributing)
+On Windows systems, the motd module populates the contents of `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\policies\system\legalnoticetext` and `HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\policies\system\legalnoticecaption`. The `legalnoticetext` registry key is shown before login on a Windows system.
+
+## License
+
+This codebase is licensed under the Apache2.0 licensing, however due to the nature of the codebase the open source dependencies may also use a combination of [AGPL](https://opensource.org/license/agpl-v3/), [BSD-2](https://opensource.org/license/bsd-2-clause/), [BSD-3](https://opensource.org/license/bsd-3-clause/), [GPL2.0](https://opensource.org/license/gpl-2-0/), [LGPL](https://opensource.org/license/lgpl-3-0/), [MIT](https://opensource.org/license/mit/) and [MPL](https://opensource.org/license/mpl-2-0/) Licensing.
+
+## Development
+
+We are experimenting with a new tool for running acceptance tests. It's name is [puppet_litmus](https://github.com/puppetlabs/puppet_litmus) this replaces beaker as the test runner. To run the acceptance tests follow the instructions [here](https://github.com/puppetlabs/puppet_litmus/wiki/Tutorial:-use-Litmus-to-execute-acceptance-tests-with-a-sample-module-(MoTD)#install-the-necessary-gems-for-the-module).
+
+Puppet Labs modules on the Puppet Forge are open projects, and community contributions are essential for keeping them great. We can’t access the huge number of platforms and myriad hardware, software, and deployment configurations that Puppet is intended to serve. We want to keep it as easy as possible to contribute changes so that our modules work in your environment. There are a few guidelines that we need contributors to follow so that we can have a chance of keeping on top of things. For more information, see our [module contribution guide.](https://puppet.com/docs/puppet/latest/contributing.html)
+
+## Contributors
+
+The list of contributors can be found at: [https://github.com/puppetlabs/puppetlabs-motd/graphs/contributors](https://github.com/puppetlabs/puppetlabs-motd/graphs/contributors).

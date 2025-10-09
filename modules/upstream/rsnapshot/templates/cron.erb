@@ -1,1 +1,1 @@
-<%= @minute %> <%= @hour %> <%= @monthday %> <%= @month %> <%= @weekday %>  root<% if scope['rsnapshot::check_mk_job'] == true -%> mk-job rsnapshot_<%= @host %>_<%= @level %><% end -%>       /usr/bin/rsnapshot -c <%= @config %> <%= @level %>
+<%= @minute %> <%= @hour %> <%= @month %> <%= @monthday %> <%= @weekday %>  root      /usr/bin/rsnapshot -c <%= @config %> <%= @level %>

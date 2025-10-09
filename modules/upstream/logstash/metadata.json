@@ -1,72 +1,69 @@
 {
-  "name": "elastic-logstash",
-  "version": "6.1.2",
-  "author": "elastic",
-  "summary": "Module for managing and configuring Logstash",
+  "name": "puppet-kibana",
+  "version": "9.0.0",
+  "author": "Vox Pupuli",
+  "summary": "Module for installing, configuring, and managing Kibana.",
   "license": "Apache-2.0",
-  "source": "https://github.com/elastic/puppet-logstash",
-  "project_page": "https://github.com/elastic/puppet-logstash",
-  "issues_url": "https://github.com/elastic/puppet-logstash/issues",
+  "source": "https://github.com/voxpupuli/puppet-kibana",
+  "project_page": "https://github.com/voxpupuli/puppet-kibana",
+  "issues_url": "https://github.com/voxpupuli/puppet-kibana/issues",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">=3.2.0 <5.0.0"},
-    {"name":"elastic/elastic_stack","version_requirement":">=6.0.0 <7.0.0"}
+    {
+      "name": "puppet/elastic_stack",
+      "version_requirement": ">= 6.1.0 < 11.0.0"
+    }
   ],
-  "data_provider": null,
-  "description": "Module for managing and configuring Logstash",
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "9"
       ]
     },
     {
-      "operatingsystem": "OracleLinux",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "Scientific",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "Debian",
+      "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04"
-      ]
-    },
-    {
-      "operatingsystem": "OpenSuSE",
-      "operatingsystemrelease": [
-        "13.x"
+        "22.04",
+        "24.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=4.6.1 <6.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    },
+    {
+      "name": "openvox",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ]
 }

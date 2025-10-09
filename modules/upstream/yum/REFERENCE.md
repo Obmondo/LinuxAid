@@ -553,7 +553,7 @@ Default value: `'present'`
 
 Data type: `Optional[Integer]`
 
-exec timeout for yum groupinstall command
+exec timeout for yum group install command
 
 Default value: `undef`
 
@@ -561,7 +561,7 @@ Default value: `undef`
 
 Data type: `Array[String[1]]`
 
-options provided to yum groupinstall command
+options provided to yum group install command
 
 Default value: `[]`
 

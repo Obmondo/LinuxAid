@@ -1,3 +1,20 @@
+#### 2025-06-18 - 0.5.8
+* Remove obsolete dnssec-enable and dnssec-lookaside options.
+* Change dnssec-validation to its current upstream default of 'auto', which
+  might actually enable it since 'yes' required keys and trust anchors.
+* Remove RHEL 5 and 6 support, those had older bind 9 with different dnssec.
+
+#### 2025-02-04 - 0.5.7
+* Remove legacy facts usage.
+
+#### 2023-09-07 - 0.5.6
+* Change zone dirmode from 750 to 770 because recent bind 9 requires write.
+
+#### 2021-06-30 - 0.5.5
+* Improve zone validation (#110, @osgpcq).
+* Support $replace on bind::server::file, useful for ddns base zones.
+* Fix bindkeys-file on RHEL8.
+
 #### 2019-01-21 - 0.5.4
 * Add zone file validation (#91, @forgodssake).
 * Fix hint and rfc1912 zones on Debian (#61, #83).

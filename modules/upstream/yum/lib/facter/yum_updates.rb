@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Facter.add('yum_package_updates') do
-  confine osfamily: 'RedHat'
+  confine 'os.family': 'RedHat'
   setcode do
     yum_updates = []
 
@@ -18,14 +18,14 @@ Facter.add('yum_package_updates') do
 end
 
 Facter.add('yum_has_updates') do
-  confine osfamily: 'RedHat'
+  confine 'os.family': 'RedHat'
   setcode do
     Facter.value(:yum_package_updates).any?
   end
 end
 
 Facter.add('yum_updates') do
-  confine osfamily: 'RedHat'
+  confine 'os.family': 'RedHat'
   setcode do
     Facter.value(:yum_package_updates).length
   end

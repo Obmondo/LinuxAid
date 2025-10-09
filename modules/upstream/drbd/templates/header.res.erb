@@ -3,7 +3,28 @@ resource <%= @name %> {
   protocol  <%= @protocol %>;
   device    <%= @device %>;
   disk      <%= @disk %>;
-  meta-disk internal;
+<% if @flexible_metadisk -%>
+  flexible-meta-disk <%= @flexible_metadisk %>;
+<% else -%>
+  meta-disk <%= @metadisk %>;
+<% end -%>
+
+<% unless @handlers_parameters.empty?  -%>
+
+  handlers {
+<% @handlers_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+  }
+<% end -%>
+<% unless @startup_parameters.empty? -%>
+
+  startup {
+<% @startup_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+  }
+<% end -%>
 
   net {
     cram-hmac-alg sha1;
@@ -18,10 +39,22 @@ resource <%= @name %> {
 <% end -%>
   }
 
+<% if @verify_alg or @rate-%>
   syncer {
+<% if @verify_alg -%>
     verify-alg <%= @verify_alg %>;
+<% end -%>
 <% if @rate -%>
     rate <%= @rate %>;
 <% end -%>
   }
+<% end -%>
+<% if @disk_parameters -%>
+
+  disk {
+<% @disk_parameters.sort_by {|k, v| k}.each do |k, v| -%>
+    <%= k %> <%= v %>;
+<% end -%>
+  }
+<% end -%>
 

@@ -1,0 +1,98 @@
+name: "ci"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+  workflow_dispatch:
+    
+jobs:
+  Spec:
+    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
+    with:
+      runs_on: "ubuntu-20.04"
+    secrets: "inherit"
+
+  setup_matrix:
+    name: "Setup Test Matrix"
+    needs: Spec
+    runs-on: "ubuntu-20.04"
+    outputs:
+      matrix: ${{ steps.get-matrix.outputs.matrix }}
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: "Setup ruby"
+        uses: "ruby/setup-ruby@v1"
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+
+      - name: Setup Test Matrix
+        id: get-matrix
+        run: |
+          bundle exec matrix_from_metadata_v2 --provision-service
+
+  Acceptance:
+    name: "Acceptance tests (${{matrix.platforms.label}}, ${{matrix.collection}})"
+    needs: setup_matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.setup_matrix.outputs.matrix)}}
+
+    env:
+      PUPPET_GEM_VERSION: '~> 7.24'
+      FACTER_GEM_VERSION: 'https://github.com/puppetlabs/facter#main'  # why is this set?
+
+    steps:
+
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: "Setup ruby"
+        uses: "ruby/setup-ruby@v1"
+        with:
+          ruby-version: "2.7"
+          bundler-cache: true
+
+      - name: "Bundle environment"
+        run: |
+          bundle env
+
+      - name: "Provision environment"
+        run: |
+          bundle exec rake "litmus:provision[${{matrix.platforms.provider}},${{ matrix.platforms.image }}]"
+          # Redact password
+          FILE='spec/fixtures/litmus_inventory.yaml'
+          sed -e 's/password: .*/password: "[redacted]"/' < $FILE || true
+
+      - name: "Install Puppet agent"
+        run: |
+          bundle exec rake 'litmus:install_agent[${{ matrix.collection }}]'
+
+      - name: "Install module"
+        run: |
+          bundle exec rake 'litmus:install_module'
+
+      - name: "Authenticate to GCP"
+        run: |
+          echo '${{ secrets.GCP_CONNECTION }}' >> creds.json
+          bundle exec bolt file upload creds.json creds.json -t ssh_nodes -i spec/fixtures/litmus_inventory.yaml
+          bundle exec bolt command run "gcloud auth activate-service-account --key-file creds.json" -t ssh_nodes -i spec/fixtures/litmus_inventory.yaml
+
+      - name: "Run acceptance tests"
+        run: |
+          bundle exec rake 'litmus:acceptance:parallel'
+
+      - name: "Remove test environment"
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+            bundle exec rake 'litmus:tear_down'

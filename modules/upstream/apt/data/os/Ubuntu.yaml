@@ -1,0 +1,7 @@
+apt::backports:
+  location: http://archive.ubuntu.com/ubuntu
+  repos: main universe multiverse restricted
+
+apt::ppa_options:
+  - -y
+apt::ppa_package: software-properties-common

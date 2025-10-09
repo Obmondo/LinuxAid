@@ -1,0 +1,6 @@
+<%= $facts[os][name] %> <%= $facts[os][release][full] %> <%= $facts[os][architecture] %>
+
+FQDN:         <%= $facts[networking][fqdn] %> (<%= $facts[networking][ip] %>)
+Processor:    <%= $facts[processors][models][0] %>
+Kernel:       <%= $facts[kernel] %>
+Memory Size:  <%= $facts[memory][system][available] %>

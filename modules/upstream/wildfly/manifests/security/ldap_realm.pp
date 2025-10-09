@@ -158,7 +158,7 @@ define wildfly::security::ldap_realm(
 ) {
 
   # Create LDAP connectivity
-  wildfly::util::resource { "/core-service=management/ldap-connection=${realm_name}-LDAPConnection":
+  wildfly::resource { "/core-service=management/ldap-connection=${realm_name}-LDAPConnection":
     content => {
       'url'               => $ldap_url,
       'search-dn'         => $ldap_search_dn,
@@ -167,19 +167,19 @@ define wildfly::security::ldap_realm(
   } ->
 
   # Define the security realm
-  wildfly::util::resource { "/core-service=management/security-realm=${realm_name}":
+  wildfly::resource { "/core-service=management/security-realm=${realm_name}":
     content => {},
   } ->
 
   # Make sure the 'properties' authentication method is removed. Only 1 authentication method
   # is allowed in a security realm at one time
-  wildfly::util::resource { "/core-service=management/security-realm=${realm_name}/authentication=properties":
+  wildfly::resource { "/core-service=management/security-realm=${realm_name}/authentication=properties":
     ensure  => absent,
     content => {},
   } ->
 
   # Bypass LDAP authentication when accessing management interface locally
-  wildfly::util::resource { "/core-service=management/security-realm=${realm_name}/authentication=local":
+  wildfly::resource { "/core-service=management/security-realm=${realm_name}/authentication=local":
     content => {
       'default-user'       => '$local',
       'skip-group-loading' => true,
@@ -187,7 +187,7 @@ define wildfly::security::ldap_realm(
   } ->
 
   # Specify LDAP authentication for the security realm
-  wildfly::util::resource { "/core-service=management/security-realm=${realm_name}/authentication=ldap":
+  wildfly::resource { "/core-service=management/security-realm=${realm_name}/authentication=ldap":
     content => {
       'connection'            => "${realm_name}-LDAPConnection",
       'base-dn'               => $ldap_user_base_dn,
@@ -201,7 +201,7 @@ define wildfly::security::ldap_realm(
 
   # Configure the LDAP parameters so it can find the groups a user belongs to
   # lint:ignore:arrow_alignment
-  wildfly::util::resource { "/core-service=management/security-realm=${realm_name}/authorization=ldap":
+  wildfly::resource { "/core-service=management/security-realm=${realm_name}/authorization=ldap":
     recursive => true,
     content   => {
       'connection'     => "${realm_name}-LDAPConnection",
@@ -241,7 +241,7 @@ define wildfly::security::ldap_realm(
 
   # Prepare the authorization system for Wildfly role <-> LDAP group mappings
   # These are the Wildfly default authentication roles
-  wildfly::util::resource { [
+  wildfly::resource { [
     '/core-service=management/access=authorization/role-mapping=Administrator',
     '/core-service=management/access=authorization/role-mapping=Auditor',
     '/core-service=management/access=authorization/role-mapping=Deployer',
@@ -254,7 +254,7 @@ define wildfly::security::ldap_realm(
   } ->
 
   # Configure Wildfly to use RBAC authorization
-  wildfly::util::resource { '/core-service=management/access=authorization':
+  wildfly::resource { '/core-service=management/access=authorization':
     content => {
       'provider' => 'rbac',
     }
@@ -262,7 +262,7 @@ define wildfly::security::ldap_realm(
 
   if str2bool($apply_to_management_interface) {
     # Apply our newly created realm to the management interfaces
-    wildfly::util::resource { '/core-service=management/management-interface=http-interface':
+    wildfly::resource { '/core-service=management/management-interface=http-interface':
       content => {
         'security-realm' => $realm_name,
         'socket-binding' => 'management-http',
@@ -270,8 +270,8 @@ define wildfly::security::ldap_realm(
       },
     }
 
-    Wildfly::Util::Resource['/core-service=management/access=authorization'] ->
-      Wildfly::Util::Resource['/core-service=management/management-interface=http-interface']
+    Wildfly::Resource['/core-service=management/access=authorization'] ->
+      Wildfly::Resource['/core-service=management/management-interface=http-interface']
   }
 
 }

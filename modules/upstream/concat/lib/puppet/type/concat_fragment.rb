@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:concat_fragment) do
   @doc = <<-DOC
     @summary
@@ -6,7 +8,7 @@ Puppet::Type.newtype(:concat_fragment) do
     @example
       # The example is based on exported resources.
 
-      concat_fragment { \"uniqe_name_${::fqdn}\":
+      concat_fragment { "uniqe_name_${::fqdn}":
         tag => 'unique_name',
         order => 10, # Optional. Default to 10
         content => 'some content' # OR
@@ -60,7 +62,7 @@ Puppet::Type.newtype(:concat_fragment) do
     defaultto '10'
     validate do |val|
       raise Puppet::ParseError, _('$order is not a string or integer.') unless val.is_a?(String) || val.is_a?(Integer)
-      raise Puppet::ParseError, _('Order cannot contain \'/\', \':\', or \'\\n\'.') if val.to_s =~ %r{[:\n\/]}
+      raise Puppet::ParseError, _('Order cannot contain \'/\', \':\', or \'\\n\'.') if %r{[:\n/]}.match?(val.to_s)
     end
   end
 
@@ -77,7 +79,7 @@ Puppet::Type.newtype(:concat_fragment) do
     end
 
     if found.empty?
-      tag_message = (self[:tag]) ? "or tag '#{self[:tag]} " : ''
+      tag_message = self[:tag] ? "or tag '#{self[:tag]} " : ''
       warning "Target Concat_file with path or title '#{self[:target]}' #{tag_message}not found in the catalog"
     end
   end
@@ -91,5 +93,14 @@ Puppet::Type.newtype(:concat_fragment) do
 
     # Check if both are set, if so rais error
     raise Puppet::ParseError, _("Can't use 'source' and 'content' at the same time") if !self[:source].nil? && !self[:content].nil?
+  end
+
+  def set_sensitive_parameters(sensitive_parameters) # rubocop:disable Naming/AccessorMethodName
+    # Respect sensitive https://tickets.puppetlabs.com/browse/PUP-10950
+    if sensitive_parameters.include?(:content)
+      sensitive_parameters.delete(:content)
+      parameter(:content).sensitive = true
+    end
+    super(sensitive_parameters)
   end
 end

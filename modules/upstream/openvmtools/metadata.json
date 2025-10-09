@@ -3,15 +3,11 @@
   "dependencies": [
     {
       "name": "puppet/epel",
-      "version_requirement": ">=3.0.0 <4.0.0"
+      "version_requirement": ">= 3.0.0 < 6.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 2.3.0 < 9.0.0"
-    },
-    {
-      "name": "puppetlabs/yumrepo_core",
-      "version_requirement": ">=1.0.0 <2.0.0"
+      "version_requirement": ">= 2.3.0 < 10.0.0"
     }
   ],
   "issues_url": "https://github.com/voxpupuli/puppet-openvmtools/issues",
@@ -22,28 +18,22 @@
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7",
-        "8",
-        "9",
-        "10"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Fedora",
       "operatingsystemrelease": [
-        "19",
-        "20",
-        "21",
-        "22",
-        "23",
-        "24",
-        "25"
+        "38",
+        "39"
       ]
     },
     {
@@ -68,20 +58,30 @@
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
@@ -96,10 +96,8 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04",
-        "18.04",
-        "20.04"
+        "20.04",
+        "22.04"
       ]
     }
   ],
@@ -107,7 +105,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.1.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-openvmtools.git",
@@ -120,5 +118,5 @@
     "vmware-tools",
     "vmware_tools"
   ],
-  "version": "3.0.0"
+  "version": "5.0.0"
 }

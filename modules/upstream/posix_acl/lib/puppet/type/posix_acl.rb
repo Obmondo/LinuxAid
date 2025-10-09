@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'pathname'
 require 'English'
-
+# rubocop:disable Naming/MethodParameterName
 Puppet::Type.newtype(:posix_acl) do
   desc <<-EOT
      Ensures that a set of ACL permissions are applied to a given file
@@ -39,7 +41,7 @@ Puppet::Type.newtype(:posix_acl) do
           file { '/var/www/html':
                  mode => 754,
                }
-    EOT
+  EOT
 
   newparam(:action) do
     desc 'What do we do with this list of ACLs? Options are set, unset, exact, and purge'
@@ -47,14 +49,21 @@ Puppet::Type.newtype(:posix_acl) do
     defaultto :set
   end
 
+  newparam(:ignore_missing) do
+    desc 'What to do if files are missing:
+      false: fail run,
+      quiet: quietly do nothing,
+      notify: do not try to to set ACL, but add notice to run'
+    newvalues(:false, :quiet, :notify)
+    defaultto :false
+  end
+
   newparam(:path) do
     desc 'The file or directory to which the ACL applies.'
     isnamevar
     validate do |value|
       path = Pathname.new(value)
-      unless path.absolute?
-        raise ArgumentError, "Path must be absolute: #{path}"
-      end
+      raise ArgumentError, "Path must be absolute: #{path}" unless path.absolute?
     end
   end
 
@@ -79,16 +88,15 @@ Puppet::Type.newtype(:posix_acl) do
   end
 
   # Snippet based on upstream Puppet (ASL 2.0)
-  [:posix_acl, :file].each do |autorequire_type|
+  %i[posix_acl file].each do |autorequire_type|
     autorequire(autorequire_type) do
       req = []
       path = Pathname.new(self[:path])
-      # rubocop:disable Style/MultilineBlockChain
       if autorequire_type != :posix_acl
         if self[:recursive] == :true
           catalog.resources.select do |r|
             r.is_a?(Puppet::Type.type(autorequire_type)) && self.class.descendant?(self[:path], r[:path])
-          end.each do |found|
+          end.each do |found| # rubocop:disable Style/MultilineBlockChain
             req << found[:path]
           end
         end
@@ -104,7 +112,6 @@ Puppet::Type.newtype(:posix_acl) do
       end
       req
     end
-    # rubocop:enable Style/MultilineBlockChain
   end
   # End of Snippet
 
@@ -115,7 +122,7 @@ Puppet::Type.newtype(:posix_acl) do
   newproperty(:permission, array_matching: :all) do
     desc 'ACL permission(s).'
 
-    def is_to_s(value) # rubocop:disable Style/PredicateName
+    def is_to_s(value)
       if value == :absent || value.include?(:absent)
         super
       else
@@ -164,9 +171,10 @@ Puppet::Type.newtype(:posix_acl) do
 
     # Make sure we are not misinterpreting recursive permission notation (e.g. rwX) when
     # comparing current to new perms.
-    def set_insync(cur_perm) # rubocop:disable Style/AccessorMethodName
+    def set_insync(cur_perm) # rubocop:disable Naming/AccessorMethodName
+      lc_cur_perm = cur_perm.map(&:downcase).uniq.sort
       should = @should.map(&:downcase).uniq.sort
-      (cur_perm.sort == should) || (provider.check_set && (should - cur_perm).empty?)
+      (lc_cur_perm.sort == should) || (provider.check_set && (should - lc_cur_perm).empty?)
     end
 
     def purge_insync(cur_perm)
@@ -180,51 +188,65 @@ Puppet::Type.newtype(:posix_acl) do
 
     def insync?(is)
       Puppet.debug "permission.insync? is: #{is.inspect} @should: #{@should.inspect}"
+      # handle missing file
+      if provider.permission.include?('DOES_NOT_EXIST')
+        case @resource.value(:ignore_missing)
+        when :false
+          raise ArgumentError, "Path #{@resource.value(:path)} not found"
+        when :quiet
+          return true
+        when :notify
+          Puppet.notice("Not setting ACL for #{@resource.value(:path)} as it does not exist.")
+          return true
+        end
+      end
       return purge_insync(is) if provider.check_purge
       return unset_insync(is) if provider.check_unset
+
       set_insync(is)
     end
 
     # Munge into normalised form
     munge do |acl|
-      r = ''
+      result = ''
       a = acl.split ':', -1 # -1 keeps trailing empty fields.
       raise ArgumentError, "Too few fields.  At least 3 required, got #{a.length}." if a.length < 3
       raise ArgumentError, "Too many fields.  At most 4 allowed, got #{a.length}."  if a.length > 4
+
       if a.length == 4
-        d = a.shift
-        raise ArgumentError, %(First field of 4 must be "d" or "default", got "#{d}".) unless %w[d default].include?(d)
-        r << 'default:'
-      end
-      t = a.shift # Copy the type.
-      r << case t
-           when 'u', 'user'
-             'user:'
-           when 'g', 'group'
-             'group:'
-           when 'o', 'other'
-             'other:'
-           when 'm', 'mask'
-             'mask:'
-           else
-             raise ArgumentError, %(Unknown type "#{t}", expected "user", "group", "other" or "mask".)
-           end
-      r << "#{a.shift}:" # Copy the "who".
-      p = a.shift
-      if p =~ %r{[0-7]}
-        p = p.oct
-        r << (p | 4 ? 'r' : '-')
-        r << (p | 2 ? 'w' : '-')
-        r << (p | 1 ? 'x' : '-')
+        default, type, who, perms = a
+        raise ArgumentError, %(First field of 4 must be "d" or "default", got "#{default}".) unless %w[d default].include?(default)
+
+        result += 'default:'
       else
-        # Not the most efficient but checks for multiple and invalid chars.
-        s = p.tr '-', ''
-        r << (s.sub!('r', '') ? 'r' : '-')
-        r << (s.sub!('w', '') ? 'w' : '-')
-        r << (s.sub!(%r{x}i, '') ? $LAST_MATCH_INFO.to_s : '-')
-        raise ArgumentError, %(Invalid permission set "#{p}".) unless s.empty?
+        type, who, perms = a
       end
-      r
+
+      result += case type
+                when 'u', 'user'
+                  'user:'
+                when 'g', 'group'
+                  'group:'
+                when 'o', 'other'
+                  'other:'
+                when 'm', 'mask'
+                  'mask:'
+                else
+                  raise ArgumentError, %(Unknown type "#{t}", expected "user", "group", "other" or "mask".)
+                end
+      result += "#{who}:"
+      if perms.match?(%r{^[0-7]$})
+        octal = perms.oct
+        result += "#{octal & 4 == 4 ? 'r' : '-'}#{octal & 2 == 2 ? 'w' : '-'}#{octal & 1 == 1 ? 'x' : '-'}"
+      else
+        match = %r{^(?<read>r)?(?<write>w)?(?<execute>[xX])?$}.match(perms.tr('-', ''))
+        raise ArgumentError, %(Invalid permission set "#{p}".) unless match
+
+        %w[read write execute].each do |perm|
+          result += match[perm] || '-'
+        end
+      end
+      result
     end
   end
 
@@ -239,11 +261,9 @@ Puppet::Type.newtype(:posix_acl) do
   end
 
   def newchild(path)
-    options = @original_parameters.merge(name: path).reject { |_param, value| value.nil? }
-    unless File.directory?(options[:name])
-      options[:permission] = self.class.pick_default_perms(options[:permission]) if options.include?(:permission)
-    end
-    [:recursive, :recursemode, :path].each do |param|
+    options = @original_parameters.merge(name: path).reject { |_param, value| value.nil? } # rubocop:disable Style/CollectionCompact
+    options[:permission] = self.class.pick_default_perms(options[:permission]) if !File.directory?(options[:name]) && options.include?(:permission)
+    %i[recursive recursemode path].each do |param|
       options.delete(param) if options.include?(param)
     end
     self.class.new(options)
@@ -251,16 +271,17 @@ Puppet::Type.newtype(:posix_acl) do
 
   def generate
     return [] unless self[:recursive] == :true && self[:recursemode] == :deep
+
     results = []
     paths = Set.new
     if File.directory?(self[:path])
       Dir.chdir(self[:path]) do
         Dir['**/*'].each do |path|
-          paths << ::File.join(self[:path], path)
+          paths << File.join(self[:path], path)
         end
       end
     end
-    # At the time we generate extra resources, all the files might now be present yet.
+    # At the time we generate extra resources, all the files might not be present yet.
     # In prediction to that we also create ACL resources for child file resources that
     # might not have been applied yet.
     catalog.resources.select do |r|
@@ -275,8 +296,7 @@ Puppet::Type.newtype(:posix_acl) do
   end
 
   validate do
-    unless self[:permission]
-      raise(Puppet::Error, 'permission is a required property.')
-    end
+    raise(Puppet::Error, 'permission is a required property.') unless self[:permission]
   end
 end
+# rubocop:enable Naming/MethodParameterName

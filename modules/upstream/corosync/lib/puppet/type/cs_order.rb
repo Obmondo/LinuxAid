@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'puppet/property/boolean'
 
 Puppet::Type.newtype(:cs_order) do
-  @doc = "Type for manipulating Corosync/Pacemkaer ordering entries.  Order
+  @doc = "Type for manipulating Corosync/Pacemaker ordering entries.  Order
     entries are another type of constraint that can be put on sets of
     primitives but unlike colocation, order does matter.  These designate
     the order at which you need specific primitives to come into a desired
@@ -24,7 +26,7 @@ Puppet::Type.newtype(:cs_order) do
 
   newproperty(:first) do
     desc "First Corosync primitive.  Just like colocation, our primitives for
-      ording come in pairs but this time order matters so we need to define
+      ordering come in pairs but this time order matters so we need to define
       which primitive starts the desired state change chain."
 
     munge do |value|
@@ -49,7 +51,7 @@ Puppet::Type.newtype(:cs_order) do
       once. This can be necessary to insert complex configurations into
       Corosync correctly.
 
-      This paramater sets the CIB this order should be created in. A
+      This parameter sets the CIB this order should be created in. A
       cs_shadow resource with a title of the same name as this value should
       also be added to your manifest."
   end
@@ -59,9 +61,9 @@ Puppet::Type.newtype(:cs_order) do
       of multiple order groups and so there is a way to control which
       primitives get priority when forcing the order of state changes on
       other primitives.  This value can be an integer but is often defined
-      as the string INFINITY."
-
-    defaultto 'INFINITY'
+      as the string INFINITY.
+      When using pcs as provider this value is not used.
+      It is generally preferred to use the `kind` parameter."
   end
 
   newproperty(:kind, required_features: :kindness) do
@@ -92,7 +94,7 @@ Puppet::Type.newtype(:cs_order) do
     %w[corosync pacemaker]
   end
 
-  [:cs_clone, :cs_group, :cs_primitive].each do |resource_type|
+  %i[cs_clone cs_group cs_primitive].each do |resource_type|
     autorequire(resource_type) do
       autos = []
       autos << unmunge_cs_resourcename(should(:first))
@@ -109,8 +111,9 @@ Puppet::Type.newtype(:cs_order) do
 
   def unmunge_cs_resourcename(name)
     return if name.nil?
+
     name = name.split(':')[0]
-    name = name[3..-1] if name.start_with? 'ms_'
+    name = name[3..] if name.start_with? 'ms_'
 
     name
   end

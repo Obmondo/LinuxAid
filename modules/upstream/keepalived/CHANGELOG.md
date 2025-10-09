@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.0](https://github.com/voxpupuli/puppet-keepalived/tree/v6.0.0) (2025-08-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-keepalived/compare/v5.2.1...v6.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#359](https://github.com/voxpupuli/puppet-keepalived/pull/359) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Make config file validation optional [\#365](https://github.com/voxpupuli/puppet-keepalived/pull/365) ([bastelfreak](https://github.com/bastelfreak))
+- config\_validate\_cmd: Switch datatype to absolute path [\#364](https://github.com/voxpupuli/puppet-keepalived/pull/364) ([bastelfreak](https://github.com/bastelfreak))
+- Add EL10 support [\#363](https://github.com/voxpupuli/puppet-keepalived/pull/363) ([bastelfreak](https://github.com/bastelfreak))
+- Add Ubuntu 24.04 support [\#362](https://github.com/voxpupuli/puppet-keepalived/pull/362) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 13 support [\#361](https://github.com/voxpupuli/puppet-keepalived/pull/361) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v5.2.1](https://github.com/voxpupuli/puppet-keepalived/tree/v5.2.1) (2025-07-22)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-keepalived/compare/v5.2.0...v5.2.1)
+
+**Fixed bugs:**
+
+- snmp: Only configure `snmp_socket` when it is required [\#357](https://github.com/voxpupuli/puppet-keepalived/pull/357) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v5.2.0](https://github.com/voxpupuli/puppet-keepalived/tree/v5.2.0) (2025-05-01)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-keepalived/compare/v5.1.0...v5.2.0)
@@ -11,6 +35,7 @@ These should not affect the functionality of the module.
 **Implemented enhancements:**
 
 - metadata.json: Add OpenVox [\#352](https://github.com/voxpupuli/puppet-keepalived/pull/352) ([jstraw](https://github.com/jstraw))
+- allow setting process parameters for `track_process` [\#349](https://github.com/voxpupuli/puppet-keepalived/pull/349) ([trefzer](https://github.com/trefzer))
 - Add `validate_cmd` for `keepalived.conf` [\#346](https://github.com/voxpupuli/puppet-keepalived/pull/346) ([phihos](https://github.com/phihos))
 - Add support for `lvs_sync_daemon` [\#342](https://github.com/voxpupuli/puppet-keepalived/pull/342) ([dlucredativ](https://github.com/dlucredativ))
 - allow hiera to define `keepalived::global_defs` [\#340](https://github.com/voxpupuli/puppet-keepalived/pull/340) ([ppickfor](https://github.com/ppickfor))

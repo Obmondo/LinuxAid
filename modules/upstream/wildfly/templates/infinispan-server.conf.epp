@@ -1,0 +1,27 @@
+# Location of JDK
+#
+JAVA_HOME="<%= $wildfly::java_home %>"
+
+# Location of Infinispan 
+#
+ISPN_SERVER_HOME="<%= $wildfly::dirname %>"
+
+# The username who should own the process.
+#
+ISPN_SERVER_USER="<%= $wildfly::user %>"
+ 
+# The amount of time to wait for startup
+#
+STARTUP_WAIT="<%= $wildfly::startup_wait %>"
+
+# The amount of time to wait for shutdown
+#
+SHUTDOWN_WAIT="<%= $wildfly::shutdown_wait %>"
+
+# Location to keep the console log
+#
+ISPN_SERVER_CONSOLE_LOG="<%= $wildfly::console_log %>"
+
+# Configuration for standalone mode
+#
+ISPN_SERVER_CONFIG="<%= $wildfly::config %> -P <%= $wildfly::dirname %>/jboss.properties"

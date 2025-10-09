@@ -1,5 +1,103 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+Each new release typically also includes the latest modulesync defaults.
+These should not affect the functionality of the module.
+
+## [v4.2.0](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v4.2.0) (2025-07-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/v4.1.0...v4.2.0)
+
+**Implemented enhancements:**
+
+- metadata.json: Add OpenVox [\#77](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/77) ([jstraw](https://github.com/jstraw))
+
+**Fixed bugs:**
+
+- fix: setup logs in rspec fixtures lib [\#84](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/84) ([TheMeier](https://github.com/TheMeier))
+- fix: setup logs in rspec fixtures lib [\#83](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/83) ([TheMeier](https://github.com/TheMeier))
+- fix: inline `my_fixture` method from PSH [\#81](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/81) ([TheMeier](https://github.com/TheMeier))
+
+## [v4.1.0](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v4.1.0) (2023-10-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/v4.0.1...v4.1.0)
+
+**Implemented enhancements:**
+
+- Add Ubuntu 22.04 support [\#62](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/62) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 11 and 12 support [\#61](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/61) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v4.0.1](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v4.0.1) (2023-07-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/v4.0.0...v4.0.1)
+
+**Fixed bugs:**
+
+- Remove old arguments to augopen\_internal [\#58](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/58) ([ekohl](https://github.com/ekohl))
+
+## [v4.0.0](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v4.0.0) (2023-06-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/v3.2.1...v4.0.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#52](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/52) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Drop unneeded stdlib dependency [\#54](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/54) ([bastelfreak](https://github.com/bastelfreak))
+- Add puppet 8 support [\#53](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/53) ([bastelfreak](https://github.com/bastelfreak))
+- Add RHEL 9 to supported OS [\#46](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/46) ([tuxmea](https://github.com/tuxmea))
+
+**Merged pull requests:**
+
+- Remove Puppet \< 3.4 compatibility code [\#47](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/47) ([ekohl](https://github.com/ekohl))
+
+## [v3.2.1](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v3.2.1) (2023-04-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/v3.2.0...v3.2.1)
+
+**Fixed bugs:**
+
+- Workaround libaugeas save/load issue [\#49](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/49) ([h-haaks](https://github.com/h-haaks))
+
+**Merged pull requests:**
+
+- Use expect\(\) instead of .should [\#45](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/45) ([ekohl](https://github.com/ekohl))
+- Fix broken Apache-2 license [\#44](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/44) ([bastelfreak](https://github.com/bastelfreak))
+- rspec: Remove Puppet::Util::Storage mock [\#42](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/42) ([lollipopman](https://github.com/lollipopman))
+- Update git:// github.com submodule URL to use https:// [\#38](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/38) ([jamespwilliams](https://github.com/jamespwilliams))
+
+## [v3.2.0](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/v3.2.0) (2022-05-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_core/compare/3.1.0...v3.2.0)
+
+**Closed issues:**
+
+- Wildcards in default\_file block [\#8](https://github.com/voxpupuli/puppet-augeasproviders_core/issues/8)
+
+**Merged pull requests:**
+
+- Cleanup metadata.json/README.md [\#36](https://github.com/voxpupuli/puppet-augeasproviders_core/pull/36) ([bastelfreak](https://github.com/bastelfreak))
+
+## [3.1.0](https://github.com/voxpupuli/puppet-augeasproviders_core/tree/3.1.0) (2021-08-26)
+
+- Allow stdlib 8.0.0 (GH #34)
+
+## 3.0.0
+
+- Remove empty Hiera data (GH #29)
+- PDK update & lint (GH #30)
+- Support Puppet 6 and 7, deprecate Puppet 5 (GH #32)
+- Update supported Ubuntu versions (GH #33)
+
+## 2.7.0
+
+- Lint with Rubocop (GH #23)
+- Raise Puppet::Error instead of using fail() (GH #24)
+- Migrate to PDK (GH #25)
+- Support stdlib 7.x (GH #26)
+
 ## 2.6.0
 
 - Add array split_by option (GH #20)
@@ -221,3 +319,6 @@
 
 ## 0.0.1
 * host: new provider added for builtin host type
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*

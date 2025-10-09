@@ -2,8 +2,8 @@
 # @summary This definition installs or removes yum package group.
 #
 # @param ensure specifies if package group should be present (installed) or absent (purged)
-# @param timeout exec timeout for yum groupinstall command
-# @param install_options options provided to yum groupinstall command
+# @param timeout exec timeout for yum group install command
+# @param install_options options provided to yum group install command
 #
 # @example Sample usage:
 #   yum::group { 'X Window System':
@@ -23,14 +23,14 @@ define yum::group (
   case $ensure {
     'present', 'installed', default: {
       exec { "yum-groupinstall-${name}":
-        command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
-        unless  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+        unless  => "yum group list hidden '${name}' | egrep -i '^Installed.+Groups:$'",
         timeout => $timeout,
       }
       if $ensure == 'latest' {
         exec { "yum-groupinstall-${name}-latest":
-          command => join(concat(["yum -y groupinstall '${name}'"], $install_options), ' '),
-          onlyif  => "yum groupinfo '${name}' | egrep '\\s+\\+'",
+          command => join(concat(["yum -y group install '${name}'"], $install_options), ' '),
+          onlyif  => "yum group info '${name}' | egrep '\\s+\\+'",
           timeout => $timeout,
           require => Exec["yum-groupinstall-${name}"],
         }
@@ -39,8 +39,8 @@ define yum::group (
 
     'absent', 'purged': {
       exec { "yum-groupremove-${name}":
-        command => "yum -y groupremove '${name}'",
-        onlyif  => "yum grouplist hidden '${name}' | egrep -i '^Installed.+Groups:$'",
+        command => "yum -y group remove '${name}'",
+        onlyif  => "yum group list hidden '${name}' | egrep -i '^Installed.+Groups:$'",
         timeout => $timeout,
       }
     }

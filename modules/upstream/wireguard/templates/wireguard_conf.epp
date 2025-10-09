@@ -1,0 +1,64 @@
+<%- |
+    String[1] $interface,
+    Stdlib::Port $dport,
+    Optional[String[1]] $table,
+    Optional[Integer] $firewall_mark,
+    Wireguard::Peers $peers,
+    Array[Hash] $addresses,
+    Array[String[1]] $preup_cmds,
+    Array[String[1]] $postup_cmds,
+    Array[String[1]] $predown_cmds,
+    Array[String[1]] $postdown_cmds,
+    Array[Stdlib::IP::Address] $default_allowlist,
+    Optional[Integer[1280, 9000]] $mtu = undef,
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+<% $addresses.each |$address| { -%>
+
+[Interface]
+<% $address.each |$key, $value| { -%>
+<%= $key %>=<%= $value %>
+<% } -%>
+<% } -%>
+ListenPort=<%= $dport %>
+<% if $table { -%>
+Table=<%= $table %>
+<% } -%>
+<% if $firewall_mark { -%>
+FwMark=<%= $firewall_mark %>
+<% } -%>
+<% $preup_cmds.each |$cmd| { -%>
+PreUp=<%= $cmd %>
+<% } -%>
+PostUp=wg set %i private-key /etc/wireguard/<%= $interface %>
+<% $postup_cmds.each |$cmd| { -%>
+PostUp=<%= $cmd %>
+<% } -%>
+<% $predown_cmds.each |$cmd| { -%>
+PreDown=<%= $cmd %>
+<% } -%>
+<% $postdown_cmds.each |$cmd| { -%>
+PostDown=<%= $cmd %>
+<% } -%>
+<% if $mtu { -%>
+MTU=<%= $mtu %>
+<% } -%>
+
+<% $peers.each |$peer| { -%>
+
+<% if $peer['description'] { -%>
+# <%= $peer['description'] %>
+<% } -%>
+[Peer]
+PublicKey=<%= $peer['public_key'] %>
+<% if $peer['endpoint'] { -%>
+Endpoint=<%= $peer['endpoint'] %>
+<% } -%>
+<% if $peer['preshared_key'] { -%>
+PresharedKey=<%= $peer['preshared_key'] %>
+<% } -%>
+PersistentKeepalive=<%= pick($peer['persistent_keepalive'], 0) %>
+<% pick($peer['allowed_ips'], $default_allowlist).each |$allowed_ip| { -%>
+AllowedIPs=<%= $allowed_ip %>
+<% } -%>
+<% } -%>
