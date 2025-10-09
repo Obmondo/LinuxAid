@@ -1,14 +1,14 @@
 forge "https://forgeapi.puppetlabs.com"
 
-mod 'simp/simplib'
+mod 'simp/simplib',
     :git => "https://github.com/simp/pupmod-simp-simplib.git",
     :ref => '4.14.2'
 
-mod 'simp/auditd'
+mod 'simp/auditd',
     :git => "https://github.com/simp/pupmod-simp-auditd.git",
     :ref => '8.14.5'
 
-mod 'puppetlabs/hocon'
+mod 'puppetlabs/hocon',
     :git => "https://github.com/puppetlabs/puppetlabs-hocon.git",
     :ref => 'v2.0.0'
 
@@ -24,8 +24,8 @@ mod 'puppetlabs/apache',
     :git => "https://github.com/puppetlabs/puppetlabs-apache.git",
     :ref => 'v13.0.0'
 
-mod 'voxpupuli/systemd'
-    :git => "https://github.com/voxpupuli/puppet-systemd.git"
+mod 'voxpupuli/systemd',
+    :git => "https://github.com/voxpupuli/puppet-systemd.git",
     :ref => 'v9.1.0'
 
 mod 'voxpupuli/archive',
@@ -369,15 +369,15 @@ mod 'puppetlabs/kubernetes',
     :ref => 'v8.1.0'
 
 mod 'puppetlabs/cron_core',
-    :git => 'https://github.com/puppetlabs/puppetlabs-cron_core.git'
+    :git => 'https://github.com/puppetlabs/puppetlabs-cron_core.git',
     :ref => 'v1.3.0'
 
 mod 'puppetlabs/augeas_core',
-    :git => 'https://github.com/puppetlabs/puppetlabs-augeas_core.git'
+    :git => 'https://github.com/puppetlabs/puppetlabs-augeas_core.git',
     :ref => 'v1.5.0'
 
 mod 'puppetlabs/node_encrypt',
-    :git => 'https://github.com/puppetlabs/puppetlabs-node_encrypt.git'
+    :git => 'https://github.com/puppetlabs/puppetlabs-node_encrypt.git',
     :ref => 'v3.2.0'
 
 mod 'pseiler/vsftpd',
@@ -444,7 +444,7 @@ mod 'voxpupuli/prometheus_reporter',
     :git => 'https://github.com/voxpupuli/puppet-prometheus_reporter.git',
     :ref => 'v2.0.0'
 
-mod 'puppets-epic-show-theatre/curator',
+mod 'pest/curator',
     :git => 'https://github.com/puppets-epic-show-theatre/puppet-curator.git',
     :ref => 'v4.0.1'
 
@@ -454,12 +454,12 @@ mod 'richardc/datacat',
 
 mod 'MiamiOH/pam_access',
     :git => 'https://github.com/MiamiOH/puppet-pam_access.git',
-    :ref: 'v1.0.6'
+    :ref => 'v1.0.6'
 
 mod 'crayfishx/purge',
     :git => 'https://github.com/crayfishx/puppet-purge.git',
-    :ref: '1.2.2'
+    :ref => '1.2.2'
 
 mod 'jcpunk/vnc',
-    :git => 'https://github.com/jcpunk/puppet-vnc.git'
+    :git => 'https://github.com/jcpunk/puppet-vnc.git',
     :ref => '4.2.1'
