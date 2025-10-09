@@ -1,0 +1,104 @@
+#
+# File is managed by puppet
+#
+
+$MaxMessageSize <%= @max_message_size %>
+<% if @preserve_fqdn -%>
+$PreserveFQDN on
+<% end -%>
+<% if @local_host_name -%>
+$LocalHostName <%= @local_host_name %>
+<% end -%>
+
+#################
+#### MODULES ####
+#################
+<% @modules.each do |module_row| -%>
+<%= module_row %>
+<% end -%>
+<% @extra_modules.each do |mod| -%>
+$ModLoad <%= mod %>
+<% end -%>
+
+<% if @non_kernel_facility -%>
+# Enable non-kernel facility klog messages
+$KLogPermitNonKernelFacility on
+
+<% end -%>
+###########################
+#### GLOBAL DIRECTIVES ####
+###########################
+#
+# Set rate limit for messages received.
+#
+<%- if @system_log_rate_limit_interval -%>
+$SystemLogRateLimitInterval <%= @system_log_rate_limit_interval %>
+<%- end -%>
+<%- if @system_log_rate_limit_burst -%>
+$SystemLogRateLimitBurst <%= @system_log_rate_limit_burst %>
+<%- end -%>
+
+<% if @default_template and @default_template_customisation -%>
+#
+# Custom setting for ActionFileDefaultTemplate
+#
+$template <%= @default_template %>,<%= @default_template_customisation %>
+
+<% end -%>
+<% if @default_template -%>
+#
+# Sets a default template for file action
+#
+$ActionFileDefaultTemplate <%= @default_template %>
+
+<% end -%>
+<% if @msg_reduction -%>
+# Filter duplicated messages
+$RepeatedMsgReduction on
+
+<% end -%>
+#
+# Set the default permissions for all log files.
+#
+$FileOwner <%= @log_user %>
+$FileGroup <%= @log_group %>
+$FileCreateMode <%= @perm_file %>
+$DirOwner <%= @log_user %>
+$DirGroup <%= @log_group %>
+$DirCreateMode <%= @perm_dir %>
+$PrivDropToUser <%= @run_user %>
+$PrivDropToGroup <%= @run_group %>
+$WorkDirectory <%= @spool_dir %>
+<% if @umask -%>
+$Umask <%= @umask %>
+<% end -%>
+
+<% if @omit_local_logging -%>
+# Turn off message reception via local log socket;
+# local messages are retrieved through imjournal now.
+$OmitLocalLogging on
+<% end -%>
+
+# Settings for imjournal (If supported)
+<% if @im_journal_statefile -%>
+$imjournalStateFile <%=@im_journal_statefile %>
+<% end -%>
+<% if @im_journal_ignore_previous_messages -%>
+$imjournalIgnorePreviousMessages <%=@im_journal_ignore_previous_messages %>
+<% end -%>
+<% if @im_journal_ratelimit_interval -%>
+$imjournalRatelimitInterval <%=@im_journal_ratelimit_interval %>
+<% end -%>
+<% if @im_journal_ratelimit_burst -%>
+$imjournalRatelimitBurst <%=@im_journal_ratelimit_burst %>
+<% end -%>
+
+#
+# Include all config files in <%= @rsyslog_d %>
+#
+$IncludeConfig <%= @rsyslog_d -%>/*.conf
+
+#
+# Emergencies are sent to <%= @usrmsg_users.join(',') -%> logged in.
+#
+*.emerg	:omusrmsg:<%= @usrmsg_users.join(',') %>

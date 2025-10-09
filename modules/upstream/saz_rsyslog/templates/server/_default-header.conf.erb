@@ -1,0 +1,68 @@
+<% if @enable_udp -%>
+# Load UDP module
+$ModLoad imudp
+<% end -%>
+
+<% if @enable_tcp -%>
+# Load TCP module
+$ModLoad imtcp
+<% end -%>
+
+<% if @enable_relp -%>
+# Load RELP module
+$ModLoad imrelp
+<% end -%>
+
+<% if @relay_server == false -%>
+# Switch to remote ruleset
+$RuleSet remote
+<% end -%>
+
+<% if @log_templates and @log_templates.any?-%>
+
+# Define custom logging templates
+<% @log_templates.flatten.compact.each do |log_template| -%>
+$template <%= log_template['name'] %>,"<%= log_template['template'] %>"
+<% end -%>
+<% end -%>
+<% if @log_filters -%>
+
+# Define custom if/then log conditions
+<% @log_filters.each do |log_filter| -%>
+if <%= log_filter['expression'] %> then <%= log_filter['action'] %>
+<% end -%>
+<% end -%>
+<% if @actionfiletemplate -%>
+
+# Using specified format for default logging format:
+$ActionFileDefaultTemplate <%= @actionfiletemplate %>
+<% else -%>
+
+<% if @high_precision_timestamps -%>
+#
+# Use high precision timestamp format.
+#
+$ActionFileDefaultTemplate RSYSLOG_FileFormat
+<% else -%>
+#
+# Use traditional timestamp format.
+#
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+<% end -%>
+<% end -%>
+
+<% if @ssl -%>
+# Server side SSL.
+$DefaultNetstreamDriver gtls
+
+# Cert files.
+$DefaultNetstreamDriverCAFile <%= @ssl_ca %>
+$DefaultNetstreamDriverCertFile <%= @ssl_cert %>
+$DefaultNetstreamDriverKeyFile <%= @ssl_key %>
+
+$InputTCPServerStreamDriverMode 1
+$InputTCPServerStreamDriverAuthMode <%= @ssl_auth_mode %>
+<% if @ssl_permitted_peer -%>
+$ActionSendStreamDriverPermittedPeer <%= @ssl_permitted_peer %>
+<% end -%>
+<% end -%>
