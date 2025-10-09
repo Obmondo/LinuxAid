@@ -1,0 +1,32 @@
+---
+.pdkignore:
+  paths:
+    - /.*.yml
+    - /pdk.yaml
+    - /.pmtignore
+    - /.git*
+    - /.editorconfig
+    - /provision.yaml
+
+.rubocop.yml:
+  default_configs:
+    AllCops:
+      NewCops: enable
+    RSpec/RepeatedDescription:
+      Exclude:
+        - spec/classes/**.*.rb
+
+Gemfile:
+  required:
+    ':development':
+      - gem: hocon
+        version: '~> 1.1'
+  optional:
+    ':development':
+      - gem: 'github_changelog_generator'
+        version: '~> 1.15'
+        condition: "Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.3.0')"
+
+spec/spec_helper.rb:
+  coverage_report: true
+  minimum_code_coverage_percentage: 100
