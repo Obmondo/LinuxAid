@@ -12,10 +12,11 @@ class profile::puppet (
   Boolean              $run_agent_as_noop      = $::common::puppet::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $::common::puppet::extra_main_settings,
   Optional[String]     $package_version_suffix = undef,
-  String               $aio_package_name       = 'puppet-agent',
+  String               $aio_package_name       = $::common::puppet::package_name,
   String               $environment            = $::common::puppet::environment,
 ) {
 
+  $puppetversion = $facts['puppetversion']
   $_version = if $version == 'latest' {
     $version
   } else {
@@ -25,8 +26,16 @@ class profile::puppet (
   # We need to manage puppet.conf on the puppetmaster, and puppet_agent also
   # tries to do this.
   if $setup_agent {
+    # TODO: remove this block, when there is no more puppet-agent 7
     # PuppetLabs
     eit_repos::repo { 'puppetlabs':
+      ensure     => false,
+      before     => Package['puppet-agent'],
+      noop_value => $noop_value,
+    }
+
+    # Openvox
+    eit_repos::repo { 'openvox':
       before     => Package['puppet-agent'],
       noop_value => $noop_value,
     }
@@ -37,7 +46,6 @@ class profile::puppet (
       name   => $aio_package_name,
     }
 
-    $_puppet_version_currently_installed = $facts['puppetversion']
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
     if $_pin_version {
       case $facts['package_provider'] {

@@ -21,6 +21,7 @@
 class common::puppet (
   Eit_types::Version   $version,
   Stdlib::Host         $server,
+  String               $package_name,
   Stdlib::Port         $server_port         = 443,
   Boolean              $configure_agent     = true,
   Boolean              $setup_agent         = true,
