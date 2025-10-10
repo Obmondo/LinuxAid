@@ -344,7 +344,7 @@ mod 'voxpupuli/posix_acl',
 
 mod 'ccin2p3/mit_krb5',
     :git => 'https://github.com/ccin2p3/puppet-mit_krb5.git',
-    :ref => 'v1.4.0'
+    :ref => '5ddb27be22cfe1c8e7285ea83d9b98c0c6136beb'
 
 mod 'voxpupuli/augeasproviders_core',
     :git => "https://github.com/voxpupuli/augeasproviders_core.git",
