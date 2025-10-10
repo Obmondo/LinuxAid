@@ -25,7 +25,7 @@ class eit_repos::yum::puppetlabs (
     enabled  => 1,
     gpgcheck => 1,
     gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-inc-release-key',
-    descr    => "PuppetLabs ${version} Products El \$releasever - \$basearch",
+    descr    => "PuppetLabs Products El \$releasever - \$basearch",
     baseurl  => "https://repos.obmondo.com/puppetlabs/yum/puppet7/el/${_os_major}/\$basearch/",
     target   => "/etc/yum.repos.d/puppetlabs-puppet7.repo",
   }
