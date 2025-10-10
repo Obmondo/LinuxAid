@@ -338,6 +338,7 @@ common::monitor::prometheus::install_method: package
 common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
 common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
+common::monitor::prometheus::server: prometheus.obmondo.com
 common::monitor::prometheus::server::version: 2.48.1
 common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
 common::monitor::prometheus::server::config_dir: "/etc/prometheus"
