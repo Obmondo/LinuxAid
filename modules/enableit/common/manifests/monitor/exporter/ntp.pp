@@ -1,6 +1,6 @@
 # @summary Class for managing NTP Exporter
 #
-# @param enable 
+# @param enable
 # Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
 #
 # @param listen_address The IP and port to listen on, default is '127.254.254.254:9559'.
@@ -12,7 +12,7 @@
 class common::monitor::exporter::ntp (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:9559',
-  Optional[Boolean] $noop_value     = undef,
+  Optional[Boolean] $noop_value     = false,
   String            $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
 ) {
   File {

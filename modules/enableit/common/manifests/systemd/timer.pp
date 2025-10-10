@@ -40,7 +40,7 @@ define common::systemd::timer (
   Eit_types::SystemdTimer::Minute  $minute      = '00',
   Cron::Environment                $environment = [],
   Cron::User                       $user        = 'root',
-  Cron::Mode                       $mode        = '0644',
+  Stdlib::Filemode                 $mode        = '0644',
   Optional[String]                 $description = undef,
   Optional[Boolean]                $noop_value  = undef,
 ) {

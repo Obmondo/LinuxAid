@@ -1,7 +1,7 @@
 # Make sure init_system is set
 confine(!$facts['init_system'], 'Unable to determine init system, aborting')
 
-include ::stdlib
+include stdlib
 
 Package { allow_virtual => true }
 

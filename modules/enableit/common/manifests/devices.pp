@@ -49,10 +49,10 @@ class common::devices (
     }
   }
 
-  $_conf_dir = "${common::setup::__conf_dir}/luks"
+  $_conf_dir = lookup('common::setup::__conf_dir')
 
   if $devices.size > 0 or $encrypted_devices.size > 0 {
-    file { $_conf_dir:
+    file { "${_conf_dir}/luks":
       ensure => directory,
       mode   => '0500',
       owner  => root,
@@ -61,7 +61,7 @@ class common::devices (
 
   $encrypted_devices.each |$k, $v| {
     common::device::encrypted_disk { $k:
-      require => File[$_conf_dir],
+      require => File["${_conf_dir}/luks"],
       *       => $v,
     }
   }
