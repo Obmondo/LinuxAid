@@ -55,3 +55,5 @@ common::system::authentication::pam::password_session_lines:
 common::system::authentication::pam::session_lines:
   - - 40
     - 'optional      pam_oddjob_mkhomedir.so umask=0077'
+
+common::puppet::version: "8.23.0-1.sles15"
