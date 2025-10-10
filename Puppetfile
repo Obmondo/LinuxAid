@@ -268,7 +268,7 @@ mod 'smoeding/debconf',
 
 mod 'walkamongus/realmd',
     :git => 'https://github.com/walkamongus/realmd.git',
-    :ref => 'v2.4.0'
+    :ref => 'c8b6a7e30c7abb5e09bd50b3f74a325c7a3358a0'
 
 mod 'sgnl05/sssd',
     :git => 'https://github.com/sgnl05/sgnl05-sssd.git',

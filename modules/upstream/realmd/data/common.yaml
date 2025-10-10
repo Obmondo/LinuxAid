@@ -14,6 +14,8 @@ realmd::sssd_config_file: /etc/sssd/sssd.conf
 realmd::sssd_config: {}
 realmd::sssd_config_cache_file: /var/lib/sss/db/config.ldb
 realmd::manage_sssd_config: false
+realmd::manage_sssd_service: true
+realmd::manage_sssd_package: true
 realmd::domain: "%{::domain}"
 realmd::domain_join_user: ~
 realmd::domain_join_password: ~
