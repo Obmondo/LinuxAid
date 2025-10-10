@@ -86,6 +86,7 @@ define mit_krb5::plugins(
     'kdcpreauth',
     'hostrealm',
     'localauth',
+    'certauth',
   ]
   unless $title in $interfaces {
     fail("Interface ${title} not supported in plugins section!")
