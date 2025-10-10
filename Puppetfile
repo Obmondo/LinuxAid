@@ -270,9 +270,13 @@ mod 'h0tw1r3/realmd',
     :git => 'https://github.com/h0tw1r3/puppet-realmd.git',
     :ref => '9f51600c7f06564a5a0ba7a09a0b9e32c9821e08'
 
-mod 'sgnl05/sssd',
-    :git => 'https://github.com/Obmondo/sgnl05-sssd.git',
+mod 'obmondo/sssd',
+    :git => 'https://github.com/obmondo/sgnl05-sssd.git',
     :ref => '60c58e5d1f1fcf41eb22c9f0c9a680f10be9afa4'
+
+mod 'obmondo/systemd_journal_remote',
+    :git => 'https://github.com/obmondo/puppet-systemd_journal_remote.git',
+    :ref => 'v1.2.0'
 
 mod 'voxpupuli/trusted_ca',
     :git => 'https://github.com/voxpupuli/puppet-trusted_ca.git',

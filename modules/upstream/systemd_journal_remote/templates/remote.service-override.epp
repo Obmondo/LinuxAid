@@ -1,0 +1,5 @@
+# THIS FILE IS MANAGED BY PUPPET
+[Service]
+ExecStart=
+ExecStart=<%= $command_path %> \
+  <%= $command_flags.join_keys_to_values("=").prefix('--').join(" \\\n  ") %>

@@ -1,0 +1,6 @@
+---
+# Journal Remote
+systemd_journal_remote::remote::manage_output: true
+
+# Journal Upload
+systemd_journal_remote::upload::manage_state: true
