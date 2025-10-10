@@ -304,6 +304,9 @@ class common::repo (
             },
           }
         }
+        'Suse': {
+          info("Nothing to do for ${_osfamily}")
+        }
         'Lede openwrt': {
           info("Nothing to do for ${_osfamily}")
         }
