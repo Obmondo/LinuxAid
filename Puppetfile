@@ -266,9 +266,9 @@ mod 'smoeding/debconf',
     :git => 'https://github.com/smoeding/puppet-debconf.git',
     :ref => 'v7.0.0'
 
-mod 'walkamongus/realmd',
-    :git => 'https://github.com/walkamongus/realmd.git',
-    :ref => 'c8b6a7e30c7abb5e09bd50b3f74a325c7a3358a0'
+mod 'h0tw1r3/realmd',
+    :git => 'https://github.com/h0tw1r3/puppet-realmd.git',
+    :ref => '9f51600c7f06564a5a0ba7a09a0b9e32c9821e08'
 
 mod 'sgnl05/sssd',
     :git => 'https://github.com/sgnl05/sgnl05-sssd.git',
