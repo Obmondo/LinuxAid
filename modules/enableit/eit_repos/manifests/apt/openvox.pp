@@ -20,10 +20,13 @@ class eit_repos::apt::openvox (
     default   => 'amd64',
   }
 
+  $_os_type = $facts['os']['name'].downcase
+  $_os_major = $facts['os']['release']['major']
+
   apt::source { 'obmondo_openvox8':
     ensure       => ensure_present($ensure),
     location     => 'https://repos.obmondo.com/openvox/apt',
-    release      => $facts['os']['distro']['codename'],
+    release      => "${_os_type}${_os_major}",
     architecture => $architecture,
     repos        => 'openvox8',
     include      => {
@@ -33,7 +36,7 @@ class eit_repos::apt::openvox (
   }
 
   apt::keyring { 'obmondo_openvox.asc':
-    ensure => present,
+    ensure => ensure_present($ensure),
     source => 'puppet:///modules/eit_repos/apt/GPG-KEY-openvox.pub',
     noop   => $noop_value,
   }
