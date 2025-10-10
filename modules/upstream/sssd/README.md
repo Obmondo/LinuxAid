@@ -130,11 +130,14 @@ currently Puppet versions 5 and 6.
 * EL 6
 * EL 7
 * EL 8
-* Fedora 29
 * Fedora 30
+* Fedora 31
+* Fedora 32
+* Fedora 33
 * Gentoo 4
 * Suse 11
 * Suse 12
+* Suse 15
 * Ubuntu 14.04
 * Ubuntu 16.04
 * Ubuntu 18.04
