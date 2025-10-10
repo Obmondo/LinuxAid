@@ -61,7 +61,7 @@ class profile::system::sudoers (
   }
 
   sudo::conf { 'yubikey_sudo_enable':
-    ensure   => $common::system::authentication::sudo::ssh_agent_auth,
+    ensure   => ensure_present($common::system::authentication::sudo::ssh_agent_auth),
     priority => 1,
     content  => 'Defaults env_keep += "SSH_AUTH_SOCK"',
     require  => File[$sudoers_d_dir],
