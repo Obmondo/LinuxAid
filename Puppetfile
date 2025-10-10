@@ -271,8 +271,8 @@ mod 'h0tw1r3/realmd',
     :ref => '9f51600c7f06564a5a0ba7a09a0b9e32c9821e08'
 
 mod 'sgnl05/sssd',
-    :git => 'https://github.com/sgnl05/sgnl05-sssd.git',
-    :ref => '3.1.0'
+    :git => 'https://github.com/Obmondo/sgnl05-sssd.git',
+    :ref => '60c58e5d1f1fcf41eb22c9f0c9a680f10be9afa4'
 
 mod 'voxpupuli/trusted_ca',
     :git => 'https://github.com/voxpupuli/puppet-trusted_ca.git',

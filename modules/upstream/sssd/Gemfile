@@ -54,5 +54,6 @@ end
 gem 'metadata-json-lint',     :require => false
 gem 'public_suffix', '1.4.6', :require => false
 gem 'puppet-strings',         :require => false
+gem 'redcarpet',              :require => false
 
 # vim:ft=ruby

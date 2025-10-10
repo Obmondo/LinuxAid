@@ -1,4 +1,4 @@
-class {'::sssd':
+class { 'sssd':
   config => {
     'sssd'               => {
       'domains'             => 'example.com',
@@ -14,6 +14,6 @@ class {'::sssd':
       'ldap_id_use_start_tls' => true,
       'ldap_tls_reqcert'      => 'demand',
       'ldap_tls_cacert'       => '/etc/pki/tls/certs/ca-bundle.crt',
-    }
-  }
+    },
+  },
 }

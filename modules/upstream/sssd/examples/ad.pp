@@ -1,4 +1,4 @@
-class {'::sssd':
+class { 'sssd':
   config => {
     'sssd'                  => {
       'domains'             => 'ad.example.com',
@@ -19,6 +19,6 @@ class {'::sssd':
       'fallback_homedir'               => '/home/%d/%u',
       'access_provider'                => 'simple',
       'simple_allow_groups'            => ['admins', 'users'],
-    }
-  }
+    },
+  },
 }

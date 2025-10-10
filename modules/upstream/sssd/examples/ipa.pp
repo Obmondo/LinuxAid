@@ -1,4 +1,4 @@
-class {'::sssd':
+class { 'sssd':
   config => {
     'sssd'                  => {
       'domains'             => 'example.com',
@@ -15,6 +15,6 @@ class {'::sssd':
       'cache_credentials'              => true,
       'krb5_store_password_if_offline' => true,
       'ldap_tls_cacert'                => '/etc/ipa/ca.crt',
-    }
-  }
+    },
+  },
 }

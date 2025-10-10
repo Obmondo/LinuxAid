@@ -1,0 +1,9 @@
+---
+
+sssd::extra_packages:
+  - 'sssd-krb5'
+  - 'sssd-ad'
+  - 'sssd-ipa'
+  - 'sssd-32bit'
+  - 'sssd-tools'
+  - 'sssd-ldap'

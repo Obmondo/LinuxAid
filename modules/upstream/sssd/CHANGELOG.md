@@ -1,3 +1,6 @@
+### 2023-12-15 (3.1.0)
+  * Add support for puppet8x
+
 ### 2020-01-28 (3.1.0)
   * Add support for RHEL 8 and newer Fedora versions (robertc99)
   * Add missing dependency (Thodoris Sotiropoulos)
