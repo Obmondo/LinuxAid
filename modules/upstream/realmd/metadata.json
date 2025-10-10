@@ -1,68 +1,64 @@
 {
-  "name": "walkamongus-realmd",
-  "version": "2.5.0",
-  "author": "Chadwick Banning",
-  "summary": "Puppet module to install and configure Realmd",
+  "name": "h0tw1r3-realmd",
+  "version": "3.0.1",
+  "author": "h0tw1r3",
+  "summary": "Puppet module to join a system to AD and Kerberos with realmd",
   "license": "Apache-2.0",
-  "source": "https://github.com/walkamongus/realmd",
-  "project_page": "https://github.com/walkamongus/realmd",
-  "issues_url": "https://github.com/walkamongus/realmd/issues",
+  "source": "https://github.com/h0tw1r3/puppet-realmd",
+  "project_page": "https://github.com/h0tw1r3/realmd",
+  "issues_url": "https://github.com/h0tw1r3/realmd/issues",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">=3.2.0 <7.0.0"
-    },
-    {
-      "name": "puppetlabs-apt",
-      "version_requirement": ">=8.0.0 <9.0.0"
+      "version_requirement": ">= 3.2.0 < 10.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "7",
-        "8"
+        "10",
+        "11"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "20.04"
+        "20.04",
+        "22.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
-  ]
+  ],
+  "pdk-version": "3.3.0",
+  "template-url": "pdk-default#3.3.0",
+  "template-ref": "tags/3.3.0-0-g5d17ec1"
 }

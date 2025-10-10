@@ -3,9 +3,9 @@ realmd::krb_client_package_name: krb5-workstation
 
 realmd::required_packages:
   oddjob:
-    ensure: present
+    ensure: installed
   oddjob-mkhomedir:
-    ensure: present
+    ensure: installed
   samba-common-tools:
-    ensure: present
+    ensure: installed
 
