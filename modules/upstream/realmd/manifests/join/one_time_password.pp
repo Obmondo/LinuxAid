@@ -2,7 +2,7 @@
 #
 # This class is called from realmd for
 # joining AD using a username and password.
-# The default password for Windows ADS is 
+# The default password for Windows ADS is
 # "the first 15 chars of the hostname in lowercase"
 #
 class realmd::join::one_time_password {
@@ -35,23 +35,17 @@ class realmd::join::one_time_password {
     }
   }
 
-  if $::operatingsystem == 'Ubuntu' and $facts['os']['distro']['codename']  == 'xenial' {
-    $_computer_name_arg  = ''
-  } else {
-      $_computer_name_arg = ["--computer-name=${_netbiosname}"]
-  }
-
   if !empty($_netbiosname) {
     $_check_pricipal = $_netbiosname
     $_domain_args = ["--domain=${_domain}", "--user-principal=host/${_fqdn}@${_realm}",
-                    '--login-type=computer', $_computer_name_arg]
+                    '--login-type=computer', "--computer-name=${_netbiosname}"]
   } else {
     $_check_pricipal = $::hostname[0,15]
     $_domain_args = ["--domain=${_domain}", "--user-principal=host/${_fqdn}@${_realm}", '--login-type=computer']
   }
 
   if $_ou != undef {
-      $_ou_args=["--computer-ou='OU=${_ou}'"]
+      $_ou_args=["--computer-ou='${_ou}'"]
   }
   else {
       $_ou_args=[]
