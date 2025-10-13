@@ -1,8 +1,13 @@
 require 'ipaddr'
-require_relative '../../puppet_x/voxpupuli/utils.rb'
+require_relative '../../puppet_x/voxpupuli/utils'
 
 Puppet::Type.newtype(:network_route) do
   @doc = 'Manage non-volatile route configuration information'
+
+  feature :provider_options, <<-EOD
+    The provider can accept a hash of arbitrary options. The semantics of
+    these options will depend on the provider.
+  EOD
 
   include PuppetX::Voxpupuli::Utils
 
@@ -17,21 +22,18 @@ Puppet::Type.newtype(:network_route) do
     isrequired
     desc 'The target network address'
     validate do |value|
-      unless value == 'default'
+      unless %w[default local].include?(value)
         a = PuppetX::Voxpupuli::Utils.try { IPAddr.new(value) }
-        raise("Invalid value for network: #{value}") unless a
+        raise("Invalid value for parameter 'network': #{value}") unless a
       end
     end
   end
 
   newproperty(:netmask) do
-    isrequired
     desc 'The subnet mask to apply to the route'
 
     validate do |value|
-      unless value.length <= 3 || PuppetX::Voxpupuli::Utils.try { IPAddr.new(value) }
-        raise("Invalid value for argument netmask: #{value}")
-      end
+      raise("Invalid value for parameter 'netmask': #{value}") unless value.length <= 3 || PuppetX::Voxpupuli::Utils.try { IPAddr.new(value) }
     end
 
     munge do |value|
@@ -45,21 +47,18 @@ Puppet::Type.newtype(:network_route) do
       elsif PuppetX::Voxpupuli::Utils.try { IPAddr.new(value).ipv4? }
         IPAddr.new('255.255.255.255').mask(value).to_s
       else
-        raise("Invalid value for argument netmask: #{value}")
+        raise("Invalid value for parameter 'netmask': #{value}")
       end
     end
   end
 
   newproperty(:gateway) do
-    isrequired
     desc 'The gateway to use for the route'
 
     validate do |value|
-      begin
-        IPAddr.new(value)
-      rescue ArgumentError
-        raise("Invalid value for gateway: #{value}")
-      end
+      IPAddr.new(value)
+    rescue ArgumentError
+      raise("Invalid value for parameter 'gateway': #{value}")
     end
   end
 
@@ -77,5 +76,10 @@ Puppet::Type.newtype(:network_route) do
     validate do |value|
       raise ArgumentError, "#{self.class} requires a string for the options property" unless value.is_a?(String)
     end
+  end
+
+  validate do
+    raise "Network_route[#{self[:name]}] must have netmask defined" if self[:network] != 'local' && self[:netmask].nil?
+    raise "Network_route[#{self[:name]}] must have gateway defined" if self[:network] != 'local' && self[:gateway].nil?
   end
 end
