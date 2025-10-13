@@ -1,0 +1,6 @@
+---
+realmd::required_packages:
+  oddjob:
+    ensure: present
+  oddjob-mkhomedir:
+    ensure: present
