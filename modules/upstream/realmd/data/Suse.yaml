@@ -1,0 +1,5 @@
+---
+realmd::krb_client_package_name: krb5-client
+realmd::required_packages:
+  samba-tool:
+    ensure: present
