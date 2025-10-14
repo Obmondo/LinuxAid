@@ -67,9 +67,6 @@ if tag_keys.count > MAX_TAGS
   raise ArgumentError, "Too many tags in use (#{tag_keys.count} of #{MAX_TAGS})"
 end
 
-# set all remaining tags to the value `null` to avoid warnings from Hiera.
-tag_keys = (tag_keys + Array.new(MAX_TAGS, nil)).slice(0...MAX_TAGS)
-
 # There seems to be no way to have hiera take and expand an array in the
 # hierarchy in hiera.yaml, so to circumvent that restriction we instead expand
 # all tags and add a line for each tag into hiera.yaml. This means that
