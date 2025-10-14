@@ -49,8 +49,8 @@ mod 'voxpupuli/gitlab',
     :ref => 'v10.3.0'
 
 mod 'voxpupuli/gitlab_ci_runner',
-    :git => 'https://github.com/voxpupuli/puppet-gitlab.git',
-    :ref => 'v10.3.0'
+    :git => 'https://github.com/voxpupuli/puppet-gitlab_ci_runner.git',
+    :ref => 'v6.1.0'
 
 mod 'voxpupuli/cron',
     :git => 'https://github.com/voxpupuli/puppet-cron.git',

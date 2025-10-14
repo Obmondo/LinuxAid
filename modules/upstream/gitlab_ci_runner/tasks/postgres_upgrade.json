@@ -1,5 +1,0 @@
-{
-  "description": "Upgrades the postgres database if needed",
-  "supports_noop": false,
-  "input_method": "environment"
-}
