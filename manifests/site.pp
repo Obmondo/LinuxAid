@@ -45,7 +45,7 @@ $obmondo_classes.filter |$_class| {
 # ```yaml
 # monitor::enable: true/false
 # ```
-$obmondo_monitoring_status = lookup('monitor::enable', Boolean, undef, true)
+$obmondo_monitoring_status = lookup('monitor::enable', Boolean, undef, $::obmondo_monitor)
 
 # Pretty Print Monitoring Status
 $_monitoring_status = $obmondo_monitoring_status ? {
