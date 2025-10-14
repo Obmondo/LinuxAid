@@ -1,4 +1,5 @@
 ---
+common::full_host_management: false
 common::system::updates::enable: true
 common::monitoring::manage: true
 
