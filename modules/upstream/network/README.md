@@ -1,11 +1,13 @@
 # Network module for Puppet
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-network.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-network)
-[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-network/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-network)
+[![Build Status](https://github.com/voxpupuli/puppet-network/workflows/CI/badge.svg)](https://github.com/voxpupuli/puppet-network/actions?query=workflow%3ACI)
+[![Release](https://github.com/voxpupuli/puppet-network/actions/workflows/release.yml/badge.svg)](https://github.com/voxpupuli/puppet-network/actions/workflows/release.yml)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/network.svg)](https://forge.puppetlabs.com/puppet/network)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/network.svg)](https://forge.puppetlabs.com/puppet/network)
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/network.svg)](https://forge.puppetlabs.com/puppet/network)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/network.svg)](https://forge.puppetlabs.com/puppet/network)
+[![puppetmodule.info docs](http://www.puppetmodule.info/images/badge.png)](http://www.puppetmodule.info/m/puppet-network)
+[![Apache-2 License](https://img.shields.io/github/license/voxpupuli/puppet-network.svg)](LICENSE)
 
 ## Overview
 
@@ -51,6 +53,16 @@ Default routes should be named 'default'.
   For Debian:
 
 ```puppet
+# default route
+network_route { 'default':
+  ensure    => 'present',
+  network   => 'default',
+  netmask   => '0.0.0.0',
+  gateway   => '172.18.6.2',
+  interface => 'enp3s0f0',
+}
+
+# specific route
 network_route { '172.17.67.0/24':
   ensure    => 'present',
   gateway   => '172.18.6.2',
@@ -71,6 +83,24 @@ network_route { '172.17.67.0/24':
   network   => '172.17.67.0',
   options   => 'table 200',
 }
+network_route { 'default':
+  ensure    => 'present',
+  gateway   => '10.0.2.2',
+  interface => 'eth0',
+  netmask   => '0.0.0.0',
+  network   => 'default'
+}
+network_route { '10.0.0.2':
+  ensure    => 'present',
+  network   => 'local',
+  interface => 'eth0',
+  options   => 'proto 66 scope host table local',
+}
+```
+
+  For SLES:
+
+```puppet
 network_route { 'default':
   ensure    => 'present',
   gateway   => '10.0.2.2',
@@ -109,22 +139,21 @@ This module requires the FileMapper mixin, available at <https://github.com/voxp
 The network_config type requires the Boolean mixin, available at <https://github.com/adrienthebo/puppet-boolean>.
 
 The debian routes provider requires the package [ifupdown-extra](http://packages.debian.org/search?suite=all&section=all&arch=any&searchon=names&keywords=ifupdown-extra).
-The `network_config` class requires the `ipaddress` gem, which needs to be
-installed on both the puppet master and the nodes. `ifupdown-extra` and
-`ipaddress` can be installed automatically using the `network` class. To use it,
-include it like so in your manifests:
+`ifupdown-extra` can be installed automatically using the `network` class.
+To use it, include it like so in your manifests:
 
 ```puppet
-include '::network'
+include 'network'
 ```
 
 This class also provides fine-grained control over which packages to install and
 how to install them. The documentation for the parameters exposed can be found
 [here](https://github.com/voxpupuli/puppet-network/blob/master/manifests/init.pp).
 
-The `ipaddress` gem can also be installed manually with:
-
-    sudo gem install ipaddress --no-ri --no-rdoc
+Bonding on Debian requires the package [ifenslave](https://packages.debian.org/search?suite=all&section=all&arch=any&searchon=names&keywords=ifenslave),
+which is installed automatically when a bond is defined. This package was
+renamed in Debian 9, and therefore bonding does not work on Debian
+versions prior to 9.
 
 Note: you may also need to update your master's plugins (run on your puppet master):
 

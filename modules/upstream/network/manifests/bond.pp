@@ -137,7 +137,7 @@
 #
 # * Linux Ethernet Bonding Driver HOWTO, Section 2 "Bonding Driver Options" http://www.kernel.org/doc/Documentation/networking/bonding.txt
 #
-define network::bond(
+define network::bond (
   $slaves,
   $ensure           = present,
   $ipaddress        = undef,
@@ -159,15 +159,14 @@ define network::bond(
   $primary_reselect = 'always',
   $xmit_hash_policy = 'layer2',
 ) {
-
-  require ::network::bond::setup
+  require network::bond::setup
 
   kmod::alias { $name:
     ensure => $ensure,
     source => 'bonding',
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       network::bond::debian { $name:
         ensure           => $ensure,
@@ -221,7 +220,7 @@ define network::bond(
       }
     }
     default: {
-      fail("network::bond does not support osfamily '${::osfamily}'")
+      fail("network::bond does not support osfamily '${facts['os']['family']}'")
     }
   }
 }

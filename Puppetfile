@@ -334,9 +334,9 @@ mod 'voxpupuli/kmod',
     :git => 'https://github.com/voxpupuli/puppet-kmod.git',
     :ref => 'v4.1.0'
 
-mod 'puppet/network',
+mod 'voxpupuli/puppet-network',
     :git => 'https://github.com/voxpupuli/puppet-network.git',
-    :ref => 'v0.9.0'
+    :ref => 'v2.2.1'
 
 mod 'mmarseglia/perforce',
     :git => 'https://github.com/runejuhl/puppet-perforce.git',
