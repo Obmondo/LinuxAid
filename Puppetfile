@@ -334,7 +334,7 @@ mod 'voxpupuli/kmod',
     :git => 'https://github.com/voxpupuli/puppet-kmod.git',
     :ref => 'v4.1.0'
 
-mod 'voxpupuli/puppet-network',
+mod 'voxpupuli/network',
     :git => 'https://github.com/voxpupuli/puppet-network.git',
     :ref => 'v2.2.1'
 
