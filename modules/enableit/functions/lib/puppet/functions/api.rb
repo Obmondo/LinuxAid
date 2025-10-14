@@ -23,6 +23,7 @@ def obmondo_api(endpoint, method = "GET", use_basic_auth = true)
   # Direct paths for the certificate and private key
   cert_path = ENV['AUTOSIGN_CLIENT_CERT']
   key_path = ENV['AUTOSIGN_CLIENT_KEY']
+  ca_path = "/etc/puppetlabs/puppet/ssl/certs/ca.pem"
 
   raise "AUTOSIGN_CLIENT_CERT environment variable is not set or empty" if cert_path.nil? || cert_path.empty? || cert_path.strip.empty?
 
@@ -33,7 +34,8 @@ def obmondo_api(endpoint, method = "GET", use_basic_auth = true)
   key = OpenSSL::PKey::RSA.new(File.read(key_path))
 
   begin
-    Net::HTTP.start(uri.host, uri.port, use_ssl: SSL, cert: cert, key: key) do |http|
+    Net::HTTP.start(uri.host, uri.port, use_ssl: SSL,
+      cert: cert, key: key, ca_file: ca_path) do |http|
       request = case method.upcase
       when "GET"
         Net::HTTP::Get.new(uri)
