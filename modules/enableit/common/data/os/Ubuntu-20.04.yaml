@@ -5,5 +5,5 @@ common::monitor::exporter::security::enable: true
 common::software::rustdesk::dependencies:
   - libgtk-3-0
   - libasound2
-common::puppet::version: "7.33.0"
-common::puppet::package_name: "puppet-agent"
+common::puppet::version: "8.19.2"
+common::puppet::package_name: "openvox-agent"
