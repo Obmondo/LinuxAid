@@ -1,34 +1,46 @@
-# @summary This class is called from gitlab for install.
-class gitlab::install (
-  $package_name   = $gitlab::package_name,
-  $package_ensure = $gitlab::package_ensure,
-  $package_hold   = $gitlab::package_hold,
-  $manage_package = $gitlab::manage_package,
+# @summary Manages the package of Gitlab runner
+#
+# @api private
+#
+class gitlab_ci_runner::install (
+  $package_name   = $gitlab_ci_runner::package_name,
+  $package_ensure = $gitlab_ci_runner::package_ensure,
 ) {
   assert_private()
 
-  if $gitlab::manage_upstream_edition != 'disabled' {
-    if $gitlab::edition {
-      $_edition = $gitlab::edition
-    } else {
-      $_edition = $gitlab::manage_upstream_edition
+  case $gitlab_ci_runner::install_method {
+    'repo': {
+      package { $package_name:
+        ensure => $package_ensure,
+      }
     }
-
-    $_package_name = "gitlab-${_edition}"
-  } else {
-    unless $package_name {
-      fail('gitlab::package_name required when gitlab::manage_upstream_edition is `disabled`')
+    'binary': {
+      $_package_ensure = $package_ensure ? {
+        'installed' => 'present',
+        default  => $package_ensure,
+      }
+      archive { $gitlab_ci_runner::binary_path:
+        ensure  => $_package_ensure,
+        source  => $gitlab_ci_runner::binary_source,
+        extract => false,
+        creates => $gitlab_ci_runner::binary_path,
+      }
+      file { $gitlab_ci_runner::binary_path:
+        ensure => file,
+        mode   => '0755',
+      }
+      if $gitlab_ci_runner::manage_user {
+        group { $gitlab_ci_runner::group:
+          ensure => present,
+        }
+        user { $gitlab_ci_runner::user:
+          ensure => present,
+          gid    => $gitlab_ci_runner::group,
+        }
+      }
     }
-
-    $_package_name = $package_name
-  }
-
-  if $manage_package {
-    package { 'gitlab-omnibus':
-      ensure  => $package_ensure,
-      name    => $_package_name,
-      mark    => $package_hold,
-      require => Class['gitlab::omnibus_package_repository'],
+    default: {
+      fail("Unsupported install method: ${gitlab_ci_runner::install_method}")
     }
   }
 }
