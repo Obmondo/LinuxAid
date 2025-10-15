@@ -27,6 +27,7 @@ keys = [
 
 Facter.add(:hardware) do
   confine :kernel => :linux
+  confine :virtual => proc { |value| value != 'lxc' }
 
   setcode do
     d = {}
