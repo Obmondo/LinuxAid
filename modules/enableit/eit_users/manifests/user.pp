@@ -54,7 +54,7 @@ define eit_users::user (
     default => $gid,
   }
 
-  file { ${_homedir}:
+  file { $_homedir:
     ensure  => 'directory',
     owner   => $name,
     group   => $file_group,
@@ -96,7 +96,7 @@ define eit_users::user (
       key     => $sshkey_match['key'],
       user    => $title,
       options => $options,
-      require => [User[$title], File["${_homedir}"]],
+      require => [User[$title], File[$_homedir]],
     }
   }
 }
