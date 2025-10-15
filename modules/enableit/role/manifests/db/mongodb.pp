@@ -37,7 +37,7 @@
 #
 # @param restart_on_change Whether to restart MongoDB on configuration change. Defaults to true.
 #
-# @param create_admin Whether to create an admin user. Defaults to true.
+# @param create_admin Whether to create an admin user. Defaults to false.
 #
 # @param directory_per_db Whether to use a separate directory for each database. Defaults to false.
 #
@@ -61,7 +61,7 @@
 #
 # @param admin_roles The roles for the admin user. Defaults to ['root'].
 #
-# @param admin_store_credentials Whether to store credentials for the admin user. Defaults to true.
+# @param admin_store_credentials Whether to store credentials for the admin user. Defaults to false.
 #
 # @param log_file The log file path. Defaults to undef.
 #
@@ -92,7 +92,7 @@ class role::db::mongodb (
   Boolean $disable_prealloc                              = false,
   Integer[1,default] $default_namespace_file_size        = 16,
   Boolean $restart_on_change                             = true,
-  Boolean $create_admin                                  = true,
+  Boolean $create_admin                                  = false,
   Boolean $directory_per_db                              = false,
   Boolean $enable_rest_api                               = false,
   Boolean $ssl                                           = false,
@@ -104,7 +104,7 @@ class role::db::mongodb (
   Optional[String] $admin_username                       = undef,
   Optional[Eit_types::Password] $admin_password          = undef,
   Array[String] $admin_roles                             = ['root'],
-  Boolean $admin_store_credentials                       = true,
+  Boolean $admin_store_credentials                       = false,
   Optional[Stdlib::Absolutepath] $log_file               = undef,
   Optional[Integer[1,default]] $max_connections          = undef,
   Eit_types::User $monitor_user                          = 'obmondo-mon',
