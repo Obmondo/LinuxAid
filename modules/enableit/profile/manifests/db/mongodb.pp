@@ -1,5 +1,5 @@
 # MongoDB class
-class profile::mongodb (
+class profile::db::mongodb (
   Hash                $global_settings,
   Hash                $server_settings,
   Eit_types::User     $monitor_user,

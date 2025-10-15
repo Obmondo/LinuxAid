@@ -20,7 +20,7 @@ class profile::communication::thinlinc (
           'Needs to have loadbalancer IP set for ThinLinc HA to work')
 
   class { '::thinlinc':
-    tlwebadm_password              => $webadm_password.pw_hash('sha-512', fqdn_rand_string(20)),
+    tlwebadm_password              => $webadm_password.pw_hash('sha-512', stdlib::fqdn_rand_string(20)),
     shadowing_shadow_mode          => $shadowing_shadow_mode,
     shadowing_allowed_shadowers    => $shadowing_allowed_shadowers,
     vsmserver_ha_nodes             => $masters,

@@ -1,7 +1,7 @@
 
 # @summary Class for managing the MongoDB role
 #
-# @param version The version of MongoDB to install. Defaults to undef.
+# @param version The version of MongoDB to install. Defaults to 8.0
 #
 # @param use_upstream_repo Whether to use the upstream repository. Defaults to true.
 #
@@ -37,7 +37,7 @@
 #
 # @param restart_on_change Whether to restart MongoDB on configuration change. Defaults to true.
 #
-# @param create_admin Whether to create an admin user. Defaults to false.
+# @param create_admin Whether to create an admin user. Defaults to true.
 #
 # @param directory_per_db Whether to use a separate directory for each database. Defaults to false.
 #
@@ -69,18 +69,16 @@
 #
 # @param monitor_user The username for the monitoring user. Defaults to 'obmondo-mon'.
 #
-# @param monitor_password The password for the monitoring user. Defaults to undef.
-#
 # @param backup Whether to enable backups. Defaults to false.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::db::mongodb (
-  Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = undef,
+  Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = '8.0',
   Boolean $use_upstream_repo                             = true,
   Array[Eit_types::IP] $listen_ips                       = ['127.0.0.1'],
   Boolean $use_ipv6                                      = false,
-  Stdlib::Port $port                                  = 27017,
+  Stdlib::Port $port                                     = 27017,
   Boolean $journal                                       = true,
   Boolean $smallfiles                                    = false,
   Boolean $remote_user_auth                              = true,
@@ -94,7 +92,7 @@ class role::db::mongodb (
   Boolean $disable_prealloc                              = false,
   Integer[1,default] $default_namespace_file_size        = 16,
   Boolean $restart_on_change                             = true,
-  Boolean $create_admin                                  = false,
+  Boolean $create_admin                                  = true,
   Boolean $directory_per_db                              = false,
   Boolean $enable_rest_api                               = false,
   Boolean $ssl                                           = false,
@@ -110,14 +108,12 @@ class role::db::mongodb (
   Optional[Stdlib::Absolutepath] $log_file               = undef,
   Optional[Integer[1,default]] $max_connections          = undef,
   Eit_types::User $monitor_user                          = 'obmondo-mon',
-  Eit_types::Password $monitor_password                  = undef,
   Boolean $backup                                        = false,
-
-  Eit_types::Encrypt::Params $encrypt_params       = [
+  Eit_types::Encrypt::Params $encrypt_params             = [
     'admin_password',
-    'monitor_password',
   ],
 ) inherits ::role::db {
+
   # FUTURE: When we support replication from the role, make sure to default to
   # the v1 protocol: https://jepsen.io/analyses/mongodb-3-4-0-rc3
   confine($remote_user_auth,    $disable_auth,    'Disabling authentication globally is not possible while requiring authentication for remote users') #lint:ignore:140chars
@@ -125,14 +121,20 @@ class role::db::mongodb (
   confine(!$ssl, $ssl_ca, '`ssl_ca` should only be used when `ssl` is enabled')
   confine($create_admin,    !($admin_username and $admin_password and $admin_roles),    'If `create_admin` is enabled, `admin_username`, `admin_password` and `admin_roles` must be set.') #lint:ignore:140chars
   confine(!$create_admin, $admin_store_credentials !~ Undef, '`create_admin` must be enabled if `admin_store_credentials` is set')
+
   # verbositylevel is a string of up to 5 repeated 'v's
   $_verbosity = join(range(1,$verbosity).each |$_| { 'v' }, '')
+
   # Since we run under systemd we'd rather not fork and instead output logs on
   # stdout/stderr.
   $_fork = !!$log_file
+
   # Always listen on localhost
   $_listen_ips = unique(concat($listen_ips, ['127.0.0.1']))
-  class { '::profile::mongodb':
+
+  $monitor_password = stdlib::fqdn_rand_string(20)
+
+  class { '::profile::db::mongodb':
     monitor_user     => $monitor_user,
     monitor_password => $monitor_password,
     backup           => $backup,

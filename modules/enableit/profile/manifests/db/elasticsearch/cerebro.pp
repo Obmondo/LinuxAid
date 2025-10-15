@@ -17,7 +17,7 @@ class profile::db::elasticsearch::cerebro (
     ensure  => 'present',
     content => epp('profile/db/elasticsearch/cerebro/application.conf.epp', {
       port   => 9000,
-      secret => fqdn_rand_string(64),
+      secret => stdlib::fqdn_rand_string(64),
     }),
     before  => Service['cerebro'],
     notify  => Service['cerebro'],
