@@ -161,7 +161,7 @@ class common::monitor::exporter::node (
     user              => 'node_exporter',
     group             => 'node_exporter',
     export_scrape_job => $enable,
-    extra_options     => "--collector.textfile.directory=${textfile_directory} --web.listen-addres=${listen_address}",
+    extra_options     => "--collector.textfile.directory=${textfile_directory} --web.listen-address=${listen_address}",
     scrape_host       => $::trusted['certname'],
     collectors_enable => $default_collectors,
     tag               => $::trusted['certname'],
