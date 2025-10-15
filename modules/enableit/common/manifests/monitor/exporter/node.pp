@@ -163,6 +163,7 @@ class common::monitor::exporter::node (
     export_scrape_job => $enable,
     extra_options     => "--collector.textfile.directory=${textfile_directory} --web.listen-address=${listen_address}",
     scrape_host       => $::trusted['certname'],
+    scrape_port       => Integer($listen_address.split(':')[1]),
     collectors_enable => $default_collectors,
     tag               => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
