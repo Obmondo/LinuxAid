@@ -47,6 +47,7 @@ class common::monitor::prometheus::server (
 
   class { 'prometheus::server':
     version                        => $version,
+    package_ensure                 => $version,
     storage_retention              => false,
     localstorage                   => false,
     collect_scrape_jobs            => $collect_scrape_jobs,
