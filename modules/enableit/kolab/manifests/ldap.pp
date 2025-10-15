@@ -1,4 +1,0 @@
-# Ldap
-class kolab::ldap {
-
-}
