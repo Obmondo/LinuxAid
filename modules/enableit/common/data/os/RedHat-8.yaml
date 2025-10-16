@@ -42,4 +42,5 @@ common::system::nsswitch::automount:
 common::system::nsswitch::aliases:
   - 'files'
 
+common::puppet::version: "8.11.0"
 common::system::dns::resolver: 'resolv'

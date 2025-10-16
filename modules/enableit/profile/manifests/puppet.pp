@@ -12,6 +12,7 @@ class profile::puppet (
   Boolean              $run_agent_as_noop      = $::common::puppet::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $::common::puppet::extra_main_settings,
   Optional[String]     $package_version_suffix = undef,
+  Optional[String]     $package_version_prefix = undef,
   String               $aio_package_name       = $::common::puppet::package_name,
   String               $environment            = $::common::puppet::environment,
 ) {
@@ -20,7 +21,7 @@ class profile::puppet (
   $_version = if $version == 'latest' {
     $version
   } else {
-    "${version}${package_version_suffix}"
+    "${package_version_prefix}${version}${package_version_suffix}"
   }
 
   # We need to manage puppet.conf on the puppetmaster, and puppet_agent also
