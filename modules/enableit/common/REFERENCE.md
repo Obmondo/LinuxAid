@@ -325,7 +325,6 @@ Data type:
 
 ```puppet
 Hash[String, Struct[{
-      ensure => Eit_types::Cert::Ensure,
       source => String,
   }]]
 ```

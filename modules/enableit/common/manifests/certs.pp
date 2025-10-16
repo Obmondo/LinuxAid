@@ -17,8 +17,8 @@ class common::certs (
       ports => Optional[Array[Stdlib::Port]],
   }]] $manual = {},
   Hash[String, Struct[{
-      ensure => Eit_types::Cert::Ensure,
-      source => String,
+      source  => Optional[Eit_Files::Source],
+      content => Optional[String],
   }]] $ca_certs = {},
   Eit_types::Encrypt::Params $encrypt_params = [
     'manual.*.key',
