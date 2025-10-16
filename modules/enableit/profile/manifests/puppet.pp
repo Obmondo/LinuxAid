@@ -34,6 +34,15 @@ class profile::puppet (
       noop_value => $noop_value,
     }
 
+    # Remove the puppetlabs repo package
+    package { [
+      'puppet7-release',
+      'puppet8-release'
+    ]:
+      ensure => false,
+      noop   => $noop_value,
+    }
+
     # Openvox
     eit_repos::repo { 'openvox':
       before     => Package['puppet-agent'],
@@ -54,6 +63,10 @@ class profile::puppet (
             version  => $_version,
             priority => 999,
             packages => $aio_package_name,
+          }
+
+          File <| tag == "/etc/apt/preferences.d/pin_${aio_package_name}.pref" |> {
+            noop => $noop_value,
           }
         }
         'yum': {
