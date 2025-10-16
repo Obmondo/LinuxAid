@@ -45,22 +45,6 @@ jobs:
         if: ${{ github.event.pull_request.merged == false }}
         run: /usr/local/bin/check_json.sh
 
-      - name: deploy to gitea runner
-        if: ${{ github.event.pull_request.merged == true }}
-        env:
-          SSH_KEY: ${{ secrets.PUPPET_SSH_KEY }}
-        run: |
-          echo "${SSH_KEY}" > /tmp/ssh_key
-          chmod a=,u=r /tmp/ssh_key
-          eval $(ssh-agent)
-          ssh-add /tmp/ssh_key || (echo 'Broken SSH key. Is the branch protected?' && exit 1)
-          ssh -o StrictHostKeyChecking=no -A root@htzhel1-ax42-a.enableit.dk bash -lc /opt/obmondo/bin/puppet_deploy.sh
-
-      - name: deploy to enableit api
-        if: ${{ github.event.pull_request.merged == true }}
-        run: |
-          curl --fail -u readonly:readonly -X PUT  https://api.obmondo.com/api/puppet/pull
-
   yamllint:
     uses: Obmondo/gitea-actions/.gitea/workflows/yamllint.yml@main
     with:
