@@ -91,6 +91,7 @@ class common::monitor::exporter::node (
   Stdlib::AbsolutePath $lib_directory,
 
   Eit_types::IPPort $listen_address,
+  Eit_types::Certname $host = $trusted['certname'],
   Boolean    $enable = true,
   Boolean    $noop_value = false,
 ) {
@@ -160,13 +161,22 @@ class common::monitor::exporter::node (
     init_style        => if !$enable { 'none' },
     user              => 'node_exporter',
     group             => 'node_exporter',
-    export_scrape_job => $enable,
+    export_scrape_job => ! $enable,
     extra_options     => "--collector.textfile.directory=${textfile_directory} --web.listen-address=${listen_address}",
     scrape_host       => $::trusted['certname'],
-    scrape_port       => Integer($listen_address.split(':')[1]),
     collectors_enable => $default_collectors,
     tag               => $::trusted['certname'],
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
+  }
+
+  $port = Integer($listen_address.split(':')[1])
+
+  @@prometheus::scrape_job { 'node':
+    job_name    => 'node',
+    tag         => $::trusted['certname'],
+    targets     => [ "${host}:${port}" ],
+    labels      => { 'certname' => $::trusted['certname'] },
+    collect_dir => '/etc/prometheus/file_sd_config.d',
   }
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
