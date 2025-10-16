@@ -30,14 +30,13 @@ class profile::puppet (
     # PuppetLabs
     eit_repos::repo { 'puppetlabs':
       ensure     => false,
-      before     => Package['puppet-agent'],
       noop_value => $noop_value,
     }
 
     # Remove the puppetlabs repo package
     package { [
       'puppet7-release',
-      'puppet8-release'
+      'puppet8-release',
     ]:
       ensure => false,
       noop   => $noop_value,
@@ -45,14 +44,13 @@ class profile::puppet (
 
     # Openvox
     eit_repos::repo { 'openvox':
-      before     => Package['puppet-agent'],
+      before     => Package[$aio_package_name],
       noop_value => $noop_value,
     }
 
-    package { 'puppet-agent':
+    package { $aio_package_name:
       ensure => $_version,
       noop   => $noop_value,
-      name   => $aio_package_name,
     }
 
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
@@ -65,8 +63,14 @@ class profile::puppet (
             packages => $aio_package_name,
           }
 
-          File <| tag == "/etc/apt/preferences.d/pin_${aio_package_name}.pref" |> {
+          File <| title == "/etc/apt/preferences.d/pin_${aio_package_name}.pref" |> {
             noop => $noop_value,
+          }
+
+          # TODO: remove these block when puppetlabs is not anymore.
+          File <| title == '/etc/apt/preferences.d/pin_puppet-agent.pref' |> {
+            enable => absent,
+            noop   => $noop_value,
           }
         }
         'yum': {
@@ -74,6 +78,9 @@ class profile::puppet (
           $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}") #lint:ignore:140chars
           yum::versionlock { $full_package_name:
             ensure => present,
+          }
+          File <| title == '/etc/yum/plugins/versionlock.list' |> {
+            noop => $noop_value,
           }
         }
         'dnf': {
@@ -84,9 +91,16 @@ class profile::puppet (
             ensure  => present,
             version => $_version,
           }
+          File <| title == '/etc/dnf/plugins/versionlock.list' |> {
+            noop => $noop_value,
+          }
         }
         'zypper': {
           zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": } #lint:ignore:140chars
+
+          File <| title == '/etc/zypp/plugins/versionlock.list' |> {
+            noop => $noop_value,
+          }
         }
         default: {
           info('Not pinning the puppet-agent package, maybe you have an older distro')
