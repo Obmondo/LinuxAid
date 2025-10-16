@@ -1,0 +1,2 @@
+---
+profile::puppet::package_version_suffix: '-1.el9'

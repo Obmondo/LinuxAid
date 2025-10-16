@@ -1,0 +1,1 @@
+profile::puppet::package_version_suffix: '-1.sles15'
