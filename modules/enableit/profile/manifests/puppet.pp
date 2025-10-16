@@ -90,7 +90,7 @@ class profile::puppet (
 
           yum::versionlock { $full_package_name:
             ensure  => present,
-            version => $_version,
+            version => $version,
           }
           File <| title == '/etc/dnf/plugins/versionlock.list' |> {
             noop => $noop_value,
