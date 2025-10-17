@@ -1,2 +1,2 @@
 ---
-profile::puppet::package_version_prefix: '-0:'
+profile::puppet::package_version_prefix: '0:'
