@@ -18,6 +18,9 @@ class profile::puppet (
 ) {
 
   $puppetversion = $facts['puppetversion']
+  $os_major = $facts['os']['release']['major']
+  $os_arch = $facts['os']['architecture']
+
   $_version = if $version == 'latest' {
     $version
   } else {
@@ -76,7 +79,7 @@ class profile::puppet (
         }
         'yum': {
           # use yum data types, otherwise assertion fails in yum::versionlock
-          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}") #lint:ignore:140chars
+          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${os_major}.${os_arch}")
           yum::versionlock { $full_package_name:
             ensure => present,
           }
@@ -92,12 +95,15 @@ class profile::puppet (
             ensure  => present,
             version => $version,
           }
+          Concat <| title == '/etc/dnf/plugins/versionlock.list' |> {
+            noop => $noop_value,
+          }
           File <| title == '/etc/dnf/plugins/versionlock.list' |> {
             noop => $noop_value,
           }
         }
         'zypper': {
-          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": } #lint:ignore:140chars
+          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${os_major}.${os_arch}": }
 
           File <| title == '/etc/zypp/plugins/versionlock.list' |> {
             noop => $noop_value,
