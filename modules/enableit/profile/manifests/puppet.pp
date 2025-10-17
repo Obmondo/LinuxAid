@@ -104,7 +104,7 @@ class profile::puppet (
           }
         }
         default: {
-          info('Not pinning the puppet-agent package, maybe you have an older distro')
+          info("Not pinning the ${aio_package_name} package, maybe you have an older distro")
         }
       }
     }
@@ -113,7 +113,7 @@ class profile::puppet (
       service { $service:
         enable  => 'mask',
         noop    => $noop_value,
-        require => Package['puppet-agent'],
+        require => Package[$aio_package_name],
       }
     }
   }
