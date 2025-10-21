@@ -27,7 +27,7 @@ class common::system::updates (
   Boolean           $remove_unused_kernels  = true,
   Boolean           $reboot                 = false,
   Eit_types::Email  $mail_to                = 'ops@obmondo.com',
-  Optional[Boolean] $noop_value             = undef,
+  Optional[Boolean] $noop_value             = false,
 ) {
   if $manage {
     # NOTE: We will only install updates when purge is true, so that gives us some
