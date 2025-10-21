@@ -12,15 +12,19 @@ class profile::puppet (
   Boolean              $run_agent_as_noop      = $::common::puppet::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $::common::puppet::extra_main_settings,
   Optional[String]     $package_version_suffix = undef,
+  Optional[String]     $package_version_prefix = undef,
   String               $aio_package_name       = $::common::puppet::package_name,
   String               $environment            = $::common::puppet::environment,
 ) {
 
   $puppetversion = $facts['puppetversion']
+  $os_major = $facts['os']['release']['major']
+  $os_arch = $facts['os']['architecture']
+
   $_version = if $version == 'latest' {
     $version
   } else {
-    "${version}${package_version_suffix}"
+    "${package_version_prefix}${version}${package_version_suffix}"
   }
 
   # We need to manage puppet.conf on the puppetmaster, and puppet_agent also
@@ -30,20 +34,29 @@ class profile::puppet (
     # PuppetLabs
     eit_repos::repo { 'puppetlabs':
       ensure     => false,
-      before     => Package['puppet-agent'],
       noop_value => $noop_value,
+    }
+
+    # Remove the puppetlabs repo package
+    package { [
+      'puppet7-release',
+      'puppet8-release',
+      'puppet-agent'
+    ]:
+      ensure => absent,
+      noop   => $noop_value,
+      notify => Package[$aio_package_name],
     }
 
     # Openvox
     eit_repos::repo { 'openvox':
-      before     => Package['puppet-agent'],
+      before     => Package[$aio_package_name],
       noop_value => $noop_value,
     }
 
-    package { 'puppet-agent':
+    package { $aio_package_name:
       ensure => $_version,
       noop   => $noop_value,
-      name   => $aio_package_name,
     }
 
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
@@ -55,28 +68,53 @@ class profile::puppet (
             priority => 999,
             packages => $aio_package_name,
           }
+
+          File <| title == "/etc/apt/preferences.d/pin_${aio_package_name}.pref" |> {
+            noop => $noop_value,
+          }
+
+          # TODO: remove these block when puppetlabs is not anymore.
+          File <| title == '/etc/apt/preferences.d/pin_puppet-agent.pref' |> {
+            enable => absent,
+            noop   => $noop_value,
+          }
         }
         'yum': {
           # use yum data types, otherwise assertion fails in yum::versionlock
-          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${_version}-*.el${facts['os']['release']['major']}.${facts['os']['architecture']}") #lint:ignore:140chars
+          $full_package_name = Yum::VersionlockString("0:${aio_package_name}-${version}-*.el${os_major}.${os_arch}")
           yum::versionlock { $full_package_name:
             ensure => present,
           }
+          Concat_file <| title == '/etc/yum/plugins/versionlock.list' |> {
+            noop => $noop_value,
+          }
         }
         'dnf': {
+          File {
+            noop => $noop_value,
+          }
+
           # use yum data types, otherwise assertion fails in yum::versionlock
           $full_package_name = Yum::RpmName($aio_package_name)
 
           yum::versionlock { $full_package_name:
             ensure  => present,
-            version => $_version,
+            version => $version,
+          }
+          Concat_file <| title == '/etc/dnf/plugins/versionlock.list' |> {
+            noop => $noop_value,
           }
         }
         'zypper': {
-          zypprepo::versionlock { "${aio_package_name}-${_version}-*.sles${facts['os']['release']['major']}.${facts['os']['architecture']}": } #lint:ignore:140chars
+          $full_package_name = "${aio_package_name}-${version}-*.sles${os_major}.${os_arch}"
+          zypprepo::versionlock { $full_package_name: }
+
+          Concat_file <| title == '/etc/zypp/locks' |> {
+            noop => $noop_value,
+          }
         }
         default: {
-          info('Not pinning the puppet-agent package, maybe you have an older distro')
+          info("Not pinning the ${aio_package_name} package, maybe you have an older distro")
         }
       }
     }
@@ -85,7 +123,7 @@ class profile::puppet (
       service { $service:
         enable  => 'mask',
         noop    => $noop_value,
-        require => Package['puppet-agent'],
+        require => Package[$aio_package_name],
       }
     }
   }

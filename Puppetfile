@@ -158,10 +158,6 @@ mod 'voxpupuli/selinux',
     :git => 'https://github.com/voxpupuli/puppet-selinux.git',
     :ref => 'v5.0.0'
 
-mod 'nanliu/staging',
-    :git => "https://github.com/nanliu/puppet-staging.git",
-    :ref => '1.0.4'
-
 mod 'puppetlabs/stdlib',
     :git => "https://github.com/puppetlabs/puppetlabs-stdlib.git",
     :ref => 'v9.7.0'
