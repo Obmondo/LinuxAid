@@ -138,6 +138,8 @@ lookup_options:
     merge: "unique"
   common::monitor::exporter::mtail::logs:
     merge: "unique"
+  common::system::classes:
+    merge: "unique"
 
 ## Global settings for common class
 common::full_host_management: true
