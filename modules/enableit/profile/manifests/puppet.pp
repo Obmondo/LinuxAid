@@ -109,7 +109,7 @@ class profile::puppet (
           $full_package_name = "${aio_package_name}-${version}-*.sles${os_major}.${os_arch}"
           zypprepo::versionlock { $full_package_name: }
 
-          Concat_file <| title == '/etc/zypp/plugins/versionlock.list' |> {
+          Concat_file <| title == '/etc/zypp/locks' |> {
             noop => $noop_value,
           }
         }
