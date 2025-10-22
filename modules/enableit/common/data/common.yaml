@@ -327,12 +327,7 @@ common::keepalived::global_defs:
 common::certs::__base_dir: "/etc/ssl/private/static-certs"
 common::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
-common::monitor::exporter::enable: true
-common::monitor::exporter::iptables::enable: true
-common::monitor::exporter::ssl::enable: false
-common::monitor::exporter::blackbox::enable: false
-common::monitor::exporter::blackbox::listen_port: 63315
-
+# Prometheus Server
 common::monitor::prometheus::noop_value: false
 common::monitor::prometheus::install_method: package
 common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
@@ -375,10 +370,17 @@ common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: cadvisor
   - job_name: security
 
+# Prometheus Exporters
+common::monitor::exporter::enable: true
+common::monitor::exporter::iptables::enable: true
+common::monitor::exporter::dellhw::enable: false
+common::monitor::exporter::blackbox::enable: false
+common::monitor::exporter::blackbox::listen_port: 63315
+
+common::monitor::exporter::node::enable: true
 common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
-common::monitor::exporter::node::enable: true
 common::monitor::exporter::node::noop_value: false
 common::monitor::exporter::node::buddyinfo: false
 common::monitor::exporter::node::cgroups: false
@@ -407,8 +409,6 @@ common::monitor::exporter::node::wifi: false
 common::monitor::exporter::node::zoneinfo: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
-
-common::monitor::exporter::dellhw::enable: false
 
 common::monitoring::atop::install: false
 common::monitoring::atop::daemon: false

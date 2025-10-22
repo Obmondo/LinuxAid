@@ -20,7 +20,7 @@ class common::monitor::exporter::filestat (
   Array[String]               $file_pattern      = [],
   Eit_types::IPPort           $listen_address    = '127.254.254.254:63387',
 ) {
-  confine($enable, $file_pattern.size == 0, 'filestat needs some file_pattern, so it can monitor those, try setting common::monitor::exporter::filestat::file_pattern in hiera') #lint:ignore:140chars  
+  confine($enable, $file_pattern.size == 0, 'filestat needs some file_pattern, so it can monitor those, try setting common::monitor::exporter::filestat::file_pattern in hiera') #lint:ignore:140chars
   File {
     noop => $noop_value
   }
@@ -82,8 +82,8 @@ class common::monitor::exporter::filestat (
     scrape_job_name   => 'filestat',
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
-  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.  
-  # upstream module cant handle noop. (which is correct)  
+  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
+  # upstream module cant handle noop. (which is correct)
   Exec <| tag == 'systemd-filestat_exporter.service-systemctl-daemon-reload' |> {
     noop        => $noop_value,
     subscribe   => File['/etc/systemd/system/filestat_exporter.service'],
