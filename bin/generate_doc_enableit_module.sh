@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generate docs for these modules
-MODULES="monitor"
+MODULES="common monitor role profile"
 MODULEDIR="modules/enableit"
 
 # Check if puppet-strings is available

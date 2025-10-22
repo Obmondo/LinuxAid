@@ -8,24 +8,89 @@
 
 * [`role`](#role): Main role class
 * [`role::appeng`](#role--appeng): Class for managing the Appeng role
+* [`role::appeng::cgi`](#role--appeng--cgi): Class for managing the Appeng CGI role
+* [`role::appeng::fastcgi`](#role--appeng--fastcgi): Class for managing the Appeng fastcgi role
+* [`role::appeng::mod_perl`](#role--appeng--mod_perl): Class for managing the Mod Perl role
+* [`role::appeng::mod_php`](#role--appeng--mod_php): Class for managing the PHP role
+* [`role::appeng::mod_wsgi`](#role--appeng--mod_wsgi): Class for managing the Uwsgi role
+* [`role::appeng::node`](#role--appeng--node): Class for managing the Appeng Node role
+* [`role::appeng::passenger`](#role--appeng--passenger): Class for managing the Appeng passenger role
+* [`role::appeng::phpfpm`](#role--appeng--phpfpm)
+* [`role::appeng::tomcat`](#role--appeng--tomcat): Class for managing the Tomcat role
+* [`role::appeng::uwsgi`](#role--appeng--uwsgi): Class for managing the UWSGI role
+* [`role::appeng::wildfly`](#role--appeng--wildfly): Class for managing the Appeng Wildfly role
 * [`role::auth`](#role--auth): Class for managing the Auth role
 * [`role::basic`](#role--basic): Class Basic will include Monitoring , Repo Management, and  System Update
+* [`role::ci::jenkins`](#role--ci--jenkins): Class for managing the Jenkins CI role
 * [`role::communication`](#role--communication): Class for managing the Communication role
+* [`role::communication::murmur`](#role--communication--murmur): Class for managing the Murmur roleclass
+* [`role::communication::thinlinc`](#role--communication--thinlinc): Class for managing the ThinLinc communication role
 * [`role::computing`](#role--computing): Class for managing the Computing role
+* [`role::computing::slurm`](#role--computing--slurm): Class for managing the Slurm computing role
 * [`role::custom`](#role--custom): Custom server; Fully managed by puppet - but only uses features that are combineable for all servers (ie. part of common class).
 * [`role::customers`](#role--customers): Class for managing the Customer role
 * [`role::db`](#role--db): Class for managing the DB role
+* [`role::db::cassandra`](#role--db--cassandra): Cassandra role.
+* [`role::db::elasticsearch`](#role--db--elasticsearch): Elasticsearch Business role.
+* [`role::db::memcached`](#role--db--memcached): Class for managing the Memcached role
+* [`role::db::mongodb`](#role--db--mongodb): Class for managing the MongoDB role
+* [`role::db::mysql`](#role--db--mysql): Class for managing MySQL database configurations
+* [`role::db::opensearch`](#role--db--opensearch): Opensearch Business role.
+* [`role::db::pgsql`](#role--db--pgsql): Class for managing PostgreSQL database
+* [`role::db::redis`](#role--db--redis): Class for managing the Redis database
 * [`role::mail`](#role--mail): Class for managing the Mail role
+* [`role::mail::mailcow`](#role--mail--mailcow): Mailcow Setup
+* [`role::mail::postfix`](#role--mail--postfix): Class for managing the Postfix mail server
 * [`role::monitor`](#role--monitor): Monitoring role
 * [`role::monitoring`](#role--monitoring): Class for managing the Monitoring role
+* [`role::monitoring::elk`](#role--monitoring--elk): Class for managing the ELK role
+* [`role::monitoring::journal_remote`](#role--monitoring--journal_remote): Class for managing the Journal Remote role
+* [`role::monitoring::rsyslog`](#role--monitoring--rsyslog): Class for managing the Rsyslog server role
 * [`role::ntpd`](#role--ntpd): Class for managing the NTPD server role
 * [`role::package_management`](#role--package_management): Class for managing package management
+* [`role::package_management::guix`](#role--package_management--guix): Class for managing the Guix package management role
+* [`role::package_management::repo`](#role--package_management--repo): Class for managing the package management repo
 * [`role::projectmanagement`](#role--projectmanagement): Class for managing the ProjectManagement role
+* [`role::projectmanagement::easyredmine`](#role--projectmanagement--easyredmine)
+* [`role::projectmanagement::foswiki`](#role--projectmanagement--foswiki): Class for managing the Foswiki project management role
+* [`role::projectmanagement::gitlab`](#role--projectmanagement--gitlab): Class for managing the GitLab project management role
+* [`role::projectmanagement::gitlab_ci_runner`](#role--projectmanagement--gitlab_ci_runner): Class for managing the GitLab CI Runner
+* [`role::projectmanagement::perforce`](#role--projectmanagement--perforce): Class for managing the Perforce version control system
+* [`role::projectmanagement::perforce::git_connector`](#role--projectmanagement--perforce--git_connector): Helix Git Connector
+* [`role::projectmanagement::perforce::icmanage`](#role--projectmanagement--perforce--icmanage): Class for managing ICManage on top of Perforce
+* [`role::projectmanagement::readthedocs`](#role--projectmanagement--readthedocs): Class for managing the Read The Docs project
+* [`role::projectmanagement::subversion`](#role--projectmanagement--subversion): Class for managing the Subversion project management role
+* [`role::provisioning::razor`](#role--provisioning--razor): Class for managing the Razor provisioning role
+* [`role::scanner::openvas`](#role--scanner--openvas): Class for managing the OpenVAS scanner
 * [`role::storage`](#role--storage): Class for managing the Storage role
+* [`role::storage::backuphost`](#role--storage--backuphost): A role class for the storage backup host
+* [`role::storage::beegfs`](#role--storage--beegfs): BeegFS class for managing storage
+* [`role::storage::nas`](#role--storage--nas): Storage Nas roleclass
+* [`role::storage::nfs`](#role--storage--nfs): Storage nfs role class
+* [`role::storage::s3`](#role--storage--s3): Class for managing the S3 Storage role
 * [`role::util`](#role--util): Class for managing the Util role
+* [`role::util::docker_registry`](#role--util--docker_registry): Docker registry role
+* [`role::util::kubernetes`](#role--util--kubernetes): Class for managing the Kubernetes role
 * [`role::virtualization`](#role--virtualization): Class for managing virtualization role
+* [`role::virtualization::docker`](#role--virtualization--docker): Docker role class
+* [`role::virtualization::kubernetes`](#role--virtualization--kubernetes): Class for managing the Kubernetes role
+* [`role::virtualization::lxd`](#role--virtualization--lxd): Class for managing the LXD virtualization role
 * [`role::web`](#role--web): Class for managing the Web role
+* [`role::web::apache`](#role--web--apache): Class for managing the Apache Web Role
+* [`role::web::haproxy`](#role--web--haproxy): Class for managing the Haproxy web role
+* [`role::web::java`](#role--web--java): Class for managing the Java web role
+* [`role::web::nginx`](#role--web--nginx): Class for managing the Nginx web server role
+* [`role::web::perl`](#role--web--perl): Class for managing the Perl web role
+* [`role::web::php`](#role--web--php): Class for managing the Web PHP role
+* [`role::web::piwik`](#role--web--piwik): Class for managing the Piwik web role
+* [`role::web::python`](#role--web--python): Web Python role
+* [`role::web::reverse_cache`](#role--web--reverse_cache): Reverse cache web role
+* [`role::web::ruby`](#role--web--ruby): Class for managing the Web Ruby role
 * [`role::webframeworks`](#role--webframeworks): Class for managing the Webframeworks role
+* [`role::webframeworks::drupal`](#role--webframeworks--drupal): Class: role::webframeworks::drupal  Optimized Drupal server setup including Latest stable Drupal version
+* [`role::webframeworks::lamp`](#role--webframeworks--lamp): Class for managing the LAMP role
+* [`role::webframeworks::rubyonrails`](#role--webframeworks--rubyonrails): Class for managing the RubyonRails role
+* [`role::webframeworks::wordpress`](#role--webframeworks--wordpress): Class for managing the Wordpress role
 
 ## Classes
 
@@ -37,6 +102,556 @@ This class includes the profile class.
 
 Class for managing the Appeng role
 
+### <a name="role--appeng--cgi"></a>`role::appeng::cgi`
+
+Class for managing the Appeng CGI role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::cgi` class:
+
+* [`url`](#-role--appeng--cgi--url)
+* [`http_server`](#-role--appeng--cgi--http_server)
+
+##### <a name="-role--appeng--cgi--url"></a>`url`
+
+Data type: `Optional[URL]`
+
+The URL for the CGI application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--cgi--http_server"></a>`http_server`
+
+Data type: `Enum['apache']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+### <a name="role--appeng--fastcgi"></a>`role::appeng::fastcgi`
+
+Class for managing the Appeng fastcgi role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::fastcgi` class:
+
+* [`url`](#-role--appeng--fastcgi--url)
+* [`http_server`](#-role--appeng--fastcgi--http_server)
+
+##### <a name="-role--appeng--fastcgi--url"></a>`url`
+
+Data type: `Eit_types::URL`
+
+The URL for the fastcgi application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--fastcgi--http_server"></a>`http_server`
+
+Data type: `Enum['apache']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+### <a name="role--appeng--mod_perl"></a>`role::appeng::mod_perl`
+
+Class for managing the Mod Perl role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::mod_perl` class:
+
+* [`url`](#-role--appeng--mod_perl--url)
+* [`http_server`](#-role--appeng--mod_perl--http_server)
+
+##### <a name="-role--appeng--mod_perl--url"></a>`url`
+
+Data type: `Optional[Eit_types::URL]`
+
+The URL for the application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--mod_perl--http_server"></a>`http_server`
+
+Data type: `Enum['apache']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+### <a name="role--appeng--mod_php"></a>`role::appeng::mod_php`
+
+Class for managing the PHP role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::mod_php` class:
+
+* [`opcodecache`](#-role--appeng--mod_php--opcodecache)
+* [`url`](#-role--appeng--mod_php--url)
+* [`ssl`](#-role--appeng--mod_php--ssl)
+* [`http_server`](#-role--appeng--mod_php--http_server)
+* [`mysql`](#-role--appeng--mod_php--mysql)
+* [`memory_limit`](#-role--appeng--mod_php--memory_limit)
+
+##### <a name="-role--appeng--mod_php--opcodecache"></a>`opcodecache`
+
+Data type: `Optional[Enum['apc', 'xcache']]`
+
+The opcode cache to use. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--mod_php--url"></a>`url`
+
+Data type: `Optional[Eit_types::URL]`
+
+The URL for the application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--mod_php--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Specifies if SSL is enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--appeng--mod_php--http_server"></a>`http_server`
+
+Data type: `Enum['apache', 'nginx']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+##### <a name="-role--appeng--mod_php--mysql"></a>`mysql`
+
+Data type: `Boolean`
+
+Specifies if MySQL support is enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--appeng--mod_php--memory_limit"></a>`memory_limit`
+
+Data type: `Optional[Pattern[/[0-9]+[MG]/]]`
+
+Sets the memory limit for PHP. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="role--appeng--mod_wsgi"></a>`role::appeng::mod_wsgi`
+
+Class for managing the Uwsgi role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::mod_wsgi` class:
+
+* [`domains`](#-role--appeng--mod_wsgi--domains)
+* [`ssl`](#-role--appeng--mod_wsgi--ssl)
+* [`enable_python`](#-role--appeng--mod_wsgi--enable_python)
+
+##### <a name="-role--appeng--mod_wsgi--domains"></a>`domains`
+
+Data type: `Array[Stdlib::Fqdn]`
+
+The array of FQDNs for the application.
+
+##### <a name="-role--appeng--mod_wsgi--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Specifies whether to enable SSL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--appeng--mod_wsgi--enable_python"></a>`enable_python`
+
+Data type: `Boolean`
+
+Specifies whether to enable Python support. Defaults to true.
+
+Default value: `true`
+
+### <a name="role--appeng--node"></a>`role::appeng::node`
+
+Class for managing the Appeng Node role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::node` class:
+
+* [`url`](#-role--appeng--node--url)
+* [`manage_repo`](#-role--appeng--node--manage_repo)
+* [`repo`](#-role--appeng--node--repo)
+* [`version`](#-role--appeng--node--version)
+
+##### <a name="-role--appeng--node--url"></a>`url`
+
+Data type: `Eit_types::URL`
+
+The URL for the Node.js application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--node--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+Whether to manage the repository for Node.js. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--appeng--node--repo"></a>`repo`
+
+Data type: `Enum['12.x', '14.x', '16.x']`
+
+The Node.js repository version. Defaults to '8.x'.
+
+Default value: `'8.x'`
+
+##### <a name="-role--appeng--node--version"></a>`version`
+
+Data type: `Variant[Eit_types::Package_Ensure, Eit_types::Version]`
+
+The version of Node.js to install. Defaults to 'present'.
+
+Default value: `'present'`
+
+### <a name="role--appeng--passenger"></a>`role::appeng::passenger`
+
+Class for managing the Appeng passenger role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::passenger` class:
+
+* [`url`](#-role--appeng--passenger--url)
+* [`version`](#-role--appeng--passenger--version)
+* [`provider`](#-role--appeng--passenger--provider)
+* [`http_server`](#-role--appeng--passenger--http_server)
+* [`manage_web_server`](#-role--appeng--passenger--manage_web_server)
+
+##### <a name="-role--appeng--passenger--url"></a>`url`
+
+Data type: `Eit_types::URL`
+
+The URL for the passenger application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--appeng--passenger--version"></a>`version`
+
+Data type: `Enum['4', '5']`
+
+The version of the passenger to use. Defaults to '5'.
+
+Default value: `'5'`
+
+##### <a name="-role--appeng--passenger--provider"></a>`provider`
+
+Data type: `Enum['gem', 'package']`
+
+The provider type for passenger. Defaults to 'package'.
+
+Default value: `'package'`
+
+##### <a name="-role--appeng--passenger--http_server"></a>`http_server`
+
+Data type: `Enum['apache']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+##### <a name="-role--appeng--passenger--manage_web_server"></a>`manage_web_server`
+
+Data type: `Boolean`
+
+A boolean to manage the web server. Defaults to false.
+
+Default value: `false`
+
+### <a name="role--appeng--phpfpm"></a>`role::appeng::phpfpm`
+
+The role::appeng::phpfpm class.
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::phpfpm` class:
+
+* [`ssl`](#-role--appeng--phpfpm--ssl)
+* [`ssl_cert`](#-role--appeng--phpfpm--ssl_cert)
+* [`ssl_key`](#-role--appeng--phpfpm--ssl_key)
+* [`mysql`](#-role--appeng--phpfpm--mysql)
+* [`mssql`](#-role--appeng--phpfpm--mssql)
+* [`catch_workers_output`](#-role--appeng--phpfpm--catch_workers_output)
+* [`manage_webserver`](#-role--appeng--phpfpm--manage_webserver)
+* [`opcodecache`](#-role--appeng--phpfpm--opcodecache)
+* [`modules`](#-role--appeng--phpfpm--modules)
+* [`version`](#-role--appeng--phpfpm--version)
+* [`memory_limit`](#-role--appeng--phpfpm--memory_limit)
+* [`http_cfg_prepend`](#-role--appeng--phpfpm--http_cfg_prepend)
+* [`max_children`](#-role--appeng--phpfpm--max_children)
+* [`start_servers`](#-role--appeng--phpfpm--start_servers)
+* [`min_spare_servers`](#-role--appeng--phpfpm--min_spare_servers)
+* [`max_spare_servers`](#-role--appeng--phpfpm--max_spare_servers)
+* [`virtualhosts`](#-role--appeng--phpfpm--virtualhosts)
+* [`encrypt_params`](#-role--appeng--phpfpm--encrypt_params)
+
+##### <a name="-role--appeng--phpfpm--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-role--appeng--phpfpm--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-role--appeng--phpfpm--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-role--appeng--phpfpm--mysql"></a>`mysql`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-role--appeng--phpfpm--mssql"></a>`mssql`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-role--appeng--phpfpm--catch_workers_output"></a>`catch_workers_output`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-role--appeng--phpfpm--manage_webserver"></a>`manage_webserver`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-role--appeng--phpfpm--opcodecache"></a>`opcodecache`
+
+Data type: `Enum['opcache', 'xcache', 'apc']`
+
+
+
+Default value: `'apc'`
+
+##### <a name="-role--appeng--phpfpm--modules"></a>`modules`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+
+
+Default value: `{}`
+
+##### <a name="-role--appeng--phpfpm--version"></a>`version`
+
+Data type: `Optional[Eit_types::Version]`
+
+
+
+Default value: `undef`
+
+##### <a name="-role--appeng--phpfpm--memory_limit"></a>`memory_limit`
+
+Data type: `Optional[Eit_types::Capacity]`
+
+
+
+Default value: `undef`
+
+##### <a name="-role--appeng--phpfpm--http_cfg_prepend"></a>`http_cfg_prepend`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `{}`
+
+##### <a name="-role--appeng--phpfpm--max_children"></a>`max_children`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `128`
+
+##### <a name="-role--appeng--phpfpm--start_servers"></a>`start_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `64`
+
+##### <a name="-role--appeng--phpfpm--min_spare_servers"></a>`min_spare_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `64`
+
+##### <a name="-role--appeng--phpfpm--max_spare_servers"></a>`max_spare_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `100`
+
+##### <a name="-role--appeng--phpfpm--virtualhosts"></a>`virtualhosts`
+
+Data type:
+
+```puppet
+Hash[String,Struct[{
+    ensure        => Boolean,
+    document_root => Stdlib::Unixpath,
+  }]]
+```
+
+
+
+Default value: `{}`
+
+##### <a name="-role--appeng--phpfpm--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+
+
+Default value:
+
+```puppet
+[
+    'ssl_cert',
+    'ssl_key',
+  ]
+```
+
+### <a name="role--appeng--tomcat"></a>`role::appeng::tomcat`
+
+Class for managing the Tomcat role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::tomcat` class:
+
+* [`version`](#-role--appeng--tomcat--version)
+* [`http_server`](#-role--appeng--tomcat--http_server)
+
+##### <a name="-role--appeng--tomcat--version"></a>`version`
+
+Data type: `Enum['6', '7']`
+
+The version of Tomcat to install. Defaults to '7'.
+
+Default value: `'7'`
+
+##### <a name="-role--appeng--tomcat--http_server"></a>`http_server`
+
+Data type: `Enum['apache', 'nginx']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+### <a name="role--appeng--uwsgi"></a>`role::appeng::uwsgi`
+
+Class for managing the UWSGI role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::uwsgi` class:
+
+* [`domains`](#-role--appeng--uwsgi--domains)
+* [`enable_python`](#-role--appeng--uwsgi--enable_python)
+* [`ssl`](#-role--appeng--uwsgi--ssl)
+
+##### <a name="-role--appeng--uwsgi--domains"></a>`domains`
+
+Data type: `Array[Stdlib::Fqdn]`
+
+The list of fully qualified domain names.
+
+##### <a name="-role--appeng--uwsgi--enable_python"></a>`enable_python`
+
+Data type: `Boolean`
+
+Whether to enable Python support. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--appeng--uwsgi--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to enable SSL. Defaults to false.
+
+Default value: `false`
+
+### <a name="role--appeng--wildfly"></a>`role::appeng::wildfly`
+
+Class for managing the Appeng Wildfly role
+
+#### Parameters
+
+The following parameters are available in the `role::appeng::wildfly` class:
+
+* [`version`](#-role--appeng--wildfly--version)
+* [`http_server`](#-role--appeng--wildfly--http_server)
+
+##### <a name="-role--appeng--wildfly--version"></a>`version`
+
+Data type: `Enum['8.2.0', '9.0.0']`
+
+The version of Wildfly to use. Defaults to '8.2.0'.
+
+Default value: `'8.2.0'`
+
+##### <a name="-role--appeng--wildfly--http_server"></a>`http_server`
+
+Data type: `Enum['apache']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
 ### <a name="role--auth"></a>`role::auth`
 
 Class for managing the Auth role
@@ -45,13 +660,571 @@ Class for managing the Auth role
 
 Class Basic will include Monitoring , Repo Management, and  System Update
 
+### <a name="role--ci--jenkins"></a>`role::ci::jenkins`
+
+Class for managing the Jenkins CI role
+
+#### Parameters
+
+The following parameters are available in the `role::ci::jenkins` class:
+
+* [`ssl_combined_pem`](#-role--ci--jenkins--ssl_combined_pem)
+* [`version`](#-role--ci--jenkins--version)
+* [`config_hash`](#-role--ci--jenkins--config_hash)
+* [`plugins`](#-role--ci--jenkins--plugins)
+
+##### <a name="-role--ci--jenkins--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `String`
+
+The SSL combined PEM file. No default.
+
+##### <a name="-role--ci--jenkins--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of Jenkins to install. Defaults to 'installed'.
+
+Default value: `'installed'`
+
+##### <a name="-role--ci--jenkins--config_hash"></a>`config_hash`
+
+Data type: `Hash`
+
+A hash of configuration parameters. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--ci--jenkins--plugins"></a>`plugins`
+
+Data type: `Eit_types::Jenkins::Plugins`
+
+A hash of Jenkins plugins to install. Defaults to an empty hash.
+
+Default value: `{}`
+
 ### <a name="role--communication"></a>`role::communication`
 
 Class for managing the Communication role
 
+### <a name="role--communication--murmur"></a>`role::communication::murmur`
+
+Class for managing the Murmur roleclass
+
+#### Parameters
+
+The following parameters are available in the `role::communication::murmur` class:
+
+* [`password`](#-role--communication--murmur--password)
+* [`port`](#-role--communication--murmur--port)
+* [`host`](#-role--communication--murmur--host)
+* [`register_name`](#-role--communication--murmur--register_name)
+* [`bandwidth`](#-role--communication--murmur--bandwidth)
+* [`max_users`](#-role--communication--murmur--max_users)
+* [`text_length_limit`](#-role--communication--murmur--text_length_limit)
+* [`autoban_attempts`](#-role--communication--murmur--autoban_attempts)
+* [`autoban_time_frame`](#-role--communication--murmur--autoban_time_frame)
+* [`autoban_time`](#-role--communication--murmur--autoban_time)
+* [`allow_html`](#-role--communication--murmur--allow_html)
+* [`welcome_text`](#-role--communication--murmur--welcome_text)
+* [`user`](#-role--communication--murmur--user)
+* [`group`](#-role--communication--murmur--group)
+* [`database_path`](#-role--communication--murmur--database_path)
+* [`log_path`](#-role--communication--murmur--log_path)
+* [`log_days`](#-role--communication--murmur--log_days)
+* [`ssl_cert`](#-role--communication--murmur--ssl_cert)
+* [`ssl_key`](#-role--communication--murmur--ssl_key)
+
+##### <a name="-role--communication--murmur--password"></a>`password`
+
+Data type: `Optional[String]`
+
+The password for the Murmur server. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--communication--murmur--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+The port on which the server will run. Defaults to 64738.
+
+Default value: `64738`
+
+##### <a name="-role--communication--murmur--host"></a>`host`
+
+Data type: `Optional[Eit_types::Host]`
+
+The host address for the server. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--communication--murmur--register_name"></a>`register_name`
+
+Data type: `String`
+
+The name used for server registration. Defaults to 'Mumble Server'.
+
+Default value: `'Mumble Server'`
+
+##### <a name="-role--communication--murmur--bandwidth"></a>`bandwidth`
+
+Data type: `Integer[0, default]`
+
+The maximum bandwidth for the server. Defaults to 72000.
+
+Default value: `72000`
+
+##### <a name="-role--communication--murmur--max_users"></a>`max_users`
+
+Data type: `Integer[1, default]`
+
+The maximum number of users allowed. Defaults to 100.
+
+Default value: `100`
+
+##### <a name="-role--communication--murmur--text_length_limit"></a>`text_length_limit`
+
+Data type: `Integer[1, default]`
+
+The length limit for text messages. Defaults to 5000.
+
+Default value: `5000`
+
+##### <a name="-role--communication--murmur--autoban_attempts"></a>`autoban_attempts`
+
+Data type: `Integer[0, default]`
+
+The number of attempts before banning a user. Defaults to 10.
+
+Default value: `10`
+
+##### <a name="-role--communication--murmur--autoban_time_frame"></a>`autoban_time_frame`
+
+Data type: `Integer[0, default]`
+
+The time frame for autoban attempts in seconds. Defaults to 120.
+
+Default value: `120`
+
+##### <a name="-role--communication--murmur--autoban_time"></a>`autoban_time`
+
+Data type: `Integer[0, default]`
+
+The duration of the ban in seconds. Defaults to 300.
+
+Default value: `300`
+
+##### <a name="-role--communication--murmur--allow_html"></a>`allow_html`
+
+Data type: `Boolean`
+
+Whether to allow HTML in messages. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--communication--murmur--welcome_text"></a>`welcome_text`
+
+Data type: `String`
+
+The welcome text displayed to users. Defaults to 'Welcome to this server running Murmur.\n Enjoy your stay!\n'
+
+Default value: `'<br />Welcome to this server running <b>Murmur</b>.<br />Enjoy your stay!<br />'`
+
+##### <a name="-role--communication--murmur--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+The user under which the service will run. Defaults to 'mumble-server'.
+
+Default value: `'mumble-server'`
+
+##### <a name="-role--communication--murmur--group"></a>`group`
+
+Data type: `Eit_types::Group`
+
+The group under which the service will run. Defaults to 'mumble-server'.
+
+Default value: `'mumble-server'`
+
+##### <a name="-role--communication--murmur--database_path"></a>`database_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the database file. Defaults to '/var/lib/mumble-server/mumble-server.sqlite'.
+
+Default value: `'/var/lib/mumble-server/mumble-server.sqlite'`
+
+##### <a name="-role--communication--murmur--log_path"></a>`log_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the log file. Defaults to '/var/log/mumble-server/mumble-server.log'.
+
+Default value: `'/var/log/mumble-server/mumble-server.log'`
+
+##### <a name="-role--communication--murmur--log_days"></a>`log_days`
+
+Data type: `Integer[1, default]`
+
+The number of days to keep logs. Defaults to 31.
+
+Default value: `31`
+
+##### <a name="-role--communication--murmur--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The path to the SSL certificate. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--communication--murmur--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The path to the SSL key. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="role--communication--thinlinc"></a>`role::communication::thinlinc`
+
+Class for managing the ThinLinc communication role
+
+#### Parameters
+
+The following parameters are available in the `role::communication::thinlinc` class:
+
+* [`webadm_password`](#-role--communication--thinlinc--webadm_password)
+* [`version`](#-role--communication--thinlinc--version)
+* [`enable`](#-role--communication--thinlinc--enable)
+* [`ha`](#-role--communication--thinlinc--ha)
+* [`masters`](#-role--communication--thinlinc--masters)
+* [`agents`](#-role--communication--thinlinc--agents)
+* [`agent_hostname`](#-role--communication--thinlinc--agent_hostname)
+* [`max_session_per_user`](#-role--communication--thinlinc--max_session_per_user)
+* [`shadowing_shadow_mode`](#-role--communication--thinlinc--shadowing_shadow_mode)
+* [`shadowing_allowed_shadowers`](#-role--communication--thinlinc--shadowing_allowed_shadowers)
+* [`master_hostname`](#-role--communication--thinlinc--master_hostname)
+* [`loadbalancer_ip`](#-role--communication--thinlinc--loadbalancer_ip)
+* [`encrypt_params`](#-role--communication--thinlinc--encrypt_params)
+
+##### <a name="-role--communication--thinlinc--webadm_password"></a>`webadm_password`
+
+Data type: `Eit_types::Password`
+
+The password for the web administrator.
+
+##### <a name="-role--communication--thinlinc--version"></a>`version`
+
+Data type: `String`
+
+The version of ThinLinc. Defaults to '4.9.0'.
+
+Default value: `'4.9.0'`
+
+##### <a name="-role--communication--thinlinc--enable"></a>`enable`
+
+Data type: `Boolean`
+
+A flag to enable the ThinLinc communication role. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--communication--thinlinc--ha"></a>`ha`
+
+Data type: `Boolean`
+
+A flag to enable high availability. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--communication--thinlinc--masters"></a>`masters`
+
+Data type: `Array[Stdlib::Host]`
+
+A list of master hosts. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--communication--thinlinc--agents"></a>`agents`
+
+Data type: `Array[Stdlib::Host]`
+
+A list of agent hosts. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--communication--thinlinc--agent_hostname"></a>`agent_hostname`
+
+Data type: `Optional[Stdlib::Host]`
+
+The hostname for the agent. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--communication--thinlinc--max_session_per_user"></a>`max_session_per_user`
+
+Data type: `Integer[0,default]`
+
+The maximum number of sessions allowed per user. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--communication--thinlinc--shadowing_shadow_mode"></a>`shadowing_shadow_mode`
+
+Data type: `ThinLinc::ShadowMode`
+
+The shadow mode for ThinLinc. Defaults to 'ask'.
+
+Default value: `'ask'`
+
+##### <a name="-role--communication--thinlinc--shadowing_allowed_shadowers"></a>`shadowing_allowed_shadowers`
+
+Data type: `Array[Eit_types::User]`
+
+A list of users allowed to shadow sessions. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--communication--thinlinc--master_hostname"></a>`master_hostname`
+
+Data type: `Stdlib::Host`
+
+The hostname of the master ThinLinc server. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+##### <a name="-role--communication--thinlinc--loadbalancer_ip"></a>`loadbalancer_ip`
+
+Data type: `Optional[Stdlib::IP::Address]`
+
+The IP address of the load balancer. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--communication--thinlinc--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'webadm_password',
+  ]
+```
+
 ### <a name="role--computing"></a>`role::computing`
 
 Class for managing the Computing role
+
+### <a name="role--computing--slurm"></a>`role::computing::slurm`
+
+Indicates if the role is blendable.
+
+#### Parameters
+
+The following parameters are available in the `role::computing::slurm` class:
+
+* [`munge_key`](#-role--computing--slurm--munge_key)
+* [`$__blendable`](#-role--computing--slurm---__blendable)
+* [`enable`](#-role--computing--slurm--enable)
+* [`interface`](#-role--computing--slurm--interface)
+* [`node_cidrs`](#-role--computing--slurm--node_cidrs)
+* [`slurm_version`](#-role--computing--slurm--slurm_version)
+* [`munge_version`](#-role--computing--slurm--munge_version)
+* [`slurmctld`](#-role--computing--slurm--slurmctld)
+* [`slurmdbd`](#-role--computing--slurm--slurmdbd)
+* [`slurmd`](#-role--computing--slurm--slurmd)
+* [`nodes`](#-role--computing--slurm--nodes)
+* [`partitions`](#-role--computing--slurm--partitions)
+* [`srun_port_range`](#-role--computing--slurm--srun_port_range)
+* [`accounting_storage_host`](#-role--computing--slurm--accounting_storage_host)
+* [`control_machine`](#-role--computing--slurm--control_machine)
+* [`return_to_service`](#-role--computing--slurm--return_to_service)
+* [`disable_root_jobs`](#-role--computing--slurm--disable_root_jobs)
+* [`use_pam`](#-role--computing--slurm--use_pam)
+* [`hwloc_enabled`](#-role--computing--slurm--hwloc_enabled)
+* [`encrypt_params`](#-role--computing--slurm--encrypt_params)
+* [`__blendable`](#-role--computing--slurm--__blendable)
+
+##### <a name="-role--computing--slurm--munge_key"></a>`munge_key`
+
+Data type:
+
+```puppet
+Optional[Variant[
+    Eit_Files::Source,
+    String
+  ]]
+```
+
+The munge key for authentication. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--computing--slurm---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--computing--slurm--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable Slurm. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--interface"></a>`interface`
+
+Data type: `Eit_types::SimpleString`
+
+The network interface to use. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--computing--slurm--node_cidrs"></a>`node_cidrs`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+The CIDR ranges for the nodes. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--computing--slurm--slurm_version"></a>`slurm_version`
+
+Data type: `Eit_types::Version`
+
+The version of Slurm to install. Defaults to '18.08.7'.
+
+Default value: `'18.08.7'`
+
+##### <a name="-role--computing--slurm--munge_version"></a>`munge_version`
+
+Data type: `Eit_types::Version`
+
+The version of Munge to install. Defaults to '0.5.11'.
+
+Default value: `'0.5.11'`
+
+##### <a name="-role--computing--slurm--slurmctld"></a>`slurmctld`
+
+Data type: `Boolean`
+
+Whether to enable the Slurm control daemon. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--slurmdbd"></a>`slurmdbd`
+
+Data type: `Boolean`
+
+Whether to enable the Slurm database daemon. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--slurmd"></a>`slurmd`
+
+Data type: `Boolean`
+
+Whether to enable the Slurm daemon. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--computing--slurm--nodes"></a>`nodes`
+
+Data type: `Hash`
+
+A hash of nodes' configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--computing--slurm--partitions"></a>`partitions`
+
+Data type: `Hash`
+
+A hash of partitions' configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--computing--slurm--srun_port_range"></a>`srun_port_range`
+
+Data type: `String`
+
+The port range for srun. Defaults to '50000-53000'.
+
+Default value: `'50000-53000'`
+
+##### <a name="-role--computing--slurm--accounting_storage_host"></a>`accounting_storage_host`
+
+Data type: `Stdlib::Host`
+
+The host for accounting storage. Defaults to the hostname from facts.
+
+Default value: `$facts['networking']['hostname']`
+
+##### <a name="-role--computing--slurm--control_machine"></a>`control_machine`
+
+Data type: `Stdlib::Host`
+
+The control machine for Slurm. Defaults to the hostname from facts.
+
+Default value: `$facts['networking']['hostname']`
+
+##### <a name="-role--computing--slurm--return_to_service"></a>`return_to_service`
+
+Data type: `Integer[0,2]`
+
+The number of attempts to return downed nodes to service. Defaults to 2.
+
+Default value: `2`
+
+##### <a name="-role--computing--slurm--disable_root_jobs"></a>`disable_root_jobs`
+
+Data type: `Boolean`
+
+Whether to disable root jobs. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--use_pam"></a>`use_pam`
+
+Data type: `Boolean`
+
+Whether to use PAM for authentication. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--hwloc_enabled"></a>`hwloc_enabled`
+
+Data type: `Boolean`
+
+Whether to enable hwloc support. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--computing--slurm--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'munge_key',
+  ]
+```
+
+##### <a name="-role--computing--slurm--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
 
 ### <a name="role--custom"></a>`role::custom`
 
@@ -65,9 +1238,1553 @@ Class for managing the Customer role
 
 Class for managing the DB role
 
+### <a name="role--db--cassandra"></a>`role::db::cassandra`
+
+Cassandra role.
+
+#### Parameters
+
+The following parameters are available in the `role::db::cassandra` class:
+
+* [`settings`](#-role--db--cassandra--settings)
+* [`cassandra_version`](#-role--db--cassandra--cassandra_version)
+* [`seeds`](#-role--db--cassandra--seeds)
+* [`backup`](#-role--db--cassandra--backup)
+
+##### <a name="-role--db--cassandra--settings"></a>`settings`
+
+Data type: `Hash`
+
+A hash of Cassandra configuration options.
+
+Default value: `{}`
+
+##### <a name="-role--db--cassandra--cassandra_version"></a>`cassandra_version`
+
+Data type: `Enum['41']`
+
+The version of Cassandra to install (e.g., '41')
+
+Default value: `'41'`
+
+##### <a name="-role--db--cassandra--seeds"></a>`seeds`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+List of seed nodes for Cassandra
+
+Default value: `[]`
+
+##### <a name="-role--db--cassandra--backup"></a>`backup`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+### <a name="role--db--elasticsearch"></a>`role::db::elasticsearch`
+
+Elasticsearch Business role.
+
+#### Parameters
+
+The following parameters are available in the `role::db::elasticsearch` class:
+
+* [`version`](#-role--db--elasticsearch--version)
+* [`es_heap_size_pct`](#-role--db--elasticsearch--es_heap_size_pct)
+* [`es_heap_size_max_gb`](#-role--db--elasticsearch--es_heap_size_max_gb)
+* [`cerebro`](#-role--db--elasticsearch--cerebro)
+* [`kibana`](#-role--db--elasticsearch--kibana)
+* [`cache_only_node`](#-role--db--elasticsearch--cache_only_node)
+* [`host`](#-role--db--elasticsearch--host)
+* [`access_9200_port_from`](#-role--db--elasticsearch--access_9200_port_from)
+* [`plugins`](#-role--db--elasticsearch--plugins)
+* [`nodes`](#-role--db--elasticsearch--nodes)
+* [`datadir`](#-role--db--elasticsearch--datadir)
+* [`cluster_name`](#-role--db--elasticsearch--cluster_name)
+* [`curate_filters`](#-role--db--elasticsearch--curate_filters)
+* [`security`](#-role--db--elasticsearch--security)
+* [`ssl`](#-role--db--elasticsearch--ssl)
+* [`oss`](#-role--db--elasticsearch--oss)
+* [`expose`](#-role--db--elasticsearch--expose)
+* [`ssl_combined_pem`](#-role--db--elasticsearch--ssl_combined_pem)
+* [`secrets`](#-role--db--elasticsearch--secrets)
+* [`kibana_elasticsearch`](#-role--db--elasticsearch--kibana_elasticsearch)
+* [`http`](#-role--db--elasticsearch--http)
+* [`transport`](#-role--db--elasticsearch--transport)
+* [`ca_cert`](#-role--db--elasticsearch--ca_cert)
+* [`kibana_username`](#-role--db--elasticsearch--kibana_username)
+* [`kibana_password`](#-role--db--elasticsearch--kibana_password)
+* [`encrypt_params`](#-role--db--elasticsearch--encrypt_params)
+
+##### <a name="-role--db--elasticsearch--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of Elasticsearch to use. Defaults to '7.10.2'.
+
+Default value: `'7.10.2'`
+
+##### <a name="-role--db--elasticsearch--es_heap_size_pct"></a>`es_heap_size_pct`
+
+Data type: `Eit_types::Percentage`
+
+The heap size percentage. Defaults to 50.
+
+Default value: `50`
+
+##### <a name="-role--db--elasticsearch--es_heap_size_max_gb"></a>`es_heap_size_max_gb`
+
+Data type: `Variant[Integer[1,31], Float[1,31]]`
+
+The maximum heap size in gigabytes. No default provided.
+
+Default value: `31`
+
+##### <a name="-role--db--elasticsearch--cerebro"></a>`cerebro`
+
+Data type: `Boolean`
+
+Include Cerebro support. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--kibana"></a>`kibana`
+
+Data type: `Boolean`
+
+Include Kibana support. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--cache_only_node"></a>`cache_only_node`
+
+Data type: `Boolean`
+
+Indicator for whether this is a cache-only node. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--host"></a>`host`
+
+Data type: `Stdlib::Fqdn`
+
+The host for Elasticsearch. No default provided.
+
+##### <a name="-role--db--elasticsearch--access_9200_port_from"></a>`access_9200_port_from`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+A list of hosts allowed to access the 9200 port. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--db--elasticsearch--plugins"></a>`plugins`
+
+Data type: `Optional[Hash]`
+
+A hash of plugins to install. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--elasticsearch--nodes"></a>`nodes`
+
+Data type: `Array[Stdlib::Host]`
+
+An array of nodes in the Elasticsearch cluster. No default provided.
+
+##### <a name="-role--db--elasticsearch--datadir"></a>`datadir`
+
+Data type: `Stdlib::Unixpath`
+
+The directory for Elasticsearch data. Defaults to '/var/lib/elasticsearch'.
+
+Default value: `'/var/lib/elasticsearch'`
+
+##### <a name="-role--db--elasticsearch--cluster_name"></a>`cluster_name`
+
+Data type: `Eit_types::SimpleString`
+
+The name of the Elasticsearch cluster. Defaults to 'elasticsearch-cluster'.
+
+Default value: `'elasticsearch-cluster'`
+
+##### <a name="-role--db--elasticsearch--curate_filters"></a>`curate_filters`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+A hash of filters for curating data. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--elasticsearch--security"></a>`security`
+
+Data type: `Boolean`
+
+Enable security features. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Enable SSL support. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--oss"></a>`oss`
+
+Data type: `Boolean`
+
+Use the OSS version of Elasticsearch. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--elasticsearch--expose"></a>`expose`
+
+Data type: `Boolean`
+
+Expose the Elasticsearch service. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--elasticsearch--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `Optional[String]`
+
+Optional combined PEM file for SSL. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--secrets"></a>`secrets`
+
+Data type: `Optional[Hash]`
+
+Optional hash of secrets. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--kibana_elasticsearch"></a>`kibana_elasticsearch`
+
+Data type: `Optional[Hash]`
+
+Optional settings for Kibana's Elasticsearch connection. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--http"></a>`http`
+
+Data type: `Optional[String]`
+
+Optional HTTP settings. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--transport"></a>`transport`
+
+Data type: `Optional[String]`
+
+Optional transport settings. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--ca_cert"></a>`ca_cert`
+
+Data type: `Optional[String]`
+
+Optional CA certificate for SSL. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--kibana_username"></a>`kibana_username`
+
+Data type: `Optional[String]`
+
+Optional username for Kibana. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--kibana_password"></a>`kibana_password`
+
+Data type: `Optional[String]`
+
+Optional password for Kibana. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--elasticsearch--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'kibana_username',
+    'kibana_password',
+  ]
+```
+
+### <a name="role--db--memcached"></a>`role::db::memcached`
+
+Class for managing the Memcached role
+
+#### Parameters
+
+The following parameters are available in the `role::db::memcached` class:
+
+* [`ensure`](#-role--db--memcached--ensure)
+
+##### <a name="-role--db--memcached--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+Boolean value to ensure that memcached is present. Defaults to true.
+
+Default value: `true`
+
+### <a name="role--db--mongodb"></a>`role::db::mongodb`
+
+Class for managing the MongoDB role
+
+#### Parameters
+
+The following parameters are available in the `role::db::mongodb` class:
+
+* [`version`](#-role--db--mongodb--version)
+* [`use_upstream_repo`](#-role--db--mongodb--use_upstream_repo)
+* [`listen_ips`](#-role--db--mongodb--listen_ips)
+* [`use_ipv6`](#-role--db--mongodb--use_ipv6)
+* [`port`](#-role--db--mongodb--port)
+* [`journal`](#-role--db--mongodb--journal)
+* [`smallfiles`](#-role--db--mongodb--smallfiles)
+* [`remote_user_auth`](#-role--db--mongodb--remote_user_auth)
+* [`disable_auth`](#-role--db--mongodb--disable_auth)
+* [`verbosity`](#-role--db--mongodb--verbosity)
+* [`object_check`](#-role--db--mongodb--object_check)
+* [`http_interface`](#-role--db--mongodb--http_interface)
+* [`extra_server_options`](#-role--db--mongodb--extra_server_options)
+* [`disable_scripting`](#-role--db--mongodb--disable_scripting)
+* [`disable_tablescan`](#-role--db--mongodb--disable_tablescan)
+* [`disable_prealloc`](#-role--db--mongodb--disable_prealloc)
+* [`default_namespace_file_size`](#-role--db--mongodb--default_namespace_file_size)
+* [`restart_on_change`](#-role--db--mongodb--restart_on_change)
+* [`create_admin`](#-role--db--mongodb--create_admin)
+* [`directory_per_db`](#-role--db--mongodb--directory_per_db)
+* [`enable_rest_api`](#-role--db--mongodb--enable_rest_api)
+* [`ssl`](#-role--db--mongodb--ssl)
+* [`ssl_ca`](#-role--db--mongodb--ssl_ca)
+* [`ssl_key`](#-role--db--mongodb--ssl_key)
+* [`quota`](#-role--db--mongodb--quota)
+* [`db_dir`](#-role--db--mongodb--db_dir)
+* [`storage_engine`](#-role--db--mongodb--storage_engine)
+* [`admin_username`](#-role--db--mongodb--admin_username)
+* [`admin_password`](#-role--db--mongodb--admin_password)
+* [`admin_roles`](#-role--db--mongodb--admin_roles)
+* [`admin_store_credentials`](#-role--db--mongodb--admin_store_credentials)
+* [`log_file`](#-role--db--mongodb--log_file)
+* [`max_connections`](#-role--db--mongodb--max_connections)
+* [`monitor_user`](#-role--db--mongodb--monitor_user)
+* [`backup`](#-role--db--mongodb--backup)
+* [`encrypt_params`](#-role--db--mongodb--encrypt_params)
+
+##### <a name="-role--db--mongodb--version"></a>`version`
+
+Data type: `Variant[Pattern[/[0-9]+\.[0-9]+/]]`
+
+The version of MongoDB to install. Defaults to 8.0
+
+Default value: `'8.0'`
+
+##### <a name="-role--db--mongodb--use_upstream_repo"></a>`use_upstream_repo`
+
+Data type: `Boolean`
+
+Whether to use the upstream repository. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--listen_ips"></a>`listen_ips`
+
+Data type: `Array[Eit_types::IP]`
+
+The IP addresses on which MongoDB will listen. Defaults to ['127.0.0.1'].
+
+Default value: `['127.0.0.1']`
+
+##### <a name="-role--db--mongodb--use_ipv6"></a>`use_ipv6`
+
+Data type: `Boolean`
+
+Whether to enable IPv6. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+The port on which MongoDB will listen. Defaults to 27017.
+
+Default value: `27017`
+
+##### <a name="-role--db--mongodb--journal"></a>`journal`
+
+Data type: `Boolean`
+
+Whether to enable journaling. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--smallfiles"></a>`smallfiles`
+
+Data type: `Boolean`
+
+Whether to use small files for the database. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--remote_user_auth"></a>`remote_user_auth`
+
+Data type: `Boolean`
+
+Whether to enable remote user authentication. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--disable_auth"></a>`disable_auth`
+
+Data type: `Boolean`
+
+Whether to disable authentication. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--verbosity"></a>`verbosity`
+
+Data type: `Integer[0,4]`
+
+The verbosity level of logs. Defaults to 0.
+
+Default value: `0`
+
+##### <a name="-role--db--mongodb--object_check"></a>`object_check`
+
+Data type: `Boolean`
+
+Whether to perform object checks. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--http_interface"></a>`http_interface`
+
+Data type: `Boolean`
+
+Whether to enable the HTTP interface. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--extra_server_options"></a>`extra_server_options`
+
+Data type: `Hash[String,String]`
+
+Additional server options for MongoDB. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--db--mongodb--disable_scripting"></a>`disable_scripting`
+
+Data type: `Boolean`
+
+Whether to disable scripting. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--disable_tablescan"></a>`disable_tablescan`
+
+Data type: `Boolean`
+
+Whether to disable table scans. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--disable_prealloc"></a>`disable_prealloc`
+
+Data type: `Boolean`
+
+Whether to disable preallocation of files. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--default_namespace_file_size"></a>`default_namespace_file_size`
+
+Data type: `Integer[1,default]`
+
+The default namespace file size in MB. Defaults to 16.
+
+Default value: `16`
+
+##### <a name="-role--db--mongodb--restart_on_change"></a>`restart_on_change`
+
+Data type: `Boolean`
+
+Whether to restart MongoDB on configuration change. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--create_admin"></a>`create_admin`
+
+Data type: `Boolean`
+
+Whether to create an admin user. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--directory_per_db"></a>`directory_per_db`
+
+Data type: `Boolean`
+
+Whether to use a separate directory for each database. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--enable_rest_api"></a>`enable_rest_api`
+
+Data type: `Boolean`
+
+Whether to enable the REST API. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to enable SSL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--ssl_ca"></a>`ssl_ca`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The SSL CA certificate path. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The SSL key path. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--quota"></a>`quota`
+
+Data type: `Variant[Integer[1,default], Boolean]`
+
+The quota for connections. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--db_dir"></a>`db_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The directory for the database files. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--storage_engine"></a>`storage_engine`
+
+Data type: `Optional[Enum['wiredTiger', 'mmapv1']]`
+
+The storage engine to use. Defaults to 'wiredTiger'.
+
+Default value: `'wiredTiger'`
+
+##### <a name="-role--db--mongodb--admin_username"></a>`admin_username`
+
+Data type: `Optional[String]`
+
+The username for the admin user. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--admin_password"></a>`admin_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+The password for the admin user. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--admin_roles"></a>`admin_roles`
+
+Data type: `Array[String]`
+
+The roles for the admin user. Defaults to ['root'].
+
+Default value: `['root']`
+
+##### <a name="-role--db--mongodb--admin_store_credentials"></a>`admin_store_credentials`
+
+Data type: `Boolean`
+
+Whether to store credentials for the admin user. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mongodb--log_file"></a>`log_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The log file path. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--max_connections"></a>`max_connections`
+
+Data type: `Optional[Integer[1,default]]`
+
+The maximum number of connections. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mongodb--monitor_user"></a>`monitor_user`
+
+Data type: `Eit_types::User`
+
+The username for the monitoring user. Defaults to 'obmondo-mon'.
+
+Default value: `'obmondo-mon'`
+
+##### <a name="-role--db--mongodb--backup"></a>`backup`
+
+Data type: `Boolean`
+
+Whether to enable backups. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mongodb--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'admin_password',
+  ]
+```
+
+### <a name="role--db--mysql"></a>`role::db::mysql`
+
+Class for managing MySQL database configurations
+
+#### Parameters
+
+The following parameters are available in the `role::db::mysql` class:
+
+* [`root_password`](#-role--db--mysql--root_password)
+* [`datadir`](#-role--db--mysql--datadir)
+* [`memlimit`](#-role--db--mysql--memlimit)
+* [`mysql_restart_on_config_change`](#-role--db--mysql--mysql_restart_on_config_change)
+* [`backup`](#-role--db--mysql--backup)
+* [`binlog`](#-role--db--mysql--binlog)
+* [`binlog_format`](#-role--db--mysql--binlog_format)
+* [`local_tcp_root_access`](#-role--db--mysql--local_tcp_root_access)
+* [`binlog_dir`](#-role--db--mysql--binlog_dir)
+* [`binlog_max_size_bytes`](#-role--db--mysql--binlog_max_size_bytes)
+* [`binlog_sync`](#-role--db--mysql--binlog_sync)
+* [`binlog_backup_target`](#-role--db--mysql--binlog_backup_target)
+* [`binlog_backup_target_dir`](#-role--db--mysql--binlog_backup_target_dir)
+* [`binlog_backup_interval`](#-role--db--mysql--binlog_backup_interval)
+* [`override_options`](#-role--db--mysql--override_options)
+* [`access_mysql_from`](#-role--db--mysql--access_mysql_from)
+
+##### <a name="-role--db--mysql--root_password"></a>`root_password`
+
+Data type: `Eit_types::MysqlPassword`
+
+The root password for the MySQL database.
+
+##### <a name="-role--db--mysql--datadir"></a>`datadir`
+
+Data type: `String`
+
+The data directory for MySQL. Defaults to '/var/lib/mysql'.
+
+Default value: `'/var/lib/mysql'`
+
+##### <a name="-role--db--mysql--memlimit"></a>`memlimit`
+
+Data type: `Eit_types::Percentage`
+
+The memory limit percentage for MySQL. Defaults to 75.
+
+Default value: `75`
+
+##### <a name="-role--db--mysql--mysql_restart_on_config_change"></a>`mysql_restart_on_config_change`
+
+Data type: `Boolean`
+
+Boolean indicating whether to restart MySQL on configuration changes. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mysql--backup"></a>`backup`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable backup. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mysql--binlog"></a>`binlog`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable binary logging. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--db--mysql--binlog_format"></a>`binlog_format`
+
+Data type: `Enum['MIXED', 'ROW', 'STATEMENT']`
+
+The format for binary logs. Defaults to 'MIXED'.
+
+Default value: `'MIXED'`
+
+##### <a name="-role--db--mysql--local_tcp_root_access"></a>`local_tcp_root_access`
+
+Data type: `Boolean`
+
+Boolean indicating whether to allow local TCP root access. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--mysql--binlog_dir"></a>`binlog_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The directory for binary logs. Defaults to "${datadir}/binlog/${facts['networking']['fqdn']}".
+
+Default value: `"${datadir}/binlog/${facts['networking']['fqdn']}"`
+
+##### <a name="-role--db--mysql--binlog_max_size_bytes"></a>`binlog_max_size_bytes`
+
+Data type: `Optional[Integer[4096, 1073741824]]`
+
+The maximum size of binary log files in bytes. Defaults to 1 GB.
+
+Default value: `1*1024*1024*1024`
+
+##### <a name="-role--db--mysql--binlog_sync"></a>`binlog_sync`
+
+Data type: `Optional[Integer[0, 4294967295]]`
+
+The binary log sync configuration. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--db--mysql--binlog_backup_target"></a>`binlog_backup_target`
+
+Data type: `Optional[Eit_types::CustomerHost]`
+
+The target for binlog backups. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mysql--binlog_backup_target_dir"></a>`binlog_backup_target_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The directory for binlog backups. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mysql--binlog_backup_interval"></a>`binlog_backup_interval`
+
+Data type: `Optional[Eit_types::TimeSpan]`
+
+The interval for binlog backups. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--mysql--override_options"></a>`override_options`
+
+Data type: `Hash[Eit_types::Mysql_Variable, Data]`
+
+Custom MySQL variable overrides. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--mysql--access_mysql_from"></a>`access_mysql_from`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+Array of IP addresses allowed to access MySQL. Defaults to ['0.0.0.0/0'].
+
+Default value: `['0.0.0.0/0']`
+
+### <a name="role--db--opensearch"></a>`role::db::opensearch`
+
+Opensearch Business role.
+
+#### Parameters
+
+The following parameters are available in the `role::db::opensearch` class:
+
+* [`ssl_combined_pem`](#-role--db--opensearch--ssl_combined_pem)
+* [`version`](#-role--db--opensearch--version)
+* [`es_heap_size_pct`](#-role--db--opensearch--es_heap_size_pct)
+* [`es_heap_size_max_gb`](#-role--db--opensearch--es_heap_size_max_gb)
+* [`cerebro`](#-role--db--opensearch--cerebro)
+* [`host`](#-role--db--opensearch--host)
+* [`access_9200_port_from`](#-role--db--opensearch--access_9200_port_from)
+* [`nodes`](#-role--db--opensearch--nodes)
+* [`datadir`](#-role--db--opensearch--datadir)
+* [`cluster_name`](#-role--db--opensearch--cluster_name)
+* [`curate_filters`](#-role--db--opensearch--curate_filters)
+* [`ssl`](#-role--db--opensearch--ssl)
+* [`dashboard`](#-role--db--opensearch--dashboard)
+* [`expose`](#-role--db--opensearch--expose)
+
+##### <a name="-role--db--opensearch--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `Optional[String]`
+
+The path to the combined SSL PEM file. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--opensearch--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of Opensearch. Defaults to '2.11.0'.
+
+Default value: `'2.11.0'`
+
+##### <a name="-role--db--opensearch--es_heap_size_pct"></a>`es_heap_size_pct`
+
+Data type: `Eit_types::Percentage`
+
+The percentage of heap size for Elasticsearch. Defaults to 50.
+
+Default value: `50`
+
+##### <a name="-role--db--opensearch--es_heap_size_max_gb"></a>`es_heap_size_max_gb`
+
+Data type: `Variant[Integer[1,31], Float[1,31]]`
+
+The maximum heap size in GB for Elasticsearch. Defaults to 31.
+
+Default value: `31`
+
+##### <a name="-role--db--opensearch--cerebro"></a>`cerebro`
+
+Data type: `Boolean`
+
+Whether to include Cerebro in the deployment. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--opensearch--host"></a>`host`
+
+Data type: `Stdlib::Fqdn`
+
+The FQDN of the Opensearch host.
+
+##### <a name="-role--db--opensearch--access_9200_port_from"></a>`access_9200_port_from`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+The hosts allowed to access the Opensearch 9200 port. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--db--opensearch--nodes"></a>`nodes`
+
+Data type: `Array[Stdlib::Host]`
+
+The list of Opensearch nodes.
+
+##### <a name="-role--db--opensearch--datadir"></a>`datadir`
+
+Data type: `Stdlib::Unixpath`
+
+The directory for Opensearch data. Defaults to '/var/lib/opensearch'.
+
+Default value: `'/var/lib/opensearch'`
+
+##### <a name="-role--db--opensearch--cluster_name"></a>`cluster_name`
+
+Data type: `Eit_types::SimpleString`
+
+The name of the Opensearch cluster. Defaults to 'opensearch-cluster'.
+
+Default value: `'opensearch-cluster'`
+
+##### <a name="-role--db--opensearch--curate_filters"></a>`curate_filters`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+The filters for curating data. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--opensearch--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to enable SSL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--opensearch--dashboard"></a>`dashboard`
+
+Data type: `Boolean`
+
+Whether to include the Opensearch Dashboard. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--db--opensearch--expose"></a>`expose`
+
+Data type: `Boolean`
+
+Whether to expose the service. Defaults to false.
+
+Default value: `false`
+
+### <a name="role--db--pgsql"></a>`role::db::pgsql`
+
+Class for managing PostgreSQL database
+
+#### Parameters
+
+The following parameters are available in the `role::db::pgsql` class:
+
+* [`allow_remote_hosts`](#-role--db--pgsql--allow_remote_hosts)
+* [`max_connections`](#-role--db--pgsql--max_connections)
+* [`listen_address`](#-role--db--pgsql--listen_address)
+* [`databases`](#-role--db--pgsql--databases)
+* [`mode`](#-role--db--pgsql--mode)
+* [`recovery_username`](#-role--db--pgsql--recovery_username)
+* [`recovery_password`](#-role--db--pgsql--recovery_password)
+* [`recovery_host`](#-role--db--pgsql--recovery_host)
+* [`recovery_port`](#-role--db--pgsql--recovery_port)
+* [`recovery_trigger`](#-role--db--pgsql--recovery_trigger)
+* [`pg_hba_rule`](#-role--db--pgsql--pg_hba_rule)
+* [`replication_username`](#-role--db--pgsql--replication_username)
+* [`replication_password`](#-role--db--pgsql--replication_password)
+* [`application_name`](#-role--db--pgsql--application_name)
+* [`encrypt_params`](#-role--db--pgsql--encrypt_params)
+* [`backup`](#-role--db--pgsql--backup)
+
+##### <a name="-role--db--pgsql--allow_remote_hosts"></a>`allow_remote_hosts`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+An array of IP addresses that are allowed to connect remotely. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--db--pgsql--max_connections"></a>`max_connections`
+
+Data type: `Integer[0, default]`
+
+The maximum number of connections to allow. Defaults to 100.
+
+Default value: `100`
+
+##### <a name="-role--db--pgsql--listen_address"></a>`listen_address`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+An array of IP addresses to listen on. Defaults to ['127.0.0.1'].
+
+Default value: `['127.0.0.1']`
+
+##### <a name="-role--db--pgsql--databases"></a>`databases`
+
+Data type: `Eit_types::Pgsql::Db`
+
+A hash of databases to manage. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--pgsql--mode"></a>`mode`
+
+Data type: `Eit_types::Pgsql::Mode`
+
+The mode in which PostgreSQL will run. Defaults to 'standalone'.
+
+Default value: `'standalone'`
+
+##### <a name="-role--db--pgsql--recovery_username"></a>`recovery_username`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+The username for recovery access. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--recovery_password"></a>`recovery_password`
+
+Data type: `Optional[String]`
+
+The password for recovery access. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--recovery_host"></a>`recovery_host`
+
+Data type: `Optional[Eit_types::IP]`
+
+The IP address of the recovery host. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--recovery_port"></a>`recovery_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+The port for recovery connections. Defaults to 5432.
+
+Default value: `5432`
+
+##### <a name="-role--db--pgsql--recovery_trigger"></a>`recovery_trigger`
+
+Data type: `Optional[Stdlib::Unixpath]`
+
+The trigger file for recovery. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--pg_hba_rule"></a>`pg_hba_rule`
+
+Data type: `Optional[Eit_types::Pgsql::Pg_hba]`
+
+A hash of pg_hba rules. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--db--pgsql--replication_username"></a>`replication_username`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+The username for replication access. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--replication_password"></a>`replication_password`
+
+Data type: `Optional[String]`
+
+The password for replication access. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--application_name"></a>`application_name`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+The name of the application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--db--pgsql--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'recovery_password',
+    'replication_password',
+  ]
+```
+
+##### <a name="-role--db--pgsql--backup"></a>`backup`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `false`
+
+### <a name="role--db--redis"></a>`role::db::redis`
+
+Class for managing the Redis database
+
+#### Parameters
+
+The following parameters are available in the `role::db::redis` class:
+
+* [`bind`](#-role--db--redis--bind)
+* [`default_port`](#-role--db--redis--default_port)
+
+##### <a name="-role--db--redis--bind"></a>`bind`
+
+Data type: `Array[Variant[Eit_types::IPPort, Eit_types::IP], 1]`
+
+The IP address and port to bind to. Defaults to ['0.0.0.0'].
+
+Default value: `['0.0.0.0']`
+
+##### <a name="-role--db--redis--default_port"></a>`default_port`
+
+Data type: `Stdlib::Port`
+
+The default port for Redis. Defaults to 6379.
+
+Default value: `6379`
+
 ### <a name="role--mail"></a>`role::mail`
 
 Class for managing the Mail role
+
+### <a name="role--mail--mailcow"></a>`role::mail::mailcow`
+
+Mailcow Setup
+
+#### Parameters
+
+The following parameters are available in the `role::mail::mailcow` class:
+
+* [`dbroot`](#-role--mail--mailcow--dbroot)
+* [`dbpass`](#-role--mail--mailcow--dbpass)
+* [`redispass`](#-role--mail--mailcow--redispass)
+* [`domain`](#-role--mail--mailcow--domain)
+* [`backup_dir`](#-role--mail--mailcow--backup_dir)
+* [`manage`](#-role--mail--mailcow--manage)
+* [`letsencrypt`](#-role--mail--mailcow--letsencrypt)
+* [`acme_contact`](#-role--mail--mailcow--acme_contact)
+* [`version`](#-role--mail--mailcow--version)
+* [`install_dir`](#-role--mail--mailcow--install_dir)
+* [`timezone`](#-role--mail--mailcow--timezone)
+* [`extra_settings`](#-role--mail--mailcow--extra_settings)
+* [`backup_retention`](#-role--mail--mailcow--backup_retention)
+* [`skip_unbound_healthcheck`](#-role--mail--mailcow--skip_unbound_healthcheck)
+* [`exporter_image`](#-role--mail--mailcow--exporter_image)
+* [`exporter_listen_address`](#-role--mail--mailcow--exporter_listen_address)
+* [`exporter_api_key`](#-role--mail--mailcow--exporter_api_key)
+* [`http_bind`](#-role--mail--mailcow--http_bind)
+* [`encrypt_params`](#-role--mail--mailcow--encrypt_params)
+
+##### <a name="-role--mail--mailcow--dbroot"></a>`dbroot`
+
+Data type: `String`
+
+The root password for the database.
+
+##### <a name="-role--mail--mailcow--dbpass"></a>`dbpass`
+
+Data type: `String`
+
+The database password.
+
+##### <a name="-role--mail--mailcow--redispass"></a>`redispass`
+
+Data type: `String`
+
+The password to connect to redis
+
+##### <a name="-role--mail--mailcow--domain"></a>`domain`
+
+Data type: `Stdlib::Fqdn`
+
+The fully qualified domain name.
+
+##### <a name="-role--mail--mailcow--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Unixpath`
+
+The directory for backups. Defaults to '/opt/backup'.
+
+Default value: `'/opt/backup'`
+
+##### <a name="-role--mail--mailcow--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Flag to manage the service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--mail--mailcow--letsencrypt"></a>`letsencrypt`
+
+Data type: `Boolean`
+
+Flag to manage Let's Encrypt certificates. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--mail--mailcow--acme_contact"></a>`acme_contact`
+
+Data type: `Optional[Eit_types::Email]`
+
+The contact email for ACME. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--mail--mailcow--version"></a>`version`
+
+Data type: `Eit_types::Mailcow::Version`
+
+The version of Mailcow to install. Defaults to '2024-08a'.
+
+Default value: `'2024-08a'`
+
+##### <a name="-role--mail--mailcow--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Unixpath`
+
+The directory to install Mailcow. Defaults to '/opt/mailcow'.
+
+Default value: `'/opt/mailcow'`
+
+##### <a name="-role--mail--mailcow--timezone"></a>`timezone`
+
+Data type: `Eit_types::Timezone`
+
+The timezone for the installation. Defaults to 'Europe/Copenhagen'.
+
+Default value: `'Europe/Copenhagen'`
+
+##### <a name="-role--mail--mailcow--extra_settings"></a>`extra_settings`
+
+Data type: `Optional[Hash]`
+
+Additional settings for Mailcow. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--mail--mailcow--backup_retention"></a>`backup_retention`
+
+Data type: `Integer[3,30]`
+
+The number of days to keep backups. Defaults to 5.
+
+Default value: `5`
+
+##### <a name="-role--mail--mailcow--skip_unbound_healthcheck"></a>`skip_unbound_healthcheck`
+
+Data type: `Optional[Boolean]`
+
+Flag to skip Unbound health check. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--mail--mailcow--exporter_image"></a>`exporter_image`
+
+Data type: `String`
+
+The image for the Mailcow exporter. Defaults to 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0'.
+
+Default value: `'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0'`
+
+##### <a name="-role--mail--mailcow--exporter_listen_address"></a>`exporter_listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The address for the exporter to listen on. Defaults to '127.254.254.254:63382'.
+
+Default value: `'127.254.254.254:63382'`
+
+##### <a name="-role--mail--mailcow--exporter_api_key"></a>`exporter_api_key`
+
+Data type: `String`
+
+The API Key to use when accessing the mailcow API
+
+##### <a name="-role--mail--mailcow--http_bind"></a>`http_bind`
+
+Data type: `Stdlib::IP::Address::V4::Nosubnet`
+
+The HTTP bind address. Defaults to '0.0.0.0'.
+
+Default value: `'0.0.0.0'`
+
+##### <a name="-role--mail--mailcow--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'dbroot',
+    'dbpass',
+    'redispass',
+    'exporter_api_key',
+  ]
+```
+
+### <a name="role--mail--postfix"></a>`role::mail::postfix`
+
+Class for managing the Postfix mail server
+
+#### Parameters
+
+The following parameters are available in the `role::mail::postfix` class:
+
+* [`manage`](#-role--mail--postfix--manage)
+* [`inet_interfaces`](#-role--mail--postfix--inet_interfaces)
+* [`myhostname`](#-role--mail--postfix--myhostname)
+* [`mydomain`](#-role--mail--postfix--mydomain)
+* [`relayhost`](#-role--mail--postfix--relayhost)
+* [`smtp_sasl_auth`](#-role--mail--postfix--smtp_sasl_auth)
+* [`smtp_sasl_password_maps`](#-role--mail--postfix--smtp_sasl_password_maps)
+* [`smtp_sasl_security_options`](#-role--mail--postfix--smtp_sasl_security_options)
+* [`default_destination_concurrency_limit`](#-role--mail--postfix--default_destination_concurrency_limit)
+* [`soft_bounce`](#-role--mail--postfix--soft_bounce)
+* [`smtp_connection_cache_destinations`](#-role--mail--postfix--smtp_connection_cache_destinations)
+* [`smtp_tls_security_level`](#-role--mail--postfix--smtp_tls_security_level)
+* [`smtp_tls_loglevel`](#-role--mail--postfix--smtp_tls_loglevel)
+* [`smtpd_tls_auth_only`](#-role--mail--postfix--smtpd_tls_auth_only)
+* [`tls_ssl_options`](#-role--mail--postfix--tls_ssl_options)
+* [`smtpd_tls_protocols`](#-role--mail--postfix--smtpd_tls_protocols)
+* [`smtpd_tls_mandatory_protocols`](#-role--mail--postfix--smtpd_tls_mandatory_protocols)
+* [`smtpd_tls_mandatory_ciphers`](#-role--mail--postfix--smtpd_tls_mandatory_ciphers)
+* [`smtpd_tls_eecdh_grade`](#-role--mail--postfix--smtpd_tls_eecdh_grade)
+* [`tls_preempt_cipherlist`](#-role--mail--postfix--tls_preempt_cipherlist)
+* [`tls_high_cipherlist`](#-role--mail--postfix--tls_high_cipherlist)
+* [`stats_daemon_port`](#-role--mail--postfix--stats_daemon_port)
+* [`run_newaliases`](#-role--mail--postfix--run_newaliases)
+* [`aliases`](#-role--mail--postfix--aliases)
+* [`_extra_main_parameters`](#-role--mail--postfix--_extra_main_parameters)
+* [`maildrop_perms`](#-role--mail--postfix--maildrop_perms)
+* [`noop_value`](#-role--mail--postfix--noop_value)
+
+##### <a name="-role--mail--postfix--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the Postfix service. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--mail--postfix--inet_interfaces"></a>`inet_interfaces`
+
+Data type: `Variant[    Eit_types::IP,    Enum['all', 'localhost']  ]`
+
+The interfaces Postfix should listen on. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+##### <a name="-role--mail--postfix--myhostname"></a>`myhostname`
+
+Data type: `Eit_types::Hostname`
+
+The hostname for the mail server.
+
+##### <a name="-role--mail--postfix--mydomain"></a>`mydomain`
+
+Data type: `Optional[Eit_types::Domain]`
+
+The domain for the mail server. Defaults to undef.
+
+##### <a name="-role--mail--postfix--relayhost"></a>`relayhost`
+
+Data type: `Optional[Eit_types::Host]`
+
+The relay host for the mail server. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--mail--postfix--smtp_sasl_auth"></a>`smtp_sasl_auth`
+
+Data type: `Boolean`
+
+Whether to enable SMTP SASL authentication. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--mail--postfix--smtp_sasl_password_maps"></a>`smtp_sasl_password_maps`
+
+Data type: `Optional[String]`
+
+The SASL password maps. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--mail--postfix--smtp_sasl_security_options"></a>`smtp_sasl_security_options`
+
+Data type: `Optional[String]`
+
+The security options for SASL. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--mail--postfix--default_destination_concurrency_limit"></a>`default_destination_concurrency_limit`
+
+Data type: `Integer[0, default]`
+
+The default limit for destination concurrency. Defaults to 20.
+
+Default value: `20`
+
+##### <a name="-role--mail--postfix--soft_bounce"></a>`soft_bounce`
+
+Data type: `Boolean`
+
+Whether to enable soft bounces. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--mail--postfix--smtp_connection_cache_destinations"></a>`smtp_connection_cache_destinations`
+
+Data type: `Array[String]`
+
+List of SMTP connection cache destinations. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-role--mail--postfix--smtp_tls_security_level"></a>`smtp_tls_security_level`
+
+Data type: `Eit_types::Postfix_Security_Level`
+
+The security level for SMTP TLS. Defaults to 'encrypt'.
+
+Default value: `'encrypt'`
+
+##### <a name="-role--mail--postfix--smtp_tls_loglevel"></a>`smtp_tls_loglevel`
+
+Data type: `Integer[0]`
+
+The log level for SMTP TLS. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--mail--postfix--smtpd_tls_auth_only"></a>`smtpd_tls_auth_only`
+
+Data type: `Enum['yes', 'no']`
+
+Whether to require TLS for authentication. Defaults to 'yes'.
+
+Default value: `'yes'`
+
+##### <a name="-role--mail--postfix--tls_ssl_options"></a>`tls_ssl_options`
+
+Data type: `String`
+
+The SSL options for TLS. Defaults to 'NO_COMPRESSION'.
+
+Default value: `'NO_COMPRESSION'`
+
+##### <a name="-role--mail--postfix--smtpd_tls_protocols"></a>`smtpd_tls_protocols`
+
+Data type: `String`
+
+The TLS protocols for the server. Defaults to '!SSLv2,!SSLv3'.
+
+Default value: `'!SSLv2,!SSLv3'`
+
+##### <a name="-role--mail--postfix--smtpd_tls_mandatory_protocols"></a>`smtpd_tls_mandatory_protocols`
+
+Data type: `String`
+
+The mandatory TLS protocols. Defaults to '!SSLv2,!SSLv3'.
+
+Default value: `'!SSLv2,!SSLv3'`
+
+##### <a name="-role--mail--postfix--smtpd_tls_mandatory_ciphers"></a>`smtpd_tls_mandatory_ciphers`
+
+Data type: `String`
+
+The mandatory ciphers for TLS. Defaults to 'high'.
+
+Default value: `'high'`
+
+##### <a name="-role--mail--postfix--smtpd_tls_eecdh_grade"></a>`smtpd_tls_eecdh_grade`
+
+Data type: `String`
+
+The ECDH grade for TLS. Defaults to 'ultra'.
+
+Default value: `'ultra'`
+
+##### <a name="-role--mail--postfix--tls_preempt_cipherlist"></a>`tls_preempt_cipherlist`
+
+Data type: `String`
+
+Whether to preempt the cipher list. Defaults to 'yes'.
+
+Default value: `'yes'`
+
+##### <a name="-role--mail--postfix--tls_high_cipherlist"></a>`tls_high_cipherlist`
+
+Data type: `String`
+
+The high cipher list for TLS. Defaults to the provided long string.
+
+Default value: `'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA'`
+
+##### <a name="-role--mail--postfix--stats_daemon_port"></a>`stats_daemon_port`
+
+Data type: `Stdlib::Port`
+
+The port for the stats daemon. Defaults to 63777.
+
+Default value: `63777`
+
+##### <a name="-role--mail--postfix--run_newaliases"></a>`run_newaliases`
+
+Data type: `Boolean`
+
+Whether to run newaliases after configuration changes. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--mail--postfix--aliases"></a>`aliases`
+
+Data type: `Hash[String, String]`
+
+The alias mappings for the mail server. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--mail--postfix--_extra_main_parameters"></a>`_extra_main_parameters`
+
+Data type: `Hash[String, String]`
+
+Any extra main parameters for Postfix. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--mail--postfix--maildrop_perms"></a>`maildrop_perms`
+
+Data type: `Variant[Stdlib::Filemode,String]`
+
+The permissions for mail drops. Defaults to 'u+rwX,g-r,g+wX'.
+
+Default value: `'u+rwX,g-r,g+wX'`
+
+##### <a name="-role--mail--postfix--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+A value for no-operation configurations. Defaults to undef.
+
+Default value: `undef`
 
 ### <a name="role--monitor"></a>`role::monitor`
 
@@ -77,6 +2794,387 @@ from ::role and otherwise be empty.
 ### <a name="role--monitoring"></a>`role::monitoring`
 
 Class for managing the Monitoring role
+
+### <a name="role--monitoring--elk"></a>`role::monitoring::elk`
+
+Class for managing the ELK role
+
+#### Parameters
+
+The following parameters are available in the `role::monitoring::elk` class:
+
+* [`clustername`](#-role--monitoring--elk--clustername)
+* [`es_config`](#-role--monitoring--elk--es_config)
+* [`es_version`](#-role--monitoring--elk--es_version)
+* [`es_datadir`](#-role--monitoring--elk--es_datadir)
+* [`cluster_hosts`](#-role--monitoring--elk--cluster_hosts)
+* [`nxlog_windowseventlog`](#-role--monitoring--elk--nxlog_windowseventlog)
+* [`nxlog_ssl_windowseventlog`](#-role--monitoring--elk--nxlog_ssl_windowseventlog)
+* [`nxlog_json`](#-role--monitoring--elk--nxlog_json)
+* [`nxlog_ssl_json`](#-role--monitoring--elk--nxlog_ssl_json)
+* [`nginx_cfg_append`](#-role--monitoring--elk--nginx_cfg_append)
+* [`nginx_ssl_mode`](#-role--monitoring--elk--nginx_ssl_mode)
+* [`ssl_cert`](#-role--monitoring--elk--ssl_cert)
+* [`ssl_key`](#-role--monitoring--elk--ssl_key)
+* [`install_cerebro`](#-role--monitoring--elk--install_cerebro)
+* [`enable_redis`](#-role--monitoring--elk--enable_redis)
+* [`redis_datadir`](#-role--monitoring--elk--redis_datadir)
+* [`redis_bind`](#-role--monitoring--elk--redis_bind)
+* [`redis_port`](#-role--monitoring--elk--redis_port)
+* [`logstash_redis_to_es_workers`](#-role--monitoring--elk--logstash_redis_to_es_workers)
+* [`install_search_guard`](#-role--monitoring--elk--install_search_guard)
+* [`curator`](#-role--monitoring--elk--curator)
+* [`curator_delete_days`](#-role--monitoring--elk--curator_delete_days)
+
+##### <a name="-role--monitoring--elk--clustername"></a>`clustername`
+
+Data type: `Pattern[/[A-Za-z0-9_.-]+/]`
+
+The name of the ELK cluster. Defaults to 'elkstack'.
+
+Default value: `'elkstack'`
+
+##### <a name="-role--monitoring--elk--es_config"></a>`es_config`
+
+Data type: `Hash[String, Data]`
+
+Configuration hash for Elasticsearch. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--elk--es_version"></a>`es_version`
+
+Data type: `Variant[Pattern[/\d\.\d\.\d/], Enum['2.x', '5.x']]`
+
+The version of Elasticsearch to use. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--monitoring--elk--es_datadir"></a>`es_datadir`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path for Elasticsearch data directory. Defaults to '/var/lib/elasticsearch/data'.
+
+Default value: `'/var/lib/elasticsearch/data'`
+
+##### <a name="-role--monitoring--elk--cluster_hosts"></a>`cluster_hosts`
+
+Data type: `Array[Eit_types::IP]`
+
+An array of IP addresses for the Elasticsearch cluster hosts. Defaults to the node's IP address.
+
+Default value: `[$facts['networking']['ip']]`
+
+##### <a name="-role--monitoring--elk--nxlog_windowseventlog"></a>`nxlog_windowseventlog`
+
+Data type: `Boolean`
+
+If true, enables nxlog for Windows Event Log. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--nxlog_ssl_windowseventlog"></a>`nxlog_ssl_windowseventlog`
+
+Data type: `Boolean`
+
+If true, enables SSL for nxlog Windows Event Log. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--nxlog_json"></a>`nxlog_json`
+
+Data type: `Boolean`
+
+If true, enables JSON logging for nxlog. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--nxlog_ssl_json"></a>`nxlog_ssl_json`
+
+Data type: `Boolean`
+
+If true, enables SSL for nxlog JSON logging. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--nginx_cfg_append"></a>`nginx_cfg_append`
+
+Data type: `Hash`
+
+Additional configuration for Nginx. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--elk--nginx_ssl_mode"></a>`nginx_ssl_mode`
+
+Data type: `Variant[Boolean, Enum['force']]`
+
+Defines the SSL mode for Nginx. Defaults to 'force'.
+
+Default value: `'force'`
+
+##### <a name="-role--monitoring--elk--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The path to the SSL certificate. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--monitoring--elk--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The path to the SSL key. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--monitoring--elk--install_cerebro"></a>`install_cerebro`
+
+Data type: `Boolean`
+
+If true, installs Cerebro management UI. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--monitoring--elk--enable_redis"></a>`enable_redis`
+
+Data type: `Boolean`
+
+If true, enables Redis integration. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--monitoring--elk--redis_datadir"></a>`redis_datadir`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path for Redis data directory. Defaults to '/var/lib/redis'.
+
+Default value: `'/var/lib/redis'`
+
+##### <a name="-role--monitoring--elk--redis_bind"></a>`redis_bind`
+
+Data type: `Array[Variant[Eit_types::IPPort, Eit_types::IP], 1]`
+
+The addresses Redis will bind to. Defaults to '127.0.0.1'.
+
+Default value: `['127.0.0.1']`
+
+##### <a name="-role--monitoring--elk--redis_port"></a>`redis_port`
+
+Data type: `Stdlib::Port`
+
+The port on which Redis listens. Defaults to 6379.
+
+Default value: `6379`
+
+##### <a name="-role--monitoring--elk--logstash_redis_to_es_workers"></a>`logstash_redis_to_es_workers`
+
+Data type: `Optional[Integer]`
+
+Number of workers for Logstash to Redis to Elasticsearch pipeline. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--monitoring--elk--install_search_guard"></a>`install_search_guard`
+
+Data type: `Boolean`
+
+If true, installs Search Guard for security features. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--curator"></a>`curator`
+
+Data type: `Boolean`
+
+If true, enables Curator for log management. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--elk--curator_delete_days"></a>`curator_delete_days`
+
+Data type: `Integer`
+
+Number of days to keep logs before deletion by Curator. Defaults to 7.
+
+Default value: `7`
+
+### <a name="role--monitoring--journal_remote"></a>`role::monitoring::journal_remote`
+
+Class for managing the Journal Remote role
+
+#### Parameters
+
+The following parameters are available in the `role::monitoring::journal_remote` class:
+
+* [`remote_enable`](#-role--monitoring--journal_remote--remote_enable)
+* [`manage_output`](#-role--monitoring--journal_remote--manage_output)
+* [`output`](#-role--monitoring--journal_remote--output)
+
+##### <a name="-role--monitoring--journal_remote--remote_enable"></a>`remote_enable`
+
+Data type: `Boolean`
+
+Whether to enable the remote journal. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--monitoring--journal_remote--manage_output"></a>`manage_output`
+
+Data type: `Boolean`
+
+Whether to manage the output settings. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--monitoring--journal_remote--output"></a>`output`
+
+Data type: `Stdlib::Unixpath`
+
+The path for the output journal. Defaults to '/var/log/journal/remote'.
+
+Default value: `'/var/log/journal/remote'`
+
+### <a name="role--monitoring--rsyslog"></a>`role::monitoring::rsyslog`
+
+Boolean indicating if the configuration is blendable. No default.
+
+#### Parameters
+
+The following parameters are available in the `role::monitoring::rsyslog` class:
+
+* [`global_config`](#-role--monitoring--rsyslog--global_config)
+* [`legacy_config`](#-role--monitoring--rsyslog--legacy_config)
+* [`templates`](#-role--monitoring--rsyslog--templates)
+* [`actions`](#-role--monitoring--rsyslog--actions)
+* [`inputs`](#-role--monitoring--rsyslog--inputs)
+* [`custom_config`](#-role--monitoring--rsyslog--custom_config)
+* [`main_queue_opts`](#-role--monitoring--rsyslog--main_queue_opts)
+* [`modules`](#-role--monitoring--rsyslog--modules)
+* [`lookup_tables`](#-role--monitoring--rsyslog--lookup_tables)
+* [`parsers`](#-role--monitoring--rsyslog--parsers)
+* [`rulesets`](#-role--monitoring--rsyslog--rulesets)
+* [`property_filters`](#-role--monitoring--rsyslog--property_filters)
+* [`expression_filters`](#-role--monitoring--rsyslog--expression_filters)
+* [`$__blendable`](#-role--monitoring--rsyslog---__blendable)
+* [`__blendable`](#-role--monitoring--rsyslog--__blendable)
+
+##### <a name="-role--monitoring--rsyslog--global_config"></a>`global_config`
+
+Data type: `Optional[Hash]`
+
+Global configuration for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--legacy_config"></a>`legacy_config`
+
+Data type: `Optional[Hash]`
+
+Legacy configuration for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--templates"></a>`templates`
+
+Data type: `Optional[Hash]`
+
+Configuration templates for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--actions"></a>`actions`
+
+Data type: `Optional[Hash]`
+
+Actions for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--inputs"></a>`inputs`
+
+Data type: `Optional[Hash]`
+
+Inputs for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--custom_config"></a>`custom_config`
+
+Data type: `Optional[Hash]`
+
+Custom configuration for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--main_queue_opts"></a>`main_queue_opts`
+
+Data type: `Optional[Hash]`
+
+Main queue options for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--modules"></a>`modules`
+
+Data type: `Optional[Hash]`
+
+Modules for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--lookup_tables"></a>`lookup_tables`
+
+Data type: `Optional[Hash]`
+
+Lookup tables for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--parsers"></a>`parsers`
+
+Data type: `Optional[Hash]`
+
+Parsers for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--rulesets"></a>`rulesets`
+
+Data type: `Optional[Hash]`
+
+Rulesets for Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--property_filters"></a>`property_filters`
+
+Data type: `Hash`
+
+Filters for properties in Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog--expression_filters"></a>`expression_filters`
+
+Data type: `Hash`
+
+Filters for expressions in Rsyslog. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--monitoring--rsyslog---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--monitoring--rsyslog--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
 
 ### <a name="role--ntpd"></a>`role::ntpd`
 
@@ -134,27 +3232,3856 @@ Default value: `undef`
 
 Class for managing package management
 
+### <a name="role--package_management--guix"></a>`role::package_management::guix`
+
+Class for managing the Guix package management role
+
+#### Parameters
+
+The following parameters are available in the `role::package_management::guix` class:
+
+* [`listen_interface`](#-role--package_management--guix--listen_interface)
+* [`clients`](#-role--package_management--guix--clients)
+
+##### <a name="-role--package_management--guix--listen_interface"></a>`listen_interface`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+The interface to listen on. Defaults to undef.
+
+##### <a name="-role--package_management--guix--clients"></a>`clients`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+The list of clients. Defaults to undef.
+
+### <a name="role--package_management--repo"></a>`role::package_management::repo`
+
+Class for managing the package management repo
+
+#### Parameters
+
+The following parameters are available in the `role::package_management::repo` class:
+
+* [`user`](#-role--package_management--repo--user)
+* [`basedir`](#-role--package_management--repo--basedir)
+* [`ssl`](#-role--package_management--repo--ssl)
+* [`ssl_cert`](#-role--package_management--repo--ssl_cert)
+* [`ssl_key`](#-role--package_management--repo--ssl_key)
+* [`registry_path`](#-role--package_management--repo--registry_path)
+* [`packagesign`](#-role--package_management--repo--packagesign)
+* [`volumes`](#-role--package_management--repo--volumes)
+* [`manage`](#-role--package_management--repo--manage)
+* [`locations`](#-role--package_management--repo--locations)
+* [`snapshot`](#-role--package_management--repo--snapshot)
+* [`signing_password`](#-role--package_management--repo--signing_password)
+* [`snapshot_tag`](#-role--package_management--repo--snapshot_tag)
+* [`nginx_path`](#-role--package_management--repo--nginx_path)
+* [`nginx_tag`](#-role--package_management--repo--nginx_tag)
+* [`script_tag`](#-role--package_management--repo--script_tag)
+* [`configurations`](#-role--package_management--repo--configurations)
+* [`weekday`](#-role--package_management--repo--weekday)
+* [`server_tag`](#-role--package_management--repo--server_tag)
+* [`gitserver_url`](#-role--package_management--repo--gitserver_url)
+* [`gitserver_token`](#-role--package_management--repo--gitserver_token)
+* [`provider`](#-role--package_management--repo--provider)
+* [`encrypt_params`](#-role--package_management--repo--encrypt_params)
+
+##### <a name="-role--package_management--repo--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+The user to run the operations as.
+
+##### <a name="-role--package_management--repo--basedir"></a>`basedir`
+
+Data type: `Stdlib::Unixpath`
+
+The base directory for the repository management.
+
+##### <a name="-role--package_management--repo--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to use SSL for connections. Defaults to false.
+
+##### <a name="-role--package_management--repo--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[String]`
+
+The SSL certificate to use, if SSL is enabled. Defaults to undef.
+
+##### <a name="-role--package_management--repo--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[String]`
+
+The SSL key to use, if SSL is enabled. Defaults to undef.
+
+##### <a name="-role--package_management--repo--registry_path"></a>`registry_path`
+
+Data type: `String`
+
+The path to the registry.
+
+##### <a name="-role--package_management--repo--packagesign"></a>`packagesign`
+
+Data type: `Boolean`
+
+Whether to enable package signing. Defaults to false.
+
+##### <a name="-role--package_management--repo--volumes"></a>`volumes`
+
+Data type: `Optional[Array]`
+
+The volumes to use. Defaults to undef.
+
+##### <a name="-role--package_management--repo--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the repository. Defaults to true.
+
+##### <a name="-role--package_management--repo--locations"></a>`locations`
+
+Data type: `Hash`
+
+A hash of locations for the repository.
+
+##### <a name="-role--package_management--repo--snapshot"></a>`snapshot`
+
+Data type: `Boolean`
+
+Whether to create a snapshot of the repository. Defaults to false.
+
+##### <a name="-role--package_management--repo--signing_password"></a>`signing_password`
+
+Data type: `Optional[String]`
+
+The password for signing, if package signing is enabled. Defaults to undef.
+
+##### <a name="-role--package_management--repo--snapshot_tag"></a>`snapshot_tag`
+
+Data type: `String`
+
+The tag to use for snapshotting.
+
+##### <a name="-role--package_management--repo--nginx_path"></a>`nginx_path`
+
+Data type: `String`
+
+The path for Nginx configurations.
+
+##### <a name="-role--package_management--repo--nginx_tag"></a>`nginx_tag`
+
+Data type: `String`
+
+The tag for Nginx configurations.
+
+##### <a name="-role--package_management--repo--script_tag"></a>`script_tag`
+
+Data type: `Optional[String]`
+
+The script tag for additional operations, if needed. Defaults to undef.
+
+##### <a name="-role--package_management--repo--configurations"></a>`configurations`
+
+Data type: `Repository::Mirrors::Configurations`
+
+The repository mirror configurations to use.
+
+##### <a name="-role--package_management--repo--weekday"></a>`weekday`
+
+Data type: `Eit_types::SystemdTimer::Weekday`
+
+The weekday for the systemd timer for the repository operations.
+
+##### <a name="-role--package_management--repo--server_tag"></a>`server_tag`
+
+Data type: `Optional[String]`
+
+An optional server tag for additional configurations. Defaults to undef.
+
+##### <a name="-role--package_management--repo--gitserver_url"></a>`gitserver_url`
+
+Data type: `Optional[Stdlib::HTTPSUrl]`
+
+The URL of the Git server, if used. Defaults to undef.
+
+##### <a name="-role--package_management--repo--gitserver_token"></a>`gitserver_token`
+
+Data type: `Optional[String]`
+
+The token for accessing the Git server, if used. Defaults to undef.
+
+##### <a name="-role--package_management--repo--provider"></a>`provider`
+
+Data type: `Optional[Enum['gitlab']]`
+
+The provider for the repository, defaults to undef.
+
+##### <a name="-role--package_management--repo--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'signing_password',
+    'gitserver_token',
+  ]
+```
+
 ### <a name="role--projectmanagement"></a>`role::projectmanagement`
 
 Class for managing the ProjectManagement role
+
+### <a name="role--projectmanagement--easyredmine"></a>`role::projectmanagement::easyredmine`
+
+The role::projectmanagement::easyredmine class.
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::easyredmine` class:
+
+* [`servername`](#-role--projectmanagement--easyredmine--servername)
+* [`location`](#-role--projectmanagement--easyredmine--location)
+* [`serveralias`](#-role--projectmanagement--easyredmine--serveralias)
+* [`database`](#-role--projectmanagement--easyredmine--database)
+* [`version`](#-role--projectmanagement--easyredmine--version)
+* [`plugins`](#-role--projectmanagement--easyredmine--plugins)
+* [`custom_fragment`](#-role--projectmanagement--easyredmine--custom_fragment)
+
+##### <a name="-role--projectmanagement--easyredmine--servername"></a>`servername`
+
+Data type: `Stdlib::Fqdn`
+
+The fully qualified domain name of the server.
+
+##### <a name="-role--projectmanagement--easyredmine--location"></a>`location`
+
+Data type: `Stdlib::Unixpath`
+
+NOTE: Local filesystem path where the easyredmine zip file has been placed manually, BEFORE running puppet. Necessary as one cannot just download easyredmine.
+
+##### <a name="-role--projectmanagement--easyredmine--serveralias"></a>`serveralias`
+
+Data type:
+
+```puppet
+Variant[
+    Array[Stdlib::Fqdn],
+    Stdlib::Fqdn
+  ]
+```
+
+The server alias to be used. Defaults to $servername.
+
+Default value: `$servername`
+
+##### <a name="-role--projectmanagement--easyredmine--database"></a>`database`
+
+Data type:
+
+```puppet
+Enum[
+    'role::db::mysql',
+    'role::db::pgsql'
+  ]
+```
+
+The database role to use. Defaults to 'role::db::pgsql'.
+
+Default value: `'role::db::pgsql'`
+
+##### <a name="-role--projectmanagement--easyredmine--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of easyredmine to install. Defaults to '3.3.0'.
+
+Default value: `'3.3.0'`
+
+##### <a name="-role--projectmanagement--easyredmine--plugins"></a>`plugins`
+
+Data type: `Optional[Hash]`
+
+A list of plugins to be installed. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--easyredmine--custom_fragment"></a>`custom_fragment`
+
+Data type: `Optional[String]`
+
+A custom fragment for configuration. Defaults to an empty string.
+
+Default value: `''`
+
+### <a name="role--projectmanagement--foswiki"></a>`role::projectmanagement::foswiki`
+
+Class for managing the Foswiki project management role
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::foswiki` class:
+
+* [`version`](#-role--projectmanagement--foswiki--version)
+* [`manage_haproxy`](#-role--projectmanagement--foswiki--manage_haproxy)
+
+##### <a name="-role--projectmanagement--foswiki--version"></a>`version`
+
+Data type: `Variant[Integer, String]`
+
+The version of Foswiki to manage. No default.
+
+##### <a name="-role--projectmanagement--foswiki--manage_haproxy"></a>`manage_haproxy`
+
+Data type: `Boolean`
+
+Whether to manage HAProxy for the service. Defaults to true.
+
+Default value: `true`
+
+### <a name="role--projectmanagement--gitlab"></a>`role::projectmanagement::gitlab`
+
+Class for managing the GitLab project management role
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::gitlab` class:
+
+* [`domain`](#-role--projectmanagement--gitlab--domain)
+* [`email_enabled`](#-role--projectmanagement--gitlab--email_enabled)
+* [`email_display_name`](#-role--projectmanagement--gitlab--email_display_name)
+* [`time_zone`](#-role--projectmanagement--gitlab--time_zone)
+* [`registry`](#-role--projectmanagement--gitlab--registry)
+* [`prometheus`](#-role--projectmanagement--gitlab--prometheus)
+* [`puma_bug`](#-role--projectmanagement--gitlab--puma_bug)
+* [`mattermost`](#-role--projectmanagement--gitlab--mattermost)
+* [`default_theme`](#-role--projectmanagement--gitlab--default_theme)
+* [`terminate_https`](#-role--projectmanagement--gitlab--terminate_https)
+* [`redirect_http_to_https`](#-role--projectmanagement--gitlab--redirect_http_to_https)
+* [`gitlab_rails`](#-role--projectmanagement--gitlab--gitlab_rails)
+* [`git_config`](#-role--projectmanagement--gitlab--git_config)
+* [`mattermost_config`](#-role--projectmanagement--gitlab--mattermost_config)
+* [`puma_worker_memory_mb`](#-role--projectmanagement--gitlab--puma_worker_memory_mb)
+* [`backup`](#-role--projectmanagement--gitlab--backup)
+* [`backup_cron_hour`](#-role--projectmanagement--gitlab--backup_cron_hour)
+* [`backup_path`](#-role--projectmanagement--gitlab--backup_path)
+* [`backup_keep_days`](#-role--projectmanagement--gitlab--backup_keep_days)
+* [`ssl_cert`](#-role--projectmanagement--gitlab--ssl_cert)
+* [`ssl_key`](#-role--projectmanagement--gitlab--ssl_key)
+* [`registry_ssl_cert`](#-role--projectmanagement--gitlab--registry_ssl_cert)
+* [`registry_ssl_key`](#-role--projectmanagement--gitlab--registry_ssl_key)
+* [`registry_domain`](#-role--projectmanagement--gitlab--registry_domain)
+* [`trusted_proxies`](#-role--projectmanagement--gitlab--trusted_proxies)
+* [`mattermost_ssl_cert`](#-role--projectmanagement--gitlab--mattermost_ssl_cert)
+* [`mattermost_ssl_key`](#-role--projectmanagement--gitlab--mattermost_ssl_key)
+* [`pages_ssl_cert`](#-role--projectmanagement--gitlab--pages_ssl_cert)
+* [`pages_ssl_key`](#-role--projectmanagement--gitlab--pages_ssl_key)
+* [`mattermost_domain`](#-role--projectmanagement--gitlab--mattermost_domain)
+* [`public_keys`](#-role--projectmanagement--gitlab--public_keys)
+* [`backupcron_user`](#-role--projectmanagement--gitlab--backupcron_user)
+* [`package_version`](#-role--projectmanagement--gitlab--package_version)
+* [`enable_pages`](#-role--projectmanagement--gitlab--enable_pages)
+* [`pages_domain`](#-role--projectmanagement--gitlab--pages_domain)
+* [`monitoring_whitelist`](#-role--projectmanagement--gitlab--monitoring_whitelist)
+* [`prometheus_exporters`](#-role--projectmanagement--gitlab--prometheus_exporters)
+* [`garbage_cleanup_job_hour`](#-role--projectmanagement--gitlab--garbage_cleanup_job_hour)
+* [`encrypt_params`](#-role--projectmanagement--gitlab--encrypt_params)
+
+##### <a name="-role--projectmanagement--gitlab--domain"></a>`domain`
+
+Data type: `Stdlib::Fqdn`
+
+The domain name for the GitLab instance.
+
+##### <a name="-role--projectmanagement--gitlab--email_enabled"></a>`email_enabled`
+
+Data type: `Boolean`
+
+Whether to enable email notifications.
+
+##### <a name="-role--projectmanagement--gitlab--email_display_name"></a>`email_display_name`
+
+Data type: `String`
+
+The display name for email notifications.
+
+##### <a name="-role--projectmanagement--gitlab--time_zone"></a>`time_zone`
+
+Data type: `Eit_types::Timezone`
+
+The timezone for the GitLab instance. Defaults to the system's timezone.
+
+Default value: `$common::system::time::timezone`
+
+##### <a name="-role--projectmanagement--gitlab--registry"></a>`registry`
+
+Data type: `Boolean`
+
+Whether to enable the container registry. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--gitlab--prometheus"></a>`prometheus`
+
+Data type: `Boolean`
+
+Whether to enable Prometheus integration. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--gitlab--puma_bug"></a>`puma_bug`
+
+Data type: `Boolean`
+
+Whether to apply the Puma bug workaround. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--gitlab--mattermost"></a>`mattermost`
+
+Data type: `Boolean`
+
+Whether to enable Mattermost integration. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--gitlab--default_theme"></a>`default_theme`
+
+Data type: `Eit_types::Gitlab::Theme`
+
+The default theme for GitLab. Defaults to 'black'.
+
+Default value: `'black'`
+
+##### <a name="-role--projectmanagement--gitlab--terminate_https"></a>`terminate_https`
+
+Data type: `Boolean`
+
+Whether to terminate HTTPS on the GitLab server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--gitlab--redirect_http_to_https"></a>`redirect_http_to_https`
+
+Data type: `Boolean`
+
+Whether to redirect HTTP traffic to HTTPS. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--gitlab--gitlab_rails"></a>`gitlab_rails`
+
+Data type: `Hash`
+
+Hash of additional GitLab Rails configuration options. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--gitlab--git_config"></a>`git_config`
+
+Data type: `Hash`
+
+Hash of Git configuration options. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--gitlab--mattermost_config"></a>`mattermost_config`
+
+Data type: `Hash`
+
+Hash of Mattermost configuration options. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--gitlab--puma_worker_memory_mb"></a>`puma_worker_memory_mb`
+
+Data type: `Eit_types::MegaBytes`
+
+Memory allocated for each Puma worker, in megabytes. Defaults to 1024.
+
+Default value: `1024`
+
+##### <a name="-role--projectmanagement--gitlab--backup"></a>`backup`
+
+Data type: `Boolean`
+
+Whether to enable backups. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--gitlab--backup_cron_hour"></a>`backup_cron_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day to run backups, in 24-hour format. Defaults to 2.
+
+Default value: `2`
+
+##### <a name="-role--projectmanagement--gitlab--backup_path"></a>`backup_path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Optional path to store backups. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--backup_keep_days"></a>`backup_keep_days`
+
+Data type: `Integer[1,default]`
+
+The number of days to keep backups. Defaults to 7.
+
+Default value: `7`
+
+##### <a name="-role--projectmanagement--gitlab--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[String]`
+
+Optional SSL certificate for the GitLab instance. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[String]`
+
+Optional SSL key for the GitLab instance. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--registry_ssl_cert"></a>`registry_ssl_cert`
+
+Data type: `Optional[String]`
+
+Optional SSL certificate for the container registry. Defaults to the value of ssl_cert.
+
+Default value: `$ssl_cert`
+
+##### <a name="-role--projectmanagement--gitlab--registry_ssl_key"></a>`registry_ssl_key`
+
+Data type: `Optional[String]`
+
+Optional SSL key for the container registry. Defaults to the value of ssl_key.
+
+Default value: `$ssl_key`
+
+##### <a name="-role--projectmanagement--gitlab--registry_domain"></a>`registry_domain`
+
+Data type: `Stdlib::Fqdn`
+
+The domain for the container registry.
+
+Default value: `$domain`
+
+##### <a name="-role--projectmanagement--gitlab--trusted_proxies"></a>`trusted_proxies`
+
+Data type: `Optional[Array[Stdlib::IP::Address]]`
+
+List of trusted proxies for the GitLab instance. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--projectmanagement--gitlab--mattermost_ssl_cert"></a>`mattermost_ssl_cert`
+
+Data type: `Optional[String]`
+
+Optional SSL certificate for Mattermost. Defaults to the value of ssl_cert.
+
+Default value: `$ssl_cert`
+
+##### <a name="-role--projectmanagement--gitlab--mattermost_ssl_key"></a>`mattermost_ssl_key`
+
+Data type: `Optional[String]`
+
+Optional SSL key for Mattermost. Defaults to the value of ssl_key.
+
+Default value: `$ssl_key`
+
+##### <a name="-role--projectmanagement--gitlab--pages_ssl_cert"></a>`pages_ssl_cert`
+
+Data type: `Optional[String]`
+
+Optional SSL certificate for GitLab Pages. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--pages_ssl_key"></a>`pages_ssl_key`
+
+Data type: `Optional[String]`
+
+Optional SSL key for GitLab Pages. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--mattermost_domain"></a>`mattermost_domain`
+
+Data type: `Stdlib::Fqdn`
+
+The domain for the Mattermost instance.
+
+Default value: `$domain`
+
+##### <a name="-role--projectmanagement--gitlab--public_keys"></a>`public_keys`
+
+Data type: `Array[String]`
+
+List of public keys for backup purposes. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--projectmanagement--gitlab--backupcron_user"></a>`backupcron_user`
+
+Data type: `Eit_types::User`
+
+The user account to run the backup cron job. Defaults to 'root'.
+
+Default value: `'root'`
+
+##### <a name="-role--projectmanagement--gitlab--package_version"></a>`package_version`
+
+Data type: `Optional[Eit_types::Package_version]`
+
+Optional package version for managing upgrades or migrations. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--enable_pages"></a>`enable_pages`
+
+Data type: `Boolean`
+
+Whether to enable GitLab Pages. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--gitlab--pages_domain"></a>`pages_domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+Optional domain for GitLab Pages. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--monitoring_whitelist"></a>`monitoring_whitelist`
+
+Data type: `Optional[Array[Eit_types::IPCIDR]]`
+
+Optional list of allowed IP CIDRs for monitoring. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--prometheus_exporters"></a>`prometheus_exporters`
+
+Data type: `Optional[Eit_types::Gitlab::Prometheus_exporters]`
+
+Optional custom Prometheus exporters. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--gitlab--garbage_cleanup_job_hour"></a>`garbage_cleanup_job_hour`
+
+Data type: `Optional[Cron::Hour]`
+
+The hour of the day to run garbage cleanup jobs. Defaults to 4.
+
+Default value: `4`
+
+##### <a name="-role--projectmanagement--gitlab--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'ssl_cert',
+    'ssl_key',
+    'registry_ssl_cert',
+    'registry_ssl_key',
+    'mattermost_ssl_cert',
+    'mattermost_ssl_key',
+  ]
+```
+
+### <a name="role--projectmanagement--gitlab_ci_runner"></a>`role::projectmanagement::gitlab_ci_runner`
+
+An internal parameter.
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::gitlab_ci_runner` class:
+
+* [`concurrency`](#-role--projectmanagement--gitlab_ci_runner--concurrency)
+* [`runners`](#-role--projectmanagement--gitlab_ci_runner--runners)
+* [`runner_defaults`](#-role--projectmanagement--gitlab_ci_runner--runner_defaults)
+* [`$__blendable`](#-role--projectmanagement--gitlab_ci_runner---__blendable)
+* [`__blendable`](#-role--projectmanagement--gitlab_ci_runner--__blendable)
+
+##### <a name="-role--projectmanagement--gitlab_ci_runner--concurrency"></a>`concurrency`
+
+Data type: `Integer[1,10]`
+
+The number of concurrent jobs to run. Defaults to 2.
+
+Default value: `2`
+
+##### <a name="-role--projectmanagement--gitlab_ci_runner--runners"></a>`runners`
+
+Data type: `Eit_types::Gitlab::Runner`
+
+A hash of runner-specific configurations.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--gitlab_ci_runner--runner_defaults"></a>`runner_defaults`
+
+Data type: `Eit_types::Gitlab::Runner::Config`
+
+A hash of default configurations for the runners.
+
+Default value: `{}`
+
+##### <a name="-role--projectmanagement--gitlab_ci_runner---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--projectmanagement--gitlab_ci_runner--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="role--projectmanagement--perforce"></a>`role::projectmanagement::perforce`
+
+Class for managing the Perforce version control system
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::perforce` class:
+
+* [`user`](#-role--projectmanagement--perforce--user)
+* [`service_root`](#-role--projectmanagement--perforce--service_root)
+* [`service_name`](#-role--projectmanagement--perforce--service_name)
+* [`ssl`](#-role--projectmanagement--perforce--ssl)
+* [`service_ssldir`](#-role--projectmanagement--perforce--service_ssldir)
+* [`service_port`](#-role--projectmanagement--perforce--service_port)
+* [`service_password`](#-role--projectmanagement--perforce--service_password)
+* [`license_content`](#-role--projectmanagement--perforce--license_content)
+* [`hostname`](#-role--projectmanagement--perforce--hostname)
+* [`version`](#-role--projectmanagement--perforce--version)
+* [`log_dir`](#-role--projectmanagement--perforce--log_dir)
+* [`log_level`](#-role--projectmanagement--perforce--log_level)
+* [`icmanage`](#-role--projectmanagement--perforce--icmanage)
+* [`git_connector`](#-role--projectmanagement--perforce--git_connector)
+* [`admin_user`](#-role--projectmanagement--perforce--admin_user)
+* [`admin_password`](#-role--projectmanagement--perforce--admin_password)
+* [`operator_user`](#-role--projectmanagement--perforce--operator_user)
+* [`operator_password`](#-role--projectmanagement--perforce--operator_password)
+* [`backup_dir`](#-role--projectmanagement--perforce--backup_dir)
+* [`backup_retention`](#-role--projectmanagement--perforce--backup_retention)
+* [`encrypt_params`](#-role--projectmanagement--perforce--encrypt_params)
+
+##### <a name="-role--projectmanagement--perforce--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+The user for the Perforce service. Defaults to 'perforce'.
+
+Default value: `'perforce'`
+
+##### <a name="-role--projectmanagement--perforce--service_root"></a>`service_root`
+
+Data type: `Stdlib::Absolutepath`
+
+The root directory for the Perforce service. Defaults to '/opt/perforce/p4root'.
+
+Default value: `'/opt/perforce/p4root'`
+
+##### <a name="-role--projectmanagement--perforce--service_name"></a>`service_name`
+
+Data type: `Eit_types::SimpleString`
+
+The name of the Perforce service. Defaults to 'perforce'.
+
+Default value: `'perforce'`
+
+##### <a name="-role--projectmanagement--perforce--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to use SSL for the Perforce service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--perforce--service_ssldir"></a>`service_ssldir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for the SSL certificates. Defaults to '/etc/perforce/ssl'.
+
+Default value: `'/etc/perforce/ssl'`
+
+##### <a name="-role--projectmanagement--perforce--service_port"></a>`service_port`
+
+Data type: `Stdlib::Port`
+
+The port for the Perforce service. Defaults to 1666.
+
+Default value: `1666`
+
+##### <a name="-role--projectmanagement--perforce--service_password"></a>`service_password`
+
+Data type: `Eit_types::Password`
+
+The password for the Perforce service.
+
+##### <a name="-role--projectmanagement--perforce--license_content"></a>`license_content`
+
+Data type: `Optional[String]`
+
+The content of the Perforce license. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--perforce--hostname"></a>`hostname`
+
+Data type: `Stdlib::Host`
+
+The hostname for the Perforce service. Defaults to the system's hostname.
+
+Default value: `$facts['networking']['hostname']`
+
+##### <a name="-role--projectmanagement--perforce--version"></a>`version`
+
+Data type: `Perforce::Version`
+
+The version of the Perforce service.
+
+##### <a name="-role--projectmanagement--perforce--log_dir"></a>`log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for Perforce logs. Defaults to '/var/log/perforce'.
+
+Default value: `'/var/log/perforce'`
+
+##### <a name="-role--projectmanagement--perforce--log_level"></a>`log_level`
+
+Data type: `Perforce::LogLevel`
+
+The logging level for the Perforce service. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--projectmanagement--perforce--icmanage"></a>`icmanage`
+
+Data type: `Boolean`
+
+Whether to manage IC. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--perforce--git_connector"></a>`git_connector`
+
+Data type: `Boolean`
+
+Whether to enable Git connector. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--perforce--admin_user"></a>`admin_user`
+
+Data type: `Eit_types::User`
+
+The admin user for the Perforce service. Defaults to 'p4admin'.
+
+Default value: `'p4admin'`
+
+##### <a name="-role--projectmanagement--perforce--admin_password"></a>`admin_password`
+
+Data type: `Eit_types::Password`
+
+The password for the admin user.
+
+##### <a name="-role--projectmanagement--perforce--operator_user"></a>`operator_user`
+
+Data type: `Eit_types::User`
+
+The operator user for the Perforce service. Defaults to 'p4operator'.
+
+Default value: `'p4operator'`
+
+##### <a name="-role--projectmanagement--perforce--operator_password"></a>`operator_password`
+
+Data type: `Eit_types::Password`
+
+The password for the operator user.
+
+##### <a name="-role--projectmanagement--perforce--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for backups. Defaults to the common backup directory.
+
+Default value: `$::common::backup::dump_dir`
+
+##### <a name="-role--projectmanagement--perforce--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+The number of days to retain backups. Defaults to 7.
+
+Default value: `7`
+
+##### <a name="-role--projectmanagement--perforce--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'service_password',
+    'admin_password',
+    'operator_password',
+  ]
+```
+
+### <a name="role--projectmanagement--perforce--git_connector"></a>`role::projectmanagement::perforce::git_connector`
+
+Whether the configuration is blendable. No default value.
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::perforce::git_connector` class:
+
+* [`version`](#-role--projectmanagement--perforce--git_connector--version)
+* [`service_port`](#-role--projectmanagement--perforce--git_connector--service_port)
+* [`p4_gconn_user`](#-role--projectmanagement--perforce--git_connector--p4_gconn_user)
+* [`git_user_home`](#-role--projectmanagement--perforce--git_connector--git_user_home)
+* [`gconn_dir`](#-role--projectmanagement--perforce--git_connector--gconn_dir)
+* [`repos_dir`](#-role--projectmanagement--perforce--git_connector--repos_dir)
+* [`log_dir`](#-role--projectmanagement--perforce--git_connector--log_dir)
+* [`gconn_log_file`](#-role--projectmanagement--perforce--git_connector--gconn_log_file)
+* [`gconn_log_level`](#-role--projectmanagement--perforce--git_connector--gconn_log_level)
+* [`p4gc_log_file`](#-role--projectmanagement--perforce--git_connector--p4gc_log_file)
+* [`p4gc_log_level`](#-role--projectmanagement--perforce--git_connector--p4gc_log_level)
+* [`$__blendable`](#-role--projectmanagement--perforce--git_connector---__blendable)
+* [`__blendable`](#-role--projectmanagement--perforce--git_connector--__blendable)
+
+##### <a name="-role--projectmanagement--perforce--git_connector--version"></a>`version`
+
+Data type: `Perforce::Version`
+
+The version of the Perforce installation. Defaults to $::role::projectmanagement::perforce::version.
+
+Default value: `$::role::projectmanagement::perforce::version`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--service_port"></a>`service_port`
+
+Data type: `Stdlib::Port`
+
+The port on which the Perforce service is running. Defaults to $::role::projectmanagement::perforce::service_port.
+
+Default value: `$::role::projectmanagement::perforce::service_port`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--p4_gconn_user"></a>`p4_gconn_user`
+
+Data type: `Eit_types::User`
+
+The user for the Perforce git connector. Defaults to 'gconn-user'.
+
+Default value: `'gconn-user'`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--git_user_home"></a>`git_user_home`
+
+Data type: `Stdlib::Absolutepath`
+
+The home directory for the git user. Defaults to '/var/lib/git'.
+
+Default value: `'/var/lib/git'`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--gconn_dir"></a>`gconn_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for the git connector. Defaults to '/opt/perforce/git-connector'.
+
+Default value: `'/opt/perforce/git-connector'`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--repos_dir"></a>`repos_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for repositories. Defaults to "${gconn_dir}/repos".
+
+Default value: `"${gconn_dir}/repos"`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--log_dir"></a>`log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for logs. Defaults to $::role::projectmanagement::perforce::log_dir.
+
+Default value: `$::role::projectmanagement::perforce::log_dir`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--gconn_log_file"></a>`gconn_log_file`
+
+Data type: `Perforce::LogFile`
+
+The log file for the git connector. Defaults to "${log_dir}/gconn.log".
+
+Default value: `"${log_dir}/gconn.log"`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--gconn_log_level"></a>`gconn_log_level`
+
+Data type: `Perforce::LogLevel`
+
+The log level for the git connector. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--p4gc_log_file"></a>`p4gc_log_file`
+
+Data type: `Perforce::LogFile`
+
+The log file for the p4gc. Defaults to "${log_dir}/p4gc.log".
+
+Default value: `"${log_dir}/p4gc.log"`
+
+##### <a name="-role--projectmanagement--perforce--git_connector--p4gc_log_level"></a>`p4gc_log_level`
+
+Data type: `Perforce::LogLevel`
+
+The log level for the p4gc. Defaults to 1.
+
+Default value: `1`
+
+##### <a name="-role--projectmanagement--perforce--git_connector---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--projectmanagement--perforce--git_connector--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="role--projectmanagement--perforce--icmanage"></a>`role::projectmanagement::perforce::icmanage`
+
+Class for managing ICManage on top of Perforce
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::perforce::icmanage` class:
+
+* [`version`](#-role--projectmanagement--perforce--icmanage--version)
+* [`install_path`](#-role--projectmanagement--perforce--icmanage--install_path)
+* [`hostname`](#-role--projectmanagement--perforce--icmanage--hostname)
+* [`manage_db`](#-role--projectmanagement--perforce--icmanage--manage_db)
+* [`db_user`](#-role--projectmanagement--perforce--icmanage--db_user)
+* [`db_password`](#-role--projectmanagement--perforce--icmanage--db_password)
+* [`root_password`](#-role--projectmanagement--perforce--icmanage--root_password)
+* [`db_backup`](#-role--projectmanagement--perforce--icmanage--db_backup)
+* [`db_admin_user`](#-role--projectmanagement--perforce--icmanage--db_admin_user)
+* [`db_admin_password`](#-role--projectmanagement--perforce--icmanage--db_admin_password)
+* [`db_charset`](#-role--projectmanagement--perforce--icmanage--db_charset)
+* [`db_collate`](#-role--projectmanagement--perforce--icmanage--db_collate)
+* [`config_file`](#-role--projectmanagement--perforce--icmanage--config_file)
+* [`access_mysql_from`](#-role--projectmanagement--perforce--icmanage--access_mysql_from)
+* [`mysql_version`](#-role--projectmanagement--perforce--icmanage--mysql_version)
+* [`backup_dir`](#-role--projectmanagement--perforce--icmanage--backup_dir)
+* [`__blendable`](#-role--projectmanagement--perforce--icmanage--__blendable)
+* [`encrypt_params`](#-role--projectmanagement--perforce--icmanage--encrypt_params)
+
+##### <a name="-role--projectmanagement--perforce--icmanage--version"></a>`version`
+
+Data type: `Integer[0,default]`
+
+The version of ICManage. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--install_path"></a>`install_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The installation path. Defaults to '/opt/icmanage'.
+
+Default value: `'/opt/icmanage'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--hostname"></a>`hostname`
+
+Data type: `Stdlib::Host`
+
+The hostname. Defaults to the value of $facts['networking']['hostname'].
+
+Default value: `$facts['networking']['hostname']`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--manage_db"></a>`manage_db`
+
+Data type: `Boolean`
+
+Whether to manage the database. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_user"></a>`db_user`
+
+Data type: `Eit_types::SimpleString`
+
+The database username. Defaults to 'icm'.
+
+Default value: `'icm'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_password"></a>`db_password`
+
+Data type: `Eit_types::Password`
+
+The database password. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--root_password"></a>`root_password`
+
+Data type: `Eit_types::Password`
+
+The root password. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_backup"></a>`db_backup`
+
+Data type: `Boolean`
+
+Whether to backup the database. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_admin_user"></a>`db_admin_user`
+
+Data type: `Eit_types::SimpleString`
+
+The database admin username. Defaults to 'icmadmin'.
+
+Default value: `'icmadmin'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_admin_password"></a>`db_admin_password`
+
+Data type: `Eit_types::Password`
+
+The database admin password. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_charset"></a>`db_charset`
+
+Data type: `Eit_types::SimpleString`
+
+The database charset. Defaults to 'utf8'.
+
+Default value: `'utf8'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--db_collate"></a>`db_collate`
+
+Data type: `Eit_types::SimpleString`
+
+The database collate. Defaults to 'utf8_general_ci'.
+
+Default value: `'utf8_general_ci'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the configuration file. Defaults to '/etc/icmanage/icmPm.cfg'.
+
+Default value: `'/etc/icmanage/icmPm.cfg'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--access_mysql_from"></a>`access_mysql_from`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+The IP CIDR allowed to access MySQL. Defaults to ['0.0.0.0/0'].
+
+Default value: `['0.0.0.0/0']`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--mysql_version"></a>`mysql_version`
+
+Data type: `String`
+
+The MySQL version. Defaults to '5.5'.
+
+Default value: `'5.5'`
+
+##### <a name="-role--projectmanagement--perforce--icmanage--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The backup directory. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+This parameter allows blending. No default.
+
+##### <a name="-role--projectmanagement--perforce--icmanage--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'db_password',
+    'root_password',
+    'db_admin_password',
+  ]
+```
+
+### <a name="role--projectmanagement--readthedocs"></a>`role::projectmanagement::readthedocs`
+
+Class for managing the Read The Docs project
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::readthedocs` class:
+
+* [`ssl_combined_pem`](#-role--projectmanagement--readthedocs--ssl_combined_pem)
+* [`upstream_git_repo`](#-role--projectmanagement--readthedocs--upstream_git_repo)
+* [`revision`](#-role--projectmanagement--readthedocs--revision)
+* [`bind`](#-role--projectmanagement--readthedocs--bind)
+* [`port`](#-role--projectmanagement--readthedocs--port)
+* [`manage_haproxy`](#-role--projectmanagement--readthedocs--manage_haproxy)
+* [`public_domainname`](#-role--projectmanagement--readthedocs--public_domainname)
+
+##### <a name="-role--projectmanagement--readthedocs--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `String`
+
+The path to the SSL combined PEM file.
+
+##### <a name="-role--projectmanagement--readthedocs--upstream_git_repo"></a>`upstream_git_repo`
+
+Data type: `Eit_types::URL`
+
+The upstream git repository. Defaults to 'https://github.com/rtfd/readthedocs.org.git'.
+
+Default value: `'https://github.com/rtfd/readthedocs.org.git'`
+
+##### <a name="-role--projectmanagement--readthedocs--revision"></a>`revision`
+
+Data type: `Eit_types::SimpleString`
+
+The version revision to use. Defaults to '2.7.0'.
+
+Default value: `'2.7.0'`
+
+##### <a name="-role--projectmanagement--readthedocs--bind"></a>`bind`
+
+Data type: `Eit_types::Host`
+
+The IP address to bind to. Defaults to '0.0.0.0'.
+
+Default value: `'0.0.0.0'`
+
+##### <a name="-role--projectmanagement--readthedocs--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+The port to use. Defaults to 8000.
+
+Default value: `8000`
+
+##### <a name="-role--projectmanagement--readthedocs--manage_haproxy"></a>`manage_haproxy`
+
+Data type: `Boolean`
+
+Whether to manage the HAProxy configuration. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--readthedocs--public_domainname"></a>`public_domainname`
+
+Data type: `Stdlib::Fqdn`
+
+The public domain name.
+
+### <a name="role--projectmanagement--subversion"></a>`role::projectmanagement::subversion`
+
+Class for managing the Subversion project management role
+
+#### Parameters
+
+The following parameters are available in the `role::projectmanagement::subversion` class:
+
+* [`enable`](#-role--projectmanagement--subversion--enable)
+* [`domain`](#-role--projectmanagement--subversion--domain)
+* [`path`](#-role--projectmanagement--subversion--path)
+* [`dir`](#-role--projectmanagement--subversion--dir)
+* [`backup_dir`](#-role--projectmanagement--subversion--backup_dir)
+* [`user`](#-role--projectmanagement--subversion--user)
+* [`password`](#-role--projectmanagement--subversion--password)
+* [`noop_value`](#-role--projectmanagement--subversion--noop_value)
+
+##### <a name="-role--projectmanagement--subversion--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the Subversion service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--projectmanagement--subversion--domain"></a>`domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+The domain for the Subversion server. Defaults to 'svn.hbkworkd.com'.
+
+Default value: `'svn.hbkworkd.com'`
+
+##### <a name="-role--projectmanagement--subversion--path"></a>`path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The absolute path to the Subversion installation. Defaults to '/var/www/svn'.
+
+Default value: `'/var/www/svn'`
+
+##### <a name="-role--projectmanagement--subversion--dir"></a>`dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The absolute path to the repositories directory. Defaults to '/repos'.
+
+Default value: `'/repos'`
+
+##### <a name="-role--projectmanagement--subversion--backup_dir"></a>`backup_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The absolute path to the backup directory. Defaults to '/var/www/svn/backup'.
+
+Default value: `'/var/www/svn/backup'`
+
+##### <a name="-role--projectmanagement--subversion--user"></a>`user`
+
+Data type: `Optional[String]`
+
+The username for Subversion authentication. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--subversion--password"></a>`password`
+
+Data type: `Optional[String]`
+
+The password for Subversion authentication. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--projectmanagement--subversion--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Whether to enable noop mode. Defaults to false.
+
+Default value: `false`
+
+### <a name="role--provisioning--razor"></a>`role::provisioning::razor`
+
+Class for managing the Razor provisioning role
+
+#### Parameters
+
+The following parameters are available in the `role::provisioning::razor` class:
+
+* [`manage_postgres`](#-role--provisioning--razor--manage_postgres)
+* [`db_server`](#-role--provisioning--razor--db_server)
+* [`db_name`](#-role--provisioning--razor--db_name)
+* [`db_user`](#-role--provisioning--razor--db_user)
+* [`db_password`](#-role--provisioning--razor--db_password)
+* [`dhcp_domain`](#-role--provisioning--razor--dhcp_domain)
+* [`dhcp_start`](#-role--provisioning--razor--dhcp_start)
+* [`dhcp_end`](#-role--provisioning--razor--dhcp_end)
+* [`dhcp_route`](#-role--provisioning--razor--dhcp_route)
+* [`dhcp_dns`](#-role--provisioning--razor--dhcp_dns)
+* [`manage_tftpd`](#-role--provisioning--razor--manage_tftpd)
+* [`encrypt_params`](#-role--provisioning--razor--encrypt_params)
+
+##### <a name="-role--provisioning--razor--manage_postgres"></a>`manage_postgres`
+
+Data type: `Boolean`
+
+Whether to manage PostgreSQL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--provisioning--razor--db_server"></a>`db_server`
+
+Data type: `Eit_types::Host`
+
+The database server. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+##### <a name="-role--provisioning--razor--db_name"></a>`db_name`
+
+Data type: `Eit_types::SimpleString`
+
+The name of the database. Defaults to 'razor_prd'.
+
+Default value: `'razor_prd'`
+
+##### <a name="-role--provisioning--razor--db_user"></a>`db_user`
+
+Data type: `Eit_types::SimpleString`
+
+The database user.
+
+Default value: `'razor'`
+
+##### <a name="-role--provisioning--razor--db_password"></a>`db_password`
+
+Data type: `Eit_types::Password`
+
+The password for the database user.
+
+##### <a name="-role--provisioning--razor--dhcp_domain"></a>`dhcp_domain`
+
+Data type: `Eit_types::Domain`
+
+The DHCP domain.
+
+##### <a name="-role--provisioning--razor--dhcp_start"></a>`dhcp_start`
+
+Data type: `Eit_types::IP`
+
+The starting IP address for DHCP.
+
+##### <a name="-role--provisioning--razor--dhcp_end"></a>`dhcp_end`
+
+Data type: `Eit_types::IP`
+
+The ending IP address for DHCP.
+
+##### <a name="-role--provisioning--razor--dhcp_route"></a>`dhcp_route`
+
+Data type: `Eit_types::IP`
+
+The DHCP route IP address.
+
+##### <a name="-role--provisioning--razor--dhcp_dns"></a>`dhcp_dns`
+
+Data type: `Array[Eit_types::IP, 1]`
+
+The DNS server IP addresses. Defaults to $common::system::dns::nameservers.
+
+Default value: `$common::system::dns::nameservers`
+
+##### <a name="-role--provisioning--razor--manage_tftpd"></a>`manage_tftpd`
+
+Data type: `Boolean`
+
+Whether to manage TFTP daemon. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--provisioning--razor--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'db_password',
+  ]
+```
+
+### <a name="role--scanner--openvas"></a>`role::scanner::openvas`
+
+Class for managing the OpenVAS scanner
+
+#### Parameters
+
+The following parameters are available in the `role::scanner::openvas` class:
+
+* [`install_dir`](#-role--scanner--openvas--install_dir)
+* [`install`](#-role--scanner--openvas--install)
+* [`web_bind_address`](#-role--scanner--openvas--web_bind_address)
+* [`web_port`](#-role--scanner--openvas--web_port)
+* [`openvasd_mode`](#-role--scanner--openvas--openvasd_mode)
+* [`openvasd_addressport`](#-role--scanner--openvas--openvasd_addressport)
+* [`storage_path`](#-role--scanner--openvas--storage_path)
+* [`registry`](#-role--scanner--openvas--registry)
+* [`vulnerability_tests_version`](#-role--scanner--openvas--vulnerability_tests_version)
+* [`notus_data_version`](#-role--scanner--openvas--notus_data_version)
+* [`scap_data_version`](#-role--scanner--openvas--scap_data_version)
+* [`cert_bund_data_version`](#-role--scanner--openvas--cert_bund_data_version)
+* [`dfn_cert_data_version`](#-role--scanner--openvas--dfn_cert_data_version)
+* [`data_objects_version`](#-role--scanner--openvas--data_objects_version)
+* [`report_formats_version`](#-role--scanner--openvas--report_formats_version)
+* [`gpg_data_version`](#-role--scanner--openvas--gpg_data_version)
+* [`redis_server_version`](#-role--scanner--openvas--redis_server_version)
+* [`pg_gvm_version`](#-role--scanner--openvas--pg_gvm_version)
+* [`gsa_version`](#-role--scanner--openvas--gsa_version)
+* [`gvmd_version`](#-role--scanner--openvas--gvmd_version)
+* [`openvas_scanner_version`](#-role--scanner--openvas--openvas_scanner_version)
+* [`ospd_openvas_version`](#-role--scanner--openvas--ospd_openvas_version)
+* [`gvm_tools_version`](#-role--scanner--openvas--gvm_tools_version)
+* [`feed_release_version`](#-role--scanner--openvas--feed_release_version)
+* [`data_mount_path`](#-role--scanner--openvas--data_mount_path)
+* [`gvm_data_path`](#-role--scanner--openvas--gvm_data_path)
+* [`openvas_plugins_path`](#-role--scanner--openvas--openvas_plugins_path)
+* [`redis_socket_path`](#-role--scanner--openvas--redis_socket_path)
+* [`gvmd_socket_path`](#-role--scanner--openvas--gvmd_socket_path)
+* [`ospd_socket_path`](#-role--scanner--openvas--ospd_socket_path)
+* [`psql_data_path`](#-role--scanner--openvas--psql_data_path)
+* [`psql_socket_path`](#-role--scanner--openvas--psql_socket_path)
+* [`openvas_config_path`](#-role--scanner--openvas--openvas_config_path)
+* [`openvas_log_path`](#-role--scanner--openvas--openvas_log_path)
+* [`notus_path`](#-role--scanner--openvas--notus_path)
+
+##### <a name="-role--scanner--openvas--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for installation. Defaults to '/opt/obmondo/docker-compose/openvas'.
+
+Default value: `'/opt/obmondo/docker-compose/openvas'`
+
+##### <a name="-role--scanner--openvas--install"></a>`install`
+
+Data type: `Boolean`
+
+Whether to install the scanner. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--scanner--openvas--web_bind_address"></a>`web_bind_address`
+
+Data type: `Stdlib::Host`
+
+The web bind address. Defaults to '127.0.0.1'.
+
+Default value: `'127.0.0.1'`
+
+##### <a name="-role--scanner--openvas--web_port"></a>`web_port`
+
+Data type: `Stdlib::Port`
+
+The port for the web interface. Defaults to 9392.
+
+Default value: `9392`
+
+##### <a name="-role--scanner--openvas--openvasd_mode"></a>`openvasd_mode`
+
+Data type: `Enum['service_notus']`
+
+The mode for openvasd. Defaults to 'service_notus'.
+
+Default value: `'service_notus'`
+
+##### <a name="-role--scanner--openvas--openvasd_addressport"></a>`openvasd_addressport`
+
+Data type: `Eit_types::AddressPort`
+
+The address and port for openvasd. Defaults to '0.0.0.0:80'.
+
+Default value: `'0.0.0.0:80'`
+
+##### <a name="-role--scanner--openvas--storage_path"></a>`storage_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for storage. Defaults to '/var/lib/openvas/22.04/vt-data/nasl'.
+
+Default value: `'/var/lib/openvas/22.04/vt-data/nasl'`
+
+##### <a name="-role--scanner--openvas--registry"></a>`registry`
+
+Data type: `String`
+
+The registry for openvas. Defaults to 'registry.community.greenbone.net/community'.
+
+Default value: `'registry.community.greenbone.net/community'`
+
+##### <a name="-role--scanner--openvas--vulnerability_tests_version"></a>`vulnerability_tests_version`
+
+Data type: `Eit_types::Version`
+
+The version for vulnerability tests. Defaults to '202502250742'.
+
+Default value: `'202502250742'`
+
+##### <a name="-role--scanner--openvas--notus_data_version"></a>`notus_data_version`
+
+Data type: `Eit_types::Version`
+
+The version for notus data. Defaults to '202502250410'.
+
+Default value: `'202502250410'`
+
+##### <a name="-role--scanner--openvas--scap_data_version"></a>`scap_data_version`
+
+Data type: `Eit_types::Version`
+
+The version for SCAP data. Defaults to '202502240506'.
+
+Default value: `'202502240506'`
+
+##### <a name="-role--scanner--openvas--cert_bund_data_version"></a>`cert_bund_data_version`
+
+Data type: `Eit_types::Version`
+
+The version for cert bundle data. Defaults to '202502250409'.
+
+Default value: `'202502250409'`
+
+##### <a name="-role--scanner--openvas--dfn_cert_data_version"></a>`dfn_cert_data_version`
+
+Data type: `Eit_types::Version`
+
+The version for DFN cert data. Defaults to '202502250401'.
+
+Default value: `'202502250401'`
+
+##### <a name="-role--scanner--openvas--data_objects_version"></a>`data_objects_version`
+
+Data type: `Eit_types::Version`
+
+The version for data objects. Defaults to '202502250505'.
+
+Default value: `'202502250505'`
+
+##### <a name="-role--scanner--openvas--report_formats_version"></a>`report_formats_version`
+
+Data type: `Eit_types::Version`
+
+The version for report formats. Defaults to '202502250500'.
+
+Default value: `'202502250500'`
+
+##### <a name="-role--scanner--openvas--gpg_data_version"></a>`gpg_data_version`
+
+Data type: `Eit_types::Version`
+
+The version for GPG data. Defaults to '1.1.0'.
+
+Default value: `'1.1.0'`
+
+##### <a name="-role--scanner--openvas--redis_server_version"></a>`redis_server_version`
+
+Data type: `Eit_types::Version`
+
+The version for Redis server. Defaults to '1.1.0'.
+
+Default value: `'1.1.0'`
+
+##### <a name="-role--scanner--openvas--pg_gvm_version"></a>`pg_gvm_version`
+
+Data type: `Eit_types::Version`
+
+The version for PostgreSQL GVM. Defaults to '22.6.7'.
+
+Default value: `'22.6.7'`
+
+##### <a name="-role--scanner--openvas--gsa_version"></a>`gsa_version`
+
+Data type: `Eit_types::Version`
+
+The version for GSA. Defaults to '24.3.0'.
+
+Default value: `'24.3.0'`
+
+##### <a name="-role--scanner--openvas--gvmd_version"></a>`gvmd_version`
+
+Data type: `Eit_types::Version`
+
+The version for GVMD. Defaults to '25'.
+
+Default value: `'25'`
+
+##### <a name="-role--scanner--openvas--openvas_scanner_version"></a>`openvas_scanner_version`
+
+Data type: `Eit_types::Version`
+
+The version for OpenVAS scanner. Defaults to '23.15.4'.
+
+Default value: `'23.15.4'`
+
+##### <a name="-role--scanner--openvas--ospd_openvas_version"></a>`ospd_openvas_version`
+
+Data type: `Eit_types::Version`
+
+The version for OSP-OpenVAS. Defaults to '22.8.0'.
+
+Default value: `'22.8.0'`
+
+##### <a name="-role--scanner--openvas--gvm_tools_version"></a>`gvm_tools_version`
+
+Data type: `Eit_types::Version`
+
+The version for GVM tools. Defaults to '25'.
+
+Default value: `'25'`
+
+##### <a name="-role--scanner--openvas--feed_release_version"></a>`feed_release_version`
+
+Data type: `Eit_types::Version`
+
+The version for feed release. Defaults to '24.10'.
+
+Default value: `'24.10'`
+
+##### <a name="-role--scanner--openvas--data_mount_path"></a>`data_mount_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for data mount. Defaults to '/mnt'.
+
+Default value: `'/mnt'`
+
+##### <a name="-role--scanner--openvas--gvm_data_path"></a>`gvm_data_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for GVM data. Defaults to '/var/lib/gvm'.
+
+Default value: `'/var/lib/gvm'`
+
+##### <a name="-role--scanner--openvas--openvas_plugins_path"></a>`openvas_plugins_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for OpenVAS plugins. Defaults to '/var/lib/openvas/plugins'.
+
+Default value: `'/var/lib/openvas/plugins'`
+
+##### <a name="-role--scanner--openvas--redis_socket_path"></a>`redis_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for Redis socket. Defaults to '/run/redis'.
+
+Default value: `'/run/redis'`
+
+##### <a name="-role--scanner--openvas--gvmd_socket_path"></a>`gvmd_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for GVMD socket. Defaults to '/run/gvmd'.
+
+Default value: `'/run/gvmd'`
+
+##### <a name="-role--scanner--openvas--ospd_socket_path"></a>`ospd_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for OSPD socket. Defaults to '/run/ospd'.
+
+Default value: `'/run/ospd'`
+
+##### <a name="-role--scanner--openvas--psql_data_path"></a>`psql_data_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for PostgreSQL data. Defaults to '/var/lib/postgresql'.
+
+Default value: `'/var/lib/postgresql'`
+
+##### <a name="-role--scanner--openvas--psql_socket_path"></a>`psql_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for PostgreSQL socket. Defaults to '/var/run/postgresql'.
+
+Default value: `'/var/run/postgresql'`
+
+##### <a name="-role--scanner--openvas--openvas_config_path"></a>`openvas_config_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for OpenVAS configuration. Defaults to '/etc/openvas'.
+
+Default value: `'/etc/openvas'`
+
+##### <a name="-role--scanner--openvas--openvas_log_path"></a>`openvas_log_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for OpenVAS logs. Defaults to '/var/log/openvas'.
+
+Default value: `'/var/log/openvas'`
+
+##### <a name="-role--scanner--openvas--notus_path"></a>`notus_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The path for Notus. Defaults to '/var/lib/notus'.
+
+Default value: `'/var/lib/notus'`
 
 ### <a name="role--storage"></a>`role::storage`
 
 Class for managing the Storage role
 
+### <a name="role--storage--backuphost"></a>`role::storage::backuphost`
+
+This role class inherits from the `role::storage` class and includes
+the `common::backup::borg` class to set up backup functionality
+using Borg.
+
+### <a name="role--storage--beegfs"></a>`role::storage::beegfs`
+
+A flag for blendable functionality.
+
+#### Parameters
+
+The following parameters are available in the `role::storage::beegfs` class:
+
+* [`enable`](#-role--storage--beegfs--enable)
+* [`mgmtd_host`](#-role--storage--beegfs--mgmtd_host)
+* [`storage_directory`](#-role--storage--beegfs--storage_directory)
+* [`client`](#-role--storage--beegfs--client)
+* [`mgmtd`](#-role--storage--beegfs--mgmtd)
+* [`storage`](#-role--storage--beegfs--storage)
+* [`meta`](#-role--storage--beegfs--meta)
+* [`admon`](#-role--storage--beegfs--admon)
+* [`admon_http_port`](#-role--storage--beegfs--admon_http_port)
+* [`storage_port`](#-role--storage--beegfs--storage_port)
+* [`client_udp_port`](#-role--storage--beegfs--client_udp_port)
+* [`meta_port`](#-role--storage--beegfs--meta_port)
+* [`helperd_tcp_port`](#-role--storage--beegfs--helperd_tcp_port)
+* [`admon_udp_port`](#-role--storage--beegfs--admon_udp_port)
+* [`mgmtd_port`](#-role--storage--beegfs--mgmtd_port)
+* [`interfaces`](#-role--storage--beegfs--interfaces)
+* [`$__blendable`](#-role--storage--beegfs---__blendable)
+* [`__blendable`](#-role--storage--beegfs--__blendable)
+
+##### <a name="-role--storage--beegfs--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Flag to enable or disable the BeegFS role.
+
+##### <a name="-role--storage--beegfs--mgmtd_host"></a>`mgmtd_host`
+
+Data type: `Eit_types::Host`
+
+The host for the management daemon. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+##### <a name="-role--storage--beegfs--storage_directory"></a>`storage_directory`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+The directory for BeegFS storage. Defaults to '/local/beegfs'.
+
+Default value: `'/local/beegfs'`
+
+##### <a name="-role--storage--beegfs--client"></a>`client`
+
+Data type: `Boolean`
+
+Flag to indicate if the client should be installed. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--storage--beegfs--mgmtd"></a>`mgmtd`
+
+Data type: `Boolean`
+
+Flag to indicate if the management daemon should be installed. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--storage--beegfs--storage"></a>`storage`
+
+Data type: `Boolean`
+
+Flag to indicate if the storage service should be enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--storage--beegfs--meta"></a>`meta`
+
+Data type: `Boolean`
+
+Flag to indicate if the metadata service should be enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--storage--beegfs--admon"></a>`admon`
+
+Data type: `Boolean`
+
+Flag to indicate if the administration service should be enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--storage--beegfs--admon_http_port"></a>`admon_http_port`
+
+Data type: `Stdlib::Port`
+
+The HTTP port for the administration service. Defaults to 8000.
+
+Default value: `8000`
+
+##### <a name="-role--storage--beegfs--storage_port"></a>`storage_port`
+
+Data type: `Stdlib::Port`
+
+The port for the storage service. Defaults to 8003.
+
+Default value: `8003`
+
+##### <a name="-role--storage--beegfs--client_udp_port"></a>`client_udp_port`
+
+Data type: `Stdlib::Port`
+
+The UDP port for the client. Defaults to 8004.
+
+Default value: `8004`
+
+##### <a name="-role--storage--beegfs--meta_port"></a>`meta_port`
+
+Data type: `Stdlib::Port`
+
+The port for the metadata service. Defaults to 8005.
+
+Default value: `8005`
+
+##### <a name="-role--storage--beegfs--helperd_tcp_port"></a>`helperd_tcp_port`
+
+Data type: `Stdlib::Port`
+
+The TCP port for the helper daemon. Defaults to 8006.
+
+Default value: `8006`
+
+##### <a name="-role--storage--beegfs--admon_udp_port"></a>`admon_udp_port`
+
+Data type: `Stdlib::Port`
+
+The UDP port for the administration service. Defaults to 8007.
+
+Default value: `8007`
+
+##### <a name="-role--storage--beegfs--mgmtd_port"></a>`mgmtd_port`
+
+Data type: `Stdlib::Port`
+
+The port for the management daemon. Defaults to 8008.
+
+Default value: `8008`
+
+##### <a name="-role--storage--beegfs--interfaces"></a>`interfaces`
+
+Data type: `Array[String]`
+
+An array of network interfaces to bind to. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--storage--beegfs---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--storage--beegfs--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="role--storage--nas"></a>`role::storage::nas`
+
+Storage Nas roleclass
+
+#### Parameters
+
+The following parameters are available in the `role::storage::nas` class:
+
+* [`devices`](#-role--storage--nas--devices)
+* [`backuphost`](#-role--storage--nas--backuphost)
+
+##### <a name="-role--storage--nas--devices"></a>`devices`
+
+Data type:
+
+```puppet
+Hash[
+    String,
+    Struct[{
+      device                             => String[1],
+      target                             => Optional[Stdlib::Absolutepath],
+      mount                              => Optional[Boolean],
+      use_luks                           => Optional[Boolean],
+      luks_secret                        => Optional[String[1]],
+      luks_key_service                   => Optional[Eit_types::URL],
+      luks_key_service_headers           => Optional[Hash[String, String]]
+    }]
+  ]
+```
+
+A hash of devices with their properties. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--storage--nas--backuphost"></a>`backuphost`
+
+Data type: `Boolean`
+
+Whether to enable the backup host. Defaults to true.
+
+Default value: `true`
+
+### <a name="role--storage--nfs"></a>`role::storage::nfs`
+
+Storage nfs role class
+
+#### Parameters
+
+The following parameters are available in the `role::storage::nfs` class:
+
+* [`exports`](#-role--storage--nfs--exports)
+
+##### <a name="-role--storage--nfs--exports"></a>`exports`
+
+Data type:
+
+```puppet
+Optional[Hash[
+    String,
+    Struct[
+      {
+        path    => Stdlib::Absolutepath,
+        options => Array[String[1]],
+        clients => Array[String[1]],
+      }
+    ]
+  ]]
+```
+
+The exports for the NFS storage. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="role--storage--s3"></a>`role::storage::s3`
+
+Class for managing the S3 Storage role
+
+#### Parameters
+
+The following parameters are available in the `role::storage::s3` class:
+
+* [`endpoint`](#-role--storage--s3--endpoint)
+* [`data_dir`](#-role--storage--s3--data_dir)
+* [`metadata_dir`](#-role--storage--s3--metadata_dir)
+* [`conf_dir`](#-role--storage--s3--conf_dir)
+* [`roles`](#-role--storage--s3--roles)
+* [`manage`](#-role--storage--s3--manage)
+* [`image`](#-role--storage--s3--image)
+
+##### <a name="-role--storage--s3--endpoint"></a>`endpoint`
+
+Data type: `Stdlib::Fqdn`
+
+The FQDN of the S3 endpoint.
+
+##### <a name="-role--storage--s3--data_dir"></a>`data_dir`
+
+Data type: `Stdlib::Unixpath`
+
+The Unix path to the data directory.
+
+##### <a name="-role--storage--s3--metadata_dir"></a>`metadata_dir`
+
+Data type: `Stdlib::Unixpath`
+
+The Unix path to the metadata directory.
+
+##### <a name="-role--storage--s3--conf_dir"></a>`conf_dir`
+
+Data type: `Stdlib::Unixpath`
+
+The Unix path to the configuration directory.
+
+##### <a name="-role--storage--s3--roles"></a>`roles`
+
+Data type: `Eit_types::Storage::S3`
+
+The S3 storage roles.
+
+##### <a name="-role--storage--s3--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the S3 storage resources. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--storage--s3--image"></a>`image`
+
+Data type: `String`
+
+The Docker image to use for S3. Defaults to 'zenko/cloudserver:latest-7.10.19'.
+
+Default value: `'zenko/cloudserver:latest-7.10.19'`
+
 ### <a name="role--util"></a>`role::util`
 
 Class for managing the Util role
+
+### <a name="role--util--docker_registry"></a>`role::util::docker_registry`
+
+Docker registry role
+
+#### Parameters
+
+The following parameters are available in the `role::util::docker_registry` class:
+
+* [`admin_email`](#-role--util--docker_registry--admin_email)
+
+##### <a name="-role--util--docker_registry--admin_email"></a>`admin_email`
+
+Data type: `Eit_types::Email`
+
+The email of the administrator for notifications. No default value.
+
+### <a name="role--util--kubernetes"></a>`role::util::kubernetes`
+
+Class for managing the Kubernetes role
+
+#### Parameters
+
+The following parameters are available in the `role::util::kubernetes` class:
+
+* [`cluster_public_dns`](#-role--util--kubernetes--cluster_public_dns)
+* [`cluster_public_port`](#-role--util--kubernetes--cluster_public_port)
+* [`version`](#-role--util--kubernetes--version)
+* [`semver_version`](#-role--util--kubernetes--semver_version)
+* [`role`](#-role--util--kubernetes--role)
+* [`token`](#-role--util--kubernetes--token)
+* [`node_join_token`](#-role--util--kubernetes--node_join_token)
+* [`ceph_client`](#-role--util--kubernetes--ceph_client)
+* [`users`](#-role--util--kubernetes--users)
+* [`pod_cidr`](#-role--util--kubernetes--pod_cidr)
+* [`service_cidr`](#-role--util--kubernetes--service_cidr)
+* [`etcd_ca_crt`](#-role--util--kubernetes--etcd_ca_crt)
+* [`etcd_ca_key`](#-role--util--kubernetes--etcd_ca_key)
+* [`apiserver2etcd_crt`](#-role--util--kubernetes--apiserver2etcd_crt)
+* [`apiserver2etcd_key`](#-role--util--kubernetes--apiserver2etcd_key)
+* [`etcdpeer_crt`](#-role--util--kubernetes--etcdpeer_crt)
+* [`etcdpeer_key`](#-role--util--kubernetes--etcdpeer_key)
+* [`kubernetes_ca_crt`](#-role--util--kubernetes--kubernetes_ca_crt)
+* [`kubernetes_ca_key`](#-role--util--kubernetes--kubernetes_ca_key)
+* [`sa_pub`](#-role--util--kubernetes--sa_pub)
+* [`sa_key`](#-role--util--kubernetes--sa_key)
+* [`front_proxy_ca_crt`](#-role--util--kubernetes--front_proxy_ca_crt)
+* [`front_proxy_ca_key`](#-role--util--kubernetes--front_proxy_ca_key)
+
+##### <a name="-role--util--kubernetes--cluster_public_dns"></a>`cluster_public_dns`
+
+Data type: `String`
+
+The public DNS for the cluster.
+
+##### <a name="-role--util--kubernetes--cluster_public_port"></a>`cluster_public_port`
+
+Data type: `Integer`
+
+The public port for the cluster.
+
+##### <a name="-role--util--kubernetes--version"></a>`version`
+
+Data type: `String`
+
+The version of Kubernetes.
+
+##### <a name="-role--util--kubernetes--semver_version"></a>`semver_version`
+
+Data type: `SemVer`
+
+The semantic version of Kubernetes. Defaults to SemVer($version).
+
+Default value: `SemVer($version)`
+
+##### <a name="-role--util--kubernetes--role"></a>`role`
+
+Data type: `Enum['master','worker']`
+
+The role of the node. Can be 'master' or 'worker'.
+
+##### <a name="-role--util--kubernetes--token"></a>`token`
+
+Data type: `String`
+
+The token for authentication.
+
+##### <a name="-role--util--kubernetes--node_join_token"></a>`node_join_token`
+
+Data type: `Optional[String]`
+
+The join token for worker nodes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--ceph_client"></a>`ceph_client`
+
+Data type: `Optional[Boolean]`
+
+Boolean to enable Ceph client. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--util--kubernetes--users"></a>`users`
+
+Data type: `Optional[Hash[String, Struct[{ role => Enum['cluster-admin'], }]]]`
+
+The users for the cluster if role is master. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--pod_cidr"></a>`pod_cidr`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+The CIDR for pods. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--service_cidr"></a>`service_cidr`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+The CIDR for services. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--etcd_ca_crt"></a>`etcd_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--etcd_ca_key"></a>`etcd_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--apiserver2etcd_crt"></a>`apiserver2etcd_crt`
+
+Data type: `Optional[String]`
+
+The certificate for API server to etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--apiserver2etcd_key"></a>`apiserver2etcd_key`
+
+Data type: `Optional[String]`
+
+The key for API server to etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--etcdpeer_crt"></a>`etcdpeer_crt`
+
+Data type: `Optional[String]`
+
+The certificate for etcd peers. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--etcdpeer_key"></a>`etcdpeer_key`
+
+Data type: `Optional[String]`
+
+The key for etcd peers. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--kubernetes_ca_crt"></a>`kubernetes_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for Kubernetes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--kubernetes_ca_key"></a>`kubernetes_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for Kubernetes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--sa_pub"></a>`sa_pub`
+
+Data type: `Optional[String]`
+
+The public key for service account. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--sa_key"></a>`sa_key`
+
+Data type: `Optional[String]`
+
+The private key for service account. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--front_proxy_ca_crt"></a>`front_proxy_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for the front proxy. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--util--kubernetes--front_proxy_ca_key"></a>`front_proxy_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for the front proxy. Defaults to undef.
+
+Default value: `undef`
 
 ### <a name="role--virtualization"></a>`role::virtualization`
 
 Class for managing virtualization role
 
+### <a name="role--virtualization--docker"></a>`role::virtualization::docker`
+
+Docker role class
+
+#### Parameters
+
+The following parameters are available in the `role::virtualization::docker` class:
+
+* [`docker_lib_dir`](#-role--virtualization--docker--docker_lib_dir)
+* [`fixed_cidr`](#-role--virtualization--docker--fixed_cidr)
+* [`bip`](#-role--virtualization--docker--bip)
+* [`default_gateway`](#-role--virtualization--docker--default_gateway)
+* [`bridge_interface`](#-role--virtualization--docker--bridge_interface)
+* [`instances`](#-role--virtualization--docker--instances)
+* [`compose_instances`](#-role--virtualization--docker--compose_instances)
+* [`manage_compose`](#-role--virtualization--docker--manage_compose)
+* [`networks`](#-role--virtualization--docker--networks)
+* [`dns`](#-role--virtualization--docker--dns)
+* [`dns_search`](#-role--virtualization--docker--dns_search)
+* [`insecure_registries`](#-role--virtualization--docker--insecure_registries)
+* [`users`](#-role--virtualization--docker--users)
+* [`prune_system`](#-role--virtualization--docker--prune_system)
+* [`prune_volume`](#-role--virtualization--docker--prune_volume)
+* [`compose_version`](#-role--virtualization--docker--compose_version)
+* [`registry`](#-role--virtualization--docker--registry)
+* [`upstream_repo`](#-role--virtualization--docker--upstream_repo)
+* [`cadvisor_image`](#-role--virtualization--docker--cadvisor_image)
+* [`prune_duration`](#-role--virtualization--docker--prune_duration)
+
+##### <a name="-role--virtualization--docker--docker_lib_dir"></a>`docker_lib_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for Docker library files. Defaults to '/var/lib/docker'.
+
+Default value: `'/var/lib/docker'`
+
+##### <a name="-role--virtualization--docker--fixed_cidr"></a>`fixed_cidr`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+The fixed CIDR for the Docker network. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--bip"></a>`bip`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+The bridge IP address. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--default_gateway"></a>`default_gateway`
+
+Data type: `Optional[Eit_types::IP]`
+
+The default gateway for Docker networks. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--bridge_interface"></a>`bridge_interface`
+
+Data type: `Eit_types::SimpleString`
+
+The Docker bridge interface. Defaults to 'docker0'.
+
+Default value: `'docker0'`
+
+##### <a name="-role--virtualization--docker--instances"></a>`instances`
+
+Data type: `Hash`
+
+The Docker instances configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--virtualization--docker--compose_instances"></a>`compose_instances`
+
+Data type: `Eit_types::Docker::ComposeInstances`
+
+The Docker Compose instances configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--virtualization--docker--manage_compose"></a>`manage_compose`
+
+Data type: `Boolean`
+
+Whether to manage Docker Compose. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--docker--networks"></a>`networks`
+
+Data type: `Hash`
+
+The networks configuration for Docker. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--virtualization--docker--dns"></a>`dns`
+
+Data type: `Optional[Array[Stdlib::IP::Address]]`
+
+The DNS configuration for Docker. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--dns_search"></a>`dns_search`
+
+Data type: `Optional[Array[Eit_types::Domain]]`
+
+The DNS search domains for Docker. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--insecure_registries"></a>`insecure_registries`
+
+Data type: `Optional[Array[Eit_types::FQDNPort]]`
+
+The list of insecure registries. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--docker--users"></a>`users`
+
+Data type: `Array[Eit_types::User]`
+
+The list of users to be added to Docker. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--virtualization--docker--prune_system"></a>`prune_system`
+
+Data type: `Boolean`
+
+Whether to prune unused images and containers. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--docker--prune_volume"></a>`prune_volume`
+
+Data type: `Boolean`
+
+Whether to prune unused volumes. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--docker--compose_version"></a>`compose_version`
+
+Data type: `Eit_types::Package_Version`
+
+The version of Docker Compose to install. Defaults to 'present'.
+
+Default value: `'present'`
+
+##### <a name="-role--virtualization--docker--registry"></a>`registry`
+
+Data type: `Hash[Eit_types::Domain, Hash]`
+
+The registry configuration for Docker. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--virtualization--docker--upstream_repo"></a>`upstream_repo`
+
+Data type: `Boolean`
+
+Whether to use the upstream repository. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--docker--cadvisor_image"></a>`cadvisor_image`
+
+Data type: `String`
+
+The cAdvisor image to use. Defaults to 'gcr.io/cadvisor/cadvisor:v0.39.0'.
+
+Default value: `'gcr.io/cadvisor/cadvisor:v0.39.0'`
+
+##### <a name="-role--virtualization--docker--prune_duration"></a>`prune_duration`
+
+Data type: `String`
+
+The parameter prune_duration specifies the duration in days for which unused Docker resources will be retained before being pruned . Defaults to '30'.
+
+Default value: `'30'`
+
+### <a name="role--virtualization--kubernetes"></a>`role::virtualization::kubernetes`
+
+Class for managing the Kubernetes role
+
+#### Parameters
+
+The following parameters are available in the `role::virtualization::kubernetes` class:
+
+* [`role`](#-role--virtualization--kubernetes--role)
+* [`discovery_token_hash`](#-role--virtualization--kubernetes--discovery_token_hash)
+* [`token`](#-role--virtualization--kubernetes--token)
+* [`controller_address`](#-role--virtualization--kubernetes--controller_address)
+* [`install_dashboard`](#-role--virtualization--kubernetes--install_dashboard)
+* [`version`](#-role--virtualization--kubernetes--version)
+* [`pod_cidr`](#-role--virtualization--kubernetes--pod_cidr)
+* [`expose_https_on_master`](#-role--virtualization--kubernetes--expose_https_on_master)
+* [`expose_http_on_master`](#-role--virtualization--kubernetes--expose_http_on_master)
+* [`apiserver_extra_args`](#-role--virtualization--kubernetes--apiserver_extra_args)
+* [`extra_public_ports`](#-role--virtualization--kubernetes--extra_public_ports)
+* [`etcd_initial_cluster`](#-role--virtualization--kubernetes--etcd_initial_cluster)
+* [`etcd_peers`](#-role--virtualization--kubernetes--etcd_peers)
+* [`worker_peers`](#-role--virtualization--kubernetes--worker_peers)
+* [`allow_k8s_api`](#-role--virtualization--kubernetes--allow_k8s_api)
+* [`keycloak_oidc_domain`](#-role--virtualization--kubernetes--keycloak_oidc_domain)
+* [`keycloak_oidc_client_id`](#-role--virtualization--kubernetes--keycloak_oidc_client_id)
+* [`keycloak_oidc_groups_claim`](#-role--virtualization--kubernetes--keycloak_oidc_groups_claim)
+* [`etcdserver_crt`](#-role--virtualization--kubernetes--etcdserver_crt)
+* [`etcdserver_key`](#-role--virtualization--kubernetes--etcdserver_key)
+* [`etcdpeer_crt`](#-role--virtualization--kubernetes--etcdpeer_crt)
+* [`etcdpeer_key`](#-role--virtualization--kubernetes--etcdpeer_key)
+* [`etcd_ca_crt`](#-role--virtualization--kubernetes--etcd_ca_crt)
+* [`etcd_ca_key`](#-role--virtualization--kubernetes--etcd_ca_key)
+* [`etcdclient_crt`](#-role--virtualization--kubernetes--etcdclient_crt)
+* [`etcdclient_key`](#-role--virtualization--kubernetes--etcdclient_key)
+* [`kubernetes_ca_crt`](#-role--virtualization--kubernetes--kubernetes_ca_crt)
+* [`kubernetes_ca_key`](#-role--virtualization--kubernetes--kubernetes_ca_key)
+* [`sa_pub`](#-role--virtualization--kubernetes--sa_pub)
+* [`sa_key`](#-role--virtualization--kubernetes--sa_key)
+* [`apiserver_cert_extra_sans`](#-role--virtualization--kubernetes--apiserver_cert_extra_sans)
+* [`front_proxy_ca_crt`](#-role--virtualization--kubernetes--front_proxy_ca_crt)
+* [`front_proxy_ca_key`](#-role--virtualization--kubernetes--front_proxy_ca_key)
+* [`docker_storage_driver`](#-role--virtualization--kubernetes--docker_storage_driver)
+* [`containerd_version`](#-role--virtualization--kubernetes--containerd_version)
+* [`image_repository`](#-role--virtualization--kubernetes--image_repository)
+* [`containerd_install_method`](#-role--virtualization--kubernetes--containerd_install_method)
+* [`containerd_snapshotter`](#-role--virtualization--kubernetes--containerd_snapshotter)
+* [`encrypt_params`](#-role--virtualization--kubernetes--encrypt_params)
+
+##### <a name="-role--virtualization--kubernetes--role"></a>`role`
+
+Data type: `Enum['controller','worker']`
+
+The role of the node (either 'controller' or 'worker').
+
+##### <a name="-role--virtualization--kubernetes--discovery_token_hash"></a>`discovery_token_hash`
+
+Data type: `String`
+
+The discovery token hash for the controller.
+
+##### <a name="-role--virtualization--kubernetes--token"></a>`token`
+
+Data type: `String`
+
+The token for authentication.
+
+##### <a name="-role--virtualization--kubernetes--controller_address"></a>`controller_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP address and port of the controller.
+
+##### <a name="-role--virtualization--kubernetes--install_dashboard"></a>`install_dashboard`
+
+Data type: `Boolean`
+
+Boolean to indicate if the Kubernetes dashboard should be installed.
+
+##### <a name="-role--virtualization--kubernetes--version"></a>`version`
+
+Data type: `String`
+
+The version of Kubernetes to install. Defaults to '1.26.1'.
+
+Default value: `'1.26.1'`
+
+##### <a name="-role--virtualization--kubernetes--pod_cidr"></a>`pod_cidr`
+
+Data type: `Eit_types::IPCIDR`
+
+The CIDR block for the pod network. Defaults to '172.20.0.0/16'.
+
+Default value: `'172.20.0.0/16'`
+
+##### <a name="-role--virtualization--kubernetes--expose_https_on_master"></a>`expose_https_on_master`
+
+Data type: `Boolean`
+
+Boolean to indicate if HTTPS should be exposed on the master. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--kubernetes--expose_http_on_master"></a>`expose_http_on_master`
+
+Data type: `Boolean`
+
+Boolean to indicate if HTTP should be exposed on the master. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--kubernetes--apiserver_extra_args"></a>`apiserver_extra_args`
+
+Data type: `Array`
+
+An array of extra arguments for the API server.
+
+Default value: `[]`
+
+##### <a name="-role--virtualization--kubernetes--extra_public_ports"></a>`extra_public_ports`
+
+Data type: `Array[Stdlib::Port]`
+
+An array of extra public ports to expose.
+
+Default value: `[]`
+
+##### <a name="-role--virtualization--kubernetes--etcd_initial_cluster"></a>`etcd_initial_cluster`
+
+Data type: `Optional[String]`
+
+The initial cluster for etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcd_peers"></a>`etcd_peers`
+
+Data type: `Optional[Array]`
+
+An array of etcd peer nodes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--worker_peers"></a>`worker_peers`
+
+Data type: `Optional[Array]`
+
+An array of worker peer nodes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--allow_k8s_api"></a>`allow_k8s_api`
+
+Data type: `Optional[Array[Variant[Stdlib::IP::Address,Stdlib::Host]]]`
+
+An array of hosts or IPs allowed to access the Kubernetes API. Defaults to etcd_peers.
+
+Default value: `$etcd_peers`
+
+##### <a name="-role--virtualization--kubernetes--keycloak_oidc_domain"></a>`keycloak_oidc_domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+The OIDC domain for Keycloak. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--keycloak_oidc_client_id"></a>`keycloak_oidc_client_id`
+
+Data type: `String`
+
+The client ID for OIDC in Keycloak. Defaults to 'kubernetes'.
+
+Default value: `'kubernetes'`
+
+##### <a name="-role--virtualization--kubernetes--keycloak_oidc_groups_claim"></a>`keycloak_oidc_groups_claim`
+
+Data type: `Boolean`
+
+Boolean to indicate if group claims are included in the OIDC token. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--kubernetes--etcdserver_crt"></a>`etcdserver_crt`
+
+Data type: `Optional[String]`
+
+The certificate for the etcd server. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcdserver_key"></a>`etcdserver_key`
+
+Data type: `Optional[String]`
+
+The key for the etcd server. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcdpeer_crt"></a>`etcdpeer_crt`
+
+Data type: `Optional[String]`
+
+The certificate for etcd peers. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcdpeer_key"></a>`etcdpeer_key`
+
+Data type: `Optional[String]`
+
+The key for etcd peers. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcd_ca_crt"></a>`etcd_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcd_ca_key"></a>`etcd_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for etcd. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcdclient_crt"></a>`etcdclient_crt`
+
+Data type: `Optional[String]`
+
+The certificate for the etcd client. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--etcdclient_key"></a>`etcdclient_key`
+
+Data type: `Optional[String]`
+
+The key for the etcd client. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--kubernetes_ca_crt"></a>`kubernetes_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for Kubernetes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--kubernetes_ca_key"></a>`kubernetes_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for Kubernetes. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--sa_pub"></a>`sa_pub`
+
+Data type: `Optional[String]`
+
+The public key for the service account. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--sa_key"></a>`sa_key`
+
+Data type: `Optional[String]`
+
+The private key for the service account. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--apiserver_cert_extra_sans"></a>`apiserver_cert_extra_sans`
+
+Data type: `Optional[Array]`
+
+An array of extra Subject Alternative Names for the API server certificate. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-role--virtualization--kubernetes--front_proxy_ca_crt"></a>`front_proxy_ca_crt`
+
+Data type: `Optional[String]`
+
+The CA certificate for the front proxy. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--front_proxy_ca_key"></a>`front_proxy_ca_key`
+
+Data type: `Optional[String]`
+
+The CA key for the front proxy. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--docker_storage_driver"></a>`docker_storage_driver`
+
+Data type: `Optional[String]`
+
+The storage driver for Docker. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--virtualization--kubernetes--containerd_version"></a>`containerd_version`
+
+Data type: `Optional[String]`
+
+The version of containerd to install. Defaults to '1.6.20-1'.
+
+Default value: `'1.6.20-1'`
+
+##### <a name="-role--virtualization--kubernetes--image_repository"></a>`image_repository`
+
+Data type: `Optional[String]`
+
+The image repository to use. Defaults to 'registry.k8s.io'.
+
+Default value: `'registry.k8s.io'`
+
+##### <a name="-role--virtualization--kubernetes--containerd_install_method"></a>`containerd_install_method`
+
+Data type: `Optional[String]`
+
+The method to install containerd. Defaults to 'package'.
+
+Default value: `'package'`
+
+##### <a name="-role--virtualization--kubernetes--containerd_snapshotter"></a>`containerd_snapshotter`
+
+Data type: `Enum['overlayfs', 'zfs']`
+
+The snapshotter to use for containerd. Defaults to 'zfs'.
+
+Default value: `'zfs'`
+
+##### <a name="-role--virtualization--kubernetes--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'discovery_token_hash',
+    'token',
+    'etcdserver_key',
+    'etcdpeer_key',
+    'etcd_ca_key',
+    'etcdclient_key',
+    'kubernetes_ca_key',
+    'sa_key',
+    'front_proxy_ca_key',
+  ]
+```
+
+### <a name="role--virtualization--lxd"></a>`role::virtualization::lxd`
+
+Class for managing the LXD virtualization role
+
+#### Parameters
+
+The following parameters are available in the `role::virtualization::lxd` class:
+
+* [`storage`](#-role--virtualization--lxd--storage)
+* [`network`](#-role--virtualization--lxd--network)
+* [`lxd_bridge`](#-role--virtualization--lxd--lxd_bridge)
+* [`instances`](#-role--virtualization--lxd--instances)
+* [`requires_filesystems`](#-role--virtualization--lxd--requires_filesystems)
+
+##### <a name="-role--virtualization--lxd--storage"></a>`storage`
+
+Data type: `Boolean`
+
+Whether to enable storage. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--virtualization--lxd--network"></a>`network`
+
+Data type: `Eit_types::IP`
+
+The network to use. Defaults to '10.0.3.0'.
+
+Default value: `'10.0.3.0'`
+
+##### <a name="-role--virtualization--lxd--lxd_bridge"></a>`lxd_bridge`
+
+Data type: `String`
+
+The LXD network bridge. Defaults to 'lxdbr0'.
+
+Default value: `'lxdbr0'`
+
+##### <a name="-role--virtualization--lxd--instances"></a>`instances`
+
+Data type: `Hash[    Eit_types::SimpleString,    Struct[{      os       => String,      arch     => Optional[String],      release  => Optional[Variant[String, Integer]],      state    => Optional[Enum['paused', 'running', 'stopped']],      ensure   => Enum['present', 'absent'],      firewall => Optional[Hash],      config   => Optional[Hash[String,Any]],      ip       => Optional[Eit_types::IP],    }]  ]`
+
+A hash of instances with their configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--virtualization--lxd--requires_filesystems"></a>`requires_filesystems`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+An array of required filesystems. Defaults to an empty array.
+
+Default value: `[]`
+
 ### <a name="role--web"></a>`role::web`
 
 Class for managing the Web role
 
+### <a name="role--web--apache"></a>`role::web::apache`
+
+Class for managing the Apache Web Role
+
+#### Parameters
+
+The following parameters are available in the `role::web::apache` class:
+
+* [`https`](#-role--web--apache--https)
+* [`http`](#-role--web--apache--http)
+* [`manage_haproxy`](#-role--web--apache--manage_haproxy)
+* [`ciphers`](#-role--web--apache--ciphers)
+* [`modules`](#-role--web--apache--modules)
+* [`domains`](#-role--web--apache--domains)
+* [`vhosts`](#-role--web--apache--vhosts)
+* [`encrypt_params`](#-role--web--apache--encrypt_params)
+
+##### <a name="-role--web--apache--https"></a>`https`
+
+Data type: `Boolean`
+
+Whether to enable HTTPS. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--apache--http"></a>`http`
+
+Data type: `Boolean`
+
+Whether to enable HTTP. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--apache--manage_haproxy"></a>`manage_haproxy`
+
+Data type: `Boolean`
+
+Whether to manage HAProxy. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--apache--ciphers"></a>`ciphers`
+
+Data type: `Enum['default', 'insecure']`
+
+The ciphers to use for SSL. Defaults to 'default'.
+
+Default value: `'default'`
+
+##### <a name="-role--web--apache--modules"></a>`modules`
+
+Data type: `Array`
+
+The list of Apache modules to enable. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-role--web--apache--domains"></a>`domains`
+
+Data type: `Array[Eit_types::Monitor::Domains]`
+
+The list of domains to manage. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-role--web--apache--vhosts"></a>`vhosts`
+
+Data type: `Eit_types::Web::Apache::Vhosts`
+
+The virtual hosts configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--web--apache--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'vhosts.*.ssl_key',
+    'vhosts.*.ssl_cert',
+  ]
+```
+
+### <a name="role--web--haproxy"></a>`role::web::haproxy`
+
+Boolean to indicate if blending is enabled.
+
+#### Parameters
+
+The following parameters are available in the `role::web::haproxy` class:
+
+* [`manual_config`](#-role--web--haproxy--manual_config)
+* [`domains`](#-role--web--haproxy--domains)
+* [`listens`](#-role--web--haproxy--listens)
+* [`ddos_protection`](#-role--web--haproxy--ddos_protection)
+* [`https`](#-role--web--haproxy--https)
+* [`http`](#-role--web--haproxy--http)
+* [`use_hsts`](#-role--web--haproxy--use_hsts)
+* [`use_lets_encrypt`](#-role--web--haproxy--use_lets_encrypt)
+* [`mode`](#-role--web--haproxy--mode)
+* [`listen_on`](#-role--web--haproxy--listen_on)
+* [`encryption_ciphers`](#-role--web--haproxy--encryption_ciphers)
+* [`configure`](#-role--web--haproxy--configure)
+* [`firewall`](#-role--web--haproxy--firewall)
+* [`version`](#-role--web--haproxy--version)
+* [`service_options`](#-role--web--haproxy--service_options)
+* [`log_compressed`](#-role--web--haproxy--log_compressed)
+* [`log_dir`](#-role--web--haproxy--log_dir)
+* [`$__blendable`](#-role--web--haproxy---__blendable)
+* [`send_log_summary`](#-role--web--haproxy--send_log_summary)
+* [`log_summary_recipients`](#-role--web--haproxy--log_summary_recipients)
+* [`__blendable`](#-role--web--haproxy--__blendable)
+
+##### <a name="-role--web--haproxy--manual_config"></a>`manual_config`
+
+Data type: `Optional[String]`
+
+Optional manual configuration for the haproxy. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--web--haproxy--domains"></a>`domains`
+
+Data type: `Eit_haproxy::Domains`
+
+The domains to be managed by haproxy. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--web--haproxy--listens"></a>`listens`
+
+Data type: `Eit_haproxy::Listen`
+
+The listening configurations for haproxy. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--web--haproxy--ddos_protection"></a>`ddos_protection`
+
+Data type: `Boolean`
+
+Boolean to enable or disable DDoS protection. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--haproxy--https"></a>`https`
+
+Data type: `Boolean`
+
+Boolean to enable or disable HTTPS. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--haproxy--http"></a>`http`
+
+Data type: `Boolean`
+
+Boolean to enable or disable HTTP. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--haproxy--use_hsts"></a>`use_hsts`
+
+Data type: `Boolean`
+
+Boolean to enable or disable HSTS. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--haproxy--use_lets_encrypt"></a>`use_lets_encrypt`
+
+Data type: `Boolean`
+
+Boolean to enable or disable Let's Encrypt. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--haproxy--mode"></a>`mode`
+
+Data type: `Enum['tcp', 'http']`
+
+The mode of haproxy. Defaults to 'http'.
+
+Default value: `'http'`
+
+##### <a name="-role--web--haproxy--listen_on"></a>`listen_on`
+
+Data type: `Array[Stdlib::IP::Address,1]`
+
+The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
+
+Default value: `['0.0.0.0']`
+
+##### <a name="-role--web--haproxy--encryption_ciphers"></a>`encryption_ciphers`
+
+Data type: `Enum['Modern','Intermediate']`
+
+The encryption ciphers to use. Defaults to 'Modern'.
+
+Default value: `'Modern'`
+
+##### <a name="-role--web--haproxy--configure"></a>`configure`
+
+Data type: `Enum['auto', 'manual']`
+
+The configuration method to use. Defaults to 'auto'.
+
+Default value: `'auto'`
+
+##### <a name="-role--web--haproxy--firewall"></a>`firewall`
+
+Data type: `Hash[Eit_types::IP,Variant[    Array[Stdlib::Port],    Stdlib::Port  ]]`
+
+The firewall configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--web--haproxy--version"></a>`version`
+
+Data type: `Eit_types::Package_version`
+
+The version of haproxy. Defaults to 'present'.
+
+Default value: `'present'`
+
+##### <a name="-role--web--haproxy--service_options"></a>`service_options`
+
+Data type: `Hash`
+
+Additional options for the haproxy service. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-role--web--haproxy--log_compressed"></a>`log_compressed`
+
+Data type: `Boolean`
+
+Boolean to enable or disable compressed logs. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--haproxy--log_dir"></a>`log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for log files. Defaults to '/var/log'.
+
+Default value: `'/var/log'`
+
+##### <a name="-role--web--haproxy---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--web--haproxy--send_log_summary"></a>`send_log_summary`
+
+Data type: `Boolean`
+
+Boolean to enable or disable sending log summaries. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--haproxy--log_summary_recipients"></a>`log_summary_recipients`
+
+Data type: `Array[String]`
+
+The recipients for log summaries. Defaults to ['info@enableit.dk'].
+
+Default value: `['info@enableit.dk']`
+
+##### <a name="-role--web--haproxy--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="role--web--java"></a>`role::web::java`
+
+Class for managing the Java web role
+
+#### Parameters
+
+The following parameters are available in the `role::web::java` class:
+
+* [`version`](#-role--web--java--version)
+* [`edition`](#-role--web--java--edition)
+* [`variant`](#-role--web--java--variant)
+* [`http_server`](#-role--web--java--http_server)
+
+##### <a name="-role--web--java--version"></a>`version`
+
+Data type: `Enum[6,7]`
+
+The Java version to use. Defaults to 7.
+
+Default value: `7`
+
+##### <a name="-role--web--java--edition"></a>`edition`
+
+Data type: `Enum['openjdk', 'oracle']`
+
+The edition of Java to use. Defaults to 'openjdk'.
+
+Default value: `'openjdk'`
+
+##### <a name="-role--web--java--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::tomcat', '::role::appeng::wildfly']`
+
+The application server variant. Defaults to '::role::appeng::tomcat'.
+
+Default value: `'::role::appeng::tomcat'`
+
+##### <a name="-role--web--java--http_server"></a>`http_server`
+
+Data type: `Enum['apache', 'nginx']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+### <a name="role--web--nginx"></a>`role::web::nginx`
+
+Internal parameter for blendable role support. No default value.
+
+#### Parameters
+
+The following parameters are available in the `role::web::nginx` class:
+
+* [`ssl`](#-role--web--nginx--ssl)
+* [`http`](#-role--web--nginx--http)
+* [`manage_repo`](#-role--web--nginx--manage_repo)
+* [`cfg_prepend`](#-role--web--nginx--cfg_prepend)
+* [`http_cfg_prepend`](#-role--web--nginx--http_cfg_prepend)
+* [`modules`](#-role--web--nginx--modules)
+* [`monitor_port`](#-role--web--nginx--monitor_port)
+* [`extra_cfg_option`](#-role--web--nginx--extra_cfg_option)
+* [`servers`](#-role--web--nginx--servers)
+* [`$__blendable`](#-role--web--nginx---__blendable)
+* [`package_source`](#-role--web--nginx--package_source)
+* [`__blendable`](#-role--web--nginx--__blendable)
+
+##### <a name="-role--web--nginx--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+Whether to enable SSL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--nginx--http"></a>`http`
+
+Data type: `Boolean`
+
+Whether to enable HTTP. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--web--nginx--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+Whether to manage the repository. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--nginx--cfg_prepend"></a>`cfg_prepend`
+
+Data type: `Hash`
+
+Hash of configuration options to prepend. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--web--nginx--http_cfg_prepend"></a>`http_cfg_prepend`
+
+Data type: `Hash`
+
+Hash of HTTP configuration options to prepend. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--web--nginx--modules"></a>`modules`
+
+Data type: `Array`
+
+Array of additional modules to include. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-role--web--nginx--monitor_port"></a>`monitor_port`
+
+Data type: `Stdlib::Port`
+
+The port to monitor. Defaults to 63080.
+
+Default value: `63080`
+
+##### <a name="-role--web--nginx--extra_cfg_option"></a>`extra_cfg_option`
+
+Data type: `Hash`
+
+Hash of additional configuration options. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--web--nginx--servers"></a>`servers`
+
+Data type: `Hash`
+
+Hash of server configurations. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-role--web--nginx---__blendable"></a>`$__blendable`
+
+
+
+##### <a name="-role--web--nginx--package_source"></a>`package_source`
+
+Data type: `Enum['nginx', 'passenger']`
+
+The package source for Nginx. Defaults to 'nginx'.
+
+Default value: `'nginx'`
+
+##### <a name="-role--web--nginx--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="role--web--perl"></a>`role::web::perl`
+
+Class for managing the Perl web role
+
+#### Parameters
+
+The following parameters are available in the `role::web::perl` class:
+
+* [`variant`](#-role--web--perl--variant)
+
+##### <a name="-role--web--perl--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::cgi', '::role::appeng::fastcgi', '::role::appeng::mod_perl']`
+
+The variant of the Appeng application to use. Defaults to '::role::appeng::cgi'.
+
+Default value: `'::role::appeng::cgi'`
+
+### <a name="role--web--php"></a>`role::web::php`
+
+Class for managing the Web PHP role
+
+#### Parameters
+
+The following parameters are available in the `role::web::php` class:
+
+* [`variant`](#-role--web--php--variant)
+
+##### <a name="-role--web--php--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::mod_php', '::role::appeng::phpfpm']`
+
+The PHP variant to use. Defaults to '::role::appeng::phpfpm'.
+
+Default value: `'::role::appeng::phpfpm'`
+
+### <a name="role--web--piwik"></a>`role::web::piwik`
+
+Class for managing the Piwik web role
+
+#### Parameters
+
+The following parameters are available in the `role::web::piwik` class:
+
+* [`hostname`](#-role--web--piwik--hostname)
+* [`database_password`](#-role--web--piwik--database_password)
+* [`variant`](#-role--web--piwik--variant)
+* [`database`](#-role--web--piwik--database)
+* [`force_https`](#-role--web--piwik--force_https)
+* [`use_forwarded_for`](#-role--web--piwik--use_forwarded_for)
+* [`use_forwarded_host`](#-role--web--piwik--use_forwarded_host)
+* [`encrypt_params`](#-role--web--piwik--encrypt_params)
+
+##### <a name="-role--web--piwik--hostname"></a>`hostname`
+
+Data type: `String`
+
+The hostname for the Piwik application.
+
+##### <a name="-role--web--piwik--database_password"></a>`database_password`
+
+Data type: `Eit_types::Password`
+
+The password for the database.
+
+##### <a name="-role--web--piwik--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::mod_php', '::role::appeng::phpfpm']`
+
+The variant of PHP to use. Defaults to '::role::appeng::mod_php'.
+
+Default value: `'::role::appeng::mod_php'`
+
+##### <a name="-role--web--piwik--database"></a>`database`
+
+Data type: `Enum['::role::db::mysql']`
+
+The database type to use. Defaults to '::role::db::mysql'.
+
+Default value: `'::role::db::mysql'`
+
+##### <a name="-role--web--piwik--force_https"></a>`force_https`
+
+Data type: `Boolean`
+
+Whether to force HTTPS. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--piwik--use_forwarded_for"></a>`use_forwarded_for`
+
+Data type: `Boolean`
+
+Whether to use the forwarded for header. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--piwik--use_forwarded_host"></a>`use_forwarded_host`
+
+Data type: `Boolean`
+
+Whether to use the forwarded host header. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--web--piwik--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value:
+
+```puppet
+[
+    'database_password',
+  ]
+```
+
+### <a name="role--web--python"></a>`role::web::python`
+
+Web Python role
+
+#### Parameters
+
+The following parameters are available in the `role::web::python` class:
+
+* [`url`](#-role--web--python--url)
+* [`variant`](#-role--web--python--variant)
+
+##### <a name="-role--web--python--url"></a>`url`
+
+Data type: `String`
+
+The URL for the Python application. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--web--python--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::uwsgi', '::role::appeng::passenger']`
+
+The application server variant to use. Defaults to '::role::appeng::uwsgi'.
+
+Default value: `'::role::appeng::uwsgi'`
+
+### <a name="role--web--reverse_cache"></a>`role::web::reverse_cache`
+
+Reverse cache web role
+
+#### Parameters
+
+The following parameters are available in the `role::web::reverse_cache` class:
+
+* [`variant`](#-role--web--reverse_cache--variant)
+* [`secret`](#-role--web--reverse_cache--secret)
+* [`backendip`](#-role--web--reverse_cache--backendip)
+* [`backendport`](#-role--web--reverse_cache--backendport)
+* [`adminacl`](#-role--web--reverse_cache--adminacl)
+* [`adminlistens`](#-role--web--reverse_cache--adminlistens)
+* [`purgers`](#-role--web--reverse_cache--purgers)
+
+##### <a name="-role--web--reverse_cache--variant"></a>`variant`
+
+Data type: `Enum['drupal']`
+
+Defines which VCL to use.
+
+##### <a name="-role--web--reverse_cache--secret"></a>`secret`
+
+Data type: `Eit_types::UUID`
+
+The secret for authentication.
+
+##### <a name="-role--web--reverse_cache--backendip"></a>`backendip`
+
+Data type: `Eit_types::IP`
+
+The backend IP address.
+
+##### <a name="-role--web--reverse_cache--backendport"></a>`backendport`
+
+Data type: `Stdlib::Port`
+
+The backend port.
+
+##### <a name="-role--web--reverse_cache--adminacl"></a>`adminacl`
+
+Data type: `Optional[Array[String]]`
+
+The admin ACL. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--web--reverse_cache--adminlistens"></a>`adminlistens`
+
+Data type: `Optional[Array[Eit_types::AddressPort]]`
+
+The admin listen addresses. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--web--reverse_cache--purgers"></a>`purgers`
+
+Data type: `Array[String]`
+
+The purgers. Defaults to ['localhost'].
+
+Default value: `['localhost']`
+
+### <a name="role--web--ruby"></a>`role::web::ruby`
+
+Class for managing the Web Ruby role
+
+#### Parameters
+
+The following parameters are available in the `role::web::ruby` class:
+
+* [`variant`](#-role--web--ruby--variant)
+
+##### <a name="-role--web--ruby--variant"></a>`variant`
+
+Data type: `Enum['::role::appeng::passenger']`
+
+The variant of the application engine to use. Defaults to '::role::appeng::passenger'.
+
+Default value: `'::role::appeng::passenger'`
+
 ### <a name="role--webframeworks"></a>`role::webframeworks`
 
 Class for managing the Webframeworks role
+
+### <a name="role--webframeworks--drupal"></a>`role::webframeworks::drupal`
+
+Class: role::webframeworks::drupal  Optimized Drupal server setup including Latest stable Drupal version
+
+#### Parameters
+
+The following parameters are available in the `role::webframeworks::drupal` class:
+
+* [`url`](#-role--webframeworks--drupal--url)
+* [`php`](#-role--webframeworks--drupal--php)
+* [`reverse_cache`](#-role--webframeworks--drupal--reverse_cache)
+* [`memcached`](#-role--webframeworks--drupal--memcached)
+* [`db`](#-role--webframeworks--drupal--db)
+* [`http_server`](#-role--webframeworks--drupal--http_server)
+* [`password`](#-role--webframeworks--drupal--password)
+
+##### <a name="-role--webframeworks--drupal--url"></a>`url`
+
+Data type: `String`
+
+The URL for the Drupal application.
+
+##### <a name="-role--webframeworks--drupal--php"></a>`php`
+
+Data type: `Enum['::role::appeng::phpfpm', '::role::appeng::mod_php']`
+
+The PHP backend to use. Defaults to '::role::appeng::phpfpm'.
+
+Default value: `'::role::appeng::phpfpm'`
+
+##### <a name="-role--webframeworks--drupal--reverse_cache"></a>`reverse_cache`
+
+Data type: `Boolean`
+
+Enable or disable reverse caching. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-role--webframeworks--drupal--memcached"></a>`memcached`
+
+Data type: `Boolean`
+
+Enable or disable memcached. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--webframeworks--drupal--db"></a>`db`
+
+Data type: `Enum['::role::db::mysql', '::role::db::pgsql']`
+
+The database backend to use. Defaults to '::role::db::mysql'.
+
+Default value: `'::role::db::mysql'`
+
+##### <a name="-role--webframeworks--drupal--http_server"></a>`http_server`
+
+Data type: `Enum['::role::web::apache']`
+
+The HTTP server to use. Defaults to '::role::web::apache'.
+
+Default value: `'::role::web::apache'`
+
+##### <a name="-role--webframeworks--drupal--password"></a>`password`
+
+Data type: `String`
+
+The password for the Drupal application. Defaults to 'drupal_xyz'.
+
+Default value: `'drupal_xyz'`
+
+### <a name="role--webframeworks--lamp"></a>`role::webframeworks::lamp`
+
+Class for managing the LAMP role
+
+#### Parameters
+
+The following parameters are available in the `role::webframeworks::lamp` class:
+
+* [`db`](#-role--webframeworks--lamp--db)
+* [`webserver`](#-role--webframeworks--lamp--webserver)
+* [`php`](#-role--webframeworks--lamp--php)
+
+##### <a name="-role--webframeworks--lamp--db"></a>`db`
+
+Data type: `Enum['role::db::mysql', 'role::db::pgsql']`
+
+The database role to use. Defaults to 'role::db::mysql'.
+
+Default value: `'role::db::mysql'`
+
+##### <a name="-role--webframeworks--lamp--webserver"></a>`webserver`
+
+Data type: `Enum['role::web::apache', 'role::web::nginx']`
+
+The web server to use. Defaults to 'role::web::apache'.
+
+Default value: `'role::web::apache'`
+
+##### <a name="-role--webframeworks--lamp--php"></a>`php`
+
+Data type: `Enum['role::appeng::phpfpm', 'role::appeng::mod_php']`
+
+The PHP implementation to use. Defaults to 'role::appeng::phpfpm'.
+
+Default value: `'role::appeng::phpfpm'`
+
+### <a name="role--webframeworks--rubyonrails"></a>`role::webframeworks::rubyonrails`
+
+Class for managing the RubyonRails role
+
+#### Parameters
+
+The following parameters are available in the `role::webframeworks::rubyonrails` class:
+
+* [`db`](#-role--webframeworks--rubyonrails--db)
+* [`ruby`](#-role--webframeworks--rubyonrails--ruby)
+* [`http_server`](#-role--webframeworks--rubyonrails--http_server)
+* [`version`](#-role--webframeworks--rubyonrails--version)
+* [`provider`](#-role--webframeworks--rubyonrails--provider)
+* [`manage_web_server`](#-role--webframeworks--rubyonrails--manage_web_server)
+
+##### <a name="-role--webframeworks--rubyonrails--db"></a>`db`
+
+Data type: `Optional[Enum['::role::db::mysql', '::role::db::pgsql']]`
+
+The database to use. Defaults to 'role::db::mysql'.
+
+Default value: `'::role::db::mysql'`
+
+##### <a name="-role--webframeworks--rubyonrails--ruby"></a>`ruby`
+
+Data type: `Enum['::role::appeng::passenger']`
+
+The Ruby implementation to use. Defaults to 'role appeng passenger'.
+
+Default value: `'::role::appeng::passenger'`
+
+##### <a name="-role--webframeworks--rubyonrails--http_server"></a>`http_server`
+
+Data type: `Enum['::role::web::apache']`
+
+The HTTP server to use. Defaults to '::role::web::apache'.
+
+Default value: `'::role::web::apache'`
+
+##### <a name="-role--webframeworks--rubyonrails--version"></a>`version`
+
+Data type: `Enum[4, 5]`
+
+The version of RubyonRails to install. Defaults to 5.
+
+Default value: `5`
+
+##### <a name="-role--webframeworks--rubyonrails--provider"></a>`provider`
+
+Data type: `Enum['gem', 'package']`
+
+The provider to use for installing RubyonRails. Defaults to 'package'.
+
+Default value: `'package'`
+
+##### <a name="-role--webframeworks--rubyonrails--manage_web_server"></a>`manage_web_server`
+
+Data type: `Boolean`
+
+Whether to manage the web server or not. Defaults to false.
+
+Default value: `false`
+
+### <a name="role--webframeworks--wordpress"></a>`role::webframeworks::wordpress`
+
+Class for managing the Wordpress role
+
+#### Parameters
+
+The following parameters are available in the `role::webframeworks::wordpress` class:
+
+* [`php`](#-role--webframeworks--wordpress--php)
+* [`url`](#-role--webframeworks--wordpress--url)
+* [`memcached`](#-role--webframeworks--wordpress--memcached)
+* [`db`](#-role--webframeworks--wordpress--db)
+* [`force_https`](#-role--webframeworks--wordpress--force_https)
+* [`http_server`](#-role--webframeworks--wordpress--http_server)
+* [`php_memory_limit`](#-role--webframeworks--wordpress--php_memory_limit)
+
+##### <a name="-role--webframeworks--wordpress--php"></a>`php`
+
+Data type: `Enum['::role::appeng::phpfpm', '::role::appeng::mod_php']`
+
+The PHP implementation to use. Defaults to '::role::appeng::phpfpm'.
+
+Default value: `'::role::appeng::phpfpm'`
+
+##### <a name="-role--webframeworks--wordpress--url"></a>`url`
+
+Data type: `String`
+
+The URL of the Wordpress installation. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-role--webframeworks--wordpress--memcached"></a>`memcached`
+
+Data type: `Boolean`
+
+Whether to enable Memcached. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--webframeworks--wordpress--db"></a>`db`
+
+Data type: `Enum['::role::db::mysql']`
+
+The database backend to use. Defaults to '::role::db::mysql'.
+
+Default value: `'::role::db::mysql'`
+
+##### <a name="-role--webframeworks--wordpress--force_https"></a>`force_https`
+
+Data type: `Boolean`
+
+Whether to enforce HTTPS. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-role--webframeworks--wordpress--http_server"></a>`http_server`
+
+Data type: `Enum['apache', 'nginx']`
+
+The HTTP server to use. Defaults to 'apache'.
+
+Default value: `'apache'`
+
+##### <a name="-role--webframeworks--wordpress--php_memory_limit"></a>`php_memory_limit`
+
+Data type: `Optional[Pattern[/[0-9]+[MG]/]]`
+
+The PHP memory limit. Defaults to '512M'.
+
+Default value: `'512M'`
 

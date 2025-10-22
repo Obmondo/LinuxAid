@@ -8,33 +8,151 @@
 
 * [`common`](#common): Main common class
 * [`common::backup`](#common--backup): Class for managing backup configurations
+* [`common::backup::borg`](#common--backup--borg): Class for setting up Borg backup and installing necessary packages
+* [`common::backup::cassandra`](#common--backup--cassandra): Backup Cassandra database using medusa with local storage
+* [`common::backup::db`](#common--backup--db): Class for managing common backup settings for databases
+* [`common::backup::db::mongodb`](#common--backup--db--mongodb): Class for managing MongoDB backups
+* [`common::backup::db::mysql`](#common--backup--db--mysql): Class for managing MySQL backup settings with specific overrides
+* [`common::backup::db::mysql::mysqlbackup`](#common--backup--db--mysql--mysqlbackup): Class for managing MySQL backup configuration and override for common::backup::db settings
+* [`common::backup::db::mysql::mysqldump`](#common--backup--db--mysql--mysqldump): Class for specific settings for mysql and override for common::backup::db settings
+* [`common::backup::db::mysql::xtrabackup`](#common--backup--db--mysql--xtrabackup): Class for managing MySQL backup using xtrabackup and Borg
+* [`common::backup::db::pgsql`](#common--backup--db--pgsql): Class for managing PostgreSQL backup configuration and overrides
+* [`common::backup::gitea`](#common--backup--gitea): Class for managing Gitea backups
+* [`common::backup::netbackup`](#common--backup--netbackup): Class for managing NetBackup common backup configuration
 * [`common::certs`](#common--certs): Class for managing common certificates and CA certificates
+* [`common::certs::letsencrypt`](#common--certs--letsencrypt): Class for managing Let's Encrypt certificates
 * [`common::convenience`](#common--convenience): Class for common convenience utilities
+* [`common::convenience::bash`](#common--convenience--bash): Class for managing common::convenience::bash
+* [`common::convenience::tmux`](#common--convenience--tmux): Class for managing common::convenience::tmux
 * [`common::cron`](#common--cron): Class for managing cron jobs
 * [`common::devices`](#common--devices): Class for managing common::devices
 * [`common::extras`](#common--extras): Class for things that does not classify into anything
+* [`common::extras::computing`](#common--extras--computing): Class for extra computing-related functionalities that do not fall into other categories
+* [`common::extras::computing::nivisa`](#common--extras--computing--nivisa): Class for managing NI-VISA 2019 configuration
 * [`common::hosts`](#common--hosts): Class for managing host entries
 * [`common::logging`](#common--logging): Class for managing common logging configuration
+* [`common::logging::journal`](#common--logging--journal): Class for managing the journal configuration
+* [`common::logging::logrotate`](#common--logging--logrotate): Class for managing logrotate rules
+* [`common::logging::rsyslog`](#common--logging--rsyslog): Class for managing rsyslog configuration
 * [`common::lvm`](#common--lvm): Class for managing LVM setup with LV creation
 * [`common::mail`](#common--mail): Class for managing common postfix mail setup
 * [`common::monitor`](#common--monitor): Class for managing monitoring defaults
+* [`common::monitor::exporter`](#common--monitor--exporter): Class for managing the common::monitor::exporter
+* [`common::monitor::exporter::blackbox`](#common--monitor--exporter--blackbox): Class for managing the Prometheus Blackbox Exporter
+* [`common::monitor::exporter::cadvisor`](#common--monitor--exporter--cadvisor): Class to manage the Prometheus cAdvisor exporter
+* [`common::monitor::exporter::dellhw`](#common--monitor--exporter--dellhw): Class for managing Prometheus dellhw exporter
+* [`common::monitor::exporter::dns`](#common--monitor--exporter--dns): Class for managing the common monitoring exporter DNS
+* [`common::monitor::exporter::elasticsearch`](#common--monitor--exporter--elasticsearch): Class for managing Prometheus Elasticsearch Exporter
+* [`common::monitor::exporter::filestat`](#common--monitor--exporter--filestat): Class for monitoring file statistics with Prometheus exporter
+* [`common::monitor::exporter::gitlab_runner`](#common--monitor--exporter--gitlab_runner): Class for managing the Prometheus GitLab Runner exporter
+* [`common::monitor::exporter::haproxy`](#common--monitor--exporter--haproxy): Class for managing the Prometheus HAProxy exporter
+* [`common::monitor::exporter::iptables`](#common--monitor--exporter--iptables): Class for managing the Prometheus iptables Exporter
+* [`common::monitor::exporter::mtail`](#common--monitor--exporter--mtail): Class for managing the Prometheus Mtail Exporter
+* [`common::monitor::exporter::mysql`](#common--monitor--exporter--mysql): Class for managing the Prometheus MySQL exporter
+* [`common::monitor::exporter::node`](#common--monitor--exporter--node): Class for managing the common::monitor::exporter::node Puppet class
+* [`common::monitor::exporter::node::lsof`](#common--monitor--exporter--node--lsof): Class for managing the Lsof exporter for Prometheus
+* [`common::monitor::exporter::node::smartmon`](#common--monitor--exporter--node--smartmon): Class for managing the Prometheus Smartmon class common::monitor::exporter::node::smartmon
+* [`common::monitor::exporter::node::ssacli`](#common--monitor--exporter--node--ssacli): Class for managing the common::monitor::exporter::node::ssacli
+* [`common::monitor::exporter::node::topprocesses`](#common--monitor--exporter--node--topprocesses): Class for managing the Topprocesses Prometheus exporter
+* [`common::monitor::exporter::ntp`](#common--monitor--exporter--ntp): Class for managing NTP Exporter
+* [`common::monitor::exporter::process`](#common--monitor--exporter--process): Class for managing the Prometheus process exporter
+* [`common::monitor::exporter::pushprox`](#common--monitor--exporter--pushprox): Class for managing the Prometheus Blackbox Exporter
+* [`common::monitor::exporter::security`](#common--monitor--exporter--security): Prometheus Security Exporter
+* [`common::monitor::exporter::systemd`](#common--monitor--exporter--systemd): Class for managing Prometheus Systemd Exporter
+* [`common::monitor::exporter::tcpshaker`](#common--monitor--exporter--tcpshaker): Class for managing the Prometheus tcpshaker daemon mode / exporter
+* [`common::monitor::exporter::wireguard`](#common--monitor--exporter--wireguard): Class for managing the Prometheus Wireguard Exporter
+* [`common::monitor::prometheus`](#common--monitor--prometheus): Class for managing Prometheus server monitoring configuration
+* [`common::monitor::prometheus::server`](#common--monitor--prometheus--server): Class for managing the Prometheus server
 * [`common::monitoring`](#common--monitoring): Class for managing common monitoring setup
+* [`common::monitoring::atop`](#common--monitoring--atop): Class for managing the atop monitoring service
+* [`common::monitoring::scom`](#common--monitoring--scom): Class for managing Microsoft SCOM monitoring configuration
+* [`common::monitoring::splunk::forwarder`](#common--monitoring--splunk--forwarder): Class for managing the Splunk forwarder in a monitoring setup
 * [`common::network`](#common--network): Class for managing network configuration
+* [`common::network::firewall`](#common--network--firewall): Class for managing the common::network::firewall configuration
+* [`common::network::netbird`](#common--network--netbird): Class for managing Netbird Agent
+* [`common::network::stunnel`](#common--network--stunnel): Class for setting up Stunnel configurations
+* [`common::network::tcpshaker`](#common--network--tcpshaker): Class for installing and setting up tcp shaker in daemon mode
+* [`common::network::vrrp`](#common--network--vrrp): Class for managing VRRP configuration
+* [`common::network::wireguard`](#common--network--wireguard): Class for managing Wireguard network configuration
 * [`common::package`](#common--package): Class for managing the installation and removal of packages
 * [`common::puppet`](#common--puppet): Class for managing Puppet installation and configuration
+* [`common::puppet::clientbucket`](#common--puppet--clientbucket): Class clientbucket contains settings for puppet cache cleanup
 * [`common::repo`](#common--repo): Class for managing software repositories
 * [`common::security`](#common--security): Class for managing security settings including certs and auditd
+* [`common::security::auditd`](#common--security--auditd): Class for managing auditd configuration
+* [`common::security::effective_group`](#common--security--effective_group): Class for managing the effective group ID setting
+* [`common::security::pkexec`](#common--security--pkexec): Class for managing the CVE-2021-4034 polkit pkexec vulnerability
 * [`common::services`](#common--services): Class for managing common services
 * [`common::settings`](#common--settings): Class for common settings for per customers
 * [`common::setup`](#common--setup): Class for setting up common configurations
+* [`common::setup::obmondo_admin`](#common--setup--obmondo_admin): Class for setting up obmondo-admin account configurations
 * [`common::software`](#common--software): Class for managing common software installation and dependencies
+* [`common::software::ansoftrsmservice`](#common--software--ansoftrsmservice): Class for managing the Ansoft Remote Simulation Manager (RSM) Service
+* [`common::software::cloudamize`](#common--software--cloudamize): Class for managing Cloudamize software
+* [`common::software::dependencyagent`](#common--software--dependencyagent): Class for managing the Microsoft dependency agent common::software::dependencyagent
+* [`common::software::fwupd`](#common--software--fwupd): Class for managing fwupd refresh process
+* [`common::software::insights`](#common--software--insights): Class for managing insights client access
+* [`common::software::iptables_api`](#common--software--iptables_api): Class for installing iptables-api
+* [`common::software::microsoft_mde`](#common--software--microsoft_mde): Class for managing Microsoft Defender for Endpoint installation and configuration
+* [`common::software::msftlinuxpatchautoassess`](#common--software--msftlinuxpatchautoassess): Class for managing the Azure Linux VM Patch Extension
+* [`common::software::nvidia_driver`](#common--software--nvidia_driver): Class for managing Nvidia Driver installation
+* [`common::software::rubrik`](#common--software--rubrik): Class for managing the Rubrik Agent software
+* [`common::software::rustdesk`](#common--software--rustdesk): Class for managing the Rustdesk software
+* [`common::software::teleport`](#common--software--teleport): Class for managing the OMS Agent
+* [`common::software::vncserver`](#common--software--vncserver): Class for managing the VNC Server
+* [`common::software::vscode`](#common--software--vscode): Class for managing Visual Studio Code installation
+* [`common::software::walinuxagent`](#common--software--walinuxagent): Class for managing walinuxagent software configuration
 * [`common::storage`](#common--storage): Class for managing storage configurations
+* [`common::storage::nfs`](#common--storage--nfs): Class for managing NFS server and exports
+* [`common::storage::nfs::server`](#common--storage--nfs--server): Class for managing NFS server and exports
+* [`common::storage::quota`](#common--storage--quota): Class for managing filesystem quotas
+* [`common::storage::samba`](#common--storage--samba): Class for managing common Samba storage configuration
+* [`common::storage::zfs`](#common--storage--zfs): Class for managing ZFS storage and utilities
 * [`common::system`](#common--system): Class for managing common system configuration
+* [`common::system::authentication`](#common--system--authentication): Class for managing system authentication
+* [`common::system::authentication::kerberos`](#common--system--authentication--kerberos): Class for managing Kerberos integration
+* [`common::system::authentication::nis`](#common--system--authentication--nis): Class for managing the NIS/ypclass common::system::authentication::nis
+* [`common::system::authentication::pam`](#common--system--authentication--pam): Class for managing common::system::authentication::pam
+* [`common::system::authentication::sssd`](#common--system--authentication--sssd): Class for managing SSSD profile for system authentication
+* [`common::system::authentication::sudo`](#common--system--authentication--sudo): Class for managing the sudo settings in the common system authentication
+* [`common::system::cloud_init`](#common--system--cloud_init): Class for managing system cloud init configuration
+* [`common::system::container`](#common--system--container): Class for managing the container specifics
+* [`common::system::dns`](#common--system--dns): Class for handling DNS client configuration
+* [`common::system::failover`](#common--system--failover): Class for managing system failover configuration
+* [`common::system::grub`](#common--system--grub): Class for managing grubclass common::system::grub
+* [`common::system::hardware`](#common--system--hardware): Class for managing hardware features
+* [`common::system::jumphost`](#common--system--jumphost): Class for setting up reverse proxy
+* [`common::system::kernel`](#common--system--kernel): Class for managing the common system kernel configuration
+* [`common::system::limits`](#common--system--limits): Class for managing system limits
+* [`common::system::motd`](#common--system--motd): Class for managing the MOTD configuration
+* [`common::system::nscd`](#common--system--nscd): Class for managing NSCD setup, caching DNS daemon, locally on client
+* [`common::system::nsswitch`](#common--system--nsswitch): Class for managing the nsswitch configuration
+* [`common::system::package_management`](#common--system--package_management): Class for managing system package management
+* [`common::system::package_management::guix`](#common--system--package_management--guix): Class for managing Guix client setup
+* [`common::system::package_management::guix::client`](#common--system--package_management--guix--client): Class for managing the Guix client in system packages
+* [`common::system::relocatetmp`](#common--system--relocatetmp): Class for relocating /tmp directory to a specified path
+* [`common::system::selinux`](#common--system--selinux): Class for managing SELinux fcontext
+* [`common::system::sshd`](#common--system--sshd): Class for managing the common SSHD configuration
+* [`common::system::systemd`](#common--system--systemd): Class for managing systemd configuration
+* [`common::system::time`](#common--system--time): Class for managing system time settings
+* [`common::system::time::ntp`](#common--system--time--ntp): Class for managing NTP configuration
+* [`common::system::updates`](#common--system--updates): Class for managing system updates
 * [`common::virtualization`](#common--virtualization): Class for managing virtualized servers
+* [`common::virtualization::vmware`](#common--virtualization--vmware): Class for managing VMware virtualization setup
+* [`common::virtualization::vmware::openvmtools`](#common--virtualization--vmware--openvmtools): Class for managing OpenVMtools configuration within VMware virtualization
 
 ### Defined types
 
+* [`common::backup::borg::push`](#common--backup--borg--push): Borg Push (Client) Server
+* [`common::backup::borg::server`](#common--backup--borg--server): Class for managing the Borg Backup Server (The Target Node) where backup will be saved.
+* [`common::backup::push`](#common--backup--push): Class for managing common::backup::push define
+* [`common::device::encrypted_disk`](#common--device--encrypted_disk): Class for managing the common::device::encrypted_disk resource
+* [`common::device::filesystem`](#common--device--filesystem): Class for managing filesystem devices and mounting
 * [`common::mkdir_p`](#common--mkdir_p): Class for providing `mkdir -p` functionality for a directory
+* [`common::services::initscript`](#common--services--initscript): Class for managing common services initscript
+* [`common::services::systemd`](#common--services--systemd): Class for managing common systemd services
+* [`common::system::selinux::module`](#common--system--selinux--module): Class for managing SELinux modules
+* [`common::systemd::timer`](#common--systemd--timer): Puppet class for systemd timer drop-in replacement for cron
 
 ## Classes
 
@@ -56,8 +174,6 @@ The following parameters are available in the `common` class:
 Data type: `Boolean`
 
 Boolean to enable or disable full host management functionalities. Defaults to true.
-
-Default value: `true`
 
 ##### <a name="-common--devices"></a>`devices`
 
@@ -97,9 +213,9 @@ Data type:
 Hash[Stdlib::Absolutepath,
     Struct[
       {
-      mode => Stdlib::Filemode,
-      apply_recursively => Boolean,
-      }]]
+        mode => Stdlib::Filemode,
+        apply_recursively => Boolean,
+  }]]
 ```
 
 Hash specifying file permission settings.
@@ -283,6 +399,1061 @@ The list of params, which needs to be encrypted
 
 Default value: `['backup_user_password']`
 
+### <a name="common--backup--borg"></a>`common::backup::borg`
+
+The absolute path to the backup configuration directory.
+
+Hash defining retention periods for daily, weekly, and monthly backups. Defaults to {'daily' => 7, 'weekly' => 2, 'monthly' => 2}.
+
+Hash specifying the schedule time. Defaults to { 'weekday' => undef, 'year' => '*', 'month' => '*', 'day' => '*', 'hour' => 02, 'minute' => 0, 'second' => 0 }.
+
+Optional delay to introduce randomness in schedule. Defaults to '10 minutes'.
+
+Optional user for remote backups. Defaults to $::common::backup::backup_user.
+
+Optional IP address for remote backup destination.
+
+Optional path for remote backup root.
+
+Path for local backup root. Defaults to $::common::backup::dump_dir.
+
+Hash of repositories to backup.
+
+Array of archive paths to include in backup.
+
+Optional hash of authorized keys for remote backup.
+
+Boolean indicating whether this node is a backup server. Defaults to false.
+
+Path to store last backup timestamp. Defaults to '/var/tmp'.
+
+#### Parameters
+
+The following parameters are available in the `common::backup::borg` class:
+
+* [`$__dir`](#-common--backup--borg---__dir)
+* [`$prune_keep`](#-common--backup--borg---prune_keep)
+* [`$timespec`](#-common--backup--borg---timespec)
+* [`$randomized_delay`](#-common--backup--borg---randomized_delay)
+* [`$remote_user`](#-common--backup--borg---remote_user)
+* [`$remote_ip`](#-common--backup--borg---remote_ip)
+* [`$remote_backup_root`](#-common--backup--borg---remote_backup_root)
+* [`$backup_root`](#-common--backup--borg---backup_root)
+* [`$repos`](#-common--backup--borg---repos)
+* [`$archives`](#-common--backup--borg---archives)
+* [`$authorized_keys`](#-common--backup--borg---authorized_keys)
+* [`$server`](#-common--backup--borg---server)
+* [`$last_borgbackup`](#-common--backup--borg---last_borgbackup)
+* [`encrypt_params`](#-common--backup--borg--encrypt_params)
+* [`__dir`](#-common--backup--borg--__dir)
+* [`prune_keep`](#-common--backup--borg--prune_keep)
+* [`timespec`](#-common--backup--borg--timespec)
+* [`randomized_delay`](#-common--backup--borg--randomized_delay)
+* [`remote_user`](#-common--backup--borg--remote_user)
+* [`remote_ip`](#-common--backup--borg--remote_ip)
+* [`remote_backup_root`](#-common--backup--borg--remote_backup_root)
+* [`backup_root`](#-common--backup--borg--backup_root)
+* [`repos`](#-common--backup--borg--repos)
+* [`archives`](#-common--backup--borg--archives)
+* [`authorized_keys`](#-common--backup--borg--authorized_keys)
+* [`server`](#-common--backup--borg--server)
+* [`last_borgbackup`](#-common--backup--borg--last_borgbackup)
+
+##### <a name="-common--backup--borg---__dir"></a>`$__dir`
+
+
+
+##### <a name="-common--backup--borg---prune_keep"></a>`$prune_keep`
+
+
+
+##### <a name="-common--backup--borg---timespec"></a>`$timespec`
+
+
+
+##### <a name="-common--backup--borg---randomized_delay"></a>`$randomized_delay`
+
+
+
+##### <a name="-common--backup--borg---remote_user"></a>`$remote_user`
+
+
+
+##### <a name="-common--backup--borg---remote_ip"></a>`$remote_ip`
+
+
+
+##### <a name="-common--backup--borg---remote_backup_root"></a>`$remote_backup_root`
+
+
+
+##### <a name="-common--backup--borg---backup_root"></a>`$backup_root`
+
+
+
+##### <a name="-common--backup--borg---repos"></a>`$repos`
+
+
+
+##### <a name="-common--backup--borg---archives"></a>`$archives`
+
+
+
+##### <a name="-common--backup--borg---authorized_keys"></a>`$authorized_keys`
+
+
+
+##### <a name="-common--backup--borg---server"></a>`$server`
+
+
+
+##### <a name="-common--backup--borg---last_borgbackup"></a>`$last_borgbackup`
+
+
+
+##### <a name="-common--backup--borg--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['repos.*.password']`
+
+##### <a name="-common--backup--borg--__dir"></a>`__dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+##### <a name="-common--backup--borg--prune_keep"></a>`prune_keep`
+
+Data type: `Eit_types::Borg_prune_numbers`
+
+
+
+Default value:
+
+```puppet
+{
+    'daily'   => 7,
+    'weekly'  => 2,
+    'monthly' => 2,
+  }
+```
+
+##### <a name="-common--backup--borg--timespec"></a>`timespec`
+
+Data type: `Eit_types::SystemdTime`
+
+
+
+Default value:
+
+```puppet
+{
+    'weekday' => undef,
+    'year'    => '*',
+    'month'   => '*',
+    'day'     => '*',
+    'hour'    => 02,
+    'minute'  => 0,
+    'second'  => 0,
+  }
+```
+
+##### <a name="-common--backup--borg--randomized_delay"></a>`randomized_delay`
+
+Data type: `Optional[Eit_types::SystemdTimeSpan]`
+
+
+
+Default value: `'10 minutes'`
+
+##### <a name="-common--backup--borg--remote_user"></a>`remote_user`
+
+Data type: `Optional[Eit_types::User]`
+
+
+
+Default value: `$::common::backup::backup_user`
+
+##### <a name="-common--backup--borg--remote_ip"></a>`remote_ip`
+
+Data type: `Optional[Variant[Eit_types::IP, Stdlib::FQDN]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-common--backup--borg--remote_backup_root"></a>`remote_backup_root`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `undef`
+
+##### <a name="-common--backup--borg--backup_root"></a>`backup_root`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::common::backup::dump_dir`
+
+##### <a name="-common--backup--borg--repos"></a>`repos`
+
+Data type: `Hash`
+
+
+
+Default value: `{}`
+
+##### <a name="-common--backup--borg--archives"></a>`archives`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+
+
+Default value: `[]`
+
+##### <a name="-common--backup--borg--authorized_keys"></a>`authorized_keys`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `undef`
+
+##### <a name="-common--backup--borg--server"></a>`server`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--backup--borg--last_borgbackup"></a>`last_borgbackup`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `'/var/tmp'`
+
+### <a name="common--backup--cassandra"></a>`common::backup::cassandra`
+
+Backup Cassandra database using medusa with local storage
+
+#### Parameters
+
+The following parameters are available in the `common::backup::cassandra` class:
+
+* [`enable`](#-common--backup--cassandra--enable)
+* [`cassandra_user`](#-common--backup--cassandra--cassandra_user)
+* [`backup_hour`](#-common--backup--cassandra--backup_hour)
+* [`snapshot_name`](#-common--backup--cassandra--snapshot_name)
+* [`medusa_bucket_name`](#-common--backup--cassandra--medusa_bucket_name)
+* [`medusa_base_path`](#-common--backup--cassandra--medusa_base_path)
+* [`cassandra_config_file`](#-common--backup--cassandra--cassandra_config_file)
+* [`max_backup_count`](#-common--backup--cassandra--max_backup_count)
+* [`max_backup_age`](#-common--backup--cassandra--max_backup_age)
+* [`enable_cleanup`](#-common--backup--cassandra--enable_cleanup)
+* [`cleanup_hour`](#-common--backup--cassandra--cleanup_hour)
+
+##### <a name="-common--backup--cassandra--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable backup
+
+Default value: `false`
+
+##### <a name="-common--backup--cassandra--cassandra_user"></a>`cassandra_user`
+
+Data type: `String`
+
+User to run Cassandra
+
+Default value: `'cassandra'`
+
+##### <a name="-common--backup--cassandra--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+Backup hour for backups
+
+Default value: `0`
+
+##### <a name="-common--backup--cassandra--snapshot_name"></a>`snapshot_name`
+
+Data type: `String`
+
+Snapshot name
+
+Default value: `'cassandra_snapshot'`
+
+##### <a name="-common--backup--cassandra--medusa_bucket_name"></a>`medusa_bucket_name`
+
+Data type: `String`
+
+Bucket name (directory name for local storage)
+
+Default value: `'cassandra_backups'`
+
+##### <a name="-common--backup--cassandra--medusa_base_path"></a>`medusa_base_path`
+
+Data type: `Stdlib::Unixpath`
+
+Base path for local storage backups
+
+Default value: `'/var/lib/medusa/backups'`
+
+##### <a name="-common--backup--cassandra--cassandra_config_file"></a>`cassandra_config_file`
+
+Data type: `Stdlib::Unixpath`
+
+Path to Cassandra configuration file
+
+Default value: `'/etc/cassandra/default.conf/cassandra.yaml'`
+
+##### <a name="-common--backup--cassandra--max_backup_count"></a>`max_backup_count`
+
+Data type: `Integer`
+
+Maximum number of backups to retain (0 = unlimited)
+
+Default value: `10`
+
+##### <a name="-common--backup--cassandra--max_backup_age"></a>`max_backup_age`
+
+Data type: `Integer`
+
+Maximum age of backups in days (0 = unlimited)
+
+Default value: `30`
+
+##### <a name="-common--backup--cassandra--enable_cleanup"></a>`enable_cleanup`
+
+Data type: `Boolean`
+
+Enable automatic cleanup of old backups using Medusa purge
+
+Default value: `true`
+
+##### <a name="-common--backup--cassandra--cleanup_hour"></a>`cleanup_hour`
+
+Data type: `Integer[0,23]`
+
+Hour to run cleanup (should be different from backup_hour)
+
+Default value: `1`
+
+### <a name="common--backup--db"></a>`common::backup::db`
+
+Class for managing common backup settings for databases
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db` class:
+
+* [`enable`](#-common--backup--db--enable)
+* [`backup_user_password`](#-common--backup--db--backup_user_password)
+* [`backup_user`](#-common--backup--db--backup_user)
+* [`root_password`](#-common--backup--db--root_password)
+* [`dump_dir`](#-common--backup--db--dump_dir)
+* [`backup_retention`](#-common--backup--db--backup_retention)
+* [`backup_hour`](#-common--backup--db--backup_hour)
+* [`ignore_tables`](#-common--backup--db--ignore_tables)
+* [`host`](#-common--backup--db--host)
+* [`backup_method`](#-common--backup--db--backup_method)
+* [`encrypt_params`](#-common--backup--db--encrypt_params)
+
+##### <a name="-common--backup--db--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable backup. Defaults to the value of $::common::backup::enable.
+
+Default value: `$::common::backup::enable`
+
+##### <a name="-common--backup--db--backup_user_password"></a>`backup_user_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+Optional password for backup user. Defaults to the value of $::common::backup::backup_user_password.
+
+Default value: `$::common::backup::backup_user_password`
+
+##### <a name="-common--backup--db--backup_user"></a>`backup_user`
+
+Data type: `String`
+
+The username for backup. Defaults to the value of $::common::backup::backup_user.
+
+Default value: `$::common::backup::backup_user`
+
+##### <a name="-common--backup--db--root_password"></a>`root_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+Optional password for root user. Defaults to the value of $::common::backup::root_password.
+
+Default value: `$::common::backup::root_password`
+
+##### <a name="-common--backup--db--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Unixpath`
+
+Filesystem path for dump directory. Defaults to the value of $::common::backup::dump_dir.
+
+Default value: `$::common::backup::dump_dir`
+
+##### <a name="-common--backup--db--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Number of days to retain backups. Defaults to 30.
+
+Default value: `30`
+
+##### <a name="-common--backup--db--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+Hour of the day to start backup (local server time). Defaults to 3.
+
+Default value: `3`
+
+##### <a name="-common--backup--db--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+Array of table names to ignore during backup. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-common--backup--db--host"></a>`host`
+
+Data type: `Optional[Eit_types::Host]`
+
+Hostname for database. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+##### <a name="-common--backup--db--backup_method"></a>`backup_method`
+
+Data type: `Enum['mysqldump', 'mysqlbackup', 'xtrabackup']`
+
+Backup method to use ('mysqldump', 'mysqlbackup', 'xtrabackup'). Defaults to 'mysqldump'.
+
+Default value: `'mysqldump'`
+
+##### <a name="-common--backup--db--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['root_password','backup_user_password']`
+
+### <a name="common--backup--db--mongodb"></a>`common::backup::db::mongodb`
+
+Class for managing MongoDB backups
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::mongodb` class:
+
+* [`enable`](#-common--backup--db--mongodb--enable)
+* [`backup_user`](#-common--backup--db--mongodb--backup_user)
+* [`backup_user_password`](#-common--backup--db--mongodb--backup_user_password)
+* [`backup_hour`](#-common--backup--db--mongodb--backup_hour)
+* [`backup_method`](#-common--backup--db--mongodb--backup_method)
+* [`dump_dir`](#-common--backup--db--mongodb--dump_dir)
+* [`backup_databases`](#-common--backup--db--mongodb--backup_databases)
+* [`backup_retention`](#-common--backup--db--mongodb--backup_retention)
+* [`encrypt_params`](#-common--backup--db--mongodb--encrypt_params)
+
+##### <a name="-common--backup--db--mongodb--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the backup feature. Defaults to the value of $::common::backup::db::enable.
+
+Default value: `$::common::backup::db::enable`
+
+##### <a name="-common--backup--db--mongodb--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::User`
+
+The user used for the backup process. Defaults to the value of $::common::backup::db::backup_user.
+
+Default value: `$::common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--mongodb--backup_user_password"></a>`backup_user_password`
+
+Data type: `Eit_types::Password`
+
+The password for the backup user. Defaults to the value of $::common::backup::db::backup_user_password.
+
+Default value: `$::common::backup::db::backup_user_password`
+
+##### <a name="-common--backup--db--mongodb--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day (0-23) when the backup should run. Defaults to the value of $::common::backup::db::backup_hour.
+
+Default value: `$::common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--mongodb--backup_method"></a>`backup_method`
+
+Data type:
+
+```puppet
+Enum[
+    'snapshot',
+    'dump'
+  ]
+```
+
+The method of backup, either 'snapshot' or 'dump'. Defaults to the value of $::common::backup::db::backup_method.
+
+Default value: `$::common::backup::db::backup_method`
+
+##### <a name="-common--backup--db--mongodb--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory where backups will be stored. Defaults to the value of $::common::backup::db::dump_dir.
+
+Default value: `$::common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--mongodb--backup_databases"></a>`backup_databases`
+
+Data type: `Optional[String]`
+
+Optional list of databases to backup. Defaults to the value of $::common::backup::db::backup_databases.
+
+Default value: `$::common::backup::db::backup_databases`
+
+##### <a name="-common--backup--db--mongodb--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Duration to retain backups in days. Defaults to the value of $::common::backup::db::backup_retention.
+
+Default value: `$::common::backup::db::backup_retention`
+
+##### <a name="-common--backup--db--mongodb--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['backup_user_password']`
+
+### <a name="common--backup--db--mysql"></a>`common::backup::db::mysql`
+
+Class for managing MySQL backup settings with specific overrides
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::mysql` class:
+
+* [`backup_user_password`](#-common--backup--db--mysql--backup_user_password)
+* [`enable`](#-common--backup--db--mysql--enable)
+* [`backup_hour`](#-common--backup--db--mysql--backup_hour)
+* [`ignore_tables`](#-common--backup--db--mysql--ignore_tables)
+* [`backup_method`](#-common--backup--db--mysql--backup_method)
+* [`backup_user`](#-common--backup--db--mysql--backup_user)
+* [`dump_dir`](#-common--backup--db--mysql--dump_dir)
+* [`backup_retention`](#-common--backup--db--mysql--backup_retention)
+* [`encrypt_params`](#-common--backup--db--mysql--encrypt_params)
+
+##### <a name="-common--backup--db--mysql--backup_user_password"></a>`backup_user_password`
+
+Data type: `Eit_types::Password`
+
+The password for the backup user. Defaults to $::common::backup::db::backup_user_password.
+
+Default value: `$::common::backup::db::backup_user_password`
+
+##### <a name="-common--backup--db--mysql--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable backup. Defaults to $::common::backup::db::enable.
+
+Default value: `$::common::backup::db::enable`
+
+##### <a name="-common--backup--db--mysql--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day to perform backup. Defaults to $::common::backup::db::backup_hour.
+
+Default value: `$::common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--mysql--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+List of tables to ignore during backup. Defaults to $::common::backup::db::ignore_tables.
+
+Default value: `$::common::backup::db::ignore_tables`
+
+##### <a name="-common--backup--db--mysql--backup_method"></a>`backup_method`
+
+Data type:
+
+```puppet
+Enum[
+    'xtrabackup',
+    'mysqldump',
+    'mysqlbackup'
+  ]
+```
+
+The backup method to use ('xtrabackup', 'mysqldump', 'mysqlbackup'). Defaults to $::common::backup::db::backup_method.
+
+Default value: `$::common::backup::db::backup_method`
+
+##### <a name="-common--backup--db--mysql--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::SimpleString`
+
+The user for backup operations. Defaults to $::common::backup::db::backup_user.
+
+Default value: `$::common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--mysql--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory to store backups. Defaults to $::common::backup::db::dump_dir.
+
+Default value: `$::common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--mysql--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Duration to retain backups. Defaults to $::common::backup::db::backup_retention.
+
+Default value: `$::common::backup::db::backup_retention`
+
+##### <a name="-common--backup--db--mysql--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['backup_user_password']`
+
+### <a name="common--backup--db--mysql--mysqlbackup"></a>`common::backup::db::mysql::mysqlbackup`
+
+Class for managing MySQL backup configuration and override for common::backup::db settings
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::mysql::mysqlbackup` class:
+
+* [`enable`](#-common--backup--db--mysql--mysqlbackup--enable)
+* [`backup_user_password`](#-common--backup--db--mysql--mysqlbackup--backup_user_password)
+* [`backup_hour`](#-common--backup--db--mysql--mysqlbackup--backup_hour)
+* [`ignore_tables`](#-common--backup--db--mysql--mysqlbackup--ignore_tables)
+* [`backup_user`](#-common--backup--db--mysql--mysqlbackup--backup_user)
+* [`dump_dir`](#-common--backup--db--mysql--mysqlbackup--dump_dir)
+* [`backup_retention`](#-common--backup--db--mysql--mysqlbackup--backup_retention)
+* [`encrypt_params`](#-common--backup--db--mysql--mysqlbackup--encrypt_params)
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the MySQL backup. Defaults to the value of $::common::backup::db::enable.
+
+Default value: `$::common::backup::db::enable`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--backup_user_password"></a>`backup_user_password`
+
+Data type: `Eit_types::Password`
+
+The password for the backup user. Defaults to $::common::backup::db::backup_user_password.
+
+Default value: `$::common::backup::db::backup_user_password`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of backup. Defaults to $::common::backup::db::backup_hour.
+
+Default value: `$::common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+List of tables to ignore during backup. Defaults to $::common::backup::db::ignore_tables.
+
+Default value: `$::common::backup::db::ignore_tables`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::User`
+
+The user to perform backup with. Defaults to $::common::backup::db::backup_user.
+
+Default value: `$::common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Directory for dump files. Defaults to $::common::backup::db::dump_dir.
+
+Default value: `$::common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Number of days to retain backups. Defaults to $::common::backup::db::backup_retention.
+
+Default value: `$::common::backup::db::backup_retention`
+
+##### <a name="-common--backup--db--mysql--mysqlbackup--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['backup_user_password']`
+
+### <a name="common--backup--db--mysql--mysqldump"></a>`common::backup::db::mysql::mysqldump`
+
+Class for specific settings for mysql and override for common::backup::db settings
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::mysql::mysqldump` class:
+
+* [`enable`](#-common--backup--db--mysql--mysqldump--enable)
+* [`backup_user_password`](#-common--backup--db--mysql--mysqldump--backup_user_password)
+* [`backup_hour`](#-common--backup--db--mysql--mysqldump--backup_hour)
+* [`ignore_tables`](#-common--backup--db--mysql--mysqldump--ignore_tables)
+* [`backup_user`](#-common--backup--db--mysql--mysqldump--backup_user)
+* [`dump_dir`](#-common--backup--db--mysql--mysqldump--dump_dir)
+* [`backup_retention`](#-common--backup--db--mysql--mysqldump--backup_retention)
+* [`encrypt_params`](#-common--backup--db--mysql--mysqldump--encrypt_params)
+
+##### <a name="-common--backup--db--mysql--mysqldump--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean for enabling or disabling mysql backup. Defaults to the value of $common::backup::db::enable.
+
+Default value: `$common::backup::db::enable`
+
+##### <a name="-common--backup--db--mysql--mysqldump--backup_user_password"></a>`backup_user_password`
+
+Data type: `Eit_types::Password`
+
+The password for the backup user. Defaults to the value of $common::backup::db::backup_user_password.
+
+Default value: `$common::backup::db::backup_user_password`
+
+##### <a name="-common--backup--db--mysql--mysqldump--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour to perform the backup. Defaults to the value of $common::backup::db::backup_hour.
+
+Default value: `$common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--mysql--mysqldump--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+Array of tables to ignore during backup. Defaults to the value of $common::backup::db::ignore_tables.
+
+Default value: `$common::backup::db::ignore_tables`
+
+##### <a name="-common--backup--db--mysql--mysqldump--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::SimpleString`
+
+The username for the backup process. Defaults to the value of $common::backup::db::backup_user.
+
+Default value: `$common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--mysql--mysqldump--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory where backups are stored. Defaults to the value of $common::backup::db::dump_dir.
+
+Default value: `$common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--mysql--mysqldump--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+The retention period for backups in days. Defaults to the value of $common::backup::db::backup_retention.
+
+Default value: `$common::backup::db::backup_retention`
+
+##### <a name="-common--backup--db--mysql--mysqldump--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['backup_user_password']`
+
+### <a name="common--backup--db--mysql--xtrabackup"></a>`common::backup::db::mysql::xtrabackup`
+
+Class for managing MySQL backup using xtrabackup and Borg
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::mysql::xtrabackup` class:
+
+* [`backup_user_password`](#-common--backup--db--mysql--xtrabackup--backup_user_password)
+* [`enable`](#-common--backup--db--mysql--xtrabackup--enable)
+* [`backup_hour`](#-common--backup--db--mysql--xtrabackup--backup_hour)
+* [`ignore_tables`](#-common--backup--db--mysql--xtrabackup--ignore_tables)
+* [`backup_user`](#-common--backup--db--mysql--xtrabackup--backup_user)
+* [`dump_dir`](#-common--backup--db--mysql--xtrabackup--dump_dir)
+* [`backup_retention`](#-common--backup--db--mysql--xtrabackup--backup_retention)
+* [`encrypt_params`](#-common--backup--db--mysql--xtrabackup--encrypt_params)
+
+##### <a name="-common--backup--db--mysql--xtrabackup--backup_user_password"></a>`backup_user_password`
+
+Data type: `Eit_types::Password`
+
+The password for the backup user. Defaults to the value of ::common::backup::db::backup_user_password.
+
+Default value: `$::common::backup::db::backup_user_password`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable the backup. Defaults to the value of ::common::backup::db::enable.
+
+Default value: `$::common::backup::db::enable`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of day to run the backup (0-23). Defaults to the value of ::common::backup::db::backup_hour.
+
+Default value: `$::common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+List of tables to ignore during backup. Defaults to the value of ::common::backup::db::ignore_tables.
+
+Default value: `$::common::backup::db::ignore_tables`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::SimpleString`
+
+The backup database user. Defaults to the value of ::common::backup::db::backup_user.
+
+Default value: `$::common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--dump_dir"></a>`dump_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Directory where backups are stored. Defaults to the value of ::common::backup::db::dump_dir.
+
+Default value: `$::common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Duration (in days) to retain backups. Defaults to the value of ::common::backup::db::backup_retention.
+
+Default value: `$::common::backup::db::backup_retention`
+
+##### <a name="-common--backup--db--mysql--xtrabackup--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['backup_user_password']`
+
+### <a name="common--backup--db--pgsql"></a>`common::backup::db::pgsql`
+
+Class for managing PostgreSQL backup configuration and overrides
+
+#### Parameters
+
+The following parameters are available in the `common::backup::db::pgsql` class:
+
+* [`enable`](#-common--backup--db--pgsql--enable)
+* [`backup_hour`](#-common--backup--db--pgsql--backup_hour)
+* [`backup_user`](#-common--backup--db--pgsql--backup_user)
+* [`ignore_tables`](#-common--backup--db--pgsql--ignore_tables)
+* [`dump_dir`](#-common--backup--db--pgsql--dump_dir)
+* [`backup_retention`](#-common--backup--db--pgsql--backup_retention)
+
+##### <a name="-common--backup--db--pgsql--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable PostgreSQL backup. Defaults to the value of $common::backup::db::enable.
+
+Default value: `$common::backup::db::enable`
+
+##### <a name="-common--backup--db--pgsql--backup_hour"></a>`backup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day to perform backup (0-23). Defaults to the value of $common::backup::db::backup_hour.
+
+Default value: `$common::backup::db::backup_hour`
+
+##### <a name="-common--backup--db--pgsql--backup_user"></a>`backup_user`
+
+Data type: `Eit_types::SimpleString`
+
+The user to run the backup as. Defaults to the value of $common::backup::db::backup_user.
+
+Default value: `$common::backup::db::backup_user`
+
+##### <a name="-common--backup--db--pgsql--ignore_tables"></a>`ignore_tables`
+
+Data type: `Array[String]`
+
+List of table names to ignore during backup. Defaults to the value of $common::backup::db::ignore_tables.
+
+Default value: `$common::backup::db::ignore_tables`
+
+##### <a name="-common--backup--db--pgsql--dump_dir"></a>`dump_dir`
+
+Data type: `Optional[Stdlib::Unixpath]`
+
+Optional path to the directory where backups will be stored. Defaults to the value of $common::backup::db::dump_dir.
+
+Default value: `$common::backup::db::dump_dir`
+
+##### <a name="-common--backup--db--pgsql--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+Duration in days to retain backups. Defaults to the value of $common::backup::db::backup_retention.
+
+Default value: `$common::backup::db::backup_retention`
+
+### <a name="common--backup--gitea"></a>`common::backup::gitea`
+
+Class for managing Gitea backups
+
+#### Parameters
+
+The following parameters are available in the `common::backup::gitea` class:
+
+* [`enable`](#-common--backup--gitea--enable)
+* [`noop_value`](#-common--backup--gitea--noop_value)
+
+##### <a name="-common--backup--gitea--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the backup. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--backup--gitea--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean value for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--backup--netbackup"></a>`common::backup::netbackup`
+
+Class for managing NetBackup common backup configuration
+
+#### Parameters
+
+The following parameters are available in the `common::backup::netbackup` class:
+
+* [`enable`](#-common--backup--netbackup--enable)
+* [`installer_path`](#-common--backup--netbackup--installer_path)
+* [`version`](#-common--backup--netbackup--version)
+* [`master_server`](#-common--backup--netbackup--master_server)
+* [`media_servers`](#-common--backup--netbackup--media_servers)
+* [`authorization_token`](#-common--backup--netbackup--authorization_token)
+* [`ca_cert`](#-common--backup--netbackup--ca_cert)
+* [`excludes`](#-common--backup--netbackup--excludes)
+
+##### <a name="-common--backup--netbackup--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable NetBackup backup. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--backup--netbackup--installer_path"></a>`installer_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Path to the installer directory.
+
+##### <a name="-common--backup--netbackup--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of NetBackup.
+
+##### <a name="-common--backup--netbackup--master_server"></a>`master_server`
+
+Data type: `Stdlib::Host`
+
+The master server hostname.
+
+##### <a name="-common--backup--netbackup--media_servers"></a>`media_servers`
+
+Data type: `Array[Stdlib::Host, 1]`
+
+Array of media server hostnames, at least one required.
+
+##### <a name="-common--backup--netbackup--authorization_token"></a>`authorization_token`
+
+Data type: `Pattern[/\A[A-Z]{16}\Z/]`
+
+Authorization token matching 16 uppercase letters.
+
+##### <a name="-common--backup--netbackup--ca_cert"></a>`ca_cert`
+
+Data type: `String`
+
+Path to the CA certificate.
+
+##### <a name="-common--backup--netbackup--excludes"></a>`excludes`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+List of paths to exclude from backup. Defaults to empty array.
+
+Default value: `[]`
+
 ### <a name="common--certs"></a>`common::certs`
 
 Class for managing common certificates and CA certificates
@@ -325,7 +1496,8 @@ Data type:
 
 ```puppet
 Hash[String, Struct[{
-      source => String,
+      source  => Optional[Eit_Files::Source],
+      content => Optional[String],
   }]]
 ```
 
@@ -349,9 +1521,178 @@ Default value:
   ]
 ```
 
+### <a name="common--certs--letsencrypt"></a>`common::certs::letsencrypt`
+
+Class for managing Let's Encrypt certificates
+
+#### Parameters
+
+The following parameters are available in the `common::certs::letsencrypt` class:
+
+* [`email`](#-common--certs--letsencrypt--email)
+* [`ca`](#-common--certs--letsencrypt--ca)
+* [`renew`](#-common--certs--letsencrypt--renew)
+* [`http_01_port`](#-common--certs--letsencrypt--http_01_port)
+* [`challenges`](#-common--certs--letsencrypt--challenges)
+* [`domains`](#-common--certs--letsencrypt--domains)
+* [`warning`](#-common--certs--letsencrypt--warning)
+* [`critical`](#-common--certs--letsencrypt--critical)
+* [`cert_host`](#-common--certs--letsencrypt--cert_host)
+* [`deploy_hook_command`](#-common--certs--letsencrypt--deploy_hook_command)
+* [`distribute_to`](#-common--certs--letsencrypt--distribute_to)
+
+##### <a name="-common--certs--letsencrypt--email"></a>`email`
+
+Data type: `Eit_types::Email`
+
+The email address associated with the certificates. Defaults to 'ops@obmondo.com'.
+
+Default value: `'ops@obmondo.com'`
+
+##### <a name="-common--certs--letsencrypt--ca"></a>`ca`
+
+Data type:
+
+```puppet
+Enum[
+    'production',
+    'staging'
+  ]
+```
+
+The Certificate Authority environment. Defaults to 'production'. Allowed values are 'production' and 'staging'.
+
+Default value: `'production'`
+
+##### <a name="-common--certs--letsencrypt--renew"></a>`renew`
+
+Data type: `Boolean`
+
+Whether to automatically renew certificates. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--certs--letsencrypt--http_01_port"></a>`http_01_port`
+
+Data type: `Stdlib::Port`
+
+The port used for HTTP-01 challenge. Defaults to 63480.
+
+Default value: `63480`
+
+##### <a name="-common--certs--letsencrypt--challenges"></a>`challenges`
+
+Data type: `Eit_types::Cert::Letsencrypt::Challenge`
+
+The challenge type for certificate issuance. Defaults to 'http'. Allowed values are 'http', 'dns', etc.
+
+Default value: `'http'`
+
+##### <a name="-common--certs--letsencrypt--domains"></a>`domains`
+
+Data type: `Array[Stdlib::Fqdn]`
+
+List of domain names for the certificates.
+
+Default value: `[]`
+
+##### <a name="-common--certs--letsencrypt--warning"></a>`warning`
+
+Data type: `Optional[Integer]`
+
+Warning threshold for renewal. Defaults to 7 days.
+
+Default value: `7`
+
+##### <a name="-common--certs--letsencrypt--critical"></a>`critical`
+
+Data type: `Optional[Integer]`
+
+Critical threshold for renewal. Defaults to 4 days.
+
+Default value: `4`
+
+##### <a name="-common--certs--letsencrypt--cert_host"></a>`cert_host`
+
+Data type: `Optional[Variant[Eit_types::Certname, Eit_types::Host]]`
+
+Optional certificate host override.
+
+Default value: `undef`
+
+##### <a name="-common--certs--letsencrypt--deploy_hook_command"></a>`deploy_hook_command`
+
+Data type: `Optional[Variant[Stdlib::Absolutepath, String]]`
+
+Optional command to run after deployment.
+
+Default value: `undef`
+
+##### <a name="-common--certs--letsencrypt--distribute_to"></a>`distribute_to`
+
+Data type: `Array[Variant[Eit_types::Certname, Eit_types::Host]]`
+
+List of hosts or locations to distribute the certificates to.
+
+Default value: `[]`
+
 ### <a name="common--convenience"></a>`common::convenience`
 
 Class for common convenience utilities
+
+### <a name="common--convenience--bash"></a>`common::convenience::bash`
+
+Class for managing common::convenience::bash
+
+#### Parameters
+
+The following parameters are available in the `common::convenience::bash` class:
+
+* [`manage`](#-common--convenience--bash--manage)
+* [`noop_value`](#-common--convenience--bash--noop_value)
+
+##### <a name="-common--convenience--bash--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the files. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--convenience--bash--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Whether to perform no-operation. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--convenience--tmux"></a>`common::convenience::tmux`
+
+Class for managing common::convenience::tmux
+
+#### Parameters
+
+The following parameters are available in the `common::convenience::tmux` class:
+
+* [`manage`](#-common--convenience--tmux--manage)
+* [`noop_value`](#-common--convenience--tmux--noop_value)
+
+##### <a name="-common--convenience--tmux--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean indicating whether to manage tmux package and files. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--convenience--tmux--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional Boolean for noop operations. Defaults to false.
+
+Default value: `false`
 
 ### <a name="common--cron"></a>`common::cron`
 
@@ -434,6 +1775,42 @@ Boolean parameter to determine if computing management should be included. Defau
 
 Default value: `false`
 
+### <a name="common--extras--computing"></a>`common::extras::computing`
+
+Class for extra computing-related functionalities that do not fall into other categories
+
+#### Parameters
+
+The following parameters are available in the `common::extras::computing` class:
+
+* [`enable`](#-common--extras--computing--enable)
+
+##### <a name="-common--extras--computing--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable computing extras. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--extras--computing--nivisa"></a>`common::extras::computing::nivisa`
+
+Class for managing NI-VISA 2019 configuration
+
+#### Parameters
+
+The following parameters are available in the `common::extras::computing::nivisa` class:
+
+* [`enable`](#-common--extras--computing--nivisa--enable)
+
+##### <a name="-common--extras--computing--nivisa--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable NI-VISA. Defaults to false.
+
+Default value: `false`
+
 ### <a name="common--hosts"></a>`common::hosts`
 
 Class for managing host entries
@@ -485,8 +1862,6 @@ Data type: `Boolean`
 
 
 
-Default value: `true`
-
 ##### <a name="-common--logging--log_dir_group"></a>`log_dir_group`
 
 Data type: `Optional[Eit_types::Group]`
@@ -502,6 +1877,231 @@ Data type: `Stdlib::Filemode`
 Mode for the log directory. Defaults to '0755'.
 
 Default value: `'0755'`
+
+### <a name="common--logging--journal"></a>`common::logging::journal`
+
+Class for managing the journal configuration
+
+#### Parameters
+
+The following parameters are available in the `common::logging::journal` class:
+
+* [`manage`](#-common--logging--journal--manage)
+* [`upload_enable`](#-common--logging--journal--upload_enable)
+* [`package_name`](#-common--logging--journal--package_name)
+* [`remote_url`](#-common--logging--journal--remote_url)
+* [`noop_value`](#-common--logging--journal--noop_value)
+
+##### <a name="-common--logging--journal--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the journal service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--journal--upload_enable"></a>`upload_enable`
+
+Data type: `Boolean`
+
+Whether to enable journal upload. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--logging--journal--package_name"></a>`package_name`
+
+Data type: `String`
+
+The name of the journal package. Defaults to 'systemd-journal-remote'.
+
+Default value: `'systemd-journal-remote'`
+
+##### <a name="-common--logging--journal--remote_url"></a>`remote_url`
+
+Data type: `Optional[Eit_types::URL]`
+
+Optional URL for remote journal storage. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--logging--journal--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional noop value for testing. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--logging--logrotate"></a>`common::logging::logrotate`
+
+Class for managing logrotate rules
+
+#### Parameters
+
+The following parameters are available in the `common::logging::logrotate` class:
+
+* [`manage`](#-common--logging--logrotate--manage)
+* [`purge`](#-common--logging--logrotate--purge)
+* [`dateext`](#-common--logging--logrotate--dateext)
+* [`compress`](#-common--logging--logrotate--compress)
+* [`su`](#-common--logging--logrotate--su)
+* [`rules`](#-common--logging--logrotate--rules)
+
+##### <a name="-common--logging--logrotate--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean flag to determine whether to manage logrotate rules. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--logging--logrotate--purge"></a>`purge`
+
+Data type: `Boolean`
+
+Boolean flag to determine whether to purge existing rules. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--logging--logrotate--dateext"></a>`dateext`
+
+Data type: `Boolean`
+
+Boolean to enable date extension in logrotate filenames. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--logrotate--compress"></a>`compress`
+
+Data type: `Boolean`
+
+Boolean to enable compression of rotated logs. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--logrotate--su"></a>`su`
+
+Data type: `Boolean`
+
+Boolean indicating whether to use 'su' directive. Defaults to true (note: not supported).
+
+Default value: `true`
+
+##### <a name="-common--logging--logrotate--rules"></a>`rules`
+
+Data type: `Eit_types::Common::Logging::Logrotate::Rules`
+
+Hash of custom logrotate rules. Defaults to empty hash.
+
+Default value: `{}`
+
+### <a name="common--logging--rsyslog"></a>`common::logging::rsyslog`
+
+Whether to manage rsyslog. Defaults to the value of $common::logging::manage.
+
+#### Parameters
+
+The following parameters are available in the `common::logging::rsyslog` class:
+
+* [`manage`](#-common--logging--rsyslog--manage)
+* [`enable`](#-common--logging--rsyslog--enable)
+* [`purge_rsyslog_d`](#-common--logging--rsyslog--purge_rsyslog_d)
+* [`log_remote`](#-common--logging--rsyslog--log_remote)
+* [`log_local`](#-common--logging--rsyslog--log_local)
+* [`system_log`](#-common--logging--rsyslog--system_log)
+* [`log_cron`](#-common--logging--rsyslog--log_cron)
+* [`log_mail`](#-common--logging--rsyslog--log_mail)
+* [`log_auth`](#-common--logging--rsyslog--log_auth)
+* [`log_boot`](#-common--logging--rsyslog--log_boot)
+* [`remote_servers`](#-common--logging--rsyslog--remote_servers)
+
+##### <a name="-common--logging--rsyslog--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::logging::manage`
+
+##### <a name="-common--logging--rsyslog--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable rsyslog. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--purge_rsyslog_d"></a>`purge_rsyslog_d`
+
+Data type: `Boolean`
+
+Whether to purge rsyslog.d directory. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--log_remote"></a>`log_remote`
+
+Data type: `Boolean`
+
+Enable logging remotely. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--logging--rsyslog--log_local"></a>`log_local`
+
+Data type: `Boolean`
+
+Enable local logging. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--system_log"></a>`system_log`
+
+Data type: `Boolean`
+
+Use system log. Defaults to value of $log_local.
+
+Default value: `$log_local`
+
+##### <a name="-common--logging--rsyslog--log_cron"></a>`log_cron`
+
+Data type: `Boolean`
+
+Enable cron logging. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--log_mail"></a>`log_mail`
+
+Data type: `Boolean`
+
+Enable mail logging. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--log_auth"></a>`log_auth`
+
+Data type: `Boolean`
+
+Enable auth logging. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--logging--rsyslog--log_boot"></a>`log_boot`
+
+Data type: `Boolean`
+
+Enable boot logging. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--logging--rsyslog--remote_servers"></a>`remote_servers`
+
+Data type: `Eit_types::Rsyslog::Remote_Ip`
+
+Hash of remote server IPs for remote logging. Defaults to an empty hash.
+
+Default value: `{}`
 
 ### <a name="common--lvm"></a>`common::lvm`
 
@@ -810,6 +2410,1345 @@ Whether to enable monitoring. Defaults to the value of $::obmondo_monitoring_sta
 
 Default value: `$::obmondo_monitoring_status`
 
+### <a name="common--monitor--exporter"></a>`common::monitor::exporter`
+
+Class for managing the common::monitor::exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter` class:
+
+* [`enable`](#-common--monitor--exporter--enable)
+* [`noop_value`](#-common--monitor--exporter--noop_value)
+* [`config_dir`](#-common--monitor--exporter--config_dir)
+
+##### <a name="-common--monitor--exporter--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to the value of $common::monitor::enable.
+
+Default value: `$common::monitor::enable`
+
+##### <a name="-common--monitor--exporter--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+The noop value for the exporter. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The directory for exporter configuration files. Defaults to '/opt/obmondo/etc/exporter'.
+
+Default value: `'/opt/obmondo/etc/exporter'`
+
+### <a name="common--monitor--exporter--blackbox"></a>`common::monitor::exporter::blackbox`
+
+Class for managing the Prometheus Blackbox Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::blackbox` class:
+
+* [`enable`](#-common--monitor--exporter--blackbox--enable)
+* [`listen_port`](#-common--monitor--exporter--blackbox--listen_port)
+* [`noop_value`](#-common--monitor--exporter--blackbox--noop_value)
+* [`config_file`](#-common--monitor--exporter--blackbox--config_file)
+* [`targets`](#-common--monitor--exporter--blackbox--targets)
+
+##### <a name="-common--monitor--exporter--blackbox--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the exporter.
+
+##### <a name="-common--monitor--exporter--blackbox--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port on which the exporter listens.
+
+##### <a name="-common--monitor--exporter--blackbox--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean to indicate if operations should be in noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--blackbox--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the configuration file. Defaults to "${::common::monitor::exporter::config_dir}/blackbox.yml".
+
+Default value: `"${::common::monitor::exporter::config_dir}/blackbox.yml"`
+
+##### <a name="-common--monitor--exporter--blackbox--targets"></a>`targets`
+
+Data type: `Array[Eit_types::Monitor::Domains]`
+
+An array of domain targets to monitor. Defaults to an empty array.
+
+Default value: `[]`
+
+### <a name="common--monitor--exporter--cadvisor"></a>`common::monitor::exporter::cadvisor`
+
+Class to manage the Prometheus cAdvisor exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::cadvisor` class:
+
+* [`enable`](#-common--monitor--exporter--cadvisor--enable)
+* [`noop_value`](#-common--monitor--exporter--cadvisor--noop_value)
+* [`listen_port`](#-common--monitor--exporter--cadvisor--listen_port)
+* [`host`](#-common--monitor--exporter--cadvisor--host)
+
+##### <a name="-common--monitor--exporter--cadvisor--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--cadvisor--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The value to use for noop setting. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--cadvisor--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port to listen on. Defaults to 63392.
+
+Default value: `63392`
+
+##### <a name="-common--monitor--exporter--cadvisor--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+The host certname. Defaults to $trusted['certname'].
+
+Default value: `$trusted['certname']`
+
+### <a name="common--monitor--exporter--dellhw"></a>`common::monitor::exporter::dellhw`
+
+Class for managing Prometheus dellhw exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::dellhw` class:
+
+* [`enable`](#-common--monitor--exporter--dellhw--enable)
+* [`noop_value`](#-common--monitor--exporter--dellhw--noop_value)
+* [`manage_repo`](#-common--monitor--exporter--dellhw--manage_repo)
+* [`listen_address`](#-common--monitor--exporter--dellhw--listen_address)
+
+##### <a name="-common--monitor--exporter--dellhw--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the exporter. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--dellhw--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean indicating whether to run in noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--dellhw--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+Boolean to determine if repository should be managed. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--dellhw--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63386'.
+
+Default value: `'127.254.254.254:63386'`
+
+### <a name="common--monitor--exporter--dns"></a>`common::monitor::exporter::dns`
+
+Class for managing the common monitoring exporter DNS
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::dns` class:
+
+* [`enable`](#-common--monitor--exporter--dns--enable)
+* [`noop_value`](#-common--monitor--exporter--dns--noop_value)
+* [`listen_address`](#-common--monitor--exporter--dns--listen_address)
+* [`interval_seconds`](#-common--monitor--exporter--dns--interval_seconds)
+* [`domains`](#-common--monitor--exporter--dns--domains)
+
+##### <a name="-common--monitor--exporter--dns--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable the DNS exporter monitor. Defaults to true.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--dns--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The value to use for noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--dns--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on. Defaults to '127.254.254.254:63395'.
+
+Default value: `'127.254.254.254:63395'`
+
+##### <a name="-common--monitor--exporter--dns--interval_seconds"></a>`interval_seconds`
+
+Data type: `Eit_types::Duration::Seconds`
+
+The interval in seconds for the metrics. Defaults to 120.
+
+Default value: `120`
+
+##### <a name="-common--monitor--exporter--dns--domains"></a>`domains`
+
+Data type: `Array[Eit_types::Hostname]`
+
+Array of domain names to monitor. Defaults to ['nrk.no', 'vg.no', 'example.com'].
+
+Default value:
+
+```puppet
+[
+    'nrk.no',
+    'vg.no',
+    'example.com',
+  ]
+```
+
+### <a name="common--monitor--exporter--elasticsearch"></a>`common::monitor::exporter::elasticsearch`
+
+Class for managing Prometheus Elasticsearch Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::elasticsearch` class:
+
+* [`enable`](#-common--monitor--exporter--elasticsearch--enable)
+* [`listen_address`](#-common--monitor--exporter--elasticsearch--listen_address)
+* [`noop_value`](#-common--monitor--exporter--elasticsearch--noop_value)
+
+##### <a name="-common--monitor--exporter--elasticsearch--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the exporter. Defaults to value of $common::monitor::exporter::enable.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--elasticsearch--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port for the exporter to listen on. Defaults to '127.254.254.254:9105'.
+
+Default value: `'127.254.254.254:9105'`
+
+##### <a name="-common--monitor--exporter--elasticsearch--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean for noop mode. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--filestat"></a>`common::monitor::exporter::filestat`
+
+Class for monitoring file statistics with Prometheus exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::filestat` class:
+
+* [`enable`](#-common--monitor--exporter--filestat--enable)
+* [`noop_value`](#-common--monitor--exporter--filestat--noop_value)
+* [`config_file`](#-common--monitor--exporter--filestat--config_file)
+* [`working_directory`](#-common--monitor--exporter--filestat--working_directory)
+* [`file_pattern`](#-common--monitor--exporter--filestat--file_pattern)
+* [`listen_address`](#-common--monitor--exporter--filestat--listen_address)
+
+##### <a name="-common--monitor--exporter--filestat--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the exporter. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--filestat--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean value used for noop operations during testing. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--filestat--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the exporter configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/filestat_exporter.yaml".
+
+Default value: `"${common::monitor::exporter::config_dir}/filestat_exporter.yaml"`
+
+##### <a name="-common--monitor--exporter--filestat--working_directory"></a>`working_directory`
+
+Data type: `Stdlib::Absolutepath`
+
+The working directory for the exporter process. Defaults to '/backup'.
+
+Default value: `'/backup'`
+
+##### <a name="-common--monitor--exporter--filestat--file_pattern"></a>`file_pattern`
+
+Data type: `Array[String]`
+
+An array of file patterns to monitor. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--monitor--exporter--filestat--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63387'.
+
+Default value: `'127.254.254.254:63387'`
+
+### <a name="common--monitor--exporter--gitlab_runner"></a>`common::monitor::exporter::gitlab_runner`
+
+Class for managing the Prometheus GitLab Runner exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::gitlab_runner` class:
+
+* [`enable`](#-common--monitor--exporter--gitlab_runner--enable)
+* [`noop_value`](#-common--monitor--exporter--gitlab_runner--noop_value)
+* [`listen_address`](#-common--monitor--exporter--gitlab_runner--listen_address)
+* [`host`](#-common--monitor--exporter--gitlab_runner--host)
+
+##### <a name="-common--monitor--exporter--gitlab_runner--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to $common::monitor::exporter::enable.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--gitlab_runner--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The value for noop. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--gitlab_runner--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on. Defaults to '127.254.254.254:63384'.
+
+Default value: `'127.254.254.254:63384'`
+
+##### <a name="-common--monitor--exporter--gitlab_runner--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+The hostname. Defaults to $trusted['certname'].
+
+Default value: `$trusted['certname']`
+
+### <a name="common--monitor--exporter--haproxy"></a>`common::monitor::exporter::haproxy`
+
+Boolean flag to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::haproxy` class:
+
+* [`enable`](#-common--monitor--exporter--haproxy--enable)
+* [`noop_value`](#-common--monitor--exporter--haproxy--noop_value)
+* [`listen_port`](#-common--monitor--exporter--haproxy--listen_port)
+* [`host`](#-common--monitor--exporter--haproxy--host)
+
+##### <a name="-common--monitor--exporter--haproxy--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--haproxy--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean value for noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--haproxy--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port to listen on. Defaults to 63661.
+
+Default value: `63661`
+
+##### <a name="-common--monitor--exporter--haproxy--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+The hostname or certname to use. Defaults to $trusted['certname'].
+
+Default value: `$trusted['certname']`
+
+### <a name="common--monitor--exporter--iptables"></a>`common::monitor::exporter::iptables`
+
+Class for managing the Prometheus iptables Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::iptables` class:
+
+* [`enable`](#-common--monitor--exporter--iptables--enable)
+* [`noop_value`](#-common--monitor--exporter--iptables--noop_value)
+* [`listen_address`](#-common--monitor--exporter--iptables--listen_address)
+
+##### <a name="-common--monitor--exporter--iptables--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable the exporter.
+
+##### <a name="-common--monitor--exporter--iptables--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean value to specify noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--iptables--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port the exporter listens on. Defaults to '127.254.254.254:63393'.
+
+Default value: `'127.254.254.254:63393'`
+
+### <a name="common--monitor--exporter--mtail"></a>`common::monitor::exporter::mtail`
+
+Class for managing the Prometheus Mtail Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::mtail` class:
+
+* [`enable`](#-common--monitor--exporter--mtail--enable)
+* [`noop_value`](#-common--monitor--exporter--mtail--noop_value)
+* [`listen_address`](#-common--monitor--exporter--mtail--listen_address)
+* [`logs`](#-common--monitor--exporter--mtail--logs)
+* [`progs`](#-common--monitor--exporter--mtail--progs)
+
+##### <a name="-common--monitor--exporter--mtail--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--mtail--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The noop value for resources. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--mtail--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on. Defaults to '127.254.254.254:63389'.
+
+Default value: `'127.254.254.254:63389'`
+
+##### <a name="-common--monitor--exporter--mtail--logs"></a>`logs`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+An array of log file paths to monitor. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--monitor--exporter--mtail--progs"></a>`progs`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the programs directory. Defaults to "${common::monitor::exporter::config_dir}/mtail".
+
+Default value: `"${common::monitor::exporter::config_dir}/mtail"`
+
+### <a name="common--monitor--exporter--mysql"></a>`common::monitor::exporter::mysql`
+
+Whether to enable the exporter. Defaults to the value of $::common::monitor::exporter::enable.
+
+The MySQL monitor username. Defaults to the value of $::profile::mysql::mysql_monitor_username.
+
+The MySQL monitor password. Defaults to the value of $::profile::mysql::mysql_monitor_password.
+
+The port used by MySQL. Defaults to the value of $::profile::mysql::mysql_port.
+
+The hostname for MySQL monitoring. Defaults to the value of $::profile::mysql::mysql_monitor_hostname.
+
+The port for Prometheus to scrape metrics. Defaults to 9104.
+
+Whether to run in noop mode. Defaults to false.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::mysql` class:
+
+* [`enable`](#-common--monitor--exporter--mysql--enable)
+* [`username`](#-common--monitor--exporter--mysql--username)
+* [`password`](#-common--monitor--exporter--mysql--password)
+* [`mysql_port`](#-common--monitor--exporter--mysql--mysql_port)
+* [`mysql_monitor_hostname`](#-common--monitor--exporter--mysql--mysql_monitor_hostname)
+* [`listen_port`](#-common--monitor--exporter--mysql--listen_port)
+* [`noop_value`](#-common--monitor--exporter--mysql--noop_value)
+* [`encrypt_params`](#-common--monitor--exporter--mysql--encrypt_params)
+
+##### <a name="-common--monitor--exporter--mysql--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--mysql--username"></a>`username`
+
+Data type: `String`
+
+
+
+Default value: `$::profile::mysql::mysql_monitor_username`
+
+##### <a name="-common--monitor--exporter--mysql--password"></a>`password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$::profile::mysql::mysql_monitor_password`
+
+##### <a name="-common--monitor--exporter--mysql--mysql_port"></a>`mysql_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::profile::mysql::mysql_port`
+
+##### <a name="-common--monitor--exporter--mysql--mysql_monitor_hostname"></a>`mysql_monitor_hostname`
+
+Data type: `String`
+
+
+
+Default value: `$::profile::mysql::mysql_monitor_hostname`
+
+##### <a name="-common--monitor--exporter--mysql--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `9104`
+
+##### <a name="-common--monitor--exporter--mysql--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--mysql--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['password']`
+
+### <a name="common--monitor--exporter--node"></a>`common::monitor::exporter::node`
+
+Class for managing the common::monitor::exporter::node Puppet class
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::node` class:
+
+* [`buddyinfo`](#-common--monitor--exporter--node--buddyinfo)
+* [`cgroups`](#-common--monitor--exporter--node--cgroups)
+* [`drbd`](#-common--monitor--exporter--node--drbd)
+* [`drm`](#-common--monitor--exporter--node--drm)
+* [`ethtool`](#-common--monitor--exporter--node--ethtool)
+* [`interrupts`](#-common--monitor--exporter--node--interrupts)
+* [`ksmd`](#-common--monitor--exporter--node--ksmd)
+* [`lnstat`](#-common--monitor--exporter--node--lnstat)
+* [`logind`](#-common--monitor--exporter--node--logind)
+* [`meminfo_numa`](#-common--monitor--exporter--node--meminfo_numa)
+* [`mountstats`](#-common--monitor--exporter--node--mountstats)
+* [`network_route`](#-common--monitor--exporter--node--network_route)
+* [`ntp`](#-common--monitor--exporter--node--ntp)
+* [`perf`](#-common--monitor--exporter--node--perf)
+* [`processes`](#-common--monitor--exporter--node--processes)
+* [`qdisc`](#-common--monitor--exporter--node--qdisc)
+* [`runit`](#-common--monitor--exporter--node--runit)
+* [`slabinfo`](#-common--monitor--exporter--node--slabinfo)
+* [`supervisord`](#-common--monitor--exporter--node--supervisord)
+* [`sysctl`](#-common--monitor--exporter--node--sysctl)
+* [`systemd`](#-common--monitor--exporter--node--systemd)
+* [`tcpstat`](#-common--monitor--exporter--node--tcpstat)
+* [`thermal_zone`](#-common--monitor--exporter--node--thermal_zone)
+* [`wifi`](#-common--monitor--exporter--node--wifi)
+* [`zoneinfo`](#-common--monitor--exporter--node--zoneinfo)
+* [`textfile_directory`](#-common--monitor--exporter--node--textfile_directory)
+* [`lib_directory`](#-common--monitor--exporter--node--lib_directory)
+* [`listen_address`](#-common--monitor--exporter--node--listen_address)
+* [`enable`](#-common--monitor--exporter--node--enable)
+* [`noop_value`](#-common--monitor--exporter--node--noop_value)
+* [`host`](#-common--monitor--exporter--node--host)
+
+##### <a name="-common--monitor--exporter--node--buddyinfo"></a>`buddyinfo`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'buddyinfo' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--cgroups"></a>`cgroups`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'cgroups' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--drbd"></a>`drbd`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'drbd' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--drm"></a>`drm`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'drm' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--ethtool"></a>`ethtool`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'ethtool' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--interrupts"></a>`interrupts`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'interrupts' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--ksmd"></a>`ksmd`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'ksmd' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--lnstat"></a>`lnstat`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'lnstat' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--logind"></a>`logind`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'logind' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--meminfo_numa"></a>`meminfo_numa`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'meminfo_numa' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--mountstats"></a>`mountstats`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'mountstats' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--network_route"></a>`network_route`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'network_route' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--ntp"></a>`ntp`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'ntp' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--perf"></a>`perf`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'perf' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--processes"></a>`processes`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'processes' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--qdisc"></a>`qdisc`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'qdisc' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--runit"></a>`runit`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'runit' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--slabinfo"></a>`slabinfo`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'slabinfo' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--supervisord"></a>`supervisord`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'supervisord' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--sysctl"></a>`sysctl`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'sysctl' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--systemd"></a>`systemd`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'systemd' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--tcpstat"></a>`tcpstat`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'tcpstat' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--thermal_zone"></a>`thermal_zone`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'thermal_zone' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--wifi"></a>`wifi`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'wifi' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--zoneinfo"></a>`zoneinfo`
+
+Data type: `Boolean`
+
+Boolean indicating whether to enable the 'zoneinfo' collector. Defaults to false.
+
+##### <a name="-common--monitor--exporter--node--textfile_directory"></a>`textfile_directory`
+
+Data type: `Stdlib::AbsolutePath`
+
+Absolute path for the textfile directory. Defaults to undef.
+
+##### <a name="-common--monitor--exporter--node--lib_directory"></a>`lib_directory`
+
+Data type: `Stdlib::AbsolutePath`
+
+Absolute path for the library directory. Defaults to undef.
+
+##### <a name="-common--monitor--exporter--node--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on, as an Eit_types::IPPort. Defaults to undef.
+
+##### <a name="-common--monitor--exporter--node--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating whether the exporter is enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--monitor--exporter--node--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean value for noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--node--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+
+
+Default value: `$trusted['certname']`
+
+### <a name="common--monitor--exporter--node--lsof"></a>`common::monitor::exporter::node::lsof`
+
+Class for managing the Lsof exporter for Prometheus
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::node::lsof` class:
+
+* [`enable`](#-common--monitor--exporter--node--lsof--enable)
+* [`noop_value`](#-common--monitor--exporter--node--lsof--noop_value)
+
+##### <a name="-common--monitor--exporter--node--lsof--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to the value of $::common::monitor::exporter::node::enable.
+
+Default value: `$::common::monitor::exporter::node::enable`
+
+##### <a name="-common--monitor--exporter--node--lsof--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to control noop behavior. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--node--smartmon"></a>`common::monitor::exporter::node::smartmon`
+
+Class for managing the Prometheus Smartmon class common::monitor::exporter::node::smartmon
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::node::smartmon` class:
+
+* [`enable`](#-common--monitor--exporter--node--smartmon--enable)
+* [`noop_value`](#-common--monitor--exporter--node--smartmon--noop_value)
+
+##### <a name="-common--monitor--exporter--node--smartmon--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the class. Defaults to $common::monitor::exporter::node::enable.
+
+Default value: `$common::monitor::exporter::node::enable`
+
+##### <a name="-common--monitor--exporter--node--smartmon--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional Boolean for no-operation mode. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--node--ssacli"></a>`common::monitor::exporter::node::ssacli`
+
+Class for managing the common::monitor::exporter::node::ssacli
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::node::ssacli` class:
+
+* [`enable`](#-common--monitor--exporter--node--ssacli--enable)
+* [`noop_value`](#-common--monitor--exporter--node--ssacli--noop_value)
+
+##### <a name="-common--monitor--exporter--node--ssacli--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
+
+Default value: `$common::monitor::exporter::node::enable`
+
+##### <a name="-common--monitor--exporter--node--ssacli--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional[Boolean], the noop value for resources. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--node--topprocesses"></a>`common::monitor::exporter::node::topprocesses`
+
+Class for managing the Topprocesses Prometheus exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::node::topprocesses` class:
+
+* [`enable`](#-common--monitor--exporter--node--topprocesses--enable)
+* [`noop_value`](#-common--monitor--exporter--node--topprocesses--noop_value)
+
+##### <a name="-common--monitor--exporter--node--topprocesses--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
+
+Default value: `$common::monitor::exporter::node::enable`
+
+##### <a name="-common--monitor--exporter--node--topprocesses--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional. The value for noop attribute. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--ntp"></a>`common::monitor::exporter::ntp`
+
+Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::ntp` class:
+
+* [`enable`](#-common--monitor--exporter--ntp--enable)
+* [`listen_address`](#-common--monitor--exporter--ntp--listen_address)
+* [`noop_value`](#-common--monitor--exporter--ntp--noop_value)
+* [`telemetry_path`](#-common--monitor--exporter--ntp--telemetry_path)
+
+##### <a name="-common--monitor--exporter--ntp--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--ntp--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port to listen on, default is '127.254.254.254:9559'.
+
+Default value: `'127.254.254.254:9559'`
+
+##### <a name="-common--monitor--exporter--ntp--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to specify noop mode. Defaults to undef.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--ntp--telemetry_path"></a>`telemetry_path`
+
+Data type: `String`
+
+The telemetry endpoint path. Defaults to '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s'.
+
+Default value: `'/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s'`
+
+### <a name="common--monitor--exporter--process"></a>`common::monitor::exporter::process`
+
+The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::process` class:
+
+* [`enable`](#-common--monitor--exporter--process--enable)
+* [`noop_value`](#-common--monitor--exporter--process--noop_value)
+* [`listen_address`](#-common--monitor--exporter--process--listen_address)
+
+##### <a name="-common--monitor--exporter--process--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--monitor--exporter--process--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Whether to perform noop operations. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--process--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `'127.254.254.254:63388'`
+
+### <a name="common--monitor--exporter--pushprox"></a>`common::monitor::exporter::pushprox`
+
+Class for managing the Prometheus Blackbox Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::pushprox` class:
+
+* [`enable`](#-common--monitor--exporter--pushprox--enable)
+* [`noop_value`](#-common--monitor--exporter--pushprox--noop_value)
+
+##### <a name="-common--monitor--exporter--pushprox--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the exporter. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--pushprox--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean to set noop for resources. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--security"></a>`common::monitor::exporter::security`
+
+Prometheus Security Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::security` class:
+
+* [`enable`](#-common--monitor--exporter--security--enable)
+* [`noop_value`](#-common--monitor--exporter--security--noop_value)
+* [`host`](#-common--monitor--exporter--security--host)
+* [`listen_host`](#-common--monitor--exporter--security--listen_host)
+* [`listen_port`](#-common--monitor--exporter--security--listen_port)
+* [`config_file`](#-common--monitor--exporter--security--config_file)
+
+##### <a name="-common--monitor--exporter--security--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the exporter. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--security--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean flag to run in noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--security--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+The host certificate name. Defaults to $trusted['certname'].
+
+Default value: `$trusted['certname']`
+
+##### <a name="-common--monitor--exporter--security--listen_host"></a>`listen_host`
+
+Data type: `Stdlib::Host`
+
+The host to listen on. Defaults to '127.254.254.254'.
+
+Default value: `'127.254.254.254'`
+
+##### <a name="-common--monitor--exporter--security--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port to listen on. Defaults to 63396.
+
+Default value: `63396`
+
+##### <a name="-common--monitor--exporter--security--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+Path to the configuration YAML file. Defaults to "${::common::monitor::exporter::config_dir}/security_exporter.yaml".
+
+Default value: `"${::common::monitor::exporter::config_dir}/security_exporter.yaml"`
+
+### <a name="common--monitor--exporter--systemd"></a>`common::monitor::exporter::systemd`
+
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+
+Whether to perform noop actions. Defaults to false.
+
+The IP and port to listen on. Defaults to '127.254.254.254:63391'.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::systemd` class:
+
+* [`enable`](#-common--monitor--exporter--systemd--enable)
+* [`noop_value`](#-common--monitor--exporter--systemd--noop_value)
+* [`listen_address`](#-common--monitor--exporter--systemd--listen_address)
+
+##### <a name="-common--monitor--exporter--systemd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--systemd--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--monitor--exporter--systemd--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `'127.254.254.254:63391'`
+
+### <a name="common--monitor--exporter--tcpshaker"></a>`common::monitor::exporter::tcpshaker`
+
+Class for managing the Prometheus tcpshaker daemon mode / exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::tcpshaker` class:
+
+* [`enable`](#-common--monitor--exporter--tcpshaker--enable)
+* [`listen_port`](#-common--monitor--exporter--tcpshaker--listen_port)
+* [`host`](#-common--monitor--exporter--tcpshaker--host)
+* [`noop_value`](#-common--monitor--exporter--tcpshaker--noop_value)
+
+##### <a name="-common--monitor--exporter--tcpshaker--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable the exporter. Defaults to the value of $common::network::tcpshaker::enable.
+
+Default value: `$common::network::tcpshaker::enable`
+
+##### <a name="-common--monitor--exporter--tcpshaker--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port to listen on. Defaults to $common::network::tcpshaker::listen_port or 8785 if undefined.
+
+Default value: `pick($common::network::tcpshaker::listen_port, 8785)`
+
+##### <a name="-common--monitor--exporter--tcpshaker--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+The host certificate name. Defaults to $trusted['certname'].
+
+Default value: `$trusted['certname']`
+
+##### <a name="-common--monitor--exporter--tcpshaker--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The noop flag for Puppet resources. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--exporter--wireguard"></a>`common::monitor::exporter::wireguard`
+
+Class for managing the Prometheus Wireguard Exporter
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::exporter::wireguard` class:
+
+* [`enable`](#-common--monitor--exporter--wireguard--enable)
+* [`listen_address`](#-common--monitor--exporter--wireguard--listen_address)
+* [`noop_value`](#-common--monitor--exporter--wireguard--noop_value)
+
+##### <a name="-common--monitor--exporter--wireguard--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-common--monitor--exporter--wireguard--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63390'.
+
+Default value: `'127.254.254.254:63390'`
+
+##### <a name="-common--monitor--exporter--wireguard--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Whether to run in noop mode. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitor--prometheus"></a>`common::monitor::prometheus`
+
+Whether to run resources in noop mode. Defaults to false.
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::prometheus` class:
+
+* [`noop_value`](#-common--monitor--prometheus--noop_value)
+* [`install_method`](#-common--monitor--prometheus--install_method)
+* [`env_file_path`](#-common--monitor--prometheus--env_file_path)
+* [`bin_dir`](#-common--monitor--prometheus--bin_dir)
+* [`usershell`](#-common--monitor--prometheus--usershell)
+* [`server`](#-common--monitor--prometheus--server)
+
+##### <a name="-common--monitor--prometheus--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--monitor--prometheus--install_method"></a>`install_method`
+
+Data type: `Enum['package']`
+
+The installation method to use. Defaults to 'package'.
+
+##### <a name="-common--monitor--prometheus--env_file_path"></a>`env_file_path`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the environment file.
+
+##### <a name="-common--monitor--prometheus--bin_dir"></a>`bin_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the binary directory.
+
+##### <a name="-common--monitor--prometheus--usershell"></a>`usershell`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the user's shell.
+
+##### <a name="-common--monitor--prometheus--server"></a>`server`
+
+Data type: `Stdlib::Fqdn`
+
+The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
+
+### <a name="common--monitor--prometheus--server"></a>`common::monitor::prometheus::server`
+
+Class for managing the Prometheus server
+
+#### Parameters
+
+The following parameters are available in the `common::monitor::prometheus::server` class:
+
+* [`version`](#-common--monitor--prometheus--server--version)
+* [`collect_scrape_jobs`](#-common--monitor--prometheus--server--collect_scrape_jobs)
+* [`config_dir`](#-common--monitor--prometheus--server--config_dir)
+* [`listen_address`](#-common--monitor--prometheus--server--listen_address)
+* [`enable`](#-common--monitor--prometheus--server--enable)
+
+##### <a name="-common--monitor--prometheus--server--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of Prometheus to install. Must be a Eit_types::Version.
+
+##### <a name="-common--monitor--prometheus--server--collect_scrape_jobs"></a>`collect_scrape_jobs`
+
+Data type: `Array[Hash]`
+
+An array of hashes defining scrape jobs to collect. Defaults to an empty array.
+
+##### <a name="-common--monitor--prometheus--server--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the configuration directory. Must be a Stdlib::Absolutepath.
+
+##### <a name="-common--monitor--prometheus--server--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP and port on which the server listens. Must be of type Eit_types::IPPort.
+
+##### <a name="-common--monitor--prometheus--server--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the monitoring. Defaults to true.
+
+Default value: `$common::monitor::enable`
+
 ### <a name="common--monitoring"></a>`common::monitoring`
 
 Class for managing common monitoring setup
@@ -827,6 +3766,184 @@ Data type: `Boolean`
 Whether to enable managing monitoring components. Defaults to true.
 
 Default value: `true`
+
+### <a name="common--monitoring--atop"></a>`common::monitoring::atop`
+
+Class for managing the atop monitoring service
+
+#### Parameters
+
+The following parameters are available in the `common::monitoring::atop` class:
+
+* [`install`](#-common--monitoring--atop--install)
+* [`daemon`](#-common--monitoring--atop--daemon)
+
+##### <a name="-common--monitoring--atop--install"></a>`install`
+
+Data type: `Boolean`
+
+Whether to install atop. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--monitoring--atop--daemon"></a>`daemon`
+
+Data type: `Boolean`
+
+Whether to run atop as a daemon. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--monitoring--scom"></a>`common::monitoring::scom`
+
+Class for managing Microsoft SCOM monitoring configuration
+
+#### Parameters
+
+The following parameters are available in the `common::monitoring::scom` class:
+
+* [`enable`](#-common--monitoring--scom--enable)
+* [`scom_masters`](#-common--monitoring--scom--scom_masters)
+* [`install_sudo_rules`](#-common--monitoring--scom--install_sudo_rules)
+* [`scom_user`](#-common--monitoring--scom--scom_user)
+* [`noop_value`](#-common--monitoring--scom--noop_value)
+
+##### <a name="-common--monitoring--scom--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable SCOM monitoring. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitoring--scom--scom_masters"></a>`scom_masters`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+List of SCOM master hosts. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--monitoring--scom--install_sudo_rules"></a>`install_sudo_rules`
+
+Data type: `Boolean`
+
+Whether to install sudo rules for SCOM. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--monitoring--scom--scom_user"></a>`scom_user`
+
+Data type: `Eit_types::User`
+
+The user for SCOM operations. Defaults to 'svclinuxmon'.
+
+Default value: `'svclinuxmon'`
+
+##### <a name="-common--monitoring--scom--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+The noop value for testing purposes. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--monitoring--splunk--forwarder"></a>`common::monitoring::splunk::forwarder`
+
+Class for managing the Splunk forwarder in a monitoring setup
+
+#### Parameters
+
+The following parameters are available in the `common::monitoring::splunk::forwarder` class:
+
+* [`password_hash`](#-common--monitoring--splunk--forwarder--password_hash)
+* [`version`](#-common--monitoring--splunk--forwarder--version)
+* [`build`](#-common--monitoring--splunk--forwarder--build)
+* [`deploymentserver`](#-common--monitoring--splunk--forwarder--deploymentserver)
+* [`seed_password`](#-common--monitoring--splunk--forwarder--seed_password)
+* [`forwarder_output`](#-common--monitoring--splunk--forwarder--forwarder_output)
+* [`log_keep_count`](#-common--monitoring--splunk--forwarder--log_keep_count)
+* [`log_max_file_size_b`](#-common--monitoring--splunk--forwarder--log_max_file_size_b)
+* [`enable`](#-common--monitoring--splunk--forwarder--enable)
+* [`noop_value`](#-common--monitoring--splunk--forwarder--noop_value)
+
+##### <a name="-common--monitoring--splunk--forwarder--password_hash"></a>`password_hash`
+
+Data type: `String[1]`
+
+The password hash for the forwarder. This parameter is required.
+
+##### <a name="-common--monitoring--splunk--forwarder--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The version of the Splunk forwarder. Defaults to '7.2.4'.
+
+Default value: `'7.2.4'`
+
+##### <a name="-common--monitoring--splunk--forwarder--build"></a>`build`
+
+Data type: `Optional[String]`
+
+The build identifier. Defaults to '8a94541dcfac'.
+
+Default value: `'8a94541dcfac'`
+
+##### <a name="-common--monitoring--splunk--forwarder--deploymentserver"></a>`deploymentserver`
+
+Data type: `Stdlib::HTTPUrl`
+
+The deployment server URL. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--monitoring--splunk--forwarder--seed_password"></a>`seed_password`
+
+Data type: `Boolean`
+
+Whether to seed the password. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--monitoring--splunk--forwarder--forwarder_output"></a>`forwarder_output`
+
+Data type: `Hash`
+
+Additional output configuration as a hash. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--monitoring--splunk--forwarder--log_keep_count"></a>`log_keep_count`
+
+Data type: `Integer`
+
+Number of log files to keep. Defaults to 5.
+
+Default value: `5`
+
+##### <a name="-common--monitoring--splunk--forwarder--log_max_file_size_b"></a>`log_max_file_size_b`
+
+Data type: `Eit_types::Bytes`
+
+Maximum size in bytes for log files. Defaults to 25000000.
+
+Default value: `25000000`
+
+##### <a name="-common--monitoring--splunk--forwarder--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable the forwarder. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--monitoring--splunk--forwarder--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+No-operation mode value. Defaults to undef.
+
+Default value: `undef`
 
 ### <a name="common--network"></a>`common::network`
 
@@ -958,6 +4075,384 @@ Data type: `Array[String]`
 
 Default value: `[]`
 
+### <a name="common--network--firewall"></a>`common::network::firewall`
+
+Class for managing the common::network::firewall configuration
+
+#### Parameters
+
+The following parameters are available in the `common::network::firewall` class:
+
+* [`manage`](#-common--network--firewall--manage)
+* [`enable`](#-common--network--firewall--enable)
+* [`enable_ipv6`](#-common--network--firewall--enable_ipv6)
+* [`enable_forwarding`](#-common--network--firewall--enable_forwarding)
+* [`drop_all`](#-common--network--firewall--drop_all)
+* [`drop_action`](#-common--network--firewall--drop_action)
+* [`allow_docker`](#-common--network--firewall--allow_docker)
+* [`allow_k8s`](#-common--network--firewall--allow_k8s)
+* [`allow_azure`](#-common--network--firewall--allow_azure)
+* [`allow_netbird`](#-common--network--firewall--allow_netbird)
+* [`block_bogons`](#-common--network--firewall--block_bogons)
+* [`block_mdns`](#-common--network--firewall--block_mdns)
+* [`block_kaspersky_sccc`](#-common--network--firewall--block_kaspersky_sccc)
+* [`block_hasp_lm`](#-common--network--firewall--block_hasp_lm)
+* [`block_dhcp_broadcast`](#-common--network--firewall--block_dhcp_broadcast)
+* [`block_netbios_broadcast`](#-common--network--firewall--block_netbios_broadcast)
+* [`rules`](#-common--network--firewall--rules)
+
+##### <a name="-common--network--firewall--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the firewall. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable the firewall. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--enable_ipv6"></a>`enable_ipv6`
+
+Data type: `Boolean`
+
+Enable IPv6 support. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--enable_forwarding"></a>`enable_forwarding`
+
+Data type: `Boolean`
+
+Enable forwarding rules. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--drop_all"></a>`drop_all`
+
+Data type: `Boolean`
+
+Drop all traffic by default. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--drop_action"></a>`drop_action`
+
+Data type: `Std_fw::Action`
+
+Action to take for dropped packets. Defaults to 'drop'.
+
+Default value: `'drop'`
+
+##### <a name="-common--network--firewall--allow_docker"></a>`allow_docker`
+
+Data type: `Boolean`
+
+Allow Docker traffic. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--allow_k8s"></a>`allow_k8s`
+
+Data type: `Boolean`
+
+Allow Kubernetes traffic. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--allow_azure"></a>`allow_azure`
+
+Data type: `Boolean`
+
+Allow Azure traffic. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--allow_netbird"></a>`allow_netbird`
+
+Data type: `Boolean`
+
+Allow Netbird traffic. Defaults to lookup('common::network::netbird::enable', Boolean, undef, false).
+
+Default value: `lookup('common::network::netbird::enable', Boolean, undef, false)`
+
+##### <a name="-common--network--firewall--block_bogons"></a>`block_bogons`
+
+Data type: `Boolean`
+
+Block bogon IP addresses. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--firewall--block_mdns"></a>`block_mdns`
+
+Data type: `Boolean`
+
+Block mDNS traffic. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--block_kaspersky_sccc"></a>`block_kaspersky_sccc`
+
+Data type: `Boolean`
+
+Block Kaspersky SCCC traffic. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--block_hasp_lm"></a>`block_hasp_lm`
+
+Data type: `Boolean`
+
+Block Hasp LM traffic. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--block_dhcp_broadcast"></a>`block_dhcp_broadcast`
+
+Data type: `Boolean`
+
+Block DHCP broadcast traffic. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--block_netbios_broadcast"></a>`block_netbios_broadcast`
+
+Data type: `Boolean`
+
+Block NetBIOS broadcast traffic. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--firewall--rules"></a>`rules`
+
+Data type: `Eit_types::Firewall`
+
+Custom firewall rules. Defaults to {}.
+
+Default value: `{}`
+
+### <a name="common--network--netbird"></a>`common::network::netbird`
+
+Class for managing Netbird Agent
+
+#### Parameters
+
+The following parameters are available in the `common::network::netbird` class:
+
+* [`setup_key`](#-common--network--netbird--setup_key)
+* [`enable`](#-common--network--netbird--enable)
+* [`noop_value`](#-common--network--netbird--noop_value)
+* [`server`](#-common--network--netbird--server)
+* [`version`](#-common--network--netbird--version)
+* [`install_method`](#-common--network--netbird--install_method)
+
+##### <a name="-common--network--netbird--setup_key"></a>`setup_key`
+
+Data type: `String`
+
+The setup key used for authentication.
+
+##### <a name="-common--network--netbird--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the Netbird agent.
+
+##### <a name="-common--network--netbird--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to enable no-operation mode.
+
+Default value: `undef`
+
+##### <a name="-common--network--netbird--server"></a>`server`
+
+Data type: `Stdlib::HTTPSUrl`
+
+The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:443'.
+
+##### <a name="-common--network--netbird--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The Netbird version to install. The default is the type Eit_types::Version.
+
+##### <a name="-common--network--netbird--install_method"></a>`install_method`
+
+Data type: `Enum['package', 'repo']`
+
+The method to install Netbird. The default is to download via their GitHub repo releases.
+
+### <a name="common--network--stunnel"></a>`common::network::stunnel`
+
+Class for setting up Stunnel configurations
+
+#### Parameters
+
+The following parameters are available in the `common::network::stunnel` class:
+
+* [`tunnels`](#-common--network--stunnel--tunnels)
+
+##### <a name="-common--network--stunnel--tunnels"></a>`tunnels`
+
+Data type: `Hash`
+
+A hash of tunnel configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+### <a name="common--network--tcpshaker"></a>`common::network::tcpshaker`
+
+Class for installing and setting up tcp shaker in daemon mode
+
+#### Parameters
+
+The following parameters are available in the `common::network::tcpshaker` class:
+
+* [`listen_port`](#-common--network--tcpshaker--listen_port)
+* [`check_interval`](#-common--network--tcpshaker--check_interval)
+* [`requests_per_check`](#-common--network--tcpshaker--requests_per_check)
+* [`concurrency`](#-common--network--tcpshaker--concurrency)
+* [`enable`](#-common--network--tcpshaker--enable)
+* [`tcp_addresses`](#-common--network--tcpshaker--tcp_addresses)
+* [`noop_value`](#-common--network--tcpshaker--noop_value)
+
+##### <a name="-common--network--tcpshaker--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+The port to listen on. Must be a Stdlib::Port.
+
+##### <a name="-common--network--tcpshaker--check_interval"></a>`check_interval`
+
+Data type: `Integer`
+
+The interval between checks in seconds. Must be an Integer.
+
+##### <a name="-common--network--tcpshaker--requests_per_check"></a>`requests_per_check`
+
+Data type: `Integer`
+
+Number of requests per check. Must be an Integer.
+
+##### <a name="-common--network--tcpshaker--concurrency"></a>`concurrency`
+
+Data type: `Integer`
+
+Concurrency level. Must be an Integer.
+
+##### <a name="-common--network--tcpshaker--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the service. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--tcpshaker--tcp_addresses"></a>`tcp_addresses`
+
+Data type: `Array[String]`
+
+Array of TCP addresses to bind to. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--network--tcpshaker--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to control noop behavior. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--network--vrrp"></a>`common::network::vrrp`
+
+Class for managing VRRP configuration
+
+#### Parameters
+
+The following parameters are available in the `common::network::vrrp` class:
+
+* [`enable`](#-common--network--vrrp--enable)
+* [`hosts`](#-common--network--vrrp--hosts)
+* [`instances`](#-common--network--vrrp--instances)
+* [`sync_groups`](#-common--network--vrrp--sync_groups)
+
+##### <a name="-common--network--vrrp--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the VRRP setup. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--network--vrrp--hosts"></a>`hosts`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+Array of IP addresses for VRRP hosts. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--network--vrrp--instances"></a>`instances`
+
+Data type: `Hash`
+
+Hash defining VRRP instances with their configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--network--vrrp--sync_groups"></a>`sync_groups`
+
+Data type: `Hash`
+
+Hash defining synchronization groups with their configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+### <a name="common--network--wireguard"></a>`common::network::wireguard`
+
+Class for managing Wireguard network configuration
+
+#### Parameters
+
+The following parameters are available in the `common::network::wireguard` class:
+
+* [`enable`](#-common--network--wireguard--enable)
+* [`tunnels`](#-common--network--wireguard--tunnels)
+* [`encrypt_params`](#-common--network--wireguard--encrypt_params)
+
+##### <a name="-common--network--wireguard--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable Wireguard. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--network--wireguard--tunnels"></a>`tunnels`
+
+Data type: `Hash`
+
+Hash of tunnel configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--network--wireguard--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['tunnels.*.private_key']`
+
 ### <a name="common--package"></a>`common::package`
 
 Class for managing the installation and removal of packages
@@ -1040,6 +4535,7 @@ The following parameters are available in the `common::puppet` class:
 * [`run_agent_as_noop`](#-common--puppet--run_agent_as_noop)
 * [`extra_main_settings`](#-common--puppet--extra_main_settings)
 * [`environment`](#-common--puppet--environment)
+* [`package_name`](#-common--puppet--package_name)
 
 ##### <a name="-common--puppet--version"></a>`version`
 
@@ -1108,6 +4604,39 @@ Data type: `String`
 The Puppet environment to use. Defaults to 'master'.
 
 Default value: `'master'`
+
+##### <a name="-common--puppet--package_name"></a>`package_name`
+
+Data type: `String`
+
+
+
+### <a name="common--puppet--clientbucket"></a>`common::puppet::clientbucket`
+
+Class clientbucket contains settings for puppet cache cleanup
+
+#### Parameters
+
+The following parameters are available in the `common::puppet::clientbucket` class:
+
+* [`enable`](#-common--puppet--clientbucket--enable)
+* [`cleanup_hour`](#-common--puppet--clientbucket--cleanup_hour)
+
+##### <a name="-common--puppet--clientbucket--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable puppet cache cleanup. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--puppet--clientbucket--cleanup_hour"></a>`cleanup_hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day (0-23) when cleanup should run. Defaults to 0.
+
+Default value: `0`
 
 ### <a name="common--repo"></a>`common::repo`
 
@@ -1284,6 +4813,96 @@ Boolean flag to enable or disable security management. Defaults to true.
 
 Default value: `true`
 
+### <a name="common--security--auditd"></a>`common::security::auditd`
+
+Class for managing auditd configuration
+
+#### Parameters
+
+The following parameters are available in the `common::security::auditd` class:
+
+* [`enable`](#-common--security--auditd--enable)
+* [`root_audit_level`](#-common--security--auditd--root_audit_level)
+
+##### <a name="-common--security--auditd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable auditd. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--security--auditd--root_audit_level"></a>`root_audit_level`
+
+Data type: `Enum['basic', 'aggressive', 'insane']`
+
+The audit level for root. Can be 'basic', 'aggressive', or 'insane'. Defaults to 'aggressive'.
+
+Default value: `'aggressive'`
+
+### <a name="common--security--effective_group"></a>`common::security::effective_group`
+
+Class for managing the effective group ID setting
+
+#### Parameters
+
+The following parameters are available in the `common::security::effective_group` class:
+
+* [`enable`](#-common--security--effective_group--enable)
+* [`group_mappings`](#-common--security--effective_group--group_mappings)
+* [`noop_value`](#-common--security--effective_group--noop_value)
+
+##### <a name="-common--security--effective_group--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable effective group ID configuration. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--security--effective_group--group_mappings"></a>`group_mappings`
+
+Data type: `Hash[String, Array[String]]`
+
+A hash mapping group names to arrays of associated groups.
+
+Default value: `{}`
+
+##### <a name="-common--security--effective_group--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional parameter to set noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--security--pkexec"></a>`common::security::pkexec`
+
+Class for managing the CVE-2021-4034 polkit pkexec vulnerability
+
+#### Parameters
+
+The following parameters are available in the `common::security::pkexec` class:
+
+* [`setuid`](#-common--security--pkexec--setuid)
+* [`noop_value`](#-common--security--pkexec--noop_value)
+
+##### <a name="-common--security--pkexec--setuid"></a>`setuid`
+
+Data type: `Boolean`
+
+Whether to add or remove the suid bit on the pkexec binary. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--security--pkexec--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional. If set, Puppet will not modify the file system but will simulate changes.
+
+Default value: `undef`
+
 ### <a name="common--services"></a>`common::services`
 
 Class for managing common services
@@ -1388,9 +5007,806 @@ Boolean value to control noop execution mode. Defaults to false.
 
 Default value: `false`
 
+### <a name="common--setup--obmondo_admin"></a>`common::setup::obmondo_admin`
+
+Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
+
+Absolute path to the optional directory. Defaults to '/opt/obmondo'.
+
+Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
+
+#### Parameters
+
+The following parameters are available in the `common::setup::obmondo_admin` class:
+
+* [`manager_pubkeys`](#-common--setup--obmondo_admin--manager_pubkeys)
+* [`sre_pubkeys`](#-common--setup--obmondo_admin--sre_pubkeys)
+* [`allow_sre`](#-common--setup--obmondo_admin--allow_sre)
+* [`$__conf_dir`](#-common--setup--obmondo_admin---__conf_dir)
+* [`$__opt_dir`](#-common--setup--obmondo_admin---__opt_dir)
+* [`$__bin_dir`](#-common--setup--obmondo_admin---__bin_dir)
+* [`noop_value`](#-common--setup--obmondo_admin--noop_value)
+* [`__conf_dir`](#-common--setup--obmondo_admin--__conf_dir)
+* [`__opt_dir`](#-common--setup--obmondo_admin--__opt_dir)
+* [`__bin_dir`](#-common--setup--obmondo_admin--__bin_dir)
+
+##### <a name="-common--setup--obmondo_admin--manager_pubkeys"></a>`manager_pubkeys`
+
+Data type: `Optional[Array[String]]`
+
+Array of SSH public keys for obmondo admin user.
+
+Default value: `[]`
+
+##### <a name="-common--setup--obmondo_admin--sre_pubkeys"></a>`sre_pubkeys`
+
+Data type: `Optional[Array[String]]`
+
+Array of SSH public keys for obmondo admin user.
+
+Default value: `[]`
+
+##### <a name="-common--setup--obmondo_admin--allow_sre"></a>`allow_sre`
+
+Data type: `Boolean`
+
+Boolean value to allow SRE to login. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--setup--obmondo_admin---__conf_dir"></a>`$__conf_dir`
+
+
+
+##### <a name="-common--setup--obmondo_admin---__opt_dir"></a>`$__opt_dir`
+
+
+
+##### <a name="-common--setup--obmondo_admin---__bin_dir"></a>`$__bin_dir`
+
+
+
+##### <a name="-common--setup--obmondo_admin--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean value to control noop execution mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--setup--obmondo_admin--__conf_dir"></a>`__conf_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/etc/obmondo'`
+
+##### <a name="-common--setup--obmondo_admin--__opt_dir"></a>`__opt_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/opt/obmondo'`
+
+##### <a name="-common--setup--obmondo_admin--__bin_dir"></a>`__bin_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/opt/obmondo/bin'`
+
 ### <a name="common--software"></a>`common::software`
 
 Class for managing common software installation and dependencies
+
+### <a name="common--software--ansoftrsmservice"></a>`common::software::ansoftrsmservice`
+
+This class installs and manages the Ansoft RSM systemd service,
+including setting up environment variables and configuring
+the service startup command.
+
+#### Parameters
+
+The following parameters are available in the `common::software::ansoftrsmservice` class:
+
+* [`enable`](#-common--software--ansoftrsmservice--enable)
+* [`environment`](#-common--software--ansoftrsmservice--environment)
+* [`ansysrsm_path`](#-common--software--ansoftrsmservice--ansysrsm_path)
+* [`manage`](#-common--software--ansoftrsmservice--manage)
+* [`env`](#-common--software--ansoftrsmservice--env)
+
+##### <a name="-common--software--ansoftrsmservice--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable and manage the service. Defaults to value from
+`common::software::ansoftrsmservice::enable`.
+
+Default value: `true`
+
+##### <a name="-common--software--ansoftrsmservice--environment"></a>`environment`
+
+A hash of environment variables to set in `/etc/default/ansoftrsmservice`.
+Defaults to value from `common::software::ansoftrsmservice::environment`.
+
+##### <a name="-common--software--ansoftrsmservice--ansysrsm_path"></a>`ansysrsm_path`
+
+Data type: `String`
+
+The base installation path of the Ansoft RSM software.
+Used in both environment variables and ExecStart.
+Defaults to value from `common::software::ansoftrsmservice::ansysrsm_path`.
+
+Default value: `undef`
+
+##### <a name="-common--software--ansoftrsmservice--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--software--ansoftrsmservice--env"></a>`env`
+
+Data type: `Hash`
+
+
+
+Default value: `{}`
+
+### <a name="common--software--cloudamize"></a>`common::software::cloudamize`
+
+Class for managing Cloudamize software
+
+#### Parameters
+
+The following parameters are available in the `common::software::cloudamize` class:
+
+* [`manage`](#-common--software--cloudamize--manage)
+* [`enable`](#-common--software--cloudamize--enable)
+* [`customer_key`](#-common--software--cloudamize--customer_key)
+* [`noop_value`](#-common--software--cloudamize--noop_value)
+
+##### <a name="-common--software--cloudamize--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the Cloudamize software. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--cloudamize--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the Cloudamize software. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--cloudamize--customer_key"></a>`customer_key`
+
+Data type: `Optional[String]`
+
+Optional customer key for Cloudamize.
+
+Default value: `undef`
+
+##### <a name="-common--software--cloudamize--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional parameter for noop mode.
+
+Default value: `undef`
+
+### <a name="common--software--dependencyagent"></a>`common::software::dependencyagent`
+
+Class for managing the Microsoft dependency agent common::software::dependencyagent
+
+#### Parameters
+
+The following parameters are available in the `common::software::dependencyagent` class:
+
+* [`manage`](#-common--software--dependencyagent--manage)
+* [`enable`](#-common--software--dependencyagent--enable)
+* [`noop_value`](#-common--software--dependencyagent--noop_value)
+
+##### <a name="-common--software--dependencyagent--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the dependency agent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--dependencyagent--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the dependency agent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--dependencyagent--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional parameter for noop mode value. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--fwupd"></a>`common::software::fwupd`
+
+Class for managing fwupd refresh process
+
+#### Parameters
+
+The following parameters are available in the `common::software::fwupd` class:
+
+* [`manage`](#-common--software--fwupd--manage)
+* [`enable`](#-common--software--fwupd--enable)
+* [`noop_value`](#-common--software--fwupd--noop_value)
+
+##### <a name="-common--software--fwupd--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the fwupd profile. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--fwupd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the fwupd refresh. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--fwupd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional parameter to specify noop mode value.
+
+Default value: `undef`
+
+### <a name="common--software--insights"></a>`common::software::insights`
+
+Class for managing insights client access
+
+#### Parameters
+
+The following parameters are available in the `common::software::insights` class:
+
+* [`manage`](#-common--software--insights--manage)
+* [`enable`](#-common--software--insights--enable)
+* [`noop_value`](#-common--software--insights--noop_value)
+
+##### <a name="-common--software--insights--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Enable or manage Insights client. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--insights--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable Insights client. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--insights--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop value. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--iptables_api"></a>`common::software::iptables_api`
+
+Enable the iptables-api installation. Defaults to false.
+
+#### Parameters
+
+The following parameters are available in the `common::software::iptables_api` class:
+
+* [`enable`](#-common--software--iptables_api--enable)
+* [`manage`](#-common--software--iptables_api--manage)
+* [`noop_value`](#-common--software--iptables_api--noop_value)
+* [`listen_address`](#-common--software--iptables_api--listen_address)
+
+##### <a name="-common--software--iptables_api--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--software--iptables_api--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the iptables-api resource. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--iptables_api--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to specify noop mode. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--iptables_api--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+The IP address and port to listen on. Defaults to '0.0.0.0:58080'.
+
+Default value: `'0.0.0.0:58080'`
+
+### <a name="common--software--microsoft_mde"></a>`common::software::microsoft_mde`
+
+Class for managing Microsoft Defender for Endpoint installation and configuration
+
+#### Parameters
+
+The following parameters are available in the `common::software::microsoft_mde` class:
+
+* [`manage`](#-common--software--microsoft_mde--manage)
+* [`enable`](#-common--software--microsoft_mde--enable)
+* [`noop_value`](#-common--software--microsoft_mde--noop_value)
+* [`version`](#-common--software--microsoft_mde--version)
+* [`exclusions`](#-common--software--microsoft_mde--exclusions)
+* [`onboard_config`](#-common--software--microsoft_mde--onboard_config)
+
+##### <a name="-common--software--microsoft_mde--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the Microsoft Defender for Endpoint installation. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--microsoft_mde--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable Microsoft Defender for Endpoint. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--microsoft_mde--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional value for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--microsoft_mde--version"></a>`version`
+
+Data type: `Eit_types::Package::Version::Installed`
+
+The installed version of Microsoft Defender for Endpoint. Defaults to 'latest'.
+
+Default value: `'latest'`
+
+##### <a name="-common--software--microsoft_mde--exclusions"></a>`exclusions`
+
+Data type: `Eit_types::Microsoft::Mde::Exclusions`
+
+Exclusions configuration for Microsoft Defender for Endpoint. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--software--microsoft_mde--onboard_config"></a>`onboard_config`
+
+Data type: `Optional[Eit_Files::Source]`
+
+Optional onboard configuration source. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--msftlinuxpatchautoassess"></a>`common::software::msftlinuxpatchautoassess`
+
+Class for managing the Azure Linux VM Patch Extension
+
+#### Parameters
+
+The following parameters are available in the `common::software::msftlinuxpatchautoassess` class:
+
+* [`manage`](#-common--software--msftlinuxpatchautoassess--manage)
+* [`enable`](#-common--software--msftlinuxpatchautoassess--enable)
+
+##### <a name="-common--software--msftlinuxpatchautoassess--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the MsftLinuxPatchAutoAssess service. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--msftlinuxpatchautoassess--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the MsftLinuxPatchAutoAssess service. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--software--nvidia_driver"></a>`common::software::nvidia_driver`
+
+Class for managing Nvidia Driver installation
+
+#### Parameters
+
+The following parameters are available in the `common::software::nvidia_driver` class:
+
+* [`enable`](#-common--software--nvidia_driver--enable)
+* [`manage`](#-common--software--nvidia_driver--manage)
+* [`noop_value`](#-common--software--nvidia_driver--noop_value)
+
+##### <a name="-common--software--nvidia_driver--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the Nvidia Driver. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--nvidia_driver--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the Nvidia Driver package. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--nvidia_driver--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--rubrik"></a>`common::software::rubrik`
+
+Class for managing the Rubrik Agent software
+
+#### Parameters
+
+The following parameters are available in the `common::software::rubrik` class:
+
+* [`manage`](#-common--software--rubrik--manage)
+* [`enable`](#-common--software--rubrik--enable)
+* [`noop_value`](#-common--software--rubrik--noop_value)
+
+##### <a name="-common--software--rubrik--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean parameter to control management of the Rubrik Agent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--rubrik--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable the Rubrik Agent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--rubrik--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to specify noop mode value.
+
+Default value: `undef`
+
+### <a name="common--software--rustdesk"></a>`common::software::rustdesk`
+
+Class for managing the Rustdesk software
+
+#### Parameters
+
+The following parameters are available in the `common::software::rustdesk` class:
+
+* [`manage`](#-common--software--rustdesk--manage)
+* [`enable`](#-common--software--rustdesk--enable)
+* [`version`](#-common--software--rustdesk--version)
+* [`noop_value`](#-common--software--rustdesk--noop_value)
+* [`dependencies`](#-common--software--rustdesk--dependencies)
+
+##### <a name="-common--software--rustdesk--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean parameter to control management of the Rustdesk. Defaults to false.
+
+Default value: `true`
+
+##### <a name="-common--software--rustdesk--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable the Rustdesk. Defaults to false.
+
+Default value: `true`
+
+##### <a name="-common--software--rustdesk--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+String parameter to control version of the Rustdesk.
+
+Default value: `undef`
+
+##### <a name="-common--software--rustdesk--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to specify noop mode value.
+
+Default value: `undef`
+
+##### <a name="-common--software--rustdesk--dependencies"></a>`dependencies`
+
+Data type: `Array[String]`
+
+
+
+Default value: `[]`
+
+### <a name="common--software--teleport"></a>`common::software::teleport`
+
+Whether to enable the OMS Agent. Defaults to false.
+
+#### Parameters
+
+The following parameters are available in the `common::software::teleport` class:
+
+* [`enable`](#-common--software--teleport--enable)
+* [`noop_value`](#-common--software--teleport--noop_value)
+* [`join_token`](#-common--software--teleport--join_token)
+* [`ca_pin`](#-common--software--teleport--ca_pin)
+* [`encrypt_params`](#-common--software--teleport--encrypt_params)
+
+##### <a name="-common--software--teleport--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-common--software--teleport--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--teleport--join_token"></a>`join_token`
+
+Data type: `Optional[String]`
+
+Optional string for the join token. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--teleport--ca_pin"></a>`ca_pin`
+
+Data type: `Optional[String]`
+
+Optional string for the CA pin. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--teleport--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['join_token','ca_pin']`
+
+### <a name="common--software--vncserver"></a>`common::software::vncserver`
+
+Class for managing the VNC Server
+
+#### Parameters
+
+The following parameters are available in the `common::software::vncserver` class:
+
+* [`manage`](#-common--software--vncserver--manage)
+* [`enable`](#-common--software--vncserver--enable)
+* [`config_defaults`](#-common--software--vncserver--config_defaults)
+* [`vnc_users`](#-common--software--vncserver--vnc_users)
+* [`noop_value`](#-common--software--vncserver--noop_value)
+* [`systemd_service`](#-common--software--vncserver--systemd_service)
+
+##### <a name="-common--software--vncserver--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the VNC Server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--vncserver--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the VNC Server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--vncserver--config_defaults"></a>`config_defaults`
+
+Data type:
+
+```puppet
+Struct[{
+      session   => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
+      geometry  => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+      localhost => Optional[Enum['yes', 'no']],
+  }]
+```
+
+The default configuration for the VNC server, including session and geometry. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--software--vncserver--vnc_users"></a>`vnc_users`
+
+Data type: `Hash[String, Stdlib::Port]`
+
+A hash of VNC users and their port configurations. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--software--vncserver--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop mode. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--vncserver--systemd_service"></a>`systemd_service`
+
+Data type: `Enum['vncserver', 'tigervncserver']`
+
+
+
+Default value: `'vncserver'`
+
+### <a name="common--software--vscode"></a>`common::software::vscode`
+
+Class for managing Visual Studio Code installation
+
+#### Parameters
+
+The following parameters are available in the `common::software::vscode` class:
+
+* [`enable`](#-common--software--vscode--enable)
+* [`manage`](#-common--software--vscode--manage)
+* [`noop_value`](#-common--software--vscode--noop_value)
+
+##### <a name="-common--software--vscode--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to determine if VSCode should be installed. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--vscode--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean indicating whether to manage the vscode installation. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--vscode--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--walinuxagent"></a>`common::software::walinuxagent`
+
+The Linux Azure package name. Defaults to undef.
+
+The Linux Azure service name. Defaults to undef.
+
+#### Parameters
+
+The following parameters are available in the `common::software::walinuxagent` class:
+
+* [`enable`](#-common--software--walinuxagent--enable)
+* [`manage`](#-common--software--walinuxagent--manage)
+* [`noop_value`](#-common--software--walinuxagent--noop_value)
+* [`$__linux_azure_package`](#-common--software--walinuxagent---__linux_azure_package)
+* [`$__linux_azure_service`](#-common--software--walinuxagent---__linux_azure_service)
+* [`waagent_memory_limit`](#-common--software--walinuxagent--waagent_memory_limit)
+* [`__linux_azure_package`](#-common--software--walinuxagent--__linux_azure_package)
+* [`__linux_azure_service`](#-common--software--walinuxagent--__linux_azure_service)
+
+##### <a name="-common--software--walinuxagent--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable walinuxagent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--walinuxagent--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage walinuxagent. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--walinuxagent--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--walinuxagent---__linux_azure_package"></a>`$__linux_azure_package`
+
+
+
+##### <a name="-common--software--walinuxagent---__linux_azure_service"></a>`$__linux_azure_service`
+
+
+
+##### <a name="-common--software--walinuxagent--waagent_memory_limit"></a>`waagent_memory_limit`
+
+Data type: `Optional[String]`
+
+Optional memory limit for waagent. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--software--walinuxagent--__linux_azure_package"></a>`__linux_azure_package`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `undef`
+
+##### <a name="-common--software--walinuxagent--__linux_azure_service"></a>`__linux_azure_service`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `undef`
 
 ### <a name="common--storage"></a>`common::storage`
 
@@ -1409,6 +5825,302 @@ Data type: `Eit_types::Common::Storage::Mounts`
 Hash of mounts configurations. Defaults to an empty hash.
 
 Default value: `{}`
+
+### <a name="common--storage--nfs"></a>`common::storage::nfs`
+
+Class for managing NFS server and exports
+
+#### Parameters
+
+The following parameters are available in the `common::storage::nfs` class:
+
+* [`enable`](#-common--storage--nfs--enable)
+* [`unmount_snapshots`](#-common--storage--nfs--unmount_snapshots)
+
+##### <a name="-common--storage--nfs--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the NFS server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--storage--nfs--unmount_snapshots"></a>`unmount_snapshots`
+
+Data type: `Boolean`
+
+Whether to unmount snapshots. Defaults to true.
+
+Default value: `true`
+
+### <a name="common--storage--nfs--server"></a>`common::storage::nfs::server`
+
+Class for managing NFS server and exports
+
+#### Parameters
+
+The following parameters are available in the `common::storage::nfs::server` class:
+
+* [`enable`](#-common--storage--nfs--server--enable)
+* [`listen_interface`](#-common--storage--nfs--server--listen_interface)
+* [`exports`](#-common--storage--nfs--server--exports)
+
+##### <a name="-common--storage--nfs--server--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable the NFS server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--storage--nfs--server--listen_interface"></a>`listen_interface`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+Optional network interface to listen on. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--storage--nfs--server--exports"></a>`exports`
+
+Data type:
+
+```puppet
+Hash[
+    String,
+    Struct[
+      {
+        path    => Stdlib::Absolutepath,
+        options => Array[String[1]],
+        clients => Array[String[1]],
+      }
+    ]
+  ]
+```
+
+Hash of export configurations, where each key is the export name and value is a struct containing path, options, and clients.
+
+Default value: `{}`
+
+### <a name="common--storage--quota"></a>`common::storage::quota`
+
+Class for managing filesystem quotas
+
+#### Parameters
+
+The following parameters are available in the `common::storage::quota` class:
+
+* [`enable`](#-common--storage--quota--enable)
+* [`quotas`](#-common--storage--quota--quotas)
+
+##### <a name="-common--storage--quota--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable quotas. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--storage--quota--quotas"></a>`quotas`
+
+Data type:
+
+```puppet
+Hash[Stdlib::Absolutepath, Struct[{
+    user  => Optional[Hash[Eit_types::User, Eit_types::Storage::Quota]],
+    group => Optional[Hash[Eit_types::Group, Eit_types::Storage::Quota]],
+  }]]
+```
+
+Hash of quotas configuration per filesystem, default is empty hash.
+
+Default value: `{}`
+
+### <a name="common--storage--samba"></a>`common::storage::samba`
+
+Class for managing common Samba storage configuration
+
+#### Parameters
+
+The following parameters are available in the `common::storage::samba` class:
+
+* [`enable`](#-common--storage--samba--enable)
+* [`workgroup`](#-common--storage--samba--workgroup)
+* [`server_string`](#-common--storage--samba--server_string)
+* [`security`](#-common--storage--samba--security)
+* [`local_master`](#-common--storage--samba--local_master)
+* [`domain_master`](#-common--storage--samba--domain_master)
+* [`preferred_master`](#-common--storage--samba--preferred_master)
+* [`realm`](#-common--storage--samba--realm)
+* [`load_printers`](#-common--storage--samba--load_printers)
+* [`printcap_name`](#-common--storage--samba--printcap_name)
+* [`shares`](#-common--storage--samba--shares)
+* [`listen_interfaces`](#-common--storage--samba--listen_interfaces)
+* [`map_to_guest`](#-common--storage--samba--map_to_guest)
+* [`idmap_config`](#-common--storage--samba--idmap_config)
+* [`global_options`](#-common--storage--samba--global_options)
+
+##### <a name="-common--storage--samba--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable Samba. Default is false.
+
+Default value: `false`
+
+##### <a name="-common--storage--samba--workgroup"></a>`workgroup`
+
+Data type: `String`
+
+The workgroup name.
+
+##### <a name="-common--storage--samba--server_string"></a>`server_string`
+
+Data type: `String`
+
+The server string description.
+
+##### <a name="-common--storage--samba--security"></a>`security`
+
+Data type: `Enum['ADS','user']`
+
+Security mode, either 'ADS' or 'user'.
+
+##### <a name="-common--storage--samba--local_master"></a>`local_master`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean indicating if the server is a local master. Default is undef.
+
+Default value: `undef`
+
+##### <a name="-common--storage--samba--domain_master"></a>`domain_master`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean indicating if the server is a domain master. Default is undef.
+
+Default value: `undef`
+
+##### <a name="-common--storage--samba--preferred_master"></a>`preferred_master`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean indicating if the server is a preferred master. Default is undef.
+
+Default value: `undef`
+
+##### <a name="-common--storage--samba--realm"></a>`realm`
+
+Data type: `Optional[Eit_types::Domain]`
+
+Optional realm domain; must be of type Eit_types::Domain.
+
+Default value: `undef`
+
+##### <a name="-common--storage--samba--load_printers"></a>`load_printers`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to load printers; default is undef.
+
+Default value: `undef`
+
+##### <a name="-common--storage--samba--printcap_name"></a>`printcap_name`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Optional absolute path for printcap; default is undef.
+
+##### <a name="-common--storage--samba--shares"></a>`shares`
+
+Data type: `Eit_types::Storage::Samba::Shares`
+
+Shares configuration of type Eit_types::Storage::Samba::Shares.
+
+##### <a name="-common--storage--samba--listen_interfaces"></a>`listen_interfaces`
+
+Data type: `Array[String]`
+
+List of interfaces to listen on; defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--storage--samba--map_to_guest"></a>`map_to_guest`
+
+Data type:
+
+```puppet
+Enum[
+    'Never',
+    'Bad User',
+    'Bad Password',
+    'Bad Uid'
+  ]
+```
+
+Enum for mapping to guest; defaults to 'Never'.
+
+Default value: `'Never'`
+
+##### <a name="-common--storage--samba--idmap_config"></a>`idmap_config`
+
+Data type: `Array`
+
+Array of ID mapping configurations; defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--storage--samba--global_options"></a>`global_options`
+
+Data type: `Eit_types::Storage::Samba::Global`
+
+Global options of type Eit_types::Storage::Samba::Global.
+
+### <a name="common--storage--zfs"></a>`common::storage::zfs`
+
+Class for managing ZFS storage and utilities
+
+#### Parameters
+
+The following parameters are available in the `common::storage::zfs` class:
+
+* [`enable`](#-common--storage--zfs--enable)
+* [`pool_names`](#-common--storage--zfs--pool_names)
+* [`remove_sysstat_cron`](#-common--storage--zfs--remove_sysstat_cron)
+* [`scrub`](#-common--storage--zfs--scrub)
+
+##### <a name="-common--storage--zfs--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating if ZFS should be enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--storage--zfs--pool_names"></a>`pool_names`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+List of pool names for ZFS pools. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--storage--zfs--remove_sysstat_cron"></a>`remove_sysstat_cron`
+
+Data type: `Boolean`
+
+Boolean to remove sysstat cron jobs. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--storage--zfs--scrub"></a>`scrub`
+
+Data type: `Eit_types::Common::Storage::Zfs::Scrub_interval`
+
+Interval for ZFS scrubbing. Defaults to 'monthly'.
+
+Default value: `'monthly'`
 
 ### <a name="common--system"></a>`common::system`
 
@@ -1509,13 +6221,13 @@ Data type:
 
 ```puppet
 Optional[Hash[String, Struct[{
-    content => Stdlib::Base64,
+          content => Stdlib::Base64,
   }]]]
 ```
 
 Optional Hash mapping service names to their content for one-shot services. Defaults to {}.
 
-Default value: `{}`
+Default value: `undef`
 
 ##### <a name="-common--system--locations"></a>`locations`
 
@@ -1533,11 +6245,2171 @@ The list of params, which needs to be encrypted
 
 Default value: `['ssh_authorized_keys.*.key']`
 
+### <a name="common--system--authentication"></a>`common::system::authentication`
+
+Class for managing system authentication
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication` class:
+
+* [`allowed_users`](#-common--system--authentication--allowed_users)
+* [`manage_pam`](#-common--system--authentication--manage_pam)
+* [`manage_sssd`](#-common--system--authentication--manage_sssd)
+* [`manage_nis`](#-common--system--authentication--manage_nis)
+* [`manage`](#-common--system--authentication--manage)
+* [`allow_managed_users`](#-common--system--authentication--allow_managed_users)
+* [`ignore_expired_root_password`](#-common--system--authentication--ignore_expired_root_password)
+* [`purge_ubuntu_user`](#-common--system--authentication--purge_ubuntu_user)
+* [`purge_users`](#-common--system--authentication--purge_users)
+* [`protected_users`](#-common--system--authentication--protected_users)
+
+##### <a name="-common--system--authentication--allowed_users"></a>`allowed_users`
+
+Data type: `Eit_types::Common::Allowed_users`
+
+Allowed users list of type Eit_types::Common::Allowed_users.
+
+##### <a name="-common--system--authentication--manage_pam"></a>`manage_pam`
+
+Data type: `Boolean`
+
+Boolean to manage PAM configuration. Defaults to false.
+
+##### <a name="-common--system--authentication--manage_sssd"></a>`manage_sssd`
+
+Data type: `Boolean`
+
+Boolean to manage SSSD configuration. Defaults to false.
+
+##### <a name="-common--system--authentication--manage_nis"></a>`manage_nis`
+
+Data type: `Boolean`
+
+Boolean to manage NIS configuration. Defaults to false.
+
+##### <a name="-common--system--authentication--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean to control overall management. Defaults to false.
+
+##### <a name="-common--system--authentication--allow_managed_users"></a>`allow_managed_users`
+
+Data type: `Boolean`
+
+Boolean to allow managed users. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--authentication--ignore_expired_root_password"></a>`ignore_expired_root_password`
+
+Data type: `Boolean`
+
+Boolean to ignore expired root password checks. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--purge_ubuntu_user"></a>`purge_ubuntu_user`
+
+Data type: `Boolean`
+
+Boolean to purge Ubuntu user. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--purge_users"></a>`purge_users`
+
+Data type: `Boolean`
+
+Boolean to purge users. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--protected_users"></a>`protected_users`
+
+Data type: `Array[Eit_types::User]`
+
+Array of type Eit_types::User specifying protected users. Defaults to an empty array.
+
+Default value: `[]`
+
+### <a name="common--system--authentication--kerberos"></a>`common::system::authentication::kerberos`
+
+Class for managing Kerberos integration
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication::kerberos` class:
+
+* [`manage`](#-common--system--authentication--kerberos--manage)
+* [`enable`](#-common--system--authentication--kerberos--enable)
+* [`base_dn`](#-common--system--authentication--kerberos--base_dn)
+* [`ou`](#-common--system--authentication--kerberos--ou)
+* [`default_realm`](#-common--system--authentication--kerberos--default_realm)
+* [`appdefaults`](#-common--system--authentication--kerberos--appdefaults)
+* [`join`](#-common--system--authentication--kerberos--join)
+* [`join_password`](#-common--system--authentication--kerberos--join_password)
+* [`join_user`](#-common--system--authentication--kerberos--join_user)
+* [`install_client`](#-common--system--authentication--kerberos--install_client)
+* [`ldaps`](#-common--system--authentication--kerberos--ldaps)
+* [`noop_value`](#-common--system--authentication--kerberos--noop_value)
+* [`cacert_path`](#-common--system--authentication--kerberos--cacert_path)
+* [`realms`](#-common--system--authentication--kerberos--realms)
+* [`encrypt_params`](#-common--system--authentication--kerberos--encrypt_params)
+
+##### <a name="-common--system--authentication--kerberos--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the Kerberos configuration. Defaults to the value of $common::system::authentication::manage_sssd.
+
+Default value: `$common::system::authentication::manage_sssd`
+
+##### <a name="-common--system--authentication--kerberos--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable Kerberos. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--kerberos--base_dn"></a>`base_dn`
+
+Data type: `Optional[String]`
+
+The base distinguished name for Kerberos. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--ou"></a>`ou`
+
+Data type: `Optional[String]`
+
+The organizational unit. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--default_realm"></a>`default_realm`
+
+Data type: `Optional[Eit_types::Domain]`
+
+The default Kerberos realm. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--appdefaults"></a>`appdefaults`
+
+Data type: `Optional`
+
+Hash of application defaults for Kerberos. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--join"></a>`join`
+
+Data type: `Boolean`
+
+Whether to join the Kerberos realm. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--kerberos--join_password"></a>`join_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+Password used for joining. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--join_user"></a>`join_user`
+
+Data type: `Optional[Eit_types::User]`
+
+User used for joining. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--install_client"></a>`install_client`
+
+Data type: `Boolean`
+
+Whether to install the Kerberos client. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--kerberos--ldaps"></a>`ldaps`
+
+Data type: `Boolean`
+
+Whether to use LDAP over SSL. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--kerberos--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional value for noop configuration. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--cacert_path"></a>`cacert_path`
+
+Data type: `Optional[Stdlib::Unixpath]`
+
+Path to CA certificate. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--realms"></a>`realms`
+
+Data type: `Optional[Eit_types::Common::System::Authentication::Kerberos::Realms]`
+
+Hash specifying the Kerberos realms. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--kerberos--encrypt_params"></a>`encrypt_params`
+
+Data type: `Eit_types::Encrypt::Params`
+
+The list of params, which needs to be encrypted
+
+Default value: `['join_password']`
+
+### <a name="common--system--authentication--nis"></a>`common::system::authentication::nis`
+
+Class for managing the NIS/ypclass common::system::authentication::nis
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication::nis` class:
+
+* [`domain`](#-common--system--authentication--nis--domain)
+* [`servers`](#-common--system--authentication--nis--servers)
+* [`enable`](#-common--system--authentication--nis--enable)
+
+##### <a name="-common--system--authentication--nis--domain"></a>`domain`
+
+Data type: `Variant[Eit_types::SimpleString, Stdlib::Host]`
+
+The domain for NIS. Can be a simple string or a host. Defaults to 'nis'.
+
+Default value: `'nis'`
+
+##### <a name="-common--system--authentication--nis--servers"></a>`servers`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+An array of IP addresses of NIS servers. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--authentication--nis--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable NIS authentication. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--system--authentication--pam"></a>`common::system::authentication::pam`
+
+Class for managing common::system::authentication::pam
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication::pam` class:
+
+* [`auth_lines`](#-common--system--authentication--pam--auth_lines)
+* [`account_lines`](#-common--system--authentication--pam--account_lines)
+* [`password_lines`](#-common--system--authentication--pam--password_lines)
+* [`session_lines`](#-common--system--authentication--pam--session_lines)
+* [`password_auth_lines`](#-common--system--authentication--pam--password_auth_lines)
+* [`password_account_lines`](#-common--system--authentication--pam--password_account_lines)
+* [`password_password_lines`](#-common--system--authentication--pam--password_password_lines)
+* [`password_session_lines`](#-common--system--authentication--pam--password_session_lines)
+* [`sshd_auth_lines`](#-common--system--authentication--pam--sshd_auth_lines)
+* [`sshd_account_lines`](#-common--system--authentication--pam--sshd_account_lines)
+* [`sshd_password_lines`](#-common--system--authentication--pam--sshd_password_lines)
+* [`sshd_session_lines`](#-common--system--authentication--pam--sshd_session_lines)
+* [`manage`](#-common--system--authentication--pam--manage)
+* [`allowed_users`](#-common--system--authentication--pam--allowed_users)
+* [`allow_managed_users`](#-common--system--authentication--pam--allow_managed_users)
+* [`manage_pwquality`](#-common--system--authentication--pam--manage_pwquality)
+* [`nologin_allowed_group`](#-common--system--authentication--pam--nologin_allowed_group)
+
+##### <a name="-common--system--authentication--pam--auth_lines"></a>`auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing authentication lines.
+
+##### <a name="-common--system--authentication--pam--account_lines"></a>`account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing account lines.
+
+##### <a name="-common--system--authentication--pam--password_lines"></a>`password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing password lines.
+
+##### <a name="-common--system--authentication--pam--session_lines"></a>`session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing session lines.
+
+##### <a name="-common--system--authentication--pam--password_auth_lines"></a>`password_auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing password authentication lines.
+
+##### <a name="-common--system--authentication--pam--password_account_lines"></a>`password_account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing password account lines.
+
+##### <a name="-common--system--authentication--pam--password_password_lines"></a>`password_password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing password password lines.
+
+##### <a name="-common--system--authentication--pam--password_session_lines"></a>`password_session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing password session lines.
+
+##### <a name="-common--system--authentication--pam--sshd_auth_lines"></a>`sshd_auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing SSHD authentication lines.
+
+##### <a name="-common--system--authentication--pam--sshd_account_lines"></a>`sshd_account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing SSHD account lines.
+
+##### <a name="-common--system--authentication--pam--sshd_password_lines"></a>`sshd_password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing SSHD password lines.
+
+##### <a name="-common--system--authentication--pam--sshd_session_lines"></a>`sshd_session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+Array of tuples containing integers (0-99) and strings representing SSHD session lines.
+
+##### <a name="-common--system--authentication--pam--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean to manage PAM configuration. Defaults to $common::system::authentication::manage_pam.
+
+Default value: `$common::system::authentication::manage_pam`
+
+##### <a name="-common--system--authentication--pam--allowed_users"></a>`allowed_users`
+
+Data type: `Eit_types::Common::Allowed_users`
+
+Allowed users list. Defaults to $common::system::authentication::allowed_users.
+
+Default value: `$common::system::authentication::allowed_users`
+
+##### <a name="-common--system--authentication--pam--allow_managed_users"></a>`allow_managed_users`
+
+Data type: `Boolean`
+
+Boolean to allow managed users. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--authentication--pam--manage_pwquality"></a>`manage_pwquality`
+
+Data type: `Boolean`
+
+Boolean to manage password quality. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--pam--nologin_allowed_group"></a>`nologin_allowed_group`
+
+Data type: `Array[Eit_types::Group, 0, 1]`
+
+Array of Group, 0 or 1 elements, specifying allowed groups for nologin.
+
+Default value: `[]`
+
+### <a name="common--system--authentication--sssd"></a>`common::system::authentication::sssd`
+
+Array of SSSD services to enable. Defaults to ['nss', 'pam', 'ssh', 'sudo'].
+
+Available services for SSSD. Defaults to undef.
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication::sssd` class:
+
+* [`services`](#-common--system--authentication--sssd--services)
+* [`$_available_services`](#-common--system--authentication--sssd---_available_services)
+* [`enable`](#-common--system--authentication--sssd--enable)
+* [`manage`](#-common--system--authentication--sssd--manage)
+* [`domains`](#-common--system--authentication--sssd--domains)
+* [`default_domain_suffix`](#-common--system--authentication--sssd--default_domain_suffix)
+* [`debug_level`](#-common--system--authentication--sssd--debug_level)
+* [`manage_oddjobd`](#-common--system--authentication--sssd--manage_oddjobd)
+* [`full_name_format`](#-common--system--authentication--sssd--full_name_format)
+* [`override_homedir`](#-common--system--authentication--sssd--override_homedir)
+* [`override_config`](#-common--system--authentication--sssd--override_config)
+* [`noop_value`](#-common--system--authentication--sssd--noop_value)
+* [`required_packages`](#-common--system--authentication--sssd--required_packages)
+* [`_available_services`](#-common--system--authentication--sssd--_available_services)
+
+##### <a name="-common--system--authentication--sssd--services"></a>`services`
+
+Data type: `Array[Eit_types::Sssd::Service]`
+
+
+
+Default value:
+
+```puppet
+[
+    'nss',
+    'pam',
+    'ssh',
+    'sudo',
+  ]
+```
+
+##### <a name="-common--system--authentication--sssd---_available_services"></a>`$_available_services`
+
+
+
+##### <a name="-common--system--authentication--sssd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable SSSD. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--sssd--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean to determine if the class should manage SSSD. Defaults to value of $common::system::authentication::manage_sssd.
+
+Default value: `$common::system::authentication::manage_sssd`
+
+##### <a name="-common--system--authentication--sssd--domains"></a>`domains`
+
+Data type: `Eit_types::Sssd::Domains`
+
+SSSD domain configurations. Defaults to empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--system--authentication--sssd--default_domain_suffix"></a>`default_domain_suffix`
+
+Data type: `Optional[Eit_types::Domain]`
+
+Default domain suffix. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--sssd--debug_level"></a>`debug_level`
+
+Data type: `Optional[Eit_types::Sssd::Debug_Level]`
+
+Debug level for SSSD. Defaults to '0x0620'.
+
+Default value: `'0x0620'`
+
+##### <a name="-common--system--authentication--sssd--manage_oddjobd"></a>`manage_oddjobd`
+
+Data type: `Boolean`
+
+Boolean to manage oddjobd service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--authentication--sssd--full_name_format"></a>`full_name_format`
+
+Data type: `Eit_types::Sssd::Full_name_format`
+
+Format for full name. Defaults to '%1$s'.
+
+Default value: `'%1$s'`
+
+##### <a name="-common--system--authentication--sssd--override_homedir"></a>`override_homedir`
+
+Data type: `Optional[Eit_types::Sssd::Override_homedir]`
+
+Override for home directory. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--sssd--override_config"></a>`override_config`
+
+Data type: `Hash`
+
+Additional override configurations for SSSD. Defaults to empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--system--authentication--sssd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean for no-op mode. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--authentication--sssd--required_packages"></a>`required_packages`
+
+Data type: `Array`
+
+List of required packages for SSSD. Defaults to ['realmd', 'samba-common-tools', 'fprintd-pam'].
+
+Default value: `['realmd', 'samba-common-tools', 'fprintd-pam']`
+
+##### <a name="-common--system--authentication--sssd--_available_services"></a>`_available_services`
+
+Data type: `Array[Eit_types::Sssd::Service]`
+
+
+
+Default value: `undef`
+
+### <a name="common--system--authentication--sudo"></a>`common::system::authentication::sudo`
+
+Class for managing the sudo settings in the common system authentication
+
+#### Parameters
+
+The following parameters are available in the `common::system::authentication::sudo` class:
+
+* [`manage`](#-common--system--authentication--sudo--manage)
+* [`purge`](#-common--system--authentication--sudo--purge)
+* [`ssh_agent_auth`](#-common--system--authentication--sudo--ssh_agent_auth)
+* [`sudoers`](#-common--system--authentication--sudo--sudoers)
+* [`__sudoers_d_dir`](#-common--system--authentication--sudo--__sudoers_d_dir)
+
+##### <a name="-common--system--authentication--sudo--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean - If true, will manage the authentication sudo settings. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--authentication--sudo--purge"></a>`purge`
+
+Data type: `Boolean`
+
+Whether to purge existing sudo configurations. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--sudo--ssh_agent_auth"></a>`ssh_agent_auth`
+
+Data type: `Boolean`
+
+Whether to enable SSH agent authentication. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--authentication--sudo--sudoers"></a>`sudoers`
+
+Data type: `Eit_types::Sudoers`
+
+The sudoers hash configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--system--authentication--sudo--__sudoers_d_dir"></a>`__sudoers_d_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the sudoers.d directory. Defaults to '/etc/obmondo/sudoers.d'.
+
+Default value: `'/etc/obmondo/sudoers.d'`
+
+### <a name="common--system--cloud_init"></a>`common::system::cloud_init`
+
+Class for managing system cloud init configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::cloud_init` class:
+
+* [`manage`](#-common--system--cloud_init--manage)
+
+##### <a name="-common--system--cloud_init--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage cloud init. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--system--container"></a>`common::system::container`
+
+Class for managing the container specifics
+
+### <a name="common--system--dns"></a>`common::system::dns`
+
+Class for handling DNS client configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::dns` class:
+
+* [`resolver`](#-common--system--dns--resolver)
+* [`manage`](#-common--system--dns--manage)
+* [`nameservers`](#-common--system--dns--nameservers)
+* [`fallback_nameservers`](#-common--system--dns--fallback_nameservers)
+* [`searchpath`](#-common--system--dns--searchpath)
+* [`dnssec`](#-common--system--dns--dnssec)
+* [`dns_over_tls`](#-common--system--dns--dns_over_tls)
+* [`listen_address`](#-common--system--dns--listen_address)
+* [`allow_external`](#-common--system--dns--allow_external)
+* [`noop_value`](#-common--system--dns--noop_value)
+
+##### <a name="-common--system--dns--resolver"></a>`resolver`
+
+Data type: `Enum['dnsmasq', 'systemd-resolved', 'resolv']`
+
+The DNS resolver to use. Valid values are 'dnsmasq', 'systemd-resolved', or 'resolv'.
+
+##### <a name="-common--system--dns--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage DNS configuration. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--dns--nameservers"></a>`nameservers`
+
+Data type: `Array`
+
+List of DNS nameservers. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--dns--fallback_nameservers"></a>`fallback_nameservers`
+
+Data type: `Array`
+
+List of fallback DNS nameservers. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--dns--searchpath"></a>`searchpath`
+
+Data type: `Array[Eit_types::Hostname]`
+
+DNS search path. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--dns--dnssec"></a>`dnssec`
+
+Data type: `Variant[Boolean, Enum['allow-downgrade']]`
+
+Enable DNSSEC validation. Can be Boolean or 'allow-downgrade'. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--dns--dns_over_tls"></a>`dns_over_tls`
+
+Data type: `Variant[Boolean, Enum['opportunistic']]`
+
+Enable DNS over TLS. Can be Boolean or 'opportunistic'. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--dns--listen_address"></a>`listen_address`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+List of IP addresses to listen on. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--dns--allow_external"></a>`allow_external`
+
+Data type: `Boolean`
+
+Allow external DNS queries. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--dns--noop_value"></a>`noop_value`
+
+Data type: `Variant[Undef, Boolean]`
+
+Value used for noop operations. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--system--failover"></a>`common::system::failover`
+
+Class for managing system failover configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::failover` class:
+
+* [`enable`](#-common--system--failover--enable)
+* [`instances`](#-common--system--failover--instances)
+
+##### <a name="-common--system--failover--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable failover. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--failover--instances"></a>`instances`
+
+Data type: `Eit_types::Common::System::Failover::Instances`
+
+Hash of failover instances configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+### <a name="common--system--grub"></a>`common::system::grub`
+
+Class for managing grubclass common::system::grub
+
+#### Parameters
+
+The following parameters are available in the `common::system::grub` class:
+
+* [`parameters`](#-common--system--grub--parameters)
+
+##### <a name="-common--system--grub--parameters"></a>`parameters`
+
+Data type:
+
+```puppet
+Hash[String, Struct[
+    {
+      ensure  => Optional[Boolean],
+      value   => Optional[Variant[Array, String, Boolean]],
+    }
+  ]]
+```
+
+Hash of parameters for grub configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+### <a name="common--system--hardware"></a>`common::system::hardware`
+
+Optional boolean to manage multipath settings. Defaults to false.
+
+Array of strings representing multipath package names. Defaults to an empty array.
+
+Array of strings representing multipath service names. Defaults to a predefined list.
+
+#### Parameters
+
+The following parameters are available in the `common::system::hardware` class:
+
+* [`manage_multipath`](#-common--system--hardware--manage_multipath)
+* [`$__multipath_packages`](#-common--system--hardware---__multipath_packages)
+* [`$__multipath_services`](#-common--system--hardware---__multipath_services)
+* [`__multipath_packages`](#-common--system--hardware--__multipath_packages)
+* [`__multipath_services`](#-common--system--hardware--__multipath_services)
+
+##### <a name="-common--system--hardware--manage_multipath"></a>`manage_multipath`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `false`
+
+##### <a name="-common--system--hardware---__multipath_packages"></a>`$__multipath_packages`
+
+
+
+##### <a name="-common--system--hardware---__multipath_services"></a>`$__multipath_services`
+
+
+
+##### <a name="-common--system--hardware--__multipath_packages"></a>`__multipath_packages`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value: `[]`
+
+##### <a name="-common--system--hardware--__multipath_services"></a>`__multipath_services`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value:
+
+```puppet
+[
+    'multipath-tools.service',
+    'multipath-tools-boot.service',
+    'multipathd.service',
+    'multipathd.socket',
+  ]
+```
+
+### <a name="common--system--jumphost"></a>`common::system::jumphost`
+
+Class for setting up reverse proxy
+
+#### Parameters
+
+The following parameters are available in the `common::system::jumphost` class:
+
+* [`configs`](#-common--system--jumphost--configs)
+* [`enable`](#-common--system--jumphost--enable)
+
+##### <a name="-common--system--jumphost--configs"></a>`configs`
+
+Data type: `Eit_types::Common::System::Jumphosts`
+
+Array of hashes containing remote host configurations.
+
+##### <a name="-common--system--jumphost--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the service. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--system--kernel"></a>`common::system::kernel`
+
+Defaults to an empty hash.
+
+Defaults to an empty hash.
+
+#### Parameters
+
+The following parameters are available in the `common::system::kernel` class:
+
+* [`modules`](#-common--system--kernel--modules)
+* [`sysctl`](#-common--system--kernel--sysctl)
+
+##### <a name="-common--system--kernel--modules"></a>`modules`
+
+Data type:
+
+```puppet
+Struct[{
+    blacklist => Optional[Array[String]],
+    install   => Optional[Array[String]],
+    load      => Optional[Array[String]],
+  }]
+```
+
+A hash defining modules to blacklist, install, or load.
+
+Default value: `{}`
+
+##### <a name="-common--system--kernel--sysctl"></a>`sysctl`
+
+Data type: `Hash[Eit_types::SimpleString, Variant[Numeric,String]]`
+
+A hash for sysctl configurations, key-value pairs.
+
+Default value: `{}`
+
+### <a name="common--system--limits"></a>`common::system::limits`
+
+Class for managing system limits
+
+#### Parameters
+
+The following parameters are available in the `common::system::limits` class:
+
+* [`manage`](#-common--system--limits--manage)
+* [`purge`](#-common--system--limits--purge)
+* [`ulimits`](#-common--system--limits--ulimits)
+
+##### <a name="-common--system--limits--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the limits. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--limits--purge"></a>`purge`
+
+Data type: `Boolean`
+
+Whether to purge existing limits. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--limits--ulimits"></a>`ulimits`
+
+Data type: `Eit_types::System::Ulimits`
+
+The ulimits configuration. Defaults to an empty hash.
+
+Default value: `{}`
+
+### <a name="common--system--motd"></a>`common::system::motd`
+
+Enable or disable the MOTD. Defaults to true.
+
+#### Parameters
+
+The following parameters are available in the `common::system::motd` class:
+
+* [`enable`](#-common--system--motd--enable)
+* [`header`](#-common--system--motd--header)
+* [`footer`](#-common--system--motd--footer)
+* [`diplay_system_stats`](#-common--system--motd--diplay_system_stats)
+* [`noop_value`](#-common--system--motd--noop_value)
+
+##### <a name="-common--system--motd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-common--system--motd--header"></a>`header`
+
+Data type: `Optional[String]`
+
+The header content for the MOTD. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--motd--footer"></a>`footer`
+
+Data type: `Optional[String]`
+
+The footer content for the MOTD. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--system--motd--diplay_system_stats"></a>`diplay_system_stats`
+
+Data type: `Boolean`
+
+Whether to display system stats in the MOTD. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--motd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to specify noop mode for file resources. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--system--nscd"></a>`common::system::nscd`
+
+Class for managing NSCD setup, caching DNS daemon, locally on client
+
+#### Parameters
+
+The following parameters are available in the `common::system::nscd` class:
+
+* [`manage`](#-common--system--nscd--manage)
+* [`ensure`](#-common--system--nscd--ensure)
+* [`debug_level`](#-common--system--nscd--debug_level)
+* [`cache_passwd`](#-common--system--nscd--cache_passwd)
+* [`cache_group`](#-common--system--nscd--cache_group)
+* [`cache_netgroup`](#-common--system--nscd--cache_netgroup)
+* [`cache_services`](#-common--system--nscd--cache_services)
+* [`use_socket_activation`](#-common--system--nscd--use_socket_activation)
+
+##### <a name="-common--system--nscd--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean flag to manage the nscd service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--nscd--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+Desired ensure state for nscd. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--nscd--debug_level"></a>`debug_level`
+
+Data type: `Integer[0,5]`
+
+Integer from 0 to 5 indicating debug level. Defaults to 0.
+
+Default value: `0`
+
+##### <a name="-common--system--nscd--cache_passwd"></a>`cache_passwd`
+
+Data type: `Boolean`
+
+Boolean to cache passwd entries. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--nscd--cache_group"></a>`cache_group`
+
+Data type: `Boolean`
+
+Boolean to cache group entries. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--nscd--cache_netgroup"></a>`cache_netgroup`
+
+Data type: `Boolean`
+
+Boolean to cache netgroup entries. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--nscd--cache_services"></a>`cache_services`
+
+Data type: `Boolean`
+
+Boolean to cache services. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--nscd--use_socket_activation"></a>`use_socket_activation`
+
+Data type: `Boolean`
+
+Boolean to enable socket activation. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--system--nsswitch"></a>`common::system::nsswitch`
+
+Class for managing the nsswitch configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::nsswitch` class:
+
+* [`ethers`](#-common--system--nsswitch--ethers)
+* [`group`](#-common--system--nsswitch--group)
+* [`hosts`](#-common--system--nsswitch--hosts)
+* [`networks`](#-common--system--nsswitch--networks)
+* [`passwd`](#-common--system--nsswitch--passwd)
+* [`protocols`](#-common--system--nsswitch--protocols)
+* [`rpc`](#-common--system--nsswitch--rpc)
+* [`services`](#-common--system--nsswitch--services)
+* [`shadow`](#-common--system--nsswitch--shadow)
+* [`sudoers`](#-common--system--nsswitch--sudoers)
+* [`manage`](#-common--system--nsswitch--manage)
+* [`aliases`](#-common--system--nsswitch--aliases)
+* [`automount`](#-common--system--nsswitch--automount)
+* [`bootparams`](#-common--system--nsswitch--bootparams)
+* [`gshadow`](#-common--system--nsswitch--gshadow)
+* [`netgroup`](#-common--system--nsswitch--netgroup)
+* [`netmasks`](#-common--system--nsswitch--netmasks)
+* [`publickey`](#-common--system--nsswitch--publickey)
+
+##### <a name="-common--system--nsswitch--ethers"></a>`ethers`
+
+Data type: `Array[String]`
+
+An array of ethers entries.
+
+##### <a name="-common--system--nsswitch--group"></a>`group`
+
+Data type: `Array[String]`
+
+An array of group entries.
+
+##### <a name="-common--system--nsswitch--hosts"></a>`hosts`
+
+Data type: `Array[String]`
+
+An array of hosts entries.
+
+##### <a name="-common--system--nsswitch--networks"></a>`networks`
+
+Data type: `Array[String]`
+
+An array of networks entries.
+
+##### <a name="-common--system--nsswitch--passwd"></a>`passwd`
+
+Data type: `Array[String]`
+
+An array of passwd entries.
+
+##### <a name="-common--system--nsswitch--protocols"></a>`protocols`
+
+Data type: `Array[String]`
+
+An array of protocol entries.
+
+##### <a name="-common--system--nsswitch--rpc"></a>`rpc`
+
+Data type: `Array[String]`
+
+An array of rpc entries.
+
+##### <a name="-common--system--nsswitch--services"></a>`services`
+
+Data type: `Array[String]`
+
+An array of services entries.
+
+##### <a name="-common--system--nsswitch--shadow"></a>`shadow`
+
+Data type: `Array[String]`
+
+An array of shadow entries.
+
+##### <a name="-common--system--nsswitch--sudoers"></a>`sudoers`
+
+Data type: `Array[String]`
+
+An array of sudoers entries.
+
+##### <a name="-common--system--nsswitch--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean indicating whether to manage the resource. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--nsswitch--aliases"></a>`aliases`
+
+Data type: `Array[String]`
+
+An array of aliases. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--automount"></a>`automount`
+
+Data type: `Array[String]`
+
+An array of automount entries. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--bootparams"></a>`bootparams`
+
+Data type: `Array[String]`
+
+An array of bootparams entries. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--gshadow"></a>`gshadow`
+
+Data type: `Array[String]`
+
+An array of gshadow entries. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--netgroup"></a>`netgroup`
+
+Data type: `Array[String]`
+
+An array of netgroup entries. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--netmasks"></a>`netmasks`
+
+Data type: `Array[String]`
+
+An array of netmasks entries. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--nsswitch--publickey"></a>`publickey`
+
+Data type: `Array[String]`
+
+An array of publickey entries. Defaults to empty array.
+
+Default value: `[]`
+
+### <a name="common--system--package_management"></a>`common::system::package_management`
+
+Class for managing system package management
+
+### <a name="common--system--package_management--guix"></a>`common::system::package_management::guix`
+
+Class for managing Guix client setup
+
+#### Parameters
+
+The following parameters are available in the `common::system::package_management::guix` class:
+
+* [`manage`](#-common--system--package_management--guix--manage)
+
+##### <a name="-common--system--package_management--guix--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage Guix setup. Defaults to true.
+
+Default value: `true`
+
+### <a name="common--system--package_management--guix--client"></a>`common::system::package_management::guix::client`
+
+Class for managing the Guix client in system packages
+
+#### Parameters
+
+The following parameters are available in the `common::system::package_management::guix::client` class:
+
+* [`enable`](#-common--system--package_management--guix--client--enable)
+* [`manage_mounts`](#-common--system--package_management--guix--client--manage_mounts)
+* [`server`](#-common--system--package_management--guix--client--server)
+
+##### <a name="-common--system--package_management--guix--client--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the Guix client. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--package_management--guix--client--manage_mounts"></a>`manage_mounts`
+
+Data type: `Boolean`
+
+Whether to manage mounts for Guix client. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--package_management--guix--client--server"></a>`server`
+
+Data type: `Stdlib::Host`
+
+The server hostname for Guix. Defaults to 'localhost'.
+
+Default value: `'localhost'`
+
+### <a name="common--system--relocatetmp"></a>`common::system::relocatetmp`
+
+Class for relocating /tmp directory to a specified path
+
+#### Parameters
+
+The following parameters are available in the `common::system::relocatetmp` class:
+
+* [`relocate_to`](#-common--system--relocatetmp--relocate_to)
+
+##### <a name="-common--system--relocatetmp--relocate_to"></a>`relocate_to`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The absolute path to move /tmp to. An Optional[Stdlib::Absolutepath]. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--system--selinux"></a>`common::system::selinux`
+
+Class for managing SELinux fcontext
+
+#### Parameters
+
+The following parameters are available in the `common::system::selinux` class:
+
+* [`manage`](#-common--system--selinux--manage)
+* [`enable`](#-common--system--selinux--enable)
+* [`enforce`](#-common--system--selinux--enforce)
+* [`fcontext`](#-common--system--selinux--fcontext)
+* [`enable_setroubleshoot`](#-common--system--selinux--enable_setroubleshoot)
+
+##### <a name="-common--system--selinux--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Flag to manage SELinux context. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--selinux--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable SELinux. Defaults to the value of $facts['selinux'].
+
+Default value: `$facts['selinux']`
+
+##### <a name="-common--system--selinux--enforce"></a>`enforce`
+
+Data type: `Boolean`
+
+Enforce SELinux policy. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--selinux--fcontext"></a>`fcontext`
+
+Data type: `Hash[String, Hash]`
+
+Hash of fcontext definitions. Defaults to empty hash.
+
+Default value: `{}`
+
+##### <a name="-common--system--selinux--enable_setroubleshoot"></a>`enable_setroubleshoot`
+
+Data type: `Boolean`
+
+Enable setroubleshoot. Defaults to false.
+
+Default value: `false`
+
+### <a name="common--system--sshd"></a>`common::system::sshd`
+
+Class for managing the common SSHD configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::sshd` class:
+
+* [`manage`](#-common--system--sshd--manage)
+* [`distribute_hostkeys`](#-common--system--sshd--distribute_hostkeys)
+* [`version`](#-common--system--sshd--version)
+* [`ports`](#-common--system--sshd--ports)
+* [`listenaddresses`](#-common--system--sshd--listenaddresses)
+* [`managed_users_only`](#-common--system--sshd--managed_users_only)
+* [`compression`](#-common--system--sshd--compression)
+* [`password_authentication`](#-common--system--sshd--password_authentication)
+* [`tcp_forwarding`](#-common--system--sshd--tcp_forwarding)
+* [`permit_user_rc`](#-common--system--sshd--permit_user_rc)
+* [`max_auth_tries`](#-common--system--sshd--max_auth_tries)
+* [`max_sessions`](#-common--system--sshd--max_sessions)
+* [`login_grace_time`](#-common--system--sshd--login_grace_time)
+* [`hostkeys`](#-common--system--sshd--hostkeys)
+* [`log_level`](#-common--system--sshd--log_level)
+* [`kexalgorithms`](#-common--system--sshd--kexalgorithms)
+* [`ciphers`](#-common--system--sshd--ciphers)
+* [`macs`](#-common--system--sshd--macs)
+* [`subsystems`](#-common--system--sshd--subsystems)
+* [`permit_root_login`](#-common--system--sshd--permit_root_login)
+* [`x11_forwarding`](#-common--system--sshd--x11_forwarding)
+* [`x11_use_localhost`](#-common--system--sshd--x11_use_localhost)
+* [`client_options`](#-common--system--sshd--client_options)
+* [`accept_env`](#-common--system--sshd--accept_env)
+* [`match`](#-common--system--sshd--match)
+
+##### <a name="-common--system--sshd--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the sshd configuration. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--sshd--distribute_hostkeys"></a>`distribute_hostkeys`
+
+Data type: `Variant[Boolean, Enum['no-noop']]`
+
+Whether to distribute host keys. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--sshd--version"></a>`version`
+
+Data type: `Eit_types::Package::Version::Installed`
+
+The version of the SSHD package to ensure is installed. Defaults to 'latest'.
+
+Default value: `'latest'`
+
+##### <a name="-common--system--sshd--ports"></a>`ports`
+
+Data type: `Array[Stdlib::Port]`
+
+Array of ports for SSHD to listen on. Defaults to [22].
+
+Default value: `[22]`
+
+##### <a name="-common--system--sshd--listenaddresses"></a>`listenaddresses`
+
+Data type: `Array[Eit_types::IPPort]`
+
+Array of addresses SSHD should listen on. Defaults to empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--sshd--managed_users_only"></a>`managed_users_only`
+
+Data type: `Boolean`
+
+Restrict SSHD to manage only specified users. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--sshd--compression"></a>`compression`
+
+Data type: `Boolean`
+
+Enable compression. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--sshd--password_authentication"></a>`password_authentication`
+
+Data type: `Boolean`
+
+Enable password authentication. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--sshd--tcp_forwarding"></a>`tcp_forwarding`
+
+Data type: `Boolean`
+
+Enable TCP forwarding. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--sshd--permit_user_rc"></a>`permit_user_rc`
+
+Data type: `Boolean`
+
+Permit user rc files. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--sshd--max_auth_tries"></a>`max_auth_tries`
+
+Data type: `Integer[0,default]`
+
+Maximum authentication attempts. Defaults to 4.
+
+Default value: `4`
+
+##### <a name="-common--system--sshd--max_sessions"></a>`max_sessions`
+
+Data type: `Integer[0,default]`
+
+Maximum sessions. Defaults to 10.
+
+Default value: `10`
+
+##### <a name="-common--system--sshd--login_grace_time"></a>`login_grace_time`
+
+Data type: `Integer[0,default]`
+
+Login grace time in seconds. Defaults to 30.
+
+Default value: `30`
+
+##### <a name="-common--system--sshd--hostkeys"></a>`hostkeys`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+Array of host key file paths. Defaults to ['/etc/ssh/ssh_host_ed25519_key', '/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key'].
+
+Default value:
+
+```puppet
+[
+    '/etc/ssh/ssh_host_ed25519_key',
+    '/etc/ssh/ssh_host_rsa_key',
+    '/etc/ssh/ssh_host_ecdsa_key',
+  ]
+```
+
+##### <a name="-common--system--sshd--log_level"></a>`log_level`
+
+Data type:
+
+```puppet
+Enum[
+    'QUIET',
+    'FATAL',
+    'ERROR',
+    'INFO',
+    'VERBOSE',
+    'DEBUG',
+    'DEBUG1',
+    'DEBUG2',
+    'DEBUG3'
+  ]
+```
+
+Logging level. Defaults to 'VERBOSE'.
+
+Default value: `'VERBOSE'`
+
+##### <a name="-common--system--sshd--kexalgorithms"></a>`kexalgorithms`
+
+Data type: `Array[Eit_types::Ssh::Kexalgorithms]`
+
+Array of key exchange algorithms. Defaults include 'curve25519-sha256@libssh.org', 'ecdh-sha2-nistp521', etc.
+
+Default value:
+
+```puppet
+[
+    'curve25519-sha256@libssh.org',
+    'ecdh-sha2-nistp521',
+    'ecdh-sha2-nistp384',
+    'ecdh-sha2-nistp256',
+    'diffie-hellman-group-exchange-sha256',
+  ]
+```
+
+##### <a name="-common--system--sshd--ciphers"></a>`ciphers`
+
+Data type: `Array[Eit_types::Ssh::Ciphers]`
+
+Array of cipher algorithms. Defaults include 'chacha20-poly1305@openssh.com', 'aes256-gcm@openssh.com', etc.
+
+Default value:
+
+```puppet
+[
+    'chacha20-poly1305@openssh.com',
+    'aes256-gcm@openssh.com',
+    'aes128-gcm@openssh.com',
+    'aes256-ctr',
+    'aes192-ctr',
+    'aes128-ctr',
+  ]
+```
+
+##### <a name="-common--system--sshd--macs"></a>`macs`
+
+Data type: `Array[Eit_types::Ssh::Macs]`
+
+Array of MAC algorithms. Defaults include 'hmac-sha2-512-etm@openssh.com', 'hmac-sha2-256-etm@openssh.com', etc.
+
+Default value:
+
+```puppet
+[
+    'hmac-sha2-512-etm@openssh.com',
+    'hmac-sha2-256-etm@openssh.com',
+    'umac-128-etm@openssh.com',
+    'hmac-sha2-512',
+    'hmac-sha2-256',
+    'umac-128@openssh.com',
+  ]
+```
+
+##### <a name="-common--system--sshd--subsystems"></a>`subsystems`
+
+Data type: `Hash[Eit_types::SimpleString, String]`
+
+Hash of subsystem commands. Defaults to {'sftp' => '/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO'}.
+
+Default value:
+
+```puppet
+{
+    'sftp' => '/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO',
+  }
+```
+
+##### <a name="-common--system--sshd--permit_root_login"></a>`permit_root_login`
+
+Data type:
+
+```puppet
+Variant[
+    Boolean,
+    Enum['forced-commands-only', 'prohibit-password']
+  ]
+```
+
+Root login permission. Defaults to 'forced-commands-only'.
+
+Default value: `'forced-commands-only'`
+
+##### <a name="-common--system--sshd--x11_forwarding"></a>`x11_forwarding`
+
+Data type: `Boolean`
+
+Enable X11 forwarding. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--sshd--x11_use_localhost"></a>`x11_use_localhost`
+
+Data type: `Boolean`
+
+Use localhost for X11 forwarding. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--sshd--client_options"></a>`client_options`
+
+Data type: `Hash`
+
+Hash of client options. Defaults to {'Host *' => {'HashKnownHosts' => true, 'SendEnv' => 'LANG LC_*'}}.
+
+Default value:
+
+```puppet
+{
+    'Host *' => {
+      'HashKnownHosts' => true,
+      'SendEnv'        => 'LANG LC_*',
+    },
+  }
+```
+
+##### <a name="-common--system--sshd--accept_env"></a>`accept_env`
+
+Data type: `Array[String]`
+
+Array of accepted environment variables. Defaults to ['LANG', 'LC_*'].
+
+Default value:
+
+```puppet
+[
+    'LANG',
+    'LC_*',
+  ]
+```
+
+##### <a name="-common--system--sshd--match"></a>`match`
+
+Data type: `Hash[String, Hash[String, Any]]`
+
+Hash of match conditions. Defaults to empty hash.
+
+Default value: `{}`
+
+### <a name="common--system--systemd"></a>`common::system::systemd`
+
+Class for managing systemd configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::systemd` class:
+
+* [`manage_journald`](#-common--system--systemd--manage_journald)
+* [`manage_resolved`](#-common--system--systemd--manage_resolved)
+* [`journald_settings`](#-common--system--systemd--journald_settings)
+
+##### <a name="-common--system--systemd--manage_journald"></a>`manage_journald`
+
+Data type: `Boolean`
+
+Whether to manage journald service. Defaults to undef.
+
+##### <a name="-common--system--systemd--manage_resolved"></a>`manage_resolved`
+
+Data type: `Boolean`
+
+Whether to manage resolved service. Defaults to undef.
+
+##### <a name="-common--system--systemd--journald_settings"></a>`journald_settings`
+
+Data type: `Systemd::JournaldSettings`
+
+Settings for journald configuration. Defaults to undef.
+
+### <a name="common--system--time"></a>`common::system::time`
+
+Class for managing system time settings
+
+#### Parameters
+
+The following parameters are available in the `common::system::time` class:
+
+* [`manage_timezone`](#-common--system--time--manage_timezone)
+* [`manage_ntp`](#-common--system--time--manage_ntp)
+* [`timezone`](#-common--system--time--timezone)
+
+##### <a name="-common--system--time--manage_timezone"></a>`manage_timezone`
+
+Data type: `Boolean`
+
+Boolean to determine if timezone management should be enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--time--manage_ntp"></a>`manage_ntp`
+
+Data type: `Boolean`
+
+Boolean to determine if NTP management should be enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--time--timezone"></a>`timezone`
+
+Data type: `Eit_types::Timezone`
+
+The timezone to set. Defaults to 'Europe/Copenhagen'.
+
+Default value: `'Europe/Copenhagen'`
+
+### <a name="common--system--time--ntp"></a>`common::system::time::ntp`
+
+Class for managing NTP configuration
+
+#### Parameters
+
+The following parameters are available in the `common::system::time::ntp` class:
+
+* [`ntp_client`](#-common--system--time--ntp--ntp_client)
+* [`manage`](#-common--system--time--ntp--manage)
+* [`servers`](#-common--system--time--ntp--servers)
+* [`noop_value`](#-common--system--time--ntp--noop_value)
+
+##### <a name="-common--system--time--ntp--ntp_client"></a>`ntp_client`
+
+Data type: `Enum['chrony', 'ntpd', 'systemd-timesyncd']`
+
+The NTP client to use. Can be 'chrony', 'ntpd', or 'systemd-timesyncd'.
+
+##### <a name="-common--system--time--ntp--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Whether to manage the NTP service. Defaults to the value of $common::system::time::manage_ntp.
+
+Default value: `$common::system::time::manage_ntp`
+
+##### <a name="-common--system--time--ntp--servers"></a>`servers`
+
+Data type: `Array[Stdlib::Host]`
+
+Array of NTP server hostnames or IPs. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--time--ntp--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional parameter for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--system--updates"></a>`common::system::updates`
+
+Class for managing system updates
+
+#### Parameters
+
+The following parameters are available in the `common::system::updates` class:
+
+* [`manage`](#-common--system--updates--manage)
+* [`enable`](#-common--system--updates--enable)
+* [`snapshot`](#-common--system--updates--snapshot)
+* [`blacklist`](#-common--system--updates--blacklist)
+* [`remove_unused_packages`](#-common--system--updates--remove_unused_packages)
+* [`remove_unused_kernels`](#-common--system--updates--remove_unused_kernels)
+* [`reboot`](#-common--system--updates--reboot)
+* [`mail_to`](#-common--system--updates--mail_to)
+* [`noop_value`](#-common--system--updates--noop_value)
+
+##### <a name="-common--system--updates--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean determines if the system updates service is managed. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--updates--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating whether automatic updates are enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--updates--snapshot"></a>`snapshot`
+
+Data type: `Boolean`
+
+Boolean indicating whether snapshots should be taken before updates. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--updates--blacklist"></a>`blacklist`
+
+Data type: `Array`
+
+Array of package names to exclude from updates. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-common--system--updates--remove_unused_packages"></a>`remove_unused_packages`
+
+Data type: `Boolean`
+
+Boolean indicating whether to remove unused packages. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--updates--remove_unused_kernels"></a>`remove_unused_kernels`
+
+Data type: `Boolean`
+
+Boolean indicating whether to remove unused kernels. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--system--updates--reboot"></a>`reboot`
+
+Data type: `Boolean`
+
+Boolean indicating whether to reboot after updates. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--system--updates--mail_to"></a>`mail_to`
+
+Data type: `Eit_types::Email`
+
+Email address to notify after updates. Defaults to 'ops@obmondo.com'.
+
+Default value: `'ops@obmondo.com'`
+
+##### <a name="-common--system--updates--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional Boolean to perform no-op runs for testing. Defaults to false.
+
+Default value: `false`
+
 ### <a name="common--virtualization"></a>`common::virtualization`
 
 Class for managing virtualized servers
 
+### <a name="common--virtualization--vmware"></a>`common::virtualization::vmware`
+
+Class for managing VMware virtualization setup
+
+### <a name="common--virtualization--vmware--openvmtools"></a>`common::virtualization::vmware::openvmtools`
+
+Class for managing OpenVMtools configuration within VMware virtualization
+
+#### Parameters
+
+The following parameters are available in the `common::virtualization::vmware::openvmtools` class:
+
+* [`ensure`](#-common--virtualization--vmware--openvmtools--ensure)
+* [`autoupgrade`](#-common--virtualization--vmware--openvmtools--autoupgrade)
+
+##### <a name="-common--virtualization--vmware--openvmtools--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+Whether to ensure the openvmtools package is installed and running. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--virtualization--vmware--openvmtools--autoupgrade"></a>`autoupgrade`
+
+Data type: `Boolean`
+
+Whether to enable automatic upgrade of openvmtools. Defaults to true.
+
+Default value: `true`
+
 ## Defined types
+
+### <a name="common--backup--borg--push"></a>`common::backup::borg::push`
+
+Borg Push (Client) Server
+
+#### Parameters
+
+The following parameters are available in the `common::backup::borg::push` defined type:
+
+* [`archives`](#-common--backup--borg--push--archives)
+* [`remote_user`](#-common--backup--borg--push--remote_user)
+* [`remote_ip`](#-common--backup--borg--push--remote_ip)
+* [`password`](#-common--backup--borg--push--password)
+* [`remote_backup_root`](#-common--backup--borg--push--remote_backup_root)
+* [`randomized_delay`](#-common--backup--borg--push--randomized_delay)
+* [`timespec`](#-common--backup--borg--push--timespec)
+
+##### <a name="-common--backup--borg--push--archives"></a>`archives`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+Array of absolute paths to archives to backup.
+
+##### <a name="-common--backup--borg--push--remote_user"></a>`remote_user`
+
+Data type: `Optional[Eit_types::User]`
+
+Optional remote user for SSH. Defaults to $::common::backup::borg::remote_user.
+
+Default value: `$::common::backup::borg::remote_user`
+
+##### <a name="-common--backup--borg--push--remote_ip"></a>`remote_ip`
+
+Data type: `Variant[Eit_types::IP, Stdlib::FQDN]`
+
+Remote IP address or FQDN. Defaults to $::common::backup::borg::remote_ip.
+
+Default value: `$::common::backup::borg::remote_ip`
+
+##### <a name="-common--backup--borg--push--password"></a>`password`
+
+Data type: `Optional[Eit_types::Password]`
+
+Optional password for the remote backup. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--backup--borg--push--remote_backup_root"></a>`remote_backup_root`
+
+Data type: `Stdlib::Absolutepath`
+
+The root directory for remote backups. Defaults to $::common::backup::borg::remote_backup_root.
+
+Default value: `$::common::backup::borg::remote_backup_root`
+
+##### <a name="-common--backup--borg--push--randomized_delay"></a>`randomized_delay`
+
+Data type: `Optional[Eit_types::SystemdTimeSpan]`
+
+Optional delay to randomize backup timing. Defaults to $::common::backup::borg::randomized_delay.
+
+Default value: `$::common::backup::borg::randomized_delay`
+
+##### <a name="-common--backup--borg--push--timespec"></a>`timespec`
+
+Data type: `Optional[Eit_types::SystemdTime]`
+
+Scheduled time for backups. Defaults to $::common::backup::borg::timespec.
+
+Default value: `$::common::backup::borg::timespec`
+
+### <a name="common--backup--borg--server"></a>`common::backup::borg::server`
+
+Class for managing the Borg Backup Server (The Target Node) where backup will be saved.
+
+#### Parameters
+
+The following parameters are available in the `common::backup::borg::server` defined type:
+
+* [`backup_root`](#-common--backup--borg--server--backup_root)
+* [`authorized_keys`](#-common--backup--borg--server--authorized_keys)
+
+##### <a name="-common--backup--borg--server--backup_root"></a>`backup_root`
+
+Data type: `Stdlib::Absolutepath`
+
+The root directory for backups. Defaults to the value of $::common::backup::dump_dir.
+
+Default value: `$::common::backup::dump_dir`
+
+##### <a name="-common--backup--borg--server--authorized_keys"></a>`authorized_keys`
+
+Data type: `Hash`
+
+Hash of authorized SSH keys with associated user keys.
+
+Default value: `$::common::backup::borg::authorized_keys`
+
+### <a name="common--backup--push"></a>`common::backup::push`
+
+Class for managing common::backup::push define
+
+#### Parameters
+
+The following parameters are available in the `common::backup::push` defined type:
+
+* [`target`](#-common--backup--push--target)
+* [`source`](#-common--backup--push--source)
+* [`destination`](#-common--backup--push--destination)
+* [`keep_time`](#-common--backup--push--keep_time)
+* [`hour`](#-common--backup--push--hour)
+* [`email`](#-common--backup--push--email)
+* [`exclude`](#-common--backup--push--exclude)
+
+##### <a name="-common--backup--push--target"></a>`target`
+
+Data type: `Eit_types::Host`
+
+The host target for backup. Must be of type Eit_types::Host.
+
+##### <a name="-common--backup--push--source"></a>`source`
+
+Data type: `Stdlib::Absolutepath`
+
+The source path to backup. Must be an absolute path of type Stdlib::Absolutepath.
+
+##### <a name="-common--backup--push--destination"></a>`destination`
+
+Data type: `Stdlib::Absolutepath`
+
+The destination identifier for the backup. Must be an absolute path of type Stdlib::Absolutepath.
+
+##### <a name="-common--backup--push--keep_time"></a>`keep_time`
+
+Data type: `Pattern[/[0-9]+[DWMY]/]`
+
+The pattern specifying how long to keep backups, e.g., '7D', '4W'. Must be of type Pattern[/[0-9]+[DWMY]/].
+
+##### <a name="-common--backup--push--hour"></a>`hour`
+
+Data type: `Integer[0,23]`
+
+The hour of the day to run the backup, in 24-hour format (0-23). Must be an Integer within range.
+
+##### <a name="-common--backup--push--email"></a>`email`
+
+Data type: `Optional[Eit_types::Email]`
+
+The email address to notify on backup failure. Defaults to 'ops@obmondo.com'.
+
+Default value: `'ops@obmondo.com'`
+
+##### <a name="-common--backup--push--exclude"></a>`exclude`
+
+Data type:
+
+```puppet
+Array[Variant[
+    Stdlib::Absolutepath,
+    String]]
+```
+
+An array of additional paths or patterns to exclude from backup. Defaults to an empty array.
+
+Default value: `[]`
+
+### <a name="common--device--encrypted_disk"></a>`common::device::encrypted_disk`
+
+Class for managing the common::device::encrypted_disk resource
+
+#### Parameters
+
+The following parameters are available in the `common::device::encrypted_disk` defined type:
+
+* [`device`](#-common--device--encrypted_disk--device)
+* [`luks_key_service_url`](#-common--device--encrypted_disk--luks_key_service_url)
+* [`luks_key_service_headers`](#-common--device--encrypted_disk--luks_key_service_headers)
+* [`luks_key`](#-common--device--encrypted_disk--luks_key)
+* [`luks_key_size_b`](#-common--device--encrypted_disk--luks_key_size_b)
+* [`pool_name`](#-common--device--encrypted_disk--pool_name)
+
+##### <a name="-common--device--encrypted_disk--device"></a>`device`
+
+Data type: `Stdlib::Absolutepath`
+
+The absolute path to the device. This parameter is required.
+
+##### <a name="-common--device--encrypted_disk--luks_key_service_url"></a>`luks_key_service_url`
+
+Data type: `Optional[Eit_types::URL]`
+
+The URL for the LUKS key service. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--device--encrypted_disk--luks_key_service_headers"></a>`luks_key_service_headers`
+
+Data type: `Optional[Hash[String,String]]`
+
+Optional headers for the LUKS key service. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--device--encrypted_disk--luks_key"></a>`luks_key`
+
+Data type: `Optional[Eit_types::Password]`
+
+The password for LUKS encryption. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--device--encrypted_disk--luks_key_size_b"></a>`luks_key_size_b`
+
+Data type:
+
+```puppet
+Optional[Variant[
+    Integer[512,512],
+    Integer[1024,1024],
+    Integer[2048,2048],
+    Integer[4096,4096]]]
+```
+
+The size of the encryption key in bits. Defaults to 1024.
+
+Default value: `1024`
+
+##### <a name="-common--device--encrypted_disk--pool_name"></a>`pool_name`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+The name of the ZFS pool, if applicable. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--device--filesystem"></a>`common::device::filesystem`
+
+Array of device paths or names. Must be an array of strings or absolute paths.
+
+#### Parameters
+
+The following parameters are available in the `common::device::filesystem` defined type:
+
+* [`devices`](#-common--device--filesystem--devices)
+* [`fs_type`](#-common--device--filesystem--fs_type)
+* [`target`](#-common--device--filesystem--target)
+
+##### <a name="-common--device--filesystem--devices"></a>`devices`
+
+Data type: `Array[Variant[Stdlib::Absolutepath, Eit_types::SimpleString]]`
+
+
+
+##### <a name="-common--device--filesystem--fs_type"></a>`fs_type`
+
+Data type: `Enum['zfs']`
+
+The filesystem type to use, e.g., 'zfs'. Defaults to 'zfs'.
+
+##### <a name="-common--device--filesystem--target"></a>`target`
+
+Data type: `Stdlib::Absolutepath`
+
+The target mount point.
 
 ### <a name="common--mkdir_p"></a>`common::mkdir_p`
 
@@ -1552,4 +8424,360 @@ The following parameters are available in the `common::mkdir_p` defined type:
 ##### <a name="-common--mkdir_p--name"></a>`name`
 
 The path of the directory to create. This parameter is required.
+
+### <a name="common--services--initscript"></a>`common::services::initscript`
+
+The desired state of the service. Can be 'running', 'stopped', or a Boolean. Defaults to 'running'.
+
+#### Parameters
+
+The following parameters are available in the `common::services::initscript` defined type:
+
+* [`ensure`](#-common--services--initscript--ensure)
+* [`source`](#-common--services--initscript--source)
+* [`content`](#-common--services--initscript--content)
+
+##### <a name="-common--services--initscript--ensure"></a>`ensure`
+
+Data type:
+
+```puppet
+Optional[
+    Variant[
+      Enum['running', 'stopped'],
+      Boolean,
+    ]
+  ]
+```
+
+
+
+Default value: `'running'`
+
+##### <a name="-common--services--initscript--source"></a>`source`
+
+Data type: `Optional[String]`
+
+The source path for the init script. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--services--initscript--content"></a>`content`
+
+Data type: `Optional[String]`
+
+The content of the init script. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--services--systemd"></a>`common::services::systemd`
+
+Defaults to undef.
+
+#### Parameters
+
+The following parameters are available in the `common::services::systemd` defined type:
+
+* [`ensure`](#-common--services--systemd--ensure)
+* [`enable`](#-common--services--systemd--enable)
+* [`unit_name`](#-common--services--systemd--unit_name)
+* [`unit`](#-common--services--systemd--unit)
+* [`service`](#-common--services--systemd--service)
+* [`slice`](#-common--services--systemd--slice)
+* [`mount`](#-common--services--systemd--mount)
+* [`path`](#-common--services--systemd--path)
+* [`automount`](#-common--services--systemd--automount)
+* [`install`](#-common--services--systemd--install)
+* [`timer`](#-common--services--systemd--timer)
+* [`script`](#-common--services--systemd--script)
+* [`override`](#-common--services--systemd--override)
+* [`unit_file_path`](#-common--services--systemd--unit_file_path)
+* [`noop_value`](#-common--services--systemd--noop_value)
+
+##### <a name="-common--services--systemd--ensure"></a>`ensure`
+
+Data type: `Variant[Eit_types::Service_Ensure, Enum['present', 'absent']]`
+
+The desired state of the service. Defaults to true (present).
+
+Default value: `true`
+
+##### <a name="-common--services--systemd--enable"></a>`enable`
+
+Data type: `Eit_types::Service_Enable`
+
+Whether to enable the service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--services--systemd--unit_name"></a>`unit_name`
+
+Data type: `String`
+
+The name of the systemd unit.
+
+Default value: `$name`
+
+##### <a name="-common--services--systemd--unit"></a>`unit`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd unit section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--service"></a>`service`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd service section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--slice"></a>`slice`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd slice section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--mount"></a>`mount`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd mount section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--path"></a>`path`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd path section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--automount"></a>`automount`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd automount section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--install"></a>`install`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd install section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--timer"></a>`timer`
+
+Data type: `Eit_types::SystemdSection`
+
+The systemd timer section configuration. Defaults to {}.
+
+Default value: `{}`
+
+##### <a name="-common--services--systemd--script"></a>`script`
+
+Data type:
+
+```puppet
+Optional[
+    Hash[
+      String,
+      Struct[{
+        path    => String,
+        mode    => String,
+        content => Optional[String],
+        source  => Optional[String],
+      }]
+    ]
+  ]
+```
+
+Optional. A hash of file paths to their content or source for additional script files.
+
+Default value: `undef`
+
+##### <a name="-common--services--systemd--override"></a>`override`
+
+Data type: `Boolean`
+
+Optional. Whether to override existing configurations. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--services--systemd--unit_file_path"></a>`unit_file_path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Optional. The specific path to the unit file. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--services--systemd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional. The noop setting for resource types. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--system--selinux--module"></a>`common::system::selinux::module`
+
+Class for managing SELinux modules
+
+#### Parameters
+
+The following parameters are available in the `common::system::selinux::module` defined type:
+
+* [`noop_value`](#-common--system--selinux--module--noop_value)
+
+##### <a name="-common--system--selinux--module--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to control noop behavior, defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--systemd--timer"></a>`common::systemd::timer`
+
+Puppet class for systemd timer drop-in replacement for cron
+
+#### Parameters
+
+The following parameters are available in the `common::systemd::timer` defined type:
+
+* [`enable`](#-common--systemd--timer--enable)
+* [`command`](#-common--systemd--timer--command)
+* [`ensure`](#-common--systemd--timer--ensure)
+* [`weekday`](#-common--systemd--timer--weekday)
+* [`day`](#-common--systemd--timer--day)
+* [`month`](#-common--systemd--timer--month)
+* [`year`](#-common--systemd--timer--year)
+* [`hour`](#-common--systemd--timer--hour)
+* [`minute`](#-common--systemd--timer--minute)
+* [`environment`](#-common--systemd--timer--environment)
+* [`user`](#-common--systemd--timer--user)
+* [`mode`](#-common--systemd--timer--mode)
+* [`description`](#-common--systemd--timer--description)
+* [`noop_value`](#-common--systemd--timer--noop_value)
+
+##### <a name="-common--systemd--timer--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the timer. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--systemd--timer--command"></a>`command`
+
+Data type: `Optional[String[1]]`
+
+The command to run. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--systemd--timer--ensure"></a>`ensure`
+
+Data type: `Cron::Job_ensure`
+
+Ensure state of the cron job. Defaults to 'present'.
+
+Default value: `'present'`
+
+##### <a name="-common--systemd--timer--weekday"></a>`weekday`
+
+Data type: `Eit_types::SystemdTimer::Weekday`
+
+Day of the week for the timer, e.g., '*'. Defaults to '*'.
+
+Default value: `'*'`
+
+##### <a name="-common--systemd--timer--day"></a>`day`
+
+Data type: `Eit_types::SystemdTimer::Day`
+
+Day of the month for the timer, e.g., '*'. Defaults to '*'.
+
+Default value: `'*'`
+
+##### <a name="-common--systemd--timer--month"></a>`month`
+
+Data type: `Eit_types::SystemdTimer::Month`
+
+Month of the year for the timer, e.g., '*'. Defaults to '*'.
+
+Default value: `'*'`
+
+##### <a name="-common--systemd--timer--year"></a>`year`
+
+Data type: `Eit_types::SystemdTimer::Year`
+
+Year for the timer, e.g., '*'. Defaults to '*'.
+
+Default value: `'*'`
+
+##### <a name="-common--systemd--timer--hour"></a>`hour`
+
+Data type: `Eit_types::SystemdTimer::Hour`
+
+Hour of the day for the timer, e.g., '00'. Defaults to '00'.
+
+Default value: `'00'`
+
+##### <a name="-common--systemd--timer--minute"></a>`minute`
+
+Data type: `Eit_types::SystemdTimer::Minute`
+
+Minute of the hour for the timer, e.g., '00'. Defaults to '00'.
+
+Default value: `'00'`
+
+##### <a name="-common--systemd--timer--environment"></a>`environment`
+
+Data type: `Cron::Environment`
+
+Array of environment variables for the timer. Defaults to [].
+
+Default value: `[]`
+
+##### <a name="-common--systemd--timer--user"></a>`user`
+
+Data type: `Cron::User`
+
+User to run the timer as. Defaults to 'root'.
+
+Default value: `'root'`
+
+##### <a name="-common--systemd--timer--mode"></a>`mode`
+
+Data type: `Stdlib::Filemode`
+
+File mode for the timer files. Defaults to '0644'.
+
+Default value: `'0644'`
+
+##### <a name="-common--systemd--timer--description"></a>`description`
+
+Data type: `Optional[String]`
+
+Optional description for the timer.
+
+Default value: `undef`
+
+##### <a name="-common--systemd--timer--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional noop value to disable actual execution. Defaults to undef.
+
+Default value: `undef`
 
