@@ -7,10 +7,41 @@
 ### Classes
 
 * [`monitor`](#monitor): Class for Obmondo monitoring
+* [`monitor::domains::health`](#monitor--domains--health): Class for monitoring domain health
 * [`monitor::prometheus`](#monitor--prometheus): Class for managing Prometheus monitoring
 * [`monitor::raid`](#monitor--raid): Class for Raid Monitoring
+* [`monitor::raid::mdraid`](#monitor--raid--mdraid): Class for monitoring MD Raid
 * [`monitor::service`](#monitor--service): Class for Obmondo system monitoring
+* [`monitor::service::elasticsearch`](#monitor--service--elasticsearch): Class for monitoring Elasticsearch service
+* [`monitor::service::haproxy`](#monitor--service--haproxy): Class for managing Haproxy Alerts
+* [`monitor::service::haproxy::backend_down`](#monitor--service--haproxy--backend_down): Class for monitoring HAProxy backend down alerts
+* [`monitor::service::haproxy::backend_response_time`](#monitor--service--haproxy--backend_response_time): Class for monitoring HAProxy backend response times
+* [`monitor::service::haproxy::requests_denied`](#monitor--service--haproxy--requests_denied): Class for haproxy alerts for ddos protection
 * [`monitor::system`](#monitor--system): Class for managing the Obmondo system monitoring
+* [`monitor::system::cpu`](#monitor--system--cpu): Class for monitoring system CPU usage
+* [`monitor::system::disk`](#monitor--system--disk): Class for managing disk monitoring
+* [`monitor::system::disk::usage`](#monitor--system--disk--usage): Class for monitoring disk usage
+* [`monitor::system::dns`](#monitor--system--dns): Class for monitoring DNS resolution
+* [`monitor::system::docker`](#monitor--system--docker): Class for Docker monitoring
+* [`monitor::system::drbd`](#monitor--system--drbd): Class for managing DRBD checks
+* [`monitor::system::file_size`](#monitor--system--file_size): Class for checking 0kb files
+* [`monitor::system::hwmon`](#monitor--system--hwmon): Class for hardware monitoring checks
+* [`monitor::system::load`](#monitor--system--load): Class for managing system load monitoring
+* [`monitor::system::ntp`](#monitor--system--ntp): Class for monitoring system NTP thresholds
+* [`monitor::system::psi`](#monitor--system--psi): Class for managing pressure stall information
+* [`monitor::system::ram`](#monitor--system--ram): Class for monitoring RAM usage
+* [`monitor::system::service`](#monitor--system--service): Class for managing systemd services in the monitor module
+* [`monitor::system::service::dellhw`](#monitor--system--service--dellhw): Class for Dell hardware SSD CLI checks
+* [`monitor::system::service::down`](#monitor--system--service--down): Service downclass monitor::system::service::down
+* [`monitor::system::service::gitlab`](#monitor--system--service--gitlab): Class for monitoring GitLab system service thresholds
+* [`monitor::system::service::gitlab_runner`](#monitor--system--service--gitlab_runner): Class for monitoring the gitlab_runner service error state
+* [`monitor::system::service::lsof`](#monitor--system--service--lsof): Class for managing the monitor::system::service::lsof resource
+* [`monitor::system::service::omsagent`](#monitor--system--service--omsagent): Class for monitoring system service 'omsagent' to check for updates
+* [`monitor::system::service::smartmon`](#monitor--system--service--smartmon): Class for managing the Smartmon Checks
+* [`monitor::system::service::ssacli`](#monitor--system--service--ssacli): Class for SSacli Checks
+* [`monitor::system::service::sssd`](#monitor--system--service--sssd): Class for managing SSSD checks
+* [`monitor::system::service::sssd::auth`](#monitor--system--service--sssd--auth): Class for managing the sssd ldap auth check
+* [`monitor::system::swap`](#monitor--system--swap): Class for managing system swap monitoring
 
 ### Defined types
 
@@ -47,6 +78,24 @@ No-operation mode value. Defaults to false.
 
 Default value: `false`
 
+### <a name="monitor--domains--health"></a>`monitor::domains::health`
+
+Class for monitoring domain health
+
+#### Parameters
+
+The following parameters are available in the `monitor::domains::health` class:
+
+* [`enable`](#-monitor--domains--health--enable)
+
+##### <a name="-monitor--domains--health--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable domain health monitoring. Defaults to true.
+
+Default value: `true`
+
 ### <a name="monitor--prometheus"></a>`monitor::prometheus`
 
 Class for managing Prometheus monitoring
@@ -69,13 +118,916 @@ Default value: `true`
 
 Class for Raid Monitoring
 
+### <a name="monitor--raid--mdraid"></a>`monitor::raid::mdraid`
+
+Class for monitoring MD Raid
+
+#### Parameters
+
+The following parameters are available in the `monitor::raid::mdraid` class:
+
+* [`enable`](#-monitor--raid--mdraid--enable)
+
+##### <a name="-monitor--raid--mdraid--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable monitoring. Defaults to true.
+
+Default value: `true`
+
 ### <a name="monitor--service"></a>`monitor::service`
 
 Class for Obmondo system monitoring
 
+### <a name="monitor--service--elasticsearch"></a>`monitor::service::elasticsearch`
+
+Class for monitoring Elasticsearch service
+
+#### Parameters
+
+The following parameters are available in the `monitor::service::elasticsearch` class:
+
+* [`enable`](#-monitor--service--elasticsearch--enable)
+* [`record`](#-monitor--service--elasticsearch--record)
+
+##### <a name="-monitor--service--elasticsearch--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable monitoring. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--service--elasticsearch--record"></a>`record`
+
+Data type: `String`
+
+The record name for the monitor. Defaults to the resource title.
+
+Default value: `$title`
+
+### <a name="monitor--service--haproxy"></a>`monitor::service::haproxy`
+
+Class for managing Haproxy Alerts
+
+### <a name="monitor--service--haproxy--backend_down"></a>`monitor::service::haproxy::backend_down`
+
+Class for monitoring HAProxy backend down alerts
+
+#### Parameters
+
+The following parameters are available in the `monitor::service::haproxy::backend_down` class:
+
+* [`enable`](#-monitor--service--haproxy--backend_down--enable)
+* [`ignore_backends`](#-monitor--service--haproxy--backend_down--ignore_backends)
+
+##### <a name="-monitor--service--haproxy--backend_down--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the alert monitoring. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--service--haproxy--backend_down--ignore_backends"></a>`ignore_backends`
+
+Data type: `Array[String]`
+
+List of backends to ignore for the alert.
+
+Default value: `[]`
+
+### <a name="monitor--service--haproxy--backend_response_time"></a>`monitor::service::haproxy::backend_response_time`
+
+Class for monitoring HAProxy backend response times
+
+#### Parameters
+
+The following parameters are available in the `monitor::service::haproxy::backend_response_time` class:
+
+* [`enable`](#-monitor--service--haproxy--backend_response_time--enable)
+
+##### <a name="-monitor--service--haproxy--backend_response_time--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the monitoring. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--service--haproxy--requests_denied"></a>`monitor::service::haproxy::requests_denied`
+
+Class for haproxy alerts for ddos protection
+
+#### Parameters
+
+The following parameters are available in the `monitor::service::haproxy::requests_denied` class:
+
+* [`enable`](#-monitor--service--haproxy--requests_denied--enable)
+
+##### <a name="-monitor--service--haproxy--requests_denied--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable alerts. Defaults to false.
+
+Default value: `false`
+
 ### <a name="monitor--system"></a>`monitor::system`
 
 Class for managing the Obmondo system monitoring
+
+### <a name="monitor--system--cpu"></a>`monitor::system::cpu`
+
+Class for monitoring system CPU usage
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::cpu` class:
+
+* [`enable`](#-monitor--system--cpu--enable)
+* [`enable_temp`](#-monitor--system--cpu--enable_temp)
+* [`usage`](#-monitor--system--cpu--usage)
+* [`temperature`](#-monitor--system--cpu--temperature)
+* [`disable`](#-monitor--system--cpu--disable)
+* [`disable_temp`](#-monitor--system--cpu--disable_temp)
+* [`override`](#-monitor--system--cpu--override)
+* [`override_temp`](#-monitor--system--cpu--override_temp)
+
+##### <a name="-monitor--system--cpu--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating if monitoring is enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--cpu--enable_temp"></a>`enable_temp`
+
+Data type: `Boolean`
+
+Boolean indicating if temperature monitoring is enabled. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-monitor--system--cpu--usage"></a>`usage`
+
+Data type: `Eit_types::Percentage`
+
+Percentage value for CPU usage threshold. Defaults to 80.
+
+Default value: `80`
+
+##### <a name="-monitor--system--cpu--temperature"></a>`temperature`
+
+Data type: `Eit_types::Percentage`
+
+Percentage value for CPU temperature threshold. Defaults to 80.
+
+Default value: `80`
+
+##### <a name="-monitor--system--cpu--disable"></a>`disable`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for CPU usage monitor.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--cpu--disable_temp"></a>`disable_temp`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for temperature monitor.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--cpu--override"></a>`override`
+
+Data type: `Monitor::Override`
+
+Optional override parameter for CPU usage threshold.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--cpu--override_temp"></a>`override_temp`
+
+Data type: `Monitor::Override`
+
+Optional override parameter for temperature threshold.
+
+Default value: `undef`
+
+### <a name="monitor--system--disk"></a>`monitor::system::disk`
+
+Class for managing disk monitoring
+
+### <a name="monitor--system--disk--usage"></a>`monitor::system::disk::usage`
+
+Class for monitoring disk usage
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::disk::usage` class:
+
+* [`enable`](#-monitor--system--disk--usage--enable)
+* [`space`](#-monitor--system--disk--usage--space)
+* [`disable`](#-monitor--system--disk--usage--disable)
+* [`labels`](#-monitor--system--disk--usage--labels)
+* [`override`](#-monitor--system--disk--usage--override)
+
+##### <a name="-monitor--system--disk--usage--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the disk use check. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--disk--usage--space"></a>`space`
+
+Data type: `Eit_types::Percentage`
+
+The threshold percentage for disk space usage. Defaults to 80.
+
+Default value: `80`
+
+##### <a name="-monitor--system--disk--usage--disable"></a>`disable`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for the monitor. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--disk--usage--labels"></a>`labels`
+
+Data type: `Hash`
+
+Labels for the monitor. Defaults to an empty hash.
+
+Default value: `{}`
+
+##### <a name="-monitor--system--disk--usage--override"></a>`override`
+
+Data type: `Monitor::Override`
+
+Override settings for the monitor. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="monitor--system--dns"></a>`monitor::system::dns`
+
+Class for monitoring DNS resolution
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::dns` class:
+
+* [`enable`](#-monitor--system--dns--enable)
+
+##### <a name="-monitor--system--dns--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable DNS monitoring. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--docker"></a>`monitor::system::docker`
+
+Class for Docker monitoring
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::docker` class:
+
+* [`enable`](#-monitor--system--docker--enable)
+
+##### <a name="-monitor--system--docker--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable Docker monitoring. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--drbd"></a>`monitor::system::drbd`
+
+Class for managing DRBD checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::drbd` class:
+
+* [`enable`](#-monitor--system--drbd--enable)
+
+##### <a name="-monitor--system--drbd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the DRBD checks. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--file_size"></a>`monitor::system::file_size`
+
+Class for checking 0kb files
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::file_size` class:
+
+* [`enable`](#-monitor--system--file_size--enable)
+
+##### <a name="-monitor--system--file_size--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the monitoring. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--hwmon"></a>`monitor::system::hwmon`
+
+Class for hardware monitoring checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::hwmon` class:
+
+* [`enable`](#-monitor--system--hwmon--enable)
+
+##### <a name="-monitor--system--hwmon--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enable or disable hwmon checks. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--load"></a>`monitor::system::load`
+
+Class for managing system load monitoring
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::load` class:
+
+* [`enable`](#-monitor--system--load--enable)
+* [`load1_percpu`](#-monitor--system--load--load1_percpu)
+* [`load5_percpu`](#-monitor--system--load--load5_percpu)
+* [`load15_percpu`](#-monitor--system--load--load15_percpu)
+* [`disable`](#-monitor--system--load--disable)
+* [`override_load1`](#-monitor--system--load--override_load1)
+* [`override_load5`](#-monitor--system--load--override_load5)
+* [`override_load15`](#-monitor--system--load--override_load15)
+
+##### <a name="-monitor--system--load--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating whether monitoring is enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--load--load1_percpu"></a>`load1_percpu`
+
+Data type: `Eit_types::Threshold`
+
+Threshold for 1-minute load per CPU. Defaults to 600.
+
+Default value: `600`
+
+##### <a name="-monitor--system--load--load5_percpu"></a>`load5_percpu`
+
+Data type: `Eit_types::Threshold`
+
+Threshold for 5-minute load per CPU. Defaults to 400.
+
+Default value: `400`
+
+##### <a name="-monitor--system--load--load15_percpu"></a>`load15_percpu`
+
+Data type: `Eit_types::Threshold`
+
+Threshold for 15-minute load per CPU. Defaults to 300.
+
+Default value: `300`
+
+##### <a name="-monitor--system--load--disable"></a>`disable`
+
+Data type: `Monitor::Disable`
+
+Optional parameter to disable the monitor. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--load--override_load1"></a>`override_load1`
+
+Data type: `Monitor::Override`
+
+Optional override for load1_percpu threshold. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--load--override_load5"></a>`override_load5`
+
+Data type: `Monitor::Override`
+
+Optional override for load5_percpu threshold. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--load--override_load15"></a>`override_load15`
+
+Data type: `Monitor::Override`
+
+
+
+Default value: `undef`
+
+### <a name="monitor--system--ntp"></a>`monitor::system::ntp`
+
+Class for monitoring system NTP thresholds
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::ntp` class:
+
+* [`enable`](#-monitor--system--ntp--enable)
+* [`offset`](#-monitor--system--ntp--offset)
+
+##### <a name="-monitor--system--ntp--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean indicating whether NTP monitoring is enabled. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--ntp--offset"></a>`offset`
+
+Data type: `Integer[0,default]`
+
+Integer representing the offset threshold for NTP skew in milliseconds. Defaults to 3000.
+
+Default value: `3000`
+
+### <a name="monitor--system--psi"></a>`monitor::system::psi`
+
+Class for managing pressure stall information
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::psi` class:
+
+* [`enable`](#-monitor--system--psi--enable)
+* [`io`](#-monitor--system--psi--io)
+* [`memory`](#-monitor--system--psi--memory)
+* [`cpu`](#-monitor--system--psi--cpu)
+* [`disable_io`](#-monitor--system--psi--disable_io)
+* [`disable_memory`](#-monitor--system--psi--disable_memory)
+* [`disable_cpu`](#-monitor--system--psi--disable_cpu)
+* [`override_io`](#-monitor--system--psi--override_io)
+* [`override_memory`](#-monitor--system--psi--override_memory)
+* [`override_cpu`](#-monitor--system--psi--override_cpu)
+
+##### <a name="-monitor--system--psi--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the PSI monitoring. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-monitor--system--psi--io"></a>`io`
+
+Data type: `Float`
+
+I/O pressure threshold as a float. Defaults to 0.5.
+
+Default value: `0.5`
+
+##### <a name="-monitor--system--psi--memory"></a>`memory`
+
+Data type: `Float`
+
+Memory pressure threshold as a float. Defaults to 0.04.
+
+Default value: `0.04`
+
+##### <a name="-monitor--system--psi--cpu"></a>`cpu`
+
+Data type: `Float`
+
+CPU pressure threshold as a float. Defaults to 0.6.
+
+Default value: `0.6`
+
+##### <a name="-monitor--system--psi--disable_io"></a>`disable_io`
+
+Data type: `Monitor::Disable`
+
+Optional disable condition for I/O pressure monitoring.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--psi--disable_memory"></a>`disable_memory`
+
+Data type: `Monitor::Disable`
+
+Optional disable condition for memory pressure monitoring.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--psi--disable_cpu"></a>`disable_cpu`
+
+Data type: `Monitor::Disable`
+
+Optional disable condition for CPU pressure monitoring.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--psi--override_io"></a>`override_io`
+
+Data type: `Monitor::Override`
+
+Optional override setting for I/O pressure threshold.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--psi--override_memory"></a>`override_memory`
+
+Data type: `Monitor::Override`
+
+Optional override setting for memory pressure threshold.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--psi--override_cpu"></a>`override_cpu`
+
+Data type: `Monitor::Override`
+
+Optional override setting for CPU pressure threshold.
+
+Default value: `undef`
+
+### <a name="monitor--system--ram"></a>`monitor::system::ram`
+
+Class for monitoring RAM usage
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::ram` class:
+
+* [`enable`](#-monitor--system--ram--enable)
+* [`warning`](#-monitor--system--ram--warning)
+* [`critical`](#-monitor--system--ram--critical)
+* [`disable_used`](#-monitor--system--ram--disable_used)
+* [`disable_used_high`](#-monitor--system--ram--disable_used_high)
+* [`disable_oom`](#-monitor--system--ram--disable_oom)
+* [`override_used`](#-monitor--system--ram--override_used)
+* [`override_used_high`](#-monitor--system--ram--override_used_high)
+* [`override_oom`](#-monitor--system--ram--override_oom)
+
+##### <a name="-monitor--system--ram--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the RAM monitoring. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--ram--warning"></a>`warning`
+
+Data type: `Eit_types::Percentage`
+
+The warning threshold as a percentage. Defaults to 80.
+
+Default value: `80`
+
+##### <a name="-monitor--system--ram--critical"></a>`critical`
+
+Data type: `Eit_types::Percentage`
+
+The critical threshold as a percentage. Defaults to 95.
+
+Default value: `95`
+
+##### <a name="-monitor--system--ram--disable_used"></a>`disable_used`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for used memory alert.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--ram--disable_used_high"></a>`disable_used_high`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for high used memory alert.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--ram--disable_oom"></a>`disable_oom`
+
+Data type: `Monitor::Disable`
+
+Optional disable parameter for OOM alert.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--ram--override_used"></a>`override_used`
+
+Data type: `Monitor::Override`
+
+Optional override parameter for used memory alert.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--ram--override_used_high"></a>`override_used_high`
+
+Data type: `Monitor::Override`
+
+Optional override parameter for high used memory alert.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--ram--override_oom"></a>`override_oom`
+
+Data type: `Monitor::Override`
+
+Optional override parameter for OOM alert.
+
+Default value: `undef`
+
+### <a name="monitor--system--service"></a>`monitor::system::service`
+
+Class for managing systemd services in the monitor module
+
+### <a name="monitor--system--service--dellhw"></a>`monitor::system::service::dellhw`
+
+Class for Dell hardware SSD CLI checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::dellhw` class:
+
+* [`enable`](#-monitor--system--service--dellhw--enable)
+
+##### <a name="-monitor--system--service--dellhw--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable the SSD checks. Defaults to false.
+
+Default value: `false`
+
+### <a name="monitor--system--service--down"></a>`monitor::system::service::down`
+
+Service downclass monitor::system::service::down
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::down` class:
+
+* [`enable`](#-monitor--system--service--down--enable)
+* [`blacklist`](#-monitor--system--service--down--blacklist)
+* [`disable`](#-monitor--system--service--down--disable)
+* [`override`](#-monitor--system--service--down--override)
+
+##### <a name="-monitor--system--service--down--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the monitor. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--service--down--blacklist"></a>`blacklist`
+
+Data type: `Array[String]`
+
+Array of service names to blacklist. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-monitor--system--service--down--disable"></a>`disable`
+
+Data type: `Monitor::Disable`
+
+Optional Monitor::Disable to disable the monitor.
+
+Default value: `undef`
+
+##### <a name="-monitor--system--service--down--override"></a>`override`
+
+Data type: `Monitor::Override`
+
+Optional Monitor::Override for overriding threshold conditions.
+
+Default value: `undef`
+
+### <a name="monitor--system--service--gitlab"></a>`monitor::system::service::gitlab`
+
+Class for monitoring GitLab system service thresholds
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::gitlab` class:
+
+* [`enable`](#-monitor--system--service--gitlab--enable)
+* [`ci_builds`](#-monitor--system--service--gitlab--ci_builds)
+
+##### <a name="-monitor--system--service--gitlab--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable monitoring for gitlab service. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--service--gitlab--ci_builds"></a>`ci_builds`
+
+Data type: `Integer`
+
+The threshold for CI pending builds. Defaults to 10.
+
+Default value: `10`
+
+### <a name="monitor--system--service--gitlab_runner"></a>`monitor::system::service::gitlab_runner`
+
+Class for monitoring the gitlab_runner service error state
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::gitlab_runner` class:
+
+* [`enable`](#-monitor--system--service--gitlab_runner--enable)
+
+##### <a name="-monitor--system--service--gitlab_runner--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable monitoring for the gitlab_runner service error state. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--service--lsof"></a>`monitor::system::service::lsof`
+
+Whether to enable monitoring of open deleted files. Defaults to true.
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::lsof` class:
+
+* [`enable`](#-monitor--system--service--lsof--enable)
+
+##### <a name="-monitor--system--service--lsof--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+### <a name="monitor--system--service--omsagent"></a>`monitor::system::service::omsagent`
+
+Class for monitoring system service 'omsagent' to check for updates
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::omsagent` class:
+
+* [`enable`](#-monitor--system--service--omsagent--enable)
+
+##### <a name="-monitor--system--service--omsagent--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the update check. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--service--smartmon"></a>`monitor::system::service::smartmon`
+
+Class for managing the Smartmon Checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::smartmon` class:
+
+* [`enable`](#-monitor--system--service--smartmon--enable)
+
+##### <a name="-monitor--system--service--smartmon--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable Smartmon checks. Defaults to false.
+
+Default value: `false`
+
+### <a name="monitor--system--service--ssacli"></a>`monitor::system::service::ssacli`
+
+Class for SSacli Checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::ssacli` class:
+
+* [`enable`](#-monitor--system--service--ssacli--enable)
+
+##### <a name="-monitor--system--service--ssacli--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean flag to enable or disable the SSacli checks. Defaults to false.
+
+Default value: `false`
+
+### <a name="monitor--system--service--sssd"></a>`monitor::system::service::sssd`
+
+Class for managing SSSD checks
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::sssd` class:
+
+* [`enable`](#-monitor--system--service--sssd--enable)
+
+##### <a name="-monitor--system--service--sssd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable SSSD checks. Defaults to true.
+
+Default value: `true`
+
+### <a name="monitor--system--service--sssd--auth"></a>`monitor::system::service::sssd::auth`
+
+Class for managing the sssd ldap auth check
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::service::sssd::auth` class:
+
+* [`enable`](#-monitor--system--service--sssd--auth--enable)
+* [`test_users`](#-monitor--system--service--sssd--auth--test_users)
+* [`noop_value`](#-monitor--system--service--sssd--auth--noop_value)
+
+##### <a name="-monitor--system--service--sssd--auth--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the auth check. Defaults to true.
+
+Default value: `$monitor::system::service::sssd::enable`
+
+##### <a name="-monitor--system--service--sssd--auth--test_users"></a>`test_users`
+
+Data type: `Array[Eit_types::User]`
+
+Array of usernames to test. Defaults to an empty array.
+
+Default value: `[]`
+
+##### <a name="-monitor--system--service--sssd--auth--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+Boolean for noop mode value, defaults to lookup of 'monitor::noop_value'.
+
+Default value: `lookup('monitor::noop_value')`
+
+### <a name="monitor--system--swap"></a>`monitor::system::swap`
+
+Class for managing system swap monitoring
+
+#### Parameters
+
+The following parameters are available in the `monitor::system::swap` class:
+
+* [`enable`](#-monitor--system--swap--enable)
+* [`warning`](#-monitor--system--swap--warning)
+
+##### <a name="-monitor--system--swap--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable swap monitoring. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-monitor--system--swap--warning"></a>`warning`
+
+Data type: `Eit_types::Percentage`
+
+The percentage threshold for warning alert. Defaults to 80.
+
+Default value: `80`
 
 ## Defined types
 
