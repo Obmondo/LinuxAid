@@ -7,42 +7,156 @@
 ### Classes
 
 * [`profile`](#profile): Loaded by ALL customers                          #
+* [`profile::appeng::phpfpm`](#profile--appeng--phpfpm): PHPFPm profile
+* [`profile::backup::netbackup`](#profile--backup--netbackup): NetBackup
 * [`profile::bind`](#profile--bind): Bind Profile
+* [`profile::certs::letsencrypt`](#profile--certs--letsencrypt): LetsEncrupt CA Signing
+* [`profile::ci::jenkins`](#profile--ci--jenkins): jenkins profile
+* [`profile::communication::murmur`](#profile--communication--murmur): Mumble fails on lxc because of avahi-daemon which fails getting installed under lxc. Here is the work around. https://lists.linuxcontainers.o
+* [`profile::communication::thinlinc`](#profile--communication--thinlinc): thinlinc  https://www.cendio.com/resources/docs/tag/ch06s02.html
 * [`profile::computing`](#profile--computing): Computing
+* [`profile::computing::slurm`](#profile--computing--slurm): SLURM Setup slurm installation is done by package, which is build by enableit and its in our custom repo To generate munge key: "dd if=/dev/u
+* [`profile::computing::slurm::slurmctld`](#profile--computing--slurm--slurmctld): Slurm slurm::slurmctld
+* [`profile::computing::slurm::slurmd`](#profile--computing--slurm--slurmd): Slurm slurm::slurmd
+* [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
 * [`profile::cron`](#profile--cron): cron
+* [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
+* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when 
+* [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
+* [`profile::db::elasticsearch::kibana`](#profile--db--elasticsearch--kibana): Elasticsearch Kibana dashboard  Generate the pem cert from the cert created by elasticsearch Get the password /usr/share/elasticsearch/bin/el
+* [`profile::db::mongodb`](#profile--db--mongodb): MongoDB class
+* [`profile::db::opensearch`](#profile--db--opensearch): Opensearch Profile
+* [`profile::db::opensearch::dashboard`](#profile--db--opensearch--dashboard): Opensearch Dashboard
+* [`profile::db::pgsql`](#profile--db--pgsql): Profile postgresql
 * [`profile::drupal`](#profile--drupal): Setup Drupal
 * [`profile::dummy`](#profile--dummy): Dummy class
+* [`profile::elastic::curator`](#profile--elastic--curator): Elastic Curator https://github.com/elastic/curator
+* [`profile::elastic::logstash`](#profile--elastic--logstash): Elastic Logstash https://github.com/elastic/logstash
 * [`profile::elk`](#profile--elk): ELK profile
 * [`profile::haproxy`](#profile--haproxy): Haproxy Profile
 * [`profile::influxdb`](#profile--influxdb): InfluxDB
 * [`profile::java`](#profile--java): Java Profile
 * [`profile::keepalived`](#profile--keepalived): KeepAlived
-* [`profile::kolab`](#profile--kolab): kolab profile
+* [`profile::license::ansys`](#profile--license--ansys): ansys license manager
 * [`profile::logging`](#profile--logging): Logging
+* [`profile::logging::journal`](#profile--logging--journal): Systemd Journald Upload
+* [`profile::logging::logrotate`](#profile--logging--logrotate): Manage logrotation
+* [`profile::logging::rsyslog`](#profile--logging--rsyslog): rsyslog
+* [`profile::mail::mailcow`](#profile--mail--mailcow): Mailcow Setup
 * [`profile::memcached`](#profile--memcached): memcached
-* [`profile::mongodb`](#profile--mongodb): MongoDB class
+* [`profile::monitoring::atop`](#profile--monitoring--atop): atop
+* [`profile::monitoring::journal_remote`](#profile--monitoring--journal_remote): Systemd_journal_remote https://dangibbs.uk/projects/puppet-systemd-journal-remote/
+* [`profile::monitoring::scom`](#profile--monitoring--scom): Microsoft SCOM
+* [`profile::monitoring::splunk::forwarder`](#profile--monitoring--splunk--forwarder): Splunk Forwarder
 * [`profile::mysql`](#profile--mysql): Mysql Profile
+* [`profile::network::firewall`](#profile--network--firewall): Firewall
+* [`profile::network::netbird`](#profile--network--netbird): Class for managing Netbird Agent
+* [`profile::network::wireguard`](#profile--network--wireguard): Wireguard
 * [`profile::nivisa`](#profile--nivisa): NI-VISA Profile
 * [`profile::nodejs`](#profile--nodejs): NodeJs Profile
 * [`profile::ntpd`](#profile--ntpd): NTP
+* [`profile::package_management::guix`](#profile--package_management--guix): Guix server
+* [`profile::package_management::guix::client`](#profile--package_management--guix--client): Guix client
+* [`profile::package_management::packagesign`](#profile--package_management--packagesign): Freight package signing tool
+* [`profile::package_management::repo`](#profile--package_management--repo): repository mirror and snapshot
 * [`profile::passenger`](#profile--passenger): Passenger Profile
 * [`profile::perl`](#profile--perl): generic perl setup
 * [`profile::php`](#profile--php): generic php setup webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support) profiles MUST be feature b
+* [`profile::php::mssql`](#profile--php--mssql): Microsoft MS SQL
+* [`profile::projectmanagement::easyredmine`](#profile--projectmanagement--easyredmine): EasyRedmine profile Does not support SSL
+* [`profile::projectmanagement::foswiki`](#profile--projectmanagement--foswiki): Foswiki Profile
+* [`profile::projectmanagement::gitlab`](#profile--projectmanagement--gitlab): $redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen
+* [`profile::projectmanagement::gitlab_ci_runner`](#profile--projectmanagement--gitlab_ci_runner): Gitlab Runner profile  Supports: If docker or shell executor is there with gitlab-runner user If docker is with gitlab-runner and shell execu
+* [`profile::projectmanagement::perforce`](#profile--projectmanagement--perforce): Perforce version control system
+* [`profile::projectmanagement::perforce::git_connector`](#profile--projectmanagement--perforce--git_connector): Helix Git Connector  https://www.perforce.com/manuals/helix-for-git/Content/Helix4Git/Home-helix4git.html
+* [`profile::projectmanagement::perforce::icmanage`](#profile--projectmanagement--perforce--icmanage): ICManage on top of Perforce
+* [`profile::projectmanagement::readthedocs`](#profile--projectmanagement--readthedocs): Read The Docs
+* [`profile::projectmanagement::subversion`](#profile--projectmanagement--subversion): Subversion enable
+* [`profile::provisioning::razor`](#profile--provisioning--razor): razor
 * [`profile::puppet`](#profile--puppet): Manage puppet agent We want to stick to PC1 repo so we can setup puppet-agent package
+* [`profile::puppet::clientbucket`](#profile--puppet--clientbucket): profile::puppet::clientbucket for puppet clientbucket cache cleanup
+* [`profile::puppet::run_puppet`](#profile--puppet--run_puppet): Run puppet on client nodes
 * [`profile::puppetdb`](#profile--puppetdb): PuppetDB
 * [`profile::python`](#profile--python): Python Profile
 * [`profile::redis`](#profile--redis): Redis Profile
 * [`profile::redmine`](#profile--redmine): Redmine profile
+* [`profile::rsnapshot::config`](#profile--rsnapshot--config): RsnapShot config
 * [`profile::rsyslog`](#profile--rsyslog): Rsyslog Server
 * [`profile::ruby`](#profile--ruby): Ruby profile
+* [`profile::scanner::openvas`](#profile--scanner--openvas)
+* [`profile::software::ansoftrsmservice`](#profile--software--ansoftrsmservice): Class for managing the Ansoft Remote Simulation Manager (RSM) Service
+* [`profile::software::cloudamize`](#profile--software--cloudamize): Cloudamize
+* [`profile::software::dependencyagent`](#profile--software--dependencyagent): Azure dependency agent
+* [`profile::software::fwupd`](#profile--software--fwupd): Fwupd
+* [`profile::software::insights`](#profile--software--insights): Redhat insights-client
+* [`profile::software::iptables_api`](#profile--software--iptables_api): iptables_api
+* [`profile::software::microsoft_mde`](#profile--software--microsoft_mde): Microsoft Defender for Endpoint
+* [`profile::software::msftlinuxpatchautoassess`](#profile--software--msftlinuxpatchautoassess): Azure Linux VM Patch Extension
+* [`profile::software::nvidia_driver`](#profile--software--nvidia_driver): Nvidia Driver
+* [`profile::software::rubrik`](#profile--software--rubrik): Rubrik backup
+* [`profile::software::rustdesk`](#profile--software--rustdesk): Rustdesk Setup
+* [`profile::software::teleport`](#profile--software--teleport): teleport
+* [`profile::software::vncserver`](#profile--software--vncserver): VNC Server
+* [`profile::software::vscode`](#profile--software--vscode): Vscode
+* [`profile::software::walinuxagent`](#profile--software--walinuxagent): Azure walinuxagent
 * [`profile::storage`](#profile--storage): Storage-related stuff  FIXME: this should run in the setup stage for easier dependency ordering
+* [`profile::storage::backuphost`](#profile--storage--backuphost): Storage backuphost profile
+* [`profile::storage::beegfs`](#profile--storage--beegfs): beegfs
+* [`profile::storage::block`](#profile--storage--block): Storage Block profile
+* [`profile::storage::nfs`](#profile--storage--nfs): Storage NFS profile
+* [`profile::storage::nfs::server`](#profile--storage--nfs--server): nfs server; should only be included from resource profile::storage::nfs::server::export
+* [`profile::storage::s3`](#profile--storage--s3): s3 storage
+* [`profile::storage::samba`](#profile--storage--samba): samba shares
+* [`profile::storage::zfs`](#profile--storage--zfs): ZFS and utilities
 * [`profile::system`](#profile--system)
+* [`profile::system::authentication`](#profile--system--authentication)
+* [`profile::system::authentication::kerberos`](#profile--system--authentication--kerberos): Kerberos integration
+* [`profile::system::authentication::ldap_auth_daemon`](#profile--system--authentication--ldap_auth_daemon): Auth Ldap profile Class
+* [`profile::system::authentication::nis`](#profile--system--authentication--nis): NIS/yp
+* [`profile::system::authentication::pam`](#profile--system--authentication--pam): PAM
+* [`profile::system::authentication::sssd`](#profile--system--authentication--sssd): SSSD Profile https://jhrozek.wordpress.com/2015/03/11/anatomy-of-sssd-user-lookup/ https://wiki.samba.org/index.php/Samba_Member_Server_Troub
+* [`profile::system::cloud_init`](#profile--system--cloud_init): since we have earlier masked all the cloud-init service and I really dont want to touch existing node, so lets have the existing node as it i
+* [`profile::system::dns`](#profile--system--dns): DNS client handling
+* [`profile::system::failover`](#profile--system--failover): IP failover
+* [`profile::system::grub`](#profile--system--grub): manage grub
+* [`profile::system::hardware`](#profile--system--hardware): Hardware features
+* [`profile::system::limits`](#profile--system--limits)
+* [`profile::system::nscd`](#profile--system--nscd): nscd
+* [`profile::system::selinux`](#profile--system--selinux)
+* [`profile::system::sshd`](#profile--system--sshd)
+* [`profile::system::sudoers`](#profile--system--sudoers): Sudoers
+* [`profile::system::systemd`](#profile--system--systemd)
+* [`profile::system::time`](#profile--system--time): Time
+* [`profile::system::time::ntp`](#profile--system--time--ntp): NTP
 * [`profile::tomcat`](#profile--tomcat): Tomcat profile
 * [`profile::vagrant`](#profile--vagrant): Vagrant Profile
 * [`profile::varnish`](#profile--varnish): Varnish Profile
+* [`profile::virtualization::docker`](#profile--virtualization--docker): Docker profile
+* [`profile::virtualization::docker::cadvisor`](#profile--virtualization--docker--cadvisor): cadvisor docker container
+* [`profile::virtualization::kubernetes`](#profile--virtualization--kubernetes): Kubernetes NOTE: kubernetes apt repository only has packages for xenial Kubernetes only works with xenial, but those xenial packages works fi
+* [`profile::virtualization::lxc`](#profile--virtualization--lxc): LXC Profile, this is too static
+* [`profile::virtualization::lxd`](#profile--virtualization--lxd): LXD profile
+* [`profile::virtualization::virtualbox`](#profile--virtualization--virtualbox): VirtualBox Profile
+* [`profile::virtualization::vmware::openvmtools`](#profile--virtualization--vmware--openvmtools): Setup openvmtools on the guest.
+* [`profile::web::apache`](#profile--web--apache): generic apache setup
+* [`profile::web::nginx`](#profile--web--nginx): Nginx Profile
 * [`profile::wildfly`](#profile--wildfly): Wildfly class
 * [`profile::wordpress`](#profile--wordpress): Wordpress profile
 * [`profile::wsgi`](#profile--wsgi): WSGI profile
+
+### Defined types
+
+* [`profile::certs::ca_cert`](#profile--certs--ca_cert): CA Cert
+* [`profile::certs::letsencrypt::domain`](#profile--certs--letsencrypt--domain): Certificates NOTE: only haproxy role support letsencrypt for now blackbox will scrape the domains if its given in the role::web::haproxy
+* [`profile::certs::manual`](#profile--certs--manual): Manual certificate TODO: lets not accept expired cert from users. need to update the underlying module openssl::cert_date_valid($_cert_file)
+* [`profile::cron::job`](#profile--cron--job): Wrapper that escapes cron command for easy use
+* [`profile::storage::mount`](#profile--storage--mount): regular mount
+* [`profile::storage::nfs::server::export`](#profile--storage--nfs--server--export): nfs export
+* [`profile::system::selinux::fcontext`](#profile--system--selinux--fcontext)
+* [`profile::system::service_oneshot`](#profile--system--service_oneshot): service_oneshot is a service, which runs only once and remainsexited
+* [`profile::system::sudoers::conf`](#profile--system--sudoers--conf): sudo conf wrapper
+* [`profile::system::time::ntp::rtc`](#profile--system--time--ntp--rtc): RTC in local TZ: no
+* [`profile::varnish::fwadmin`](#profile--varnish--fwadmin): Varnish Firewall
 
 ## Classes
 
@@ -50,13 +164,931 @@
 
 Loaded by ALL customers                          #
 
+### <a name="profile--appeng--phpfpm"></a>`profile::appeng::phpfpm`
+
+PHPFPm profile
+
+#### Parameters
+
+The following parameters are available in the `profile::appeng::phpfpm` class:
+
+* [`ssl`](#-profile--appeng--phpfpm--ssl)
+* [`ssl_cert`](#-profile--appeng--phpfpm--ssl_cert)
+* [`ssl_key`](#-profile--appeng--phpfpm--ssl_key)
+* [`mysql`](#-profile--appeng--phpfpm--mysql)
+* [`mssql`](#-profile--appeng--phpfpm--mssql)
+* [`catch_workers_output`](#-profile--appeng--phpfpm--catch_workers_output)
+* [`manage_webserver`](#-profile--appeng--phpfpm--manage_webserver)
+* [`opcodecache`](#-profile--appeng--phpfpm--opcodecache)
+* [`modules`](#-profile--appeng--phpfpm--modules)
+* [`version`](#-profile--appeng--phpfpm--version)
+* [`memory_limit`](#-profile--appeng--phpfpm--memory_limit)
+* [`http_cfg_prepend`](#-profile--appeng--phpfpm--http_cfg_prepend)
+* [`max_children`](#-profile--appeng--phpfpm--max_children)
+* [`start_servers`](#-profile--appeng--phpfpm--start_servers)
+* [`min_spare_servers`](#-profile--appeng--phpfpm--min_spare_servers)
+* [`max_spare_servers`](#-profile--appeng--phpfpm--max_spare_servers)
+* [`virtualhosts`](#-profile--appeng--phpfpm--virtualhosts)
+
+##### <a name="-profile--appeng--phpfpm--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--appeng--phpfpm--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::appeng::phpfpm::ssl_cert`
+
+##### <a name="-profile--appeng--phpfpm--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::appeng::phpfpm::ssl_key`
+
+##### <a name="-profile--appeng--phpfpm--mysql"></a>`mysql`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--appeng--phpfpm--mssql"></a>`mssql`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--appeng--phpfpm--catch_workers_output"></a>`catch_workers_output`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--appeng--phpfpm--manage_webserver"></a>`manage_webserver`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--appeng--phpfpm--opcodecache"></a>`opcodecache`
+
+Data type: `Enum[ 'opcache', 'xcache', 'apc' ]`
+
+
+
+Default value: `'apc'`
+
+##### <a name="-profile--appeng--phpfpm--modules"></a>`modules`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--appeng--phpfpm--version"></a>`version`
+
+Data type: `Optional[Eit_types::Version]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--appeng--phpfpm--memory_limit"></a>`memory_limit`
+
+Data type: `Optional[Eit_types::Capacity]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--appeng--phpfpm--http_cfg_prepend"></a>`http_cfg_prepend`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--appeng--phpfpm--max_children"></a>`max_children`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `128`
+
+##### <a name="-profile--appeng--phpfpm--start_servers"></a>`start_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `64`
+
+##### <a name="-profile--appeng--phpfpm--min_spare_servers"></a>`min_spare_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `64`
+
+##### <a name="-profile--appeng--phpfpm--max_spare_servers"></a>`max_spare_servers`
+
+Data type: `Integer[1,512]`
+
+
+
+Default value: `100`
+
+##### <a name="-profile--appeng--phpfpm--virtualhosts"></a>`virtualhosts`
+
+Data type:
+
+```puppet
+Hash[String,Struct[{
+    ensure        => Boolean,
+    document_root => Stdlib::Unixpath,
+    ssl_key       => Optional[String],
+    ssl_cert      => Optional[String],
+  }]]
+```
+
+
+
+Default value: `{}`
+
+### <a name="profile--backup--netbackup"></a>`profile::backup::netbackup`
+
+NetBackup
+
+#### Parameters
+
+The following parameters are available in the `profile::backup::netbackup` class:
+
+* [`installer_path`](#-profile--backup--netbackup--installer_path)
+* [`version`](#-profile--backup--netbackup--version)
+* [`master_server`](#-profile--backup--netbackup--master_server)
+* [`media_servers`](#-profile--backup--netbackup--media_servers)
+* [`excludes`](#-profile--backup--netbackup--excludes)
+* [`authorization_token`](#-profile--backup--netbackup--authorization_token)
+* [`ca_cert`](#-profile--backup--netbackup--ca_cert)
+
+##### <a name="-profile--backup--netbackup--installer_path"></a>`installer_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::common::backup::netbackup::installer_path`
+
+##### <a name="-profile--backup--netbackup--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$::common::backup::netbackup::version`
+
+##### <a name="-profile--backup--netbackup--master_server"></a>`master_server`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$::common::backup::netbackup::master_server`
+
+##### <a name="-profile--backup--netbackup--media_servers"></a>`media_servers`
+
+Data type: `Array[Stdlib::Host, 1]`
+
+
+
+Default value: `$::common::backup::netbackup::media_servers`
+
+##### <a name="-profile--backup--netbackup--excludes"></a>`excludes`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+
+
+Default value: `$::common::backup::netbackup::excludes`
+
+##### <a name="-profile--backup--netbackup--authorization_token"></a>`authorization_token`
+
+Data type: `Pattern[/\A[A-Z]{16}\Z/]`
+
+
+
+Default value: `$::common::backup::netbackup::authorization_token`
+
+##### <a name="-profile--backup--netbackup--ca_cert"></a>`ca_cert`
+
+Data type: `String`
+
+
+
+Default value: `$::common::backup::netbackup::ca_cert`
+
 ### <a name="profile--bind"></a>`profile::bind`
 
 Bind Profile
 
+### <a name="profile--certs--letsencrypt"></a>`profile::certs::letsencrypt`
+
+LetsEncrupt CA Signing
+
+#### Parameters
+
+The following parameters are available in the `profile::certs::letsencrypt` class:
+
+* [`email`](#-profile--certs--letsencrypt--email)
+* [`epel`](#-profile--certs--letsencrypt--epel)
+* [`ca`](#-profile--certs--letsencrypt--ca)
+* [`keep_log_files`](#-profile--certs--letsencrypt--keep_log_files)
+
+##### <a name="-profile--certs--letsencrypt--email"></a>`email`
+
+Data type: `Eit_types::Email`
+
+
+
+Default value: `$::common::certs::letsencrypt::email`
+
+##### <a name="-profile--certs--letsencrypt--epel"></a>`epel`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--certs--letsencrypt--ca"></a>`ca`
+
+Data type:
+
+```puppet
+Enum[
+    'production',
+    'staging'
+  ]
+```
+
+
+
+Default value: `$::common::certs::letsencrypt::ca`
+
+##### <a name="-profile--certs--letsencrypt--keep_log_files"></a>`keep_log_files`
+
+Data type: `Integer`
+
+
+
+Default value: `30`
+
+### <a name="profile--ci--jenkins"></a>`profile::ci::jenkins`
+
+jenkins profile
+
+#### Parameters
+
+The following parameters are available in the `profile::ci::jenkins` class:
+
+* [`ssl_combined_pem`](#-profile--ci--jenkins--ssl_combined_pem)
+* [`version`](#-profile--ci--jenkins--version)
+* [`config_hash`](#-profile--ci--jenkins--config_hash)
+* [`plugins`](#-profile--ci--jenkins--plugins)
+* [`port`](#-profile--ci--jenkins--port)
+
+##### <a name="-profile--ci--jenkins--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `String`
+
+
+
+##### <a name="-profile--ci--jenkins--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `'installed'`
+
+##### <a name="-profile--ci--jenkins--config_hash"></a>`config_hash`
+
+Data type: `Hash`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--ci--jenkins--plugins"></a>`plugins`
+
+Data type: `Eit_types::Jenkins::Plugins`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--ci--jenkins--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `8080`
+
+### <a name="profile--communication--murmur"></a>`profile::communication::murmur`
+
+Mumble fails on lxc because of avahi-daemon which fails getting installed under lxc.
+Here is the work around.
+https://lists.linuxcontainers.org/pipermail/lxc-users/2016-January/010791.html
+
+#### Parameters
+
+The following parameters are available in the `profile::communication::murmur` class:
+
+* [`password`](#-profile--communication--murmur--password)
+* [`port`](#-profile--communication--murmur--port)
+* [`host`](#-profile--communication--murmur--host)
+* [`register_name`](#-profile--communication--murmur--register_name)
+* [`bandwidth`](#-profile--communication--murmur--bandwidth)
+* [`max_users`](#-profile--communication--murmur--max_users)
+* [`text_length_limit`](#-profile--communication--murmur--text_length_limit)
+* [`autoban_attempts`](#-profile--communication--murmur--autoban_attempts)
+* [`autoban_time_frame`](#-profile--communication--murmur--autoban_time_frame)
+* [`autoban_time`](#-profile--communication--murmur--autoban_time)
+* [`allow_html`](#-profile--communication--murmur--allow_html)
+* [`welcome_text`](#-profile--communication--murmur--welcome_text)
+* [`user`](#-profile--communication--murmur--user)
+* [`group`](#-profile--communication--murmur--group)
+* [`database_path`](#-profile--communication--murmur--database_path)
+* [`log_path`](#-profile--communication--murmur--log_path)
+* [`log_days`](#-profile--communication--murmur--log_days)
+* [`ssl_cert`](#-profile--communication--murmur--ssl_cert)
+* [`ssl_key`](#-profile--communication--murmur--ssl_key)
+
+##### <a name="-profile--communication--murmur--password"></a>`password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--communication--murmur--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `64738`
+
+##### <a name="-profile--communication--murmur--host"></a>`host`
+
+Data type: `Optional[Eit_types::Host]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--communication--murmur--register_name"></a>`register_name`
+
+Data type: `String`
+
+
+
+Default value: `'Mumble Server'`
+
+##### <a name="-profile--communication--murmur--bandwidth"></a>`bandwidth`
+
+Data type: `Integer[0, default]`
+
+
+
+Default value: `72000`
+
+##### <a name="-profile--communication--murmur--max_users"></a>`max_users`
+
+Data type: `Integer[1, default]`
+
+
+
+Default value: `100`
+
+##### <a name="-profile--communication--murmur--text_length_limit"></a>`text_length_limit`
+
+Data type: `Integer[1, default]`
+
+
+
+Default value: `5000`
+
+##### <a name="-profile--communication--murmur--autoban_attempts"></a>`autoban_attempts`
+
+Data type: `Integer[0, default]`
+
+
+
+Default value: `10`
+
+##### <a name="-profile--communication--murmur--autoban_time_frame"></a>`autoban_time_frame`
+
+Data type: `Integer[0, default]`
+
+
+
+Default value: `120`
+
+##### <a name="-profile--communication--murmur--autoban_time"></a>`autoban_time`
+
+Data type: `Integer[0, default]`
+
+
+
+Default value: `300`
+
+##### <a name="-profile--communication--murmur--allow_html"></a>`allow_html`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--communication--murmur--welcome_text"></a>`welcome_text`
+
+Data type: `String`
+
+
+
+Default value: `'<br />Welcome to this server running <b>Murmur</b>.<br />Enjoy your stay!<br />'`
+
+##### <a name="-profile--communication--murmur--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `'mumble-server'`
+
+##### <a name="-profile--communication--murmur--group"></a>`group`
+
+Data type: `Eit_types::Group`
+
+
+
+Default value: `'mumble-server'`
+
+##### <a name="-profile--communication--murmur--database_path"></a>`database_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/var/lib/mumble-server/mumble-server.sqlite'`
+
+##### <a name="-profile--communication--murmur--log_path"></a>`log_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/var/log/mumble-server/mumble-server.log'`
+
+##### <a name="-profile--communication--murmur--log_days"></a>`log_days`
+
+Data type: `Integer[1, default]`
+
+
+
+Default value: `31`
+
+##### <a name="-profile--communication--murmur--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--communication--murmur--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--communication--thinlinc"></a>`profile::communication::thinlinc`
+
+thinlinc
+
+https://www.cendio.com/resources/docs/tag/ch06s02.html
+
+#### Parameters
+
+The following parameters are available in the `profile::communication::thinlinc` class:
+
+* [`ha`](#-profile--communication--thinlinc--ha)
+* [`version`](#-profile--communication--thinlinc--version)
+* [`masters`](#-profile--communication--thinlinc--masters)
+* [`agent_hostname`](#-profile--communication--thinlinc--agent_hostname)
+* [`webadm_password`](#-profile--communication--thinlinc--webadm_password)
+* [`enable`](#-profile--communication--thinlinc--enable)
+* [`shadowing_shadow_mode`](#-profile--communication--thinlinc--shadowing_shadow_mode)
+* [`shadowing_allowed_shadowers`](#-profile--communication--thinlinc--shadowing_allowed_shadowers)
+* [`max_session_per_user`](#-profile--communication--thinlinc--max_session_per_user)
+* [`agents`](#-profile--communication--thinlinc--agents)
+* [`master_hostname`](#-profile--communication--thinlinc--master_hostname)
+* [`loadbalancer_ip`](#-profile--communication--thinlinc--loadbalancer_ip)
+
+##### <a name="-profile--communication--thinlinc--ha"></a>`ha`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::communication::thinlinc::ha`
+
+##### <a name="-profile--communication--thinlinc--version"></a>`version`
+
+Data type: `String`
+
+
+
+Default value: `$role::communication::thinlinc::version`
+
+##### <a name="-profile--communication--thinlinc--masters"></a>`masters`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$role::communication::thinlinc::masters`
+
+##### <a name="-profile--communication--thinlinc--agent_hostname"></a>`agent_hostname`
+
+Data type: `Optional[Stdlib::Host]`
+
+
+
+Default value: `$role::communication::thinlinc::agent_hostname`
+
+##### <a name="-profile--communication--thinlinc--webadm_password"></a>`webadm_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$role::communication::thinlinc::webadm_password`
+
+##### <a name="-profile--communication--thinlinc--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::communication::thinlinc::enable`
+
+##### <a name="-profile--communication--thinlinc--shadowing_shadow_mode"></a>`shadowing_shadow_mode`
+
+Data type: `ThinLinc::ShadowMode`
+
+
+
+Default value: `$role::communication::thinlinc::shadowing_shadow_mode`
+
+##### <a name="-profile--communication--thinlinc--shadowing_allowed_shadowers"></a>`shadowing_allowed_shadowers`
+
+Data type: `Optional[Array[String]]`
+
+
+
+Default value: `$role::communication::thinlinc::shadowing_allowed_shadowers`
+
+##### <a name="-profile--communication--thinlinc--max_session_per_user"></a>`max_session_per_user`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `$role::communication::thinlinc::max_session_per_user`
+
+##### <a name="-profile--communication--thinlinc--agents"></a>`agents`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$role::communication::thinlinc::agents`
+
+##### <a name="-profile--communication--thinlinc--master_hostname"></a>`master_hostname`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$role::communication::thinlinc::master_hostname`
+
+##### <a name="-profile--communication--thinlinc--loadbalancer_ip"></a>`loadbalancer_ip`
+
+Data type: `Optional[Stdlib::IP::Address]`
+
+
+
+Default value: `$role::communication::thinlinc::loadbalancer_ip`
+
 ### <a name="profile--computing"></a>`profile::computing`
 
 Computing
+
+### <a name="profile--computing--slurm"></a>`profile::computing::slurm`
+
+SLURM Setup
+slurm installation is done by package,
+which is build by enableit and its in our custom repo
+To generate munge key:
+"dd if=/dev/urandom bs=1 count=1024 > ${key_filename}",
+OR "create-munge-key",
+
+#### Parameters
+
+The following parameters are available in the `profile::computing::slurm` class:
+
+* [`enable`](#-profile--computing--slurm--enable)
+* [`interface`](#-profile--computing--slurm--interface)
+* [`node_cidrs`](#-profile--computing--slurm--node_cidrs)
+* [`slurm_version`](#-profile--computing--slurm--slurm_version)
+* [`munge_version`](#-profile--computing--slurm--munge_version)
+* [`munge_key`](#-profile--computing--slurm--munge_key)
+* [`slurmctld`](#-profile--computing--slurm--slurmctld)
+* [`slurmdbd`](#-profile--computing--slurm--slurmdbd)
+* [`slurmd`](#-profile--computing--slurm--slurmd)
+* [`nodes`](#-profile--computing--slurm--nodes)
+* [`partitions`](#-profile--computing--slurm--partitions)
+* [`srun_port_range`](#-profile--computing--slurm--srun_port_range)
+* [`accounting_storage_host`](#-profile--computing--slurm--accounting_storage_host)
+* [`control_machine`](#-profile--computing--slurm--control_machine)
+* [`return_to_service`](#-profile--computing--slurm--return_to_service)
+* [`disable_root_jobs`](#-profile--computing--slurm--disable_root_jobs)
+* [`use_pam`](#-profile--computing--slurm--use_pam)
+* [`hwloc_enabled`](#-profile--computing--slurm--hwloc_enabled)
+
+##### <a name="-profile--computing--slurm--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::enable`
+
+##### <a name="-profile--computing--slurm--interface"></a>`interface`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::computing::slurm::interface`
+
+##### <a name="-profile--computing--slurm--node_cidrs"></a>`node_cidrs`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+
+
+Default value: `$::role::computing::slurm::node_cidrs`
+
+##### <a name="-profile--computing--slurm--slurm_version"></a>`slurm_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$::role::computing::slurm::slurm_version`
+
+##### <a name="-profile--computing--slurm--munge_version"></a>`munge_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$::role::computing::slurm::munge_version`
+
+##### <a name="-profile--computing--slurm--munge_key"></a>`munge_key`
+
+Data type:
+
+```puppet
+Optional[Variant[
+    Eit_Files::Source,
+    String
+  ]]
+```
+
+
+
+Default value: `$::role::computing::slurm::munge_key`
+
+##### <a name="-profile--computing--slurm--slurmctld"></a>`slurmctld`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::slurmctld`
+
+##### <a name="-profile--computing--slurm--slurmdbd"></a>`slurmdbd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::slurmdbd`
+
+##### <a name="-profile--computing--slurm--slurmd"></a>`slurmd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::slurmd`
+
+##### <a name="-profile--computing--slurm--nodes"></a>`nodes`
+
+Data type: `Hash`
+
+
+
+Default value: `$::role::computing::slurm::nodes`
+
+##### <a name="-profile--computing--slurm--partitions"></a>`partitions`
+
+Data type: `Hash`
+
+
+
+Default value: `$::role::computing::slurm::partitions`
+
+##### <a name="-profile--computing--slurm--srun_port_range"></a>`srun_port_range`
+
+Data type: `String`
+
+
+
+Default value: `$::role::computing::slurm::srun_port_range`
+
+##### <a name="-profile--computing--slurm--accounting_storage_host"></a>`accounting_storage_host`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$::role::computing::slurm::accounting_storage_host`
+
+##### <a name="-profile--computing--slurm--control_machine"></a>`control_machine`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$::role::computing::slurm::control_machine`
+
+##### <a name="-profile--computing--slurm--return_to_service"></a>`return_to_service`
+
+Data type: `Integer[0,2]`
+
+
+
+Default value: `$::role::computing::slurm::return_to_service`
+
+##### <a name="-profile--computing--slurm--disable_root_jobs"></a>`disable_root_jobs`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::disable_root_jobs`
+
+##### <a name="-profile--computing--slurm--use_pam"></a>`use_pam`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::use_pam`
+
+##### <a name="-profile--computing--slurm--hwloc_enabled"></a>`hwloc_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::computing::slurm::hwloc_enabled`
+
+### <a name="profile--computing--slurm--slurmctld"></a>`profile::computing::slurm::slurmctld`
+
+Slurm slurm::slurmctld
+
+#### Parameters
+
+The following parameters are available in the `profile::computing::slurm::slurmctld` class:
+
+* [`interface`](#-profile--computing--slurm--slurmctld--interface)
+* [`node_cidrs`](#-profile--computing--slurm--slurmctld--node_cidrs)
+
+##### <a name="-profile--computing--slurm--slurmctld--interface"></a>`interface`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+##### <a name="-profile--computing--slurm--slurmctld--node_cidrs"></a>`node_cidrs`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+
+
+### <a name="profile--computing--slurm--slurmd"></a>`profile::computing::slurm::slurmd`
+
+Slurm slurm::slurmd
+
+#### Parameters
+
+The following parameters are available in the `profile::computing::slurm::slurmd` class:
+
+* [`interface`](#-profile--computing--slurm--slurmd--interface)
+* [`node_cidrs`](#-profile--computing--slurm--slurmd--node_cidrs)
+* [`srun_port_range`](#-profile--computing--slurm--slurmd--srun_port_range)
+
+##### <a name="-profile--computing--slurm--slurmd--interface"></a>`interface`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+##### <a name="-profile--computing--slurm--slurmd--node_cidrs"></a>`node_cidrs`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+
+
+##### <a name="-profile--computing--slurm--slurmd--srun_port_range"></a>`srun_port_range`
+
+Data type: `String`
+
+
+
+Default value: `'50000-53000'`
+
+### <a name="profile--computing--slurm--slurmdbd"></a>`profile::computing::slurm::slurmdbd`
+
+Slurm slurm::slurmctld
+
+#### Parameters
+
+The following parameters are available in the `profile::computing::slurm::slurmdbd` class:
+
+* [`interface`](#-profile--computing--slurm--slurmdbd--interface)
+* [`node_cidrs`](#-profile--computing--slurm--slurmdbd--node_cidrs)
+* [`storagehost`](#-profile--computing--slurm--slurmdbd--storagehost)
+
+##### <a name="-profile--computing--slurm--slurmdbd--interface"></a>`interface`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+##### <a name="-profile--computing--slurm--slurmdbd--node_cidrs"></a>`node_cidrs`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+
+
+##### <a name="-profile--computing--slurm--slurmdbd--storagehost"></a>`storagehost`
+
+Data type: `String`
+
+
+
+Default value: `'127.0.0.1'`
 
 ### <a name="profile--cron"></a>`profile::cron`
 
@@ -84,6 +1116,731 @@ Data type: `Hash`
 
 
 Default value: `$common::cron::jobs`
+
+### <a name="profile--db--cassandra"></a>`profile::db::cassandra`
+
+Profile for managing Cassandra database
+
+#### Parameters
+
+The following parameters are available in the `profile::db::cassandra` class:
+
+* [`settings`](#-profile--db--cassandra--settings)
+* [`cassandra_version`](#-profile--db--cassandra--cassandra_version)
+* [`seeds`](#-profile--db--cassandra--seeds)
+
+##### <a name="-profile--db--cassandra--settings"></a>`settings`
+
+Data type: `Hash`
+
+Additional configuration settings that override baseline_settings
+
+Default value: `$role::db::cassandra::settings`
+
+##### <a name="-profile--db--cassandra--cassandra_version"></a>`cassandra_version`
+
+Data type: `Enum['41']`
+
+Version of Cassandra to install
+
+Default value: `$role::db::cassandra::cassandra_version`
+
+##### <a name="-profile--db--cassandra--seeds"></a>`seeds`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+List of seed nodes for Cassandra
+
+Default value: `$role::db::cassandra::seeds`
+
+### <a name="profile--db--elasticsearch"></a>`profile::db::elasticsearch`
+
+Elasticsearch profile
+
+Puppet module does not support 8.x and Zscaler needs 8.x only
+
+Cert Setup
+NOTE: The cert are automatically setup when it's a fresh installation
+if the cert are not generated, you will have to purge/remove the elasticsearch
+rm the /etc/elasticsearch and /var/lib/elasticsearch
+and install the elasticsearch again
+
+kibana_system password
+/usr/share/elasticsearch/bin/elasticsearch-reset-password --username kibana_system
+
+The password is shown when you install it manually (atleast on Ubuntu)
+The generated password for the elastic built-in superuser is : dKTmDZon7*2HLCbIcNPa
+if for some reason, you can't you can reset the password with the above command
+/usr/share/elasticsearch/bin/elasticsearch-reset-password --username elastic
+
+Cert created by elasticsearch is better, otherwise some cli commands fails
+so use self-signed cert by cautious
+
+add base64 encoded string for the cert
+base64 -i /path/to/cert.p12
+TODO: write a puppet provider to support this.
+
+#### Parameters
+
+The following parameters are available in the `profile::db::elasticsearch` class:
+
+* [`version`](#-profile--db--elasticsearch--version)
+* [`security`](#-profile--db--elasticsearch--security)
+* [`oss`](#-profile--db--elasticsearch--oss)
+* [`ssl`](#-profile--db--elasticsearch--ssl)
+* [`plugins`](#-profile--db--elasticsearch--plugins)
+* [`secrets`](#-profile--db--elasticsearch--secrets)
+* [`es_heap_size_pct`](#-profile--db--elasticsearch--es_heap_size_pct)
+* [`es_heap_size_max_gb`](#-profile--db--elasticsearch--es_heap_size_max_gb)
+* [`access_9200_port_from`](#-profile--db--elasticsearch--access_9200_port_from)
+* [`nodes`](#-profile--db--elasticsearch--nodes)
+* [`datadir`](#-profile--db--elasticsearch--datadir)
+* [`ca_cert`](#-profile--db--elasticsearch--ca_cert)
+* [`cluster_name`](#-profile--db--elasticsearch--cluster_name)
+* [`curate_filters`](#-profile--db--elasticsearch--curate_filters)
+* [`transport`](#-profile--db--elasticsearch--transport)
+* [`http`](#-profile--db--elasticsearch--http)
+
+##### <a name="-profile--db--elasticsearch--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::db::elasticsearch::version`
+
+##### <a name="-profile--db--elasticsearch--security"></a>`security`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::security`
+
+##### <a name="-profile--db--elasticsearch--oss"></a>`oss`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::oss`
+
+##### <a name="-profile--db--elasticsearch--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::ssl`
+
+##### <a name="-profile--db--elasticsearch--plugins"></a>`plugins`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$role::db::elasticsearch::plugins`
+
+##### <a name="-profile--db--elasticsearch--secrets"></a>`secrets`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$role::db::elasticsearch::secrets`
+
+##### <a name="-profile--db--elasticsearch--es_heap_size_pct"></a>`es_heap_size_pct`
+
+Data type: `Eit_types::Percentage`
+
+
+
+Default value: `$role::db::elasticsearch::es_heap_size_pct`
+
+##### <a name="-profile--db--elasticsearch--es_heap_size_max_gb"></a>`es_heap_size_max_gb`
+
+Data type: `Variant[Integer[1,31], Float[1,31]]`
+
+
+
+Default value: `$role::db::elasticsearch::es_heap_size_max_gb`
+
+##### <a name="-profile--db--elasticsearch--access_9200_port_from"></a>`access_9200_port_from`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+
+
+Default value: `$role::db::elasticsearch::access_9200_port_from`
+
+##### <a name="-profile--db--elasticsearch--nodes"></a>`nodes`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$role::db::elasticsearch::nodes`
+
+##### <a name="-profile--db--elasticsearch--datadir"></a>`datadir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::db::elasticsearch::datadir`
+
+##### <a name="-profile--db--elasticsearch--ca_cert"></a>`ca_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::ca_cert`
+
+##### <a name="-profile--db--elasticsearch--cluster_name"></a>`cluster_name`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::db::elasticsearch::cluster_name`
+
+##### <a name="-profile--db--elasticsearch--curate_filters"></a>`curate_filters`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+
+
+Default value: `$role::db::elasticsearch::curate_filters`
+
+##### <a name="-profile--db--elasticsearch--transport"></a>`transport`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::transport`
+
+##### <a name="-profile--db--elasticsearch--http"></a>`http`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::http`
+
+### <a name="profile--db--elasticsearch--cerebro"></a>`profile::db::elasticsearch::cerebro`
+
+Cerebro
+
+#### Parameters
+
+The following parameters are available in the `profile::db::elasticsearch::cerebro` class:
+
+* [`es_service_name`](#-profile--db--elasticsearch--cerebro--es_service_name)
+* [`selinux`](#-profile--db--elasticsearch--cerebro--selinux)
+
+##### <a name="-profile--db--elasticsearch--cerebro--es_service_name"></a>`es_service_name`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--db--elasticsearch--cerebro--selinux"></a>`selinux`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+### <a name="profile--db--elasticsearch--kibana"></a>`profile::db::elasticsearch::kibana`
+
+Elasticsearch Kibana dashboard
+
+Generate the pem cert from the cert created by elasticsearch
+Get the password
+/usr/share/elasticsearch/bin/elasticsearch-keystore show xpack.security.http.ssl.keystore.secure_password
+openssl pkcs12 -in http.p12 -out http.pem -clcerts -nodes
+openssl pkcs12 -in http.p12 -out http.pem -nocerts -nodes
+
+#### Parameters
+
+The following parameters are available in the `profile::db::elasticsearch::kibana` class:
+
+* [`manage`](#-profile--db--elasticsearch--kibana--manage)
+* [`oss`](#-profile--db--elasticsearch--kibana--oss)
+* [`expose`](#-profile--db--elasticsearch--kibana--expose)
+* [`ssl`](#-profile--db--elasticsearch--kibana--ssl)
+* [`host`](#-profile--db--elasticsearch--kibana--host)
+* [`version`](#-profile--db--elasticsearch--kibana--version)
+* [`ssl_combined_pem`](#-profile--db--elasticsearch--kibana--ssl_combined_pem)
+* [`elasticsearch`](#-profile--db--elasticsearch--kibana--elasticsearch)
+* [`nodes`](#-profile--db--elasticsearch--kibana--nodes)
+* [`ca_cert`](#-profile--db--elasticsearch--kibana--ca_cert)
+* [`kibana_username`](#-profile--db--elasticsearch--kibana--kibana_username)
+* [`kibana_password`](#-profile--db--elasticsearch--kibana--kibana_password)
+
+##### <a name="-profile--db--elasticsearch--kibana--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::kibana`
+
+##### <a name="-profile--db--elasticsearch--kibana--oss"></a>`oss`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::oss`
+
+##### <a name="-profile--db--elasticsearch--kibana--expose"></a>`expose`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::expose`
+
+##### <a name="-profile--db--elasticsearch--kibana--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::elasticsearch::ssl`
+
+##### <a name="-profile--db--elasticsearch--kibana--host"></a>`host`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::db::elasticsearch::host`
+
+##### <a name="-profile--db--elasticsearch--kibana--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::db::elasticsearch::version`
+
+##### <a name="-profile--db--elasticsearch--kibana--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::ssl_combined_pem`
+
+##### <a name="-profile--db--elasticsearch--kibana--elasticsearch"></a>`elasticsearch`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$role::db::elasticsearch::kibana_elasticsearch`
+
+##### <a name="-profile--db--elasticsearch--kibana--nodes"></a>`nodes`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$role::db::elasticsearch::nodes`
+
+##### <a name="-profile--db--elasticsearch--kibana--ca_cert"></a>`ca_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::ca_cert`
+
+##### <a name="-profile--db--elasticsearch--kibana--kibana_username"></a>`kibana_username`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::kibana_username`
+
+##### <a name="-profile--db--elasticsearch--kibana--kibana_password"></a>`kibana_password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::elasticsearch::kibana_password`
+
+### <a name="profile--db--mongodb"></a>`profile::db::mongodb`
+
+MongoDB class
+
+#### Parameters
+
+The following parameters are available in the `profile::db::mongodb` class:
+
+* [`global_settings`](#-profile--db--mongodb--global_settings)
+* [`server_settings`](#-profile--db--mongodb--server_settings)
+* [`monitor_user`](#-profile--db--mongodb--monitor_user)
+* [`monitor_password`](#-profile--db--mongodb--monitor_password)
+* [`server_defaults`](#-profile--db--mongodb--server_defaults)
+* [`backup`](#-profile--db--mongodb--backup)
+
+##### <a name="-profile--db--mongodb--global_settings"></a>`global_settings`
+
+Data type: `Hash`
+
+
+
+##### <a name="-profile--db--mongodb--server_settings"></a>`server_settings`
+
+Data type: `Hash`
+
+
+
+##### <a name="-profile--db--mongodb--monitor_user"></a>`monitor_user`
+
+Data type: `Eit_types::User`
+
+
+
+##### <a name="-profile--db--mongodb--monitor_password"></a>`monitor_password`
+
+Data type: `Eit_types::Password`
+
+
+
+##### <a name="-profile--db--mongodb--server_defaults"></a>`server_defaults`
+
+Data type: `Hash`
+
+
+
+Default value:
+
+```puppet
+{
+    manage_pidfile => false,
+  }
+```
+
+##### <a name="-profile--db--mongodb--backup"></a>`backup`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+### <a name="profile--db--opensearch"></a>`profile::db::opensearch`
+
+Opensearch Profile
+
+#### Parameters
+
+The following parameters are available in the `profile::db::opensearch` class:
+
+* [`version`](#-profile--db--opensearch--version)
+* [`es_heap_size_pct`](#-profile--db--opensearch--es_heap_size_pct)
+* [`es_heap_size_max_gb`](#-profile--db--opensearch--es_heap_size_max_gb)
+* [`access_9200_port_from`](#-profile--db--opensearch--access_9200_port_from)
+* [`nodes`](#-profile--db--opensearch--nodes)
+* [`datadir`](#-profile--db--opensearch--datadir)
+* [`cluster_name`](#-profile--db--opensearch--cluster_name)
+* [`curate_filters`](#-profile--db--opensearch--curate_filters)
+
+##### <a name="-profile--db--opensearch--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::db::opensearch::version`
+
+##### <a name="-profile--db--opensearch--es_heap_size_pct"></a>`es_heap_size_pct`
+
+Data type: `Eit_types::Percentage`
+
+
+
+Default value: `$role::db::opensearch::es_heap_size_pct`
+
+##### <a name="-profile--db--opensearch--es_heap_size_max_gb"></a>`es_heap_size_max_gb`
+
+Data type: `Variant[Integer[1,31], Float[1,31]]`
+
+
+
+Default value: `$role::db::opensearch::es_heap_size_max_gb`
+
+##### <a name="-profile--db--opensearch--access_9200_port_from"></a>`access_9200_port_from`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+
+
+Default value: `$role::db::opensearch::access_9200_port_from`
+
+##### <a name="-profile--db--opensearch--nodes"></a>`nodes`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$role::db::opensearch::nodes`
+
+##### <a name="-profile--db--opensearch--datadir"></a>`datadir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::db::opensearch::datadir`
+
+##### <a name="-profile--db--opensearch--cluster_name"></a>`cluster_name`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::db::opensearch::cluster_name`
+
+##### <a name="-profile--db--opensearch--curate_filters"></a>`curate_filters`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+
+
+Default value: `$role::db::opensearch::curate_filters`
+
+### <a name="profile--db--opensearch--dashboard"></a>`profile::db::opensearch::dashboard`
+
+Opensearch Dashboard
+
+#### Parameters
+
+The following parameters are available in the `profile::db::opensearch::dashboard` class:
+
+* [`manage`](#-profile--db--opensearch--dashboard--manage)
+* [`expose`](#-profile--db--opensearch--dashboard--expose)
+* [`ssl`](#-profile--db--opensearch--dashboard--ssl)
+* [`host`](#-profile--db--opensearch--dashboard--host)
+* [`version`](#-profile--db--opensearch--dashboard--version)
+* [`ssl_combined_pem`](#-profile--db--opensearch--dashboard--ssl_combined_pem)
+
+##### <a name="-profile--db--opensearch--dashboard--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::opensearch::dashboard`
+
+##### <a name="-profile--db--opensearch--dashboard--expose"></a>`expose`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::opensearch::expose`
+
+##### <a name="-profile--db--opensearch--dashboard--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::db::opensearch::ssl`
+
+##### <a name="-profile--db--opensearch--dashboard--host"></a>`host`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::db::opensearch::host`
+
+##### <a name="-profile--db--opensearch--dashboard--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::db::opensearch::version`
+
+##### <a name="-profile--db--opensearch--dashboard--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::opensearch::ssl_combined_pem`
+
+### <a name="profile--db--pgsql"></a>`profile::db::pgsql`
+
+Profile postgresql
+
+#### Parameters
+
+The following parameters are available in the `profile::db::pgsql` class:
+
+* [`monitor_username`](#-profile--db--pgsql--monitor_username)
+* [`monitor_password`](#-profile--db--pgsql--monitor_password)
+* [`databases`](#-profile--db--pgsql--databases)
+* [`mode`](#-profile--db--pgsql--mode)
+* [`max_connections`](#-profile--db--pgsql--max_connections)
+* [`listen_address`](#-profile--db--pgsql--listen_address)
+* [`allow_remote_hosts`](#-profile--db--pgsql--allow_remote_hosts)
+* [`recovery_username`](#-profile--db--pgsql--recovery_username)
+* [`recovery_password`](#-profile--db--pgsql--recovery_password)
+* [`recovery_host`](#-profile--db--pgsql--recovery_host)
+* [`recovery_port`](#-profile--db--pgsql--recovery_port)
+* [`recovery_trigger`](#-profile--db--pgsql--recovery_trigger)
+* [`replication_username`](#-profile--db--pgsql--replication_username)
+* [`replication_password`](#-profile--db--pgsql--replication_password)
+* [`application_name`](#-profile--db--pgsql--application_name)
+* [`pg_hba_rule`](#-profile--db--pgsql--pg_hba_rule)
+* [`backup`](#-profile--db--pgsql--backup)
+
+##### <a name="-profile--db--pgsql--monitor_username"></a>`monitor_username`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+##### <a name="-profile--db--pgsql--monitor_password"></a>`monitor_password`
+
+Data type: `Eit_types::Password`
+
+
+
+##### <a name="-profile--db--pgsql--databases"></a>`databases`
+
+Data type: `Eit_types::Pgsql::Db`
+
+
+
+Default value: `$role::db::pgsql::databases`
+
+##### <a name="-profile--db--pgsql--mode"></a>`mode`
+
+Data type: `Eit_types::Pgsql::Mode`
+
+
+
+Default value: `$role::db::pgsql::mode`
+
+##### <a name="-profile--db--pgsql--max_connections"></a>`max_connections`
+
+Data type: `Integer[0, default]`
+
+
+
+Default value: `$role::db::pgsql::max_connections`
+
+##### <a name="-profile--db--pgsql--listen_address"></a>`listen_address`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+
+
+Default value: `$role::db::pgsql::listen_address`
+
+##### <a name="-profile--db--pgsql--allow_remote_hosts"></a>`allow_remote_hosts`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+
+
+Default value: `$role::db::pgsql::allow_remote_hosts`
+
+##### <a name="-profile--db--pgsql--recovery_username"></a>`recovery_username`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `$role::db::pgsql::recovery_username`
+
+##### <a name="-profile--db--pgsql--recovery_password"></a>`recovery_password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::pgsql::recovery_password`
+
+##### <a name="-profile--db--pgsql--recovery_host"></a>`recovery_host`
+
+Data type: `Optional[Eit_types::Host]`
+
+
+
+Default value: `$role::db::pgsql::recovery_host`
+
+##### <a name="-profile--db--pgsql--recovery_port"></a>`recovery_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+
+
+Default value: `$role::db::pgsql::recovery_port`
+
+##### <a name="-profile--db--pgsql--recovery_trigger"></a>`recovery_trigger`
+
+Data type: `Optional[Stdlib::Unixpath]`
+
+
+
+Default value: `$role::db::pgsql::recovery_trigger`
+
+##### <a name="-profile--db--pgsql--replication_username"></a>`replication_username`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `$role::db::pgsql::replication_username`
+
+##### <a name="-profile--db--pgsql--replication_password"></a>`replication_password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::db::pgsql::replication_password`
+
+##### <a name="-profile--db--pgsql--application_name"></a>`application_name`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `$role::db::pgsql::application_name`
+
+##### <a name="-profile--db--pgsql--pg_hba_rule"></a>`pg_hba_rule`
+
+Data type: `Optional[Eit_types::Pgsql::Pg_hba]`
+
+
+
+Default value: `$role::db::pgsql::pg_hba_rule`
+
+##### <a name="-profile--db--pgsql--backup"></a>`backup`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$role::db::pgsql::backup`
 
 ### <a name="profile--drupal"></a>`profile::drupal`
 
@@ -151,6 +1908,98 @@ Default value: `'drupal_xyz'`
 ### <a name="profile--dummy"></a>`profile::dummy`
 
 Dummy class
+
+### <a name="profile--elastic--curator"></a>`profile::elastic::curator`
+
+Elastic Curator
+https://github.com/elastic/curator
+
+#### Parameters
+
+The following parameters are available in the `profile::elastic::curator` class:
+
+* [`version`](#-profile--elastic--curator--version)
+* [`ensure`](#-profile--elastic--curator--ensure)
+* [`filters`](#-profile--elastic--curator--filters)
+* [`config_file`](#-profile--elastic--curator--config_file)
+* [`actions_file`](#-profile--elastic--curator--actions_file)
+
+##### <a name="-profile--elastic--curator--version"></a>`version`
+
+Data type: `Integer[5]`
+
+
+
+Default value: `5`
+
+##### <a name="-profile--elastic--curator--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--elastic--curator--filters"></a>`filters`
+
+Data type: `Hash[Eit_types::SimpleString, Hash]`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--elastic--curator--config_file"></a>`config_file`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `'/etc/elasticsearch/curator/curator.yml'`
+
+##### <a name="-profile--elastic--curator--actions_file"></a>`actions_file`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `'/etc/elasticsearch/curator/action.yml'`
+
+### <a name="profile--elastic--logstash"></a>`profile::elastic::logstash`
+
+Elastic Logstash
+https://github.com/elastic/logstash
+
+#### Parameters
+
+The following parameters are available in the `profile::elastic::logstash` class:
+
+* [`version`](#-profile--elastic--logstash--version)
+* [`ensure`](#-profile--elastic--logstash--ensure)
+* [`manage_repo`](#-profile--elastic--logstash--manage_repo)
+
+##### <a name="-profile--elastic--logstash--version"></a>`version`
+
+Data type: `Pattern[/\d\.\d\.\d/]`
+
+
+
+Default value: `'5.6.4'`
+
+##### <a name="-profile--elastic--logstash--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--elastic--logstash--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
 
 ### <a name="profile--elk"></a>`profile::elk`
 
@@ -655,77 +2504,30 @@ Data type: `Hash`
 
 Default value: `$::common::keepalived::instances`
 
-### <a name="profile--kolab"></a>`profile::kolab`
+### <a name="profile--license--ansys"></a>`profile::license::ansys`
 
-kolab profile
+ansys license manager
 
 #### Parameters
 
-The following parameters are available in the `profile::kolab` class:
+The following parameters are available in the `profile::license::ansys` class:
 
-* [`manage_database`](#-profile--kolab--manage_database)
-* [`manage_epel_repo`](#-profile--kolab--manage_epel_repo)
-* [`manage_postfix`](#-profile--kolab--manage_postfix)
-* [`domain`](#-profile--kolab--domain)
-* [`dkim`](#-profile--kolab--dkim)
-* [`dkim_domains`](#-profile--kolab--dkim_domains)
-* [`dkim_ips`](#-profile--kolab--dkim_ips)
+* [`license_file_port`](#-profile--license--ansys--license_file_port)
+* [`licensing_interconnect_port`](#-profile--license--ansys--licensing_interconnect_port)
 
-##### <a name="-profile--kolab--manage_database"></a>`manage_database`
+##### <a name="-profile--license--ansys--license_file_port"></a>`license_file_port`
 
-Data type: `Boolean`
+Data type: `Stdlib::Port`
 
 
 
-Default value: `true`
+##### <a name="-profile--license--ansys--licensing_interconnect_port"></a>`licensing_interconnect_port`
 
-##### <a name="-profile--kolab--manage_epel_repo"></a>`manage_epel_repo`
-
-Data type: `Boolean`
+Data type: `Stdlib::Port`
 
 
 
-Default value: `false`
-
-##### <a name="-profile--kolab--manage_postfix"></a>`manage_postfix`
-
-Data type: `Boolean`
-
-
-
-Default value: `true`
-
-##### <a name="-profile--kolab--domain"></a>`domain`
-
-Data type: `Eit_types::Domain`
-
-
-
-Default value: `$facts['networking']['domain']`
-
-##### <a name="-profile--kolab--dkim"></a>`dkim`
-
-Data type: `Boolean`
-
-
-
-Default value: `false`
-
-##### <a name="-profile--kolab--dkim_domains"></a>`dkim_domains`
-
-Data type: `Array[Eit_types::Domain]`
-
-
-
-Default value: `[]`
-
-##### <a name="-profile--kolab--dkim_ips"></a>`dkim_ips`
-
-Data type: `Array[Eit_types::IP]`
-
-
-
-Default value: `[]`
+Default value: `2325`
 
 ### <a name="profile--logging"></a>`profile::logging`
 
@@ -763,6 +2565,384 @@ Data type: `Stdlib::Filemode`
 
 Default value: `$::common::logging::log_dir_mode`
 
+### <a name="profile--logging--journal"></a>`profile::logging::journal`
+
+Systemd Journald Upload
+
+#### Parameters
+
+The following parameters are available in the `profile::logging::journal` class:
+
+* [`enable`](#-profile--logging--journal--enable)
+* [`package_name`](#-profile--logging--journal--package_name)
+* [`remote_url`](#-profile--logging--journal--remote_url)
+* [`noop_value`](#-profile--logging--journal--noop_value)
+
+##### <a name="-profile--logging--journal--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::logging::journal::upload_enable`
+
+##### <a name="-profile--logging--journal--package_name"></a>`package_name`
+
+Data type: `String`
+
+
+
+Default value: `$common::logging::journal::package_name`
+
+##### <a name="-profile--logging--journal--remote_url"></a>`remote_url`
+
+Data type: `Eit_types::URL`
+
+
+
+Default value: `$common::logging::journal::remote_url`
+
+##### <a name="-profile--logging--journal--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::logging::journal::noop_value`
+
+### <a name="profile--logging--logrotate"></a>`profile::logging::logrotate`
+
+Manage logrotation
+
+#### Parameters
+
+The following parameters are available in the `profile::logging::logrotate` class:
+
+* [`purge`](#-profile--logging--logrotate--purge)
+* [`dateext`](#-profile--logging--logrotate--dateext)
+* [`compress`](#-profile--logging--logrotate--compress)
+* [`rules`](#-profile--logging--logrotate--rules)
+* [`adv_options`](#-profile--logging--logrotate--adv_options)
+* [`__scheduling_method`](#-profile--logging--logrotate--__scheduling_method)
+
+##### <a name="-profile--logging--logrotate--purge"></a>`purge`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::logrotate::purge`
+
+##### <a name="-profile--logging--logrotate--dateext"></a>`dateext`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::logrotate::dateext`
+
+##### <a name="-profile--logging--logrotate--compress"></a>`compress`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::logrotate::compress`
+
+##### <a name="-profile--logging--logrotate--rules"></a>`rules`
+
+Data type: `Eit_types::Common::Logging::Logrotate::Rules`
+
+
+
+Default value: `$::common::logging::logrotate::rules`
+
+##### <a name="-profile--logging--logrotate--adv_options"></a>`adv_options`
+
+Data type: `Hash`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--logging--logrotate--__scheduling_method"></a>`__scheduling_method`
+
+Data type: `Enum['cron', 'service']`
+
+
+
+Default value: `'cron'`
+
+### <a name="profile--logging--rsyslog"></a>`profile::logging::rsyslog`
+
+rsyslog
+
+#### Parameters
+
+The following parameters are available in the `profile::logging::rsyslog` class:
+
+* [`enable`](#-profile--logging--rsyslog--enable)
+* [`purge_rsyslog_d`](#-profile--logging--rsyslog--purge_rsyslog_d)
+* [`log_remote`](#-profile--logging--rsyslog--log_remote)
+* [`log_local`](#-profile--logging--rsyslog--log_local)
+* [`log_cron`](#-profile--logging--rsyslog--log_cron)
+* [`log_mail`](#-profile--logging--rsyslog--log_mail)
+* [`log_auth`](#-profile--logging--rsyslog--log_auth)
+* [`log_boot`](#-profile--logging--rsyslog--log_boot)
+* [`system_log`](#-profile--logging--rsyslog--system_log)
+* [`remote_servers`](#-profile--logging--rsyslog--remote_servers)
+
+##### <a name="-profile--logging--rsyslog--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::enable`
+
+##### <a name="-profile--logging--rsyslog--purge_rsyslog_d"></a>`purge_rsyslog_d`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::purge_rsyslog_d`
+
+##### <a name="-profile--logging--rsyslog--log_remote"></a>`log_remote`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_remote`
+
+##### <a name="-profile--logging--rsyslog--log_local"></a>`log_local`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_local`
+
+##### <a name="-profile--logging--rsyslog--log_cron"></a>`log_cron`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_cron`
+
+##### <a name="-profile--logging--rsyslog--log_mail"></a>`log_mail`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_mail`
+
+##### <a name="-profile--logging--rsyslog--log_auth"></a>`log_auth`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_auth`
+
+##### <a name="-profile--logging--rsyslog--log_boot"></a>`log_boot`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::log_boot`
+
+##### <a name="-profile--logging--rsyslog--system_log"></a>`system_log`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::logging::rsyslog::system_log`
+
+##### <a name="-profile--logging--rsyslog--remote_servers"></a>`remote_servers`
+
+Data type: `Eit_types::Rsyslog::Remote_Ip`
+
+
+
+Default value: `$::common::logging::rsyslog::remote_servers`
+
+### <a name="profile--mail--mailcow"></a>`profile::mail::mailcow`
+
+Mailcow Setup
+
+#### Parameters
+
+The following parameters are available in the `profile::mail::mailcow` class:
+
+* [`manage`](#-profile--mail--mailcow--manage)
+* [`letsencrypt`](#-profile--mail--mailcow--letsencrypt)
+* [`acme_contact`](#-profile--mail--mailcow--acme_contact)
+* [`version`](#-profile--mail--mailcow--version)
+* [`install_dir`](#-profile--mail--mailcow--install_dir)
+* [`backup_dir`](#-profile--mail--mailcow--backup_dir)
+* [`timezone`](#-profile--mail--mailcow--timezone)
+* [`dbroot`](#-profile--mail--mailcow--dbroot)
+* [`dbpass`](#-profile--mail--mailcow--dbpass)
+* [`redispass`](#-profile--mail--mailcow--redispass)
+* [`extra_settings`](#-profile--mail--mailcow--extra_settings)
+* [`domain`](#-profile--mail--mailcow--domain)
+* [`backup_retention`](#-profile--mail--mailcow--backup_retention)
+* [`exporter_image`](#-profile--mail--mailcow--exporter_image)
+* [`exporter_listen_address`](#-profile--mail--mailcow--exporter_listen_address)
+* [`exporter_api_key`](#-profile--mail--mailcow--exporter_api_key)
+* [`http_bind`](#-profile--mail--mailcow--http_bind)
+* [`skip_unbound_healthcheck`](#-profile--mail--mailcow--skip_unbound_healthcheck)
+
+##### <a name="-profile--mail--mailcow--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::mail::mailcow::manage`
+
+##### <a name="-profile--mail--mailcow--letsencrypt"></a>`letsencrypt`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::mail::mailcow::letsencrypt`
+
+##### <a name="-profile--mail--mailcow--acme_contact"></a>`acme_contact`
+
+Data type: `Optional[Eit_types::Email]`
+
+
+
+Default value: `$role::mail::mailcow::acme_contact`
+
+##### <a name="-profile--mail--mailcow--version"></a>`version`
+
+Data type: `Eit_types::Mailcow::Version`
+
+
+
+Default value: `$role::mail::mailcow::version`
+
+##### <a name="-profile--mail--mailcow--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::mail::mailcow::install_dir`
+
+##### <a name="-profile--mail--mailcow--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::mail::mailcow::backup_dir`
+
+##### <a name="-profile--mail--mailcow--timezone"></a>`timezone`
+
+Data type: `Eit_types::Timezone`
+
+
+
+Default value: `$role::mail::mailcow::timezone`
+
+##### <a name="-profile--mail--mailcow--dbroot"></a>`dbroot`
+
+Data type: `String`
+
+
+
+Default value: `$role::mail::mailcow::dbroot`
+
+##### <a name="-profile--mail--mailcow--dbpass"></a>`dbpass`
+
+Data type: `String`
+
+
+
+Default value: `$role::mail::mailcow::dbpass`
+
+##### <a name="-profile--mail--mailcow--redispass"></a>`redispass`
+
+Data type: `String`
+
+
+
+Default value: `$role::mail::mailcow::redispass`
+
+##### <a name="-profile--mail--mailcow--extra_settings"></a>`extra_settings`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$role::mail::mailcow::extra_settings`
+
+##### <a name="-profile--mail--mailcow--domain"></a>`domain`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::mail::mailcow::domain`
+
+##### <a name="-profile--mail--mailcow--backup_retention"></a>`backup_retention`
+
+Data type: `Integer[3,30]`
+
+
+
+Default value: `$role::mail::mailcow::backup_retention`
+
+##### <a name="-profile--mail--mailcow--exporter_image"></a>`exporter_image`
+
+Data type: `String`
+
+
+
+Default value: `$role::mail::mailcow::exporter_image`
+
+##### <a name="-profile--mail--mailcow--exporter_listen_address"></a>`exporter_listen_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `$role::mail::mailcow::exporter_listen_address`
+
+##### <a name="-profile--mail--mailcow--exporter_api_key"></a>`exporter_api_key`
+
+Data type: `String`
+
+
+
+Default value: `$role::mail::mailcow::exporter_api_key`
+
+##### <a name="-profile--mail--mailcow--http_bind"></a>`http_bind`
+
+Data type: `Stdlib::IP::Address::V4::Nosubnet`
+
+
+
+Default value: `$role::mail::mailcow::http_bind`
+
+##### <a name="-profile--mail--mailcow--skip_unbound_healthcheck"></a>`skip_unbound_healthcheck`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$role::mail::mailcow::skip_unbound_healthcheck`
+
 ### <a name="profile--memcached"></a>`profile::memcached`
 
 memcached
@@ -790,66 +2970,213 @@ Data type: `Stdlib::Port`
 
 Default value: `11211`
 
-### <a name="profile--mongodb"></a>`profile::mongodb`
+### <a name="profile--monitoring--atop"></a>`profile::monitoring::atop`
 
-MongoDB class
+atop
 
 #### Parameters
 
-The following parameters are available in the `profile::mongodb` class:
+The following parameters are available in the `profile::monitoring::atop` class:
 
-* [`global_settings`](#-profile--mongodb--global_settings)
-* [`server_settings`](#-profile--mongodb--server_settings)
-* [`monitor_user`](#-profile--mongodb--monitor_user)
-* [`monitor_password`](#-profile--mongodb--monitor_password)
-* [`server_defaults`](#-profile--mongodb--server_defaults)
-* [`backup`](#-profile--mongodb--backup)
+* [`daemon`](#-profile--monitoring--atop--daemon)
+* [`install`](#-profile--monitoring--atop--install)
 
-##### <a name="-profile--mongodb--global_settings"></a>`global_settings`
-
-Data type: `Hash`
-
-
-
-##### <a name="-profile--mongodb--server_settings"></a>`server_settings`
-
-Data type: `Hash`
-
-
-
-##### <a name="-profile--mongodb--monitor_user"></a>`monitor_user`
-
-Data type: `Eit_types::User`
-
-
-
-##### <a name="-profile--mongodb--monitor_password"></a>`monitor_password`
-
-Data type: `Eit_types::Password`
-
-
-
-##### <a name="-profile--mongodb--server_defaults"></a>`server_defaults`
-
-Data type: `Hash`
-
-
-
-Default value:
-
-```puppet
-{
-    manage_pidfile => false,
-  }
-```
-
-##### <a name="-profile--mongodb--backup"></a>`backup`
+##### <a name="-profile--monitoring--atop--daemon"></a>`daemon`
 
 Data type: `Boolean`
 
 
 
-Default value: `false`
+Default value: `$common::monitoring::atop::daemon`
+
+##### <a name="-profile--monitoring--atop--install"></a>`install`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::atop::install`
+
+### <a name="profile--monitoring--journal_remote"></a>`profile::monitoring::journal_remote`
+
+Systemd_journal_remote
+https://dangibbs.uk/projects/puppet-systemd-journal-remote/
+
+#### Parameters
+
+The following parameters are available in the `profile::monitoring::journal_remote` class:
+
+* [`enable`](#-profile--monitoring--journal_remote--enable)
+* [`manage_output`](#-profile--monitoring--journal_remote--manage_output)
+* [`output`](#-profile--monitoring--journal_remote--output)
+
+##### <a name="-profile--monitoring--journal_remote--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::monitoring::journal_remote::remote_enable`
+
+##### <a name="-profile--monitoring--journal_remote--manage_output"></a>`manage_output`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::monitoring::journal_remote::manage_output`
+
+##### <a name="-profile--monitoring--journal_remote--output"></a>`output`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::monitoring::journal_remote::output`
+
+### <a name="profile--monitoring--scom"></a>`profile::monitoring::scom`
+
+Microsoft SCOM
+
+#### Parameters
+
+The following parameters are available in the `profile::monitoring::scom` class:
+
+* [`scom_masters`](#-profile--monitoring--scom--scom_masters)
+* [`install_sudo_rules`](#-profile--monitoring--scom--install_sudo_rules)
+* [`scom_user`](#-profile--monitoring--scom--scom_user)
+* [`noop_value`](#-profile--monitoring--scom--noop_value)
+
+##### <a name="-profile--monitoring--scom--scom_masters"></a>`scom_masters`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+
+
+Default value: `$common::monitoring::scom::scom_masters`
+
+##### <a name="-profile--monitoring--scom--install_sudo_rules"></a>`install_sudo_rules`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::scom::install_sudo_rules`
+
+##### <a name="-profile--monitoring--scom--scom_user"></a>`scom_user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$common::monitoring::scom::scom_user`
+
+##### <a name="-profile--monitoring--scom--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::scom::noop_value`
+
+### <a name="profile--monitoring--splunk--forwarder"></a>`profile::monitoring::splunk::forwarder`
+
+Splunk Forwarder
+
+#### Parameters
+
+The following parameters are available in the `profile::monitoring::splunk::forwarder` class:
+
+* [`enable`](#-profile--monitoring--splunk--forwarder--enable)
+* [`noop_value`](#-profile--monitoring--splunk--forwarder--noop_value)
+* [`version`](#-profile--monitoring--splunk--forwarder--version)
+* [`build`](#-profile--monitoring--splunk--forwarder--build)
+* [`deploymentserver`](#-profile--monitoring--splunk--forwarder--deploymentserver)
+* [`seed_password`](#-profile--monitoring--splunk--forwarder--seed_password)
+* [`password_hash`](#-profile--monitoring--splunk--forwarder--password_hash)
+* [`forwarder_output`](#-profile--monitoring--splunk--forwarder--forwarder_output)
+* [`log_keep_count`](#-profile--monitoring--splunk--forwarder--log_keep_count)
+* [`log_max_file_size_b`](#-profile--monitoring--splunk--forwarder--log_max_file_size_b)
+
+##### <a name="-profile--monitoring--splunk--forwarder--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::enable`
+
+##### <a name="-profile--monitoring--splunk--forwarder--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::noop_value`
+
+##### <a name="-profile--monitoring--splunk--forwarder--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::version`
+
+##### <a name="-profile--monitoring--splunk--forwarder--build"></a>`build`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::build`
+
+##### <a name="-profile--monitoring--splunk--forwarder--deploymentserver"></a>`deploymentserver`
+
+Data type: `Optional[Stdlib::HTTPUrl]`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::deploymentserver`
+
+##### <a name="-profile--monitoring--splunk--forwarder--seed_password"></a>`seed_password`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::seed_password`
+
+##### <a name="-profile--monitoring--splunk--forwarder--password_hash"></a>`password_hash`
+
+Data type: `String[1]`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::password_hash`
+
+##### <a name="-profile--monitoring--splunk--forwarder--forwarder_output"></a>`forwarder_output`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::forwarder_output`
+
+##### <a name="-profile--monitoring--splunk--forwarder--log_keep_count"></a>`log_keep_count`
+
+Data type: `Integer`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::log_keep_count`
+
+##### <a name="-profile--monitoring--splunk--forwarder--log_max_file_size_b"></a>`log_max_file_size_b`
+
+Data type: `Eit_types::Bytes`
+
+
+
+Default value: `$common::monitoring::splunk::forwarder::log_max_file_size_b`
 
 ### <a name="profile--mysql"></a>`profile::mysql`
 
@@ -1022,6 +3349,240 @@ Data type: `Eit_types::Version`
 
 Default value: `'installed'`
 
+### <a name="profile--network--firewall"></a>`profile::network::firewall`
+
+Firewall
+
+#### Parameters
+
+The following parameters are available in the `profile::network::firewall` class:
+
+* [`enable`](#-profile--network--firewall--enable)
+* [`enable_ipv6`](#-profile--network--firewall--enable_ipv6)
+* [`enable_forwarding`](#-profile--network--firewall--enable_forwarding)
+* [`drop_all`](#-profile--network--firewall--drop_all)
+* [`drop_action`](#-profile--network--firewall--drop_action)
+* [`allow_docker`](#-profile--network--firewall--allow_docker)
+* [`allow_k8s`](#-profile--network--firewall--allow_k8s)
+* [`allow_azure`](#-profile--network--firewall--allow_azure)
+* [`allow_netbird`](#-profile--network--firewall--allow_netbird)
+* [`block_bogons`](#-profile--network--firewall--block_bogons)
+* [`block_mdns`](#-profile--network--firewall--block_mdns)
+* [`block_kaspersky_sccc`](#-profile--network--firewall--block_kaspersky_sccc)
+* [`block_hasp_lm`](#-profile--network--firewall--block_hasp_lm)
+* [`block_dhcp_broadcast`](#-profile--network--firewall--block_dhcp_broadcast)
+* [`block_netbios_broadcast`](#-profile--network--firewall--block_netbios_broadcast)
+* [`rules`](#-profile--network--firewall--rules)
+
+##### <a name="-profile--network--firewall--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::enable`
+
+##### <a name="-profile--network--firewall--enable_ipv6"></a>`enable_ipv6`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::enable_ipv6`
+
+##### <a name="-profile--network--firewall--enable_forwarding"></a>`enable_forwarding`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::enable_forwarding`
+
+##### <a name="-profile--network--firewall--drop_all"></a>`drop_all`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::drop_all`
+
+##### <a name="-profile--network--firewall--drop_action"></a>`drop_action`
+
+Data type: `Std_fw::Action`
+
+
+
+Default value: `$common::network::firewall::drop_action`
+
+##### <a name="-profile--network--firewall--allow_docker"></a>`allow_docker`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::allow_docker`
+
+##### <a name="-profile--network--firewall--allow_k8s"></a>`allow_k8s`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::allow_docker`
+
+##### <a name="-profile--network--firewall--allow_azure"></a>`allow_azure`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::allow_azure`
+
+##### <a name="-profile--network--firewall--allow_netbird"></a>`allow_netbird`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::allow_netbird`
+
+##### <a name="-profile--network--firewall--block_bogons"></a>`block_bogons`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_bogons`
+
+##### <a name="-profile--network--firewall--block_mdns"></a>`block_mdns`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_mdns`
+
+##### <a name="-profile--network--firewall--block_kaspersky_sccc"></a>`block_kaspersky_sccc`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_kaspersky_sccc`
+
+##### <a name="-profile--network--firewall--block_hasp_lm"></a>`block_hasp_lm`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_hasp_lm`
+
+##### <a name="-profile--network--firewall--block_dhcp_broadcast"></a>`block_dhcp_broadcast`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_dhcp_broadcast`
+
+##### <a name="-profile--network--firewall--block_netbios_broadcast"></a>`block_netbios_broadcast`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::network::firewall::block_netbios_broadcast`
+
+##### <a name="-profile--network--firewall--rules"></a>`rules`
+
+Data type: `Eit_types::Firewall`
+
+
+
+Default value: `$common::network::firewall::rules`
+
+### <a name="profile--network--netbird"></a>`profile::network::netbird`
+
+Class for managing Netbird Agent
+
+#### Parameters
+
+The following parameters are available in the `profile::network::netbird` class:
+
+* [`setup_key`](#-profile--network--netbird--setup_key)
+* [`enable`](#-profile--network--netbird--enable)
+* [`noop_value`](#-profile--network--netbird--noop_value)
+* [`server`](#-profile--network--netbird--server)
+* [`version`](#-profile--network--netbird--version)
+* [`install_method`](#-profile--network--netbird--install_method)
+
+##### <a name="-profile--network--netbird--setup_key"></a>`setup_key`
+
+Data type: `String`
+
+The setup key used for authentication.
+
+Default value: `$common::network::netbird::setup_key`
+
+##### <a name="-profile--network--netbird--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean to enable or disable the Netbird agent. Defaults to false.
+
+Default value: `$common::network::netbird::enable`
+
+##### <a name="-profile--network--netbird--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+Optional boolean to enable no-operation mode.
+
+Default value: `$common::network::netbird::noop_value`
+
+##### <a name="-profile--network--netbird--server"></a>`server`
+
+Data type: `Stdlib::HTTPSUrl`
+
+The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:443'.
+
+Default value: `$common::network::netbird::server`
+
+##### <a name="-profile--network--netbird--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The Netbird version to install. The default is the type Eit_types::Version.
+
+Default value: `$common::network::netbird::version`
+
+##### <a name="-profile--network--netbird--install_method"></a>`install_method`
+
+Data type: `Enum['package', 'repo']`
+
+The method to install Netbird. The default is to download via their GitHub repo releases.
+
+Default value: `$common::network::netbird::install_method`
+
+### <a name="profile--network--wireguard"></a>`profile::network::wireguard`
+
+Wireguard
+
+#### Parameters
+
+The following parameters are available in the `profile::network::wireguard` class:
+
+* [`tunnels`](#-profile--network--wireguard--tunnels)
+
+##### <a name="-profile--network--wireguard--tunnels"></a>`tunnels`
+
+Data type: `Hash`
+
+
+
+Default value: `$common::network::wireguard::tunnels`
+
 ### <a name="profile--nivisa"></a>`profile::nivisa`
 
 NI-VISA Profile
@@ -1158,6 +3719,308 @@ Data type: `Optional[Integer[0]]`
 
 
 Default value: `undef`
+
+### <a name="profile--package_management--guix"></a>`profile::package_management::guix`
+
+Guix server
+
+#### Parameters
+
+The following parameters are available in the `profile::package_management::guix` class:
+
+* [`listen_interface`](#-profile--package_management--guix--listen_interface)
+* [`clients`](#-profile--package_management--guix--clients)
+* [`guix_builders`](#-profile--package_management--guix--guix_builders)
+* [`system`](#-profile--package_management--guix--system)
+* [`install_source`](#-profile--package_management--guix--install_source)
+
+##### <a name="-profile--package_management--guix--listen_interface"></a>`listen_interface`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+##### <a name="-profile--package_management--guix--clients"></a>`clients`
+
+Data type: `Optional[Array[Stdlib::Host]]`
+
+
+
+##### <a name="-profile--package_management--guix--guix_builders"></a>`guix_builders`
+
+Data type: `Integer[1,99]`
+
+
+
+Default value: `10`
+
+##### <a name="-profile--package_management--guix--system"></a>`system`
+
+Data type: `Enum['x86_64-linux']`
+
+
+
+Default value: `'x86_64-linux'`
+
+##### <a name="-profile--package_management--guix--install_source"></a>`install_source`
+
+Data type: `Eit_types::URL`
+
+
+
+Default value: `"ftp://alpha.gnu.org/gnu/guix/guix-binary-0.15.0.${system}.tar.xz"`
+
+### <a name="profile--package_management--guix--client"></a>`profile::package_management::guix::client`
+
+Guix client
+
+#### Parameters
+
+The following parameters are available in the `profile::package_management::guix::client` class:
+
+* [`enable`](#-profile--package_management--guix--client--enable)
+* [`manage_mounts`](#-profile--package_management--guix--client--manage_mounts)
+* [`server`](#-profile--package_management--guix--client--server)
+* [`nfs_base`](#-profile--package_management--guix--client--nfs_base)
+
+##### <a name="-profile--package_management--guix--client--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::package_management::guix::client::enable`
+
+##### <a name="-profile--package_management--guix--client--manage_mounts"></a>`manage_mounts`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::package_management::guix::client::manage_mounts`
+
+##### <a name="-profile--package_management--guix--client--server"></a>`server`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$::common::system::package_management::guix::client::server`
+
+##### <a name="-profile--package_management--guix--client--nfs_base"></a>`nfs_base`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--package_management--packagesign"></a>`profile::package_management::packagesign`
+
+Freight package signing tool
+
+#### Parameters
+
+The following parameters are available in the `profile::package_management::packagesign` class:
+
+* [`manage`](#-profile--package_management--packagesign--manage)
+* [`packagesign`](#-profile--package_management--packagesign--packagesign)
+* [`snapshot`](#-profile--package_management--packagesign--snapshot)
+* [`basedir`](#-profile--package_management--packagesign--basedir)
+* [`locations`](#-profile--package_management--packagesign--locations)
+* [`volumes`](#-profile--package_management--packagesign--volumes)
+* [`registry_path`](#-profile--package_management--packagesign--registry_path)
+* [`server_tag`](#-profile--package_management--packagesign--server_tag)
+* [`script_tag`](#-profile--package_management--packagesign--script_tag)
+* [`nginx_path`](#-profile--package_management--packagesign--nginx_path)
+* [`nginx_tag`](#-profile--package_management--packagesign--nginx_tag)
+* [`snapshot_tag`](#-profile--package_management--packagesign--snapshot_tag)
+* [`provider`](#-profile--package_management--packagesign--provider)
+* [`signing_password`](#-profile--package_management--packagesign--signing_password)
+* [`gitserver_url`](#-profile--package_management--packagesign--gitserver_url)
+* [`gitserver_token`](#-profile--package_management--packagesign--gitserver_token)
+
+##### <a name="-profile--package_management--packagesign--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::package_management::repo::manage`
+
+##### <a name="-profile--package_management--packagesign--packagesign"></a>`packagesign`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::package_management::repo::packagesign`
+
+##### <a name="-profile--package_management--packagesign--snapshot"></a>`snapshot`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::package_management::repo::snapshot`
+
+##### <a name="-profile--package_management--packagesign--basedir"></a>`basedir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::package_management::repo::basedir`
+
+##### <a name="-profile--package_management--packagesign--locations"></a>`locations`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::package_management::repo::locations`
+
+##### <a name="-profile--package_management--packagesign--volumes"></a>`volumes`
+
+Data type: `Array`
+
+
+
+Default value: `$role::package_management::repo::volumes`
+
+##### <a name="-profile--package_management--packagesign--registry_path"></a>`registry_path`
+
+Data type: `String`
+
+
+
+Default value: `$role::package_management::repo::registry_path`
+
+##### <a name="-profile--package_management--packagesign--server_tag"></a>`server_tag`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::package_management::repo::server_tag`
+
+##### <a name="-profile--package_management--packagesign--script_tag"></a>`script_tag`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::package_management::repo::script_tag`
+
+##### <a name="-profile--package_management--packagesign--nginx_path"></a>`nginx_path`
+
+Data type: `String`
+
+
+
+Default value: `$role::package_management::repo::nginx_path`
+
+##### <a name="-profile--package_management--packagesign--nginx_tag"></a>`nginx_tag`
+
+Data type: `String`
+
+
+
+Default value: `$role::package_management::repo::nginx_tag`
+
+##### <a name="-profile--package_management--packagesign--snapshot_tag"></a>`snapshot_tag`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::package_management::repo::snapshot_tag`
+
+##### <a name="-profile--package_management--packagesign--provider"></a>`provider`
+
+Data type: `Optional[Enum['gitlab']]`
+
+
+
+Default value: `$role::package_management::repo::provider`
+
+##### <a name="-profile--package_management--packagesign--signing_password"></a>`signing_password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::package_management::repo::signing_password`
+
+##### <a name="-profile--package_management--packagesign--gitserver_url"></a>`gitserver_url`
+
+Data type: `Optional[Stdlib::HTTPSUrl]`
+
+
+
+Default value: `$role::package_management::repo::gitserver_url`
+
+##### <a name="-profile--package_management--packagesign--gitserver_token"></a>`gitserver_token`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::package_management::repo::gitserver_token`
+
+### <a name="profile--package_management--repo"></a>`profile::package_management::repo`
+
+repository mirror and snapshot
+
+#### Parameters
+
+The following parameters are available in the `profile::package_management::repo` class:
+
+* [`manage`](#-profile--package_management--repo--manage)
+* [`weekday`](#-profile--package_management--repo--weekday)
+* [`user`](#-profile--package_management--repo--user)
+* [`basedir`](#-profile--package_management--repo--basedir)
+* [`configurations`](#-profile--package_management--repo--configurations)
+
+##### <a name="-profile--package_management--repo--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::package_management::repo::manage`
+
+##### <a name="-profile--package_management--repo--weekday"></a>`weekday`
+
+Data type: `Eit_types::SystemdTimer::Weekday`
+
+
+
+Default value: `$role::package_management::repo::weekday`
+
+##### <a name="-profile--package_management--repo--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$role::package_management::repo::user`
+
+##### <a name="-profile--package_management--repo--basedir"></a>`basedir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::package_management::repo::basedir`
+
+##### <a name="-profile--package_management--repo--configurations"></a>`configurations`
+
+Data type: `Repository::Mirrors::Configurations`
+
+
+
+Default value: `$role::package_management::repo::configurations`
 
 ### <a name="profile--passenger"></a>`profile::passenger`
 
@@ -1502,6 +4365,1259 @@ Default value:
   }
 ```
 
+### <a name="profile--php--mssql"></a>`profile::php::mssql`
+
+Microsoft MS SQL
+
+#### Parameters
+
+The following parameters are available in the `profile::php::mssql` class:
+
+* [`ensure`](#-profile--php--mssql--ensure)
+
+##### <a name="-profile--php--mssql--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::profile::php::mssql`
+
+### <a name="profile--projectmanagement--easyredmine"></a>`profile::projectmanagement::easyredmine`
+
+EasyRedmine profile
+Does not support SSL
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::easyredmine` class:
+
+* [`servername`](#-profile--projectmanagement--easyredmine--servername)
+* [`serveralias`](#-profile--projectmanagement--easyredmine--serveralias)
+* [`db_connector`](#-profile--projectmanagement--easyredmine--db_connector)
+* [`version`](#-profile--projectmanagement--easyredmine--version)
+* [`download_url`](#-profile--projectmanagement--easyredmine--download_url)
+* [`plugins`](#-profile--projectmanagement--easyredmine--plugins)
+* [`custom_fragment`](#-profile--projectmanagement--easyredmine--custom_fragment)
+
+##### <a name="-profile--projectmanagement--easyredmine--servername"></a>`servername`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::servername`
+
+##### <a name="-profile--projectmanagement--easyredmine--serveralias"></a>`serveralias`
+
+Data type:
+
+```puppet
+Variant[
+    Array[Stdlib::Fqdn],
+    Stdlib::Fqdn
+  ]
+```
+
+
+
+Default value: `$role::projectmanagement::easyredmine::serveralias`
+
+##### <a name="-profile--projectmanagement--easyredmine--db_connector"></a>`db_connector`
+
+Data type: `Enum['mysql2','postgresql']`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::_database`
+
+##### <a name="-profile--projectmanagement--easyredmine--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::version`
+
+##### <a name="-profile--projectmanagement--easyredmine--download_url"></a>`download_url`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::location`
+
+##### <a name="-profile--projectmanagement--easyredmine--plugins"></a>`plugins`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::plugins`
+
+##### <a name="-profile--projectmanagement--easyredmine--custom_fragment"></a>`custom_fragment`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::easyredmine::custom_fragment`
+
+### <a name="profile--projectmanagement--foswiki"></a>`profile::projectmanagement::foswiki`
+
+Foswiki Profile
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::foswiki` class:
+
+* [`version`](#-profile--projectmanagement--foswiki--version)
+* [`manage_haproxy`](#-profile--projectmanagement--foswiki--manage_haproxy)
+
+##### <a name="-profile--projectmanagement--foswiki--version"></a>`version`
+
+Data type: `Variant[Integer, String]`
+
+
+
+Default value: `$::role::projectmanagement::foswiki::version`
+
+##### <a name="-profile--projectmanagement--foswiki--manage_haproxy"></a>`manage_haproxy`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::projectmanagement::foswiki::manage_haproxy`
+
+### <a name="profile--projectmanagement--gitlab"></a>`profile::projectmanagement::gitlab`
+
+$redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen on port 80 normally). it actually won't redirect unless external_url IS set to https://
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::gitlab` class:
+
+* [`domain`](#-profile--projectmanagement--gitlab--domain)
+* [`time_zone`](#-profile--projectmanagement--gitlab--time_zone)
+* [`email_enabled`](#-profile--projectmanagement--gitlab--email_enabled)
+* [`email_display_name`](#-profile--projectmanagement--gitlab--email_display_name)
+* [`registry`](#-profile--projectmanagement--gitlab--registry)
+* [`puma_bug`](#-profile--projectmanagement--gitlab--puma_bug)
+* [`mattermost`](#-profile--projectmanagement--gitlab--mattermost)
+* [`prometheus`](#-profile--projectmanagement--gitlab--prometheus)
+* [`default_theme`](#-profile--projectmanagement--gitlab--default_theme)
+* [`terminate_https`](#-profile--projectmanagement--gitlab--terminate_https)
+* [`redirect_http_to_https`](#-profile--projectmanagement--gitlab--redirect_http_to_https)
+* [`gitlab_rails`](#-profile--projectmanagement--gitlab--gitlab_rails)
+* [`git_config`](#-profile--projectmanagement--gitlab--git_config)
+* [`mattermost_config`](#-profile--projectmanagement--gitlab--mattermost_config)
+* [`backup`](#-profile--projectmanagement--gitlab--backup)
+* [`backup_cron_hour`](#-profile--projectmanagement--gitlab--backup_cron_hour)
+* [`backup_path`](#-profile--projectmanagement--gitlab--backup_path)
+* [`backup_keep_days`](#-profile--projectmanagement--gitlab--backup_keep_days)
+* [`ssl_cert`](#-profile--projectmanagement--gitlab--ssl_cert)
+* [`ssl_key`](#-profile--projectmanagement--gitlab--ssl_key)
+* [`registry_ssl_cert`](#-profile--projectmanagement--gitlab--registry_ssl_cert)
+* [`registry_ssl_key`](#-profile--projectmanagement--gitlab--registry_ssl_key)
+* [`registry_domain`](#-profile--projectmanagement--gitlab--registry_domain)
+* [`trusted_proxies`](#-profile--projectmanagement--gitlab--trusted_proxies)
+* [`mattermost_ssl_cert`](#-profile--projectmanagement--gitlab--mattermost_ssl_cert)
+* [`mattermost_ssl_key`](#-profile--projectmanagement--gitlab--mattermost_ssl_key)
+* [`mattermost_domain`](#-profile--projectmanagement--gitlab--mattermost_domain)
+* [`public_keys`](#-profile--projectmanagement--gitlab--public_keys)
+* [`backupcron_user`](#-profile--projectmanagement--gitlab--backupcron_user)
+* [`package_version`](#-profile--projectmanagement--gitlab--package_version)
+* [`puma_worker_memory_mb`](#-profile--projectmanagement--gitlab--puma_worker_memory_mb)
+* [`enable_pages`](#-profile--projectmanagement--gitlab--enable_pages)
+* [`pages_domain`](#-profile--projectmanagement--gitlab--pages_domain)
+* [`pages_ssl_cert`](#-profile--projectmanagement--gitlab--pages_ssl_cert)
+* [`pages_ssl_key`](#-profile--projectmanagement--gitlab--pages_ssl_key)
+* [`host`](#-profile--projectmanagement--gitlab--host)
+* [`monitoring_whitelist`](#-profile--projectmanagement--gitlab--monitoring_whitelist)
+* [`prometheus_exporters`](#-profile--projectmanagement--gitlab--prometheus_exporters)
+* [`garbage_cleanup_job_hour`](#-profile--projectmanagement--gitlab--garbage_cleanup_job_hour)
+
+##### <a name="-profile--projectmanagement--gitlab--domain"></a>`domain`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::projectmanagement::gitlab::domain`
+
+##### <a name="-profile--projectmanagement--gitlab--time_zone"></a>`time_zone`
+
+Data type: `Eit_types::Timezone`
+
+
+
+Default value: `$role::projectmanagement::gitlab::time_zone`
+
+##### <a name="-profile--projectmanagement--gitlab--email_enabled"></a>`email_enabled`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::email_enabled`
+
+##### <a name="-profile--projectmanagement--gitlab--email_display_name"></a>`email_display_name`
+
+Data type: `String`
+
+
+
+Default value: `$role::projectmanagement::gitlab::email_display_name`
+
+##### <a name="-profile--projectmanagement--gitlab--registry"></a>`registry`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::registry`
+
+##### <a name="-profile--projectmanagement--gitlab--puma_bug"></a>`puma_bug`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::puma_bug`
+
+##### <a name="-profile--projectmanagement--gitlab--mattermost"></a>`mattermost`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::mattermost`
+
+##### <a name="-profile--projectmanagement--gitlab--prometheus"></a>`prometheus`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::prometheus`
+
+##### <a name="-profile--projectmanagement--gitlab--default_theme"></a>`default_theme`
+
+Data type: `Eit_types::Gitlab::Theme`
+
+
+
+Default value: `$role::projectmanagement::gitlab::default_theme`
+
+##### <a name="-profile--projectmanagement--gitlab--terminate_https"></a>`terminate_https`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::terminate_https`
+
+##### <a name="-profile--projectmanagement--gitlab--redirect_http_to_https"></a>`redirect_http_to_https`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::redirect_http_to_https`
+
+##### <a name="-profile--projectmanagement--gitlab--gitlab_rails"></a>`gitlab_rails`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::projectmanagement::gitlab::gitlab_rails`
+
+##### <a name="-profile--projectmanagement--gitlab--git_config"></a>`git_config`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::projectmanagement::gitlab::git_config`
+
+##### <a name="-profile--projectmanagement--gitlab--mattermost_config"></a>`mattermost_config`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::projectmanagement::gitlab::mattermost_config`
+
+##### <a name="-profile--projectmanagement--gitlab--backup"></a>`backup`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::backup`
+
+##### <a name="-profile--projectmanagement--gitlab--backup_cron_hour"></a>`backup_cron_hour`
+
+Data type: `Integer[0,23]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::backup_cron_hour`
+
+##### <a name="-profile--projectmanagement--gitlab--backup_path"></a>`backup_path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::backup_path`
+
+##### <a name="-profile--projectmanagement--gitlab--backup_keep_days"></a>`backup_keep_days`
+
+Data type: `Integer[1,default]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::backup_keep_days`
+
+##### <a name="-profile--projectmanagement--gitlab--ssl_cert"></a>`ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::ssl_cert`
+
+##### <a name="-profile--projectmanagement--gitlab--ssl_key"></a>`ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::ssl_key`
+
+##### <a name="-profile--projectmanagement--gitlab--registry_ssl_cert"></a>`registry_ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::registry_ssl_cert`
+
+##### <a name="-profile--projectmanagement--gitlab--registry_ssl_key"></a>`registry_ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::registry_ssl_key`
+
+##### <a name="-profile--projectmanagement--gitlab--registry_domain"></a>`registry_domain`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::projectmanagement::gitlab::registry_domain`
+
+##### <a name="-profile--projectmanagement--gitlab--trusted_proxies"></a>`trusted_proxies`
+
+Data type: `Optional[Array[Stdlib::IP::Address]]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::trusted_proxies`
+
+##### <a name="-profile--projectmanagement--gitlab--mattermost_ssl_cert"></a>`mattermost_ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::mattermost_ssl_cert`
+
+##### <a name="-profile--projectmanagement--gitlab--mattermost_ssl_key"></a>`mattermost_ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::mattermost_ssl_key`
+
+##### <a name="-profile--projectmanagement--gitlab--mattermost_domain"></a>`mattermost_domain`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::projectmanagement::gitlab::mattermost_domain`
+
+##### <a name="-profile--projectmanagement--gitlab--public_keys"></a>`public_keys`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::public_keys`
+
+##### <a name="-profile--projectmanagement--gitlab--backupcron_user"></a>`backupcron_user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$role::projectmanagement::gitlab::backupcron_user`
+
+##### <a name="-profile--projectmanagement--gitlab--package_version"></a>`package_version`
+
+Data type: `Optional[Eit_types::Package_version]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::package_version`
+
+##### <a name="-profile--projectmanagement--gitlab--puma_worker_memory_mb"></a>`puma_worker_memory_mb`
+
+Data type: `Eit_types::MegaBytes`
+
+
+
+Default value: `$role::projectmanagement::gitlab::puma_worker_memory_mb`
+
+##### <a name="-profile--projectmanagement--gitlab--enable_pages"></a>`enable_pages`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::gitlab::enable_pages`
+
+##### <a name="-profile--projectmanagement--gitlab--pages_domain"></a>`pages_domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::pages_domain`
+
+##### <a name="-profile--projectmanagement--gitlab--pages_ssl_cert"></a>`pages_ssl_cert`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::pages_ssl_cert`
+
+##### <a name="-profile--projectmanagement--gitlab--pages_ssl_key"></a>`pages_ssl_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::pages_ssl_key`
+
+##### <a name="-profile--projectmanagement--gitlab--host"></a>`host`
+
+Data type: `Eit_types::Certname`
+
+
+
+Default value: `$trusted['certname']`
+
+##### <a name="-profile--projectmanagement--gitlab--monitoring_whitelist"></a>`monitoring_whitelist`
+
+Data type: `Optional[Array[Eit_types::IPCIDR]]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::monitoring_whitelist`
+
+##### <a name="-profile--projectmanagement--gitlab--prometheus_exporters"></a>`prometheus_exporters`
+
+Data type: `Optional[Eit_types::Gitlab::Prometheus_exporters]`
+
+
+
+Default value: `$role::projectmanagement::gitlab::prometheus_exporters`
+
+##### <a name="-profile--projectmanagement--gitlab--garbage_cleanup_job_hour"></a>`garbage_cleanup_job_hour`
+
+Data type: `Cron::Hour`
+
+
+
+Default value: `$role::projectmanagement::gitlab::garbage_cleanup_job_hour`
+
+### <a name="profile--projectmanagement--gitlab_ci_runner"></a>`profile::projectmanagement::gitlab_ci_runner`
+
+Gitlab Runner profile
+
+Supports:
+If docker or shell executor is there with gitlab-runner user
+If docker is with gitlab-runner and shell executor with diff user
+If just shell executor is there with gitlab-runner
+If shell executor is there with diff runner user
+
+Not Supported:
+docker with diff user is not supported, since it does not make sense.
+Multiple runner which can talk to diff gitlab instance.
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::gitlab_ci_runner` class:
+
+* [`concurrency`](#-profile--projectmanagement--gitlab_ci_runner--concurrency)
+* [`runners`](#-profile--projectmanagement--gitlab_ci_runner--runners)
+* [`runner_defaults`](#-profile--projectmanagement--gitlab_ci_runner--runner_defaults)
+* [`listen_address`](#-profile--projectmanagement--gitlab_ci_runner--listen_address)
+
+##### <a name="-profile--projectmanagement--gitlab_ci_runner--concurrency"></a>`concurrency`
+
+Data type: `Integer[1,10]`
+
+
+
+Default value: `$role::projectmanagement::gitlab_ci_runner::concurrency`
+
+##### <a name="-profile--projectmanagement--gitlab_ci_runner--runners"></a>`runners`
+
+Data type: `Eit_types::Gitlab::Runner`
+
+
+
+Default value: `$role::projectmanagement::gitlab_ci_runner::runners`
+
+##### <a name="-profile--projectmanagement--gitlab_ci_runner--runner_defaults"></a>`runner_defaults`
+
+Data type: `Eit_types::Gitlab::Runner::Config`
+
+
+
+Default value: `$role::projectmanagement::gitlab_ci_runner::runner_defaults`
+
+##### <a name="-profile--projectmanagement--gitlab_ci_runner--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `'127.254.254.254:63384'`
+
+### <a name="profile--projectmanagement--perforce"></a>`profile::projectmanagement::perforce`
+
+Perforce version control system
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::perforce` class:
+
+* [`user`](#-profile--projectmanagement--perforce--user)
+* [`service_root`](#-profile--projectmanagement--perforce--service_root)
+* [`service_name`](#-profile--projectmanagement--perforce--service_name)
+* [`ssl`](#-profile--projectmanagement--perforce--ssl)
+* [`service_ssldir`](#-profile--projectmanagement--perforce--service_ssldir)
+* [`service_port`](#-profile--projectmanagement--perforce--service_port)
+* [`service_password`](#-profile--projectmanagement--perforce--service_password)
+* [`license_content`](#-profile--projectmanagement--perforce--license_content)
+* [`hostname`](#-profile--projectmanagement--perforce--hostname)
+* [`version`](#-profile--projectmanagement--perforce--version)
+* [`log_dir`](#-profile--projectmanagement--perforce--log_dir)
+* [`log_file`](#-profile--projectmanagement--perforce--log_file)
+* [`log_level`](#-profile--projectmanagement--perforce--log_level)
+* [`git_connector`](#-profile--projectmanagement--perforce--git_connector)
+* [`admin_user`](#-profile--projectmanagement--perforce--admin_user)
+* [`admin_password`](#-profile--projectmanagement--perforce--admin_password)
+* [`operator_user`](#-profile--projectmanagement--perforce--operator_user)
+* [`operator_password`](#-profile--projectmanagement--perforce--operator_password)
+* [`backup_dir`](#-profile--projectmanagement--perforce--backup_dir)
+* [`backup_retention`](#-profile--projectmanagement--perforce--backup_retention)
+
+##### <a name="-profile--projectmanagement--perforce--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$role::projectmanagement::perforce::user`
+
+##### <a name="-profile--projectmanagement--perforce--service_root"></a>`service_root`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::projectmanagement::perforce::service_root`
+
+##### <a name="-profile--projectmanagement--perforce--service_name"></a>`service_name`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::projectmanagement::perforce::service_name`
+
+##### <a name="-profile--projectmanagement--perforce--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::perforce::ssl`
+
+##### <a name="-profile--projectmanagement--perforce--service_ssldir"></a>`service_ssldir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::projectmanagement::perforce::service_ssldir`
+
+##### <a name="-profile--projectmanagement--perforce--service_port"></a>`service_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$role::projectmanagement::perforce::service_port`
+
+##### <a name="-profile--projectmanagement--perforce--service_password"></a>`service_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$role::projectmanagement::perforce::service_password`
+
+##### <a name="-profile--projectmanagement--perforce--license_content"></a>`license_content`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::perforce::license_content`
+
+##### <a name="-profile--projectmanagement--perforce--hostname"></a>`hostname`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$role::projectmanagement::perforce::hostname`
+
+##### <a name="-profile--projectmanagement--perforce--version"></a>`version`
+
+Data type: `Perforce::Version`
+
+
+
+Default value: `$role::projectmanagement::perforce::version`
+
+##### <a name="-profile--projectmanagement--perforce--log_dir"></a>`log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::projectmanagement::perforce::log_dir`
+
+##### <a name="-profile--projectmanagement--perforce--log_file"></a>`log_file`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `"${log_dir}/p4d.log"`
+
+##### <a name="-profile--projectmanagement--perforce--log_level"></a>`log_level`
+
+Data type: `Perforce::LogLevel`
+
+
+
+Default value: `$role::projectmanagement::perforce::log_level`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector"></a>`git_connector`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::perforce::git_connector`
+
+##### <a name="-profile--projectmanagement--perforce--admin_user"></a>`admin_user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$role::projectmanagement::perforce::admin_user`
+
+##### <a name="-profile--projectmanagement--perforce--admin_password"></a>`admin_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$role::projectmanagement::perforce::admin_password`
+
+##### <a name="-profile--projectmanagement--perforce--operator_user"></a>`operator_user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$role::projectmanagement::perforce::operator_user`
+
+##### <a name="-profile--projectmanagement--perforce--operator_password"></a>`operator_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$role::projectmanagement::perforce::operator_password`
+
+##### <a name="-profile--projectmanagement--perforce--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::projectmanagement::perforce::backup_dir`
+
+##### <a name="-profile--projectmanagement--perforce--backup_retention"></a>`backup_retention`
+
+Data type: `Eit_types::Duration::Days`
+
+
+
+Default value: `7`
+
+### <a name="profile--projectmanagement--perforce--git_connector"></a>`profile::projectmanagement::perforce::git_connector`
+
+Helix Git Connector
+
+https://www.perforce.com/manuals/helix-for-git/Content/Helix4Git/Home-helix4git.html
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::perforce::git_connector` class:
+
+* [`version`](#-profile--projectmanagement--perforce--git_connector--version)
+* [`service_port`](#-profile--projectmanagement--perforce--git_connector--service_port)
+* [`p4_gconn_user`](#-profile--projectmanagement--perforce--git_connector--p4_gconn_user)
+* [`git_user_home`](#-profile--projectmanagement--perforce--git_connector--git_user_home)
+* [`gconn_dir`](#-profile--projectmanagement--perforce--git_connector--gconn_dir)
+* [`repos_dir`](#-profile--projectmanagement--perforce--git_connector--repos_dir)
+* [`log_dir`](#-profile--projectmanagement--perforce--git_connector--log_dir)
+* [`gconn_log_file`](#-profile--projectmanagement--perforce--git_connector--gconn_log_file)
+* [`gconn_log_level`](#-profile--projectmanagement--perforce--git_connector--gconn_log_level)
+* [`p4gc_log_file`](#-profile--projectmanagement--perforce--git_connector--p4gc_log_file)
+* [`p4gc_log_level`](#-profile--projectmanagement--perforce--git_connector--p4gc_log_level)
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--version"></a>`version`
+
+Data type: `Perforce::Version`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::version`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--service_port"></a>`service_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::service_port`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--p4_gconn_user"></a>`p4_gconn_user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::p4_gconn_user`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--git_user_home"></a>`git_user_home`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::git_user_home`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--gconn_dir"></a>`gconn_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::gconn_dir`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--repos_dir"></a>`repos_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::repos_dir`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--log_dir"></a>`log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::log_dir`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--gconn_log_file"></a>`gconn_log_file`
+
+Data type: `Perforce::LogFile`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::gconn_log_file`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--gconn_log_level"></a>`gconn_log_level`
+
+Data type: `Perforce::LogLevel`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::gconn_log_level`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--p4gc_log_file"></a>`p4gc_log_file`
+
+Data type: `Perforce::LogFile`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::p4gc_log_file`
+
+##### <a name="-profile--projectmanagement--perforce--git_connector--p4gc_log_level"></a>`p4gc_log_level`
+
+Data type: `Perforce::LogLevel`
+
+
+
+Default value: `$::role::projectmanagement::perforce::git_connector::p4gc_log_level`
+
+### <a name="profile--projectmanagement--perforce--icmanage"></a>`profile::projectmanagement::perforce::icmanage`
+
+ICManage on top of Perforce
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::perforce::icmanage` class:
+
+* [`version`](#-profile--projectmanagement--perforce--icmanage--version)
+* [`install_path`](#-profile--projectmanagement--perforce--icmanage--install_path)
+* [`hostname`](#-profile--projectmanagement--perforce--icmanage--hostname)
+* [`manage_db`](#-profile--projectmanagement--perforce--icmanage--manage_db)
+* [`root_password`](#-profile--projectmanagement--perforce--icmanage--root_password)
+* [`db_user`](#-profile--projectmanagement--perforce--icmanage--db_user)
+* [`db_password`](#-profile--projectmanagement--perforce--icmanage--db_password)
+* [`db_backup`](#-profile--projectmanagement--perforce--icmanage--db_backup)
+* [`db_admin_user`](#-profile--projectmanagement--perforce--icmanage--db_admin_user)
+* [`db_admin_password`](#-profile--projectmanagement--perforce--icmanage--db_admin_password)
+* [`db_charset`](#-profile--projectmanagement--perforce--icmanage--db_charset)
+* [`db_collate`](#-profile--projectmanagement--perforce--icmanage--db_collate)
+* [`config_file`](#-profile--projectmanagement--perforce--icmanage--config_file)
+* [`mysql_version`](#-profile--projectmanagement--perforce--icmanage--mysql_version)
+* [`backup_dir`](#-profile--projectmanagement--perforce--icmanage--backup_dir)
+* [`access_mysql_from`](#-profile--projectmanagement--perforce--icmanage--access_mysql_from)
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--version"></a>`version`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::version`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--install_path"></a>`install_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::install_path`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--hostname"></a>`hostname`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::hostname`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--manage_db"></a>`manage_db`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::manage_db`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--root_password"></a>`root_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::root_password`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_user"></a>`db_user`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_user`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_password"></a>`db_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_password`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_backup"></a>`db_backup`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_backup`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_admin_user"></a>`db_admin_user`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_admin_user`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_admin_password"></a>`db_admin_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_admin_password`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_charset"></a>`db_charset`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_charset`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--db_collate"></a>`db_collate`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::db_collate`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/etc/icmanage/icmPm.cfg'`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--mysql_version"></a>`mysql_version`
+
+Data type: `String`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::mysql_version`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--backup_dir"></a>`backup_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::backup_dir`
+
+##### <a name="-profile--projectmanagement--perforce--icmanage--access_mysql_from"></a>`access_mysql_from`
+
+Data type: `Array[Eit_types::IPCIDR]`
+
+
+
+Default value: `$::role::projectmanagement::perforce::icmanage::access_mysql_from`
+
+### <a name="profile--projectmanagement--readthedocs"></a>`profile::projectmanagement::readthedocs`
+
+Read The Docs
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::readthedocs` class:
+
+* [`upstream_git_repo`](#-profile--projectmanagement--readthedocs--upstream_git_repo)
+* [`revision`](#-profile--projectmanagement--readthedocs--revision)
+* [`bind`](#-profile--projectmanagement--readthedocs--bind)
+* [`port`](#-profile--projectmanagement--readthedocs--port)
+* [`ssl_combined_pem`](#-profile--projectmanagement--readthedocs--ssl_combined_pem)
+* [`manage_haproxy`](#-profile--projectmanagement--readthedocs--manage_haproxy)
+* [`public_domainname`](#-profile--projectmanagement--readthedocs--public_domainname)
+
+##### <a name="-profile--projectmanagement--readthedocs--upstream_git_repo"></a>`upstream_git_repo`
+
+Data type: `Eit_types::URL`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::upstream_git_repo`
+
+##### <a name="-profile--projectmanagement--readthedocs--revision"></a>`revision`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::revision`
+
+##### <a name="-profile--projectmanagement--readthedocs--bind"></a>`bind`
+
+Data type: `Eit_types::Host`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::bind`
+
+##### <a name="-profile--projectmanagement--readthedocs--port"></a>`port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::port`
+
+##### <a name="-profile--projectmanagement--readthedocs--ssl_combined_pem"></a>`ssl_combined_pem`
+
+Data type: `String`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::ssl_combined_pem`
+
+##### <a name="-profile--projectmanagement--readthedocs--manage_haproxy"></a>`manage_haproxy`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::manage_haproxy`
+
+##### <a name="-profile--projectmanagement--readthedocs--public_domainname"></a>`public_domainname`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$::role::projectmanagement::readthedocs::public_domainname`
+
+### <a name="profile--projectmanagement--subversion"></a>`profile::projectmanagement::subversion`
+
+Subversion enable
+
+#### Parameters
+
+The following parameters are available in the `profile::projectmanagement::subversion` class:
+
+* [`enable`](#-profile--projectmanagement--subversion--enable)
+* [`domain`](#-profile--projectmanagement--subversion--domain)
+* [`path`](#-profile--projectmanagement--subversion--path)
+* [`dir`](#-profile--projectmanagement--subversion--dir)
+* [`backup_dir`](#-profile--projectmanagement--subversion--backup_dir)
+* [`user`](#-profile--projectmanagement--subversion--user)
+* [`password`](#-profile--projectmanagement--subversion--password)
+* [`noop_value`](#-profile--projectmanagement--subversion--noop_value)
+
+##### <a name="-profile--projectmanagement--subversion--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::projectmanagement::subversion::enable`
+
+##### <a name="-profile--projectmanagement--subversion--domain"></a>`domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+
+
+Default value: `$role::projectmanagement::subversion::domain`
+
+##### <a name="-profile--projectmanagement--subversion--path"></a>`path`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$role::projectmanagement::subversion::path`
+
+##### <a name="-profile--projectmanagement--subversion--dir"></a>`dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$role::projectmanagement::subversion::dir`
+
+##### <a name="-profile--projectmanagement--subversion--backup_dir"></a>`backup_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$role::projectmanagement::subversion::backup_dir`
+
+##### <a name="-profile--projectmanagement--subversion--user"></a>`user`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::subversion::user`
+
+##### <a name="-profile--projectmanagement--subversion--password"></a>`password`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$role::projectmanagement::subversion::password`
+
+##### <a name="-profile--projectmanagement--subversion--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$role::projectmanagement::subversion::noop_value`
+
+### <a name="profile--provisioning--razor"></a>`profile::provisioning::razor`
+
+razor
+
+#### Parameters
+
+The following parameters are available in the `profile::provisioning::razor` class:
+
+* [`manage_postgres`](#-profile--provisioning--razor--manage_postgres)
+* [`db_server`](#-profile--provisioning--razor--db_server)
+* [`db_name`](#-profile--provisioning--razor--db_name)
+* [`db_user`](#-profile--provisioning--razor--db_user)
+* [`db_password`](#-profile--provisioning--razor--db_password)
+* [`dhcp_start`](#-profile--provisioning--razor--dhcp_start)
+* [`dhcp_end`](#-profile--provisioning--razor--dhcp_end)
+* [`dhcp_route`](#-profile--provisioning--razor--dhcp_route)
+* [`dhcp_dns`](#-profile--provisioning--razor--dhcp_dns)
+* [`dhcp_domain`](#-profile--provisioning--razor--dhcp_domain)
+* [`manage_tftpd`](#-profile--provisioning--razor--manage_tftpd)
+
+##### <a name="-profile--provisioning--razor--manage_postgres"></a>`manage_postgres`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::provisioning::razor::manage_postgres`
+
+##### <a name="-profile--provisioning--razor--db_server"></a>`db_server`
+
+Data type: `Eit_types::Host`
+
+
+
+Default value: `$role::provisioning::razor::db_server`
+
+##### <a name="-profile--provisioning--razor--db_name"></a>`db_name`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::provisioning::razor::db_name`
+
+##### <a name="-profile--provisioning--razor--db_user"></a>`db_user`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::provisioning::razor::db_user`
+
+##### <a name="-profile--provisioning--razor--db_password"></a>`db_password`
+
+Data type: `Eit_types::Password`
+
+
+
+Default value: `$role::provisioning::razor::db_password`
+
+##### <a name="-profile--provisioning--razor--dhcp_start"></a>`dhcp_start`
+
+Data type: `Eit_types::IP`
+
+
+
+Default value: `$role::provisioning::razor::dhcp_start`
+
+##### <a name="-profile--provisioning--razor--dhcp_end"></a>`dhcp_end`
+
+Data type: `Eit_types::IP`
+
+
+
+Default value: `$role::provisioning::razor::dhcp_end`
+
+##### <a name="-profile--provisioning--razor--dhcp_route"></a>`dhcp_route`
+
+Data type: `Eit_types::IP`
+
+
+
+Default value: `$role::provisioning::razor::dhcp_route`
+
+##### <a name="-profile--provisioning--razor--dhcp_dns"></a>`dhcp_dns`
+
+Data type: `Array[Eit_types::IP, 1]`
+
+
+
+Default value: `$role::provisioning::razor::dhcp_dns`
+
+##### <a name="-profile--provisioning--razor--dhcp_domain"></a>`dhcp_domain`
+
+Data type: `Eit_types::Domain`
+
+
+
+Default value: `$role::provisioning::razor::dhcp_domain`
+
+##### <a name="-profile--provisioning--razor--manage_tftpd"></a>`manage_tftpd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::provisioning::razor::manage_tftpd`
+
 ### <a name="profile--puppet"></a>`profile::puppet`
 
 Manage puppet agent
@@ -1522,6 +5638,7 @@ The following parameters are available in the `profile::puppet` class:
 * [`run_agent_as_noop`](#-profile--puppet--run_agent_as_noop)
 * [`extra_main_settings`](#-profile--puppet--extra_main_settings)
 * [`package_version_suffix`](#-profile--puppet--package_version_suffix)
+* [`package_version_prefix`](#-profile--puppet--package_version_prefix)
 * [`aio_package_name`](#-profile--puppet--aio_package_name)
 * [`environment`](#-profile--puppet--environment)
 
@@ -1605,13 +5722,21 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
+##### <a name="-profile--puppet--package_version_prefix"></a>`package_version_prefix`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
 ##### <a name="-profile--puppet--aio_package_name"></a>`aio_package_name`
 
 Data type: `String`
 
 
 
-Default value: `'puppet-agent'`
+Default value: `$::common::puppet::package_name`
 
 ##### <a name="-profile--puppet--environment"></a>`environment`
 
@@ -1620,6 +5745,14 @@ Data type: `String`
 
 
 Default value: `$::common::puppet::environment`
+
+### <a name="profile--puppet--clientbucket"></a>`profile::puppet::clientbucket`
+
+profile::puppet::clientbucket for puppet clientbucket cache cleanup
+
+### <a name="profile--puppet--run_puppet"></a>`profile::puppet::run_puppet`
+
+Run puppet on client nodes
 
 ### <a name="profile--puppetdb"></a>`profile::puppetdb`
 
@@ -1730,6 +5863,10 @@ Data type: `Boolean`
 
 
 Default value: `true`
+
+### <a name="profile--rsnapshot--config"></a>`profile::rsnapshot::config`
+
+RsnapShot config
 
 ### <a name="profile--rsyslog"></a>`profile::rsyslog`
 
@@ -1920,6 +6057,900 @@ Data type: `Any`
 
 Default value: `undef`
 
+### <a name="profile--scanner--openvas"></a>`profile::scanner::openvas`
+
+The profile::scanner::openvas class.
+
+#### Parameters
+
+The following parameters are available in the `profile::scanner::openvas` class:
+
+* [`install_dir`](#-profile--scanner--openvas--install_dir)
+* [`install`](#-profile--scanner--openvas--install)
+* [`web_bind_address`](#-profile--scanner--openvas--web_bind_address)
+* [`web_port`](#-profile--scanner--openvas--web_port)
+* [`openvasd_mode`](#-profile--scanner--openvas--openvasd_mode)
+* [`openvasd_addressport`](#-profile--scanner--openvas--openvasd_addressport)
+* [`storage_path`](#-profile--scanner--openvas--storage_path)
+* [`registry`](#-profile--scanner--openvas--registry)
+* [`vulnerability_tests_version`](#-profile--scanner--openvas--vulnerability_tests_version)
+* [`notus_data_version`](#-profile--scanner--openvas--notus_data_version)
+* [`scap_data_version`](#-profile--scanner--openvas--scap_data_version)
+* [`cert_bund_data_version`](#-profile--scanner--openvas--cert_bund_data_version)
+* [`dfn_cert_data_version`](#-profile--scanner--openvas--dfn_cert_data_version)
+* [`data_objects_version`](#-profile--scanner--openvas--data_objects_version)
+* [`report_formats_version`](#-profile--scanner--openvas--report_formats_version)
+* [`gpg_data_version`](#-profile--scanner--openvas--gpg_data_version)
+* [`redis_server_version`](#-profile--scanner--openvas--redis_server_version)
+* [`pg_gvm_version`](#-profile--scanner--openvas--pg_gvm_version)
+* [`gsa_version`](#-profile--scanner--openvas--gsa_version)
+* [`gvmd_version`](#-profile--scanner--openvas--gvmd_version)
+* [`openvas_scanner_version`](#-profile--scanner--openvas--openvas_scanner_version)
+* [`ospd_openvas_version`](#-profile--scanner--openvas--ospd_openvas_version)
+* [`gvm_tools_version`](#-profile--scanner--openvas--gvm_tools_version)
+* [`feed_release_version`](#-profile--scanner--openvas--feed_release_version)
+* [`data_mount_path`](#-profile--scanner--openvas--data_mount_path)
+* [`gvm_data_path`](#-profile--scanner--openvas--gvm_data_path)
+* [`openvas_plugins_path`](#-profile--scanner--openvas--openvas_plugins_path)
+* [`redis_socket_path`](#-profile--scanner--openvas--redis_socket_path)
+* [`gvmd_socket_path`](#-profile--scanner--openvas--gvmd_socket_path)
+* [`ospd_socket_path`](#-profile--scanner--openvas--ospd_socket_path)
+* [`psql_data_path`](#-profile--scanner--openvas--psql_data_path)
+* [`psql_socket_path`](#-profile--scanner--openvas--psql_socket_path)
+* [`openvas_config_path`](#-profile--scanner--openvas--openvas_config_path)
+* [`openvas_log_path`](#-profile--scanner--openvas--openvas_log_path)
+* [`notus_path`](#-profile--scanner--openvas--notus_path)
+
+##### <a name="-profile--scanner--openvas--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::install_dir`
+
+##### <a name="-profile--scanner--openvas--install"></a>`install`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::scanner::openvas::install`
+
+##### <a name="-profile--scanner--openvas--web_bind_address"></a>`web_bind_address`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$role::scanner::openvas::web_bind_address`
+
+##### <a name="-profile--scanner--openvas--web_port"></a>`web_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$role::scanner::openvas::web_port`
+
+##### <a name="-profile--scanner--openvas--openvasd_mode"></a>`openvasd_mode`
+
+Data type: `Enum['service_notus']`
+
+
+
+Default value: `$role::scanner::openvas::openvasd_mode`
+
+##### <a name="-profile--scanner--openvas--openvasd_addressport"></a>`openvasd_addressport`
+
+Data type: `Eit_types::Addressport`
+
+
+
+Default value: `$role::scanner::openvas::openvasd_addressport`
+
+##### <a name="-profile--scanner--openvas--storage_path"></a>`storage_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::storage_path`
+
+##### <a name="-profile--scanner--openvas--registry"></a>`registry`
+
+Data type: `String`
+
+
+
+Default value: `$role::scanner::openvas::registry`
+
+##### <a name="-profile--scanner--openvas--vulnerability_tests_version"></a>`vulnerability_tests_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::vulnerability_tests_version`
+
+##### <a name="-profile--scanner--openvas--notus_data_version"></a>`notus_data_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::notus_data_version`
+
+##### <a name="-profile--scanner--openvas--scap_data_version"></a>`scap_data_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::scap_data_version`
+
+##### <a name="-profile--scanner--openvas--cert_bund_data_version"></a>`cert_bund_data_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::cert_bund_data_version`
+
+##### <a name="-profile--scanner--openvas--dfn_cert_data_version"></a>`dfn_cert_data_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::dfn_cert_data_version`
+
+##### <a name="-profile--scanner--openvas--data_objects_version"></a>`data_objects_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::data_objects_version`
+
+##### <a name="-profile--scanner--openvas--report_formats_version"></a>`report_formats_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::report_formats_version`
+
+##### <a name="-profile--scanner--openvas--gpg_data_version"></a>`gpg_data_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::gpg_data_version`
+
+##### <a name="-profile--scanner--openvas--redis_server_version"></a>`redis_server_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::redis_server_version`
+
+##### <a name="-profile--scanner--openvas--pg_gvm_version"></a>`pg_gvm_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::pg_gvm_version`
+
+##### <a name="-profile--scanner--openvas--gsa_version"></a>`gsa_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::gsa_version`
+
+##### <a name="-profile--scanner--openvas--gvmd_version"></a>`gvmd_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::gvmd_version`
+
+##### <a name="-profile--scanner--openvas--openvas_scanner_version"></a>`openvas_scanner_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::openvas_scanner_version`
+
+##### <a name="-profile--scanner--openvas--ospd_openvas_version"></a>`ospd_openvas_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::ospd_openvas_version`
+
+##### <a name="-profile--scanner--openvas--gvm_tools_version"></a>`gvm_tools_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::gvm_tools_version`
+
+##### <a name="-profile--scanner--openvas--feed_release_version"></a>`feed_release_version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$role::scanner::openvas::feed_release_version`
+
+##### <a name="-profile--scanner--openvas--data_mount_path"></a>`data_mount_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::data_mount_path`
+
+##### <a name="-profile--scanner--openvas--gvm_data_path"></a>`gvm_data_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::gvm_data_path`
+
+##### <a name="-profile--scanner--openvas--openvas_plugins_path"></a>`openvas_plugins_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::openvas_plugins_path`
+
+##### <a name="-profile--scanner--openvas--redis_socket_path"></a>`redis_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::redis_socket_path`
+
+##### <a name="-profile--scanner--openvas--gvmd_socket_path"></a>`gvmd_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::gvmd_socket_path`
+
+##### <a name="-profile--scanner--openvas--ospd_socket_path"></a>`ospd_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::ospd_socket_path`
+
+##### <a name="-profile--scanner--openvas--psql_data_path"></a>`psql_data_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::psql_data_path`
+
+##### <a name="-profile--scanner--openvas--psql_socket_path"></a>`psql_socket_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::psql_socket_path`
+
+##### <a name="-profile--scanner--openvas--openvas_config_path"></a>`openvas_config_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::openvas_config_path`
+
+##### <a name="-profile--scanner--openvas--openvas_log_path"></a>`openvas_log_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::openvas_log_path`
+
+##### <a name="-profile--scanner--openvas--notus_path"></a>`notus_path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::scanner::openvas::notus_path`
+
+### <a name="profile--software--ansoftrsmservice"></a>`profile::software::ansoftrsmservice`
+
+This class installs and manages the Ansoft RSM systemd service,
+including setting up environment variables and configuring
+the service startup command.
+
+#### Parameters
+
+The following parameters are available in the `profile::software::ansoftrsmservice` class:
+
+* [`enable`](#-profile--software--ansoftrsmservice--enable)
+* [`env`](#-profile--software--ansoftrsmservice--env)
+* [`ansysrsm_path`](#-profile--software--ansoftrsmservice--ansysrsm_path)
+
+##### <a name="-profile--software--ansoftrsmservice--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Whether to enable and manage the service. Defaults to value from
+`common::software::ansoftrsmservice::enable`.
+
+Default value: `$common::software::ansoftrsmservice::enable`
+
+##### <a name="-profile--software--ansoftrsmservice--env"></a>`env`
+
+Data type: `Hash`
+
+A hash of environment variables to set in `/etc/default/ansoftrsmservice`.
+Defaults to value from `common::software::ansoftrsmservice::env`.
+
+Default value: `$common::software::ansoftrsmservice::env`
+
+##### <a name="-profile--software--ansoftrsmservice--ansysrsm_path"></a>`ansysrsm_path`
+
+Data type: `String`
+
+The base installation path of the Ansoft RSM software.
+Used in both environment variables and ExecStart.
+Defaults to value from `common::software::ansoftrsmservice::ansysrsm_path`.
+
+Default value: `$common::software::ansoftrsmservice::ansysrsm_path`
+
+### <a name="profile--software--cloudamize"></a>`profile::software::cloudamize`
+
+Cloudamize
+
+#### Parameters
+
+The following parameters are available in the `profile::software::cloudamize` class:
+
+* [`__packages`](#-profile--software--cloudamize--__packages)
+* [`enable`](#-profile--software--cloudamize--enable)
+* [`customer_key`](#-profile--software--cloudamize--customer_key)
+* [`noop_value`](#-profile--software--cloudamize--noop_value)
+
+##### <a name="-profile--software--cloudamize--__packages"></a>`__packages`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+##### <a name="-profile--software--cloudamize--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::cloudamize::enable`
+
+##### <a name="-profile--software--cloudamize--customer_key"></a>`customer_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::software::cloudamize::customer_key`
+
+##### <a name="-profile--software--cloudamize--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::cloudamize::noop_value`
+
+### <a name="profile--software--dependencyagent"></a>`profile::software::dependencyagent`
+
+Azure dependency agent
+
+#### Parameters
+
+The following parameters are available in the `profile::software::dependencyagent` class:
+
+* [`enable`](#-profile--software--dependencyagent--enable)
+* [`noop_value`](#-profile--software--dependencyagent--noop_value)
+
+##### <a name="-profile--software--dependencyagent--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::dependencyagent::enable`
+
+##### <a name="-profile--software--dependencyagent--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::dependencyagent::noop_value`
+
+### <a name="profile--software--fwupd"></a>`profile::software::fwupd`
+
+Fwupd
+
+#### Parameters
+
+The following parameters are available in the `profile::software::fwupd` class:
+
+* [`enable`](#-profile--software--fwupd--enable)
+* [`noop_value`](#-profile--software--fwupd--noop_value)
+
+##### <a name="-profile--software--fwupd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::fwupd::enable`
+
+##### <a name="-profile--software--fwupd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::fwupd::noop_value`
+
+### <a name="profile--software--insights"></a>`profile::software::insights`
+
+Redhat insights-client
+
+#### Parameters
+
+The following parameters are available in the `profile::software::insights` class:
+
+* [`enable`](#-profile--software--insights--enable)
+* [`noop_value`](#-profile--software--insights--noop_value)
+
+##### <a name="-profile--software--insights--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::insights::enable`
+
+##### <a name="-profile--software--insights--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::insights::noop_value`
+
+### <a name="profile--software--iptables_api"></a>`profile::software::iptables_api`
+
+iptables_api
+
+#### Parameters
+
+The following parameters are available in the `profile::software::iptables_api` class:
+
+* [`enable`](#-profile--software--iptables_api--enable)
+* [`noop_value`](#-profile--software--iptables_api--noop_value)
+* [`listen_address`](#-profile--software--iptables_api--listen_address)
+
+##### <a name="-profile--software--iptables_api--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::iptables_api::enable`
+
+##### <a name="-profile--software--iptables_api--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::iptables_api::noop_value`
+
+##### <a name="-profile--software--iptables_api--listen_address"></a>`listen_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `$common::software::iptables_api::listen_address`
+
+### <a name="profile--software--microsoft_mde"></a>`profile::software::microsoft_mde`
+
+Microsoft Defender for Endpoint
+
+#### Parameters
+
+The following parameters are available in the `profile::software::microsoft_mde` class:
+
+* [`enable`](#-profile--software--microsoft_mde--enable)
+* [`noop_value`](#-profile--software--microsoft_mde--noop_value)
+* [`version`](#-profile--software--microsoft_mde--version)
+* [`onboard_config`](#-profile--software--microsoft_mde--onboard_config)
+* [`exclusions`](#-profile--software--microsoft_mde--exclusions)
+
+##### <a name="-profile--software--microsoft_mde--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::microsoft_mde::enable`
+
+##### <a name="-profile--software--microsoft_mde--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::microsoft_mde::noop_value`
+
+##### <a name="-profile--software--microsoft_mde--version"></a>`version`
+
+Data type: `Eit_types::Package::Version::Installed`
+
+
+
+Default value: `$common::software::microsoft_mde::version`
+
+##### <a name="-profile--software--microsoft_mde--onboard_config"></a>`onboard_config`
+
+Data type: `Optional[Eit_Files::Source]`
+
+
+
+Default value: `$common::software::microsoft_mde::onboard_config`
+
+##### <a name="-profile--software--microsoft_mde--exclusions"></a>`exclusions`
+
+Data type: `Eit_types::Microsoft::Mde::Exclusions`
+
+
+
+Default value: `$common::software::microsoft_mde::exclusions`
+
+### <a name="profile--software--msftlinuxpatchautoassess"></a>`profile::software::msftlinuxpatchautoassess`
+
+Azure Linux VM Patch Extension
+
+#### Parameters
+
+The following parameters are available in the `profile::software::msftlinuxpatchautoassess` class:
+
+* [`enable`](#-profile--software--msftlinuxpatchautoassess--enable)
+
+##### <a name="-profile--software--msftlinuxpatchautoassess--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::msftlinuxpatchautoassess::enable`
+
+### <a name="profile--software--nvidia_driver"></a>`profile::software::nvidia_driver`
+
+Nvidia Driver
+
+#### Parameters
+
+The following parameters are available in the `profile::software::nvidia_driver` class:
+
+* [`enable`](#-profile--software--nvidia_driver--enable)
+* [`noop_value`](#-profile--software--nvidia_driver--noop_value)
+
+##### <a name="-profile--software--nvidia_driver--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::nvidia_driver::enable`
+
+##### <a name="-profile--software--nvidia_driver--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::nvidia_driver::noop_value`
+
+### <a name="profile--software--rubrik"></a>`profile::software::rubrik`
+
+Rubrik backup
+
+#### Parameters
+
+The following parameters are available in the `profile::software::rubrik` class:
+
+* [`enable`](#-profile--software--rubrik--enable)
+* [`noop_value`](#-profile--software--rubrik--noop_value)
+
+##### <a name="-profile--software--rubrik--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::rubrik::enable`
+
+##### <a name="-profile--software--rubrik--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::rubrik::noop_value`
+
+### <a name="profile--software--rustdesk"></a>`profile::software::rustdesk`
+
+Rustdesk Setup
+
+#### Parameters
+
+The following parameters are available in the `profile::software::rustdesk` class:
+
+* [`enable`](#-profile--software--rustdesk--enable)
+* [`version`](#-profile--software--rustdesk--version)
+* [`noop_value`](#-profile--software--rustdesk--noop_value)
+* [`dependencies`](#-profile--software--rustdesk--dependencies)
+
+##### <a name="-profile--software--rustdesk--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::rustdesk::enable`
+
+##### <a name="-profile--software--rustdesk--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$common::software::rustdesk::version`
+
+##### <a name="-profile--software--rustdesk--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::rustdesk::noop_value`
+
+##### <a name="-profile--software--rustdesk--dependencies"></a>`dependencies`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$common::software::rustdesk::dependencies`
+
+### <a name="profile--software--teleport"></a>`profile::software::teleport`
+
+teleport
+
+#### Parameters
+
+The following parameters are available in the `profile::software::teleport` class:
+
+* [`enable`](#-profile--software--teleport--enable)
+* [`noop_value`](#-profile--software--teleport--noop_value)
+* [`join_token`](#-profile--software--teleport--join_token)
+* [`ca_pin`](#-profile--software--teleport--ca_pin)
+
+##### <a name="-profile--software--teleport--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::teleport::enable`
+
+##### <a name="-profile--software--teleport--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::teleport::noop_value`
+
+##### <a name="-profile--software--teleport--join_token"></a>`join_token`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::software::teleport::join_token`
+
+##### <a name="-profile--software--teleport--ca_pin"></a>`ca_pin`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::software::teleport::ca_pin`
+
+### <a name="profile--software--vncserver"></a>`profile::software::vncserver`
+
+VNC Server
+
+#### Parameters
+
+The following parameters are available in the `profile::software::vncserver` class:
+
+* [`enable`](#-profile--software--vncserver--enable)
+* [`noop_value`](#-profile--software--vncserver--noop_value)
+* [`config_defaults`](#-profile--software--vncserver--config_defaults)
+* [`vnc_users`](#-profile--software--vncserver--vnc_users)
+* [`systemd_service`](#-profile--software--vncserver--systemd_service)
+
+##### <a name="-profile--software--vncserver--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::vncserver::enable`
+
+##### <a name="-profile--software--vncserver--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::vncserver::noop_value`
+
+##### <a name="-profile--software--vncserver--config_defaults"></a>`config_defaults`
+
+Data type:
+
+```puppet
+Struct[{
+    session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
+    geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+    localhost => Optional[Enum['yes', 'no']],
+  }]
+```
+
+
+
+Default value: `$common::software::vncserver::config_defaults`
+
+##### <a name="-profile--software--vncserver--vnc_users"></a>`vnc_users`
+
+Data type: `Hash[String, Stdlib::Port]`
+
+
+
+Default value: `$common::software::vncserver::vnc_users`
+
+##### <a name="-profile--software--vncserver--systemd_service"></a>`systemd_service`
+
+Data type: `Enum['vncserver', 'tigervncserver']`
+
+
+
+Default value: `$common::software::vncserver::systemd_service`
+
+### <a name="profile--software--vscode"></a>`profile::software::vscode`
+
+Vscode
+
+#### Parameters
+
+The following parameters are available in the `profile::software::vscode` class:
+
+* [`enable`](#-profile--software--vscode--enable)
+* [`noop_value`](#-profile--software--vscode--noop_value)
+
+##### <a name="-profile--software--vscode--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::vscode::enable`
+
+##### <a name="-profile--software--vscode--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::vscode::noop_value`
+
+### <a name="profile--software--walinuxagent"></a>`profile::software::walinuxagent`
+
+Azure walinuxagent
+
+#### Parameters
+
+The following parameters are available in the `profile::software::walinuxagent` class:
+
+* [`enable`](#-profile--software--walinuxagent--enable)
+* [`manage`](#-profile--software--walinuxagent--manage)
+* [`noop_value`](#-profile--software--walinuxagent--noop_value)
+* [`__linux_azure_package`](#-profile--software--walinuxagent--__linux_azure_package)
+* [`__linux_azure_service`](#-profile--software--walinuxagent--__linux_azure_service)
+* [`waagent_memory_limit`](#-profile--software--walinuxagent--waagent_memory_limit)
+
+##### <a name="-profile--software--walinuxagent--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::walinuxagent::enable`
+
+##### <a name="-profile--software--walinuxagent--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::software::walinuxagent::manage`
+
+##### <a name="-profile--software--walinuxagent--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::software::walinuxagent::noop_value`
+
+##### <a name="-profile--software--walinuxagent--__linux_azure_package"></a>`__linux_azure_package`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$common::software::walinuxagent::__linux_azure_package`
+
+##### <a name="-profile--software--walinuxagent--__linux_azure_service"></a>`__linux_azure_service`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$common::software::walinuxagent::__linux_azure_service`
+
+##### <a name="-profile--software--walinuxagent--waagent_memory_limit"></a>`waagent_memory_limit`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::software::walinuxagent::waagent_memory_limit`
+
 ### <a name="profile--storage"></a>`profile::storage`
 
 Storage-related stuff
@@ -1940,9 +6971,1835 @@ Data type: `Eit_types::Common::Storage::Mounts`
 
 Default value: `$common::storage::mounts`
 
+### <a name="profile--storage--backuphost"></a>`profile::storage::backuphost`
+
+Storage backuphost profile
+
+### <a name="profile--storage--beegfs"></a>`profile::storage::beegfs`
+
+beegfs
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::beegfs` class:
+
+* [`enable`](#-profile--storage--beegfs--enable)
+* [`mgmtd_host`](#-profile--storage--beegfs--mgmtd_host)
+* [`storage_directory`](#-profile--storage--beegfs--storage_directory)
+* [`client`](#-profile--storage--beegfs--client)
+* [`mgmtd`](#-profile--storage--beegfs--mgmtd)
+* [`storage`](#-profile--storage--beegfs--storage)
+* [`meta`](#-profile--storage--beegfs--meta)
+* [`admon`](#-profile--storage--beegfs--admon)
+* [`admon_http_port`](#-profile--storage--beegfs--admon_http_port)
+* [`storage_port`](#-profile--storage--beegfs--storage_port)
+* [`client_udp_port`](#-profile--storage--beegfs--client_udp_port)
+* [`meta_port`](#-profile--storage--beegfs--meta_port)
+* [`helperd_tcp_port`](#-profile--storage--beegfs--helperd_tcp_port)
+* [`admon_udp_port`](#-profile--storage--beegfs--admon_udp_port)
+* [`mgmtd_port`](#-profile--storage--beegfs--mgmtd_port)
+* [`interfaces`](#-profile--storage--beegfs--interfaces)
+
+##### <a name="-profile--storage--beegfs--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::enable`
+
+##### <a name="-profile--storage--beegfs--mgmtd_host"></a>`mgmtd_host`
+
+Data type: `Eit_types::Host`
+
+
+
+Default value: `$::role::storage::beegfs::mgmtd_host`
+
+##### <a name="-profile--storage--beegfs--storage_directory"></a>`storage_directory`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+
+
+Default value: `$::role::storage::beegfs::storage_directory`
+
+##### <a name="-profile--storage--beegfs--client"></a>`client`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::client`
+
+##### <a name="-profile--storage--beegfs--mgmtd"></a>`mgmtd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::mgmtd`
+
+##### <a name="-profile--storage--beegfs--storage"></a>`storage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::storage`
+
+##### <a name="-profile--storage--beegfs--meta"></a>`meta`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::meta`
+
+##### <a name="-profile--storage--beegfs--admon"></a>`admon`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::storage::beegfs::admon`
+
+##### <a name="-profile--storage--beegfs--admon_http_port"></a>`admon_http_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::admon_http_port`
+
+##### <a name="-profile--storage--beegfs--storage_port"></a>`storage_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::storage_port`
+
+##### <a name="-profile--storage--beegfs--client_udp_port"></a>`client_udp_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::client_udp_port`
+
+##### <a name="-profile--storage--beegfs--meta_port"></a>`meta_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::meta_port`
+
+##### <a name="-profile--storage--beegfs--helperd_tcp_port"></a>`helperd_tcp_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::helperd_tcp_port`
+
+##### <a name="-profile--storage--beegfs--admon_udp_port"></a>`admon_udp_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::admon_udp_port`
+
+##### <a name="-profile--storage--beegfs--mgmtd_port"></a>`mgmtd_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::role::storage::beegfs::mgmtd_port`
+
+##### <a name="-profile--storage--beegfs--interfaces"></a>`interfaces`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$::role::storage::beegfs::interfaces`
+
+### <a name="profile--storage--block"></a>`profile::storage::block`
+
+Storage Block profile
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::block` class:
+
+* [`devices`](#-profile--storage--block--devices)
+
+##### <a name="-profile--storage--block--devices"></a>`devices`
+
+Data type:
+
+```puppet
+Hash[
+    String,
+    Struct[{
+      device                             => Stdlib::Absolutepath,
+      Optional[target]                   => Stdlib::Absolutepath,
+      Optional[mount]                    => Boolean,
+      Optional[use_luks]                 => Boolean,
+      Optional[luks_secret]              => String[1],
+      Optional[luks_key_service]         => Eit_types::URL,
+      Optional[luks_key_service_headers] => Hash[String, String],
+    }]
+  ]
+```
+
+
+
+Default value: `{}`
+
+### <a name="profile--storage--nfs"></a>`profile::storage::nfs`
+
+Storage NFS profile
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::nfs` class:
+
+* [`enable`](#-profile--storage--nfs--enable)
+* [`unmount_snapshots`](#-profile--storage--nfs--unmount_snapshots)
+
+##### <a name="-profile--storage--nfs--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::storage::nfs::enable`
+
+##### <a name="-profile--storage--nfs--unmount_snapshots"></a>`unmount_snapshots`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::storage::nfs::unmount_snapshots`
+
+### <a name="profile--storage--nfs--server"></a>`profile::storage::nfs::server`
+
+nfs server; should only be included from resource
+profile::storage::nfs::server::export
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::nfs::server` class:
+
+* [`enable`](#-profile--storage--nfs--server--enable)
+* [`exports`](#-profile--storage--nfs--server--exports)
+* [`listen_interface`](#-profile--storage--nfs--server--listen_interface)
+* [`nfs_port`](#-profile--storage--nfs--server--nfs_port)
+* [`mountd_port`](#-profile--storage--nfs--server--mountd_port)
+
+##### <a name="-profile--storage--nfs--server--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::storage::nfs::server::enable`
+
+##### <a name="-profile--storage--nfs--server--exports"></a>`exports`
+
+Data type: `Eit_types::Storage::Nfs::Exports`
+
+
+
+Default value: `$::common::storage::nfs::server::exports`
+
+##### <a name="-profile--storage--nfs--server--listen_interface"></a>`listen_interface`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `$::common::storage::nfs::server::listen_interface`
+
+##### <a name="-profile--storage--nfs--server--nfs_port"></a>`nfs_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `2049`
+
+##### <a name="-profile--storage--nfs--server--mountd_port"></a>`mountd_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `892`
+
+### <a name="profile--storage--s3"></a>`profile::storage::s3`
+
+s3 storage
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::s3` class:
+
+* [`endpoint`](#-profile--storage--s3--endpoint)
+* [`manage`](#-profile--storage--s3--manage)
+* [`data_dir`](#-profile--storage--s3--data_dir)
+* [`metadata_dir`](#-profile--storage--s3--metadata_dir)
+* [`image`](#-profile--storage--s3--image)
+* [`conf_dir`](#-profile--storage--s3--conf_dir)
+* [`roles`](#-profile--storage--s3--roles)
+
+##### <a name="-profile--storage--s3--endpoint"></a>`endpoint`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$role::storage::s3::endpoint`
+
+##### <a name="-profile--storage--s3--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::storage::s3::manage`
+
+##### <a name="-profile--storage--s3--data_dir"></a>`data_dir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::storage::s3::data_dir`
+
+##### <a name="-profile--storage--s3--metadata_dir"></a>`metadata_dir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::storage::s3::metadata_dir`
+
+##### <a name="-profile--storage--s3--image"></a>`image`
+
+Data type: `String`
+
+
+
+Default value: `$role::storage::s3::image`
+
+##### <a name="-profile--storage--s3--conf_dir"></a>`conf_dir`
+
+Data type: `Stdlib::Unixpath`
+
+
+
+Default value: `$role::storage::s3::conf_dir`
+
+##### <a name="-profile--storage--s3--roles"></a>`roles`
+
+Data type: `Eit_types::Storage::S3`
+
+
+
+Default value: `$role::storage::s3::roles`
+
+### <a name="profile--storage--samba"></a>`profile::storage::samba`
+
+samba shares
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::samba` class:
+
+* [`workgroup`](#-profile--storage--samba--workgroup)
+* [`server_string`](#-profile--storage--samba--server_string)
+* [`security`](#-profile--storage--samba--security)
+* [`local_master`](#-profile--storage--samba--local_master)
+* [`domain_master`](#-profile--storage--samba--domain_master)
+* [`preferred_master`](#-profile--storage--samba--preferred_master)
+* [`realm`](#-profile--storage--samba--realm)
+* [`load_printers`](#-profile--storage--samba--load_printers)
+* [`printcap_name`](#-profile--storage--samba--printcap_name)
+* [`shares`](#-profile--storage--samba--shares)
+* [`listen_interfaces`](#-profile--storage--samba--listen_interfaces)
+* [`global_options`](#-profile--storage--samba--global_options)
+* [`map_to_guest`](#-profile--storage--samba--map_to_guest)
+* [`idmap_config`](#-profile--storage--samba--idmap_config)
+
+##### <a name="-profile--storage--samba--workgroup"></a>`workgroup`
+
+Data type: `String`
+
+
+
+Default value: `$::common::storage::samba::workgroup`
+
+##### <a name="-profile--storage--samba--server_string"></a>`server_string`
+
+Data type: `String`
+
+
+
+Default value: `$::common::storage::samba::server_string`
+
+##### <a name="-profile--storage--samba--security"></a>`security`
+
+Data type: `Enum['ADS', 'user']`
+
+
+
+Default value: `$::common::storage::samba::security`
+
+##### <a name="-profile--storage--samba--local_master"></a>`local_master`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$::common::storage::samba::local_master`
+
+##### <a name="-profile--storage--samba--domain_master"></a>`domain_master`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$::common::storage::samba::domain_master`
+
+##### <a name="-profile--storage--samba--preferred_master"></a>`preferred_master`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$::common::storage::samba::preferred_master`
+
+##### <a name="-profile--storage--samba--realm"></a>`realm`
+
+Data type: `Optional[Eit_types::Domain]`
+
+
+
+Default value: `$::common::storage::samba::realm`
+
+##### <a name="-profile--storage--samba--load_printers"></a>`load_printers`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$::common::storage::samba::load_printers`
+
+##### <a name="-profile--storage--samba--printcap_name"></a>`printcap_name`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$::common::storage::samba::printcap_name`
+
+##### <a name="-profile--storage--samba--shares"></a>`shares`
+
+Data type: `Eit_types::Storage::Samba::Shares`
+
+
+
+Default value: `$::common::storage::samba::shares`
+
+##### <a name="-profile--storage--samba--listen_interfaces"></a>`listen_interfaces`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$::common::storage::samba::listen_interfaces`
+
+##### <a name="-profile--storage--samba--global_options"></a>`global_options`
+
+Data type: `Eit_types::Storage::Samba::Global`
+
+
+
+Default value: `$::common::storage::samba::global_options`
+
+##### <a name="-profile--storage--samba--map_to_guest"></a>`map_to_guest`
+
+Data type:
+
+```puppet
+Enum[
+    'Never',
+    'Bad User',
+    'Bad Password',
+    'Bad Uid'
+  ]
+```
+
+
+
+Default value: `$::common::storage::samba::map_to_guest`
+
+##### <a name="-profile--storage--samba--idmap_config"></a>`idmap_config`
+
+Data type: `Array`
+
+
+
+Default value: `$::common::storage::samba::idmap_config`
+
+### <a name="profile--storage--zfs"></a>`profile::storage::zfs`
+
+ZFS and utilities
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::zfs` class:
+
+* [`pool_names`](#-profile--storage--zfs--pool_names)
+* [`remove_sysstat_cron`](#-profile--storage--zfs--remove_sysstat_cron)
+* [`scrub`](#-profile--storage--zfs--scrub)
+
+##### <a name="-profile--storage--zfs--pool_names"></a>`pool_names`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value: `$::common::storage::zfs::pool_names`
+
+##### <a name="-profile--storage--zfs--remove_sysstat_cron"></a>`remove_sysstat_cron`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::storage::zfs::remove_sysstat_cron`
+
+##### <a name="-profile--storage--zfs--scrub"></a>`scrub`
+
+Data type: `Eit_types::Common::Storage::Zfs::Scrub_interval`
+
+
+
+Default value: `$::common::storage::zfs::scrub`
+
 ### <a name="profile--system"></a>`profile::system`
 
 The profile::system class.
+
+### <a name="profile--system--authentication"></a>`profile::system::authentication`
+
+The profile::system::authentication class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication` class:
+
+* [`allowed_users`](#-profile--system--authentication--allowed_users)
+* [`allow_managed_users`](#-profile--system--authentication--allow_managed_users)
+* [`manage_pam`](#-profile--system--authentication--manage_pam)
+* [`ignore_expired_root_password`](#-profile--system--authentication--ignore_expired_root_password)
+* [`purge_ubuntu_user`](#-profile--system--authentication--purge_ubuntu_user)
+* [`purge_users`](#-profile--system--authentication--purge_users)
+* [`protected_users`](#-profile--system--authentication--protected_users)
+
+##### <a name="-profile--system--authentication--allowed_users"></a>`allowed_users`
+
+Data type: `Eit_types::Common::Allowed_users`
+
+
+
+Default value: `$::common::system::authentication::allowed_users`
+
+##### <a name="-profile--system--authentication--allow_managed_users"></a>`allow_managed_users`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::authentication::allow_managed_users`
+
+##### <a name="-profile--system--authentication--manage_pam"></a>`manage_pam`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::authentication::manage_pam`
+
+##### <a name="-profile--system--authentication--ignore_expired_root_password"></a>`ignore_expired_root_password`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::authentication::ignore_expired_root_password`
+
+##### <a name="-profile--system--authentication--purge_ubuntu_user"></a>`purge_ubuntu_user`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::authentication::purge_ubuntu_user`
+
+##### <a name="-profile--system--authentication--purge_users"></a>`purge_users`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::system::authentication::purge_users`
+
+##### <a name="-profile--system--authentication--protected_users"></a>`protected_users`
+
+Data type: `Array[Eit_types::User]`
+
+
+
+Default value: `$::common::system::authentication::protected_users`
+
+### <a name="profile--system--authentication--kerberos"></a>`profile::system::authentication::kerberos`
+
+Kerberos integration
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication::kerberos` class:
+
+* [`enable`](#-profile--system--authentication--kerberos--enable)
+* [`base_dn`](#-profile--system--authentication--kerberos--base_dn)
+* [`ou`](#-profile--system--authentication--kerberos--ou)
+* [`default_realm`](#-profile--system--authentication--kerberos--default_realm)
+* [`join`](#-profile--system--authentication--kerberos--join)
+* [`appdefaults`](#-profile--system--authentication--kerberos--appdefaults)
+* [`join_password`](#-profile--system--authentication--kerberos--join_password)
+* [`join_user`](#-profile--system--authentication--kerberos--join_user)
+* [`install_client`](#-profile--system--authentication--kerberos--install_client)
+* [`ldaps`](#-profile--system--authentication--kerberos--ldaps)
+* [`noop_value`](#-profile--system--authentication--kerberos--noop_value)
+* [`cacert_path`](#-profile--system--authentication--kerberos--cacert_path)
+* [`realms`](#-profile--system--authentication--kerberos--realms)
+
+##### <a name="-profile--system--authentication--kerberos--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::kerberos::enable`
+
+##### <a name="-profile--system--authentication--kerberos--base_dn"></a>`base_dn`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::system::authentication::kerberos::base_dn`
+
+##### <a name="-profile--system--authentication--kerberos--ou"></a>`ou`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$common::system::authentication::kerberos::ou`
+
+##### <a name="-profile--system--authentication--kerberos--default_realm"></a>`default_realm`
+
+Data type: `Eit_types::Domain`
+
+
+
+Default value: `$common::system::authentication::kerberos::default_realm`
+
+##### <a name="-profile--system--authentication--kerberos--join"></a>`join`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::kerberos::join`
+
+##### <a name="-profile--system--authentication--kerberos--appdefaults"></a>`appdefaults`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$common::system::authentication::kerberos::appdefaults`
+
+##### <a name="-profile--system--authentication--kerberos--join_password"></a>`join_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+
+
+Default value: `$common::system::authentication::kerberos::join_password`
+
+##### <a name="-profile--system--authentication--kerberos--join_user"></a>`join_user`
+
+Data type: `Optional[Eit_types::User]`
+
+
+
+Default value: `$common::system::authentication::kerberos::join_user`
+
+##### <a name="-profile--system--authentication--kerberos--install_client"></a>`install_client`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::kerberos::install_client`
+
+##### <a name="-profile--system--authentication--kerberos--ldaps"></a>`ldaps`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::kerberos::ldaps`
+
+##### <a name="-profile--system--authentication--kerberos--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::system::authentication::kerberos::noop_value`
+
+##### <a name="-profile--system--authentication--kerberos--cacert_path"></a>`cacert_path`
+
+Data type: `Optional[Stdlib::Unixpath]`
+
+
+
+Default value: `$common::system::authentication::kerberos::cacert_path`
+
+##### <a name="-profile--system--authentication--kerberos--realms"></a>`realms`
+
+Data type: `Eit_types::Common::System::Authentication::Kerberos::Realms`
+
+
+
+Default value: `$common::system::authentication::kerberos::realms`
+
+### <a name="profile--system--authentication--ldap_auth_daemon"></a>`profile::system::authentication::ldap_auth_daemon`
+
+Auth Ldap profile Class
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication::ldap_auth_daemon` class:
+
+* [`ensure`](#-profile--system--authentication--ldap_auth_daemon--ensure)
+* [`listen_host`](#-profile--system--authentication--ldap_auth_daemon--listen_host)
+* [`listen_port`](#-profile--system--authentication--ldap_auth_daemon--listen_port)
+
+##### <a name="-profile--system--authentication--ldap_auth_daemon--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--system--authentication--ldap_auth_daemon--listen_host"></a>`listen_host`
+
+Data type: `Eit_types::Host`
+
+
+
+Default value: `'localhost'`
+
+##### <a name="-profile--system--authentication--ldap_auth_daemon--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `8888`
+
+### <a name="profile--system--authentication--nis"></a>`profile::system::authentication::nis`
+
+NIS/yp
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication::nis` class:
+
+* [`enable`](#-profile--system--authentication--nis--enable)
+* [`domain`](#-profile--system--authentication--nis--domain)
+* [`servers`](#-profile--system--authentication--nis--servers)
+
+##### <a name="-profile--system--authentication--nis--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::nis::enable`
+
+##### <a name="-profile--system--authentication--nis--domain"></a>`domain`
+
+Data type: `Variant[Eit_types::SimpleString, Stdlib::Host]`
+
+
+
+Default value: `$common::system::authentication::nis::domain`
+
+##### <a name="-profile--system--authentication--nis--servers"></a>`servers`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+
+
+Default value: `$common::system::authentication::nis::servers`
+
+### <a name="profile--system--authentication--pam"></a>`profile::system::authentication::pam`
+
+PAM
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication::pam` class:
+
+* [`manage`](#-profile--system--authentication--pam--manage)
+* [`allowed_users`](#-profile--system--authentication--pam--allowed_users)
+* [`allow_managed_users`](#-profile--system--authentication--pam--allow_managed_users)
+* [`manage_pwquality`](#-profile--system--authentication--pam--manage_pwquality)
+* [`nologin_allowed_group`](#-profile--system--authentication--pam--nologin_allowed_group)
+* [`auth_lines`](#-profile--system--authentication--pam--auth_lines)
+* [`account_lines`](#-profile--system--authentication--pam--account_lines)
+* [`password_lines`](#-profile--system--authentication--pam--password_lines)
+* [`session_lines`](#-profile--system--authentication--pam--session_lines)
+* [`password_auth_lines`](#-profile--system--authentication--pam--password_auth_lines)
+* [`password_account_lines`](#-profile--system--authentication--pam--password_account_lines)
+* [`password_password_lines`](#-profile--system--authentication--pam--password_password_lines)
+* [`password_session_lines`](#-profile--system--authentication--pam--password_session_lines)
+* [`sshd_auth_lines`](#-profile--system--authentication--pam--sshd_auth_lines)
+* [`sshd_account_lines`](#-profile--system--authentication--pam--sshd_account_lines)
+* [`sshd_password_lines`](#-profile--system--authentication--pam--sshd_password_lines)
+* [`sshd_session_lines`](#-profile--system--authentication--pam--sshd_session_lines)
+
+##### <a name="-profile--system--authentication--pam--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::pam::manage`
+
+##### <a name="-profile--system--authentication--pam--allowed_users"></a>`allowed_users`
+
+Data type: `Eit_types::Common::Allowed_users`
+
+
+
+Default value: `$common::system::authentication::pam::allowed_users`
+
+##### <a name="-profile--system--authentication--pam--allow_managed_users"></a>`allow_managed_users`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::pam::allow_managed_users`
+
+##### <a name="-profile--system--authentication--pam--manage_pwquality"></a>`manage_pwquality`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::pam::manage_pwquality`
+
+##### <a name="-profile--system--authentication--pam--nologin_allowed_group"></a>`nologin_allowed_group`
+
+Data type: `Array[Eit_types::Group, 0, 1]`
+
+
+
+Default value: `$common::system::authentication::pam::nologin_allowed_group`
+
+##### <a name="-profile--system--authentication--pam--auth_lines"></a>`auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::auth_lines`
+
+##### <a name="-profile--system--authentication--pam--account_lines"></a>`account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::account_lines`
+
+##### <a name="-profile--system--authentication--pam--password_lines"></a>`password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::password_lines`
+
+##### <a name="-profile--system--authentication--pam--session_lines"></a>`session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::session_lines`
+
+##### <a name="-profile--system--authentication--pam--password_auth_lines"></a>`password_auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::password_auth_lines`
+
+##### <a name="-profile--system--authentication--pam--password_account_lines"></a>`password_account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::password_account_lines`
+
+##### <a name="-profile--system--authentication--pam--password_password_lines"></a>`password_password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::password_password_lines`
+
+##### <a name="-profile--system--authentication--pam--password_session_lines"></a>`password_session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::password_session_lines`
+
+##### <a name="-profile--system--authentication--pam--sshd_auth_lines"></a>`sshd_auth_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::sshd_auth_lines`
+
+##### <a name="-profile--system--authentication--pam--sshd_account_lines"></a>`sshd_account_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::sshd_account_lines`
+
+##### <a name="-profile--system--authentication--pam--sshd_password_lines"></a>`sshd_password_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::sshd_password_lines`
+
+##### <a name="-profile--system--authentication--pam--sshd_session_lines"></a>`sshd_session_lines`
+
+Data type: `Array[Tuple[Integer[0,99], String]]`
+
+
+
+Default value: `$common::system::authentication::pam::sshd_session_lines`
+
+### <a name="profile--system--authentication--sssd"></a>`profile::system::authentication::sssd`
+
+SSSD Profile
+https://jhrozek.wordpress.com/2015/03/11/anatomy-of-sssd-user-lookup/
+https://wiki.samba.org/index.php/Samba_Member_Server_Troubleshooting
+
+#### Parameters
+
+The following parameters are available in the `profile::system::authentication::sssd` class:
+
+* [`enable`](#-profile--system--authentication--sssd--enable)
+* [`extra_packages`](#-profile--system--authentication--sssd--extra_packages)
+* [`services`](#-profile--system--authentication--sssd--services)
+* [`_available_services`](#-profile--system--authentication--sssd--_available_services)
+* [`domains`](#-profile--system--authentication--sssd--domains)
+* [`default_domain_suffix`](#-profile--system--authentication--sssd--default_domain_suffix)
+* [`debug_level`](#-profile--system--authentication--sssd--debug_level)
+* [`manage_oddjobd`](#-profile--system--authentication--sssd--manage_oddjobd)
+* [`full_name_format`](#-profile--system--authentication--sssd--full_name_format)
+* [`override_homedir`](#-profile--system--authentication--sssd--override_homedir)
+* [`override_config`](#-profile--system--authentication--sssd--override_config)
+* [`noop_value`](#-profile--system--authentication--sssd--noop_value)
+* [`required_packages`](#-profile--system--authentication--sssd--required_packages)
+
+##### <a name="-profile--system--authentication--sssd--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::sssd::enable`
+
+##### <a name="-profile--system--authentication--sssd--extra_packages"></a>`extra_packages`
+
+Data type: `Optional[Array]`
+
+
+
+##### <a name="-profile--system--authentication--sssd--services"></a>`services`
+
+Data type: `Array[Eit_types::Sssd::Service]`
+
+
+
+Default value: `$common::system::authentication::sssd::services`
+
+##### <a name="-profile--system--authentication--sssd--_available_services"></a>`_available_services`
+
+Data type: `Array[Eit_types::Sssd::Service]`
+
+
+
+Default value: `$common::system::authentication::sssd::_available_services`
+
+##### <a name="-profile--system--authentication--sssd--domains"></a>`domains`
+
+Data type: `Eit_types::Sssd::Domains`
+
+
+
+Default value: `$common::system::authentication::sssd::domains`
+
+##### <a name="-profile--system--authentication--sssd--default_domain_suffix"></a>`default_domain_suffix`
+
+Data type: `Optional[Eit_types::Domain]`
+
+
+
+Default value: `$common::system::authentication::sssd::default_domain_suffix`
+
+##### <a name="-profile--system--authentication--sssd--debug_level"></a>`debug_level`
+
+Data type: `Optional[Eit_types::Sssd::Debug_Level]`
+
+
+
+Default value: `$common::system::authentication::sssd::debug_level`
+
+##### <a name="-profile--system--authentication--sssd--manage_oddjobd"></a>`manage_oddjobd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::sssd::manage_oddjobd`
+
+##### <a name="-profile--system--authentication--sssd--full_name_format"></a>`full_name_format`
+
+Data type: `Eit_types::Sssd::Full_name_format`
+
+
+
+Default value: `$common::system::authentication::sssd::full_name_format`
+
+##### <a name="-profile--system--authentication--sssd--override_homedir"></a>`override_homedir`
+
+Data type: `Optional[Eit_types::Sssd::Override_homedir]`
+
+
+
+Default value: `$common::system::authentication::sssd::override_homedir`
+
+##### <a name="-profile--system--authentication--sssd--override_config"></a>`override_config`
+
+Data type: `Hash`
+
+
+
+Default value: `$common::system::authentication::sssd::override_config`
+
+##### <a name="-profile--system--authentication--sssd--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::system::authentication::sssd::noop_value`
+
+##### <a name="-profile--system--authentication--sssd--required_packages"></a>`required_packages`
+
+Data type: `Array`
+
+
+
+Default value: `$common::system::authentication::sssd::required_packages`
+
+### <a name="profile--system--cloud_init"></a>`profile::system::cloud_init`
+
+since we have earlier masked all the cloud-init service and I really dont want to touch
+existing node, so lets have the existing node as it is and enable as an when we required, so
+someone is doing manually and I expect they know what they are doing it.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::cloud_init` class:
+
+* [`enable`](#-profile--system--cloud_init--enable)
+* [`services`](#-profile--system--cloud_init--services)
+
+##### <a name="-profile--system--cloud_init--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::cloud_init::manage`
+
+##### <a name="-profile--system--cloud_init--services"></a>`services`
+
+Data type: `Array`
+
+
+
+Default value: `$common::system::cloud_init::services`
+
+### <a name="profile--system--dns"></a>`profile::system::dns`
+
+DNS client handling
+
+#### Parameters
+
+The following parameters are available in the `profile::system::dns` class:
+
+* [`resolver`](#-profile--system--dns--resolver)
+* [`nameservers`](#-profile--system--dns--nameservers)
+* [`fallback_nameservers`](#-profile--system--dns--fallback_nameservers)
+* [`searchpath`](#-profile--system--dns--searchpath)
+* [`dnssec`](#-profile--system--dns--dnssec)
+* [`dns_over_tls`](#-profile--system--dns--dns_over_tls)
+* [`listen_address`](#-profile--system--dns--listen_address)
+* [`allow_external`](#-profile--system--dns--allow_external)
+* [`noop_value`](#-profile--system--dns--noop_value)
+
+##### <a name="-profile--system--dns--resolver"></a>`resolver`
+
+Data type: `Enum['dnsmasq', 'systemd-resolved', 'resolv']`
+
+
+
+Default value: `$common::system::dns::resolver`
+
+##### <a name="-profile--system--dns--nameservers"></a>`nameservers`
+
+Data type: `Array`
+
+
+
+Default value: `$common::system::dns::nameservers`
+
+##### <a name="-profile--system--dns--fallback_nameservers"></a>`fallback_nameservers`
+
+Data type: `Array`
+
+
+
+Default value: `$common::system::dns::fallback_nameservers`
+
+##### <a name="-profile--system--dns--searchpath"></a>`searchpath`
+
+Data type: `Array[Eit_types::Hostname]`
+
+
+
+Default value: `$common::system::dns::searchpath`
+
+##### <a name="-profile--system--dns--dnssec"></a>`dnssec`
+
+Data type: `Optional[Variant[Boolean, Enum['allow-downgrade']]]`
+
+
+
+Default value: `$common::system::dns::dnssec`
+
+##### <a name="-profile--system--dns--dns_over_tls"></a>`dns_over_tls`
+
+Data type: `Optional[Variant[Boolean, Enum['opportunistic']]]`
+
+
+
+Default value: `$common::system::dns::dns_over_tls`
+
+##### <a name="-profile--system--dns--listen_address"></a>`listen_address`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+
+
+Default value: `$common::system::dns::listen_address`
+
+##### <a name="-profile--system--dns--allow_external"></a>`allow_external`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::dns::allow_external`
+
+##### <a name="-profile--system--dns--noop_value"></a>`noop_value`
+
+Data type: `Variant[Undef, Boolean]`
+
+
+
+Default value: `$common::system::dns::noop_value`
+
+### <a name="profile--system--failover"></a>`profile::system::failover`
+
+IP failover
+
+#### Parameters
+
+The following parameters are available in the `profile::system::failover` class:
+
+* [`instances`](#-profile--system--failover--instances)
+
+##### <a name="-profile--system--failover--instances"></a>`instances`
+
+Data type: `Eit_types::Common::System::Failover::Instances`
+
+
+
+Default value: `$::common::system::failover::instances`
+
+### <a name="profile--system--grub"></a>`profile::system::grub`
+
+manage grub
+
+#### Parameters
+
+The following parameters are available in the `profile::system::grub` class:
+
+* [`parameters`](#-profile--system--grub--parameters)
+
+##### <a name="-profile--system--grub--parameters"></a>`parameters`
+
+Data type:
+
+```puppet
+Hash[
+    String,
+    Struct[{
+      ensure => Boolean,
+      value  => Optional[Variant[Array,String,Boolean]],
+    }]
+  ]
+```
+
+
+
+Default value: `$::common::system::grub::parameters`
+
+### <a name="profile--system--hardware"></a>`profile::system::hardware`
+
+Hardware features
+
+#### Parameters
+
+The following parameters are available in the `profile::system::hardware` class:
+
+* [`manage_multipath`](#-profile--system--hardware--manage_multipath)
+* [`__multipath_packages`](#-profile--system--hardware--__multipath_packages)
+* [`__multipath_services`](#-profile--system--hardware--__multipath_services)
+
+##### <a name="-profile--system--hardware--manage_multipath"></a>`manage_multipath`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::system::hardware::manage_multipath`
+
+##### <a name="-profile--system--hardware--__multipath_packages"></a>`__multipath_packages`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value: `$common::system::hardware::__multipath_packages`
+
+##### <a name="-profile--system--hardware--__multipath_services"></a>`__multipath_services`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value: `$common::system::hardware::__multipath_services`
+
+### <a name="profile--system--limits"></a>`profile::system::limits`
+
+The profile::system::limits class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::limits` class:
+
+* [`manage`](#-profile--system--limits--manage)
+* [`purge`](#-profile--system--limits--purge)
+* [`ulimits`](#-profile--system--limits--ulimits)
+
+##### <a name="-profile--system--limits--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::limits::manage`
+
+##### <a name="-profile--system--limits--purge"></a>`purge`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::limits::purge`
+
+##### <a name="-profile--system--limits--ulimits"></a>`ulimits`
+
+Data type: `Eit_types::System::Ulimits`
+
+
+
+Default value: `$common::system::limits::ulimits`
+
+### <a name="profile--system--nscd"></a>`profile::system::nscd`
+
+nscd
+
+#### Parameters
+
+The following parameters are available in the `profile::system::nscd` class:
+
+* [`ensure`](#-profile--system--nscd--ensure)
+* [`debug_level`](#-profile--system--nscd--debug_level)
+* [`cache_passwd`](#-profile--system--nscd--cache_passwd)
+* [`cache_group`](#-profile--system--nscd--cache_group)
+* [`cache_netgroup`](#-profile--system--nscd--cache_netgroup)
+* [`cache_services`](#-profile--system--nscd--cache_services)
+* [`use_socket_activation`](#-profile--system--nscd--use_socket_activation)
+
+##### <a name="-profile--system--nscd--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::ensure`
+
+##### <a name="-profile--system--nscd--debug_level"></a>`debug_level`
+
+Data type: `Integer[0,5]`
+
+
+
+Default value: `$common::system::nscd::debug_level`
+
+##### <a name="-profile--system--nscd--cache_passwd"></a>`cache_passwd`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::cache_passwd`
+
+##### <a name="-profile--system--nscd--cache_group"></a>`cache_group`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::cache_group`
+
+##### <a name="-profile--system--nscd--cache_netgroup"></a>`cache_netgroup`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::cache_netgroup`
+
+##### <a name="-profile--system--nscd--cache_services"></a>`cache_services`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::cache_services`
+
+##### <a name="-profile--system--nscd--use_socket_activation"></a>`use_socket_activation`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::nscd::use_socket_activation`
+
+### <a name="profile--system--selinux"></a>`profile::system::selinux`
+
+The profile::system::selinux class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::selinux` class:
+
+* [`enable`](#-profile--system--selinux--enable)
+* [`enforce`](#-profile--system--selinux--enforce)
+* [`enable_setroubleshoot`](#-profile--system--selinux--enable_setroubleshoot)
+* [`fcontext`](#-profile--system--selinux--fcontext)
+
+##### <a name="-profile--system--selinux--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::selinux::enable`
+
+##### <a name="-profile--system--selinux--enforce"></a>`enforce`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::selinux::enforce`
+
+##### <a name="-profile--system--selinux--enable_setroubleshoot"></a>`enable_setroubleshoot`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::selinux::enable_setroubleshoot`
+
+##### <a name="-profile--system--selinux--fcontext"></a>`fcontext`
+
+Data type: `Hash[String, Hash]`
+
+
+
+Default value: `$common::system::selinux::fcontext`
+
+### <a name="profile--system--sshd"></a>`profile::system::sshd`
+
+The profile::system::sshd class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::sshd` class:
+
+* [`manage`](#-profile--system--sshd--manage)
+* [`distribute_hostkeys`](#-profile--system--sshd--distribute_hostkeys)
+* [`version`](#-profile--system--sshd--version)
+* [`ports`](#-profile--system--sshd--ports)
+* [`listenaddresses`](#-profile--system--sshd--listenaddresses)
+* [`managed_users_only`](#-profile--system--sshd--managed_users_only)
+* [`compression`](#-profile--system--sshd--compression)
+* [`password_authentication`](#-profile--system--sshd--password_authentication)
+* [`tcp_forwarding`](#-profile--system--sshd--tcp_forwarding)
+* [`permit_user_rc`](#-profile--system--sshd--permit_user_rc)
+* [`max_auth_tries`](#-profile--system--sshd--max_auth_tries)
+* [`max_sessions`](#-profile--system--sshd--max_sessions)
+* [`login_grace_time`](#-profile--system--sshd--login_grace_time)
+* [`hostkeys`](#-profile--system--sshd--hostkeys)
+* [`log_level`](#-profile--system--sshd--log_level)
+* [`kexalgorithms`](#-profile--system--sshd--kexalgorithms)
+* [`ciphers`](#-profile--system--sshd--ciphers)
+* [`macs`](#-profile--system--sshd--macs)
+* [`subsystems`](#-profile--system--sshd--subsystems)
+* [`permit_root_login`](#-profile--system--sshd--permit_root_login)
+* [`x11_forwarding`](#-profile--system--sshd--x11_forwarding)
+* [`x11_use_localhost`](#-profile--system--sshd--x11_use_localhost)
+* [`client_options`](#-profile--system--sshd--client_options)
+* [`accept_env`](#-profile--system--sshd--accept_env)
+* [`match`](#-profile--system--sshd--match)
+
+##### <a name="-profile--system--sshd--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::manage`
+
+##### <a name="-profile--system--sshd--distribute_hostkeys"></a>`distribute_hostkeys`
+
+Data type: `Variant[Boolean, Enum['no-noop']]`
+
+
+
+Default value: `$common::system::sshd::distribute_hostkeys`
+
+##### <a name="-profile--system--sshd--version"></a>`version`
+
+Data type: `Eit_types::Package::Version::Installed`
+
+
+
+Default value: `$common::system::sshd::version`
+
+##### <a name="-profile--system--sshd--ports"></a>`ports`
+
+Data type: `Array[Stdlib::Port]`
+
+
+
+Default value: `$common::system::sshd::ports`
+
+##### <a name="-profile--system--sshd--listenaddresses"></a>`listenaddresses`
+
+Data type: `Array[Eit_types::IPPort]`
+
+
+
+Default value: `$common::system::sshd::listenaddresses`
+
+##### <a name="-profile--system--sshd--managed_users_only"></a>`managed_users_only`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::managed_users_only`
+
+##### <a name="-profile--system--sshd--compression"></a>`compression`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::compression`
+
+##### <a name="-profile--system--sshd--password_authentication"></a>`password_authentication`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::password_authentication`
+
+##### <a name="-profile--system--sshd--tcp_forwarding"></a>`tcp_forwarding`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::tcp_forwarding`
+
+##### <a name="-profile--system--sshd--permit_user_rc"></a>`permit_user_rc`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::permit_user_rc`
+
+##### <a name="-profile--system--sshd--max_auth_tries"></a>`max_auth_tries`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `$common::system::sshd::max_auth_tries`
+
+##### <a name="-profile--system--sshd--max_sessions"></a>`max_sessions`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `$common::system::sshd::max_sessions`
+
+##### <a name="-profile--system--sshd--login_grace_time"></a>`login_grace_time`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `$common::system::sshd::login_grace_time`
+
+##### <a name="-profile--system--sshd--hostkeys"></a>`hostkeys`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+
+
+Default value: `$common::system::sshd::hostkeys`
+
+##### <a name="-profile--system--sshd--log_level"></a>`log_level`
+
+Data type:
+
+```puppet
+Enum[
+    'QUIET',
+    'FATAL',
+    'ERROR',
+    'INFO',
+    'VERBOSE',
+    'DEBUG',
+    'DEBUG1',
+    'DEBUG2',
+    'DEBUG3'
+  ]
+```
+
+
+
+Default value: `$common::system::sshd::log_level`
+
+##### <a name="-profile--system--sshd--kexalgorithms"></a>`kexalgorithms`
+
+Data type: `Array[Eit_types::Ssh::Kexalgorithms]`
+
+
+
+Default value: `$common::system::sshd::kexalgorithms`
+
+##### <a name="-profile--system--sshd--ciphers"></a>`ciphers`
+
+Data type: `Array[Eit_types::Ssh::Ciphers]`
+
+
+
+Default value: `$common::system::sshd::ciphers`
+
+##### <a name="-profile--system--sshd--macs"></a>`macs`
+
+Data type: `Array[Eit_types::Ssh::Macs]`
+
+
+
+Default value: `$common::system::sshd::macs`
+
+##### <a name="-profile--system--sshd--subsystems"></a>`subsystems`
+
+Data type: `Hash[Eit_types::SimpleString, String]`
+
+
+
+Default value: `$common::system::sshd::subsystems`
+
+##### <a name="-profile--system--sshd--permit_root_login"></a>`permit_root_login`
+
+Data type:
+
+```puppet
+Variant[
+    Boolean,
+    Enum['forced-commands-only', 'prohibit-password']
+  ]
+```
+
+
+
+Default value: `$common::system::sshd::permit_root_login`
+
+##### <a name="-profile--system--sshd--x11_forwarding"></a>`x11_forwarding`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::x11_forwarding`
+
+##### <a name="-profile--system--sshd--x11_use_localhost"></a>`x11_use_localhost`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::sshd::x11_use_localhost`
+
+##### <a name="-profile--system--sshd--client_options"></a>`client_options`
+
+Data type: `Hash`
+
+
+
+Default value: `$common::system::sshd::client_options`
+
+##### <a name="-profile--system--sshd--accept_env"></a>`accept_env`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$common::system::sshd::accept_env`
+
+##### <a name="-profile--system--sshd--match"></a>`match`
+
+Data type: `Hash[String, Hash[String, Any]]`
+
+
+
+Default value: `$common::system::sshd::match`
+
+### <a name="profile--system--sudoers"></a>`profile::system::sudoers`
+
+Sudoers
+
+#### Parameters
+
+The following parameters are available in the `profile::system::sudoers` class:
+
+* [`purge`](#-profile--system--sudoers--purge)
+* [`sudoers`](#-profile--system--sudoers--sudoers)
+* [`sudoers_d_dir`](#-profile--system--sudoers--sudoers_d_dir)
+
+##### <a name="-profile--system--sudoers--purge"></a>`purge`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::authentication::sudo::purge`
+
+##### <a name="-profile--system--sudoers--sudoers"></a>`sudoers`
+
+Data type: `Eit_types::Sudoers`
+
+
+
+Default value: `$common::system::authentication::sudo::sudoers`
+
+##### <a name="-profile--system--sudoers--sudoers_d_dir"></a>`sudoers_d_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$common::system::authentication::sudo::__sudoers_d_dir`
+
+### <a name="profile--system--systemd"></a>`profile::system::systemd`
+
+The profile::system::systemd class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::systemd` class:
+
+* [`manage_journald`](#-profile--system--systemd--manage_journald)
+* [`manage_resolved`](#-profile--system--systemd--manage_resolved)
+* [`journald_settings`](#-profile--system--systemd--journald_settings)
+
+##### <a name="-profile--system--systemd--manage_journald"></a>`manage_journald`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::systemd::manage_journald`
+
+##### <a name="-profile--system--systemd--manage_resolved"></a>`manage_resolved`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::systemd::manage_resolved`
+
+##### <a name="-profile--system--systemd--journald_settings"></a>`journald_settings`
+
+Data type: `Systemd::JournaldSettings`
+
+
+
+Default value: `$common::system::systemd::journald_settings`
+
+### <a name="profile--system--time"></a>`profile::system::time`
+
+Time
+
+#### Parameters
+
+The following parameters are available in the `profile::system::time` class:
+
+* [`timezone`](#-profile--system--time--timezone)
+
+##### <a name="-profile--system--time--timezone"></a>`timezone`
+
+Data type: `Eit_types::Timezone`
+
+
+
+Default value: `$common::system::time::timezone`
+
+### <a name="profile--system--time--ntp"></a>`profile::system::time::ntp`
+
+NTP
+
+#### Parameters
+
+The following parameters are available in the `profile::system::time::ntp` class:
+
+* [`manage`](#-profile--system--time--ntp--manage)
+* [`ntp_client`](#-profile--system--time--ntp--ntp_client)
+* [`servers`](#-profile--system--time--ntp--servers)
+* [`noop_value`](#-profile--system--time--ntp--noop_value)
+
+##### <a name="-profile--system--time--ntp--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::system::time::ntp::manage`
+
+##### <a name="-profile--system--time--ntp--ntp_client"></a>`ntp_client`
+
+Data type: `Enum['chrony', 'ntpd', 'systemd-timesyncd']`
+
+
+
+Default value: `$common::system::time::ntp::ntp_client`
+
+##### <a name="-profile--system--time--ntp--servers"></a>`servers`
+
+Data type: `Array[Stdlib::Host]`
+
+
+
+Default value: `$common::system::time::ntp::servers`
+
+##### <a name="-profile--system--time--ntp--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `$common::system::time::ntp::noop_value`
 
 ### <a name="profile--tomcat"></a>`profile::tomcat`
 
@@ -2119,6 +8976,859 @@ Data type: `Array[String]`
 
 
 Default value: `[ 'localhost' ]`
+
+### <a name="profile--virtualization--docker"></a>`profile::virtualization::docker`
+
+Docker profile
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::docker` class:
+
+* [`docker_lib_dir`](#-profile--virtualization--docker--docker_lib_dir)
+* [`manage_compose`](#-profile--virtualization--docker--manage_compose)
+* [`instances`](#-profile--virtualization--docker--instances)
+* [`compose_instances`](#-profile--virtualization--docker--compose_instances)
+* [`networks`](#-profile--virtualization--docker--networks)
+* [`dns`](#-profile--virtualization--docker--dns)
+* [`dns_search`](#-profile--virtualization--docker--dns_search)
+* [`insecure_registries`](#-profile--virtualization--docker--insecure_registries)
+* [`users`](#-profile--virtualization--docker--users)
+* [`fixed_cidr`](#-profile--virtualization--docker--fixed_cidr)
+* [`bip`](#-profile--virtualization--docker--bip)
+* [`default_gateway`](#-profile--virtualization--docker--default_gateway)
+* [`bridge_interface`](#-profile--virtualization--docker--bridge_interface)
+* [`prune_system`](#-profile--virtualization--docker--prune_system)
+* [`prune_volume`](#-profile--virtualization--docker--prune_volume)
+* [`registry`](#-profile--virtualization--docker--registry)
+* [`upstream_repo`](#-profile--virtualization--docker--upstream_repo)
+* [`prune_duration`](#-profile--virtualization--docker--prune_duration)
+
+##### <a name="-profile--virtualization--docker--docker_lib_dir"></a>`docker_lib_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$role::virtualization::docker::docker_lib_dir`
+
+##### <a name="-profile--virtualization--docker--manage_compose"></a>`manage_compose`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::virtualization::docker::manage_compose`
+
+##### <a name="-profile--virtualization--docker--instances"></a>`instances`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::virtualization::docker::instances`
+
+##### <a name="-profile--virtualization--docker--compose_instances"></a>`compose_instances`
+
+Data type: `Eit_types::Docker::ComposeInstances`
+
+
+
+Default value: `$role::virtualization::docker::compose_instances`
+
+##### <a name="-profile--virtualization--docker--networks"></a>`networks`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::virtualization::docker::networks`
+
+##### <a name="-profile--virtualization--docker--dns"></a>`dns`
+
+Data type: `Optional[Array[Stdlib::IP::Address]]`
+
+
+
+Default value: `$role::virtualization::docker::dns`
+
+##### <a name="-profile--virtualization--docker--dns_search"></a>`dns_search`
+
+Data type: `Optional[Array[Eit_types::Domain]]`
+
+
+
+Default value: `$role::virtualization::docker::dns_search`
+
+##### <a name="-profile--virtualization--docker--insecure_registries"></a>`insecure_registries`
+
+Data type: `Optional[Array[Eit_types::FQDNPort]]`
+
+
+
+Default value: `$role::virtualization::docker::insecure_registries`
+
+##### <a name="-profile--virtualization--docker--users"></a>`users`
+
+Data type: `Array[Eit_types::User]`
+
+
+
+Default value: `$role::virtualization::docker::users`
+
+##### <a name="-profile--virtualization--docker--fixed_cidr"></a>`fixed_cidr`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+
+
+Default value: `$role::virtualization::docker::fixed_cidr`
+
+##### <a name="-profile--virtualization--docker--bip"></a>`bip`
+
+Data type: `Optional[Eit_types::IPCIDR]`
+
+
+
+Default value: `$role::virtualization::docker::bip`
+
+##### <a name="-profile--virtualization--docker--default_gateway"></a>`default_gateway`
+
+Data type: `Optional[Eit_types::IP]`
+
+
+
+Default value: `$role::virtualization::docker::default_gateway`
+
+##### <a name="-profile--virtualization--docker--bridge_interface"></a>`bridge_interface`
+
+Data type: `Eit_types::SimpleString`
+
+
+
+Default value: `$role::virtualization::docker::bridge_interface`
+
+##### <a name="-profile--virtualization--docker--prune_system"></a>`prune_system`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::virtualization::docker::prune_system`
+
+##### <a name="-profile--virtualization--docker--prune_volume"></a>`prune_volume`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::virtualization::docker::prune_volume`
+
+##### <a name="-profile--virtualization--docker--registry"></a>`registry`
+
+Data type: `Hash[Eit_types::Domain, Hash]`
+
+
+
+Default value: `$role::virtualization::docker::registry`
+
+##### <a name="-profile--virtualization--docker--upstream_repo"></a>`upstream_repo`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::virtualization::docker::upstream_repo`
+
+##### <a name="-profile--virtualization--docker--prune_duration"></a>`prune_duration`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `$role::virtualization::docker::prune_duration`
+
+### <a name="profile--virtualization--docker--cadvisor"></a>`profile::virtualization::docker::cadvisor`
+
+cadvisor docker container
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::docker::cadvisor` class:
+
+* [`enable`](#-profile--virtualization--docker--cadvisor--enable)
+* [`noop_value`](#-profile--virtualization--docker--cadvisor--noop_value)
+* [`listen_port`](#-profile--virtualization--docker--cadvisor--listen_port)
+* [`cadvisor_image`](#-profile--virtualization--docker--cadvisor--cadvisor_image)
+
+##### <a name="-profile--virtualization--docker--cadvisor--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::monitor::exporter::enable`
+
+##### <a name="-profile--virtualization--docker--cadvisor--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `false`
+
+##### <a name="-profile--virtualization--docker--cadvisor--listen_port"></a>`listen_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `63392`
+
+##### <a name="-profile--virtualization--docker--cadvisor--cadvisor_image"></a>`cadvisor_image`
+
+Data type: `String`
+
+
+
+Default value: `$role::virtualization::docker::cadvisor_image`
+
+### <a name="profile--virtualization--kubernetes"></a>`profile::virtualization::kubernetes`
+
+Kubernetes
+NOTE: kubernetes apt repository only has packages for xenial
+Kubernetes only works with xenial, but those xenial packages works fine on focal
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::kubernetes` class:
+
+* [`role`](#-profile--virtualization--kubernetes--role)
+* [`etcd_ca_crt`](#-profile--virtualization--kubernetes--etcd_ca_crt)
+* [`etcd_ca_key`](#-profile--virtualization--kubernetes--etcd_ca_key)
+* [`etcdclient_crt`](#-profile--virtualization--kubernetes--etcdclient_crt)
+* [`etcdclient_key`](#-profile--virtualization--kubernetes--etcdclient_key)
+* [`etcdserver_crt`](#-profile--virtualization--kubernetes--etcdserver_crt)
+* [`etcdserver_key`](#-profile--virtualization--kubernetes--etcdserver_key)
+* [`etcdpeer_crt`](#-profile--virtualization--kubernetes--etcdpeer_crt)
+* [`etcdpeer_key`](#-profile--virtualization--kubernetes--etcdpeer_key)
+* [`kubernetes_ca_crt`](#-profile--virtualization--kubernetes--kubernetes_ca_crt)
+* [`kubernetes_ca_key`](#-profile--virtualization--kubernetes--kubernetes_ca_key)
+* [`discovery_token_hash`](#-profile--virtualization--kubernetes--discovery_token_hash)
+* [`front_proxy_ca_crt`](#-profile--virtualization--kubernetes--front_proxy_ca_crt)
+* [`front_proxy_ca_key`](#-profile--virtualization--kubernetes--front_proxy_ca_key)
+* [`sa_pub`](#-profile--virtualization--kubernetes--sa_pub)
+* [`sa_key`](#-profile--virtualization--kubernetes--sa_key)
+* [`token`](#-profile--virtualization--kubernetes--token)
+* [`apiserver_cert_extra_sans`](#-profile--virtualization--kubernetes--apiserver_cert_extra_sans)
+* [`controller_address`](#-profile--virtualization--kubernetes--controller_address)
+* [`etcd_initial_cluster`](#-profile--virtualization--kubernetes--etcd_initial_cluster)
+* [`etcd_peers`](#-profile--virtualization--kubernetes--etcd_peers)
+* [`worker_peers`](#-profile--virtualization--kubernetes--worker_peers)
+* [`version`](#-profile--virtualization--kubernetes--version)
+* [`pod_cidr`](#-profile--virtualization--kubernetes--pod_cidr)
+* [`install_dashboard`](#-profile--virtualization--kubernetes--install_dashboard)
+* [`allow_k8s_api`](#-profile--virtualization--kubernetes--allow_k8s_api)
+* [`expose_https_on_master`](#-profile--virtualization--kubernetes--expose_https_on_master)
+* [`expose_http_on_master`](#-profile--virtualization--kubernetes--expose_http_on_master)
+* [`keycloak_oidc_domain`](#-profile--virtualization--kubernetes--keycloak_oidc_domain)
+* [`keycloak_oidc_client_id`](#-profile--virtualization--kubernetes--keycloak_oidc_client_id)
+* [`keycloak_oidc_groups_claim`](#-profile--virtualization--kubernetes--keycloak_oidc_groups_claim)
+* [`extra_public_ports`](#-profile--virtualization--kubernetes--extra_public_ports)
+* [`docker_storage_driver`](#-profile--virtualization--kubernetes--docker_storage_driver)
+* [`containerd_version`](#-profile--virtualization--kubernetes--containerd_version)
+* [`image_repository`](#-profile--virtualization--kubernetes--image_repository)
+* [`containerd_config_template`](#-profile--virtualization--kubernetes--containerd_config_template)
+* [`containerd_install_method`](#-profile--virtualization--kubernetes--containerd_install_method)
+* [`containerd_snapshotter`](#-profile--virtualization--kubernetes--containerd_snapshotter)
+
+##### <a name="-profile--virtualization--kubernetes--role"></a>`role`
+
+Data type: `Enum['controller','worker']`
+
+
+
+Default value: `$::role::virtualization::kubernetes::role`
+
+##### <a name="-profile--virtualization--kubernetes--etcd_ca_crt"></a>`etcd_ca_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcd_ca_crt`
+
+##### <a name="-profile--virtualization--kubernetes--etcd_ca_key"></a>`etcd_ca_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcd_ca_key`
+
+##### <a name="-profile--virtualization--kubernetes--etcdclient_crt"></a>`etcdclient_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdclient_crt`
+
+##### <a name="-profile--virtualization--kubernetes--etcdclient_key"></a>`etcdclient_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdclient_key`
+
+##### <a name="-profile--virtualization--kubernetes--etcdserver_crt"></a>`etcdserver_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdserver_crt`
+
+##### <a name="-profile--virtualization--kubernetes--etcdserver_key"></a>`etcdserver_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdserver_key`
+
+##### <a name="-profile--virtualization--kubernetes--etcdpeer_crt"></a>`etcdpeer_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdpeer_crt`
+
+##### <a name="-profile--virtualization--kubernetes--etcdpeer_key"></a>`etcdpeer_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcdpeer_key`
+
+##### <a name="-profile--virtualization--kubernetes--kubernetes_ca_crt"></a>`kubernetes_ca_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::kubernetes_ca_crt`
+
+##### <a name="-profile--virtualization--kubernetes--kubernetes_ca_key"></a>`kubernetes_ca_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::kubernetes_ca_key`
+
+##### <a name="-profile--virtualization--kubernetes--discovery_token_hash"></a>`discovery_token_hash`
+
+Data type: `String`
+
+
+
+Default value: `$::role::virtualization::kubernetes::discovery_token_hash`
+
+##### <a name="-profile--virtualization--kubernetes--front_proxy_ca_crt"></a>`front_proxy_ca_crt`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::front_proxy_ca_crt`
+
+##### <a name="-profile--virtualization--kubernetes--front_proxy_ca_key"></a>`front_proxy_ca_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::front_proxy_ca_key`
+
+##### <a name="-profile--virtualization--kubernetes--sa_pub"></a>`sa_pub`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::sa_pub`
+
+##### <a name="-profile--virtualization--kubernetes--sa_key"></a>`sa_key`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::sa_key`
+
+##### <a name="-profile--virtualization--kubernetes--token"></a>`token`
+
+Data type: `String`
+
+
+
+Default value: `$::role::virtualization::kubernetes::token`
+
+##### <a name="-profile--virtualization--kubernetes--apiserver_cert_extra_sans"></a>`apiserver_cert_extra_sans`
+
+Data type: `Optional[Array]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::apiserver_cert_extra_sans`
+
+##### <a name="-profile--virtualization--kubernetes--controller_address"></a>`controller_address`
+
+Data type: `Eit_types::IPPort`
+
+
+
+Default value: `$::role::virtualization::kubernetes::controller_address`
+
+##### <a name="-profile--virtualization--kubernetes--etcd_initial_cluster"></a>`etcd_initial_cluster`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcd_initial_cluster`
+
+##### <a name="-profile--virtualization--kubernetes--etcd_peers"></a>`etcd_peers`
+
+Data type: `Array`
+
+
+
+Default value: `$::role::virtualization::kubernetes::etcd_peers`
+
+##### <a name="-profile--virtualization--kubernetes--worker_peers"></a>`worker_peers`
+
+Data type: `Optional[Array]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::worker_peers`
+
+##### <a name="-profile--virtualization--kubernetes--version"></a>`version`
+
+Data type: `String`
+
+
+
+Default value: `$::role::virtualization::kubernetes::version`
+
+##### <a name="-profile--virtualization--kubernetes--pod_cidr"></a>`pod_cidr`
+
+Data type: `Eit_types::IPCIDR`
+
+
+
+Default value: `$::role::virtualization::kubernetes::pod_cidr`
+
+##### <a name="-profile--virtualization--kubernetes--install_dashboard"></a>`install_dashboard`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::virtualization::kubernetes::install_dashboard`
+
+##### <a name="-profile--virtualization--kubernetes--allow_k8s_api"></a>`allow_k8s_api`
+
+Data type:
+
+```puppet
+Optional[Array[Variant[
+    Stdlib::IP::Address,
+    Stdlib::Host
+  ]]]
+```
+
+
+
+Default value: `$::role::virtualization::kubernetes::allow_k8s_api`
+
+##### <a name="-profile--virtualization--kubernetes--expose_https_on_master"></a>`expose_https_on_master`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::virtualization::kubernetes::expose_https_on_master`
+
+##### <a name="-profile--virtualization--kubernetes--expose_http_on_master"></a>`expose_http_on_master`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::virtualization::kubernetes::expose_http_on_master`
+
+##### <a name="-profile--virtualization--kubernetes--keycloak_oidc_domain"></a>`keycloak_oidc_domain`
+
+Data type: `Optional[Stdlib::Fqdn]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::keycloak_oidc_domain`
+
+##### <a name="-profile--virtualization--kubernetes--keycloak_oidc_client_id"></a>`keycloak_oidc_client_id`
+
+Data type: `String`
+
+
+
+Default value: `$::role::virtualization::kubernetes::keycloak_oidc_client_id`
+
+##### <a name="-profile--virtualization--kubernetes--keycloak_oidc_groups_claim"></a>`keycloak_oidc_groups_claim`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::role::virtualization::kubernetes::keycloak_oidc_groups_claim`
+
+##### <a name="-profile--virtualization--kubernetes--extra_public_ports"></a>`extra_public_ports`
+
+Data type: `Array[Stdlib::Port]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::extra_public_ports`
+
+##### <a name="-profile--virtualization--kubernetes--docker_storage_driver"></a>`docker_storage_driver`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::docker_storage_driver`
+
+##### <a name="-profile--virtualization--kubernetes--containerd_version"></a>`containerd_version`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::containerd_version`
+
+##### <a name="-profile--virtualization--kubernetes--image_repository"></a>`image_repository`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::image_repository`
+
+##### <a name="-profile--virtualization--kubernetes--containerd_config_template"></a>`containerd_config_template`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::containerd_config_template`
+
+##### <a name="-profile--virtualization--kubernetes--containerd_install_method"></a>`containerd_install_method`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `$::role::virtualization::kubernetes::containerd_install_method`
+
+##### <a name="-profile--virtualization--kubernetes--containerd_snapshotter"></a>`containerd_snapshotter`
+
+Data type: `Enum['overlayfs', 'zfs']`
+
+
+
+Default value: `$::role::virtualization::kubernetes::containerd_snapshotter`
+
+### <a name="profile--virtualization--lxc"></a>`profile::virtualization::lxc`
+
+LXC Profile, this is too static
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::lxc` class:
+
+* [`bridge`](#-profile--virtualization--lxc--bridge)
+* [`network`](#-profile--virtualization--lxc--network)
+* [`__blendable`](#-profile--virtualization--lxc--__blendable)
+
+##### <a name="-profile--virtualization--lxc--bridge"></a>`bridge`
+
+Data type: `String`
+
+
+
+##### <a name="-profile--virtualization--lxc--network"></a>`network`
+
+Data type: `Eit_types::IPv4CIDR`
+
+
+
+##### <a name="-profile--virtualization--lxc--__blendable"></a>`__blendable`
+
+Data type: `Boolean`
+
+
+
+### <a name="profile--virtualization--lxd"></a>`profile::virtualization::lxd`
+
+LXD profile
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::lxd` class:
+
+* [`network`](#-profile--virtualization--lxd--network)
+* [`lxd_bridge`](#-profile--virtualization--lxd--lxd_bridge)
+* [`instances`](#-profile--virtualization--lxd--instances)
+* [`requires_filesystems`](#-profile--virtualization--lxd--requires_filesystems)
+
+##### <a name="-profile--virtualization--lxd--network"></a>`network`
+
+Data type: `Eit_types::IP`
+
+
+
+Default value: `'10.0.3.0'`
+
+##### <a name="-profile--virtualization--lxd--lxd_bridge"></a>`lxd_bridge`
+
+Data type: `String`
+
+
+
+Default value: `'lxdbr0'`
+
+##### <a name="-profile--virtualization--lxd--instances"></a>`instances`
+
+Data type: `Hash`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--virtualization--lxd--requires_filesystems"></a>`requires_filesystems`
+
+Data type: `Array[Eit_types::SimpleString]`
+
+
+
+Default value: `[]`
+
+### <a name="profile--virtualization--virtualbox"></a>`profile::virtualization::virtualbox`
+
+VirtualBox Profile
+
+### <a name="profile--virtualization--vmware--openvmtools"></a>`profile::virtualization::vmware::openvmtools`
+
+Setup openvmtools on the guest.
+
+#### Parameters
+
+The following parameters are available in the `profile::virtualization::vmware::openvmtools` class:
+
+* [`ensure`](#-profile--virtualization--vmware--openvmtools--ensure)
+* [`autoupgrade`](#-profile--virtualization--vmware--openvmtools--autoupgrade)
+
+##### <a name="-profile--virtualization--vmware--openvmtools--ensure"></a>`ensure`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::virtualization::vmware::openvmtools::ensure`
+
+##### <a name="-profile--virtualization--vmware--openvmtools--autoupgrade"></a>`autoupgrade`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::virtualization::vmware::openvmtools::autoupgrade`
+
+### <a name="profile--web--apache"></a>`profile::web::apache`
+
+generic apache setup
+
+#### Parameters
+
+The following parameters are available in the `profile::web::apache` class:
+
+* [`https`](#-profile--web--apache--https)
+* [`http`](#-profile--web--apache--http)
+* [`ciphers`](#-profile--web--apache--ciphers)
+* [`modules`](#-profile--web--apache--modules)
+* [`vhosts`](#-profile--web--apache--vhosts)
+* [`domains`](#-profile--web--apache--domains)
+
+##### <a name="-profile--web--apache--https"></a>`https`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::web::apache::https`
+
+##### <a name="-profile--web--apache--http"></a>`http`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::web::apache::http`
+
+##### <a name="-profile--web--apache--ciphers"></a>`ciphers`
+
+Data type: `Optional[Enum['default','insecure']]`
+
+
+
+Default value: `$role::web::apache::ciphers`
+
+##### <a name="-profile--web--apache--modules"></a>`modules`
+
+Data type: `Array`
+
+
+
+Default value: `$role::web::apache::modules`
+
+##### <a name="-profile--web--apache--vhosts"></a>`vhosts`
+
+Data type: `Eit_types::Web::Apache::Vhosts`
+
+
+
+Default value: `$role::web::apache::vhosts`
+
+##### <a name="-profile--web--apache--domains"></a>`domains`
+
+Data type: `Array[Eit_types::Monitor::Domains]`
+
+
+
+Default value: `$role::web::apache::domains`
+
+### <a name="profile--web--nginx"></a>`profile::web::nginx`
+
+Nginx Profile
+
+#### Parameters
+
+The following parameters are available in the `profile::web::nginx` class:
+
+* [`ssl`](#-profile--web--nginx--ssl)
+* [`http`](#-profile--web--nginx--http)
+* [`manage_repo`](#-profile--web--nginx--manage_repo)
+* [`cfg_prepend`](#-profile--web--nginx--cfg_prepend)
+* [`http_cfg_prepend`](#-profile--web--nginx--http_cfg_prepend)
+* [`modules`](#-profile--web--nginx--modules)
+* [`extra_cfg_option`](#-profile--web--nginx--extra_cfg_option)
+* [`servers`](#-profile--web--nginx--servers)
+* [`module_directory`](#-profile--web--nginx--module_directory)
+* [`monitor_port`](#-profile--web--nginx--monitor_port)
+* [`package_source`](#-profile--web--nginx--package_source)
+
+##### <a name="-profile--web--nginx--ssl"></a>`ssl`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::web::nginx::ssl`
+
+##### <a name="-profile--web--nginx--http"></a>`http`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::web::nginx::http`
+
+##### <a name="-profile--web--nginx--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+
+
+Default value: `$role::web::nginx::manage_repo`
+
+##### <a name="-profile--web--nginx--cfg_prepend"></a>`cfg_prepend`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::web::nginx::cfg_prepend`
+
+##### <a name="-profile--web--nginx--http_cfg_prepend"></a>`http_cfg_prepend`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::web::nginx::http_cfg_prepend`
+
+##### <a name="-profile--web--nginx--modules"></a>`modules`
+
+Data type: `Array`
+
+
+
+Default value: `$role::web::nginx::modules`
+
+##### <a name="-profile--web--nginx--extra_cfg_option"></a>`extra_cfg_option`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::web::nginx::extra_cfg_option`
+
+##### <a name="-profile--web--nginx--servers"></a>`servers`
+
+Data type: `Hash`
+
+
+
+Default value: `$role::web::nginx::servers`
+
+##### <a name="-profile--web--nginx--module_directory"></a>`module_directory`
+
+Data type: `String`
+
+
+
+Default value: `'/usr/lib64/nginx/modules'`
+
+##### <a name="-profile--web--nginx--monitor_port"></a>`monitor_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$role::web::nginx::monitor_port`
+
+##### <a name="-profile--web--nginx--package_source"></a>`package_source`
+
+Data type: `Enum['nginx', 'passenger']`
+
+
+
+Default value: `$role::web::nginx::package_source`
 
 ### <a name="profile--wildfly"></a>`profile::wildfly`
 
@@ -2387,4 +10097,649 @@ Data type: `Enum['nginx', 'apache']`
 
 
 Default value: `'nginx'`
+
+## Defined types
+
+### <a name="profile--certs--ca_cert"></a>`profile::certs::ca_cert`
+
+CA Cert
+
+#### Parameters
+
+The following parameters are available in the `profile::certs::ca_cert` defined type:
+
+* [`source`](#-profile--certs--ca_cert--source)
+* [`content`](#-profile--certs--ca_cert--content)
+* [`update`](#-profile--certs--ca_cert--update)
+
+##### <a name="-profile--certs--ca_cert--source"></a>`source`
+
+Data type: `Optional[Eit_Files::Source]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--certs--ca_cert--content"></a>`content`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--certs--ca_cert--update"></a>`update`
+
+Data type: `Optional[Eit_types::Cert::Update]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--certs--letsencrypt--domain"></a>`profile::certs::letsencrypt::domain`
+
+Certificates
+NOTE: only haproxy role support letsencrypt for now
+blackbox will scrape the domains if its given in the role::web::haproxy
+
+#### Parameters
+
+The following parameters are available in the `profile::certs::letsencrypt::domain` defined type:
+
+* [`email`](#-profile--certs--letsencrypt--domain--email)
+* [`ca`](#-profile--certs--letsencrypt--domain--ca)
+* [`renew`](#-profile--certs--letsencrypt--domain--renew)
+* [`domains`](#-profile--certs--letsencrypt--domain--domains)
+* [`http_01_port`](#-profile--certs--letsencrypt--domain--http_01_port)
+* [`challenges`](#-profile--certs--letsencrypt--domain--challenges)
+* [`warning`](#-profile--certs--letsencrypt--domain--warning)
+* [`critical`](#-profile--certs--letsencrypt--domain--critical)
+* [`cert_host`](#-profile--certs--letsencrypt--domain--cert_host)
+* [`deploy_hook_command`](#-profile--certs--letsencrypt--domain--deploy_hook_command)
+* [`distribute_to`](#-profile--certs--letsencrypt--domain--distribute_to)
+
+##### <a name="-profile--certs--letsencrypt--domain--email"></a>`email`
+
+Data type: `Eit_types::Email`
+
+
+
+Default value: `$::common::certs::letsencrypt::email`
+
+##### <a name="-profile--certs--letsencrypt--domain--ca"></a>`ca`
+
+Data type:
+
+```puppet
+Enum[
+    'production',
+    'staging'
+  ]
+```
+
+
+
+Default value: `$::common::certs::letsencrypt::ca`
+
+##### <a name="-profile--certs--letsencrypt--domain--renew"></a>`renew`
+
+Data type: `Boolean`
+
+
+
+Default value: `$::common::certs::letsencrypt::renew`
+
+##### <a name="-profile--certs--letsencrypt--domain--domains"></a>`domains`
+
+Data type: `Array[Stdlib::Fqdn]`
+
+
+
+Default value: `$::common::certs::letsencrypt::domains`
+
+##### <a name="-profile--certs--letsencrypt--domain--http_01_port"></a>`http_01_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$::common::certs::letsencrypt::http_01_port`
+
+##### <a name="-profile--certs--letsencrypt--domain--challenges"></a>`challenges`
+
+Data type: `Eit_types::Cert::Letsencrypt::Challenge`
+
+
+
+Default value: `$::common::certs::letsencrypt::challenges`
+
+##### <a name="-profile--certs--letsencrypt--domain--warning"></a>`warning`
+
+Data type: `Optional[Integer]`
+
+
+
+Default value: `$::common::certs::letsencrypt::warning`
+
+##### <a name="-profile--certs--letsencrypt--domain--critical"></a>`critical`
+
+Data type: `Optional[Integer]`
+
+
+
+Default value: `$::common::certs::letsencrypt::critical`
+
+##### <a name="-profile--certs--letsencrypt--domain--cert_host"></a>`cert_host`
+
+Data type: `Optional[Variant[Eit_types::Certname, Eit_types::Host]]`
+
+
+
+Default value: `$::common::certs::letsencrypt::cert_host`
+
+##### <a name="-profile--certs--letsencrypt--domain--deploy_hook_command"></a>`deploy_hook_command`
+
+Data type: `Optional[Variant[Stdlib::Absolutepath, String]]`
+
+
+
+Default value: `$::common::certs::letsencrypt::deploy_hook_command`
+
+##### <a name="-profile--certs--letsencrypt--domain--distribute_to"></a>`distribute_to`
+
+Data type: `Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]]`
+
+
+
+Default value: `$::common::certs::letsencrypt::distribute_to`
+
+### <a name="profile--certs--manual"></a>`profile::certs::manual`
+
+Manual certificate
+TODO: lets not accept expired cert from users.
+need to update the underlying module
+openssl::cert_date_valid($_cert_file)
+
+#### Parameters
+
+The following parameters are available in the `profile::certs::manual` defined type:
+
+* [`key`](#-profile--certs--manual--key)
+* [`cert`](#-profile--certs--manual--cert)
+* [`base_dir_parts`](#-profile--certs--manual--base_dir_parts)
+* [`base_dir_combined`](#-profile--certs--manual--base_dir_combined)
+* [`domain`](#-profile--certs--manual--domain)
+* [`ca`](#-profile--certs--manual--ca)
+* [`ports`](#-profile--certs--manual--ports)
+
+##### <a name="-profile--certs--manual--key"></a>`key`
+
+Data type: `String`
+
+
+
+##### <a name="-profile--certs--manual--cert"></a>`cert`
+
+Data type: `String`
+
+
+
+##### <a name="-profile--certs--manual--base_dir_parts"></a>`base_dir_parts`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+##### <a name="-profile--certs--manual--base_dir_combined"></a>`base_dir_combined`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+##### <a name="-profile--certs--manual--domain"></a>`domain`
+
+Data type: `Stdlib::Fqdn`
+
+
+
+Default value: `$title`
+
+##### <a name="-profile--certs--manual--ca"></a>`ca`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--certs--manual--ports"></a>`ports`
+
+Data type: `Optional[Array[Stdlib::Port]]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--cron--job"></a>`profile::cron::job`
+
+Wrapper that escapes cron command for easy use
+
+#### Parameters
+
+The following parameters are available in the `profile::cron::job` defined type:
+
+* [`command`](#-profile--cron--job--command)
+* [`enable`](#-profile--cron--job--enable)
+* [`user`](#-profile--cron--job--user)
+* [`weekday`](#-profile--cron--job--weekday)
+* [`month`](#-profile--cron--job--month)
+* [`monthday`](#-profile--cron--job--monthday)
+* [`hour`](#-profile--cron--job--hour)
+* [`minute`](#-profile--cron--job--minute)
+* [`environment`](#-profile--cron--job--environment)
+* [`noop_value`](#-profile--cron--job--noop_value)
+
+##### <a name="-profile--cron--job--command"></a>`command`
+
+Data type: `String`
+
+
+
+##### <a name="-profile--cron--job--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--cron--job--user"></a>`user`
+
+Data type: `Eit_types::User`
+
+
+
+Default value: `'root'`
+
+##### <a name="-profile--cron--job--weekday"></a>`weekday`
+
+Data type: `Variant[Enum['*'], Eit_types::Time::Weekdays]`
+
+
+
+Default value: `'*'`
+
+##### <a name="-profile--cron--job--month"></a>`month`
+
+Data type: `Cron::Month`
+
+
+
+Default value: `'*'`
+
+##### <a name="-profile--cron--job--monthday"></a>`monthday`
+
+Data type: `Variant[Enum['*'], Eit_types::Time::Monthday]`
+
+
+
+Default value: `'*'`
+
+##### <a name="-profile--cron--job--hour"></a>`hour`
+
+Data type: `Profile::Cron::Hour`
+
+
+
+Default value: `'*'`
+
+##### <a name="-profile--cron--job--minute"></a>`minute`
+
+Data type: `Profile::Cron::Minute`
+
+
+
+Default value: `'*'`
+
+##### <a name="-profile--cron--job--environment"></a>`environment`
+
+Data type: `Hash[String, String]`
+
+
+
+Default value: `{}`
+
+##### <a name="-profile--cron--job--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--storage--mount"></a>`profile::storage::mount`
+
+regular mount
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::mount` defined type:
+
+* [`ensure`](#-profile--storage--mount--ensure)
+* [`path`](#-profile--storage--mount--path)
+* [`atboot`](#-profile--storage--mount--atboot)
+* [`device`](#-profile--storage--mount--device)
+* [`dump`](#-profile--storage--mount--dump)
+* [`fstype`](#-profile--storage--mount--fstype)
+* [`options`](#-profile--storage--mount--options)
+* [`remounts`](#-profile--storage--mount--remounts)
+* [`target`](#-profile--storage--mount--target)
+* [`noop_mode`](#-profile--storage--mount--noop_mode)
+
+##### <a name="-profile--storage--mount--ensure"></a>`ensure`
+
+Data type: `Eit_types::Resource::Mount::Ensure`
+
+
+
+##### <a name="-profile--storage--mount--path"></a>`path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$name`
+
+##### <a name="-profile--storage--mount--atboot"></a>`atboot`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--device"></a>`device`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--dump"></a>`dump`
+
+Data type: `Optional[Integer[0,2]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--fstype"></a>`fstype`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--options"></a>`options`
+
+Data type: `Optional[Array[String[1]]]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--remounts"></a>`remounts`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--target"></a>`target`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--storage--mount--noop_mode"></a>`noop_mode`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `false`
+
+### <a name="profile--storage--nfs--server--export"></a>`profile::storage::nfs::server::export`
+
+nfs export
+
+#### Parameters
+
+The following parameters are available in the `profile::storage::nfs::server::export` defined type:
+
+* [`options`](#-profile--storage--nfs--server--export--options)
+* [`clients`](#-profile--storage--nfs--server--export--clients)
+* [`path`](#-profile--storage--nfs--server--export--path)
+
+##### <a name="-profile--storage--nfs--server--export--options"></a>`options`
+
+Data type: `Array[String[1]]`
+
+
+
+##### <a name="-profile--storage--nfs--server--export--clients"></a>`clients`
+
+Data type:
+
+```puppet
+Variant[
+    Enum['*'],
+    Array[Stdlib::Host]
+  ]
+```
+
+
+
+##### <a name="-profile--storage--nfs--server--export--path"></a>`path`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$name`
+
+### <a name="profile--system--selinux--fcontext"></a>`profile::system::selinux::fcontext`
+
+The profile::system::selinux::fcontext class.
+
+#### Parameters
+
+The following parameters are available in the `profile::system::selinux::fcontext` defined type:
+
+* [`pathspec`](#-profile--system--selinux--fcontext--pathspec)
+* [`ensure`](#-profile--system--selinux--fcontext--ensure)
+* [`seltype`](#-profile--system--selinux--fcontext--seltype)
+* [`seluser`](#-profile--system--selinux--fcontext--seluser)
+* [`filetype`](#-profile--system--selinux--fcontext--filetype)
+
+##### <a name="-profile--system--selinux--fcontext--pathspec"></a>`pathspec`
+
+Data type: `String`
+
+
+
+Default value: `$title`
+
+##### <a name="-profile--system--selinux--fcontext--ensure"></a>`ensure`
+
+Data type: `Eit_types::Ensure`
+
+
+
+Default value: `'present'`
+
+##### <a name="-profile--system--selinux--fcontext--seltype"></a>`seltype`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--selinux--fcontext--seluser"></a>`seluser`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--selinux--fcontext--filetype"></a>`filetype`
+
+Data type: `Enum['a', 'f', 'd', 'c', 'b', 's', 'l', 'p']`
+
+
+
+Default value: `'a'`
+
+### <a name="profile--system--service_oneshot"></a>`profile::system::service_oneshot`
+
+service_oneshot is a service, which runs only once
+and remainsexited
+
+#### Parameters
+
+The following parameters are available in the `profile::system::service_oneshot` defined type:
+
+* [`content`](#-profile--system--service_oneshot--content)
+* [`enable`](#-profile--system--service_oneshot--enable)
+* [`noop_value`](#-profile--system--service_oneshot--noop_value)
+
+##### <a name="-profile--system--service_oneshot--content"></a>`content`
+
+Data type: `Stdlib::Base64`
+
+
+
+##### <a name="-profile--system--service_oneshot--enable"></a>`enable`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-profile--system--service_oneshot--noop_value"></a>`noop_value`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+### <a name="profile--system--sudoers--conf"></a>`profile::system::sudoers::conf`
+
+sudo conf wrapper
+
+#### Parameters
+
+The following parameters are available in the `profile::system::sudoers::conf` defined type:
+
+* [`filename`](#-profile--system--sudoers--conf--filename)
+* [`ensure`](#-profile--system--sudoers--conf--ensure)
+* [`priority`](#-profile--system--sudoers--conf--priority)
+* [`content`](#-profile--system--sudoers--conf--content)
+* [`source`](#-profile--system--sudoers--conf--source)
+* [`template`](#-profile--system--sudoers--conf--template)
+* [`sudoers_d_dir`](#-profile--system--sudoers--conf--sudoers_d_dir)
+* [`noop_value`](#-profile--system--sudoers--conf--noop_value)
+
+##### <a name="-profile--system--sudoers--conf--filename"></a>`filename`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--sudoers--conf--ensure"></a>`ensure`
+
+Data type: `Eit_types::Ensure`
+
+
+
+Default value: `present`
+
+##### <a name="-profile--system--sudoers--conf--priority"></a>`priority`
+
+Data type: `Integer[0,default]`
+
+
+
+Default value: `10`
+
+##### <a name="-profile--system--sudoers--conf--content"></a>`content`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--sudoers--conf--source"></a>`source`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--sudoers--conf--template"></a>`template`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--system--sudoers--conf--sudoers_d_dir"></a>`sudoers_d_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$common::system::authentication::sudo::__sudoers_d_dir`
+
+##### <a name="-profile--system--sudoers--conf--noop_value"></a>`noop_value`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--system--time--ntp--rtc"></a>`profile::system::time::ntp::rtc`
+
+RTC in local TZ: no
+
+#### Parameters
+
+The following parameters are available in the `profile::system::time::ntp::rtc` defined type:
+
+* [`service_name`](#-profile--system--time--ntp--rtc--service_name)
+
+##### <a name="-profile--system--time--ntp--rtc--service_name"></a>`service_name`
+
+Data type: `String`
+
+
+
+### <a name="profile--varnish--fwadmin"></a>`profile::varnish::fwadmin`
+
+Varnish Firewall
 
