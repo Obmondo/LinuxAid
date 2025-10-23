@@ -1,73 +1,55 @@
 # LinuxAid
 
-## Setup Hiera for users
+A platform for everything you need to run a secure and reliable Linux operations setup
 
-* Clone your [linuxaid-config](https://github.com/Obmondo/linuxaid-config-template.git)
-to get the customerid, you will have to be a registered on obmondo.com
+## Config options
 
-```sh
-git clone https://github.com/Obmondo/linuxaid-config-template.git <customerid>
-```
+Under each module that you use in linuxaid-config tree - you can see the documentation for it the corresponding REFERENCE.md file - following the Puppet standard way of documenting modules.
 
-* Create the symlink under data/customers/\<customerid\>
+For LinuxAid we have built these modules:
 
-```sh
-ln -s  <customerid> data/customers/<customerid>
-```
+- [Roles](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/role/REFERENCE.md) - the list of roles (software and configs we support currently). Note some roles support mixing - so multiple roles cannot always be assigned to a server, as they can conflict.
+- [Common settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/REFERENCE.md) - the list of common configurations you can rollout for any server, regardless of its configured role.
+- [Monitoring settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/monitor/REFERENCE.md) - settings for monitoring
 
-## Puppet roles logic
+## Security and Reliability
 
-No role selected, 0 changes performed on the node
+### Supply Chain Security
 
-`full_host_management` settings can be enabled for any host, which will be setup in no-noop mode
+For Supply Chain Security we have built an [open source repository server](https://gitea.obmondo.com/EnableIT/LinuxAid/src/branch/master/modules/enableit/role/REFERENCE.md#role--package_management--repo).
 
-```yaml
-common::repo::manage: true
-common::logging::manage: true
-common::backup::manage: true
-common::cron::purge_unmanaged: 'root-only'
-common::virtualization::manage: true
-common::network::manage: true
-common::services::manage: true
-common::storage::manage: false
-common::system::manage: true
-common::security::manage: true
-common::monitoring::manage: true
-common::extras::manage: false
-common::mail::manage: true
-```
+It supports mirroring any upstream mirror you need to use for your servers - so you can run airgapped - and servers don't need internet access to function and be maintainable. It also enables staged rollouts.
 
-* NOTE: if full_host_management is set to false and one enable sssd (we wont enable sssd, WHY ? cause sssd might need more things, which user might have not enabled and it might fail)
+It also has a daemon called packagesign, a separate open source project we wrote, that supports automatically pulling built rpm or deb packages from gitea, gitlab etc. build jobs - and gpg signing and adding them to your own repository.
 
-Monitoring(role::monitoring) role selected, only deploy monitoring related stuff (in puppet noop mode ONLY). no full_host_management and you can't even force this (since its hardcoded in the code)
+This is part of a design to protect against any single-point-of-compromise affecting you.
 
-Basic(role::basic) is mix of \[role::monitoring + repo management + system update + custom cert and system ca certs\] (noop mode) - full_host_management is enabled by default (but will only do anything in --no-noop)
+To do this, you need to gpg sign all commits on your branches, that builds these packages/releases (easily setup in .gitconfig) - and then on your runners (which are separate from and not managed by your Githost) - you need to enable it to run a security check, that validates ALL gpg signatures on the git repo cloned - before the CI job is allowed to run.
 
-Any role selected, we need to manage all the settings for the selected role + role::basic
+This protects against a compromised Githost - as they can inject code into your repo.. but once thats cloned by a runner - the job will not be allowed to run.
 
-Monitoring setup wont be setup, unless a subscription is added and after the subsription is expired/in-active, the monitoring setup won't be removed, but only it will disable pushprox (so obmondo does not receive metrics)
+This way - they cannot sneak anything into your release packages.
 
-** Server Update logic
-Pin OS Upgrade for RHEL/SUSE/Ubuntu
+### Staged rollouts
 
-Which means RHEL 8.6 should be update within 8.6 repo and not with 8.7 repos and same goes for SUSE as well
+Using our reposerver role, you can enable automatic snapshots - which will simply make hardlink based snapshots of all repositories, so that you can split your servers into groups, and assign a snapshot to 1 group at a time, and roll out security updates to them.
 
-Ubuntu stays on same release always - unless explicitly set for os_upgrade (ie. we point to f.ex 24.04 - and its currently running 22.04 - it'll change repos - and then next upgrade - will upgrade it to 24.04)
+You can do the same for your LinuxAid configuration (the puppet and/or hiera tree) if you want - by simply making git branches or tags - and locking servers to an environment.
 
-## Status
+## Monitoring
 
-[Puppetboard](http://localhost:8000)
+LinuxAid includes monitoring of everything we have ever needed for any customer we have had.
+That includes hardware monitoring of hardware from Dell, HP, IBM, Supermicro etc. - and we constantly add support and gladly accept PRs :)
 
-## Encrypting/Decrypting Secrets
+Because LinuxAid is built on Puppet (Now OpenVox - the Open Source community fork), it automatically detects your hardware and everything else on your system, using a system called 'facts' - of which there's 1000's - and configures your server according to these facts, with the right monitoring (and everything else).
 
-We using [eyaml.sh](./bin/eyaml.sh) which is a wrapper of heira-eyaml to encrypt/decrypt secrets. You can check their [GitHub repo](https://github.com/voxpupuli/hiera-eyaml) for installation options.
-Make sure that you've the public key present in `var/public_key.pkcs7.pem` in this respository. We already ignoring it in [.gitignore](./.gitignore).
+We run the LinuxAid setup under a Kubernetes setup - documented in KubeAid (see below details link) - and this CAN be spun Pup on a single-host Linux server if you want, but it means you can have a High availability setup, very easily.
+See the technical details on [monitoring here](https://github.com/Obmondo/LinuxAid/blob/master/docs/monitoring/monitoring.md)
 
-### Examples
+## Docs
 
-1. Encrypt some token
-
-```sh
-$ echo "ABCDEFGH-1234-1234-1234-ABCDEFGHIJKL" | ./bin/eyaml.sh
-ENC[PKCS7,MIIBmQYJKoZIhvcNAQcDoIIBijCCAYYCAQAxggEhMIIBHQIBADAFMAACAQEwDQYJKoZIhvcNAQEBBQAEggEAtT/+mI32f5VO2oDG7WmGAPmc5Ctt0rmtEsMLD2FAURZfI0m0C6w8ScwzdDEsC/C0ZOdQY6iE1sYgV74/i0mwHw4eqeIYJq4TgIJUXK/shAZSxdRGOdi7K5q0RhqPazss8MTA5vTe2/RQ0zv0sKpfFnzX14juSIVC/sKPo6KxjUDKIS/io+rEvFh1/EOr3RzpYNJT4iPD7r84ZNzwUoaTCcFtKFaxl0njfiVZBrbmgh+TJKSMs/gjI+QUXFrw4jn9zhHaHmRg0KhCc1pTudhCWZGv/6gA4JZWscgLKPspT5tMxo1NSMllCT3WD1HdcDygKPuElQQzxJ/zMLCvdlNQLTBcBgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBDfc2XAbH8cZC432CAFko6NgDAo4xjSoC67caMck6rJEQP8f6kw90MFq5+ROXOpjLKbZdm6lZ8AFPdR1/3w4T7Pd1A=]
-```
+* [Guides](./docs/guides)
+* [Facts](./docs/facts)
+* [Monitoring](./docs/monitoring)
+* [Roles](./docs/roles)
+* [Setup](./docs/setup)
