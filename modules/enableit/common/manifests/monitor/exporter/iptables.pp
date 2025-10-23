@@ -7,8 +7,8 @@
 # @param listen_address The IP and port the exporter listens on. Defaults to '127.254.254.254:63393'.
 #
 class common::monitor::exporter::iptables (
-  Boolean $enable,
-  Boolean $noop_value = false,
+  Boolean           $enable         = true,
+  Boolean           $noop_value     = false,
   Eit_types::IPPort $listen_address = '127.254.254.254:63393',
 ) {
   $_enable = $enable and $facts['iptable_rules_exist']
@@ -75,7 +75,7 @@ class common::monitor::exporter::iptables (
         'CAP_NET_ADMIN',
         'CAP_NET_RAW',
       ],
-      'AmbientCapabilities' => [
+      'AmbientCapabilities'   => [
         'CAP_DAC_READ_SEARCH',
         'CAP_NET_ADMIN',
         'CAP_NET_RAW',

@@ -20,7 +20,6 @@ class common::monitor::exporter (
   if $enable and $facts['init_system'] == 'systemd' {
     include common::monitor::exporter::node
     include common::monitor::exporter::dns
-    include common::monitor::exporter::pushprox
     include common::monitor::exporter::dellhw
     include common::monitor::exporter::iptables
     include common::monitor::exporter::systemd
