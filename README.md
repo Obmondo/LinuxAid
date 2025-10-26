@@ -12,6 +12,21 @@ For LinuxAid we have built these modules:
 - [Common settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/REFERENCE.md) - the list of common configurations you can rollout for any server, regardless of its configured role.
 - [Monitoring settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/monitor/REFERENCE.md) - settings for monitoring
 
+These options can be applied in different scopes and by default LinuxAid has been built to support applying options based on:
+
+- Tags
+  which is just a group - given by Puppet ENC. 
+  TODO: Document ENC features and custom tag support.
+- Facts
+  Which is 'knowledge about a system' and you can define config for any fact, including:
+  - OS, Distribution, software versions installed or versions of these
+  - Location
+  - specific hardware configurations, like which raid controller or how much memory etc.
+
+  We have over 7k facts - and we then filter that down by default to avoid clogging up the database necessary. This filter is adjustable, should you find you want to use some of the facts we've chosen not to use by default. See [Facts](./docs/facts) for details.
+
+NB. You can see the Hiearchy we've built to support this (and adjust as you want it) here: https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10
+
 ## Security and Reliability
 
 ### Supply Chain Security
@@ -35,6 +50,20 @@ This way - they cannot sneak anything into your release packages.
 Using our reposerver role, you can enable automatic snapshots - which will simply make hardlink based snapshots of all repositories, so that you can split your servers into groups, and assign a snapshot to 1 group at a time, and roll out security updates to them.
 
 You can do the same for your LinuxAid configuration (the puppet and/or hiera tree) if you want - by simply making git branches or tags - and locking servers to an environment.
+
+### GitOps
+
+LinuxAid was built on Puppet (Now OpenVox), which was designed for centralized management and GitOps, which enables:
+
+- Changelog of everything done on your systems 
+  Also required by ISO 27001:2022 and ITILv4, and required several regulations and rules all over the world, incl. NIS2.
+  TODO: Add links to these requirements (in our upcoming compliance helper - coming on Obmondo)
+- System built for making it easy to actually develop the GitOps way.
+  TODO: add link to OpenVox (LinuxAid edition) vs. Ansible/Terraform docs - GitOps
+- Using standardized code review methods, for your operations setup too.
+  Everythings a Pull Request now.
+- Supply Chain Security on operations. 
+  See the gpg signing feaure we use in #Supply Chain Security section above
 
 ## Monitoring
 
