@@ -100,7 +100,7 @@ LinuxAid was built on Puppet (Now OpenVox), which was designed for centralized m
   Everything's a Pull Request now.
 
 - **Supply Chain Security on operations**
-  See the gpg signing feature we use in #Supply Chain Security section above
+  See the GPG signing feature in the [Supply Chain Security](#supply-chain-security) section above.
 
 ### Compliance Built-In
 
@@ -113,13 +113,222 @@ LinuxAid ensures GDPR, CIS, and NIS2 compliance through its architecture:
 
 ## Monitoring
 
-LinuxAid includes monitoring of everything we have ever needed for any customer we have had.
-That includes hardware monitoring of hardware from Dell, HP, IBM, Supermicro etc. - and we constantly add support and gladly accept PRs :)
+LinuxAid includes monitoring of everything we have ever needed for any customer we have had and we constantly add support and gladly accept PRs :)
 
 Because LinuxAid is built on Puppet (Now OpenVox - the Open Source community fork), it automatically detects your hardware and everything else on your system, using a system called 'facts' - of which there's 1000's - and configures your server according to these facts, with the right monitoring (and everything else).
 
-We run the LinuxAid setup under a Kubernetes setup - documented in KubeAid (see below details link) - and this CAN be spun Pup on a single-host Linux server if you want, but it means you can have a High availability setup, very easily.
+**Observability Stack:**
+- Prometheus for metrics tracking
+- Grafana dashboards
+- Alert Manager with custom rules and pre-defined thresholds
+
+### High Availability
+
+We run the LinuxAid setup under a Kubernetes setup - documented in KubeAid (see below details link) - and this CAN be spun up on a single-host Linux server if you want, but it means you can have a High availability setup, very easily.
+
+**Scalable Architecture:** The OpenVox Server (formerly Puppet Server) is written in Clojure with workload separation:
+- **Compiler:** Builds catalogs (CPU-intensive work)
+- **API Layer:** Handles agent communications
+- **Independent scaling:** Scale components based on workload
+
 See the technical details on [monitoring here](https://github.com/Obmondo/LinuxAid/blob/master/docs/monitoring/monitoring.md)
+
+## Proven at Enterprise Scale
+
+Puppet's architecture has been proven at massive scale:
+
+- **GitHub:** Thousands of nodes, 500,000+ lines of Puppet code, 200+ contributors, thousands of catalog-diff runs per day in CI/CD
+- **AWS:** ~100,000 servers managed with Puppet
+- **eBay:** ~100,000 servers under Puppet management
+- **Nordea:** 30,000+ servers in highly regulated banking environment
+- **Thousands of enterprises** running production workloads across industries
+
+These organizations chose this architecture because alternative approaches **don't scale operationally**. The catalog-diff capability alone becomes essential when contemplating changes across tens of thousands of heterogeneous systems with hundreds of contributors.
+
+**LinuxAid is built on this same proven architecture.** Based on OpenVox (the open-source community fork of Puppet), LinuxAid leverages decades of proven operational patterns while adding years of Obmondo's expertise, delivering multiple supported applications, built-in compliance frameworks (GDPR, CIS, NIS2), and enterprise-grade monitoring out of the box. This provides production readiness at enterprise scale without the years of development effort these organizations invested.
+## 100% Data Ownership
+
+LinuxAid provides true data ownership, your setup runs on your servers, even after subscription ends:
+- Your infrastructure code remains on your systems
+- No vendor lock-in
+- Complete control over your operations
+- Can be hosted on-premises or in any cloud
+
+---
+
+## How LinuxAid Compares: Where Alternatives Fall Short
+
+While other tools have their place, they struggle with the operational features that become critical at scale and in compliance-sensitive environments.
+
+### Core Infrastructure Management
+
+| Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
+|---------|----------|---------|-----------|------|-----------|
+| **State Management** | | | | | |
+| Stateless (no state files) | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Automatic drift detection | ✅ | ❌ | ⚠️ Manual | ✅ | ✅ |
+| Dynamic system querying | ✅ | ❌ | ❌ | ✅ | ✅ |
+| State file corruption risk | ✅ None | ✅ None | ❌ High | ✅ None | ✅ None |
+| **Change Management** | | | | | |
+| Pre-deployment impact analysis | ✅ Catalog-diff | ❌ | ⚠️ Plan only | ❌ | ❌ |
+| Preview across all systems | ✅ | ❌ | ⚠️ Limited | ❌ | ❌ |
+| Reduce 30K servers to 5-7 patterns | ✅ | ❌ | ❌ | ❌ | ❌ |
+| CI/CD integration (1000s runs/day) | ✅ GitHub | ❌ | ⚠️ Limited | ❌ | ❌ |
+| **Validation & Safety** | | | | | |
+| True dry-run vs real state | ✅ | ⚠️ Check | ⚠️ Plan | ✅ | ✅ |
+| Automatic file backups | ✅ Built-in | ⚠️ Per-module | ❌ | ⚠️ Manual | ⚠️ Manual |
+| Rollback capability | ✅ Auto | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| **Architecture** | | | | | |
+| Pull-based model | ✅ | ❌ Push | ❌ API | ✅ | ✅ Both |
+| No production SSH required | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Declarative resources | ✅ | ⚠️ Procedural | ✅ Infra | ✅ | ✅ |
+| Automatic dependency resolution | ✅ Graph | ❌ Sequential | ✅ | ✅ | ⚠️ Limited |
+| Define resources any order | ✅ | ❌ | ⚠️ Limited | ✅ | ⚠️ Limited |
+
+**Legend:** ✅ Full support | ⚠️ Partial/Manual | ❌ Not supported
+
+### Compliance & Security Comparison
+
+| Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
+|---------|----------|---------|-----------|------|-----------|
+| **Compliance** | | | | | |
+| GDPR compliant | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| CIS benchmarks | ✅ Built-in | ⚠️ External | ❌ | ⚠️ External | ⚠️ External |
+| NIS2 compliant | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| ISO 27001 ready | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| Complete audit trail | ✅ Built-in | ⚠️ Tower only | ⚠️ Partial | ⚠️ Manual | ⚠️ Manual |
+| GitOps native | ✅ | ⚠️ External | ✅ | ⚠️ External | ⚠️ External |
+| All changes logged | ✅ Auto | ❌ | ⚠️ Partial | ⚠️ Manual | ⚠️ Manual |
+| Separation of duties | ✅ Built-in | ❌ | ⚠️ Manual | ✅ | ⚠️ Manual |
+| **Supply Chain** | | | | | |
+| Repository server | ✅ Built-in | ❌ | ❌ | ❌ | ❌ |
+| Air-gapped operation | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| GPG signature validation | ✅ Built-in | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| Package signing daemon | ✅ Packagesign | ❌ | ❌ | ❌ | ❌ |
+| Staged rollouts | ✅ Snapshots | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| Single-point protection | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+### Scale & Performance Comparison
+
+| Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
+|---------|----------|---------|-----------|------|-----------|
+| **Proven Scale** | | | | | |
+| 100,000+ servers | ✅ AWS, eBay | ⚠️ Tower | ⚠️ Limited | ✅ Facebook | ✅ |
+| 30,000+ servers | ✅ Nordea | ⚠️ Difficult | ❌ | ✅ | ✅ |
+| 1000s contributors | ✅ GitHub | ❌ | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
+| 500,000+ lines code | ✅ GitHub | ❌ | ❌ | ⚠️ Rare | ⚠️ Rare |
+| **Performance** | | | | | |
+| Horizontal scaling | ✅ Components | ⚠️ Tower | ⚠️ Limited | ✅ | ✅ |
+| Component scaling | ✅ Compiler/API | ❌ | ❌ | ✅ | ✅ |
+| Agent efficiency | ✅ | ❌ | ❌ | ✅ | ✅ |
+
+### Configuration & Monitoring Comparison
+
+| Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
+|---------|----------|---------|-----------|------|-----------|
+| **Data Management** | | | | | |
+| Hierarchical data | ✅ Hiera | ⚠️ Vars | ⚠️ Variables | ⚠️ Data bags | ✅ Pillar |
+| Code/data separation | ✅ Excellent | ⚠️ Basic | ⚠️ Basic | ✅ Good | ✅ Good |
+| Environment overrides | ✅ | ⚠️ Limited | ⚠️ Workspaces | ✅ | ✅ |
+| Context-aware configs | ✅ 7000+ facts | ⚠️ Limited | ❌ | ✅ Ohai | ✅ Grains |
+| **Community** | | | | | |
+| Module ecosystem | ✅ Forge | ✅ Galaxy | ✅ Registry | ❌ Weak | ⚠️ Limited |
+| Quality standards | ✅ Strong | ⚠️ Variable | ⚠️ Variable | ⚠️ Weak | ⚠️ Variable |
+| Built-in apps | ✅ 60+ | ⚠️ External | ❌ | ⚠️ Limited | ⚠️ Limited |
+| **Monitoring** | | | | | |
+| Hardware monitoring | ✅ Dell, HP, IBM | ❌ | ❌ | ❌ | ❌ |
+| Auto-detect & configure | ✅ Fact-based | ❌ | ❌ | ⚠️ Manual | ⚠️ Manual |
+| Prometheus integration | ✅ Built-in | ⚠️ External | ⚠️ External | ⚠️ External | ⚠️ External |
+| Grafana dashboards | ✅ Pre-built | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+
+### Core Architectural Differences
+
+**Pull Model vs. Push Model:**
+- **LinuxAid (Pull):** Systems pull configuration from central server in controlled, auditable manner
+- **Ansible (Push):** Administrators SSH into systems and execute commands directly using Python Fabric library
+- **Terraform (State File):** Tracks infrastructure in separate state file that must be carefully managed
+
+This architectural decision cascades into every aspect of operational practice.
+
+### The SSH Anti-Pattern Problem
+
+Ansible's architecture makes it easy to develop problematic workflows:
+
+1. **Production SSH access:** "Quick fix" via SSH
+2. **Update playbook:** Try to capture the fix in code
+3. **Test deployment:** Deploy to fresh system, it fails
+4. **Missing steps:** Realize manual fix had undocumented steps
+5. **Iterate:** Multiple rounds of SSH + playbook updates
+6. **Give up:** Playbook "mostly works" but needs manual intervention
+
+**The problem:** When you have direct SSH access, you risk changes not being logged anywhere, violating compliance requirements and "good way of working" with colleagues. You iterate on fixes, make manual changes, and forget steps.
+
+**LinuxAid's approach:** You don't SSH directly to servers you manage. All changes run through the Puppet server. You must update your configuration code. Next run either succeeds or fails with clear errors. No ambiguity, no forgotten manual steps.
+
+LinuxAid makes it much easier **NOT** to land in these bad habits that come naturally with Ansible's SSH-based model.
+
+### Long-Term Operational Sustainability
+
+**The Real Question:** Will your operational patterns still be sustainable in two years when you're managing thousands of systems with compliance requirements?
+
+| Aspect | Ansible | Terraform | LinuxAid |
+|--------|---------|-----------|----------|
+| **Small scale** | ✅ Quick start | ✅ Provisioning | ✅ |
+| **Large scale** | ⚠️ Needs Tower | ❌ Config mgmt | ✅ Proven |
+| **Compliance** | ❌ Manual | ⚠️ Partial | ✅ Built-in |
+| **Anti-patterns** | ❌ SSH habits | ✅ N/A | ✅ Prevented |
+| **Technical debt** | ❌ Accumulates | ⚠️ State files | ✅ Minimal |
+| **Sustainability** | ⚠️ Small teams | ⚠️ Infra only | ✅ Enterprise |
+
+**LinuxAid:**
+- Architected for sustainable operations at scale (100s to 100,000s of systems)
+- Compliance-friendly workflows naturally support audit requirements
+- Change confidence through catalog diffing and dry-run validation
+- Prevents anti-patterns through architectural constraints
+- Proven at enterprise scale for decades
+
+### Data Ownership & Use Cases
+
+| Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
+|---------|----------|---------|-----------|------|-----------|
+| **Ownership** | | | | | |
+| 100% data ownership | ✅ | ✅ | ✅ | ⚠️ Hosted | ✅ |
+| Runs on your servers | ✅ | ✅ | ✅ | ⚠️ Optional | ✅ |
+| Post-subscription access | ✅ Full | ✅ | ✅ | ❌ Limited | ✅ |
+| No vendor lock-in | ✅ | ✅ | ⚠️ Partial | ❌ | ✅ |
+| **Best For** | | | | | |
+| Small (< 50 servers) | ✅ | ✅ | ⚠️ Provision | ✅ | ✅ |
+| Medium (50-1000) | ✅ | ⚠️ | ⚠️ Provision | ✅ | ✅ |
+| Enterprise (1000+) | ✅ Proven | ⚠️ Tower | ❌ | ✅ | ✅ |
+| Compliance-heavy | ✅ Built-in | ❌ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
+| Multiple contributors | ✅ GitHub | ⚠️ Difficult | ⚠️ Locking | ⚠️ Difficult | ⚠️ Difficult |
+| Infrastructure provision | ⚠️ Terraform | ⚠️ Limited | ✅ Perfect | ⚠️ Limited | ⚠️ Limited |
+| System configuration | ✅ Perfect | ⚠️ Small | ❌ Wrong | ✅ | ✅ |
+
+---
+
+## Complementary Tools
+
+**Best Practice:** Use multiple tools for their strengths:
+
+- **Terraform:** Provision infrastructure (cloud resources, networking, load balancers)
+- **LinuxAid:** Configure and maintain systems (ongoing compliance, security, applications)
+- **Puppet Bolt:** One-off tasks and orchestration (separate tool that can complement LinuxAid)
+
+---
+
+## Key Differentiators
+
+**LinuxAid's Unique Strengths:**
+
+1. **Catalog-diff** - The transformational capability for large-scale operations (no competitor offers this)
+2. **Stateless architecture** - No state file management overhead
+3. **Built-in compliance** - GDPR, CIS, NIS2 ready out of the box
+4. **Supply chain security** - Repository server with GPG signing and air-gap support
+5. **Proven architecture at extreme scale** - 100,000+ servers at AWS, eBay and GitHub
+6. **Prevents anti-patterns** - Architecture naturally discourages problematic workflows
+
+---
 
 ## Docs
 
