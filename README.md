@@ -56,6 +56,8 @@ It supports mirroring any upstream mirror you need to use for your servers - so 
 
 It also has a daemon called packagesign, a separate open source project we wrote, that supports automatically pulling built rpm or deb packages from gitea, gitlab etc. build jobs - and gpg signing and adding them to your own repository.
 
+**Protection Against Single-Point-of-Compromise:**
+
 This is part of a design to protect against any single-point-of-compromise affecting you.
 
 To do this, you need to gpg sign all commits on your branches, that builds these packages/releases (easily setup in .gitconfig) - and then on your runners (which are separate from and not managed by your Githost) - you need to enable it to run a security check, that validates ALL gpg signatures on the git repo cloned - before the CI job is allowed to run.
