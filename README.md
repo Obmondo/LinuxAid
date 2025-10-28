@@ -76,15 +76,40 @@ You can do the same for your LinuxAid configuration (the puppet and/or hiera tre
 
 LinuxAid was built on Puppet (Now OpenVox), which was designed for centralized management and GitOps, which enables:
 
-- Changelog of everything done on your systems 
+- **Changelog of everything done on your systems**
   Also required by ISO 27001:2022 and ITILv4, and required several regulations and rules all over the world, incl. NIS2.
   TODO: Add links to these requirements (in our upcoming compliance helper - coming on Obmondo)
-- System built for making it easy to actually develop the GitOps way.
+
+- **All changes through central server**
+  Similar to what Ansible Tower provides (as a paid add-on), LinuxAid's architecture makes centralized control a core feature:
+  - All changes flow through the Puppet server
+  - Complete logging and auditability
+  - No direct SSH to systems for "quick fixes"
+  - Prevents the anti-pattern of undocumented manual changes
+
+- **Branch-based development and testing**
+  - Develop features in feature branches
+  - Test changes against real systems using branch-specific catalogs
+  - Merge to main only after validation
+  - No need to maintain separate test infrastructure
+
+- **System built for making it easy to actually develop the GitOps way**
   TODO: add link to OpenVox (LinuxAid edition) vs. Ansible/Terraform docs - GitOps
-- Using standardized code review methods, for your operations setup too.
-  Everythings a Pull Request now.
-- Supply Chain Security on operations. 
-  See the gpg signing feaure we use in #Supply Chain Security section above
+
+- **Using standardized code review methods, for your operations setup too**
+  Everything's a Pull Request now.
+
+- **Supply Chain Security on operations**
+  See the gpg signing feature we use in #Supply Chain Security section above
+
+### Compliance Built-In
+
+LinuxAid ensures GDPR, CIS, and NIS2 compliance through its architecture:
+- Audit-ready change tracking
+- Separation of duties (no production SSH needed)
+- Reproducible system states
+- Configuration baselines enforcement
+- Drift detection and correction
 
 ## Monitoring
 
