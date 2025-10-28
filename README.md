@@ -25,11 +25,11 @@ These options can be applied in different scopes and by default LinuxAid has bee
 
 ### Hierarchical Data Management with Hiera
 
-LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated data separation from code.
+LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated data separation from code. This builds on the scope-based configuration mentioned above (Tags and Facts), allowing you to organize and override configuration data at any level of specificity.
 
 **Benefits:**
 - Same codebase across dev, staging, and production
-- Override data at appropriate specificity levels (node, location, OS, etc.)
+- Override data at appropriate specificity levels (node, location, OS, etc.) - leveraging the Tag and Fact-based scopes described above
 - Clear separation between code logic and environment-specific data
 - Similar flexibility to Helm values in Kubernetes
 
@@ -44,7 +44,64 @@ The Puppet community module ecosystem is the backbone of LinuxAid's capabilities
 - 60+ supported applications out of the box
 - Strong backward compatibility commitment
 
-This distinguished Puppet from competitors like Chef, which failed due to lack of community modules.
+## Change Impact Analysis: Catalog-Diff
+
+**One of LinuxAid's most transformational capabilities** is the ability to calculate and preview ALL changes that any code modification will cause across your infrastructure—without touching a single server.
+
+### How It Works
+
+When managing 30,000 servers, you can:
+
+1. **Make a code change** in your configuration management repository
+2. **Calculate changesets** automatically for all affected nodes
+3. **Preview detailed impact** - see exactly what will change on each server
+4. **Group by pattern** - reduce 30,000 servers to 5-7 distinct changeset patterns
+5. **Review before deployment** - know precisely which servers will be affected and how
+
+### Example Output
+
+Instead of discovering issues after deployment, you get:
+
+```
+Changeset 1: (affects 15,234 servers)
+  - Add iptables rule for port 443
+  - Restart firewall service
+  Servers: web-prod-*, web-staging-*
+
+Changeset 2: (affects 8,421 servers)
+  - Update nginx.conf: worker_processes 2 → 4
+  - Reload nginx service
+  Servers: loadbalancer-*
+
+Changeset 3: (affects 3,156 servers)
+  - No changes (catalog identical)
+  Servers: db-primary-*, db-replica-*
+```
+
+### Real-World Impact
+
+GitHub uses this capability extensively, running thousands of catalog-diff operations daily in their CI/CD pipeline with 500,000+ lines of Puppet code and 200+ contributors. This enables them to:
+
+- **Prevent unexpected changes** before they reach production
+- **Collaborate confidently** across large teams without stepping on each other
+- **Meet compliance requirements** by documenting exact change impact
+- **Reduce MTTR** by catching issues in development, not production
+
+### Why This Matters
+
+**Traditional approach (Ansible, manual scripting):**
+- Run playbook → discover it changed unexpected systems
+- Roll back manually
+- Debug what went wrong
+- Try again
+
+**LinuxAid approach:**
+- Review catalog-diff report
+- See exactly what will change and where
+- Approve or reject before any server is touched
+- Deploy with confidence
+
+**No other configuration management tool offers this level of pre-deployment visibility.** This is why enterprises managing tens of thousands of systems choose this architecture, the alternative doesn't scale operationally.
 
 ## Security and Reliability
 
@@ -81,7 +138,7 @@ LinuxAid was built on Puppet (Now OpenVox), which was designed for centralized m
   TODO: Add links to these requirements (in our upcoming compliance helper - coming on Obmondo)
 
 - **All changes through central server**
-  Similar to what Ansible Tower provides (as a paid add-on), LinuxAid's architecture makes centralized control a core feature:
+  Similar to what AWX (the open-source upstream of Ansible's automation controller) provides, LinuxAid's architecture makes centralized control a core feature:
   - All changes flow through the Puppet server
   - Complete logging and auditability
   - No direct SSH to systems for "quick fixes"
@@ -146,6 +203,7 @@ Puppet's architecture has been proven at massive scale:
 These organizations chose this architecture because alternative approaches **don't scale operationally**. The catalog-diff capability alone becomes essential when contemplating changes across tens of thousands of heterogeneous systems with hundreds of contributors.
 
 **LinuxAid is built on this same proven architecture.** Based on OpenVox (the open-source community fork of Puppet), LinuxAid leverages decades of proven operational patterns while adding years of Obmondo's expertise, delivering multiple supported applications, built-in compliance frameworks (GDPR, CIS, NIS2), and enterprise-grade monitoring out of the box. This provides production readiness at enterprise scale without the years of development effort these organizations invested.
+
 ## 100% Data Ownership
 
 LinuxAid provides true data ownership, your setup runs on your servers, even after subscription ends:
@@ -196,7 +254,7 @@ While other tools have their place, they struggle with the operational features 
 | CIS benchmarks | ✅ Built-in | ⚠️ External | ❌ | ⚠️ External | ⚠️ External |
 | NIS2 compliant | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
 | ISO 27001 ready | ✅ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
-| Complete audit trail | ✅ Built-in | ⚠️ Tower only | ⚠️ Partial | ⚠️ Manual | ⚠️ Manual |
+| Complete audit trail | ✅ Built-in | ⚠️ AWX only | ⚠️ Partial | ⚠️ Manual | ⚠️ Manual |
 | GitOps native | ✅ | ⚠️ External | ✅ | ⚠️ External | ⚠️ External |
 | All changes logged | ✅ Auto | ❌ | ⚠️ Partial | ⚠️ Manual | ⚠️ Manual |
 | Separation of duties | ✅ Built-in | ❌ | ⚠️ Manual | ✅ | ⚠️ Manual |
@@ -213,12 +271,12 @@ While other tools have their place, they struggle with the operational features 
 | Feature | LinuxAid | Ansible | Terraform | Chef | SaltStack |
 |---------|----------|---------|-----------|------|-----------|
 | **Proven Scale** | | | | | |
-| 100,000+ servers | ✅ AWS, eBay | ⚠️ Tower | ⚠️ Limited | ✅ Facebook | ✅ |
+| 100,000+ servers | ✅ AWS, eBay | ⚠️ AWX | ⚠️ Limited | ✅ Facebook | ✅ |
 | 30,000+ servers | ✅ Nordea | ⚠️ Difficult | ❌ | ✅ | ✅ |
 | 1000s contributors | ✅ GitHub | ❌ | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
 | 500,000+ lines code | ✅ GitHub | ❌ | ❌ | ⚠️ Rare | ⚠️ Rare |
 | **Performance** | | | | | |
-| Horizontal scaling | ✅ Components | ⚠️ Tower | ⚠️ Limited | ✅ | ✅ |
+| Horizontal scaling | ✅ Components | ⚠️ AWX | ⚠️ Limited | ✅ | ✅ |
 | Component scaling | ✅ Compiler/API | ❌ | ❌ | ✅ | ✅ |
 | Agent efficiency | ✅ | ❌ | ❌ | ✅ | ✅ |
 
@@ -232,8 +290,8 @@ While other tools have their place, they struggle with the operational features 
 | Environment overrides | ✅ | ⚠️ Limited | ⚠️ Workspaces | ✅ | ✅ |
 | Context-aware configs | ✅ 7000+ facts | ⚠️ Limited | ❌ | ✅ Ohai | ✅ Grains |
 | **Community** | | | | | |
-| Module ecosystem | ✅ Forge | ✅ Galaxy | ✅ Registry | ❌ Weak | ⚠️ Limited |
-| Quality standards | ✅ Strong | ⚠️ Variable | ⚠️ Variable | ⚠️ Weak | ⚠️ Variable |
+| Module ecosystem | ✅ Forge | ✅ Galaxy | ✅ Registry | ⚠️ Limited | ⚠️ Limited |
+| Quality standards | ✅ Strong | ⚠️ Variable | ⚠️ Variable | ⚠️ Variable | ⚠️ Variable |
 | Built-in apps | ✅ 60+ | ⚠️ External | ❌ | ⚠️ Limited | ⚠️ Limited |
 | **Monitoring** | | | | | |
 | Hardware monitoring | ✅ Dell, HP, IBM | ❌ | ❌ | ❌ | ❌ |
@@ -274,7 +332,7 @@ LinuxAid makes it much easier **NOT** to land in these bad habits that come natu
 | Aspect | Ansible | Terraform | LinuxAid |
 |--------|---------|-----------|----------|
 | **Small scale** | ✅ Quick start | ✅ Provisioning | ✅ |
-| **Large scale** | ⚠️ Needs Tower | ❌ Config mgmt | ✅ Proven |
+| **Large scale** | ⚠️ Needs AWX | ❌ Config mgmt | ✅ Proven |
 | **Compliance** | ❌ Manual | ⚠️ Partial | ✅ Built-in |
 | **Anti-patterns** | ❌ SSH habits | ✅ N/A | ✅ Prevented |
 | **Technical debt** | ❌ Accumulates | ⚠️ State files | ✅ Minimal |
@@ -299,7 +357,7 @@ LinuxAid makes it much easier **NOT** to land in these bad habits that come natu
 | **Best For** | | | | | |
 | Small (< 50 servers) | ✅ | ✅ | ⚠️ Provision | ✅ | ✅ |
 | Medium (50-1000) | ✅ | ⚠️ | ⚠️ Provision | ✅ | ✅ |
-| Enterprise (1000+) | ✅ Proven | ⚠️ Tower | ❌ | ✅ | ✅ |
+| Enterprise (1000+) | ✅ Proven | ⚠️ AWX | ❌ | ✅ | ✅ |
 | Compliance-heavy | ✅ Built-in | ❌ | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
 | Multiple contributors | ✅ GitHub | ⚠️ Difficult | ⚠️ Locking | ⚠️ Difficult | ⚠️ Difficult |
 | Infrastructure provision | ⚠️ Terraform | ⚠️ Limited | ✅ Perfect | ⚠️ Limited | ⚠️ Limited |
