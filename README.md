@@ -14,18 +14,37 @@ For LinuxAid we have built these modules:
 
 These options can be applied in different scopes and by default LinuxAid has been built to support applying options based on:
 
-- Tags
-  which is just a group - given by Puppet ENC. 
+- **Tags** - which is just a group - given by Puppet ENC. 
   TODO: Document ENC features and custom tag support.
-- Facts
-  Which is 'knowledge about a system' and you can define config for any fact, including:
+- **Facts** - Which is 'knowledge about a system' and you can define config for any fact, including:
   - OS, Distribution, software versions installed or versions of these
   - Location
   - specific hardware configurations, like which raid controller or how much memory etc.
 
   We have over 7k facts - and we then filter that down by default to avoid clogging up the database necessary. This filter is adjustable, should you find you want to use some of the facts we've chosen not to use by default. See [Facts](./docs/facts) for details.
 
-NB. You can see the Hiearchy we've built to support this (and adjust as you want it) here: https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10
+### Hierarchical Data Management with Hiera
+
+LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated data separation from code.
+
+**Benefits:**
+- Same codebase across dev, staging, and production
+- Override data at appropriate specificity levels (node, location, OS, etc.)
+- Clear separation between code logic and environment-specific data
+- Similar flexibility to Helm values in Kubernetes
+
+NB. You can see the Hierarchy we've built to support this (and adjust as you want it) here: https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10
+
+### Strong Community Module Ecosystem
+
+The Puppet community module ecosystem is the backbone of LinuxAid's capabilities:
+- Well-tested, peer-reviewed implementations
+- Standardized interfaces and patterns
+- Easy to extend and customize
+- 60+ supported applications out of the box
+- Strong backward compatibility commitment
+
+This distinguished Puppet from competitors like Chef, which failed due to lack of community modules.
 
 ## Security and Reliability
 
