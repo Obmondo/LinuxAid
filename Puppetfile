@@ -436,7 +436,7 @@ mod 'voxpupuli/ssh_keygen',
 
 mod 'voxpupuli/splunk',
     :git => 'https://github.com/voxpupuli/puppet-splunk.git',
-    :ref => 'v10.0.0'
+    :ref => 'f2ea3d959662c63a63032dcd58feb06d7a9ca006'
 
 mod 'voxpupuli/zypprepo',
     :git => 'https://github.com/voxpupuli/puppet-zypprepo.git',

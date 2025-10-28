@@ -1,7 +1,6 @@
 # @summary
-#   Private class declared by Class[splunk::forwarder] to contain all the
-#   configuration needed for a base install of the Splunk Universal
-#   Forwarder
+#   Contains all configuration needed for a base install of the Splunk
+#   Universal Forwarder
 #
 class splunk::forwarder::config {
   if $splunk::forwarder::seed_password {
@@ -31,9 +30,11 @@ class splunk::forwarder::config {
   }
 
   # Remove init.d file if the service provider is systemd
-  if $facts['service_provider'] == 'systemd' and versioncmp($splunk::forwarder::version, '7.2.2') >= 0 {
-    file { '/etc/init.d/splunk':
-      ensure => 'absent',
+  if $facts['os']['name'] != 'windows' {
+    if $facts['service_provider'] == 'systemd' and versioncmp($splunk::forwarder::version, '7.2.2') >= 0 {
+      file { '/etc/init.d/splunk':
+        ensure => 'absent',
+      }
     }
   }
 

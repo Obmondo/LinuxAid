@@ -1,9 +1,6 @@
 # @summary
-#   This class takes a small number of arguments (can be set through Hiera) and
-#   generates sane default values installation media names and locations.
-#   Default ports can also be specified here. This is a parameters class, and
-#   contributes no resources to the graph. Rather, it only sets values for
-#   parameters to be consumed by child classes.
+#   Accepts settings, and provides default values for module parameters.
+#   Parameters class only: contributes no resources to the graph.
 #
 # @param version
 #   The version of Splunk to install. This will be in the form x.y.z; e.g.
@@ -159,13 +156,14 @@ class splunk::params (
       $enterprise_seed_config_file     = "${enterprise_homedir}/etc/system/local/user-seed.conf"
       $forwarder_password_config_file  = "${forwarder_homedir}/etc/passwd"
       $enterprise_password_config_file = "${enterprise_homedir}/etc/passwd"
-      $forwarder_secret_file           = "${forwarder_homedir}/etc/splunk.secret"
-      $enterprise_secret_file          = "${enterprise_homedir}/etc/splunk.secret"
+      $forwarder_secret_file           = "${forwarder_homedir}/etc/auth/splunk.secret"
+      $enterprise_secret_file          = "${enterprise_homedir}/etc/auth/splunk.secret"
       $forwarder_confdir               = "${forwarder_homedir}/etc"
       $enterprise_src_subdir           = 'linux'
       $enterprise_confdir              = "${enterprise_homedir}/etc"
       $forwarder_install_options       = []
       $enterprise_install_options      = []
+      $forwarder_service_enable        = 'true'
       # Systemd not supported until Splunk 7.2.2
       if $facts['service_provider'] == 'systemd' and versioncmp($version, '7.2.2') >= 0 {
         $enterprise_service      = 'Splunkd'
@@ -191,13 +189,14 @@ class splunk::params (
       $enterprise_seed_config_file     = "${enterprise_homedir}/etc/system/local/user-seed.conf"
       $forwarder_password_config_file  = "${forwarder_homedir}/etc/passwd"
       $enterprise_password_config_file = "${enterprise_homedir}/etc/passwd"
-      $forwarder_secret_file           = "${forwarder_homedir}/etc/splunk.secret"
-      $enterprise_secret_file          = "${enterprise_homedir}/etc/splunk.secret"
+      $forwarder_secret_file           = "${forwarder_homedir}/etc/auth/splunk.secret"
+      $enterprise_secret_file          = "${enterprise_homedir}/etc/auth/splunk.secret"
       $forwarder_confdir               = "${forwarder_homedir}/etc"
       $enterprise_src_subdir           = 'solaris'
       $enterprise_confdir              = "${enterprise_homedir}/etc"
       $forwarder_install_options       = []
       $enterprise_install_options      = []
+      $forwarder_service_enable        = 'true'
       # Systemd not supported until Splunk 7.2.2
       if $facts['service_provider'] == 'systemd' and versioncmp($version, '7.2.2') >= 0 {
         $enterprise_service      = 'Splunkd'
@@ -223,8 +222,8 @@ class splunk::params (
       $enterprise_seed_config_file     = "${enterprise_homedir}/etc/system/local/user-seed.conf"
       $forwarder_password_config_file  = "${forwarder_homedir}/etc/passwd"
       $enterprise_password_config_file = "${enterprise_homedir}/etc/passwd"
-      $forwarder_secret_file           = "${forwarder_homedir}/etc/splunk.secret"
-      $enterprise_secret_file          = "${enterprise_homedir}/etc/splunk.secret"
+      $forwarder_secret_file           = "${forwarder_homedir}/etc/auth/splunk.secret"
+      $enterprise_secret_file          = "${enterprise_homedir}/etc/auth/splunk.secret"
       $forwarder_confdir               = "${forwarder_homedir}/etc"
       $enterprise_src_subdir           = 'freebsd'
       $enterprise_confdir              = "${enterprise_homedir}/etc"
@@ -232,6 +231,7 @@ class splunk::params (
       $enterprise_install_options      = []
       $enterprise_service              = 'splunk'
       $forwarder_service               = 'splunk'
+      $forwarder_service_enable        = 'true'
       $enterprise_service_file         = '/etc/rc.d/splunk'
       $forwarder_service_file          = '/etc/rc.d/splunk'
       $boot_start_args                 = ''
@@ -244,9 +244,10 @@ class splunk::params (
       $enterprise_seed_config_file     = "${enterprise_homedir}\\etc\\system\\local\\user-seed.conf"
       $forwarder_password_config_file  = "${forwarder_homedir}\\etc\\passwd"
       $enterprise_password_config_file = "${enterprise_homedir}\\etc\\passwd"
-      $forwarder_secret_file           = "${forwarder_homedir}\\etc\\splunk.secret"
-      $enterprise_secret_file          = "${enterprise_homedir}\\etc\\splunk.secret"
+      $forwarder_secret_file           = "${forwarder_homedir}\\etc\\auth\\splunk.secret"
+      $enterprise_secret_file          = "${enterprise_homedir}\\etc\\auth\\splunk.secret"
       $forwarder_service               = 'SplunkForwarder'
+      $forwarder_service_enable        = 'delayed'
       $forwarder_service_file          = "${forwarder_homedir}\\dummy" # Not used in Windows, but attribute must be defined with a valid path
       $forwarder_confdir               = "${forwarder_homedir}\\etc"
       $enterprise_src_subdir           = 'windows'
@@ -309,6 +310,13 @@ class splunk::params (
     default:   { $package_provider = undef } # Don't define a $package_provider
   }
 
+  # Download URLs changed starting from 9.4.0 for debs.
+  # Splunk only includes "-linux-".
+  if versioncmp($version, '9.4.0') >= 0 {
+    $deb_prefix = 'linux'
+  } else {
+    $deb_prefix = 'linux-2.6'
+  }
   # Download URLs changed starting from 8.2.11 and 9.0.5 for RPMs.
   # Splunk no longer includes "-linux-2.6-".
   $linux_prefix = (versioncmp($version, '9.0.5') >= 0 or (versioncmp($version, '8.2.11') >= 0 and versioncmp($version, '9.0.0') == -1)) ? {
@@ -333,13 +341,26 @@ class splunk::params (
       $forwarder_package_name  = 'splunkforwarder'
       $enterprise_package_name = 'splunk'
     }
+    'RedHat aarch64': {
+      $package_suffix          = "${version}-${build}${linux_prefix}aarch64.rpm"
+      $forwarder_package_name  = 'splunkforwarder'
+      $enterprise_package_name = 'splunk'
+    }
     'Debian i386': {
       $package_suffix          = "${version}-${build}-linux-2.6-intel.deb"
       $forwarder_package_name  = 'splunkforwarder'
       $enterprise_package_name = 'splunk'
     }
     'Debian amd64': {
-      $package_suffix          = "${version}-${build}-linux-2.6-amd64.deb"
+      $package_suffix          = "${version}-${build}-${deb_prefix}-amd64.deb"
+      $forwarder_package_name  = 'splunkforwarder'
+      $enterprise_package_name = 'splunk'
+    }
+    'Debian aarch64': {
+      $package_suffix = versioncmp($version, '9.4.0') >= 0 ? {
+        true  => "${version}-${build}-linux-arm64.deb",
+        false => "${version}-${build}-Linux-armv8.deb"
+      }
       $forwarder_package_name  = 'splunkforwarder'
       $enterprise_package_name = 'splunk'
     }
