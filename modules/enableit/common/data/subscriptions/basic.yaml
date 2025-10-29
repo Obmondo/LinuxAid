@@ -1,0 +1,9 @@
+---
+common::system::classes:
+  - common::system::updates
+
+common::default::classes:
+  - common::setup::obmondo_admin
+  - common::system::authentication::sudo
+
+common::system::updates::enable: true

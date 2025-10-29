@@ -26,16 +26,13 @@ class common::setup::obmondo_admin (
   Stdlib::Absolutepath    $__bin_dir       = '/opt/obmondo/bin',
   Boolean                 $noop_value      = false,
 ) {
-  include common::system::authentication::sudo
-  contain ::common::virtualization
-
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
   $_home_admin_ssh = "${_home_admin}/.ssh"
 
   file {
     default:
-    ensure => directory,
+    ensure => ensure_dir($::obmondo_monitor),
     noop   => $noop_value,
       ;
 
@@ -71,13 +68,6 @@ class common::setup::obmondo_admin (
     owner => 'root',
     group => 'root',
       ;
-  }
-
-  # Create Obmondo User and Group
-  group { 'obmondo':
-    ensure => present,
-    system => true,
-    noop   => $noop_value,
   }
 
   user { 'obmondo-admin':

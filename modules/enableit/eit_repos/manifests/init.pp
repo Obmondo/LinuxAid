@@ -60,7 +60,7 @@ class eit_repos (
         eit_repos::apt::upstream.include
       }
 
-      Class[$_defined_apt_classes] -> Package<||>
+      Class[$_defined_apt_classes] -> Package<| provider == 'apt' |>
     }
     'RedHat': {
       # Necessary to be able to purge versionlocks

@@ -1,6 +1,3 @@
 ---
-common::role_basic::classes:
-  - common::system::updates
-common::system::updates::enable: true
 common::system::classes:
   - common::system::updates

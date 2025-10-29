@@ -138,6 +138,8 @@ lookup_options:
     merge: "unique"
   common::monitor::exporter::mtail::logs:
     merge: "unique"
+  common::default::classes:
+    merge: "unique"
   common::system::classes:
     merge: "unique"
 
