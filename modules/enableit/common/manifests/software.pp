@@ -61,4 +61,12 @@ class common::software {
   if lookup('common::software::rustdesk::manage', Boolean, undef, false) {
     common::software::rustdesk.include
   }
+
+  if lookup('common::software::pycharm::manage', Boolean, undef, false) {
+    include common::software::pycharm
+  }
+
+  if lookup('common::software::miniforge::manage', Boolean, undef, false) {
+    include common::software::miniforge
+  }
 }
