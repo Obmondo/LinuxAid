@@ -3,15 +3,6 @@ class profile::network::wireguard (
   Hash $tunnels = $common::network::wireguard::tunnels,
 ) {
 
-  $_manage_repo = $::facts['os']['name'] ? {
-    'Ubuntu' => false,
-    default  => true
-  }
-
-  class { '::wireguard':
-    manage_repo => $_manage_repo
-  }
-
   # We support both managed and unmanaged configuration. For managed
   # configuration we manage the WireGuard config file. For unmanaged we don't
   # manage the config file, but we do manage the service.
@@ -23,12 +14,11 @@ class profile::network::wireguard (
   $_unmanaged_tunnels = $tunnels - $_managed_tunnels
 
   $_managed_tunnels.each | $key, $value | {
-    wireguard::interface { $key :
+    wireguard::interface  { $key :
       ensure      => pick($value['ensure'], 'present'),
       private_key => $value['private_key'],
-      listen_port => $value['listen_port'],
-      address     => $value['address'],
-      saveconfig  => false,
+      dport       => $value['listen_port'],
+      addresses   => [{'address' => $value['address']}],
       peers       => $value['peers']
     }
   }
