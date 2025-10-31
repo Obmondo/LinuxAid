@@ -272,7 +272,7 @@ mod 'obmondo/sssd',
 
 mod 'obmondo/systemd_journal_remote',
     :git => 'https://github.com/obmondo/puppet-systemd_journal_remote.git',
-    :ref => 'v1.2.0'
+    :ref => 'v1.2.1'
 
 mod 'voxpupuli/trusted_ca',
     :git => 'https://github.com/voxpupuli/puppet-trusted_ca.git',

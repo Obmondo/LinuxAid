@@ -1,0 +1,11 @@
+---
+fixtures:
+  repositories:
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    inifile: https://github.com/puppetlabs/puppetlabs-inifile
+    provision: 'https://github.com/puppetlabs/provision.git'
+    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib
+    systemd: https://github.com/voxpupuli/puppet-systemd
+  symlinks:
+    systemd_journal_remote: "#{source_dir}"

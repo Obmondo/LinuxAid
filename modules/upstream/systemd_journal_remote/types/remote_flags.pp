@@ -11,7 +11,6 @@ type Systemd_Journal_Remote::Remote_Flags = Struct[
     Optional['trust']        => Variant[Stdlib::Unixpath, Enum['all']],
     Optional['gnutls-log']   => String,
     Optional['output']       => Stdlib::Unixpath,
-    Optional['gnutls-log']   => String,
     Optional['split-mode']   => Enum['none','host'],
     Optional['compress']     => Enum['yes','no'],
     Optional['seal']         => Enum['yes','no'],
