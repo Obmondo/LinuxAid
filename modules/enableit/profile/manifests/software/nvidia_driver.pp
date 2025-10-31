@@ -10,11 +10,10 @@ class profile::software::nvidia_driver (
 
       apt::source { 'Nvidia-Driver':
         ensure       => ensure_present($enable),
-        location     => "https://developer.download.nvidia.com/compute/cuda/repos/${distro}/x86_64/ /",
+        location     => "https://developer.download.nvidia.com/compute/cuda/repos/${distro}/x86_64/",
         noop         => $noop_value,
         architecture => 'amd64',
-        release      => '',
-        repos        => '',
+        release      => '/',
         key          => {
           'id'     => 'EB693B3035CD5710E231E123A4B469963BF863CC',
           'source' => 'https://developer.download.nvidia.com/compute/cuda/repos/GPGKEY',
