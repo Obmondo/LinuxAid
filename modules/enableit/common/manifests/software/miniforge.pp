@@ -2,17 +2,17 @@
 #
 # @param manage Boolean parameter to control management of Miniforge. Defaults to false.
 #
-# @param enable Boolean parameter to enable or disable Miniforge. Defaults to true.
+# @param enable Boolean parameter to control whether Miniforge is installed or not. Defaults to true.
 #
-# @param version String parameter to control version of Miniforge3.
+# @param version Eit_types::Version parameter to control version of Miniforge3.
 #
-# @param noop_value Optional boolean to specify noop mode value.
+# @param install_dir Eit_types::AbsPath parameter to control installation directory of Miniforge3.
 #
 class common::software::miniforge (
-  Boolean               $manage     = true,
-  Boolean               $enable     = true,
-  Eit_types::Version    $version    = '25.3.1-0',
-  Eit_types::Noop_Value $noop_value = undef,
+  Boolean            $manage      = false,
+  Boolean            $enable      = true,
+  Eit_types::Version $version     = '25.9.1-0',
+  Eit_types::AbsPath $install_dir = '/opt/miniforge',
 ) {
 
   if $manage {
