@@ -281,7 +281,7 @@ class cassandra (
     $commitlog_directory_settings = $settings
   }
 
-  if is_array($data_file_directories) {
+  if $data_file_directories =~ Array {
     file { $data_file_directories:
       ensure  => directory,
       owner   => 'cassandra',
