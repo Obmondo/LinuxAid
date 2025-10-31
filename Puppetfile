@@ -392,7 +392,7 @@ mod 'pseiler/vsftpd',
 
 mod 'voxpupuli/cassandra',
     :git => 'https://github.com/voxpupuli/puppet-cassandra.git',
-    :ref => 'v3.1.0'
+    :ref => '562e8e901db36ab30b2e1cbe4577dd899c9615dd'
 
 mod 'voxpupuli/augeas',
     :git => 'https://github.com/voxpupuli/puppet-augeas.git',

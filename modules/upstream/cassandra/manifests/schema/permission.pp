@@ -139,7 +139,7 @@ define cassandra::schema::permission (
     exec { $create_script:
       command => $create_command,
       unless  => $read_command,
-      require => Exec['::cassandra::schema connection test'],
+      require => Exec['cassandra::schema connection test'],
     }
   } elsif $ensure == absent {
     $delete_script = "REVOKE ${permission_name} ON ${resource} FROM ${user_name}"
@@ -153,7 +153,7 @@ define cassandra::schema::permission (
     exec { $delete_script:
       command => $delete_command,
       onlyif  => $read_command,
-      require => Exec['::cassandra::schema connection test'],
+      require => Exec['cassandra::schema connection test'],
     }
   } else {
     fail("Unknown action (${ensure}) for ensure attribute.")
