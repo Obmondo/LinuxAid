@@ -16,6 +16,7 @@ class monitor::system::disk::usage (
   Monitor::Disable      $disable  = undef,
   Hash                  $labels   = {},
   Monitor::Override     $override = undef,
+  Array[Stdlib::Unixpath] $ignore_mountpoints = [],
 ) {
   @@monitor::alert { $title:
     enable  => $enable,
@@ -28,5 +29,17 @@ class monitor::system::disk::usage (
     labels   => $labels,
     override => $override,
     tag      => $::trusted['certname'],
+  }
+
+  $ignore_mountpoints.each |$_mountpoint| {
+    @@monitor::threshold { "${title}::ignore_mountpoints":
+      record   => "${title}::ignore_mountpoints",
+      expr     => 1,
+      override => $override,
+      tag      => $::trusted['certname'],
+      labels   => {
+        'mountpoint' => $_mountpoint,
+      }
+    }
   }
 }
