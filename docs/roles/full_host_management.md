@@ -1,5 +1,3 @@
-## Full Management Host.
-
 # Full Host Management Configuration
 
 ## Overview

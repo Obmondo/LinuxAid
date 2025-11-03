@@ -15,78 +15,12 @@ When no role is selected:
 
 ### Available Roles
 
-#### 1. **Monitoring Role** (`role::monitoring`)
+* [Monitoring](./monitoring.md)
+* [Basic](./basic.md)
 
-The Monitoring role is designed for deploying monitoring infrastructure only.
+### Host Management
 
-**Characteristics:**
-- Deploys **only** monitoring-related components
-- Always runs in **Puppet noop mode ONLY**
-- `full_host_management` is **disabled and cannot be forced** (hardcoded in the implementation)
-- Minimal footprint for dedicated monitoring hosts
-
-**Use Case:** Ideal for hosts that should only run monitoring agents without any other configuration management.
-
----
-
-#### 2. **Basic Role** (`role::basic`)
-
-The Basic role provides foundational host management with monitoring capabilities.
-
-**Components:**
-- `role::monitoring` - Monitoring setup
-- Repository management
-- System updates
-- Custom certificates and system CA certificates
-
-**Characteristics:**
-- Runs in **noop mode** by default
-- `full_host_management` is **enabled by default**
-- Full management settings only take effect when running with `--no-noop` flag
-
-**Use Case:** Suitable for hosts requiring basic system management and monitoring without extensive configuration.
-
----
-
-#### 3. **Custom Roles** (Any Other Role)
-
-When any custom role is selected, the system applies:
-- All settings specific to the selected role
-- **Plus** all settings from `role::basic`
-
-This ensures a baseline configuration is always present alongside role-specific settings.
-
----
-
-## Full Host Management Settings
-
-The `full_host_management` parameter enables comprehensive configuration management across multiple system areas. When enabled and running in no-noop mode, the following settings are applied:
-
-```yaml
-common::repo::manage: true                    # Repository management
-common::logging::manage: true                 # Logging configuration
-common::backup::manage: true                  # Backup management
-common::cron::purge_unmanaged: 'root-only'   # Cron job management
-common::virtualization::manage: true          # Virtualization settings
-common::network::manage: true                 # Network configuration
-common::services::manage: true                # Service management
-common::storage::manage: false                # Storage management (disabled)
-common::system::manage: true                  # System-level configuration
-common::security::manage: true                # Security settings
-common::monitoring::manage: true              # Monitoring configuration
-common::extras::manage: false                 # Extra features (disabled)
-common::mail::manage: true                    # Mail configuration
-```
-
-### Important Notes
-
-- `full_host_management` can be enabled for **any host**
-- When enabled, the system operates in **noop mode** for that host (unless agent is run with --no-noop manually for now)
-- Storage and extras management are disabled by default
-
----
-
-## Monitoring Setup Behavior
+* [Full Host Management](./full_host_management.md)
 
 ### Subscription-Based Activation
 
