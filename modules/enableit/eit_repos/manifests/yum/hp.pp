@@ -1,7 +1,7 @@
 # HP MCP for community OS and SPP for RHEL and SUSE
 class eit_repos::yum::hp (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
 

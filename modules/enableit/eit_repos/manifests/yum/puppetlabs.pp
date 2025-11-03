@@ -1,7 +1,7 @@
 # PuppetLabs
 class eit_repos::yum::puppetlabs (
-  Boolean           $ensure     = false,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = false,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
   $_os_major = $facts['os']['release']['major']

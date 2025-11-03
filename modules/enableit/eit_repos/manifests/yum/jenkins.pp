@@ -1,7 +1,7 @@
 # Jenkins
 class eit_repos::yum::jenkins (
-  Boolean $ensure               = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
   # We most likely don't want $noop_value to be `true` (because that causes noop

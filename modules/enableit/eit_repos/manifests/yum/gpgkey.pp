@@ -36,7 +36,7 @@ define eit_repos::yum::gpgkey (
   String                    $owner      = 'root',
   String                    $group      = 'root',
   String                    $mode       = '0644',
-  Optional[Boolean]         $noop_value = undef,
+  Boolean                   $noop_value = $eit_repos::noop_value,
 ) {
 
   $_creators = [$content, $source]

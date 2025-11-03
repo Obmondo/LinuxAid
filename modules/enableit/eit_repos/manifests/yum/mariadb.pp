@@ -1,8 +1,8 @@
 # Mariadb
 class eit_repos::yum::mariadb (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
-  String            $version    = '10.4',
+  Boolean $ensure     = true,
+  String  $version    = '10.4',
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
   # We most likely don't want $noop_value to be `true` (because that causes noop
