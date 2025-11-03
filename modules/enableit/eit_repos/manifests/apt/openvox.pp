@@ -1,7 +1,7 @@
 # Apt openvox
 class eit_repos::apt::openvox (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
   File {

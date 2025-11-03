@@ -1,8 +1,8 @@
 # Kubernetes APT repos
 class eit_repos::apt::kubernetes (
-  Boolean           $ensure     = true,
-  Array[String]     $versions   = ['v1.27'],
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean       $ensure     = true,
+  Array[String] $versions   = ['v1.27'],
+  Boolean       $noop_value = $eit_repos::noop_value,
 ) {
 
   # We most likely don't want $noop_value to be `true` (because that causes noop
