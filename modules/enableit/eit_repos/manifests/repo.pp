@@ -1,20 +1,14 @@
 # Eit_Repos define
 define eit_repos::repo (
   Boolean           $ensure     = true,
+  Boolean           $noop_value = $eit_repos::noop_value,
   Optional[
     Variant[
       String,
       Array
     ]
   ]                 $versions   = undef,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
 ) {
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
 
   $_package_provider = if $facts['package_provider'] == 'dnf' {
     'yum'

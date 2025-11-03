@@ -20,12 +20,6 @@ class eit_repos (
   confine(!($facts['package_provider'] in ['apt', 'yum', 'dnf', 'zypper']),
           "provider ${facts['package_provider']} (${facts['os']['family']}) is not supported")
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   case $facts['os']['family'] {
     'Debian': {
       class { 'apt':

@@ -6,12 +6,6 @@ class eit_repos::yum::epel (
   Enum['http', 'https'] $source_protocol = lookup('eit_repos::source_protocol'),
 ) {
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   yumrepo { 'enableit-epel' :
     ensure   => ensure_present($ensure),
     baseurl  => "${source_protocol}://repos.obmondo.com/epel/\$releasever/\$basearch/",

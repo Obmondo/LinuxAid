@@ -1,15 +1,11 @@
 # Docket yum repos
 class eit_repos::yum::docker (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
-# The dockerrepo only provides "centos" (not rhel) as distribution.
-# https://access.redhat.com/discussions/6249651
+  # The dockerrepo only provides "centos" (not rhel) as distribution.
+  # https://access.redhat.com/discussions/6249651
 
   yumrepo { 'docker-ce-stable' :
     ensure   => ensure_present($ensure),

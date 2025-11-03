@@ -4,12 +4,6 @@ class eit_repos::yum::jenkins (
   Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   yumrepo { 'jenkins' :
     ensure   => ensure_present($ensure),
     baseurl  => 'http://pkg.jenkins-ci.org/redhat',

@@ -4,11 +4,6 @@ class eit_repos::yum::elrepo (
   Boolean $noop_value = $eit_repos::noop_value,
 ) {
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
   # TODO: Looks like it support only centos6, get it working for centos7
   yumrepo { 'elrepo' :
     ensure     => ensure_present($ensure),
