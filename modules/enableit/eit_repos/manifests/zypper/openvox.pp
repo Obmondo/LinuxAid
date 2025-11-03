@@ -4,12 +4,6 @@ class eit_repos::zypper::openvox (
   Optional[Boolean] $noop_value = $eit_repos::noop_value,
 ) {
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   $_os_major = $facts['os']['release']['major']
 
   zypprepo { 'obmondo_openvox8':

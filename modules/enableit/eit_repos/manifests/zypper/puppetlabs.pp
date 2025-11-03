@@ -6,12 +6,6 @@ class eit_repos::zypper::puppetlabs (
   Enum['http', 'https'] $source_protocol = lookup('eit_repos::source_protocol'),
 ) {
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   $suseversion = $facts['os']['release']['major']
 
   # Obmondo Puppetlabs Repo

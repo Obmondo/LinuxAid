@@ -77,12 +77,6 @@ class common::repo (
     default   => 'amd64',
   }
 
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
-
   if $manage {
     class { 'eit_repos':
       purge           => $purge,
