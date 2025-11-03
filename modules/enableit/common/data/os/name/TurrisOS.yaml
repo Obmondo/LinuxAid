@@ -1,13 +1,18 @@
 ---
 common::monitor::prometheus::env_file_path: "/etc/default"
-common::system::authentication::sudo::manage: false
+
 common::logging::manage: false
+
 common::default::classes:
   - common::network
+
 common::role_basic::classes: []
+
 common::full_host_management: false
+
 common::repo::manage: false
 
+common::system::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
 common::system::motd::enable: false
 
@@ -24,3 +29,6 @@ common::system::nsswitch::shadow: []
 common::network::service_name: "network"
 common::network::ipaddress_package: "rubygem-ipaddress"
 common::network::ipaddress_provider: "gem"
+
+common::system::updates::enable: false
+common::system::updates::manage: false

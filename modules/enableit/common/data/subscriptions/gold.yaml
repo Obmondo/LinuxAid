@@ -7,3 +7,4 @@ common::default::classes:
   - common::system::authentication::sudo
 
 common::system::updates::enable: true
+common::system::updates::manage: true
