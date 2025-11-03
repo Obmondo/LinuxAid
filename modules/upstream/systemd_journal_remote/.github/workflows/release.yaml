@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    name: Deploy to forge
+    runs-on: ubuntu-20.04
+    if: github.repository_owner == 'gibbs'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Build and Deploy
+        env:
+          BLACKSMITH_FORGE_USERNAME: '${{ secrets.PUPPET_FORGE_USERNAME }}'
+          BLACKSMITH_FORGE_API_KEY: '${{ secrets.PUPPET_FORGE_API_KEY }}'
+        run: bundle exec rake module:push
