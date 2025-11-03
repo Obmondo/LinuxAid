@@ -1,6 +1,6 @@
 # @summary Class for managing the Prometheus HAProxy exporter
 #
-# @param enable 
+# @param enable
 # Boolean flag to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 #
 # @param noop_value Boolean value for noop mode. Defaults to false.
@@ -11,7 +11,7 @@
 #
 class common::monitor::exporter::haproxy (
   Boolean             $enable      = $common::monitor::exporter::enable,
-  Boolean             $noop_value  = false,
+  Boolean             $noop_value  = $common::monitor::exporter::noop_value,
   Stdlib::Port        $listen_port = 63661,
   Eit_types::Certname $host        = $trusted['certname'],
 ) {

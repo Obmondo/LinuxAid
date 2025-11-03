@@ -8,7 +8,7 @@
 #
 class common::monitor::exporter (
   Boolean              $enable     = $common::monitor::enable,
-  Optional[Boolean]    $noop_value = false,
+  Optional[Boolean]    $noop_value = $common::monitor::noop_value,
   Stdlib::Absolutepath $config_dir = '/opt/obmondo/etc/exporter',
 ) {
   file { $config_dir :

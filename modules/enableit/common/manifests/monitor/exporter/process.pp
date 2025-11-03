@@ -4,12 +4,12 @@
 #
 # @param noop_value Whether to perform noop operations. Defaults to false.
 #
-# @param listen_address 
+# @param listen_address
 # The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
 #
 class common::monitor::exporter::process (
   Boolean           $enable         = true,
-  Boolean           $noop_value     = false,
+  Boolean           $noop_value     = $common::monitor::exporter::noop_value,
   Eit_types::IPPort $listen_address = '127.254.254.254:63388',
 ) {
   class { 'prometheus::process_exporter':

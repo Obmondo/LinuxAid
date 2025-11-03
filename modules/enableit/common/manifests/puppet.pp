@@ -25,6 +25,7 @@ class common::puppet (
   Stdlib::Port         $server_port         = 443,
   Boolean              $configure_agent     = true,
   Boolean              $setup_agent         = true,
+  Boolean              $noop_value          = true,
   Stdlib::Absolutepath $config_file         = $facts['puppet_config'],
   Boolean              $run_agent_as_noop   = true,
   Optional[Hash]       $extra_main_settings = undef,

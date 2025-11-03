@@ -2,7 +2,7 @@
 #
 # @param enable Boolean flag to enable or disable the exporter. Defaults to false.
 #
-# @param noop_value Boolean flag to run in noop mode. Defaults to false.
+# @param noop_value Boolean flag to run in noop mode. Defaults to $common::monitor::exporter::noop_value.
 #
 # @param host The host certificate name. Defaults to $trusted['certname'].
 #
@@ -10,15 +10,15 @@
 #
 # @param listen_port The port to listen on. Defaults to 63396.
 #
-# @param config_file Path to the configuration YAML file. Defaults to "${::common::monitor::exporter::config_dir}/security_exporter.yaml".
+# @param config_file Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
 #
 class common::monitor::exporter::security (
   Boolean              $enable      = false,
-  Boolean              $noop_value  = false,
+  Boolean              $noop_value  = $common::monitor::exporter::noop_value,
   Eit_types::Certname  $host        = $trusted['certname'],
   Stdlib::Host         $listen_host = '127.254.254.254',
   Stdlib::Port         $listen_port = 63396,
-  Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/security_exporter.yaml"
+  Stdlib::Absolutepath $config_file = "${common::monitor::exporter::config_dir}/security_exporter.yaml"
 ) {
 
   $service_name = 'obmondo-security-exporter'

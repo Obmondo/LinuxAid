@@ -16,17 +16,18 @@ class common::monitor::prometheus::server (
   Stdlib::Absolutepath $config_dir,
   Eit_types::IPPort    $listen_address,
 
-  Boolean              $enable = $common::monitor::enable,
+  Boolean              $enable     = $common::monitor::enable,
+  Boolean              $noop_value = $common::monitor::noop_value,
 ) {
 
   include common::monitor::prometheus
 
   Exec {
-    noop => false,
+    noop => $noop_value,
   }
 
   File {
-    noop => false,
+    noop => $noop_value,
   }
 
   file { '/opt/obmondo/prometheus':

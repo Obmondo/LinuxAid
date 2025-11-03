@@ -2,7 +2,7 @@
 # We want to stick to PC1 repo
 # so we can setup puppet-agent package
 class profile::puppet (
-  Boolean              $noop_value             = false,
+  Boolean              $noop_value             = $::common::puppet::noop_value,
   Stdlib::Host         $server                 = $::common::puppet::server,
   Stdlib::Port         $server_port            = $::common::puppet::server_port,
   Eit_types::Version   $version                = $::common::puppet::version,
