@@ -40,7 +40,7 @@
 #
 class common::repo (
   Boolean                   $manage          = true,
-  Optional[Boolean]         $noop_value      = undef,
+  Boolean                   $noop_value      = true,
   Array[
     Variant[
       String,
