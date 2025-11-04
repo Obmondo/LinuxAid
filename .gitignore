@@ -29,3 +29,6 @@ var/
 
 # Ignore yardoc dir
 *.yardoc/
+
+# Ignore custom/user-specific VS Code configs
+*.vscode/

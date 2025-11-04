@@ -1,0 +1,10 @@
+---
+rustdesk::server::enable: false
+rustdesk::server::version: 1.7.1
+rustdesk::server::noop_value: false
+rustdesk::server::dependencies: []
+
+rustdesk::client::enable: false
+rustdesk::client::version: 1.4.3
+rustdesk::client::noop_value: false
+rustdesk::client::dependencies: []
