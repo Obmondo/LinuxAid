@@ -10,11 +10,6 @@ hierarchy:
       - "role/%{::obmondo_classes.0}.yaml"
       - "role/%{::obmondo_classes.1}.yaml"
 
-  - name: "Monitor"
-    paths:
-      - "monitor/monitor=%{::obmondo_monitor},os.name=%{facts.os.name}.yaml"
-      - "monitor/monitor=%{::obmondo_monitor}.yaml"
-
   - name: "Facts"
     paths:
       - "facts/hardware.sys_vendor=%{facts.hardware.sys_vendor},os.family=%{facts.os.family},os.release.major=%{facts.os.release.major}.yaml"
@@ -45,6 +40,10 @@ hierarchy:
 
   - name: "OS kernel"
     path: "%{kernel}.yaml"
+
+  - name: "Subscription"
+    paths:
+      - "role/subscriptions/%{::subscription}.yaml"
 
   - name: "common"
     path: "common.yaml"

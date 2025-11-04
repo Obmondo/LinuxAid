@@ -20,7 +20,7 @@ class common::monitor::prometheus (
   Stdlib::Absolutepath $usershell,
   Stdlib::Fqdn         $server,
 
-  Boolean              $noop_value = false,
+  Boolean              $noop_value = $common::monitor::noop_value,
 ) {
   File {
     noop => $noop_value,

@@ -2,7 +2,7 @@
 # We want to stick to PC1 repo
 # so we can setup puppet-agent package
 class profile::puppet (
-  Boolean              $noop_value             = false,
+  Boolean              $noop_value             = $::common::puppet::noop_value,
   Stdlib::Host         $server                 = $::common::puppet::server,
   Stdlib::Port         $server_port            = $::common::puppet::server_port,
   Eit_types::Version   $version                = $::common::puppet::version,
@@ -37,26 +37,27 @@ class profile::puppet (
       noop_value => $noop_value,
     }
 
+    # Openvox
+    eit_repos::repo { 'openvox':
+      noop_value => $noop_value,
+    }
+
     # Remove the puppetlabs repo package
     package { [
       'puppet7-release',
       'puppet8-release',
       'puppet-agent'
     ]:
-      ensure => absent,
-      noop   => $noop_value,
-      notify => Package[$aio_package_name],
-    }
-
-    # Openvox
-    eit_repos::repo { 'openvox':
-      before     => Package[$aio_package_name],
-      noop_value => $noop_value,
+      ensure  => absent,
+      noop    => $noop_value,
+      notify  => Package[$aio_package_name],
+      require => Eit_repos::Repo['openvox'],
     }
 
     package { $aio_package_name:
-      ensure => $_version,
-      noop   => $noop_value,
+      ensure  => $_version,
+      noop    => $noop_value,
+      require => Eit_repos::Repo['openvox'],
     }
 
     $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])

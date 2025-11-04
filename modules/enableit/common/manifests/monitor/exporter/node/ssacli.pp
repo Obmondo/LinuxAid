@@ -5,8 +5,8 @@
 # @param noop_value Optional[Boolean], the noop value for resources. Defaults to false.
 #
 class common::monitor::exporter::node::ssacli (
-  Boolean           $enable         = $common::monitor::exporter::node::enable,
-  Optional[Boolean] $noop_value     = false,
+  Boolean $enable     = $common::monitor::exporter::node::enable,
+  Boolean $noop_value = $common::monitor::exporter::node::noop_value,
 ) {
 
   File {

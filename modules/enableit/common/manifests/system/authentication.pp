@@ -49,6 +49,4 @@ class common::system::authentication (
       include profile::system::authentication
     }
   }
-  # NOTE: need this for our own sudo setup for obmondo-admin
-  include common::system::authentication::sudo
 }

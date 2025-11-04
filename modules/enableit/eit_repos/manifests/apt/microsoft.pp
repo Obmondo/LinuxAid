@@ -1,14 +1,8 @@
 # Microsoft
 class eit_repos::apt::microsoft (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
 
   $_os_type = $facts['os']['name'].downcase
   $_os_major = $facts['os']['release']['major']

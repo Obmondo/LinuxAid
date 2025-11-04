@@ -49,7 +49,7 @@ class common (
     }
     # NOTE: when user only want role::basic and repo + updates with no full host management
     if 'role::basic' in $::obmondo_classes and !$full_host_management {
-      lookup('common::role_basic::classes').each | $role | {
+      lookup('common::role_basic::classes', Array, undef, []).each | $role | {
         contain $role
       }
     }

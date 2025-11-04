@@ -1,16 +1,9 @@
 # NI_VISA currently only used by GN
 class eit_repos::yum::ni_visa (
   Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean           $noop_value = $eit_repos::noop_value,
   Optional[String]  $version    = '2019.07'
 ) {
-
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
 
   yumrepo { 'ni-software':
     ensure        => ensure_present($ensure),

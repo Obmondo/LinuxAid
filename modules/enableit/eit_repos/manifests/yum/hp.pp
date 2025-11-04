@@ -1,15 +1,8 @@
 # HP MCP for community OS and SPP for RHEL and SUSE
 class eit_repos::yum::hp (
-  Boolean           $ensure     = true,
-  Optional[Boolean] $noop_value = $eit_repos::noop_value,
+  Boolean $ensure     = true,
+  Boolean $noop_value = $eit_repos::noop_value,
 ) {
-
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
 
   $osname = $facts.dig('os','name')
 

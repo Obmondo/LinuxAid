@@ -8,7 +8,21 @@ MAX_TAGS = 10
 DEFAULT_HIERA_BRANCH = 'main'
 OBMONDO_MONITOR = true
 SUBSCRIPTION = false
-TAG_KEYS = []
+HIERA_DATADIR = ../../hiera-data
+TAGS_FILE = HIERA_DATADIR + '/' + DEFAULT_HIERA_BRANCH + '/tags.yaml'
+
+# TODO: add support for regex in array list
+def find_keys_for_host(data, certname)
+  data.select { |key, hosts| hosts.include?(certname) }.keys
+end
+
+begin
+  LIST_OF_TAGS = YAML.load_file(TAGS_FILE)
+  TAG_KEYS = find_keys_for_host(LIST_OF_TAGS, CERTNAME)
+rescue
+  warn 'No tags file found at => ' + TAGS_FILE
+  TAG_KEYS = []
+end
 
 parameters = {
   'node_name'       => CERTNAME,

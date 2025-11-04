@@ -40,7 +40,7 @@
 #
 class common::repo (
   Boolean                   $manage          = true,
-  Optional[Boolean]         $noop_value      = undef,
+  Boolean                   $noop_value      = true,
   Array[
     Variant[
       String,
@@ -75,12 +75,6 @@ class common::repo (
   $architecture = $facts['os']['architecture'] ? {
     'aarch64' => 'arm64',
     default   => 'amd64',
-  }
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
   }
 
   if $manage {

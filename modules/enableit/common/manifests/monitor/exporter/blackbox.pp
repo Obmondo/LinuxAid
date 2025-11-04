@@ -4,17 +4,18 @@
 #
 # @param listen_port The port on which the exporter listens.
 #
-# @param noop_value (Optional) Boolean to indicate if operations should be in noop mode. Defaults to false.
+# @param noop_value (Optional) Boolean to indicate if operations should be in noop mode. Defaults to $common::monitor::exporter::noop_value.
 #
-# @param config_file The absolute path to the configuration file. Defaults to "${::common::monitor::exporter::config_dir}/blackbox.yml".
+# @param config_file The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
 #
 # @param targets An array of domain targets to monitor. Defaults to an empty array.
 #
 class common::monitor::exporter::blackbox (
   Boolean              $enable,
   Stdlib::Port         $listen_port,
-  Boolean              $noop_value  = false,
-  Stdlib::Absolutepath $config_file = "${::common::monitor::exporter::config_dir}/blackbox.yml",
+  Boolean              $noop_value  = $common::monitor::exporter::noop_value,
+  Stdlib::Absolutepath $config_file = "${common::monitor::exporter::config_dir}/blackbox.yml",
+
   Array[Eit_types::Monitor::Domains] $targets = [],
 ) {
 

@@ -3,7 +3,7 @@ class eit_repos (
   Boolean               $purge           = false,
   Boolean               $upstream        = false,
   Boolean               $purge_pins      = true,
-  Optional[Boolean]     $noop_value      = undef,
+  Boolean               $noop_value      = true,
   Enum['http', 'https'] $source_protocol = 'https',
 ) {
 
@@ -19,12 +19,6 @@ class eit_repos (
 
   confine(!($facts['package_provider'] in ['apt', 'yum', 'dnf', 'zypper']),
           "provider ${facts['package_provider']} (${facts['os']['family']}) is not supported")
-
-  # We most likely don't want $noop_value to be `true` (because that causes noop
-  # to be forced); we most likely intend to use `undef` instead.
-  if $noop_value {
-    notify { '$noop_value is true!': }
-  }
 
   case $facts['os']['family'] {
     'Debian': {
@@ -60,7 +54,7 @@ class eit_repos (
         eit_repos::apt::upstream.include
       }
 
-      Class[$_defined_apt_classes] -> Package<||>
+      Class[$_defined_apt_classes] -> Package<| provider == 'apt' |>
     }
     'RedHat': {
       # Necessary to be able to purge versionlocks

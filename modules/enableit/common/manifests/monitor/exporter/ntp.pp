@@ -12,7 +12,7 @@
 class common::monitor::exporter::ntp (
   Boolean           $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort $listen_address = '127.254.254.254:9559',
-  Optional[Boolean] $noop_value     = false,
+  Boolean           $noop_value     = $common::monitor::exporter::noop_value,
   String            $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
 ) {
   File {

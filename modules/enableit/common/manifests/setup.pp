@@ -5,7 +5,11 @@
 class common::setup (
   Boolean $noop_value = false,
 ) {
-  include ::common::system::authentication::sudo
-  contain ::common::virtualization
-  contain ::common::setup::obmondo_admin
+
+  # Create Obmondo group for exporter to run under this group
+  group { 'obmondo':
+    ensure => present,
+    system => true,
+    noop   => $noop_value,
+  }
 }

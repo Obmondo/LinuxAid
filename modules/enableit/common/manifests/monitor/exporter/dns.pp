@@ -12,7 +12,7 @@
 #
 class common::monitor::exporter::dns (
   Boolean                      $enable           = $common::monitor::exporter::enable,
-  Boolean                      $noop_value       = false,
+  Boolean                      $noop_value       = $common::monitor::exporter::noop_value,
   Eit_types::IPPort            $listen_address   = '127.254.254.254:63395',
   Eit_types::Duration::Seconds $interval_seconds = 120,
   Array[Eit_types::Hostname]   $domains          = [
