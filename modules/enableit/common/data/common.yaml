@@ -158,7 +158,7 @@ common::mail::manage: false
 
 common::default::classes:
   - common::setup
-  - common::puppet
+  - common::openvox
   - common::monitor
   - common::monitoring
   - common::hosts
@@ -317,10 +317,11 @@ common::system::services:
     noop: false
 
 # Puppet
-common::puppet::version: "8.23.0"
-common::puppet::package_name: "openvox-agent"
-common::puppet::configure_agent: true
-common::puppet::setup_agent: true
+common::openvox::version: "8.23.0"
+common::openvox::server: enableit.puppet.obmondo.com
+common::openvox::package_name: "openvox-agent"
+common::openvox::configure_agent: true
+common::openvox::setup_agent: true
 
 # KeepAlived
 common::keepalived::global_defs:
@@ -497,8 +498,6 @@ common::software::vncserver::config_defaults:
 
 common::mail::myhostname: "%{facts.networking.fqdn}"
 common::mail::mydomain: "%{facts.networking.domain}"
-
-common::puppet::server: enableit.puppet.obmondo.com
 
 common::system::dns::listen_address:
   - "192.168.0.1"

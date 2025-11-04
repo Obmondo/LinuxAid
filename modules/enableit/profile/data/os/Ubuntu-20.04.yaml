@@ -2,5 +2,5 @@
 profile::software::nvidia_driver::packages:
   - 'nvidia-driver-570'
   - 'cuda-drivers-570'
-profile::puppet::package_version_suffix: '-1+ubuntu20.04'
+profile::openvox::package_version_suffix: '-1+ubuntu20.04'
 profile::logging::logrotate::__scheduling_method: 'service'
