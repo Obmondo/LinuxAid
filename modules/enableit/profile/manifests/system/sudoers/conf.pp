@@ -6,8 +6,8 @@ define profile::system::sudoers::conf (
   Optional[String]                  $content       = undef,
   Optional[String]                  $source        = undef,
   Optional[String]                  $template      = undef,
-  Stdlib::Absolutepath              $sudoers_d_dir = '/etc/obmondo/sudoers.d',
-  Optional[Boolean]    $noop_value    = undef,
+  Stdlib::Absolutepath              $sudoers_d_dir = $common::system::authentication::sudo::__sudoers_d_dir,
+  Boolean                           $noop_value    = true,
 ) {
 
   $_sudo_conf_name = safe_string($name)
