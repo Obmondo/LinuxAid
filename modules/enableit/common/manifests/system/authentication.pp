@@ -25,6 +25,7 @@ class common::system::authentication (
   Boolean                          $manage_pam,
   Boolean                          $manage_sssd,
   Boolean                          $manage_nis,
+  Boolean                          $manage_sudo,
   Boolean                          $manage,
   Boolean                          $allow_managed_users          = true,
   Boolean                          $ignore_expired_root_password = false,
@@ -44,6 +45,9 @@ class common::system::authentication (
     }
     if $manage_nis {
       include common::system::authentication::nis
+    }
+    if $manage_sudo {
+      include common::system::authentication::sudo
     }
     if $purge_ubuntu_user or $purge_users or $ignore_expired_root_password {
       include profile::system::authentication
