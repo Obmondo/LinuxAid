@@ -14,7 +14,7 @@ For LinuxAid we have built these modules:
 
 These options can be applied in different scopes and by default LinuxAid has been built to support applying options based on:
 
-- **Tags** - which is just a group - given by Puppet ENC. 
+- **Tags** - which is just a group - given by OpenVox ENC. 
   TODO: Document ENC features and custom tag support.
 - **Facts** - Which is 'knowledge about a system' and you can define config for any fact, including:
   - OS, Distribution, software versions installed or versions of these
@@ -49,7 +49,7 @@ All with pre-configured, production-ready settings that follow best practices.
 
 ## Calculate Changes Before Deployment
 
-**One of LinuxAid's most powerful capabilities** is the ability to calculate and preview ALL changes that any code modification will cause across your entire infrastructure—without touching a single server.
+**One of LinuxAid's most powerful capabilities** is the ability to calculate and preview ALL changes that any code modification will cause across your entire infrastructure, without touching a single server.
 
 ### How It Works
 
@@ -66,22 +66,52 @@ When managing 30,000 servers, you can:
 Instead of discovering issues after deployment, you get a preview like this:
 
 ```
-Changeset 1: (affects 15,234 servers)
-  Changes:
-  - File[/etc/nginx/nginx.conf]:
-      ensure: file
-      content: changed (worker_processes 2 → 4)
-  - Service[nginx]:
-      ensure: running → reloaded
-  Servers: web-prod-*, web-staging-*
+Changeset Pattern 1: (affects 15,234 servers)
+  Catalog Changes:
+  
+  File[/etc/nginx/nginx.conf]:
+    parameters:
+      ensure: 
+        - file
+      content:
+        - {md5}8f3d5e9a1c2b4e6f (current)
+        + {md5}a7b2c9d4e1f6g8h3 (new)
+    
+  Service[nginx]:
+    parameters:
+      ensure:
+        - running
+        + running (restarted)
+    dependencies:
+      ~> subscribes to File[/etc/nginx/nginx.conf]
+  
+  Affected servers: web-prod-*, web-staging-*
 
-Changeset 2: (affects 8,421 servers)
-  Changes:
-  - Package[openssl]:
-      ensure: 1.1.1k → 1.1.1l
-  - File[/etc/ssl/certs/ca-bundle.crt]:
-      ensure: file (updated)
-  Servers: all-debian-11-*
+Changeset Pattern 2: (affects 8,421 servers)
+  Catalog Changes:
+  
+  Package[openssl]:
+    parameters:
+      ensure:
+        - 1.1.1k
+        + 1.1.1l
+  
+  File[/etc/ssl/certs/ca-bundle.crt]:
+    parameters:
+      ensure:
+        - file
+      content:
+        - {md5}c4d5e6f7g8h9i0j1 (current)
+        + {md5}k2l3m4n5o6p7q8r9 (new)
+    dependencies:
+      <- requires Package[openssl]
+  
+  Affected servers: all-debian-11-*
+
+Changeset Pattern 3: (affects 3,156 servers)
+  No catalog changes
+  
+  Affected servers: db-primary-*, db-replica-*
 
 Changeset 3: (affects 3,156 servers)
   No changes (catalog identical)
@@ -162,7 +192,7 @@ Using LinuxAid's repository server:
 - Assign snapshots to one group at a time
 - Roll out security updates progressively
 
-You can do the same for your LinuxAid configuration (puppet/hiera tree) by using git branches or tags and locking servers to specific environments.
+You can do the same for your LinuxAid configuration (hiera tree) by using git branches or tags and locking servers to specific environments.
 
 ### GitOps
 
@@ -229,14 +259,14 @@ See technical details on [monitoring here](https://github.com/Obmondo/LinuxAid/b
 
 The architecture LinuxAid is built on has been proven at massive scale:
 
-- **Puppet Enterprise:** Officially documents support for 20,000+ nodes with compile masters
+- **Puppet Enterprise:** The upstream project officially documents support for 20,000+ nodes with compile masters
 - **Large enterprise deployments:** Organizations have successfully deployed Puppet at scales reaching 100,000+ servers
 - **GitHub:** Manages thousands of nodes with extensive Puppet code (500,000+ lines) and 200+ contributors
 - **Financial institutions:** Major banks have deployed this architecture for 30,000+ servers in highly regulated environments
 
 These organizations chose this architecture because alternative approaches **don't scale operationally**. The ability to calculate changes across tens of thousands of heterogeneous systems with hundreds of contributors becomes essential at this scale.
 
-**LinuxAid provides this same proven architecture** with years of Obmondo's expertise, delivering 60+ supported applications, built-in compliance frameworks (GDPR, CIS, NIS2), and enterprise-grade monitoring out of the box.
+**LinuxAid provides this same proven architecture** through OpenVox with years of Obmondo's expertise, delivering 60+ supported applications, built-in compliance frameworks (GDPR, CIS, NIS2), and enterprise-grade monitoring out of the box.
 
 ## 100% Data Ownership
 
@@ -255,16 +285,16 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 
 ### Core Infrastructure Management
 
-| Feature | LinuxAid (Puppet-based) | Ansible | Terraform | Chef | SaltStack |
+| Feature | LinuxAid (OpenVox) | Ansible | Terraform | Chef | SaltStack |
 |---------|----------|---------|-----------|------|-----------|
 | **State Management** | | | | | |
 | Stateless (no state files) | ✅ | ✅ | ❌ | ✅ | ✅ |
 | Automatic drift detection | ✅ | ⚠️ Limited | ⚠️ Manual refresh | ✅ | ✅ |
-| Dynamic system querying | ✅ Via PuppetDB | ⚠️ Via inventory | ❌ | ✅ | ✅ |
+| Dynamic system querying | ✅ Via OpenVoxDB | ⚠️ Via inventory | ❌ | ✅ | ✅ |
 | State file corruption risk | ✅ None | ✅ None | ❌ High | ✅ None | ✅ None |
 | **Change Management** | | | | | |
 | Preview changes before deployment | ✅ noop mode | ⚠️ check mode | ✅ terraform plan | ✅ why-run | ✅ test mode |
-| Calculate changes across all systems | ✅ With PuppetDB | ⚠️ Requires AWX | ⚠️ Per workspace | ⚠️ Limited | ⚠️ Limited |
+| Calculate changes across all systems | ✅ With OpenVoxDB | ⚠️ Requires AWX | ⚠️ Per workspace | ⚠️ Limited | ⚠️ Limited |
 | Group similar changes across nodes | ✅ LinuxAid feature | ❌ | ❌ | ❌ | ❌ |
 | CI/CD integration for change preview | ✅ | ⚠️ Via AWX/Tower | ✅ | ⚠️ Limited | ⚠️ Limited |
 | **Validation & Safety** | | | | | |
@@ -282,7 +312,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 
 **Notes on change management:**
 - All tools listed have dry-run/preview capabilities, but with different levels of completeness
-- Puppet's noop mode (used by LinuxAid) can have limitations with dependent resources
+- OpenVox's noop mode (used by LinuxAid) can have limitations with dependent resources
 - Ansible's check mode may not catch all changes, especially in conditional tasks
 - Terraform's plan is comprehensive for infrastructure but doesn't manage OS-level configuration
 - LinuxAid's grouping of changes across nodes into patterns is a custom enhancement
@@ -297,7 +327,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | DISA STIG support | ✅ | ✅ Via roles | ⚠️ Manual | ✅ Certified | ⚠️ Community |
 | Compliance as code | ✅ | ✅ | ⚠️ Limited | ✅ InSpec | ⚠️ Limited |
 | **Audit & Reporting** | | | | | |
-| Complete audit trail | ✅ PuppetDB logs | ✅ Via AWX | ⚠️ State changes | ✅ Chef Automate | ⚠️ Requires setup |
+| Complete audit trail | ✅ OpenVoxDB logs | ✅ Via AWX | ⚠️ State changes | ✅ Chef Automate | ⚠️ Requires setup |
 | Compliance reporting | ✅ Built-in | ✅ Via AWX | ⚠️ Limited | ✅ Chef Compliance | ⚠️ Manual |
 | Continuous compliance monitoring | ✅ | ✅ Scheduled runs | ❌ | ✅ | ✅ |
 | **GitOps & Change Control** | | | | | |
@@ -333,7 +363,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | Efficient agent model | ✅ | ❌ Agentless (SSH) | ❌ API-based | ✅ | ✅ |
 
 **Scale context:**
-- **Puppet Enterprise:** Officially documents support for 20,000+ nodes with compile masters, and larger deployments are possible with database separation
+- **OpenVox:** Based on Puppet architecture which officially documents support for 20,000+ nodes with compile masters, and larger deployments are possible with database separation
 - **Ansible AWX:** Designed to manage large numbers of servers according to documentation
 - **GitHub's deployment:** Manages thousands of nodes with extensive Puppet infrastructure
 - **Enterprise deployments:** Organizations across various industries have successfully deployed Puppet-based systems at enterprise scale
@@ -389,20 +419,20 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 
 1. **Integrated compliance and operations** - Pre-built GDPR, CIS, and NIS2 configurations combined with 60+ supported applications in one platform
 
-2. **Change calculation and preview** - Enhanced PuppetDB integration allows previewing changes across infrastructure and grouping similar changes into patterns
+2. **Change calculation and preview** - Enhanced OpenVoxDB integration allows previewing changes across infrastructure and grouping similar changes into patterns
 
 3. **Supply chain security** - Built-in repository server with GPG signing, air-gap support, and packagesign daemon for secure package management
 
 4. **Production-ready application support** - 60+ applications with Obmondo-tested, production-ready configurations, not just generic templates
 
-5. **Built on proven technology** - Based on Puppet/OpenVox, proven at enterprise scale with documented support for 20,000+ nodes and capability for larger deployments
+5. **Built on proven technology** - Based on OpenVox (Puppet-compatible), proven at enterprise scale with documented support for 20,000+ nodes and capability for larger deployments
 
 6. **True data ownership** - Open-source foundation means full control even after subscription ends
 
 7. **Integrated monitoring stack** - Hardware-aware monitoring with Prometheus, Grafana, and AlertManager configured out of the box
 
 **Important notes:**
-- Many features are Puppet/PuppetDB features enhanced by Obmondo's integrations and years of operational experience
+- Many features are based on Puppet/PuppetDB concepts enhanced by Obmondo's OpenVox implementation and years of operational experience
 - Competitors like Ansible (with AWX) and Chef (with InSpec/Compliance) have robust compliance and audit capabilities
 - The grouping of servers into changeset patterns and preview capabilities are LinuxAid-specific enhancements
 
@@ -413,8 +443,8 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 **Best Practice:** Use the right tool for each job:
 
 - **Terraform:** Provision infrastructure (cloud resources, networking, load balancers)
-- **LinuxAid (Puppet-based):** Configure and maintain systems (ongoing compliance, security, applications, monitoring)
-- **Ansible:** Ad-hoc tasks, orchestration (can complement LinuxAid via Puppet Bolt)
+- **LinuxAid (OpenVox-based):** Configure and maintain systems (ongoing compliance, security, applications, monitoring)
+- **Ansible:** Ad-hoc tasks, orchestration (can complement LinuxAid via Bolt)
 - **Chef InSpec:** Dedicated compliance auditing (can complement any configuration tool)
 
 ---
@@ -423,20 +453,20 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 
 **The Real Question:** Will your operational patterns scale sustainably when managing hundreds or thousands of systems with compliance requirements?
 
-| Consideration | Ansible | Terraform | LinuxAid (Puppet) | Chef | SaltStack |
+| Consideration | Ansible | Terraform | LinuxAid (OpenVox) | Chef | SaltStack |
 |---------------|---------|-----------|-------------------|------|-----------|
 | **Small scale (< 50)** | ✅ Quick & simple | ✅ Provisioning | ⚠️ May be complex | ⚠️ Learning curve | ⚠️ Learning curve |
 | **Medium scale (50-1000)** | ✅ With discipline | ⚠️ Infra only | ✅ Designed for this | ✅ Designed for this | ✅ Works well |
 | **Large scale (1000+)** | ✅ Needs AWX | ❌ Wrong tool | ✅ Proven | ✅ Proven | ✅ Proven |
 | **Compliance requirements** | ✅ Via Lockdown/AWX | ⚠️ Limited | ✅ Built-in | ✅ InSpec | ⚠️ Requires work |
 | **Anti-pattern prevention** | ⚠️ Requires discipline | ✅ Declarative | ✅ Architecture enforces | ✅ Architecture enforces | ✅ Architecture enforces |
-| **Change confidence** | ✅ check mode + AWX | ✅ plan (infra only) | ✅ noop + PuppetDB | ✅ why-run | ✅ test mode |
+| **Change confidence** | ✅ check mode + AWX | ✅ plan (infra only) | ✅ noop + OpenVoxDB | ✅ why-run | ✅ test mode |
 | **Multi-team collaboration** | ✅ With AWX | ⚠️ State locking | ✅ Designed for it | ✅ Designed for it | ⚠️ Requires setup |
 
 **LinuxAid advantages:**
-- Built on Puppet/OpenVox architecture with documented support for enterprise scale
-- Compliance-friendly workflows naturally support audit requirements via PuppetDB logging
-- Change confidence through noop mode and PuppetDB-enhanced change calculation
+- Built on OpenVox architecture with documented support for enterprise scale
+- Compliance-friendly workflows naturally support audit requirements via OpenVoxDB logging
+- Change confidence through noop mode and OpenVoxDB-enhanced change calculation
 - Prevents SSH-based anti-patterns through pull-based architecture
 - 60+ applications with production-ready configurations from Obmondo's operational experience
 
