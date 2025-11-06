@@ -335,7 +335,7 @@ mod 'voxpupuli/network',
     :ref => 'v2.2.1'
 
 mod 'obmondo/perforce',
-    :git => 'https://github.com/obmondo/puppet-perforce.git',
+    :git => 'https://github.com/Obmondo/puppet-perforce.git',
     :ref => 'v0.0.4'
 
 mod 'voxpupuli/posix_acl',
