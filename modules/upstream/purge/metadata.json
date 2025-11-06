@@ -1,13 +1,13 @@
 {
-  "name": "crayfishx-purge",
-  "version": "1.2.2",
-  "author": "crayfishx",
+  "name": "obmondo-purge",
+  "version": "1.2.3",
+  "author": "obmondo",
   "summary": "A puppet meta-type for purging resources based on criteria",
   "tags": [ "resources", "purge" ],
   "license": "Apache-2.0",
-  "source": "https://github.com/crayfishx/puppet-purge",
-  "project_page": "https://github.com/crayfishx/puppet-purge",
-  "issues_url": "https://github.com/crayfishx/puppet-purge/issues",
+  "source": "https://github.com/obmondo/puppet-purge",
+  "project_page": "https://github.com/obmondo/puppet-purge",
+  "issues_url": "https://github.com/obmondo/puppet-purge/issues",
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
