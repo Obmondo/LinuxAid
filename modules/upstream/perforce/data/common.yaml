@@ -1,7 +1,17 @@
 ---
 perforce::user: 'perforce'
 perforce::service_name: 'perforce'
-perforce::service_port: '1666'
+perforce::service_port: 1666
 perforce::service_root: '/opt/perforce/p4root'
+perforce::install_root: '/opt/perforce'
+perforce::rpm_gpg_key_url: null
 perforce::service_password: 'Password1!'
 perforce::service_ssldir: null
+perforce::license_content: null
+perforce::version: '2019.1-1813586'
+perforce::packages:
+  - 'helix-p4dctl'
+  - 'helix-proxy'
+  - 'helix-broker'
+  - 'helix-cli'
+  - 'helix-p4d'

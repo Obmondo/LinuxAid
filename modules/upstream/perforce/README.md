@@ -30,21 +30,26 @@ service (default user is perforce).
 
 ### Beginning with perforce
 
-```
-      $user = 'perforce'
-      $service_root = '/opt/perforce/p4root'
-  
-      user { $user :
-        ensure     => present,
-        home       => $service_root,
-        system     => true,
-      }
-      -> file { ['/opt/perforce', $service_root ] :
-        ensure => directory,
-        owner  => $user,
-        mode   => '0750',
-      }
-      -> class { 'perforce': }
+```puppet
+$user = 'perforce'
+$service_root = '/opt/perforce/p4root'
+
+user { $user :
+  ensure     => present,
+  home       => $service_root,
+  system     => true,
+}
+
+file { ['/opt/perforce', $service_root ] :
+  ensure  => directory,
+  owner   => $user,
+  mode    => '0750',
+  require => User[$user],
+}
+
+class { 'perforce':
+  require => File[$service_root],
+}
 ```
 
 ## Usage
@@ -53,7 +58,7 @@ service (default user is perforce).
 
 If you don't want the module to manage perforce's configuration you can install just the packages.
 
-```
+```puppet
 class { ::perforce::repository: }
 -> class { ::perforce::install: }
 ```
@@ -63,9 +68,9 @@ class { ::perforce::repository: }
 This module will configure the p4d service for SSL by setting `service_ssldir` to a fully qualified path.  You must also
 provide a private key and certificate.  p4d requires these files are named `privatekey.txt` and `certificate.txt`.
 
-```
-      $service_ssldir = "/opt/perforce/p4ssldir"
-      $private_key = "-----BEGIN PRIVATE KEY-----
+```puppet
+$service_ssldir = '/opt/perforce/p4ssldir'
+$private_key = "-----BEGIN PRIVATE KEY-----
 MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDHYb8MmF7Bimo5
 XubrQyTOcJmJORiK0eTbGJGm/nhTa4Kv1GB0+g+9+nSQwcxK3An+zMfwY7Ej269u
 PwI+KlwtgvOCr22hQoO14KUHzqGAxjKB+vfLssMcaXs1mLndVmWJM9wVA9O1nzYs
@@ -93,7 +98,7 @@ ImwI2+x3uJro6y977dax/20rjOa6TvGo4kIrVAgH7cjBVqzGvFFfGlQKytRJ9vDG
 hkBHT7KEoypcPrbwu3fSStr/5qvq5mETOD3LAJsXC3kTa2mfmZii2KBQ0Fn7TOis
 98tGyMeMVjTW2b6WqwW6DtA7
 -----END PRIVATE KEY-----"
-      $certificate = "-----BEGIN CERTIFICATE-----
+$certificate = "-----BEGIN CERTIFICATE-----
 MIIDXTCCAkWgAwIBAgIJAObn29SUorldMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
 aWRnaXRzIFB0eSBMdGQwHhcNMTgwNTMwMjAwODEyWhcNMTkwNTMwMjAwODEyWjBF
@@ -115,26 +120,32 @@ SUSxBKdUCRIml+kXJZPE0CC+DtPcv1pzPAFLCDNQwdreurKk+KE985RKanx9iZdS
 WA==
 -----END CERTIFICATE-----"
 
-      file { $service_ssldir :
-        ensure => directory,
-        owner  => 'perforce',
-        mode   => '0700',
-      }
-      -> file { "${service_ssldir}/privatekey.txt":
-        ensure  => file,
-        owner   => 'perforce',
-        mode    => '0600',
-        content => $private_key,
-      }
-      -> file {"${service_ssldir}/certificate.txt":
-        ensure  => file,
-        owner   => 'perforce',
-        mode    => '0600',
-        content => $certificate,
-      }
-      -> class { 'perforce':
-        service_ssldir  => $service_ssldir
-      }
+file { $service_ssldir :
+  ensure => directory,
+  owner  => 'perforce',
+  mode   => '0700',
+}
+
+file {
+  default:
+    ensure  => file,
+    owner   => 'perforce',
+    mode    => '0600',
+    require => File[$service_ssldir],
+    before  => Class['perforce'],
+    ;;
+
+  "${service_ssldir}/privatekey.txt":
+    content => $private_key,
+    ;;
+
+  "${service_ssldir}/certificate.txt":
+    content => $certificate,
+}
+
+class { 'perforce':
+  service_ssldir => $service_ssldir
+}
 ```
 
 ## Reference
@@ -142,7 +153,7 @@ WA==
 
 ## Limitations
 
-* Developed and tested on CentOS 7.
+* Developed and tested on CentOS 7 and RHEL7.
 * Requires systemd.
 
 ## Development
@@ -150,4 +161,3 @@ WA==
 Fork and submit a PR.
 
 ## Release Notes/Contributors/Etc. **Optional**
-

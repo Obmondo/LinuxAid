@@ -1,5 +1,0 @@
-fixtures:
-  symlinks:
-    perforce: "#{source_dir}"
-  repositories:
-    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib"
