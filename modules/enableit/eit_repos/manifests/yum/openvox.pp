@@ -14,7 +14,7 @@ class eit_repos::yum::openvox (
     gpgkey   => 'file:///etc/pki/rpm-gpg/GPG-KEY-openvox-openvox8-release',
     descr    => "OpenVox8 For Repository el${_os_major}",
     baseurl  => "https://repos.obmondo.com/openvox/yum/openvox8/el/${_os_major}/\$basearch/",
-    target   => "/etc/yum.repos.d/obmondo-openvox8.repo",
+    target   => '/etc/yum.repos.d/obmondo-openvox8.repo',
   }
 
   # Same key is used to sign all packages
