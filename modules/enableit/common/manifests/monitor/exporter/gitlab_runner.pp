@@ -20,7 +20,7 @@ class common::monitor::exporter::gitlab_runner (
   prometheus::scrape_job { 'gitlab_runner':
     job_name    => 'gitlab_runner',
     tag         => $::trusted['certname'],
-    targets     => [ "${listen_address}" ],
+    targets     => [ $listen_address ],
     labels      => { 'certname' => $::trusted['certname'] },
     collect_dir => '/etc/prometheus/file_sd_config.d',
   }

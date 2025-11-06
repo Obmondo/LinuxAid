@@ -56,7 +56,7 @@ class common::monitor::exporter::mtail (
     "-progs ${progs}",
     "-address ${_address}",
     "-port ${_port}",
-    "-logtostderr",
+    '-logtostderr',
     $parse_logs,
   ]
 

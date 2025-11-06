@@ -14,7 +14,7 @@ class common::convenience::bash (
       noop   => $noop_value,
       ;
     '/opt/obmondo/share/bash':
-      ensure  => ensure_dir($manage),
+      ensure => ensure_dir($manage),
       ;
     '/opt/obmondo/share/bash/bashrc':
       source  => 'puppet:///modules/common/convenience/bash/bashrc',

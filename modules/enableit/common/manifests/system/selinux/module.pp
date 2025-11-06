@@ -19,9 +19,9 @@ define common::system::selinux::module (
       }
     }
     selinux::module { $title:
-      ensure     => 'present',
-      source_te  => "puppet:///modules/common/system/selinux/${title}.te",
-      builder    => 'simple',
+      ensure    => 'present',
+      source_te => "puppet:///modules/common/system/selinux/${title}.te",
+      builder   => 'simple',
     }
   }
 }
