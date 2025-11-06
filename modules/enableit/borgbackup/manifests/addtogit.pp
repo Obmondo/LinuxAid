@@ -48,7 +48,7 @@ define borgbackup::addtogit (
     $md5_passphrase = md5("${passphrase}\n")
 
     exec { "create passphrase file ${title}":
-      command => "echo ${passphrase} | gpg --encrypt --always-trust ${keys} > ${git_home}/${facts['networking']['fqdn']}/${reponame}_pass.gpg",
+      command => "echo ${passphrase} | gpg --encrypt --always-trust ${keys} > ${git_home}/${facts['networking']['fqdn']}/${reponame}_pass.gpg", #lint:ignore:140chars
       require => [Exec["create gpg private key for ${facts['networking']['fqdn']}"], File["${git_home}/${facts['networking']['fqdn']}"]],
       before  => Exec["initialize borg repo ${reponame}"],
       unless  => [
@@ -74,7 +74,7 @@ define borgbackup::addtogit (
 
   exec { "create key file ${title}":
     command  => "${configdir}/repo_${reponame}.sh exportkey | gpg --encrypt --always-trust ${keys} > ${git_home}/${facts['networking']['fqdn']}/${reponame}_keyfile.gpg", #lint:ignore:140chars
-    require  => [Exec["initialize borg repo ${reponame}", "create gpg private key for ${facts['networking']['fqdn']}"], File["${git_home}/${facts['networking']['fqdn']}"]],
+    require  => [Exec["initialize borg repo ${reponame}", "create gpg private key for ${facts['networking']['fqdn']}"], File["${git_home}/${facts['networking']['fqdn']}"]], #lint:ignore:140chars
     provider => 'shell',
     unless   => [
       # check if file contains key
