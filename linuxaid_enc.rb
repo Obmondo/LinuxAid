@@ -8,7 +8,7 @@ MAX_TAGS = 10
 DEFAULT_HIERA_BRANCH = 'main'
 OBMONDO_MONITOR = true
 SUBSCRIPTION = false
-HIERA_DATADIR = ../../hiera-data
+HIERA_DATADIR = '../../hiera-data'
 TAGS_FILE = HIERA_DATADIR + '/' + DEFAULT_HIERA_BRANCH + '/tags.yaml'
 
 # TODO: add support for regex in array list
