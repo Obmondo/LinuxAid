@@ -32,7 +32,7 @@ class eit_redis (
   # Redis needs to be able to overcommit memory to work properly
   sysctl::configuration {
     'vm.overcommit_memory':
-      value  => '1',
+      value => '1',
       ;
 
     'net.core.somaxconn':
