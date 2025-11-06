@@ -126,7 +126,7 @@ class samba::server (
   #   }
   # }
 
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     Selboolean { persistent => true, }
 
     if $selinux_enable_home_dirs {
