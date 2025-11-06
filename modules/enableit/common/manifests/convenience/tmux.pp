@@ -18,7 +18,7 @@ class common::convenience::tmux (
       ;
 
     '/etc/tmux.conf':
-    ensure => ensure_file($manage),
+      ensure => ensure_file($manage),
       source => 'puppet:///modules/common/convenience/tmux/tmux.conf',
       ;
 
@@ -29,7 +29,7 @@ class common::convenience::tmux (
     '/opt/obmondo/share/tmux/badges.sh':
       source  => 'puppet:///modules/common/convenience/tmux/badges.sh',
       mode    => 'a+x',
-    require => File['/opt/obmondo/share/tmux'],
+      require => File['/opt/obmondo/share/tmux'],
       ;
 
     '/opt/obmondo/share/tmux/tmux-env.sh':

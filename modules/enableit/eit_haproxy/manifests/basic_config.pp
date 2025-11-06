@@ -280,11 +280,11 @@ class eit_haproxy::basic_config (
       mode    => $mode,
       bind    => $bind,
       options => {
-        'option'  => 'tcplog',
-        'balance' => 'roundrobin',
+        'option'                => 'tcplog',
+        'balance'               => 'roundrobin',
         'http-request redirect' => if $value['force_https'] { 'scheme https code 301 unless { ssl_fc }' },
-        'server'  => $_servers,
-        'timeout' => 'server 10m',
+        'server'                => $_servers,
+        'timeout'               => 'server 10m',
       },
     }
   }

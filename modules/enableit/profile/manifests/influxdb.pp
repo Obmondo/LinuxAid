@@ -40,10 +40,10 @@ class profile::influxdb (
       ;
 
     '100 allow influxdb-api':
-      dport  => 8086,
+      dport => 8086,
       ;
     '100 allow influxdb api proxy':
-      dport  => 9094,
+      dport => 9094,
       ;
   }
 

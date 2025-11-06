@@ -54,7 +54,7 @@ class common::package (
         'zypper': {
           $full_package_name = "${package_name}-${options['pin']}-*.sles${facts['os']['release']['major']}*.${facts['os']['architecture']}"
           zypprepo::versionlock { $full_package_name:
-            ensure  => present,
+            ensure => present,
           }
         }
         default: {

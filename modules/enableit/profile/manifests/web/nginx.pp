@@ -54,7 +54,7 @@ class profile::web::nginx (
   }
 
   # If selinux manage is true, we need selinux port to added under port list
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     selinux::port { 'allow-nginx-monitoring' :
       seltype  => 'http_port_t',
       protocol => 'tcp',

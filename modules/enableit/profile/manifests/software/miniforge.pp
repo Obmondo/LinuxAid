@@ -14,7 +14,7 @@ class profile::software::miniforge (
 ){
 
   $package_url   = "https://github.com/conda-forge/miniforge/releases/download/${version}/Miniforge3-${version}-Linux-x86_64.sh"
-  $install_dir   = "/opt/miniforge"
+  $install_dir   = '/opt/miniforge'
   $package_name  = "Miniforge-${version}-Linux-x86_64.sh"
   $download_path = "/tmp/${package_name}"
 
@@ -28,11 +28,11 @@ class profile::software::miniforge (
 
   # Download the installer script
   archive { $download_path:
-    ensure       => ensure_present($enable),
-    source       => $package_url,
-    extract      => false,
-    creates      => $download_path,
-    cleanup      => false,
+    ensure  => ensure_present($enable),
+    source  => $package_url,
+    extract => false,
+    creates => $download_path,
+    cleanup => false,
   }
 
   # Onshot service for instaling Miniforge.
@@ -50,6 +50,6 @@ class profile::software::miniforge (
     install => {
       'WantedBy' => 'multi-user.target',
     },
-    require    => Archive[$download_path],
+    require => Archive[$download_path],
   }
 }

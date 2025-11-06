@@ -1,7 +1,7 @@
 # NFS config
 class nfs::server::config (
-  Boolean $ensure = true,
-  Stdlib::Absolutepath $defaults_path, # from hiera
+  Stdlib::Absolutepath $defaults_path,
+  Boolean              $ensure = true,
 ) {
 
   file { $defaults_path:

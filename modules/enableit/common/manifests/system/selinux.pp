@@ -12,7 +12,7 @@
 #
 class common::system::selinux (
   Boolean            $manage                = false,
-  Boolean            $enable                = $facts['selinux'],
+  Boolean            $enable                = $facts['os']['selinux']['enabled'],
   Boolean            $enforce               = false,
   Hash[String, Hash] $fcontext              = {},
   Boolean            $enable_setroubleshoot = false,

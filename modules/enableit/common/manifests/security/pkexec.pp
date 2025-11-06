@@ -14,7 +14,7 @@ class common::security::pkexec (
     'u-s,g-s'
   }
   file { '/usr/bin/pkexec':
-    mode  => $_mode,
-    noop  => $noop_value,
+    mode => $_mode,
+    noop => $noop_value,
   }
 }

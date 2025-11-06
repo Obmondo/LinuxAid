@@ -31,7 +31,7 @@ class netbackup::server::prepare {
   sysctl { 'net.ipv4.conf.all.rp_filter': value => '1', }
 
   class { 'selinux':
-    mode            => 'disabled',
+    mode => 'disabled',
   }
   # END Pre-checks
 

@@ -30,9 +30,9 @@ class profile::software::iptables_api (
     | EOT
 
   systemd::unit_file { 'iptables-api.service':
-    ensure => ensure_present($enable),
-    enable => $enable,
-    active => $enable,
+    ensure  => ensure_present($enable),
+    enable  => $enable,
+    active  => $enable,
     content => $_service_content,
   }
 

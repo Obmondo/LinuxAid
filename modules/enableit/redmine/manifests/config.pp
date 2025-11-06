@@ -33,7 +33,7 @@ class redmine::config {
       "${redmine::install_dir}/tmp/sessions",
       "${redmine::install_dir}/public/plugin_assets",
       "${redmine::install_dir}/log"]:
-    ensure  => 'directory',
+    ensure => 'directory',
   }
 
   file { "${redmine::install_dir}/config/database.yml":

@@ -28,7 +28,7 @@ class profile::storage::beegfs (
 
     if $client {
       class { 'beegfs::client':
-        interfaces        => $interfaces,
+        interfaces => $interfaces,
       }
 
       firewall_multi { '100 beegfs client':

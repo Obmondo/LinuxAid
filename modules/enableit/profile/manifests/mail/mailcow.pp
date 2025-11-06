@@ -93,7 +93,7 @@ class profile::mail::mailcow (
   }
 
   file { default:
-    ensure  => ensure_dir($manage),
+    ensure => ensure_dir($manage),
     ;
     [
       '/opt/obmondo/docker-compose/mailcow',

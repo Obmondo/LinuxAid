@@ -1,9 +1,9 @@
 # NetBackup client installation
 class netbackup::client (
+  Stdlib::Host         $masterserver,
   Stdlib::Absolutepath $installer,
   Optional[String]     $version         = undef,
   Stdlib::Host         $clientname      = $facts['networking']['fqdn'],
-  Stdlib::Host         $masterserver,
   Array[Stdlib::Host]  $mediaservers    = [],
   Boolean              $service_enabled = true,
   Array[String]        $excludes        = [],
