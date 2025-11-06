@@ -88,7 +88,7 @@ class common::mail (
 ) {
   $real_soft_bounce = to_yesno($soft_bounce)
   if $manage {
-    $has_mail_server_role = $facts['obmondo_classes'].grep('role::mail::').size
+    $has_mail_server_role = $::obmondo_classes.grep('role::mail::').size
     if $has_mail_server_role {
       # we only want to setup as normal "outgoing only" mail server - if server
       # does not have role::mail::$something :)
