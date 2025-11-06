@@ -43,7 +43,7 @@ hierarchy:
 
   - name: "Subscription"
     paths:
-      - "role/subscriptions/%{::subscription}.yaml"
+      - "subscriptions/%{::subscription}.yaml"
 
   - name: "common"
     path: "common.yaml"

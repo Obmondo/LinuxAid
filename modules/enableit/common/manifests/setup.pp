@@ -6,7 +6,6 @@ class common::setup (
   Boolean $noop_value = false,
 ) {
 
-  include common::setup::obmondo_admin
   # Create Obmondo group for exporter to run under this group
   group { 'obmondo':
     ensure => present,
