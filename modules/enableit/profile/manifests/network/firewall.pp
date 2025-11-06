@@ -146,11 +146,11 @@ class profile::network::firewall (
 
     if $allow_docker {
       firewallchain { 'DOCKER:filter:IPv4':
-        purge  => false,
+        purge => false,
       }
 
       firewallchain { 'DOCKER:nat:IPv4':
-        purge  => false,
+        purge => false,
       }
     }
 
@@ -158,7 +158,7 @@ class profile::network::firewall (
       # Azure creates firewall rules in the security table. Puppet can't manage
       # rules in this table, but we can avoid purging the rules that Azure creates.
       firewallchain { 'OUTPUT:security:IPv4':
-        purge  => false,
+        purge => false,
       }
 
       # For reference, these are the rules as copied from an Azure VM:

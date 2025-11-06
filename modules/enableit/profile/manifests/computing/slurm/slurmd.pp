@@ -15,11 +15,11 @@ class profile::computing::slurm::slurmd (
       ;
 
     '100 allow slurmd':
-      dport   => 6818,
+      dport => 6818,
       ;
 
     '100 allow srun':
-      dport   => $srun_port_range,
+      dport => $srun_port_range,
       ;
   }
 

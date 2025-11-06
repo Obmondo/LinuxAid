@@ -100,7 +100,7 @@ class profile::storage::samba (
 
   firewall_multi {
     default:
-      jump    => 'accept',
+      jump => 'accept',
       # iniface => $_interfaces,
       ;
 

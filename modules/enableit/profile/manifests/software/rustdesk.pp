@@ -44,16 +44,16 @@ class profile::software::rustdesk (
     ensure => installed,
   }
 
-  archive { "${download_path}":
-    ensure  => ensure_present($enable),
-    source  => $package_url,
+  archive { $download_path:
+    ensure => ensure_present($enable),
+    source => $package_url,
   }
 
   package { 'rustdesk':
     ensure   => installed,
     provider => 'dpkg',
     source   => $download_path,
-    require  => Archive["${download_path}"],
+    require  => Archive[$download_path],
   }
 
   service { 'rustdesk.service':

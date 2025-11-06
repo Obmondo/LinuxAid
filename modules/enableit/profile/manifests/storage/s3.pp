@@ -34,7 +34,7 @@ class profile::storage::s3 (
   }
 
   file { default:
-    ensure  => ensure_dir($manage),
+    ensure => ensure_dir($manage),
     ;
     [
       '/opt/obmondo/docker-compose/s3',

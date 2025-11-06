@@ -91,7 +91,7 @@ class profile::elk (
 
   $_ssl_only = $nginx_ssl_mode == 'force'
 
-  if $facts['selinux'] {
+  if $facts['os']['selinux']['enabled'] {
     selinux::port { 'allow-nginx-access-kibana-server':
       context  => 'http_port_t',
       protocol => 'tcp',
