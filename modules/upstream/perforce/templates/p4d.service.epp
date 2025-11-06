@@ -1,8 +1,11 @@
 <%- |
-      String $user,
-      String $pidfile,
+      String               $user,
+      Stdlib::AbsolutePath $pidfile,
+      Stdlib::AbsolutePath $install_root,
 | -%>
-# Example Perforce systemd file (p4d.service):
+# MANAGED BY PUPPET; CHANGES WILL BE LOST
+#
+# Based on example Perforce systemd file (p4d.service):
 #
 # This service file will start Perforce at boot, and
 # provide everything needed to use systemctl to control
@@ -29,7 +32,7 @@ Type=forking
 User=<%= $user %>
 
 # The command used to start Perforce:
-ExecStart=/usr/sbin/p4d $P4OPTIONS
+ExecStart=<%= $install_root %>/sbin/p4d $P4OPTIONS
 
 # PID file for stopping/starting service
 PIDFile=<%= $pidfile %>

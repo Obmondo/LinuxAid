@@ -1,15 +1,16 @@
 <%- |
-  String $port,
-  String $root,
-  String $name,
-  String $pidfile,
-  Optional[String] $ssldir,
+  Stdlib::Port                   $port,
+  Stdlib::AbsolutePath           $root,
+  String                         $name,
+  Stdlib::AbsolutePath           $pidfile,
+  Optional[Stdlib::AbsolutePath] $ssldir,
 | -%>
 # THIS FILE MANAGED BY PUPPET - DO NOT MODIFY
 #
 # perforce environment file
 #
-# This file contains all the environment variables required for perforce server and cli to work properly
+# This file contains all the environment variables required for perforce server
+# and cli to work properly
 
 # startup options for p4d
 # -d              daemonize the server. fork then run p4d
