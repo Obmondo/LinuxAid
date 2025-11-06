@@ -1,0 +1,4 @@
+---
+lookup_options:
+  purge::resources:
+    merge: deep

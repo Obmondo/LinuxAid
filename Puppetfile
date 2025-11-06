@@ -462,9 +462,9 @@ mod 'MiamiOH/pam_access',
     :git => 'https://github.com/MiamiOH/puppet-pam_access.git',
     :ref => 'v1.0.6'
 
-mod 'crayfishx/purge',
-    :git => 'https://github.com/crayfishx/puppet-purge.git',
-    :ref => '1.2.2'
+mod 'obmondo/purge',
+    :git => 'https://github.com/obmondo/puppet-purge.git',
+    :ref => '1.2.3'
 
 mod 'jcpunk/vnc',
     :git => 'https://github.com/jcpunk/puppet-vnc.git',
