@@ -130,7 +130,7 @@ mod 'voxpupuli/postfix',
 
 mod 'puppetlabs/postgresql',
     :git => "https://github.com/puppetlabs/puppetlabs-postgresql.git",
-    :ref => 'v10.5.0'
+    :ref => 'v10.6.0'
 
 mod 'puppetlabs/puppetdb',
     :git => "https://github.com/puppetlabs/puppetlabs-puppetdb.git",
