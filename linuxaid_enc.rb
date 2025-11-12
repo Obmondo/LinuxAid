@@ -20,7 +20,6 @@ begin
   LIST_OF_TAGS = YAML.load_file(TAGS_FILE)
   TAG_KEYS = find_keys_for_host(LIST_OF_TAGS, CERTNAME)
 rescue
-  warn 'No tags file found at => ' + TAGS_FILE
   TAG_KEYS = []
 end
 
