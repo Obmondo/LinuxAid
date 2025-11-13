@@ -30,12 +30,10 @@ class profile::storage::zfs (
 
   include sanoid
 
-  $replications.each |$pool_name, $config| {
-    notify { "$pool_name and $config": }
+  $replications.each |$pool_name, $params| {
+    notify { "$pool_name and $params": }
     sanoid::syncoid::replication { $pool_name:
-      enabled => pick($config['enabled'], true),
-      source  => $config['source'],
-      options => $config['options'],
+      * => $params,
     }
   }
 
