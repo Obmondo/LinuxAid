@@ -11,4 +11,5 @@ class sanoid (
   include sanoid::install
   include sanoid::config
   include sanoid::service
+  include sanoid::syncoid
 }

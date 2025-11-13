@@ -1,12 +1,13 @@
 # Sanoid Replication
 define sanoid::syncoid::replication (
-  Boolean                            $enabled,
-  Sanoid::Syncoid::Replication       $configs,
+  Boolean                  $enabled,
+  String[1]                $source,
+  Sanoid::Syncoid::Options $options,
 ) {
 
   $pool_name = $title
 
-  $source = "${configs['source']}:${pool_name}"
+  $source = "${options['source']}:${pool_name}"
   $destination = $pool_name
   $default_options = $sanoid::syncoid::default_options
 
@@ -15,9 +16,9 @@ define sanoid::syncoid::replication (
 
   # Merge default_configs with job-specific configs
   # Job-specific configs override defaults
-  $merged_options = $configs['options'] ? {
+  $merged_options = $options['options'] ? {
     undef   => $default_options,
-    default => $default_options + $configs['options'],
+    default => $default_options + $options['options'],
   }
 
   # Build command line arguments
