@@ -3,7 +3,7 @@ class profile::storage::zfs (
   Array[Eit_types::SimpleString]                  $pool_names          = $common::storage::zfs::pool_names,
   Boolean                                         $remove_sysstat_cron = $common::storage::zfs::remove_sysstat_cron,
   Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = $common::storage::zfs::scrub,
-  Sanoid::Syncoid::Replications                   $replications        = $common::storage::zfs::replications,
+  Optional[Sanoid::Syncoid::Replications]         $replications        = $common::storage::zfs::replications,
 ) inherits profile::storage {
 
   class { 'zfs':
