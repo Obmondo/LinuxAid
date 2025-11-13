@@ -2,10 +2,15 @@
 class profile::software::nvidia_driver (
   Boolean           $enable     = $common::software::nvidia_driver::enable,
   Optional[Boolean] $noop_value = $common::software::nvidia_driver::noop_value,
-){
+) {
+
+  confine(
+    $facts['os']['name'] == 'Debian' and versioncmp(facts['os']['release']['major'], '10') <= 0,
+    'Only Debian 10 and newer release are supported',
+  )
 
   case $facts['os']['family'] {
-    'Debian':{
+    'Debian': {
       $distro = regsubst(downcase("${facts['os']['name']}${facts['os']['release']['full']}"), '\.', '', 'G')
 
       apt::source { 'Nvidia-Driver':
@@ -16,20 +21,14 @@ class profile::software::nvidia_driver (
         release      => '/',
         key          => {
           'id'     => 'EB693B3035CD5710E231E123A4B469963BF863CC',
-          'source' => 'https://developer.download.nvidia.com/compute/cuda/repos/GPGKEY',
+          'source' => "https://developer.download.nvidia.com/compute/cuda/repos/${distro}/x86_64/3bf863cc.pub",
         },
       }
-
-      package { 'cuda-drivers':
-        ensure => ensure_present($enable),
-        noop   => $noop_value,
-      }
     }
-
-    'RedHat':{
+    'RedHat': {
       $distro = $facts['os']['release']['major']
 
-      yumrepo { 'Nvidia-Driver' :
+      yumrepo { 'Nvidia-Driver':
         ensure   => ensure_present($enable),
         baseurl  => "https://developer.download.nvidia.com/compute/cuda/repos/rhel${distro}/x86_64",
         enabled  => 1,
@@ -38,18 +37,14 @@ class profile::software::nvidia_driver (
         gpgkey   => "https://developer.download.nvidia.com/compute/cuda/repos/rhel${distro}/x86_64/D42D0685.pub",
         descr    => "Nvidia-cuda repository for Rhel-${distro}",
       }
-
-      package { ['kernel-devel', 'kernel-headers']:
-        ensure => ensure_present($enable),
-        noop   => $noop_value,
-      }
-
-      package { ['nvidia-driver-latest-dkms', 'cuda']:
-        ensure  => ensure_present($enable),
-        noop    => $noop_value,
-        require => Package['kernel-devel', 'kernel-headers'],
-      }
     }
-    default : { fail('Not Supported') }
+    default: {
+      fail('Not Supported')
+    }
+  }
+
+  package { lookup('profile::software::nvidia_driver::packages'):
+    ensure => ensure_present($enable),
+    noop   => $noop_value,
   }
 }
