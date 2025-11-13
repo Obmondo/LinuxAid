@@ -1,7 +1,7 @@
 # Sanoid Replication
 define sanoid::syncoid::replication (
   Boolean                  $enabled,
-  String[1]                $source,
+  String[1]                $from,
   Sanoid::Syncoid::Options $options,
 ) {
 

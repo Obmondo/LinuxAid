@@ -3,7 +3,7 @@ class profile::storage::zfs (
   Array[Eit_types::SimpleString]                  $pool_names          = $common::storage::zfs::pool_names,
   Boolean                                         $remove_sysstat_cron = $common::storage::zfs::remove_sysstat_cron,
   Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = $common::storage::zfs::scrub,
-  Optional[Sanoid::Syncoid::Replications]         $replications        = $common::storage::zfs::replications,
+  Sanoid::Syncoid::Replications                   $replications        = $common::storage::zfs::replications,
 ) inherits profile::storage {
 
   class { 'zfs':
@@ -30,12 +30,10 @@ class profile::storage::zfs (
 
   include sanoid
 
-  $replications.each |$pool_name, $params| {
-    notify { "$pool_name and $params": }
-    sanoid::syncoid::replication { $pool_name:
-      * => $params,
-    }
-  }
+  notify { "$replications": }
+ # $replications.each |$pool_name, $params| {
+ #   notify { "$pool_name and $params": }
+ # }
 
   if $scrub {
     $_config = $scrub ? {
