@@ -1,22 +1,22 @@
 # @summary Class for managing the Rustdesk software
 #
-# @param manage Boolean parameter to control management of the Rustdesk. Defaults to false.
+# @param client_enable Boolean parameter to control management of the Rustdesk. Defaults to false.
 #
-# @param enable Boolean parameter to enable or disable the Rustdesk. Defaults to false.
-#
-# @param version String parameter to control version of the Rustdesk.
-#
-# @param noop_value Optional boolean to specify noop mode value.
+# @param server_enable Boolean parameter to enable or disable the Rustdesk. Defaults to false.
 #
 class common::software::rustdesk (
-  Boolean               $manage       = true,
-  Boolean               $enable       = true,
-  Eit_types::Version    $version      = undef,
-  Eit_types::Noop_Value $noop_value   = undef,
-  Array[String]         $dependencies = [],
+  Boolean            $client_enable       = false,
+  Boolean            $server_enable       = false,
 ) {
+  if $client_enable {
+    class { 'rustdesk::client':
+      enable     => $client_enable,
+    }
+  }
 
-  if $manage {
-    contain profile::software::rustdesk
+  if $server_enable {
+    class { 'rustdesk::server':
+      enable     => $server_enable,
+    }
   }
 }

@@ -1,10 +1,13 @@
 ---
 rustdesk::server::enable: false
 rustdesk::server::version: 1.7.1
-rustdesk::server::noop_value: false
 rustdesk::server::dependencies: []
+rustdesk::server::signal::package_name: rustdesk-server-hbbs
+rustdesk::server::rekay::package_name: rustdesk-server-hbbr
+
+# ------------
 
 rustdesk::client::enable: false
 rustdesk::client::version: 1.4.3
-rustdesk::client::noop_value: false
 rustdesk::client::dependencies: []
+# rustdesk::client::package_name: rustdesk-server-hbbs

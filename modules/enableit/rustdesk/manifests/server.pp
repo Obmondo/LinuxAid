@@ -1,7 +1,37 @@
+# @summary Manages the RustDesk server installation and configuration  
+#  
+# This class handles the installation and management of the RustDesk remote desktop server.  
+# It controls whether the server is enabled, which version to install, and manages  
+# any required dependencies.  
+#  
+# @param enable  
+#   Whether to enable and manage the RustDesk server.  
+#   When set to false, the server will not be installed or managed.  
+#  
+# @param version  
+#   The version of RustDesk server to install.  
+#   Must be a valid version string conforming to Eit_types::Version.  
+#
+# @param dependencies  
+#   Array of package names that are required dependencies for the RustDesk server.  
+#   These packages will be installed before the RustDesk server.  
+#  
+# @example Basic usage with defaults  
+#   include rustdesk::server  
+#  
+# @example Install specific version  
+#   class { 'rustdesk::server':  
+#     version => '1.7.1',  
+#   }  
+#  
+# @example Disable server management  
+#   class { 'rustdesk::server':  
+#     enable => false,  
+#   }  
+#  
 class rustdesk::server (
   Boolean            $enable       = $rustdesk::server::enable,
   Eit_types::Version $version      = $rustdesk::server::version,
-  Optional[Boolean]  $noop_value   = $rustdesk::server::noop_value,
   Array[String]      $dependencies = $rustdesk::server::dependencies,
 ) {
   # Fixed common dependencies
@@ -10,26 +40,18 @@ class rustdesk::server (
   # Merge common + OS-specific dependencies
   $extra_dependencies = concat($common_deps, $dependencies)
 
-  $relay_server_package_url   = "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbr_${version}_amd64.deb"
-  $relay_server_package_name  = "rustdesk-server-hbbr_${version}_amd64.deb"
-  $relay_server_download_path = "/tmp/${relay_server_package_name}"
-
-  $signal_server_package_url   = "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbs_${version}_amd64.deb"
-  $signal_server_package_name  = "rustdesk-server-hbbs_${version}_amd64.deb"
-  $signal_server_download_path = "/tmp/${signal_server_package_name}"
-
-  $packages = ['relay', 'signal']
-
-  Package {
-    noop => $noop_value,
-  }
-
-  Exec {
-    noop => $noop_value,
-  }
-
-  Service {
-    noop => $noop_value,
+  $rustdesk_servers = {
+    'relay' => {
+      'package_url' => "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbr_${version}_amd64.deb",
+      # 'package_name' => 'rustdesk-server-hbbr',
+      'package_file_name' => "${package_name}_${version}_amd64.deb",
+      'download_path' => "/tmp/${package_file_name}",
+    },
+    'signal' => {
+      'package_url' => "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbs_${version}_amd64.deb",
+      'package_file_name' => "${package_name}_${version}_amd64.deb",
+      'download_path' => "/tmp/${package_name}",
+    },
   }
 
   # Ensure dependencies are installed first
@@ -39,68 +61,26 @@ class rustdesk::server (
 
   # ----------------
 
-  $packages.each |$pkg| {
-    # Here you can define what you want to do with each package
-    notify { "Installing package: ${package}":
-      message => "Installing ${package}",
+  ['relay', 'signal'].each |$server| {
+    $_server_type = lookup("rustdesk::server::${server}::package_name")
+    $_package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${_server_type}_${version}_amd64.deb"
+    archive { $server :
+      ensure => $enable,
+      source => $_package_url,
     }
 
-    archive { $pkg$relay_server_download_path:
-      ensure => ensure_present($enable),
-      source => $relay_server_package_url,
-    }
-
-    package { 'rustdesk-server-hbbr':
+    package { $_server_type:
       ensure   => installed,
       provider => 'dpkg',
-      source   => $relay_server_download_path,
-      require  => Archive[$relay_server_download_path],
+      source   => "/tmp/${server}",
+      require  => Archive[$server],
     }
 
-    service { 'rustdesk-hbbr.service':
-      ensure  => ensure_service($enable),
+    service { $_server_type:
+      ensure  => $enable,
       enable  => $enable,
-      require => Package['rustdesk-server-hbbr'],
+      require => Package[$server],
     }
   }
 
   # ----------------
-
-  archive { $relay_server_download_path:
-    ensure => ensure_present($enable),
-    source => $relay_server_package_url,
-  }
-
-  package { 'rustdesk-server-hbbr':
-    ensure   => installed,
-    provider => 'dpkg',
-    source   => $relay_server_download_path,
-    require  => Archive[$relay_server_download_path],
-  }
-
-  service { 'rustdesk-hbbr.service':
-    ensure  => ensure_service($enable),
-    enable  => $enable,
-    require => Package['rustdesk-server-hbbr'],
-  }
-
-  # ----------------
-
-  archive { $signal_server_download_path:
-    ensure => ensure_present($enable),
-    source => $signal_server_package_url,
-  }
-
-  package { 'rustdesk-server-hbbr':
-    ensure   => installed,
-    provider => 'dpkg',
-    source   => $signal_server_download_path,
-    require  => Archive[$signal_server_download_path],
-  }
-
-  service { 'rustdesk-hbbr.service':
-    ensure  => ensure_service($enable),
-    enable  => $enable,
-    require => Package['rustdesk-server-hbbr'],
-  }
-}

@@ -1,7 +1,37 @@
+# @summary Manages the RustDesk client installation and configuration  
+#  
+# This class handles the installation and management of the RustDesk remote desktop client.  
+# It controls whether the client is enabled, which version to install, and manages  
+# any required dependencies.  
+#  
+# @param enable  
+#   Whether to enable and manage the RustDesk client.  
+#   When set to false, the client will not be installed or managed.  
+#  
+# @param version  
+#   The version of RustDesk client to install.  
+#   Must be a valid version string conforming to Eit_types::Version.  
+#  
+# @param dependencies  
+#   Array of package names that are required dependencies for the RustDesk client.  
+#   These packages will be installed before the RustDesk client.  
+#  
+# @example Basic usage with defaults  
+#   include rustdesk::client  
+#  
+# @example Install specific version  
+#   class { 'rustdesk::client':  
+#     version => '1.4.3',  
+#   }  
+#  
+# @example Disable client management  
+#   class { 'rustdesk::client':  
+#     enable => false,  
+#   }  
+#  
 class rustdesk::client (
   Boolean            $enable       = $rustdesk::client::enable,
   Eit_types::Version $version      = $rustdesk::client::version,
-  Optional[Boolean]  $noop_value   = $rustdesk::client::noop_value,
   Array[String]      $dependencies = $rustdesk::client::dependencies,
 ) {
   # Fixed common dependencies
@@ -24,18 +54,6 @@ class rustdesk::client (
   $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/rustdesk-${version}-x86_64.deb"
   $package_name  = "rustdesk-${version}-x86_64.deb"
   $download_path = "/tmp/${package_name}"
-
-  Package {
-    noop => $noop_value,
-  }
-
-  Exec {
-    noop => $noop_value,
-  }
-
-  Service {
-    noop => $noop_value,
-  }
 
   # Ensure dependencies are installed first
   package { $extra_dependencies:
