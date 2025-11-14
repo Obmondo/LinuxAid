@@ -16,8 +16,13 @@ class perforce::license {
       'absent'
     },
     owner   => $perforce::user,
-    group   => 'root',
-    mode    => '0400',
+    group   => $perforce::group,
+    mode    => '0640',
     content => $perforce::license_content,
+    require => [
+      File[$perforce::service_root],
+      User[$perforce::user],
+      User[$perforce::group],
+    ],
   }
 }

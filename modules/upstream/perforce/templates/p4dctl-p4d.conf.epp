@@ -1,0 +1,29 @@
+# MANAGED BY PUPPET; CAVEAT LECTOR
+#
+# See
+# https://www.perforce.com/manuals/p4sag/Content/P4SAG/p4dctl.config_file.html
+
+p4d <%= $server_name %>
+{
+    Owner    = <%= $user %>
+    Execute  = /opt/perforce/sbin/p4d
+    Umask    = 077
+
+    # Enabled by default.
+    Enabled  = true
+
+    Environment
+    {
+        P4ROOT    = <%= $root %>
+<%- if $ssldir { %>
+        P4SSLDIR  = <%= $ssldir %>
+<% } -%>
+        P4PORT    = <%= $port %>
+        PATH      = /bin:/usr/bin:/usr/local/bin:/opt/perforce/bin:/opt/perforce/sbin
+
+        # Enables nightly checkpoint routine
+        # This should *not* be considered a complete backup solution
+        MAINTENANCE = <%= $enable_maintenance %>
+    }
+
+}

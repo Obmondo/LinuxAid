@@ -49,6 +49,7 @@ class common::backup (
   Optional[String]               $luks_service_name        = undef,
   Optional[Boolean]              $lvm                      = undef,
   Optional[String]               $lvm_vg                   = undef,
+  Optional[Eit_types::Password]  $root_password            = undef,
   Eit_types::Percentage          $lvm_extents_min_required = 15,
   Hash[
     String,

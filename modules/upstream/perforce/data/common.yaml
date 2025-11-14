@@ -1,7 +1,8 @@
 ---
 perforce::user: 'perforce'
+perforce::group: 'perforce'
 perforce::service_name: 'perforce'
-perforce::service_port: 1666
+perforce::service_port: '1666'
 perforce::service_root: '/opt/perforce/p4root'
 perforce::install_root: '/opt/perforce'
 perforce::rpm_gpg_key_url: null

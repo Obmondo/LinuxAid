@@ -2,6 +2,10 @@
 #
 class perforce::install {
 
+  package { $perforce::packages:
+    ensure  => installed,
+  }
+
   $_perforce_daemon = "${perforce::install_root}/sbin/p4d"
   $_perforce_daemon_suffix = $perforce::version.regsubst(/^20([0-9]{2}\.[0-9]+)-[0-9]+$/, '\1')
   # Newer versions of Perforce seems to put the daemon in a file with a version
