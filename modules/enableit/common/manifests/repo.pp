@@ -262,6 +262,14 @@ class common::repo (
         }
         'Debian': {
           $_os_type = downcase($_os['distro']['id'])
+          $os_arch = downcase($_os['architecture'])
+
+          if $facts['os']['architecture'] == 'aarch64' {
+            $apt_repo = "${_os_type}_arm64"
+          } else {
+            $apt_repo = $_os_type
+          }
+
           $feature_repo = $_os_type ? {
             'ubuntu'  => ['backports', 'security', 'updates'],
             'debian'  => ['backports', 'updates'],
@@ -274,7 +282,7 @@ class common::repo (
               architecture => $architecture,
               release      => "${_os_codename}-${repo}",
               comment      => "local apt ${_os_codename}-${repo} server",
-              location     => "https://${domain}/${_snapshot_uri_fragment}apt/${_os_type}",
+              location     => "https://${domain}/${_snapshot_uri_fragment}apt/${apt_repo}",
               repos        => 'main universe multiverse restricted',
               keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
               include      => {
@@ -289,7 +297,7 @@ class common::repo (
             architecture => $architecture,
             release      => $_os_codename,
             comment      => 'local apt repo server',
-            location     => "https://${domain}/${_snapshot_uri_fragment}apt/${_os_type}",
+            location     => "https://${domain}/${_snapshot_uri_fragment}apt/${apt_repo}",
             repos        => 'main universe multiverse restricted',
             keyring      => "/usr/share/keyrings/${_os_type}-archive-keyring.gpg",
             include      => {
