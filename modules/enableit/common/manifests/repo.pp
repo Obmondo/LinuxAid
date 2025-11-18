@@ -262,7 +262,6 @@ class common::repo (
         }
         'Debian': {
           $_os_type = downcase($_os['distro']['id'])
-          $os_arch = downcase($_os['architecture'])
 
           if $facts['os']['architecture'] == 'aarch64' {
             $apt_repo = "${_os_type}_arm64"
