@@ -27,7 +27,6 @@ class profile::projectmanagement::perforce::icmanage (
   if $manage_db {
 
     class { '::profile::mysql' :
-      webadmin       => false,
       backup         => $db_backup,
       package_ensure => $mysql_version,
     }
@@ -73,7 +72,7 @@ class profile::projectmanagement::perforce::icmanage (
     onlyif  => "/usr/bin/test ! -d ${install_path}",
   }
 
-  remote_file { $_installer_tmp_file:
+  archive { $_installer_tmp_file:
     ensure  => 'present',
     source  => "https://download.icmanage.com/${_icm_installer}",
     require => Exec['test if icmanage is installed'],
@@ -82,7 +81,7 @@ class profile::projectmanagement::perforce::icmanage (
   exec { "install icmanage ${version}":
     command => "/bin/sh ${_installer_tmp_file} --baseDirPath ${install_path}",
     onlyif  => "/usr/bin/test ! -d ${install_path}",
-    require => Remote_file[$_installer_tmp_file],
+    require => Archive[$_installer_tmp_file],
   }
 
   $_config_dir = $config_file.dirname

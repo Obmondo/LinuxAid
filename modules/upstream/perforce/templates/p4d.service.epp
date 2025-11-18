@@ -41,3 +41,7 @@ PIDFile=<%= $pidfile %>
 # Describes the target for this service -- this will always
 # be 'multi-user.target':
 WantedBy=multi-user.target
+
+# Local Variables:
+# mode: systemd
+# End:

@@ -1,20 +1,16 @@
 {
-  "name": "Obmondo-perforce",
+  "name": "mmarseglia-perforce",
   "version": "0.0.4",
   "author": "mmarseglia",
   "summary": "Perforce client and server",
   "license": "GPL-3.0-or-later",
-  "source": "http://github.com/obmondo/puppet-perforce",
-  "project_page": "http://github.com/obmondo/puppet-perforce",
-  "issues_url": "http://github.com/obmondo/puppet-perforce",
+  "source": "http://github.com/mmarseglia/puppet-perforce",
+  "project_page": "http://github.com/mmarseglia/puppet-perforce",
+  "issues_url": "https://github.com/mmarseglia/puppet-perforce/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.13.1 < 5.0.0"
-    },
-    {
-      "name": "puppetlabs/yumrepo_core",
-      "version_requirement": ">= 1.0.2 < 2.0.0"
     }
   ],
   "operatingsystem_support": [

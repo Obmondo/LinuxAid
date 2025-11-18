@@ -4,6 +4,8 @@
   String                         $name,
   Stdlib::AbsolutePath           $pidfile,
   Optional[Stdlib::AbsolutePath] $ssldir,
+  Perforce::LogFile              $log,
+  Perforce::LogLevel             $log_level,
 | -%>
 # THIS FILE MANAGED BY PUPPET - DO NOT MODIFY
 #
@@ -26,10 +28,14 @@ P4NAME="<%= $name %>"
 
 # Enables SSL for the p4d service, requires certificate files to be present.
 P4SSLDIR="<%= $ssldir %>"
+<% } -%>
 
 # port p4d runs on
-P4PORT=ssl:<%= $port %>
-<% } else { -%>
-# port p4d runs on
-P4PORT=<%= $port %>
-<% } -%>
+P4PORT=<%= if $ssldir { 'ssl:' } %><%= $port %>
+
+P4LOG='<%= $log %>'
+P4DEBUG=<%= $log_level %>
+
+# Local Variables:
+# mode: conf-unix
+# End:
