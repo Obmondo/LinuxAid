@@ -5,7 +5,6 @@ class profile::openvox (
   Stdlib::Host         $server                 = $common::openvox::server,
   Stdlib::Port         $server_port            = $common::openvox::server_port,
   Eit_types::Version   $version                = $common::openvox::version,
-  Boolean              $setup_agent            = $common::openvox::setup_agent,
   Stdlib::Absolutepath $config_file            = $common::openvox::config_file,
   Boolean              $run_agent_as_noop      = $common::openvox::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $common::openvox::extra_main_settings,
