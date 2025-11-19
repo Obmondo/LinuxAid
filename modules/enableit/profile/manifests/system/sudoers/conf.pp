@@ -6,9 +6,10 @@ define profile::system::sudoers::conf (
   Optional[String]                  $content       = undef,
   Optional[String]                  $source        = undef,
   Optional[String]                  $template      = undef,
-  Stdlib::Absolutepath              $sudoers_d_dir = $common::system::authentication::sudo::__sudoers_d_dir,
   Boolean                           $noop_value    = true,
 ) {
+
+  $sudoers_d_dir = lookup('common::system::authentication::sudo::sudoers_d_dir', Stdlib::Absolutepath, 'first', '/etc/obmondo/sudoers.d')
 
   $_sudo_conf_name = safe_string($name)
 

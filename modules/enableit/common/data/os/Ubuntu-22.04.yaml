@@ -1,8 +1,6 @@
 ---
 common::monitor::exporter::enable: true
 common::network::service_name: 'systemd-networkd'
-common::system::dns::dnssec: null
-common::system::dns::dns_over_tls: null
 common::monitor::exporter::security::enable: true
 common::software::rustdesk::dependencies:
   - libgtk-3-0

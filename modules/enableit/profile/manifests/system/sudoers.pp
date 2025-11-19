@@ -2,7 +2,7 @@
 class profile::system::sudoers (
   Boolean              $purge         = $common::system::authentication::sudo::purge,
   Eit_types::Sudoers   $sudoers       = $common::system::authentication::sudo::sudoers,
-  Stdlib::Absolutepath $sudoers_d_dir = $common::system::authentication::sudo::__sudoers_d_dir,
+  Stdlib::Absolutepath $sudoers_d_dir = $common::system::authentication::sudo::sudoers_d_dir,
 ) {
 
   contain sudo::params

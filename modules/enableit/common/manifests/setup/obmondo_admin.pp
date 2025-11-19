@@ -6,14 +6,8 @@
 #
 # @param allow_sre Boolean value to allow SRE to login. Defaults to true.
 #
-# @param $__conf_dir
-# Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
-#
 # @param $__opt_dir
 # Absolute path to the optional directory. Defaults to '/opt/obmondo'.
-#
-# @param $__bin_dir
-# Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
 #
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
@@ -21,10 +15,8 @@ class common::setup::obmondo_admin (
   Optional[Array[String]] $manager_pubkeys = [],
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
-  Stdlib::Absolutepath    $__conf_dir      = '/etc/obmondo',
-  Stdlib::Absolutepath    $__opt_dir       = '/opt/obmondo',
-  Stdlib::Absolutepath    $__bin_dir       = '/opt/obmondo/bin',
   Boolean                 $noop_value      = false,
+  Stdlib::Absolutepath    $__opt_dir       = $common::setup::__opt_dir,
 ) {
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
@@ -32,42 +24,33 @@ class common::setup::obmondo_admin (
 
   file {
     default:
-    ensure => ensure_dir($::obmondo_monitor),
-    noop   => $noop_value,
-      ;
-
-    [$__conf_dir, $__opt_dir, $_home]:
-      ;
+      ensure => ensure_dir($::obmondo_monitor),
+      noop   => $noop_value,
+    ;
 
     $_home_admin:
-    owner   => 'obmondo-admin',
-    group   => 'obmondo',
-    mode    => '0755',
-    require => User['obmondo-admin'],
-      ;
+      owner   => 'obmondo-admin',
+      group   => 'obmondo',
+      mode    => '0755',
+      require => User['obmondo-admin'],
+    ;
 
     $_home_admin_ssh:
-    ensure  => directory,
-    owner   => 'obmondo-admin',
-    group   => 'obmondo',
-    mode    => '0700',
-    require => File[$_home_admin],
-      ;
+      ensure  => directory,
+      owner   => 'obmondo-admin',
+      group   => 'obmondo',
+      mode    => '0700',
+      require => File[$_home_admin],
+    ;
 
-  [
-    "${__opt_dir}/share",
-    "${__opt_dir}/etc",
-  ]:
-      ;
-
-  [
-    '/etc/ssl/private/',
-    '/etc/ssl/private/letsencrypt',
-  ]:
-    mode  => '0700',
-    owner => 'root',
-    group => 'root',
-      ;
+    [
+      '/etc/ssl/private/',
+      '/etc/ssl/private/letsencrypt',
+    ]:
+      mode  => '0700',
+      owner => 'root',
+      group => 'root',
+    ;
   }
 
   user { 'obmondo-admin':

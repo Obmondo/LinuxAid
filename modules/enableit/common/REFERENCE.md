@@ -6806,7 +6806,7 @@ The following parameters are available in the `common::system::authentication::s
 * [`purge`](#-common--system--authentication--sudo--purge)
 * [`ssh_agent_auth`](#-common--system--authentication--sudo--ssh_agent_auth)
 * [`sudoers`](#-common--system--authentication--sudo--sudoers)
-* [`__sudoers_d_dir`](#-common--system--authentication--sudo--__sudoers_d_dir)
+* [`sudoers_d_dir`](#-common--system--authentication--sudo--sudoers_d_dir)
 
 ##### <a name="-common--system--authentication--sudo--manage"></a>`manage`
 
@@ -6840,7 +6840,7 @@ The sudoers hash configuration. Defaults to an empty hash.
 
 Default value: `{}`
 
-##### <a name="-common--system--authentication--sudo--__sudoers_d_dir"></a>`__sudoers_d_dir`
+##### <a name="-common--system--authentication--sudo--sudoers_d_dir"></a>`sudoers_d_dir`
 
 Data type: `Stdlib::Absolutepath`
 

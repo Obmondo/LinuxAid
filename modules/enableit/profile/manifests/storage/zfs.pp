@@ -1,8 +1,9 @@
 # ZFS and utilities
 class profile::storage::zfs (
-  Array[Eit_types::SimpleString]                  $pool_names          = $::common::storage::zfs::pool_names,
-  Boolean                                         $remove_sysstat_cron = $::common::storage::zfs::remove_sysstat_cron,
-  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = $::common::storage::zfs::scrub,
+  Array[Eit_types::SimpleString]                  $pool_names          = $common::storage::zfs::pool_names,
+  Boolean                                         $remove_sysstat_cron = $common::storage::zfs::remove_sysstat_cron,
+  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = $common::storage::zfs::scrub,
+  Eit_types::Common::Storage::Zfs::Replications   $replications        = $common::storage::zfs::replications,
 ) inherits profile::storage {
 
   class { 'zfs':
@@ -24,6 +25,16 @@ class profile::storage::zfs (
   if $remove_sysstat_cron {
     file { '/etc/cron.d/sysstat':
       ensure => absent,
+    }
+  }
+
+  if $replications {
+    include sanoid
+  }
+
+  $replications.each |$pool_name, $options| {
+    sanoid::syncoid::replication { $pool_name:
+      * => $options,
     }
   }
 
@@ -51,5 +62,4 @@ class profile::storage::zfs (
       *      => $_config,
     }
   }
-
 }

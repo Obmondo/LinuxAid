@@ -213,7 +213,7 @@ common::system::authentication::sudo::purge: false
 
 ### DNS
 common::system::dns::manage: false
-common::system::dns::dnssec: false
+common::system::dns::dnssec: 'allow-downgrade'
 common::system::dns::dns_over_tls: false
 common::system::dns::nameservers: []
 common::system::dns::searchpath: []

@@ -8,14 +8,14 @@
 #
 # @param sudoers The sudoers hash configuration. Defaults to an empty hash.
 #
-# @param __sudoers_d_dir The absolute path to the sudoers.d directory. Defaults to '/etc/obmondo/sudoers.d'.
+# @param sudoers_d_dir The absolute path to the sudoers.d directory. Defaults to '/etc/obmondo/sudoers.d'.
 #
 class common::system::authentication::sudo (
-  Boolean $manage          = true,
-  Boolean $purge           = false,
-  Boolean $ssh_agent_auth  = false,
-  Eit_types::Sudoers $sudoers = {},
-  Stdlib::Absolutepath $__sudoers_d_dir = '/etc/obmondo/sudoers.d',
+  Boolean              $manage         = true,
+  Boolean              $purge          = false,
+  Boolean              $ssh_agent_auth = false,
+  Eit_types::Sudoers   $sudoers        = {},
+  Stdlib::Absolutepath $sudoers_d_dir  = '/etc/obmondo/sudoers.d',
 ) {
   if $manage {
     include profile::system::sudoers

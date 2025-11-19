@@ -2,8 +2,6 @@
 common::monitor::exporter::enable: true
 common::network::service_name: 'systemd-networkd'
 common::system::systemd::manage_resolved: true
-common::system::dns::dnssec: null
-common::system::dns::dns_over_tls: null
 common::monitor::exporter::security::enable: true
 common::software::vncserver::systemd_service: 'tigervncserver'
 common::software::vncserver::config_defaults:

@@ -38,7 +38,7 @@ class common (
     # NOTE: Later this needs to be fixed.
     if $facts['os']['name'] != 'TurrisOS' {
       eit_repos::repo { 'enableit_client':
-          noop_value => false,
+        noop_value => false,
       }
     }
 
@@ -47,12 +47,14 @@ class common (
     lookup('common::default::classes').each | $role | {
       contain $role
     }
+
     # NOTE: when user only want role::basic and repo + updates with no full host management
     if 'role::basic' in $::obmondo_classes and !$full_host_management {
       lookup('common::role_basic::classes', Array, undef, []).each | $role | {
         contain $role
       }
     }
+
     # NOTE: full_host_management defaults to true, except for role::monitoring
     # If you need these classes, then one has to enable full_host_management
     if $full_host_management {

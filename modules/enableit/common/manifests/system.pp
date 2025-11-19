@@ -221,7 +221,7 @@ class common::system (
 
   file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
     ensure  => present,
-    content => to_yaml($_obmondo_system_facts),
+    content => stdlib::to_yaml($_obmondo_system_facts),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
