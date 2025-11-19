@@ -6,8 +6,6 @@
 #
 # @param server_port The port number for the openvox server. Defaults to 443.
 #
-# @param setup_agent Whether to set up the openvox agent. Defaults to true.
-#
 # @param config_file The path to the openvox configuration file. Defaults to `$facts['openvox_config']`.
 #
 # @param run_agent_as_noop Whether to run the openvox agent in noop mode. Defaults to true.

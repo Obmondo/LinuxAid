@@ -10,7 +10,7 @@ define eit_repos::repo (
   ]                 $versions   = undef,
 ) {
 
-  $_package_provider = lookup('eit_repos::package_provider')
+  $_package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])
 
   $_options = if $versions != undef {
     {
