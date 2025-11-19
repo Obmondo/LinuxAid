@@ -30,8 +30,8 @@
 #   }  
 #  
 class rustdesk::client (
-  Boolean            $enable       = $rustdesk::client::enable,
-  Eit_types::Version $version      = $rustdesk::client::version,
+  Boolean            $enable       = $rustdesk::client_enable,
+  Eit_types::Version $version      = $rustdesk::client_version,
   Array[String]      $dependencies = $rustdesk::client::dependencies,
 ) {
   # Fixed common dependencies

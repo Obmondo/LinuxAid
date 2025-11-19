@@ -30,8 +30,8 @@
 #   }  
 #  
 class rustdesk::server (
-  Boolean            $enable       = $rustdesk::server::enable,
-  Eit_types::Version $version      = $rustdesk::server::version,
+  Boolean            $enable       = $rustdesk::server_enable,
+  Eit_types::Version $version      = $rustdesk::server_version,
   Array[String]      $dependencies = $rustdesk::server::dependencies,
 ) {
   # Fixed common dependencies
@@ -39,20 +39,6 @@ class rustdesk::server (
 
   # Merge common + OS-specific dependencies
   $extra_dependencies = concat($common_deps, $dependencies)
-
-  $rustdesk_servers = {
-    'relay' => {
-      'package_url' => "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbr_${version}_amd64.deb",
-      # 'package_name' => 'rustdesk-server-hbbr',
-      'package_file_name' => "${package_name}_${version}_amd64.deb",
-      'download_path' => "/tmp/${package_file_name}",
-    },
-    'signal' => {
-      'package_url' => "https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/rustdesk-server-hbbs_${version}_amd64.deb",
-      'package_file_name' => "${package_name}_${version}_amd64.deb",
-      'download_path' => "/tmp/${package_name}",
-    },
-  }
 
   # Ensure dependencies are installed first
   package { $extra_dependencies:
@@ -64,6 +50,7 @@ class rustdesk::server (
   ['relay', 'signal'].each |$server| {
     $_server_type = lookup("rustdesk::server::${server}::package_name")
     $_package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${_server_type}_${version}_amd64.deb"
+
     archive { $server :
       ensure => $enable,
       source => $_package_url,
