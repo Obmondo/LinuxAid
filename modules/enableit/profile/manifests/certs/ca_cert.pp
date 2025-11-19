@@ -5,10 +5,13 @@ define profile::certs::ca_cert (
   Optional[Eit_types::Cert::Update] $update  = undef,
 ) {
 
-  $_file = eit_files::to_file($source)
+  $_file = $source ? {
+    Eit_Files::Source => eit_files::to_file($source),
+    default           => undef,
+  }
 
   trusted_ca::ca { $name:
-    source  => $_file['resource']['source'],
-    content => $_file['resource']['content'],
+    source  => dig($_file, 'resource', 'source'),
+    content => $content,
   }
 }
