@@ -489,6 +489,9 @@ common::security::auditd::enable: false
 ## System Updates
 common::system::updates::enable: true
 
+## Obmondo Admin
+common::setup::obmondo_admin::manage: true
+
 prometheus::bin_dir: /opt/obmondo/bin
 prometheus::install_method: package
 

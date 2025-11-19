@@ -9,6 +9,7 @@
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
 class common::setup::obmondo_admin (
+  Boolean                 $manage          = true,
   Optional[Array[String]] $manager_pubkeys = [],
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
@@ -16,7 +17,7 @@ class common::setup::obmondo_admin (
 ) {
   contain common::setup
 
-  $_enable = $::obmondo_monitor
+  $_enable = $::obmondo_monitor and $manage
   $__opt_dir = $common::setup::__opt_dir
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
@@ -24,7 +25,7 @@ class common::setup::obmondo_admin (
 
   file {
     default:
-      ensure => ensure_dir($_enable),
+      ensure => stdlib::ensure($_enable, 'directory'),
       noop   => $noop_value,
     ;
 
@@ -36,7 +37,7 @@ class common::setup::obmondo_admin (
     ;
 
     $_home_admin_ssh:
-      ensure  => directory,
+      ensure  => stdlib::ensure($_enable, 'directory'),
       owner   => 'obmondo-admin',
       group   => 'obmondo',
       mode    => '0700',
@@ -54,7 +55,7 @@ class common::setup::obmondo_admin (
   }
 
   user { 'obmondo-admin':
-    ensure         => present,
+    ensure         => stdlib::ensure($_enable),
     comment        => 'Obmondo adminstration user',
     forcelocal     => true,
     gid            => 'obmondo',
@@ -81,7 +82,7 @@ class common::setup::obmondo_admin (
   $all_pubkeys.each |$key| {
     $_key = functions::split_ssh_key($key)
     ssh_authorized_key { "obmondo-admin ssh key ${_key['comment']}":
-      ensure  => ensure_present($_enable),
+      ensure  => stdlib::ensure($_enable),
       type    => $_key['type'],
       key     => $_key['key'],
       user    => 'obmondo-admin',

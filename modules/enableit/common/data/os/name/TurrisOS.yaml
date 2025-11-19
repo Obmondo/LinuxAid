@@ -16,6 +16,8 @@ common::system::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
 common::system::motd::enable: false
 
+common::setup::obmondo_admin::manage: false
+
 common::system::nsswitch::ethers: []
 common::system::nsswitch::group: []
 common::system::nsswitch::hosts: []
