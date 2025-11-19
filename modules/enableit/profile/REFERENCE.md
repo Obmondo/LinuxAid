@@ -21,7 +21,7 @@
 * [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
 * [`profile::cron`](#profile--cron): cron
 * [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
-* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when 
+* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when
 * [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
 * [`profile::db::elasticsearch::kibana`](#profile--db--elasticsearch--kibana): Elasticsearch Kibana dashboard  Generate the pem cert from the cert created by elasticsearch Get the password /usr/share/elasticsearch/bin/el
 * [`profile::db::mongodb`](#profile--db--mongodb): MongoDB class
@@ -8700,7 +8700,7 @@ Data type: `Stdlib::Absolutepath`
 
 
 
-Default value: `$common::system::authentication::sudo::__sudoers_d_dir`
+Default value: `$common::system::authentication::sudo::sudoers_d_dir`
 
 ### <a name="profile--system--systemd"></a>`profile::system::systemd`
 
@@ -10713,7 +10713,7 @@ Data type: `Stdlib::Absolutepath`
 
 
 
-Default value: `$common::system::authentication::sudo::__sudoers_d_dir`
+Default value: `$common::system::authentication::sudo::sudoers_d_dir`
 
 ##### <a name="-profile--system--sudoers--conf--noop_value"></a>`noop_value`
 
