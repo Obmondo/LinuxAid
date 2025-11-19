@@ -1,0 +1,17 @@
+<%- | String $job_name,
+      String $on_calendar,
+| -%>
+# This file is managed by Puppet - DO NOT EDIT
+# Manual changes will be overwritten
+
+[Unit]
+Description=Timer for Syncoid replication job: <%= $job_name %>
+
+[Timer]
+OnCalendar=<%= $on_calendar %>
+OnBootSec=15min
+Persistent=true
+Unit=syncoid-replication@<%= $job_name %>.service
+
+[Install]
+WantedBy=timers.target

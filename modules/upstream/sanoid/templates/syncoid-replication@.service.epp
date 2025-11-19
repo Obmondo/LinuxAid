@@ -1,0 +1,19 @@
+# This file is managed by Puppet - DO NOT EDIT
+# Manual changes will be overwritten
+
+[Unit]
+Description=Syncoid replication job: %i
+After=zfs.target
+Requires=zfs.target
+
+[Service]
+Type=oneshot
+Environment=HOME=/root
+EnvironmentFile=/etc/syncoid/replication-%i.conf
+ExecStart=/usr/sbin/syncoid $SYNCOID_ARGS $SYNCOID_SOURCE $SYNCOID_DESTINATION
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=syncoid-%i
+
+[Install]
+WantedBy=multi-user.target
