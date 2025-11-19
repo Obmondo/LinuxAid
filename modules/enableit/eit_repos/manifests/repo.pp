@@ -11,6 +11,7 @@ define eit_repos::repo (
 ) {
 
   $_package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])
+  $os_name = $facts['os']['name']
 
   $_options = if $versions != undef {
     {
@@ -23,7 +24,10 @@ define eit_repos::repo (
     noop_value => $noop_value,
   }
 
-  class { "eit_repos::${_package_provider}::${name}":
-    * => stdlib::merge($_options, $_defaults),
+  # Note: Skip repo setup for TurrisOS, for now.
+  if $os_name != 'TurrisOS' {
+    class { "eit_repos::${_package_provider}::${name}":
+      * => stdlib::merge($_options, $_defaults),
+    }
   }
 }
