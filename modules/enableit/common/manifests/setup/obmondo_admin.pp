@@ -6,9 +6,6 @@
 #
 # @param allow_sre Boolean value to allow SRE to login. Defaults to true.
 #
-# @param $__opt_dir
-# Absolute path to the optional directory. Defaults to '/opt/obmondo'.
-#
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
 class common::setup::obmondo_admin (
@@ -16,15 +13,18 @@ class common::setup::obmondo_admin (
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
   Boolean                 $noop_value      = false,
-  Stdlib::Absolutepath    $__opt_dir       = $common::setup::__opt_dir,
 ) {
+  contain common::setup
+
+  $_enable = $::obmondo_monitor
+  $__opt_dir = $common::setup::__opt_dir
   $_home = "${__opt_dir}/home"
   $_home_admin = "${_home}/obmondo-admin"
   $_home_admin_ssh = "${_home_admin}/.ssh"
 
   file {
     default:
-      ensure => ensure_dir($::obmondo_monitor),
+      ensure => ensure_dir($_enable),
       noop   => $noop_value,
     ;
 
@@ -73,7 +73,7 @@ class common::setup::obmondo_admin (
     noop_value => $noop_value,
   }
 
-  $all_pubkeys = ($allow_sre and $::obmondo_monitor) ? {
+  $all_pubkeys = ($allow_sre and $_enable) ? {
     true    => $manager_pubkeys + $sre_pubkeys,
     default => $manager_pubkeys,
   }
@@ -81,7 +81,7 @@ class common::setup::obmondo_admin (
   $all_pubkeys.each |$key| {
     $_key = functions::split_ssh_key($key)
     ssh_authorized_key { "obmondo-admin ssh key ${_key['comment']}":
-      ensure  => ensure_present($::obmondo_monitor),
+      ensure  => ensure_present($_enable),
       type    => $_key['type'],
       key     => $_key['key'],
       user    => 'obmondo-admin',
