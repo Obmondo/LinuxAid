@@ -1,0 +1,10 @@
+<%- | String $source,
+      String $destination,
+      String $args = '',
+| -%>
+# This file is managed by Puppet - DO NOT EDIT
+# Manual changes will be overwritten
+
+SYNCOID_SOURCE="<%= $source %>"
+SYNCOID_DESTINATION="<%= $destination %>"
+SYNCOID_ARGS="<%= $args %>"

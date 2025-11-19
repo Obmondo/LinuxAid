@@ -1,0 +1,32 @@
+{
+  "name": "obmondo-sanoid",
+  "version": "0.1.0",
+  "author": "Ashish Jaiswal",
+  "summary": "",
+  "license": "Apache-2.0",
+  "source": "",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "22.04",
+        "24.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.24 < 9.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.1.0"
+    }
+  ],
+  "pdk-version": "3.4.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#main",
+  "template-ref": "tags/3.5.1.2-0-gfa96b82"
+}

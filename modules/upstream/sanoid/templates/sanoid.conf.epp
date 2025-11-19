@@ -1,0 +1,25 @@
+<%- | Sanoid::Pools $pools,
+      Sanoid::Templates $templates,
+| -%>
+# This file is managed by Puppet - DO NOT EDIT
+# Manual changes will be overwritten
+
+<%- $pools.each |$pool_name, $pool_config| { -%>
+[<%= $pool_name %>]
+    use_template = <%= $pool_config['template'] %>
+    recursive = <%= bool2str($pool_config['recursive'], 'yes', 'no') %>
+
+<%- } -%>
+
+<%- $templates.each |$template_name, $template_config| { -%>
+[template_<%= $template_name %>]
+    frequently = <%= $template_config['frequently'] %>     # 15-min snapshots
+    hourly = <%= $template_config['hourly'] %>             # Hourly snapshots
+    daily = <%= $template_config['daily'] %>               # Daily snapshots
+    weekly = <%= $template_config['weekly'] %>             # Weekly snapshots
+    monthly = <%= $template_config['monthly'] %>           # Monthly snapshots
+    yearly = <%= $template_config['yearly'] %>             # Yearly snapshots
+    autosnap = <%= bool2str($template_config['autosnap'], 'yes', 'no') %>
+    autoprune = <%= bool2str($template_config['autoprune'], 'yes', 'no') %>
+
+<%- } -%>
