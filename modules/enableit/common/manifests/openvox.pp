@@ -31,11 +31,15 @@ class common::openvox (
   String               $environment         = 'master',
 ) {
 
+  $_arch    = profile::arch()
+  $_os_name = $facts['os']['name']
+  $_kernel  = $facts['kernel'].downcase
+
   archive { 'linuxaid-cli':
     ensure       => present,
-    source       => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+    source       => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_Linux_${_arch}.tar.gz",
     extract      => true,
-    path         => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+    path         => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
     extract_path => '/usr/bin',
     cleanup      => true,
     user         => 'root',
