@@ -3,5 +3,3 @@ common::system::authentication::purge_ubuntu_user: true
 
 common::system::systemd::manage_resolved: true
 common::system::dns::resolver: 'systemd-resolved'
-common::system::dns::dnssec: 'allow-downgrade'
-common::system::dns::dns_over_tls: false
