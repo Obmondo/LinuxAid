@@ -34,3 +34,6 @@ common::network::ipaddress_provider: "gem"
 
 common::system::updates::enable: false
 common::system::updates::manage: false
+
+# NOTE: TurrisOS (armv7) support is not adding into monitoring
+common::monitor::enable: false
