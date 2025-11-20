@@ -178,6 +178,11 @@ class profile::openvox (
   file { functions::dir_to_dirs($_facts_d_dir):
     ensure => 'directory',
     noop   => $noop_value,
+    notify => Hocon_Setting[
+      'facter external-dir',
+      'facter ttls',
+      'facter blocklist',
+    ]
   }
 
   $facts_ttls = [
