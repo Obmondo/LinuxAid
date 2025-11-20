@@ -223,7 +223,7 @@ class profile::openvox (
       ensure  => present,
       path    => "${_facter_dir}/facter.conf",
       noop    => $noop_value,
-      require => File[$_facts_d_dir],
+      require => File[$_facter_dir],
       ;
 
     'facter external-dir':
