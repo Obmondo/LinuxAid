@@ -250,6 +250,7 @@ class profile::openvox (
       ;
   }
 
+  contain profile::openvox::linuxaid_cli
   contain profile::openvox::run_openvox
   contain profile::openvox::clientbucket
 }

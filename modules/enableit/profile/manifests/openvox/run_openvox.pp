@@ -63,6 +63,7 @@ class profile::openvox::run_openvox (
       service_content => $_service,
       active          => true,
       enable          => true,
+      require         => Archive['linuxaid-cli'],
     }
   }
 }

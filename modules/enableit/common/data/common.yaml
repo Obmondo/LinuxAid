@@ -316,6 +316,7 @@ common::system::services:
 
 # Puppet
 common::openvox::version: "8.23.0"
+common::openvox::linuxaid_cli_version: 1.0.0
 common::openvox::server: enableit.puppet.obmondo.com
 common::openvox::package_name: "openvox-agent"
 common::openvox::configure_agent: true
