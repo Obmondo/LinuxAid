@@ -14,7 +14,7 @@ define eit_users::user (
   Array[Eit_types::Group]             $groups              = [],
   Boolean                             $purge_ssh_keys      = true,
   Array[Eit_types::Ssh_pubkey]        $ssh_authorized_keys = [],
-  Optional[Boolean]                   $noop_value          = undef,
+  Eit_types::Noop_Value               $noop_value          = undef,
 ) {
 
   # Make sure we don't try to set the homedir of root to `/home/root`, unless

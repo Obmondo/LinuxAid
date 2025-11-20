@@ -2,8 +2,8 @@
 # Repo configuration
 # https://downloads.linux.hpe.com/SDR/project/mcp/
 class eit_repos::apt::hp (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   $distro = $facts['os']['distro']['codename']

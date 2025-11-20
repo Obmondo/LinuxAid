@@ -1,7 +1,7 @@
 # Dell APT repos
 class eit_repos::apt::dell (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) inherits eit_repos::apt {
 
   $distro = $facts['os']['distro']['codename']

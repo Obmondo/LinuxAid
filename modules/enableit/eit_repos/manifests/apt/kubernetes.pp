@@ -1,8 +1,8 @@
 # Kubernetes APT repos
 class eit_repos::apt::kubernetes (
-  Boolean       $ensure     = true,
-  Array[String] $versions   = ['v1.27'],
-  Boolean       $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Array[String]         $versions   = ['v1.27'],
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   $versions.each |$version| {

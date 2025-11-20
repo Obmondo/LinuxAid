@@ -1,13 +1,13 @@
 # Eit_Repos define
 define eit_repos::repo (
-  Boolean           $ensure     = true,
-  Boolean           $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
   Optional[
     Variant[
       String,
       Array
     ]
-  ]                 $versions   = undef,
+  ]                     $versions   = undef,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   $_package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])

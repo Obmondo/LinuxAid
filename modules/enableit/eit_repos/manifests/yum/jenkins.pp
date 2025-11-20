@@ -1,7 +1,7 @@
 # Jenkins
 class eit_repos::yum::jenkins (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   yumrepo { 'jenkins' :

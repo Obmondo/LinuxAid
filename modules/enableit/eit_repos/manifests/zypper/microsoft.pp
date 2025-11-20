@@ -1,7 +1,7 @@
 # Zypper Microsoft
 class eit_repos::zypper::microsoft (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   $suseversion = $facts['os']['release']['major']

@@ -1,7 +1,7 @@
 # EnableIT Client
 class eit_repos::zypper::enableit_client (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 
   Enum['http', 'https'] $source_protocol = lookup('eit_repos::source_protocol'),
 ) {

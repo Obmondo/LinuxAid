@@ -3,7 +3,7 @@ class eit_repos (
   Boolean               $purge           = false,
   Boolean               $upstream        = false,
   Boolean               $purge_pins      = true,
-  Boolean               $noop_value      = true,
+  Eit_types::Noop_Value $noop_value      = undef,
   Enum['http', 'https'] $source_protocol = 'https',
 ) {
 
