@@ -9,11 +9,11 @@
 # @param noop_value Optional boolean to specify noop mode value.
 #
 class common::software::rustdesk (
-  Boolean            $manage       = true,
-  Boolean            $enable       = true,
-  Eit_types::Version $version      = undef,
-  Optional[Boolean]  $noop_value   = undef,
-  Array[String]      $dependencies = [],
+  Boolean               $manage       = true,
+  Boolean               $enable       = true,
+  Eit_types::Version    $version      = undef,
+  Eit_types::Noop_Value $noop_value   = undef,
+  Array[String]         $dependencies = [],
 ) {
 
   if $manage {

@@ -7,9 +7,9 @@
 # @param noop_value Optional boolean for noop mode. Defaults to undef.
 #
 class common::software::nvidia_driver (
-  Boolean           $enable     = false,
-  Boolean           $manage     = false,
-  Optional[Boolean] $noop_value = undef,
+  Boolean               $enable     = false,
+  Boolean               $manage     = false,
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits common {
   if $manage {
     contain profile::software::nvidia_driver

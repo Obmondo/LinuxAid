@@ -1,6 +1,6 @@
 # @summary Class for managing the OMS Agent
 #
-# @param enable 
+# @param enable
 # Whether to enable the OMS Agent. Defaults to false.
 #
 # @param noop_value Optional boolean for noop mode. Defaults to undef.
@@ -13,7 +13,7 @@
 #
 class common::software::teleport (
   Boolean                           $enable        = false,
-  Optional[Boolean]                 $noop_value    = undef,
+  Eit_types::Noop_Value             $noop_value    = undef,
   Optional[String]                  $join_token    = undef,
   Optional[String]                  $ca_pin        = undef,
   Eit_types::Encrypt::Params        $encrypt_params = ['join_token','ca_pin'],

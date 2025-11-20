@@ -5,8 +5,8 @@
 # @param noop_value Optional Boolean for noop operations. Defaults to false.
 #
 class common::convenience::tmux (
-  Boolean           $manage     = true,
-  Optional[Boolean] $noop_value = false,
+  Boolean               $manage     = true,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   package::install('tmux')

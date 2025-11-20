@@ -12,10 +12,10 @@
 # Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
 #
 class common::setup (
-  Boolean              $noop_value = false,
-  Stdlib::Absolutepath $__conf_dir = '/etc/obmondo',
-  Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
-  Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
+  Eit_types::Noop_Value $noop_value = undef,
+  Stdlib::Absolutepath  $__conf_dir = '/etc/obmondo',
+  Stdlib::Absolutepath  $__opt_dir  = '/opt/obmondo',
+  Stdlib::Absolutepath  $__bin_dir  = '/opt/obmondo/bin',
 ) {
 
   # Create Obmondo group for exporter to run under this group
@@ -27,7 +27,7 @@ class common::setup (
 
   file {
     default:
-    ensure => ensure_dir($::obmondo_monitor),
+    ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
     noop   => $noop_value,
       ;
 

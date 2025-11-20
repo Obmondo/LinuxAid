@@ -15,18 +15,18 @@
 # @param environment The openvox environment to use. Defaults to 'master'.
 #
 class common::openvox (
-  Eit_types::Version   $version,
-  Stdlib::Host         $server,
-  String               $package_name,
-  Stdlib::Port         $server_port         = 443,
-  Boolean              $manage              = true,
-  Optional[Boolean]    $noop_value          = undef,
-  Stdlib::Absolutepath $config_file         = $facts['puppet_config'],
-  Boolean              $run_agent_as_noop   = true,
-  Optional[Hash]       $extra_main_settings = undef,
+  Eit_types::Version    $version,
+  Stdlib::Host          $server,
+  String                $package_name,
+  Stdlib::Port          $server_port         = 443,
+  Boolean               $manage              = true,
+  Eit_types::Noop_Value $noop_value          = undef,
+  Stdlib::Absolutepath  $config_file         = $facts['puppet_config'],
+  Boolean               $run_agent_as_noop   = true,
+  Optional[Hash]        $extra_main_settings = undef,
 
-  # TODO: lets control via enc script
-  String               $environment         = 'master',
+  # TODO: lets control  via enc script
+  String                $environment         = 'master',
 ) {
 
   $_arch    = profile::arch()

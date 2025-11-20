@@ -7,9 +7,9 @@
 # @param noop_value Optional boolean for noop value. Defaults to undef.
 #
 class common::software::insights (
-  Boolean $manage = false,
-  Boolean $enable = false,
-  Optional[Boolean] $noop_value = undef,
+  Boolean               $manage     = false,
+  Boolean               $enable     = false,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   if $manage {
     if $facts['os']['family'] == 'RedHat' {

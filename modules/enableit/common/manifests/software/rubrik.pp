@@ -7,9 +7,9 @@
 # @param noop_value Optional boolean to specify noop mode value.
 #
 class common::software::rubrik (
-  Boolean           $manage     = false,
-  Boolean           $enable     = false,
-  Optional[Boolean] $noop_value = undef,
+  Boolean               $manage     = false,
+  Boolean               $enable     = false,
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits common {
   if $manage {
     contain profile::software::rubrik

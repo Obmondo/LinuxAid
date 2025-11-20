@@ -7,9 +7,9 @@
 # @param noop_value Optional parameter to set noop mode. Defaults to undef.
 #
 class common::security::effective_group (
-  Boolean $enable             = false,
+  Boolean                     $enable         = false,
   Hash[String, Array[String]] $group_mappings = {},
-  Optional[Boolean] $noop_value = undef,
+  Eit_types::Noop_Value       $noop_value     = undef,
 ) {
   File {
     ensure => ensure_file($enable),

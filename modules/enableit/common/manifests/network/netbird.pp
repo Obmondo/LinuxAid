@@ -18,7 +18,7 @@ class common::network::netbird (
   Eit_types::Version       $version,
   String                   $setup_key,
   Enum['package', 'repo']  $install_method,
-  Optional[Boolean]        $noop_value  =  undef,
+  Eit_types::Noop_Value    $noop_value =  undef,
 ) {
   include profile::network::netbird
 }

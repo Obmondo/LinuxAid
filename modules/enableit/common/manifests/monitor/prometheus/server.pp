@@ -16,8 +16,8 @@ class common::monitor::prometheus::server (
   Stdlib::Absolutepath $config_dir,
   Eit_types::IPPort    $listen_address,
 
-  Boolean              $enable     = $common::monitor::enable,
-  Boolean              $noop_value = $common::monitor::noop_value,
+  Boolean               $enable     = $common::monitor::enable,
+  Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
 
   include common::monitor::prometheus

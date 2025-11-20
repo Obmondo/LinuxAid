@@ -5,8 +5,8 @@
 # @param noop_value Optional. If set, Puppet will not modify the file system but will simulate changes.
 #
 class common::security::pkexec (
-  Boolean           $setuid     = true,
-  Optional[Boolean] $noop_value = undef,
+  Boolean               $setuid     = true,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   $_mode = if $setuid {
     'u+s'

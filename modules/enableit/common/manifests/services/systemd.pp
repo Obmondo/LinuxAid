@@ -57,7 +57,7 @@ define common::services::systemd (
   ] $script                                      = undef,
   Boolean $override                              = false,
   Optional[Stdlib::Absolutepath] $unit_file_path = undef,
-  Optional[Boolean] $noop_value                  = undef,
+  Eit_types::Noop_Value $noop_value              = undef,
 ) {
 
   $_is_instance = $unit_name =~ /@\.(automount|device|directives|exec|generator|index|journal-fields|kill|link|mount|negative|netdev|network|nspawn|offline-updates|path|positive|preset|resource-control|scope|service|slice|socket|special|swap|target|time|timer)$/ #lint:ignore:140chars

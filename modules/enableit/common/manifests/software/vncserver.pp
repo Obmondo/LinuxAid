@@ -19,7 +19,7 @@ class common::software::vncserver (
       localhost => Optional[Enum['yes', 'no']],
   }]                                       $config_defaults  = {},
   Hash[String, Stdlib::Port]               $vnc_users        = {},
-  Optional[Boolean]                        $noop_value       = false,
+  Eit_types::Noop_Value                    $noop_value       = undef,
   Enum['vncserver', 'tigervncserver']      $systemd_service  = 'vncserver',
 ) inherits common {
   if $manage {

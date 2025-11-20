@@ -9,10 +9,10 @@
 # @param noop_value Optional boolean to specify noop mode value.
 #
 class common::software::miniforge (
-  Boolean            $manage     = true,
-  Boolean            $enable     = true,
-  Eit_types::Version $version    = '25.3.1-0',
-  Optional[Boolean]  $noop_value = false,
+  Boolean               $manage     = true,
+  Boolean               $enable     = true,
+  Eit_types::Version    $version    = '25.3.1-0',
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   if $manage {

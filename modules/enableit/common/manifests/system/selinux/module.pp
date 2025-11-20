@@ -3,7 +3,7 @@
 # @param noop_value Optional boolean to control noop behavior, defaults to undef.
 #
 define common::system::selinux::module (
-  Optional[Boolean] $noop_value = undef,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   if lookup('common::system::selinux::enable', Boolean, undef, false) {
     include common::system::selinux

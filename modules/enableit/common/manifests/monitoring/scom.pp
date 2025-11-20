@@ -15,7 +15,7 @@ class common::monitoring::scom (
   Optional[Array[Stdlib::Host]] $scom_masters       = undef,
   Boolean                       $install_sudo_rules = true,
   Eit_types::User               $scom_user          = 'svclinuxmon',
-  Boolean                       $noop_value         = undef,
+  Eit_types::Noop_Value         $noop_value         = undef,
 ) {
   if $enable {
     include profile::monitoring::scom

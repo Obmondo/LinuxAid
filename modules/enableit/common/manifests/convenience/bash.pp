@@ -5,8 +5,8 @@
 # @param noop_value Whether to perform no-operation. Defaults to false.
 #
 class common::convenience::bash (
-  Boolean           $manage     = true,
-  Optional[Boolean] $noop_value = false,
+  Boolean               $manage     = true,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   file {
     default:
