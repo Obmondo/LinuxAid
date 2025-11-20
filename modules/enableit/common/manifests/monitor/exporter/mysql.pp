@@ -30,8 +30,9 @@ class common::monitor::exporter::mysql (
   Stdlib::Port        $mysql_port             = $profile::mysql::mysql_port,
   String              $mysql_monitor_hostname = $profile::mysql::mysql_monitor_hostname,
   Stdlib::Port        $listen_port            = 9104,
-  Boolean             $noop_value             = $common::monitor::exporter::noop_value,
-  Eit_types::Encrypt::Params $encrypt_params  = ['password'],
+
+  Eit_types::Noop_Value      $noop_value     = $common::monitor::exporter::noop_value,
+  Eit_types::Encrypt::Params $encrypt_params = ['password'],
 ) {
   class { 'prometheus::mysqld_exporter':
     package_name      => 'obmondo-mysqld-exporter',

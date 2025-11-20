@@ -10,10 +10,10 @@
 # @param host The hostname or certname to use. Defaults to $trusted['certname'].
 #
 class common::monitor::exporter::haproxy (
-  Boolean             $enable      = $common::monitor::exporter::enable,
-  Boolean             $noop_value  = $common::monitor::exporter::noop_value,
-  Stdlib::Port        $listen_port = 63661,
-  Eit_types::Certname $host        = $trusted['certname'],
+  Boolean               $enable      = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
+  Stdlib::Port          $listen_port = 63661,
+  Eit_types::Certname   $host        = $trusted['certname'],
 ) {
   File {
     noop => $noop_value,

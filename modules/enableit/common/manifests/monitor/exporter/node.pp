@@ -91,9 +91,9 @@ class common::monitor::exporter::node (
   Stdlib::AbsolutePath $lib_directory,
   Eit_types::IPPort    $listen_address,
 
-  Eit_types::Certname $host       = $trusted['certname'],
-  Boolean             $enable     = true,
-  Boolean             $noop_value = $common::monitor::exporter::noop_value,
+  Eit_types::Certname   $host       = $trusted['certname'],
+  Boolean               $enable     = true,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 

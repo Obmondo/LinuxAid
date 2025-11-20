@@ -6,7 +6,7 @@
 #
 class common::monitor::exporter::node::ssacli (
   Boolean $enable     = $common::monitor::exporter::node::enable,
-  Boolean $noop_value = $common::monitor::exporter::node::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,
 ) {
 
   File {

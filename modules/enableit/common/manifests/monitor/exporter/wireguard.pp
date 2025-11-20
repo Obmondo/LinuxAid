@@ -7,9 +7,9 @@
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
 class common::monitor::exporter::wireguard (
-  Boolean           $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort $listen_address = '127.254.254.254:63390',
-  Boolean           $noop_value     = $common::monitor::exporter::noop_value,
+  Boolean               $enable         = $common::monitor::exporter::enable,
+  Eit_types::IPPort     $listen_address = '127.254.254.254:63390',
+  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
 ) {
 
   File {
