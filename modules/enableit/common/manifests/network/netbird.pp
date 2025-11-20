@@ -13,12 +13,12 @@
 # @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
 #
 class common::network::netbird (
-  String                   $setup_key,
   Boolean                  $enable,
-  Optional[Boolean]        $noop_value  =  undef,
   Stdlib::HTTPSUrl         $server,
   Eit_types::Version       $version,
+  String                   $setup_key,
   Enum['package', 'repo']  $install_method,
+  Optional[Boolean]        $noop_value  =  undef,
 ) {
   include profile::network::netbird
 }

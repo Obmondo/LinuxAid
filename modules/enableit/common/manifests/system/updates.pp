@@ -33,8 +33,11 @@ class common::system::updates (
     # NOTE: We will only install updates when purge is true, so that gives us some
     # confidence that we will not install updates from unwanted sources.
     $purge_settings = lookup('common::repo::purge', Boolean, undef, false)
+
     confine($enable, !$purge_settings, 'Automatic update is disabled, since all the repos are not managed by puppet, you can enable it via common::repo::purge: true') #lint:ignore:140chars
+
     $_os_family = $facts['os']['family']
+
     File {
       noop => $noop_value,
     }
@@ -44,6 +47,8 @@ class common::system::updates (
     Service {
       noop => $noop_value,
     }
+
+
     package { delete_undef_values([
       'unattended-upgrades',
       if $_os_family == 'RedHat' {
@@ -56,52 +61,49 @@ class common::system::updates (
     }
 
     package { 'obmondo-system-update':
-      ensure => ensure_latest($enable),
+      ensure => absent,
+      noop   => $noop_value,
     }
 
     file { '/etc/default/obmondo-update':
-      ensure  => ensure_present($enable),
-      content => anything_to_ini({
-        'PUPPETCERT'    => $facts.dig('hostcert'),
-        'PUPPETPRIVKEY' => $facts.dig('hostprivkey'),
-        'HOSTNAME'      => $facts['networking']['hostname'],
-      }),
-      mode    => '0644',
-      require => Package['obmondo-system-update'],
-      noop    => $noop_value,
+      ensure => absent,
+      noop   => $noop_value,
     }
 
-    # Change the upgrade service timer timing.
-    $_minutes = fqdn_rand(30, $facts['networking']['hostname'])
-    $_timer = @("EOT"/$n)
-      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-      [Unit]
-      Description=Obmondo System Update Timer
-      Requires=obmondo-system-update.service
-      [Timer]
-      OnCalendar=*-*-* *:0/30:00
-      RandomizedDelaySec=${_minutes}m
-    | EOT
+    if $facts['init_system'] == 'systemd' {
 
-    $_service = @(EOT)
-      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-      [Unit]
-      Description=Obmondo System Update Service
-      Wants=obmondo-system-update.timer
-      [Service]
-      Type=oneshot
-      EnvironmentFile=-/etc/default/obmondo-update
-      Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
-      ExecStart=/opt/obmondo/bin/obmondo-system-update
-    | EOT
+      # Change the upgrade service timer timing.
+      $_minutes = fqdn_rand(30, $facts['networking']['hostname'])
 
-    systemd::timer { 'obmondo-system-update.timer':
-      ensure          => ensure_present($enable),
-      timer_content   => $_timer,
-      service_content => $_service,
-      active          => $enable,
-      enable          => $enable,
-      require         => Package['obmondo-system-update'],
+      $_timer = @("EOT"/$n)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Unit]
+        Description=Obmondo System Update Timer
+        Requires=obmondo-system-update.service
+        [Timer]
+        OnCalendar=*-*-* *:0/30:00
+        RandomizedDelaySec=${_minutes}m
+      | EOT
+
+      $_service = @(EOT)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Unit]
+        Description=Obmondo System Update Service
+        Wants=obmondo-system-update.timer
+        [Service]
+        Type=oneshot
+        EnvironmentFile=-/etc/default/linuxaid-cli
+        Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
+        ExecStart=/opt/obmondo/bin/linuxaid-cli system-update
+      | EOT
+
+      systemd::timer { 'obmondo-system-update.timer':
+        ensure          => ensure_present($enable),
+        timer_content   => $_timer,
+        service_content => $_service,
+        active          => $enable,
+        enable          => $enable,
+      }
     }
   }
 }

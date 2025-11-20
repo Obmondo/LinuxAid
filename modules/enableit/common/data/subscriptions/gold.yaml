@@ -8,3 +8,6 @@ common::default::classes:
 
 common::system::updates::enable: true
 common::system::updates::manage: true
+
+common::setup::obmondo_admin::manage: true
+common::setup::obmondo_admin::ensure: true

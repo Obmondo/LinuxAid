@@ -16,6 +16,8 @@ common::system::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
 common::system::motd::enable: false
 
+common::setup::obmondo_admin::manage: false
+
 common::system::nsswitch::ethers: []
 common::system::nsswitch::group: []
 common::system::nsswitch::hosts: []
@@ -32,3 +34,6 @@ common::network::ipaddress_provider: "gem"
 
 common::system::updates::enable: false
 common::system::updates::manage: false
+
+# NOTE: TurrisOS (armv7) support is not adding into monitoring
+common::monitor::enable: false

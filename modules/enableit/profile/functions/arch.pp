@@ -25,7 +25,7 @@
 #
 # @author Sidharth Jawale
 # @since 1.0.0
-function profile::netbird_arch {
+function profile::arch {
   $os_arch = $facts['os']['architecture']
   $os_name = $facts['os']['name']
 

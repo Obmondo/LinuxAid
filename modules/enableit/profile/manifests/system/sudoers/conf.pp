@@ -1,7 +1,7 @@
 # sudo conf wrapper
 define profile::system::sudoers::conf (
-  Optional[Eit_types::SimpleString] $filename      = undef,
   Eit_types::Ensure                 $ensure        = present,
+  Optional[Eit_types::SimpleString] $filename      = undef,
   Integer[0,default]                $priority      = 10,
   Optional[String]                  $content       = undef,
   Optional[String]                  $source        = undef,

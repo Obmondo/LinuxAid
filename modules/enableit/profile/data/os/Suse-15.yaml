@@ -1,2 +1,2 @@
 ---
-profile::puppet::package_version_suffix: '-1.sles15'
+profile::openvox::package_version_suffix: '-1.sles15'
