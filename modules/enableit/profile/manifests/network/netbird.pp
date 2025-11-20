@@ -37,6 +37,7 @@ class profile::network::netbird (
       exec { 'update_package_repo':
         command => 'opkg update; opkg install kmod-tun',
         path    => '/usr/bin:/usr/sbin:/bin:/sbin',
+        unless  => 'opkg list-installed | grep kmod-tun >/dev/null',
         noop    => $noop_value,
       }
 
