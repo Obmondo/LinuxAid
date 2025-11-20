@@ -24,8 +24,7 @@ class common::monitor::exporter::node::topprocesses (
   $textfile_directory = lookup('common::monitor::exporter::node::textfile_directory', Stdlib::AbsolutePath)
 
   package {'obmondo-topprocesses-textfile-exporter':
-    ensure  => ensure_latest($enable),
-    require => if $enable { Package['obmondo-node-exporter'] },
+    ensure => ensure_latest($enable),
   }
 
   file { "${textfile_directory}/topprocesses.prom" :
