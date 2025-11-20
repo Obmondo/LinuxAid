@@ -9,7 +9,7 @@ class profile::openvox::linuxaid_cli (
 
   archive { 'linuxaid-cli':
     ensure       => present,
-    source       => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_Linux_${_arch}.tar.gz",
+    source       => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_v${version}_linux_${_arch}.tar.gz",
     extract      => true,
     path         => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
     extract_path => '/usr/bin',

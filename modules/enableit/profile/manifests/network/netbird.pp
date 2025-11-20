@@ -29,11 +29,14 @@ class profile::network::netbird (
   $_installed_netbird_version = $facts['netbird_client_version']
   $_os_name                   = $facts['os']['name']
   $_kernel                    = $facts['kernel'].downcase
-  $_arch                      = profile::arch()
 
   # Install NetBird service
   if $enable {
     if $_os_name == 'TurrisOS' {
+      # NOTE: only tested on TurrisOS which has only armv6 packages
+      # even though TurrisOS comes with armv7
+      $_arch = 'armv6'
+
       exec { 'update_package_repo':
         command => 'opkg update; opkg install kmod-tun',
         path    => '/usr/bin:/usr/sbin:/bin:/sbin',
@@ -50,6 +53,8 @@ class profile::network::netbird (
       #   noop     => $noop_value,
       #   require  => Exec['update_package_repo'],
       # }
+    } else {
+      $_arch = profile::arch()
     }
 
     # Download and extract NetBird binary from GitHub releases
