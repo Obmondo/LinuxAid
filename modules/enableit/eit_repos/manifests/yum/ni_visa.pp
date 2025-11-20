@@ -1,7 +1,7 @@
 # NI_VISA currently only used by GN
 class eit_repos::yum::ni_visa (
   Boolean               $ensure     = true,
-  Optional[String]      $version    = '2019.07'
+  Optional[String]      $version    = '2019.07',
   Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 

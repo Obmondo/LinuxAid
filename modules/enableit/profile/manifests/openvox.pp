@@ -27,18 +27,6 @@ class profile::openvox (
     "${package_version_prefix}${version}${package_version_suffix}"
   }
 
-  if $os_name == 'TurrisOS' {
-    package { [
-      'ruby',
-      'ruby-gems',
-      'ruby-dev',
-      'ruby-stdlib',
-    ]:
-      ensure => $_version,
-      noop   => $noop_value,
-    }
-  }
-
   unless $os_name == 'TurrisOS' {
     # TODO: remove this block, when there is no more puppet-agent 7
     # PuppetLabs
