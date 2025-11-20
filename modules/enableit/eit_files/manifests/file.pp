@@ -17,7 +17,7 @@ define eit_files::file (
   Optional[String]                 $content      = undef,
   Optional[Stdlib::Unixpath]       $target       = undef,
   Optional[Stdlib::AbsolutePath]   $ensure_mount = undef,
-  Optional[Boolean]                $noop_value   = undef,
+  Eit_types::Noop_Value            $noop_value   = undef,
 ) {
 
   if $source and $content {

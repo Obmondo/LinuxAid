@@ -9,7 +9,7 @@
 class monitor::system::service::sssd::auth (
   Boolean                $enable     = $monitor::system::service::sssd::enable,
   Array[Eit_types::User] $test_users = [],
-  Boolean                $noop_value = lookup('monitor::noop_value'),
+  Eit_types::Noop_Value  $noop_value = lookup('monitor::noop_value'),
 ) inherits monitor::system::service::sssd {
 
   $_enable = $enable and $test_users.count > 0

@@ -9,10 +9,10 @@
 # @param disable Optional disable configuration.
 #
 define monitor::alert (
-  String  $alert_id   = $title,
-  Boolean $enable     = true,
-  Boolean $noop_value = $monitor::noop_value,
-  Monitor::Disable $disable = undef,
+  String                $alert_id   = $title,
+  Boolean               $enable     = true,
+  Eit_types::Noop_Value $noop_value = $monitor::noop_value,
+  Monitor::Disable      $disable    = undef,
 ) {
 
   unless $alert_id =~ /^monitor::/ {

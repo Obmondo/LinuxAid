@@ -82,7 +82,7 @@ class role::mail::postfix (
   Hash[String, String] $aliases                              = {},
   Hash[String, String] $_extra_main_parameters               = {},
   Variant[Stdlib::Filemode,String] $maildrop_perms           = 'u+rwX,g-r,g+wX',
-  Optional[Boolean] $noop_value                              = undef,
+  Eit_types::Noop_Value $noop_value                          = undef,
 ) {
   class { 'common::mail':
     manage                                => $manage,
