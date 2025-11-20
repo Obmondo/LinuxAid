@@ -10,7 +10,7 @@
 #  
 # @param client_version  
 #   The version of RustDesk client to install.  
-#   Must be a valid version string conforming to Eit_types::Version.  
+#   Must be a valid version string conforming to SemVer.  
 #  
 # @param server_enable  
 #   Whether to enable and manage the RustDesk server component.  
@@ -18,7 +18,7 @@
 #  
 # @param server_version  
 #   The version of RustDesk server to install.  
-#   Must be a valid version string conforming to Eit_types::Version.  
+#   Must be a valid version string conforming to SemVer.  
 #  
 # @example Enable only the client with specific version  
 #   class { 'rustdesk':  
@@ -39,11 +39,11 @@
 #   include rustdesk  
 #
 class rustdesk (
-  Boolean            $client_enable        = $rustdesk::client_enable,
-  Eit_types::Version $client_version       = $rustdesk::client_version,
+  Boolean   $client_enable        = $rustdesk::client_enable,
+  SemVer    $client_version       = $rustdesk::client_version,
 
-  Boolean            $server_enable        = $rustdesk::server_enable,
-  Eit_types::Version $server_version       = $rustdesk::server_version,
+  Boolean   $server_enable        = $rustdesk::server_enable,
+  SemVer    $server_version       = $rustdesk::server_version,
 ) {
   $_osfamily =$facts['os']['family']
   if $_osfamily != 'Ubuntu' {

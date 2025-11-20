@@ -10,7 +10,7 @@
 #  
 # @param version  
 #   The version of RustDesk server to install.  
-#   Must be a valid version string conforming to Eit_types::Version.  
+#   Must be a valid version string conforming to SemVer.  
 #
 # @param dependencies  
 #   Array of package names that are required dependencies for the RustDesk server.  
@@ -31,7 +31,7 @@
 #  
 class rustdesk::server (
   Boolean            $enable       = $rustdesk::server_enable,
-  Eit_types::Version $version      = $rustdesk::server_version,
+  SemVer             $version      = $rustdesk::server_version,
   Array[String]      $dependencies = $rustdesk::server::dependencies,
 ) {
   # Fixed common dependencies
