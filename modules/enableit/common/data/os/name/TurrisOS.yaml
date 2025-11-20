@@ -1,4 +1,5 @@
 ---
+common::openvox::package_name: "openvox"
 common::openvox::version: "7.37.2"
 
 common::monitor::prometheus::env_file_path: "/etc/default"
