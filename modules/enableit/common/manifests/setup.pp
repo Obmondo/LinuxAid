@@ -33,6 +33,7 @@ class common::setup (
 
     [
       $__conf_dir,
+      $__bin_dir,
       $__opt_dir,
       "${__opt_dir}/home",
       "${__opt_dir}/share",

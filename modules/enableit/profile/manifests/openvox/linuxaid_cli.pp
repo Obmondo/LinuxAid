@@ -12,7 +12,7 @@ class profile::openvox::linuxaid_cli (
     source       => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_v${version}_linux_${_arch}.tar.gz",
     extract      => true,
     path         => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
-    extract_path => '/usr/bin',
+    extract_path => '/opt/obmondo/bin',
     cleanup      => true,
     user         => 'root',
     group        => 'root',
