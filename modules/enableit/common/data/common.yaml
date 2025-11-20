@@ -385,6 +385,10 @@ common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315
 
 common::monitor::exporter::node::enable: true
+common::monitor::exporter::node::version: 1.10.2
+common::monitor::exporter::node::checksums:
+  1.10.2: c46e5b6f53948477ff3a19d97c58307394a29fe64a01905646f026ddc32cb65b
+
 common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385

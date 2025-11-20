@@ -93,9 +93,12 @@ class common::monitor::exporter::node (
 
   Eit_types::Certname   $host       = $trusted['certname'],
   Boolean               $enable     = true,
+  Eit_types::Version    $version    = '1.10.2',
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
+
+  $_checksum = lookup('common::monitor::exporter::node::checksums')
 
   File {
     noop => $noop_value,
@@ -154,11 +157,10 @@ class common::monitor::exporter::node (
   ].delete_undef_values
 
   class { 'prometheus::node_exporter':
-    package_name      => 'obmondo-node-exporter',
+    version           => $version,
+    install_method    => 'url',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
-    package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
     user              => 'node_exporter',
     group             => 'node_exporter',
     export_scrape_job => ! $enable,
@@ -166,7 +168,9 @@ class common::monitor::exporter::node (
     scrape_host       => $::trusted['certname'],
     collectors_enable => $default_collectors,
     tag               => $::trusted['certname'],
-    scrape_job_labels => { 'certname' => $::trusted['certname'] },
+    scrape_job_labels => {
+      'certname' => $::trusted['certname']
+    },
   }
 
   $port = Integer($listen_address.split(':')[1])
@@ -185,6 +189,12 @@ class common::monitor::exporter::node (
     noop        => $noop_value,
     subscribe   => File['/etc/systemd/system/node_exporter.service'],
   } ~> Service['node_exporter']
+
+  Archive <| tag == "/tmp/node_exporter-${version}.tar.gz" |> {
+    checksum        => $_checksum[$version],
+    checksum_verify => true,
+    noop            => $noop_value,
+  }
 
   firewall { '100 allow node exporter':
     ensure   => ensure_present($enable and $listen_address !~ /^127\./),
