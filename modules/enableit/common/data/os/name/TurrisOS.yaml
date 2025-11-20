@@ -43,3 +43,8 @@ common::system::updates::manage: false
 common::network::netbird::checksums:
   0.59.3: 9287e9528b5f01d5e4fbbc45330224fe712e9e93f6150446223d0b4edcb6d23f
   0.60.0: 803e909938314368662d5ef50afe6759915e670745a6defbfebe63b610ef8d08
+
+common::monitor::exporter::node::lsof::enable: false
+common::monitor::exporter::node::topprocesses::enable: false
+common::monitor::exporter::node::ssacli::enable: false
+common::monitor::exporter::node::smartmon::enable: false
