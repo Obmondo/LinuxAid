@@ -32,6 +32,8 @@ class profile::network::netbird (
 
   # Install NetBird service
   if $enable {
+    $_checksum = lookup('common::network::netbird::checksums')
+
     if $_os_name == 'TurrisOS' {
       # NOTE: only tested on TurrisOS which has only armv6 packages
       # even though TurrisOS comes with armv7
@@ -60,16 +62,18 @@ class profile::network::netbird (
     # Download and extract NetBird binary from GitHub releases
     if $_installed_netbird_version != $version {
       archive { 'netbird':
-        ensure       => ensure_present($enable),
-        source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
-        extract      => true,
-        path         => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
-        extract_path => '/usr/bin',
-        cleanup      => true,
-        user         => 'root',
-        group        => 'root',
-        noop         => $noop_value,
-        notify       => Exec['netbird_service_install'],
+        ensure        => ensure_present($enable),
+        source        => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract       => true,
+        path          => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract_path  => '/usr/bin',
+        checksum      => $_checksum[$version],
+        checksum_type => 'sha256',
+        cleanup       => true,
+        user          => 'root',
+        group         => 'root',
+        noop          => $noop_value,
+        notify        => Exec['netbird_service_install'],
       }
 
       # creates sysvinit script for OpenWRT

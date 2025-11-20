@@ -16,7 +16,6 @@
 #
 class common::openvox (
   Eit_types::Version    $version,
-  Eit_types::Version    $linuxaid_cli_version,
   Stdlib::Host          $server,
   String                $package_name,
   Stdlib::Port          $server_port         = 443,
