@@ -17,6 +17,7 @@ class profile::openvox (
 
   $puppetversion = $facts['puppetversion']
   $os_major = $facts['os']['release']['major']
+  $os_name = $facts['os']['name']
   $os_arch = $facts['os']['architecture']
   $package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])
 
@@ -26,35 +27,49 @@ class profile::openvox (
     "${package_version_prefix}${version}${package_version_suffix}"
   }
 
-  # TODO: remove this block, when there is no more puppet-agent 7
-  # PuppetLabs
-  eit_repos::repo { 'puppetlabs':
-    ensure     => false,
-    noop_value => $noop_value,
+  if $os_name == 'TurrisOS' {
+    package { [
+      'ruby',
+      'ruby-gems',
+      'ruby-dev',
+      'ruby-stdlib',
+    ]:
+      ensure => $_version,
+      noop   => $noop_value,
+    }
   }
 
-  # Openvox
-  eit_repos::repo { 'openvox':
-    noop_value => $noop_value,
-  }
+  unless $os_name == 'TurrisOS' {
+    # TODO: remove this block, when there is no more puppet-agent 7
+    # PuppetLabs
+    eit_repos::repo { 'puppetlabs':
+      ensure     => false,
+      noop_value => $noop_value,
+    }
 
-  # Remove the puppetlabs repo package
-  package { [
-    'puppet7-release',
-    'puppet8-release',
-    'puppet-agent'
-  ]:
-    ensure  => absent,
-    noop    => $noop_value,
-    notify  => Package[$aio_package_name],
-    require => Eit_repos::Repo['openvox'],
+    # Openvox
+    eit_repos::repo { 'openvox':
+      noop_value => $noop_value,
+      notify     => Package[$aio_package_name],
+    }
+
+    # Remove the puppetlabs repo package
+    package { [
+      'puppet7-release',
+      'puppet8-release',
+      'puppet-agent'
+    ]:
+      ensure  => absent,
+      noop    => $noop_value,
+      notify  => Package[$aio_package_name],
+      require => Eit_repos::Repo['openvox'],
+    }
   }
 
   package { $aio_package_name:
     ensure   => $_version,
     noop     => $noop_value,
     provider => $package_provider,
-    require  => Eit_repos::Repo['openvox'],
   }
 
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
