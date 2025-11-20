@@ -4,7 +4,6 @@ common::system::classes:
 
 common::default::classes:
   - common::setup::obmondo_admin
-  - common::system::authentication::sudo
 
 common::system::updates::enable: true
 common::system::updates::manage: true
