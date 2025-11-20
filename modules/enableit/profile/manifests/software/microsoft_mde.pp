@@ -1,7 +1,7 @@
 # Microsoft Defender for Endpoint
 class profile::software::microsoft_mde (
   Boolean                                $enable              = $common::software::microsoft_mde::enable,
-  Optional[Boolean]                      $noop_value          = $common::software::microsoft_mde::noop_value,
+  Eit_types::Noop_Value                  $noop_value          = $common::software::microsoft_mde::noop_value,
   Eit_types::Package::Version::Installed $version             = $common::software::microsoft_mde::version,
   Optional[Eit_Files::Source]            $onboard_config      = $common::software::microsoft_mde::onboard_config,
   Eit_types::Microsoft::Mde::Exclusions  $exclusions          = $common::software::microsoft_mde::exclusions,

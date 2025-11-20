@@ -8,7 +8,7 @@ class profile::system::dns (
   Optional[Variant[Boolean, Enum['opportunistic']]]   $dns_over_tls         = $common::system::dns::dns_over_tls,
   Array[Stdlib::IP::Address]                          $listen_address       = $common::system::dns::listen_address,
   Boolean                                             $allow_external       = $common::system::dns::allow_external,
-  Variant[Undef, Boolean]                             $noop_value           = $common::system::dns::noop_value,
+  Eit_types::Noop_Value                               $noop_value           = $common::system::dns::noop_value,
 ) {
 
   $_resolvers = ['dnsmasq', 'systemd-resolved']

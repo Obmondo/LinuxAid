@@ -1,9 +1,9 @@
 # cadvisor docker container
 class profile::virtualization::docker::cadvisor (
-  Boolean           $enable         = $common::monitor::exporter::enable,
-  Optional[Boolean] $noop_value     = false,
-  Stdlib::Port      $listen_port    = 63392,
-  String            $cadvisor_image = $role::virtualization::docker::cadvisor_image,
+  Boolean               $enable         = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value $noop_value     = undef,
+  Stdlib::Port          $listen_port    = 63392,
+  String                $cadvisor_image = $role::virtualization::docker::cadvisor_image,
 ) inherits profile::virtualization::docker {
 
   Exec {

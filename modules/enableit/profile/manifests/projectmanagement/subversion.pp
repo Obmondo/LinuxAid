@@ -1,4 +1,4 @@
-# Subversion enable 
+# Subversion enable
 class profile::projectmanagement::subversion (
   Boolean                        $enable     = $role::projectmanagement::subversion::enable,
   Optional[Stdlib::Fqdn]         $domain     = $role::projectmanagement::subversion::domain,
@@ -7,7 +7,7 @@ class profile::projectmanagement::subversion (
   Optional[Stdlib::Absolutepath] $backup_dir = $role::projectmanagement::subversion::backup_dir,
   Optional[String]               $user       = $role::projectmanagement::subversion::user,
   Optional[String]               $password   = $role::projectmanagement::subversion::password,
-  Optional[Boolean]              $noop_value = $role::projectmanagement::subversion::noop_value,
+  Eit_types::Noop_Value          $noop_value = $role::projectmanagement::subversion::noop_value,
 ) {
 
   Package {
@@ -28,6 +28,6 @@ class profile::projectmanagement::subversion (
 #    path => "${path}",
 #    user => "${user}",
 #    password => "${password}"
-#  }  
+#  }
 
 }

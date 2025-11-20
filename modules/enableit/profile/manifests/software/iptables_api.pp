@@ -1,8 +1,8 @@
 # iptables_api
 class profile::software::iptables_api (
-  Boolean           $enable         = $common::software::iptables_api::enable,
-  Optional[Boolean] $noop_value     = $common::software::iptables_api::noop_value,
-  Eit_types::IPPort $listen_address = $common::software::iptables_api::listen_address,
+  Boolean               $enable         = $common::software::iptables_api::enable,
+  Eit_types::Noop_Value $noop_value     = $common::software::iptables_api::noop_value,
+  Eit_types::IPPort     $listen_address = $common::software::iptables_api::listen_address,
 ){
 
   $_listen_ip = $listen_address.split(':')[0]

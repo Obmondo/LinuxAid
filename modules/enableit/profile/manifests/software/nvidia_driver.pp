@@ -1,7 +1,7 @@
 # Nvidia Driver
 class profile::software::nvidia_driver (
-  Boolean           $enable     = $common::software::nvidia_driver::enable,
-  Optional[Boolean] $noop_value = $common::software::nvidia_driver::noop_value,
+  Boolean               $enable     = $common::software::nvidia_driver::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::nvidia_driver::noop_value,
 ) {
 
   confine(

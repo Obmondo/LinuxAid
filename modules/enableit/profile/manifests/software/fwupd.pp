@@ -1,7 +1,7 @@
 # Fwupd
 class profile::software::fwupd (
-  Boolean           $enable     = $common::software::fwupd::enable,
-  Optional[Boolean] $noop_value = $common::software::fwupd::noop_value,
+  Boolean               $enable     = $common::software::fwupd::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::fwupd::noop_value,
 ) {
 
   Package {

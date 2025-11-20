@@ -20,7 +20,7 @@ class common::openvox (
   String               $package_name,
   Stdlib::Port         $server_port         = 443,
   Boolean              $manage              = true,
-  Boolean              $noop_value          = true,
+  Optional[Boolean]    $noop_value          = undef,
   Stdlib::Absolutepath $config_file         = $facts['puppet_config'],
   Boolean              $run_agent_as_noop   = true,
   Optional[Hash]       $extra_main_settings = undef,
@@ -47,6 +47,7 @@ class common::openvox (
 
   ensure_resource('file', '/etc/default', {
     ensure => directory,
+    noop   => $noop_value,
     mode   => '0755',
     owner  => 'root',
   })
@@ -55,6 +56,7 @@ class common::openvox (
     ensure  => present,
     mode    => '0644',
     owner   => 'root',
+    noop    => $noop_value,
     content => anything_to_ini({
       'PUPPETCERT'    => $facts['hostcert'],
       'PUPPETPRIVKEY' => $facts['hostprivkey'],

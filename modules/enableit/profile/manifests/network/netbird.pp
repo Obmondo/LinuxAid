@@ -7,7 +7,7 @@
 #
 # @param enable Boolean to enable or disable the Netbird agent. Defaults to false.
 #
-# @param noop_value Optional boolean to enable no-operation mode.
+# @param noop_value Eit_types::Noop_Value to enable no-operation mode.
 #
 # @param server The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:443'.
 #
@@ -17,7 +17,7 @@
 #
 class profile::network::netbird (
   Boolean                 $enable         = $common::network::netbird::enable,
-  Optional[Boolean]       $noop_value     = $common::network::netbird::noop_value,
+  Eit_types::Noop_Value   $noop_value     = $common::network::netbird::noop_value,
   String                  $setup_key      = $common::network::netbird::setup_key,
   Stdlib::HTTPSUrl        $server         = $common::network::netbird::server,
   Eit_types::Version      $version        = $common::network::netbird::version,

@@ -1,7 +1,7 @@
 # Splunk Forwarder
 class profile::monitoring::splunk::forwarder (
   Boolean                   $enable              = $common::monitoring::splunk::forwarder::enable,
-  Boolean                   $noop_value          = $common::monitoring::splunk::forwarder::noop_value,
+  Eit_types::Noop_Value     $noop_value          = $common::monitoring::splunk::forwarder::noop_value,
   Eit_types::Version        $version             = $common::monitoring::splunk::forwarder::version,
   Optional[String]          $build               = $common::monitoring::splunk::forwarder::build,
   Optional[Stdlib::HTTPUrl] $deploymentserver    = $common::monitoring::splunk::forwarder::deploymentserver,

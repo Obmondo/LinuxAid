@@ -1,6 +1,6 @@
 # profile::openvox::clientbucket for puppet clientbucket cache cleanup
 class profile::openvox::clientbucket (
-  Boolean $noop_value = $common::openvox::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
 
   if $facts['init_system'] == 'sysvinit' {
@@ -51,6 +51,7 @@ class profile::openvox::clientbucket (
 
     # delete puppet cache everyday if it is older than 30 days
     systemd::timer { 'cleanup_puppet.timer':
+      ensure          => present,
       timer_content   => $_timer,
       service_content => $_service,
       active          => true,

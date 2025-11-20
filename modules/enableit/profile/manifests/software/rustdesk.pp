@@ -1,10 +1,10 @@
 # Rustdesk Setup
 class profile::software::rustdesk (
-  Boolean            $enable       = $common::software::rustdesk::enable,
-  Eit_types::Version $version      = $common::software::rustdesk::version,
-  Optional[Boolean]  $noop_value   = $common::software::rustdesk::noop_value,
-  Array[String]      $dependencies = $common::software::rustdesk::dependencies,
-) inherits common {
+  Boolean               $enable       = $common::software::rustdesk::enable,
+  Eit_types::Version    $version      = $common::software::rustdesk::version,
+  Eit_types::Noop_Value $noop_value   = $common::software::rustdesk::noop_value,
+  Array[String]         $dependencies = $common::software::rustdesk::dependencies,
+) {
 
   # Fixed common dependencies
   $common_deps = [

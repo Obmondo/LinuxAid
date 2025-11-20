@@ -1,10 +1,9 @@
 # service_oneshot is a service, which runs only once
 # and remainsexited
 define profile::system::service_oneshot (
-  Stdlib::Base64 $content,
-
-  Boolean $enable     = true,
-  Boolean $noop_value = false,
+  Stdlib::Base64        $content,
+  Boolean               $enable     = true,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $file_path = "/opt/obmondo/bin/${name}"

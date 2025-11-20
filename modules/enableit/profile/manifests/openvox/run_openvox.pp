@@ -1,6 +1,6 @@
 # Run openvox-agent on client nodes
 class profile::openvox::run_openvox (
-  Boolean $noop_value = $common::openvox::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
 
   package { 'obmondo-run-puppet':

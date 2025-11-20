@@ -1,7 +1,6 @@
 # Manage openvox-agent
 # so we can setup openvox-agent package
 class profile::openvox (
-  Boolean              $noop_value             = $common::openvox::noop_value,
   Stdlib::Host         $server                 = $common::openvox::server,
   Stdlib::Port         $server_port            = $common::openvox::server_port,
   Eit_types::Version   $version                = $common::openvox::version,
@@ -10,8 +9,10 @@ class profile::openvox (
   Optional[Hash]       $extra_main_settings    = $common::openvox::extra_main_settings,
   String               $aio_package_name       = $common::openvox::package_name,
   String               $environment            = $common::openvox::environment,
-  Optional[String]     $package_version_suffix = undef,
-  Optional[String]     $package_version_prefix = undef,
+
+  Eit_types::Noop_Value $noop_value             = $common::openvox::noop_value,
+  Optional[String]      $package_version_suffix = undef,
+  Optional[String]      $package_version_prefix = undef,
 ) {
 
   $puppetversion = $facts['puppetversion']

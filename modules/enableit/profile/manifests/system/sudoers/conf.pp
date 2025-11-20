@@ -1,12 +1,12 @@
 # sudo conf wrapper
 define profile::system::sudoers::conf (
-  Eit_types::Ensure                 $ensure        = present,
-  Optional[Eit_types::SimpleString] $filename      = undef,
-  Integer[0,default]                $priority      = 10,
-  Optional[String]                  $content       = undef,
-  Optional[String]                  $source        = undef,
-  Optional[String]                  $template      = undef,
-  Boolean                           $noop_value    = true,
+  Eit_types::Ensure                 $ensure     = present,
+  Optional[Eit_types::SimpleString] $filename   = undef,
+  Integer[0,default]                $priority   = 10,
+  Optional[String]                  $content    = undef,
+  Optional[String]                  $source     = undef,
+  Optional[String]                  $template   = undef,
+  Eit_types::Noop_Value             $noop_value = undef,
 ) {
 
   $sudoers_d_dir = lookup('common::system::authentication::sudo::sudoers_d_dir', Stdlib::Absolutepath, 'first', '/etc/obmondo/sudoers.d')

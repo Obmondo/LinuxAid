@@ -2,9 +2,9 @@
 class profile::software::cloudamize (
   Array[Eit_types::SimpleString] $__packages,
 
-  Boolean           $enable       = $common::software::cloudamize::enable,
-  Optional[String]  $customer_key = $common::software::cloudamize::customer_key,
-  Optional[Boolean] $noop_value   = $common::software::cloudamize::noop_value,
+  Boolean               $enable       = $common::software::cloudamize::enable,
+  Optional[String]      $customer_key = $common::software::cloudamize::customer_key,
+  Eit_types::Noop_Value $noop_value   = $common::software::cloudamize::noop_value,
 ) {
 
   Exec {

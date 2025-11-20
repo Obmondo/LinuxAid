@@ -9,7 +9,7 @@ define profile::cron::job (
   Profile::Cron::Hour                           $hour        = '*',
   Profile::Cron::Minute                         $minute      = '*',
   Hash[String, String]                          $environment = {},
-  Optional[Boolean]                             $noop_value  = undef,
+  Eit_types::Noop_Value                         $noop_value  = undef,
 ) {
 
   $_weekdays_lookup = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
