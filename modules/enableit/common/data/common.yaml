@@ -184,6 +184,14 @@ common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false
 
 ### Authentication
+common::system::authentication::manage_nis: false
+common::system::authentication::manage_pam: false
+common::system::authentication::manage_sssd: false
+common::system::authentication::manage_sudo: false
+common::system::authentication::ignore_expired_root_password: false
+common::system::authentication::purge_ubuntu_user: false
+common::system::authentication::purge_user: false
+common::system::authentication::sudo::purge: false
 common::system::authentication::manage: false
 common::system::authentication::allowed_users:
   "root":
@@ -200,16 +208,6 @@ common::system::authentication::allowed_users:
   "ALL":
     - "cron"
     - "crond"
-common::system::authentication::manage_nis: false
-common::system::authentication::manage_pam: false
-common::system::authentication::manage_sssd: false
-common::system::authentication::manage_sudo: false
-common::system::authentication::ignore_expired_root_password: false
-common::system::authentication::purge_ubuntu_user: false
-common::system::authentication::purge_user: false
-
-common::system::authentication::sudo::manage: true
-common::system::authentication::sudo::purge: false
 
 ### DNS
 common::system::dns::manage: false
@@ -490,7 +488,8 @@ common::security::auditd::enable: false
 common::system::updates::enable: true
 
 ## Obmondo Admin
-common::setup::obmondo_admin::manage: true
+common::setup::obmondo_admin::manage: false
+common::setup::obmondo_admin::enable: false
 
 prometheus::bin_dir: /opt/obmondo/bin
 prometheus::install_method: package

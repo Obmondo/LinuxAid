@@ -9,8 +9,8 @@
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
 class common::setup::obmondo_admin (
-  Boolean                 $manage          = true,
-  Boolean                 $ensure          = true,
+  Boolean                 $manage          = false,
+  Boolean                 $enable          = false,
   Optional[Array[String]] $manager_pubkeys = [],
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
@@ -19,7 +19,7 @@ class common::setup::obmondo_admin (
   contain common::setup
 
   if $manage {
-    $_enable = $::obmondo_monitor and $ensure
+    $_enable = $::obmondo_monitor and $enable #lint:ignore:top_scope_facts
     $__opt_dir = $common::setup::__opt_dir
     $_home = "${__opt_dir}/home"
     $_home_admin = "${_home}/obmondo-admin"
