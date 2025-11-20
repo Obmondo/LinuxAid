@@ -45,6 +45,12 @@ class common::openvox (
     noop         => $noop_value,
   }
 
+  ensure_resource('file', '/etc/default', {
+    ensure => directory,
+    mode   => '0755',
+    owner  => 'root',
+  })
+
   file { '/etc/default/linuxaid-cli':
     ensure  => present,
     mode    => '0644',
