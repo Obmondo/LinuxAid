@@ -9,10 +9,10 @@
 # @param noop_value The noop flag for Puppet resources. Defaults to false.
 #
 class common::monitor::exporter::tcpshaker (
-  Boolean              $enable      = $common::network::tcpshaker::enable,
-  Stdlib::Port         $listen_port = pick($common::network::tcpshaker::listen_port, 8785),
-  Eit_types::Certname  $host        = $trusted['certname'],
-  Boolean              $noop_value  = $common::monitor::exporter::noop_value,
+  Boolean               $enable      = $common::network::tcpshaker::enable,
+  Stdlib::Port          $listen_port = pick($common::network::tcpshaker::listen_port, 8785),
+  Eit_types::Certname   $host        = $trusted['certname'],
+  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
 ) {
 
   File {

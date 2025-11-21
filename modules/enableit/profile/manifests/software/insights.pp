@@ -1,7 +1,7 @@
 # Redhat insights-client
 class profile::software::insights (
-  Boolean           $enable     = $common::software::insights::enable,
-  Optional[Boolean] $noop_value = $common::software::insights::noop_value,
+  Boolean               $enable     = $common::software::insights::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::insights::noop_value,
 ){
 
   Package {

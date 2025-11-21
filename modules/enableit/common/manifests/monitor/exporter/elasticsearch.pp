@@ -7,9 +7,9 @@
 # @param noop_value Boolean for noop mode. Defaults to false.
 #
 class common::monitor::exporter::elasticsearch (
-  Boolean           $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort $listen_address = '127.254.254.254:9105',
-  Boolean           $noop_value     = $common::monitor::exporter::noop_value,
+  Boolean               $enable         = $common::monitor::exporter::enable,
+  Eit_types::IPPort     $listen_address = '127.254.254.254:9105',
+  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
 ) {
   class { 'prometheus::elasticsearch_exporter':
     package_name      => 'obmondo-elasticsearch-exporter',

@@ -8,9 +8,9 @@
 # The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
 #
 class common::monitor::exporter::process (
-  Boolean           $enable         = true,
-  Boolean           $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort $listen_address = '127.254.254.254:63388',
+  Boolean               $enable         = true,
+  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Eit_types::IPPort     $listen_address = '127.254.254.254:63388',
 ) {
   class { 'prometheus::process_exporter':
     package_name      => 'obmondo-process-exporter',

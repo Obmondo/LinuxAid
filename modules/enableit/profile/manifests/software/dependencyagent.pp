@@ -1,7 +1,7 @@
 # Azure dependency agent
 class profile::software::dependencyagent (
-  Boolean           $enable     = $common::software::dependencyagent::enable,
-  Optional[Boolean] $noop_value = $common::software::dependencyagent::noop_value,
+  Boolean               $enable     = $common::software::dependencyagent::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::dependencyagent::noop_value,
 ) {
 
   package { 'obmondo-mde-dependency-agent':

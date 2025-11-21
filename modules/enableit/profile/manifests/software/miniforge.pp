@@ -10,7 +10,8 @@
 class profile::software::miniforge (
   Boolean           $enable     = $common::software::miniforge::enable,
   String            $version    = $common::software::miniforge::version,
-  Optional[Boolean] $noop_value = $common::software::miniforge::noop_value,
+
+  Eit_types::Noop_Value $noop_value = $common::software::miniforge::noop_value,
 ){
 
   $package_url   = "https://github.com/conda-forge/miniforge/releases/download/${version}/Miniforge3-${version}-Linux-x86_64.sh"

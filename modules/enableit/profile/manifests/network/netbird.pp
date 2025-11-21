@@ -7,7 +7,7 @@
 #
 # @param enable Boolean to enable or disable the Netbird agent. Defaults to false.
 #
-# @param noop_value Optional boolean to enable no-operation mode.
+# @param noop_value Eit_types::Noop_Value to enable no-operation mode.
 #
 # @param server The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:443'.
 #
@@ -17,7 +17,7 @@
 #
 class profile::network::netbird (
   Boolean                 $enable         = $common::network::netbird::enable,
-  Optional[Boolean]       $noop_value     = $common::network::netbird::noop_value,
+  Eit_types::Noop_Value   $noop_value     = $common::network::netbird::noop_value,
   String                  $setup_key      = $common::network::netbird::setup_key,
   Stdlib::HTTPSUrl        $server         = $common::network::netbird::server,
   Eit_types::Version      $version        = $common::network::netbird::version,
@@ -29,11 +29,16 @@ class profile::network::netbird (
   $_installed_netbird_version = $facts['netbird_client_version']
   $_os_name                   = $facts['os']['name']
   $_kernel                    = $facts['kernel'].downcase
-  $_arch                      = profile::arch()
 
   # Install NetBird service
   if $enable {
+    $_checksum = lookup('common::network::netbird::checksums')
+
     if $_os_name == 'TurrisOS' {
+      # NOTE: only tested on TurrisOS which has only armv6 packages
+      # even though TurrisOS comes with armv7
+      $_arch = 'armv6'
+
       exec { 'update_package_repo':
         command => 'opkg update; opkg install kmod-tun',
         path    => '/usr/bin:/usr/sbin:/bin:/sbin',
@@ -50,21 +55,25 @@ class profile::network::netbird (
       #   noop     => $noop_value,
       #   require  => Exec['update_package_repo'],
       # }
+    } else {
+      $_arch = profile::arch()
     }
 
     # Download and extract NetBird binary from GitHub releases
     if $_installed_netbird_version != $version {
       archive { 'netbird':
-        ensure       => ensure_present($enable),
-        source       => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
-        extract      => true,
-        path         => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
-        extract_path => '/usr/bin',
-        cleanup      => true,
-        user         => 'root',
-        group        => 'root',
-        noop         => $noop_value,
-        notify       => Exec['netbird_service_install'],
+        ensure        => ensure_present($enable),
+        source        => "https://github.com/netbirdio/netbird/releases/download/v${version}/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract       => true,
+        path          => "/tmp/netbird_${version}_${_kernel}_${_arch}.tar.gz",
+        extract_path  => '/usr/bin',
+        checksum      => $_checksum[$version],
+        checksum_type => 'sha256',
+        cleanup       => true,
+        user          => 'root',
+        group         => 'root',
+        noop          => $noop_value,
+        notify        => Exec['netbird_service_install'],
       }
 
       # creates sysvinit script for OpenWRT

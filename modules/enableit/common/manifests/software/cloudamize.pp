@@ -9,10 +9,10 @@
 # @param noop_value Optional parameter for noop mode.
 #
 class common::software::cloudamize (
-  Boolean           $manage       = false,
-  Boolean           $enable       = false,
-  Optional[String]  $customer_key = undef,
-  Optional[Boolean] $noop_value   = undef,
+  Boolean               $manage       = false,
+  Boolean               $enable       = false,
+  Optional[String]      $customer_key = undef,
+  Eit_types::Noop_Value $noop_value   = undef,
 ) inherits common {
 
   confine($enable, !$customer_key,

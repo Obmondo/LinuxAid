@@ -15,7 +15,7 @@
 class common::software::microsoft_mde (
   Boolean                                $manage         = false,
   Boolean                                $enable         = false,
-  Optional[Boolean]                      $noop_value     = undef,
+  Eit_types::Noop_Value                  $noop_value     = undef,
   Eit_types::Package::Version::Installed $version        = 'latest',
   Eit_types::Microsoft::Mde::Exclusions  $exclusions     = {},
   # It would be better to use Hiera EYAML for this, but for some reason the

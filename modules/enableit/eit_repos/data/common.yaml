@@ -1,2 +1,3 @@
 ---
 eit_repos::source_protocol: 'https'
+eit_repos::noop_value: undef

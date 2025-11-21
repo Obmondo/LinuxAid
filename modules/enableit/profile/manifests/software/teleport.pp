@@ -1,9 +1,9 @@
 # teleport
 class profile::software::teleport (
-  Boolean                           $enable        = $common::software::teleport::enable,
-  Optional[Boolean]                 $noop_value    = $common::software::teleport::noop_value,
-  Optional[String]                  $join_token    = $common::software::teleport::join_token,
-  Optional[String]                  $ca_pin        = $common::software::teleport::ca_pin,
+  Boolean               $enable     = $common::software::teleport::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::teleport::noop_value,
+  Optional[String]      $join_token = $common::software::teleport::join_token,
+  Optional[String]      $ca_pin     = $common::software::teleport::ca_pin,
 )
 {
   package { 'teleport':
@@ -24,7 +24,7 @@ class profile::software::teleport (
   common::services::systemd { 'teleport.service' :
     ensure     => $enable,
     override   => $enable,
-    noop_value => false,
+    noop_value => $noop_value,
     service    => {
       'RuntimeDirectory' => 'teleport',
     },

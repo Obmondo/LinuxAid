@@ -40,7 +40,7 @@
 #
 class common::repo (
   Boolean                   $manage          = true,
-  Boolean                   $noop_value      = true,
+  Eit_types::Noop_Value     $noop_value      = undef,
   Array[
     Variant[
       String,
@@ -125,7 +125,7 @@ class common::repo (
         if $manage_update and $snapshot_repo {
           $yumrepos.each |$_name, $_parameters| {
             if $_parameters['baseurl'] !~ /\$\{snapshot\}/ and $_parameters['baseurl'] !~ /freight/ {
-              fail("Repository '${_name}' is missing snapshot placeholder, which is required if automatic system updates are enabled. Please change the URL to contain an EPP style template.")
+              fail("Repository '${_name}' is missing snapshot placeholder, which is required if automatic system updates are enabled. Please change the URL to contain an EPP style template.") #lint:ignore:140chars
             }
           }
         }

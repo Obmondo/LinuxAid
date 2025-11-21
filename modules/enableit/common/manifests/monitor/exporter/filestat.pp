@@ -2,7 +2,7 @@
 #
 # @param enable Boolean flag to enable or disable the exporter. Defaults to false.
 #
-# @param noop_value Boolean value used for noop operations during testing. Defaults to false.
+# @param noop_value Eit_types::Noop_Value value used for noop operations during testing. Defaults to false.
 #
 # @param config_file The path to the exporter configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/filestat_exporter.yaml".
 #
@@ -14,7 +14,7 @@
 #
 class common::monitor::exporter::filestat (
   Boolean                     $enable            = false,
-  Boolean                     $noop_value        = $common::monitor::exporter::noop_value,
+  Eit_types::Noop_Value       $noop_value        = $common::monitor::exporter::noop_value,
   Stdlib::Absolutepath        $config_file       = "${common::monitor::exporter::config_dir}/filestat_exporter.yaml",
   Stdlib::Absolutepath        $working_directory = '/backup',
   Array[String]               $file_pattern      = [],

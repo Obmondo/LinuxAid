@@ -2,11 +2,11 @@
 #
 # @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
 #
-# @param noop_value Optional boolean to control noop behavior. Defaults to $common::monitor::exporter::node::noop_value.
+# @param noop_value Eit_types::Noop_Value to control noop behavior. Defaults to $common::monitor::exporter::node::noop_value.
 #
 class common::monitor::exporter::node::lsof (
-  Boolean $enable     = $common::monitor::exporter::node::enable,
-  Boolean $noop_value = $common::monitor::exporter::node::noop_value,
+  Boolean               $enable     = $common::monitor::exporter::node::enable,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,
 ) {
   File {
     noop => $noop_value,
@@ -21,8 +21,7 @@ class common::monitor::exporter::node::lsof (
   $textfile_directory = lookup('common::monitor::exporter::node::textfile_directory', Stdlib::AbsolutePath)
 
   package { 'obmondo-lsof-textfile-exporter' :
-    ensure  => ensure_latest($enable),
-    require => Package['obmondo-node-exporter'],
+    ensure => ensure_latest($enable),
   }
 
   file { "${textfile_directory}/check_deleted_open_files.prom" :

@@ -7,9 +7,9 @@
 # @param config_dir The directory for exporter configuration files. Defaults to '/opt/obmondo/etc/exporter'.
 #
 class common::monitor::exporter (
-  Boolean              $enable     = $common::monitor::enable,
-  Optional[Boolean]    $noop_value = $common::monitor::noop_value,
-  Stdlib::Absolutepath $config_dir = '/opt/obmondo/etc/exporter',
+  Boolean               $enable     = $common::monitor::enable,
+  Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
+  Stdlib::Absolutepath  $config_dir = '/opt/obmondo/etc/exporter',
 ) {
   file { $config_dir :
     ensure => ensure_dir($enable),
@@ -17,8 +17,9 @@ class common::monitor::exporter (
     noop   => $noop_value,
   }
 
+  include common::monitor::exporter::node
+
   if $enable and $facts['init_system'] == 'systemd' {
-    include common::monitor::exporter::node
     include common::monitor::exporter::dns
     include common::monitor::exporter::dellhw
     include common::monitor::exporter::iptables

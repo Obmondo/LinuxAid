@@ -1,9 +1,9 @@
 # Systemd Journald Upload
 class profile::logging::journal (
-  Boolean           $enable       = $common::logging::journal::upload_enable,
-  String            $package_name = $common::logging::journal::package_name,
-  Eit_types::URL    $remote_url   = $common::logging::journal::remote_url,
-  Optional[Boolean] $noop_value   = $common::logging::journal::noop_value,
+  Boolean               $enable       = $common::logging::journal::upload_enable,
+  String                $package_name = $common::logging::journal::package_name,
+  Eit_types::URL        $remote_url   = $common::logging::journal::remote_url,
+  Eit_types::Noop_Value $noop_value   = $common::logging::journal::noop_value,
 ) {
 
   File {

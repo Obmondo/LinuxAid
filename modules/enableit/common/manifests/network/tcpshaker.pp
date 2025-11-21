@@ -19,9 +19,10 @@ class common::network::tcpshaker (
   Integer           $check_interval,
   Integer           $requests_per_check,
   Integer           $concurrency,
-  Boolean           $enable        = false,
-  Array[String]     $tcp_addresses = [],
-  Optional[Boolean] $noop_value    = undef
+
+  Boolean               $enable         = false,
+  Array[String]         $tcp_addresses  = [],
+  Eit_types::Noop_Value $noop_value     = undef,
 ) {
   $config_location = '/etc/tcpshaker.yaml'
   $package_name = 'tcp-shaker'

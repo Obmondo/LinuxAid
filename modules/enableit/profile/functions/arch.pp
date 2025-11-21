@@ -27,18 +27,10 @@
 # @since 1.0.0
 function profile::arch {
   $os_arch = $facts['os']['architecture']
-  $os_name = $facts['os']['name']
 
   case $os_arch {
     /^arm/:{
-      case $os_name {
-        'TurrisOS': {
-          'armv6'
-        }
-        default: {
-          'arm64'
-        }
-      }
+      $os_arch.chop # return armv7
     }
     default: {
       'amd64'

@@ -1,7 +1,7 @@
 # Microsoft
 class eit_repos::yum::microsoft (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   $_os_major = $facts['os']['release']['major']

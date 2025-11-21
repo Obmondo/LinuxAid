@@ -6,7 +6,7 @@
 #
 class common::monitor::exporter::node::ssacli (
   Boolean $enable     = $common::monitor::exporter::node::enable,
-  Boolean $noop_value = $common::monitor::exporter::node::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,
 ) {
 
   File {
@@ -24,8 +24,7 @@ class common::monitor::exporter::node::ssacli (
   $textfile_directory = lookup('common::monitor::exporter::node::textfile_directory', Stdlib::AbsolutePath)
 
   package {'obmondo-ssacli-text-file-exporter':
-    ensure  => ensure_latest($enable),
-    require => if $enable { Package['obmondo-node-exporter'] },
+    ensure => ensure_latest($enable),
   }
 
   file { "${textfile_directory}/ssacli.prom" :

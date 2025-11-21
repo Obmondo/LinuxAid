@@ -1,18 +1,21 @@
 # Run openvox-agent on client nodes
 class profile::openvox::run_openvox (
-  Boolean $noop_value = $common::openvox::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
 
-  package { 'obmondo-run-puppet':
-    ensure => absent,
-    noop   => $noop_value,
-  }
-
-  file { '/etc/default/run_puppet':
-    ensure => absent,
+  if $facts['init_system'] == 'sysvinit' {
+    cron { 'run-openvox':
+      ensure  => present,
+      command => '/opt/obmondo/bin/linuxaid-cli run-openvox',
+      user    => 'root',
+      minute  => fqdn_rand(59, $facts['networking']['hostname']),
+      hour    => '*',
+      noop    => $noop_value,
+    }
   }
 
   if $facts['init_system'] == 'systemd' {
+    $_minutes = fqdn_rand(300, $facts['networking']['hostname'])
     Service {
       noop => $noop_value,
     }
@@ -21,8 +24,14 @@ class profile::openvox::run_openvox (
       noop => $noop_value,
     }
 
-    # Change the upgrade service timer timing.
-    $_minutes = fqdn_rand(300, $facts['networking']['hostname'])
+    package { 'obmondo-run-puppet':
+      ensure => absent,
+      noop   => $noop_value,
+    }
+
+    file { '/etc/default/run_puppet':
+      ensure => absent,
+    }
 
     $_timer = @("EOT"/$n)
       # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
@@ -63,6 +72,7 @@ class profile::openvox::run_openvox (
       service_content => $_service,
       active          => true,
       enable          => true,
+      require         => Archive['linuxaid-cli'],
     }
   }
 }

@@ -3,7 +3,7 @@ class profile::system::time::ntp (
   Boolean                                     $manage     = $common::system::time::ntp::manage,
   Enum['chrony', 'ntpd', 'systemd-timesyncd'] $ntp_client = $common::system::time::ntp::ntp_client,
   Array[Stdlib::Host]                         $servers    = $common::system::time::ntp::servers,
-  Optional[Boolean]                           $noop_value = $common::system::time::ntp::noop_value,
+  Eit_types::Noop_Value                       $noop_value = $common::system::time::ntp::noop_value,
 ) {
 
   $_enable_ntp = $facts.dig('treat_as_physical') and !($facts.dig('cloud', 'provider') == 'azure')

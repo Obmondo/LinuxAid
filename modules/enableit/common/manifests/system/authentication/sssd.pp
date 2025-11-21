@@ -1,6 +1,6 @@
 # @summary Class for managing SSSD profile for system authentication
 #
-# @param services 
+# @param services
 # Array of SSSD services to enable. Defaults to ['nss', 'pam', 'ssh', 'sudo'].
 #
 # @param $_available_services
@@ -45,7 +45,7 @@ class common::system::authentication::sssd (
   Eit_types::Sssd::Full_name_format           $full_name_format      = '%1$s',
   Optional[Eit_types::Sssd::Override_homedir] $override_homedir      = undef,
   Hash                                        $override_config       = {},
-  Optional[Boolean]                           $noop_value            = undef,
+  Eit_types::Noop_Value                       $noop_value            = undef,
   Array                                       $required_packages     = ['realmd', 'samba-common-tools', 'fprintd-pam'],
 ) {
   if $manage {

@@ -9,10 +9,10 @@
 # @param host The hostname. Defaults to $trusted['certname'].
 #
 class common::monitor::exporter::gitlab_runner (
-  Boolean             $enable         = $common::monitor::exporter::enable,
-  Boolean             $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort   $listen_address = '127.254.254.254:63384',
-  Eit_types::Certname $host           = $trusted['certname'],
+  Boolean               $enable         = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Eit_types::IPPort     $listen_address = '127.254.254.254:63384',
+  Eit_types::Certname   $host           = $trusted['certname'],
 ) {
   File {
     noop => $noop_value,

@@ -5,8 +5,8 @@
 # @param noop_value Optional Boolean for no-operation mode. Defaults to false.
 #
 class common::monitor::exporter::node::smartmon (
-  Boolean $enable     = $common::monitor::exporter::node::enable,
-  Boolean $noop_value = $common::monitor::exporter::node::noop_value,
+  Boolean               $enable     = $common::monitor::exporter::node::enable,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,
 ) {
   File {
     noop => $noop_value,
@@ -25,9 +25,11 @@ class common::monitor::exporter::node::smartmon (
   $_enable = $facts.dig('raidcontrollers') == undef and $facts.dig('virtual') == 'physical'
 
   package {
-    ['obmondo-smartmon-textfile-collector', 'smartmontools']:
-      ensure  => ensure_latest($_enable),
-      require => if $_enable { Package['obmondo-node-exporter'] },
+    [
+      'obmondo-smartmon-textfile-collector',
+      'smartmontools'
+    ]:
+    ensure => ensure_latest($_enable),
   }
 
   file { "${textfile_directory}/smartmon.prom" :

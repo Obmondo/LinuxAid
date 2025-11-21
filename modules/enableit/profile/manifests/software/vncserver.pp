@@ -1,7 +1,7 @@
 # VNC Server
 class profile::software::vncserver (
   Boolean                             $enable         = $common::software::vncserver::enable,
-  Optional[Boolean]                   $noop_value     = $common::software::vncserver::noop_value,
+  Eit_types::Noop_Value                   $noop_value     = $common::software::vncserver::noop_value,
   Struct[{
     session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
     geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],

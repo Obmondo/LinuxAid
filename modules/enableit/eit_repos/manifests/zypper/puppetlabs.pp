@@ -1,7 +1,7 @@
 # PuppetLabs
 class eit_repos::zypper::puppetlabs (
-  Boolean $ensure     = false,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = false,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 
   Enum['http', 'https'] $source_protocol = lookup('eit_repos::source_protocol'),
 ) {

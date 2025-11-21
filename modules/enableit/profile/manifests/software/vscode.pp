@@ -1,7 +1,7 @@
 # Vscode
 class profile::software::vscode (
-  Boolean           $enable     = $common::software::vscode::enable,
-  Optional[Boolean] $noop_value = $common::software::vscode::noop_value,
+  Boolean               $enable     = $common::software::vscode::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::vscode::noop_value,
 ){
 
   if $facts[os][family] == 'RedHat' {

@@ -1,7 +1,6 @@
 # Manage openvox-agent
 # so we can setup openvox-agent package
 class profile::openvox (
-  Boolean              $noop_value             = $common::openvox::noop_value,
   Stdlib::Host         $server                 = $common::openvox::server,
   Stdlib::Port         $server_port            = $common::openvox::server_port,
   Eit_types::Version   $version                = $common::openvox::version,
@@ -10,12 +9,15 @@ class profile::openvox (
   Optional[Hash]       $extra_main_settings    = $common::openvox::extra_main_settings,
   String               $aio_package_name       = $common::openvox::package_name,
   String               $environment            = $common::openvox::environment,
-  Optional[String]     $package_version_suffix = undef,
-  Optional[String]     $package_version_prefix = undef,
+
+  Eit_types::Noop_Value $noop_value             = $common::openvox::noop_value,
+  Optional[String]      $package_version_suffix = undef,
+  Optional[String]      $package_version_prefix = undef,
 ) {
 
   $puppetversion = $facts['puppetversion']
   $os_major = $facts['os']['release']['major']
+  $os_name = $facts['os']['name']
   $os_arch = $facts['os']['architecture']
   $package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])
 
@@ -25,35 +27,37 @@ class profile::openvox (
     "${package_version_prefix}${version}${package_version_suffix}"
   }
 
-  # TODO: remove this block, when there is no more puppet-agent 7
-  # PuppetLabs
-  eit_repos::repo { 'puppetlabs':
-    ensure     => false,
-    noop_value => $noop_value,
-  }
+  unless $os_name == 'TurrisOS' {
+    # TODO: remove this block, when there is no more puppet-agent 7
+    # PuppetLabs
+    eit_repos::repo { 'puppetlabs':
+      ensure     => false,
+      noop_value => $noop_value,
+    }
 
-  # Openvox
-  eit_repos::repo { 'openvox':
-    noop_value => $noop_value,
-  }
+    # Openvox
+    eit_repos::repo { 'openvox':
+      noop_value => $noop_value,
+      notify     => Package[$aio_package_name],
+    }
 
-  # Remove the puppetlabs repo package
-  package { [
-    'puppet7-release',
-    'puppet8-release',
-    'puppet-agent'
-  ]:
-    ensure  => absent,
-    noop    => $noop_value,
-    notify  => Package[$aio_package_name],
-    require => Eit_repos::Repo['openvox'],
+    # Remove the puppetlabs repo package
+    package { [
+      'puppet7-release',
+      'puppet8-release',
+      'puppet-agent'
+    ]:
+      ensure  => absent,
+      noop    => $noop_value,
+      notify  => Package[$aio_package_name],
+      require => Eit_repos::Repo['openvox'],
+    }
   }
 
   package { $aio_package_name:
     ensure   => $_version,
     noop     => $noop_value,
     provider => $package_provider,
-    require  => Eit_repos::Repo['openvox'],
   }
 
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
@@ -249,6 +253,7 @@ class profile::openvox (
       ;
   }
 
+  contain profile::openvox::linuxaid_cli
   contain profile::openvox::run_openvox
   contain profile::openvox::clientbucket
 }

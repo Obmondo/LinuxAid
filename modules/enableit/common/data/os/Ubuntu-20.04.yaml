@@ -6,4 +6,3 @@ common::software::rustdesk::dependencies:
   - libgtk-3-0
   - libasound2
 common::openvox::version: "8.19.2"
-common::openvox::package_name: "openvox-agent"

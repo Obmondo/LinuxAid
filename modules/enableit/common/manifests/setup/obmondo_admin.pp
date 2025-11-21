@@ -14,7 +14,7 @@ class common::setup::obmondo_admin (
   Optional[Array[String]] $manager_pubkeys = [],
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
-  Boolean                 $noop_value      = false,
+  Eit_types::Noop_Value   $noop_value      = undef,
 ) {
   contain common::setup
 

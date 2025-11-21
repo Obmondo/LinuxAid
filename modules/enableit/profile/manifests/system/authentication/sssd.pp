@@ -14,7 +14,7 @@ class profile::system::authentication::sssd (
   Eit_types::Sssd::Full_name_format           $full_name_format      = $common::system::authentication::sssd::full_name_format,
   Optional[Eit_types::Sssd::Override_homedir] $override_homedir      = $common::system::authentication::sssd::override_homedir,
   Hash                                        $override_config       = $common::system::authentication::sssd::override_config,
-  Optional[Boolean]                           $noop_value            = $common::system::authentication::sssd::noop_value,
+  Eit_types::Noop_Value                       $noop_value            = $common::system::authentication::sssd::noop_value,
   Array                                       $required_packages     = $common::system::authentication::sssd::required_packages,
 ) {
 

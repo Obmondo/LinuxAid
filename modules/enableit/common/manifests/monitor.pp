@@ -3,12 +3,12 @@
 # @param enable Whether to enable monitoring. Defaults to the value of $::obmondo_monitoring_status.
 #
 class common::monitor (
-  Boolean $enable     = $::obmondo_monitoring_status,
-  Boolean $noop_value = true,
+  Boolean               $enable     = $::obmondo_monitoring_status, #lint:ignore:top_scope_facts
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   if $enable {
-    contain ::monitor
+#    contain ::monitor
     contain ::common::monitor::exporter
-    contain ::common::monitor::prometheus::server
+#    contain ::common::monitor::prometheus::server
   }
 }

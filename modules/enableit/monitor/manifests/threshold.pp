@@ -15,11 +15,11 @@
 define monitor::threshold (
   String  $record     = $title,
   Boolean $enable     = true,
-  Boolean $noop_value = $monitor::noop_value,
   Any     $expr       = 1,
   Hash    $labels     = {},
 
-  Monitor::Override $override = undef,
+  Monitor::Override     $override   = undef,
+  Eit_types::Noop_Value $noop_value = $monitor::noop_value,
 ) {
   unless $record =~ /^monitor::/ {
     fail('Invalid resource title; it should start with `monitor::`')

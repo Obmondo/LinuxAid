@@ -1,6 +1,6 @@
 # @summary Class for managing the MOTD configuration
 #
-# @param enable 
+# @param enable
 # Enable or disable the MOTD. Defaults to true.
 #
 # @param header The header content for the MOTD. Defaults to undef.
@@ -12,11 +12,11 @@
 # @param noop_value Optional boolean to specify noop mode for file resources. Defaults to undef.
 #
 class common::system::motd (
-  Boolean           $enable              = true,
-  Optional[String]  $header              = undef,
-  Optional[String]  $footer              = undef,
-  Boolean           $diplay_system_stats = true,
-  Optional[Boolean] $noop_value          = undef,
+  Boolean               $enable              = true,
+  Optional[String]      $header              = undef,
+  Optional[String]      $footer              = undef,
+  Boolean               $diplay_system_stats = true,
+  Eit_types::Noop_Value $noop_value          = undef,
 ) inherits ::common::system {
 
   # MOTD

@@ -1,7 +1,7 @@
 # Apt Puppetlabs
 class eit_repos::apt::puppetlabs (
-  Boolean $ensure     = false,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = false,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   File {

@@ -1,7 +1,7 @@
 # Rubrik backup
 class profile::software::rubrik (
-  Boolean           $enable     = $common::software::rubrik::enable,
-  Optional[Boolean] $noop_value = $common::software::rubrik::noop_value,
+  Boolean               $enable     = $common::software::rubrik::enable,
+  Eit_types::Noop_Value $noop_value = $common::software::rubrik::noop_value,
 ){
 
   Package {

@@ -30,7 +30,7 @@ class common::system::dns (
   Variant[Boolean, Enum['opportunistic']]       $dns_over_tls         = false,
   Array[Stdlib::IP::Address]                    $listen_address       = [],
   Boolean                                       $allow_external       = false,
-  Variant[Undef, Boolean]                       $noop_value           = undef,
+  Eit_types::Noop_Value                         $noop_value           = undef,
 ) inherits common::system {
 
   confine($manage, $nameservers.count == 0,

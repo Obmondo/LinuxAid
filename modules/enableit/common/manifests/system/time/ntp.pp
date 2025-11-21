@@ -10,9 +10,10 @@
 #
 class common::system::time::ntp (
   Enum['chrony', 'ntpd', 'systemd-timesyncd'] $ntp_client,
-  Boolean $manage = $common::system::time::manage_ntp,
-  Array[Stdlib::Host] $servers = [],
-  Optional[Boolean] $noop_value = undef,
+
+  Boolean               $manage     = $common::system::time::manage_ntp,
+  Array[Stdlib::Host]   $servers    = [],
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits common::system::time {
 
   confine($ntp_client == 'systemd-timesyncd',

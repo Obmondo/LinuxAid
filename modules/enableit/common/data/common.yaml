@@ -319,7 +319,10 @@ common::openvox::version: "8.23.0"
 common::openvox::server: enableit.puppet.obmondo.com
 common::openvox::package_name: "openvox-agent"
 common::openvox::configure_agent: true
-common::openvox::setup_agent: true
+
+common::openvox::linuxaid_cli::version: 1.0.2
+common::openvox::linuxaid_cli::checksums:
+  1.0.2: '99dbd5dad60e4a1956dd3da305c980b82b3e4418e40ce578e18efb39e6f55867'
 
 # KeepAlived
 common::keepalived::global_defs:
@@ -382,6 +385,10 @@ common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315
 
 common::monitor::exporter::node::enable: true
+common::monitor::exporter::node::version: 1.10.2
+common::monitor::exporter::node::checksums:
+  1.10.2: c46e5b6f53948477ff3a19d97c58307394a29fe64a01905646f026ddc32cb65b
+
 common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
@@ -468,6 +475,9 @@ common::network::wireguard::enable: false
 common::network::netbird::enable: false
 common::network::netbird::install_method: repo
 common::network::netbird::version: 0.59.3
+common::network::netbird::checksums:
+  0.59.3: 1a251bfecd6ffbe633bc985e382b12efb1f5b5bd9ec8c2543b5cfa7d7ce4070a
+  0.60.0: 0774801213f95392684efe3f13b746bab0f633b3546b9063860b073fe153c6e4
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785

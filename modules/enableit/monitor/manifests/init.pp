@@ -5,8 +5,8 @@
 # @param noop_value No-operation mode value. Defaults to false.
 #
 class monitor (
-  Boolean $enable     = $::obmondo_monitoring_status,
-  Boolean $noop_value = false,
+  Boolean               $enable     = $::obmondo_monitoring_status, #lint:ignore:top_scope_facts
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
   if $enable {
     contain monitor::prometheus

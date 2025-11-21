@@ -9,10 +9,10 @@
 # @param host The host certname. Defaults to $trusted['certname'].
 #
 class common::monitor::exporter::cadvisor (
-  Boolean             $enable      = $common::monitor::exporter::enable,
-  Boolean             $noop_value  = $common::monitor::exporter::noop_value,
-  Stdlib::Port        $listen_port = 63392,
-  Eit_types::Certname $host        = $trusted['certname'],
+  Boolean               $enable      = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
+  Stdlib::Port          $listen_port = 63392,
+  Eit_types::Certname   $host        = $trusted['certname'],
 ) {
   File {
     noop => $noop_value,

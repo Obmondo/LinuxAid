@@ -5,8 +5,8 @@
 # @param noop_value Optional boolean value for noop mode. Defaults to undef.
 #
 class common::backup::gitea (
-  Boolean $enable = false,
-  Optional[Boolean] $noop_value = undef,
+  Boolean               $enable = false,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   file { '/opt/obmondo/bin/gitea-backup':

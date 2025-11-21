@@ -1,8 +1,8 @@
 # NI_VISA currently only used by GN
 class eit_repos::yum::ni_visa (
-  Boolean           $ensure     = true,
-  Boolean           $noop_value = $eit_repos::noop_value,
-  Optional[String]  $version    = '2019.07'
+  Boolean               $ensure     = true,
+  Optional[String]      $version    = '2019.07',
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   yumrepo { 'ni-software':

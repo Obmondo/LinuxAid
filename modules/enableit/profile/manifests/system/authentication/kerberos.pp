@@ -10,7 +10,7 @@ class profile::system::authentication::kerberos (
   Optional[Eit_types::User]                $join_user      = $common::system::authentication::kerberos::join_user,
   Boolean                                  $install_client = $common::system::authentication::kerberos::install_client,
   Boolean                                  $ldaps          = $common::system::authentication::kerberos::ldaps,
-  Optional[Boolean]                        $noop_value     = $common::system::authentication::kerberos::noop_value,
+  Eit_types::Noop_Value                    $noop_value     = $common::system::authentication::kerberos::noop_value,
   Optional[Stdlib::Unixpath]               $cacert_path    = $common::system::authentication::kerberos::cacert_path,
 
   Eit_types::Common::System::Authentication::Kerberos::Realms $realms = $common::system::authentication::kerberos::realms,

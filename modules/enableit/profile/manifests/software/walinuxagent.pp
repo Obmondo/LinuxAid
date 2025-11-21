@@ -2,7 +2,7 @@
 class profile::software::walinuxagent (
   Boolean                           $enable                 = $common::software::walinuxagent::enable,
   Boolean                           $manage                 = $common::software::walinuxagent::manage,
-  Optional[Boolean]                 $noop_value             = $common::software::walinuxagent::noop_value,
+  Eit_types::Noop_Value             $noop_value             = $common::software::walinuxagent::noop_value,
   Eit_types::SimpleString           $__linux_azure_package  = $common::software::walinuxagent::__linux_azure_package,
   Eit_types::SimpleString           $__linux_azure_service  = $common::software::walinuxagent::__linux_azure_service,
   Optional[String]                  $waagent_memory_limit   = $common::software::walinuxagent::waagent_memory_limit,

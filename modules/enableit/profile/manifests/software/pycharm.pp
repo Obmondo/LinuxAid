@@ -8,9 +8,9 @@
 # @param noop_value Optional boolean to specify noop mode value.
 #
 class profile::software::pycharm (
-  Boolean            $enable     = $common::software::pycharm::enable,
-  Eit_types::Version $version    = $common::software::pycharm::version,
-  Optional[Boolean]  $noop_value = $common::software::pycharm::noop_value,
+  Boolean               $enable     = $common::software::pycharm::enable,
+  Eit_types::Version    $version    = $common::software::pycharm::version,
+  Eit_types::Noop_Value $noop_value = $common::software::pycharm::noop_value,
 ){
 
   $package_url   = "https://download-cdn.jetbrains.com/python/pycharm-${version}.tar.gz"

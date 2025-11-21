@@ -42,7 +42,7 @@ define common::systemd::timer (
   Cron::User                       $user        = 'root',
   Stdlib::Filemode                 $mode        = '0644',
   Optional[String]                 $description = undef,
-  Optional[Boolean]                $noop_value  = undef,
+  Eit_types::Noop_Value            $noop_value  = undef,
 ) {
 
   Exec {

@@ -1,7 +1,7 @@
 # ELrepo
 class eit_repos::yum::elrepo (
-  Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean               $ensure     = true,
+  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
 ) {
 
   # TODO: Looks like it support only centos6, get it working for centos7
