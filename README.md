@@ -1,5 +1,7 @@
 # LinuxAid
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Obmondo/LinuxAid)
+
 A platform for everything you need to run a secure and reliable Linux operations setup
 
 ## Config options
@@ -14,7 +16,7 @@ For LinuxAid we have built these modules:
 
 These options can be applied in different scopes and by default LinuxAid has been built to support applying options based on:
 
-- **Tags** - which is just a group - given by OpenVox ENC. 
+- **Tags** - which is just a group - given by OpenVox ENC.
   TODO: Document ENC features and custom tag support.
 - **Facts** - Which is 'knowledge about a system' and you can define config for any fact, including:
   - OS, Distribution, software versions installed or versions of these
@@ -28,16 +30,18 @@ These options can be applied in different scopes and by default LinuxAid has bee
 LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated data separation from code. This builds on the scope-based configuration mentioned above (Tags and Facts), allowing you to organize and override configuration data at any level of specificity.
 
 **Benefits:**
+
 - Same codebase across dev, staging, and production
 - Override data at appropriate specificity levels (node, location, OS, etc.) - leveraging the Tag and Fact-based scopes described above
 - Clear separation between code logic and environment-specific data
 - Similar flexibility to Helm values in Kubernetes
 
-NB. You can see the Hierarchy we've built to support this (and adjust as you want it) here: https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10
+NB. You can see the Hierarchy we've built to support this (and adjust as you want it) here: <https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10>
 
 ### 60+ Supported Applications
 
 LinuxAid provides out-of-the-box support for 60+ applications, including:
+
 - Web servers (Nginx, Apache, HAProxy)
 - Databases (MySQL, PostgreSQL, MongoDB)
 - Monitoring tools (Prometheus, Grafana)
@@ -138,12 +142,14 @@ Changeset 5: (affects 298 servers)
 ### Real-World Benefits
 
 **Before making any changes to production, you know:**
+
 - Exactly what will change on each server
 - Which servers will be affected
 - How many distinct change patterns exist
 - Whether your change will have unintended consequences
 
 **Traditional approach (Ansible, manual scripting):**
+
 1. Run playbook against production
 2. Discover it changed unexpected systems
 3. Roll back manually
@@ -151,12 +157,14 @@ Changeset 5: (affects 298 servers)
 5. Try again
 
 **LinuxAid approach:**
+
 1. Review changeset calculation
 2. See exactly what will change and where
 3. Approve or reject before any server is touched
 4. Deploy with confidence
 
 This capability is essential when:
+
 - Managing thousands of heterogeneous systems
 - Working with multiple contributors on the same codebase
 - Meeting compliance requirements that demand change documentation
@@ -169,6 +177,7 @@ This capability is essential when:
 LinuxAid provides an [open source repository server](https://gitea.obmondo.com/EnableIT/LinuxAid/src/branch/master/modules/enableit/role/REFERENCE.md#role--package_management--repo) for supply chain security.
 
 **Features:**
+
 - Mirror any upstream repository for air-gapped operations
 - Servers don't need internet access to function
 - Automatic snapshots for staged rollouts
@@ -187,6 +196,7 @@ This way, malicious code cannot sneak into your release packages.
 ### Staged Rollouts
 
 Using LinuxAid's repository server:
+
 - Enable automatic snapshots (hardlink-based for efficiency)
 - Split servers into groups
 - Assign snapshots to one group at a time
@@ -223,6 +233,7 @@ LinuxAid was built for centralized management and GitOps:
 ### Compliance Built-In
 
 LinuxAid ensures GDPR, CIS, and NIS2 compliance through its architecture:
+
 - Audit-ready change tracking
 - Separation of duties (no production SSH needed)
 - Reproducible system states
@@ -237,6 +248,7 @@ LinuxAid includes comprehensive monitoring for everything we have needed for any
 LinuxAid automatically detects your hardware and system configuration using 'facts' (1000+ available), then configures your server with the appropriate monitoring for your specific hardware and software setup.
 
 **Observability Stack:**
+
 - Prometheus for metrics tracking
 - Grafana dashboards (pre-built)
 - Alert Manager with custom rules and pre-defined thresholds
@@ -244,11 +256,13 @@ LinuxAid automatically detects your hardware and system configuration using 'fac
 ### High Availability
 
 LinuxAid runs under a Kubernetes setup (documented in KubeAid) which can be deployed on:
+
 - Single-host Linux server
 - Multi-node high availability cluster
 - Any cloud provider or on-premises
 
 **Scalable Architecture:** The OpenVox Server is written in Clojure with workload separation:
+
 - **Compiler:** Builds configurations (CPU-intensive work)
 - **API Layer:** Handles agent communications
 - **Independent scaling:** Scale components based on workload
@@ -271,6 +285,7 @@ These organizations chose this architecture because alternative approaches **don
 ## 100% Data Ownership
 
 LinuxAid provides true data ownership:
+
 - Your setup runs on your servers
 - Infrastructure code remains on your systems
 - Full control even after subscription ends
@@ -311,6 +326,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 **Legend:** ✅ Full support | ⚠️ Partial/Requires setup | ❌ Not supported or not applicable
 
 **Notes on change management:**
+
 - All tools listed have dry-run/preview capabilities, but with different levels of completeness
 - OpenVox's noop mode (used by LinuxAid) can have limitations with dependent resources
 - Ansible's check mode may not catch all changes, especially in conditional tasks
@@ -343,6 +359,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | Staged rollouts via snapshots | ✅ Built-in | ⚠️ Manual processes | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
 
 **Important context:**
+
 - **Ansible:** AWX/Automation Platform (formerly Ansible Tower - note that AWX is the open-source upstream project) provides robust compliance features including audit trails, RBAC, and scheduled compliance checks. Ansible Lockdown project provides well-maintained CIS and STIG roles.
 - **Chef:** Chef InSpec is a mature, purpose-built compliance automation tool with CIS certifications and DISA STIG support. Chef Compliance provides comprehensive audit and remediation.
 - **Terraform:** Primarily designed for infrastructure provisioning, not OS-level compliance management.
@@ -363,6 +380,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | Efficient agent model | ✅ | ❌ Agentless (SSH) | ❌ API-based | ✅ | ✅ |
 
 **Scale context:**
+
 - **OpenVox:** Based on Puppet architecture which officially documents support for 20,000+ nodes with compile masters, and larger deployments are possible with database separation
 - **Ansible AWX:** Designed to manage large numbers of servers according to documentation
 - **GitHub's deployment:** Manages thousands of nodes with extensive Puppet infrastructure
@@ -388,6 +406,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | Pre-built dashboards | ✅ Grafana included | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual | ⚠️ Manual |
 
 **Application support context:**
+
 - **LinuxAid:** 60+ applications with pre-configured, production-ready settings maintained by Obmondo
 - **Ansible:** Ansible Galaxy has thousands of roles, but quality and maintenance vary significantly
 - **Chef:** Chef Supermarket provides cookbooks, but like Ansible Galaxy, quality varies
@@ -432,6 +451,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 7. **Integrated monitoring stack** - Hardware-aware monitoring with Prometheus, Grafana, and AlertManager configured out of the box
 
 **Important notes:**
+
 - Many features are based on Puppet/PuppetDB concepts enhanced by Obmondo's OpenVox implementation and years of operational experience
 - Competitors like Ansible (with AWX) and Chef (with InSpec/Compliance) have robust compliance and audit capabilities
 - The grouping of servers into changeset patterns and preview capabilities are LinuxAid-specific enhancements
@@ -464,6 +484,7 @@ While other tools have their place, LinuxAid provides an integrated approach tha
 | **Multi-team collaboration** | ✅ With AWX | ⚠️ State locking | ✅ Designed for it | ✅ Designed for it | ⚠️ Requires setup |
 
 **LinuxAid advantages:**
+
 - Built on OpenVox architecture with documented support for enterprise scale
 - Compliance-friendly workflows naturally support audit requirements via OpenVoxDB logging
 - Change confidence through noop mode and OpenVoxDB-enhanced change calculation
@@ -489,8 +510,8 @@ Ansible's architecture makes it easy to develop problematic workflows:
 
 ## Docs
 
-* [Guides](./docs/guides)
-* [Facts](./docs/facts)
-* [Monitoring](./docs/monitoring)
-* [Roles](./docs/roles)
-* [Setup](./docs/setup)
+- [Guides](./docs/guides)
+- [Facts](./docs/facts)
+- [Monitoring](./docs/monitoring)
+- [Roles](./docs/roles)
+- [Setup](./docs/setup)
