@@ -1,6 +1,6 @@
 # Linuxaid-cli setup
 class profile::openvox::linuxaid_cli (
-  Eit_types::Noop_Value $noop_value = undef,
+  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
   $version   = lookup('common::openvox::linuxaid_cli::version')
   $_checksum = lookup('common::openvox::linuxaid_cli::checksums')

@@ -66,6 +66,10 @@ class profile::openvox::run_openvox (
       ensure => absent,
     }
 
+    systemd::manage_unit { 'run-puppet.service':
+      ensure => absent,
+    }
+
     systemd::timer { 'run-openvox.timer':
       ensure          => present,
       timer_content   => $_timer,
