@@ -105,10 +105,14 @@ class common::monitor::exporter::node (
   }
 
   include common::monitor::prometheus
-  include common::monitor::exporter::node::smartmon
-  include common::monitor::exporter::node::topprocesses
-  include common::monitor::exporter::node::lsof
-  include common::monitor::exporter::node::ssacli
+
+  # NOTE: The underlying packages only works with systemd
+  if $facts['init_system'] == 'systemd' {
+    include common::monitor::exporter::node::smartmon
+    include common::monitor::exporter::node::topprocesses
+    include common::monitor::exporter::node::lsof
+    include common::monitor::exporter::node::ssacli
+  }
 
   file { $lib_directory:
     ensure => 'directory',
