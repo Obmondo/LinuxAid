@@ -2,7 +2,7 @@
 common::openvox::package_name: "openvox"
 common::openvox::version: "7.37.2"
 common::openvox::linuxaid_cli::checksums:
-  1.0.2: "dce8284ccc981ec6bdfa52f8fa02e9e113a81d66c59c785ed43fe8e9f6c373a4"
+  1.0.2: "0c3785eab3c0af5d042146017721f77ebcd905d6308a307537e64cb4201814ec"
 
 common::monitor::prometheus::env_file_path: "/etc/default"
 

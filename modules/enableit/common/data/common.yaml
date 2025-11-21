@@ -211,7 +211,7 @@ common::system::authentication::allowed_users:
 
 ### DNS
 common::system::dns::manage: false
-common::system::dns::dnssec: 'allow-downgrade'
+common::system::dns::dnssec: "allow-downgrade"
 common::system::dns::dns_over_tls: false
 common::system::dns::nameservers: []
 common::system::dns::searchpath: []
@@ -322,7 +322,7 @@ common::openvox::configure_agent: true
 
 common::openvox::linuxaid_cli::version: 1.0.2
 common::openvox::linuxaid_cli::checksums:
-  1.0.2: '99dbd5dad60e4a1956dd3da305c980b82b3e4418e40ce578e18efb39e6f55867'
+  1.0.2: "050a95ed7fc634b31da68118be057b0650333c14cee8bfd0b3922bfc376b1b7d"
 
 # KeepAlived
 common::keepalived::global_defs:
