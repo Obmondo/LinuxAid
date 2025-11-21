@@ -48,7 +48,6 @@ class common::system::updates (
       noop => $noop_value,
     }
 
-
     package { delete_undef_values([
       'unattended-upgrades',
       if $_os_family == 'RedHat' {
@@ -71,7 +70,6 @@ class common::system::updates (
     }
 
     if $facts['init_system'] == 'systemd' {
-
       # Change the upgrade service timer timing.
       $_minutes = fqdn_rand(30, $facts['networking']['hostname'])
 
@@ -83,7 +81,7 @@ class common::system::updates (
         [Timer]
         OnCalendar=*-*-* *:0/30:00
         RandomizedDelaySec=${_minutes}m
-      | EOT
+        | EOT
 
       $_service = @(EOT)
         # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
@@ -95,7 +93,7 @@ class common::system::updates (
         EnvironmentFile=-/etc/default/linuxaid-cli
         Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
         ExecStart=/opt/obmondo/bin/linuxaid-cli system-update
-      | EOT
+        | EOT
 
       systemd::timer { 'obmondo-system-update.timer':
         ensure          => ensure_present($enable),
