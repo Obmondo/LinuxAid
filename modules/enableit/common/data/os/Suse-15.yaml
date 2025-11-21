@@ -46,7 +46,7 @@ common::system::nsswitch::automount:
 common::system::nsswitch::aliases:
   - 'files'
 
-common::system::dns::resolver: 'resolv'
+common::system::dns::resolver: 'systemd-resolved'
 common::monitor::exporter::enable: true
 common::system::authentication::pam::password_session_lines:
   - - 40
