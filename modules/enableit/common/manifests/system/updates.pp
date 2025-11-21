@@ -19,15 +19,15 @@
 # @param noop_value Optional Boolean to perform no-op runs for testing. Defaults to false.
 #
 class common::system::updates (
-  Boolean           $manage                 = false,
-  Boolean           $enable                 = false,
-  Boolean           $snapshot               = true,
-  Array             $blacklist              = [],
-  Boolean           $remove_unused_packages = true,
-  Boolean           $remove_unused_kernels  = true,
-  Boolean           $reboot                 = false,
-  Eit_types::Email  $mail_to                = 'ops@obmondo.com',
-  Eit_types::Noop_Value $noop_value         = undef,
+  Boolean               $manage                 = false,
+  Boolean               $enable                 = false,
+  Boolean               $snapshot               = true,
+  Array                 $blacklist              = [],
+  Boolean               $remove_unused_packages = true,
+  Boolean               $remove_unused_kernels  = true,
+  Boolean               $reboot                 = false,
+  Eit_types::Email      $mail_to                = 'ops@obmondo.com',
+  Eit_types::Noop_Value $noop_value             = undef,
 ) {
   if $manage {
     # NOTE: We will only install updates when purge is true, so that gives us some
