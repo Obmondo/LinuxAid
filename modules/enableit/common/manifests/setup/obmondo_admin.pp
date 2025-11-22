@@ -71,10 +71,11 @@ class common::setup::obmondo_admin (
       require        => Group['obmondo'],
     }
 
-    profile::system::sudoers::conf { 'obmondo-admin':
-      ensure     => stdlib::ensure($_enable),
-      content    => 'obmondo-admin ALL=(ALL) NOPASSWD: ALL',
-      noop_value => $noop_value,
+    sudo::conf { 'obmondo-admin':
+      ensure   => stdlib::ensure($_enable),
+      content  => 'obmondo-admin ALL=(ALL) NOPASSWD: ALL',
+      priority => 10,
+      noop     => $noop_value,
     }
 
     $all_pubkeys = ($allow_sre and $_enable) ? {
