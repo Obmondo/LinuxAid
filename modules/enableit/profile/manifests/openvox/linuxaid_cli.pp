@@ -23,10 +23,10 @@ class profile::openvox::linuxaid_cli (
   }
 
   ensure_resource('file', '/etc/default', {
-      ensure => directory,
-      noop   => $noop_value,
-      mode   => '0755',
-      owner  => 'root',
+    ensure => directory,
+    noop   => $noop_value,
+    mode   => '0755',
+    owner  => 'root',
   })
 
   file { '/etc/default/linuxaid-cli':
@@ -35,9 +35,9 @@ class profile::openvox::linuxaid_cli (
     owner   => 'root',
     noop    => $noop_value,
     content => anything_to_ini({
-        'PUPPETCERT'    => $facts['hostcert'],
-        'PUPPETPRIVKEY' => $facts['hostprivkey'],
-        'HOSTNAME'      => $facts['networking']['hostname'],
+      'PUPPETCERT'    => $facts['hostcert'],
+      'PUPPETPRIVKEY' => $facts['hostprivkey'],
+      'HOSTNAME'      => $facts['networking']['hostname'],
     }),
   }
 }
