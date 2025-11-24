@@ -215,7 +215,7 @@ class common::system (
   $_obmondo_system_facts = {
     'obmondo_system' => {
       'location' => $_location,
-      'certname' => $facts['networking']['hostname'],
+      'certname' => $trusted['certname'],
     },
   }
 

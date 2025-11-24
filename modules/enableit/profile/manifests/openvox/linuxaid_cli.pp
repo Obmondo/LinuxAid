@@ -37,7 +37,7 @@ class profile::openvox::linuxaid_cli (
     content => anything_to_ini({
       'PUPPETCERT'    => $facts['hostcert'],
       'PUPPETPRIVKEY' => $facts['hostprivkey'],
-      'HOSTNAME'      => $facts['networking']['hostname'],
+      'HOSTNAME'      => $trusted['certname'],
     }),
   }
 }
