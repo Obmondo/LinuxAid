@@ -3,4 +3,3 @@
 common::monitor::exporter::node::smartmon::enable: false
 common::monitor::exporter::dellhw::enable: true
 common::monitor::exporter::dellhw::manage_repo: true
-common::monitor::exporter::dellhw::noop_value: false

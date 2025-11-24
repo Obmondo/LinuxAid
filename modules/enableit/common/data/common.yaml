@@ -307,10 +307,8 @@ common::services::disabled_services:
 common::system::services:
   "rpc-svcgssd":
     enable: "mask"
-    noop: false
   "sssd-pac":
     enable: "mask"
-    noop: false
 
 # Puppet
 common::openvox::version: "8.23.0"
@@ -333,7 +331,6 @@ common::certs::__base_dir: "/etc/ssl/private/static-certs"
 common::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
 # Prometheus Server
-common::monitor::prometheus::noop_value: false
 common::monitor::prometheus::install_method: package
 common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
 common::monitor::prometheus::usershell: "/usr/sbin/nologin"
@@ -390,7 +387,6 @@ common::monitor::exporter::node::checksums:
 common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
-common::monitor::exporter::node::noop_value: false
 common::monitor::exporter::node::buddyinfo: false
 common::monitor::exporter::node::cgroups: false
 common::monitor::exporter::node::drbd: false
