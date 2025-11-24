@@ -19,9 +19,11 @@ class profile::system::authentication::pam (
   Array[Tuple[Integer[0,99], String]]  $sshd_session_lines      = $common::system::authentication::pam::sshd_session_lines,
 ) {
 
+  $system_user = lookup('common::system::users', { default_value => {} })
+
   # Users that we manage that do not have ensure=>absent
   $_managed_users = if $allow_managed_users {
-    lookup('common::system::users').filter |$_userid, $_user_config| {
+    $system_user.filter |$_userid, $_user_config| {
       # remove system accounts; the should not be able to log in
       $_user_config.dig('system') != true
     }.filter |$_x| {
