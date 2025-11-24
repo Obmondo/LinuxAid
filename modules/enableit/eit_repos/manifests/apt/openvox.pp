@@ -32,6 +32,5 @@ class eit_repos::apt::openvox (
   apt::keyring { 'obmondo_openvox.asc':
     ensure => ensure_present($ensure),
     source => 'puppet:///modules/eit_repos/apt/GPG-KEY-openvox.pub',
-    noop   => $noop_value,
   }
 }

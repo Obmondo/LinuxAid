@@ -1,8 +1,4 @@
 ---
-common::puppet::noop_value: true
-common::monitor::noop_value: true
-common::repo::noop_value: true
-
 common::full_host_management: false
 common::system::updates::enable: false
 common::monitoring::manage: true
