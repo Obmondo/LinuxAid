@@ -998,9 +998,9 @@ Default value: `[]`
 
 Data type: `Boolean`
 
-Boolean for noop mode value, defaults to lookup of 'monitor::noop_value'.
+Boolean for noop mode value, defaults to $monitor::noop_value..
 
-Default value: `lookup('monitor::noop_value')`
+Default value: `$monitor::noop_value`
 
 ### <a name="monitor--system--swap"></a>`monitor::system::swap`
 
