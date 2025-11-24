@@ -2,7 +2,7 @@ function monitor::package (
   Variant[String, Array[String]] $name,
   Variant[Boolean, String]       $install         = true,
   Hash                           $optional_params = {},
-  Eit_types::Noop_Value          $noop_value      = lookup('monitor::noop_value'),
+  Eit_types::Noop_Value          $noop_value      = $monitor::noop_value,
 ) {
 
   package::install($name, {

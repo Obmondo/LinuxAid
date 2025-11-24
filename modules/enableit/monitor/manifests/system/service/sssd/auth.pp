@@ -4,12 +4,12 @@
 #
 # @param test_users Array of usernames to test. Defaults to an empty array.
 #
-# @param noop_value Boolean for noop mode value, defaults to lookup of 'monitor::noop_value'.
+# @param noop_value The noop value for the monitor. Defaults to $monitor::noop_value.
 #
 class monitor::system::service::sssd::auth (
   Boolean                $enable     = $monitor::system::service::sssd::enable,
   Array[Eit_types::User] $test_users = [],
-  Eit_types::Noop_Value  $noop_value = lookup('monitor::noop_value'),
+  Eit_types::Noop_Value  $noop_value = $monitor::noop_value,
 ) inherits monitor::system::service::sssd {
 
   $_enable = $enable and $test_users.count > 0
