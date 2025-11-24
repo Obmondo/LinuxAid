@@ -7,8 +7,8 @@ class common::monitor (
   Eit_types::Noop_Value $noop_value = undef,
 ) {
   if $enable {
-#    contain ::monitor
+    contain ::monitor
     contain ::common::monitor::exporter
-#    contain ::common::monitor::prometheus::server
+    contain ::common::monitor::prometheus::server
   }
 }
