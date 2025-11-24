@@ -219,7 +219,9 @@ class common::repo (
               '/etc/yum.repos.d/base.repo',
               '/etc/yum.repos.d/extras.repo',
               '/etc/yum.repos.d/updates.repo',
-              ]: ensure => absent, noop => $noop_value,
+              ]:
+                ensure => absent,
+                noop   => $noop_value,
             }
           }
           if $_os['name'] == 'CentOS' {
@@ -270,9 +272,9 @@ class common::repo (
           }
 
           $feature_repo = $_os_type ? {
-            'ubuntu'  => ['backports', 'security', 'updates'],
-            'debian'  => ['backports', 'updates'],
-            default => fail("${_os_type} not supported")
+            'ubuntu' => ['backports', 'security', 'updates'],
+            'debian' => ['backports', 'updates'],
+            default  => fail("${_os_type} not supported")
           }
           $feature_repo.each |$repo| {
             apt::source { "local_apt_repo_${_os_codename}-${repo}":

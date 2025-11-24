@@ -163,10 +163,8 @@ common::system::authentication::pam::password_session_lines:
 common::system::services:
   'dnf-makecache':
     enable: 'mask'
-    noop: false
   'dnf-automatic':
     enable: 'mask'
-    noop: false
 
 common::monitor::prometheus::env_file_path: '/etc/sysconfig'
 common::monitor::exporter::security::enable: true

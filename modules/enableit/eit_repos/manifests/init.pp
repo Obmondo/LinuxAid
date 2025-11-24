@@ -10,11 +10,11 @@ class eit_repos (
   $distro_id = $facts['os']['name']
 
   File {
-    noop => false,
+    noop => $noop_value,
   }
 
   Exec {
-    noop => false,
+    noop => $noop_value,
   }
 
   confine(!($facts['package_provider'] in ['apt', 'yum', 'dnf', 'zypper']),

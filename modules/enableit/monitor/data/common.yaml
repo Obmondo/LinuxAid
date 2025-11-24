@@ -37,7 +37,6 @@ monitor::system::service::down::blacklist:
 
 monitor::service::enable: true
 
-monitor::noop_value: false
 monitor::domains::enable: true
 
 monitor::system::defaults:
