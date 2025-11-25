@@ -14,6 +14,7 @@ ExecStart=/usr/sbin/syncoid $SYNCOID_ARGS $SYNCOID_SOURCE $SYNCOID_DESTINATION
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=syncoid-%i
+SuccessExitStatus=0 2
 
 [Install]
 WantedBy=multi-user.target
