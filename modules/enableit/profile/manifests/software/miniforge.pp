@@ -8,13 +8,13 @@
 #
 # @param version Eit_types::Version parameter to control version of Miniforge3.
 #
-# @param install_dir Eit_types::AbsPath parameter to control installation directory of Miniforge3.
+# @param install_dir Stdlib::Absolutepath parameter to control installation directory of Miniforge3.
 #
 class profile::software::miniforge (
-  Boolean            $manage      = $common::software::miniforge::manage,
-  Boolean            $enable      = $common::software::miniforge::enable,
-  Eit_types::Version $version     = $common::software::miniforge::version,
-  Eit_types::AbsPath $install_dir = $common::software::miniforge::install_dir,
+  Boolean              $manage      = $common::software::miniforge::manage,
+  Boolean              $enable      = $common::software::miniforge::enable,
+  Eit_types::Version   $version     = $common::software::miniforge::version,
+  Stdlib::Absolutepath $install_dir = $common::software::miniforge::install_dir,
 ){
 
   $package_url   = "https://github.com/conda-forge/miniforge/releases/download/${version}/Miniforge3-${version}-Linux-x86_64.sh"
