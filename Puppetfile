@@ -466,6 +466,10 @@ mod 'obmondo/purge',
     :git => 'https://github.com/obmondo/puppet-purge.git',
     :ref => '1.2.3'
 
+mod 'obmondo/sanoid',
+    :git => 'https://github.com/Obmondo/puppet-sanoid.git',
+    :ref => 'v1.0.1'
+
 mod 'jcpunk/vnc',
     :git => 'https://github.com/jcpunk/puppet-vnc.git',
     :ref => '4.2.1'
