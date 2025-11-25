@@ -9,12 +9,16 @@
 # @param scrub Interval for ZFS scrubbing. Defaults to 'monthly'.
 #
 class common::storage::zfs (
-  Boolean                                         $enable              = false,
-  Array[Eit_types::SimpleString]                  $pool_names          = [],
-  Boolean                                         $remove_sysstat_cron = true,
-  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = 'monthly',
-  Eit_types::Common::Storage::Zfs::Replications   $replications        = {},
+  Boolean                       $enable              = false,
+  Boolean                       $remove_sysstat_cron = true,
+  Array[String]                 $allow_sync_from     = [],
+  Sanoid::Pools                 $pools               = {},
+  Optional[Sanoid::Templates]   $templates           = undef,
+  Sanoid::Syncoid::Replications $replications        = {},
+
+  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub = 'monthly',
 ) inherits common::storage {
+
   if $enable {
     include profile::storage::zfs
   }

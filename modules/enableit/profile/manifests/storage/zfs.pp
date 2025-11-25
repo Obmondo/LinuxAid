@@ -1,9 +1,12 @@
 # ZFS and utilities
 class profile::storage::zfs (
-  Array[Eit_types::SimpleString]                  $pool_names          = $common::storage::zfs::pool_names,
-  Boolean                                         $remove_sysstat_cron = $common::storage::zfs::remove_sysstat_cron,
-  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub               = $common::storage::zfs::scrub,
-  Eit_types::Common::Storage::Zfs::Replications   $replications        = $common::storage::zfs::replications,
+  Boolean                       $remove_sysstat_cron = $common::storage::zfs::remove_sysstat_cron,
+  Sanoid::Pools                 $pools               = $common::storage::zfs::pools,
+  Array[String]                 $allow_sync_from     = $common::storage::zfs::allow_sync_from,
+  Optional[Sanoid::Templates]   $templates           = $common::storage::zfs::templates,
+  Sanoid::Syncoid::Replications $replications        = $common::storage::zfs::replications,
+
+  Eit_types::Common::Storage::Zfs::Scrub_interval $scrub = $common::storage::zfs::scrub,
 ) inherits profile::storage {
 
   class { 'zfs':
@@ -29,12 +32,11 @@ class profile::storage::zfs (
   }
 
   if $replications {
-    include sanoid
-  }
-
-  $replications.each |$pool_name, $options| {
-    sanoid::syncoid::replication { $pool_name:
-      * => $options,
+    class { '::sanoid':
+      pools           => $pools,
+      templates       => $templates,
+      replications    => $replications,
+      allow_sync_from => $allow_sync_from,
     }
   }
 
@@ -55,7 +57,7 @@ class profile::storage::zfs (
       },
     }
 
-    zfs::scrub { $pool_names:
+    zfs::scrub { keys($pools):
       hour   => 23,
       minute => 00,
       month  => '*',
