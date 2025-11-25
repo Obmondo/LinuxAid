@@ -1,11 +1,12 @@
 ---
-sanoid::ensure_package: 'installed'
+sanoid::ensure_package: true
 sanoid::package_name: 'sanoid'
 
 sanoid::config_file: 'sanoid.conf'
-sanoid::ensure_service: 'running'
+sanoid::ensure_service: true
 
 sanoid::pools: {}
+sanoid::replications: {}
 
 sanoid::templates:
   production:
@@ -24,9 +25,18 @@ sanoid::templates:
     yearly: 2
     autosnap: true
     autoprune: true
+  # Similar to production, except autosnap
+  backup:
+    frequently: 0
+    hourly: 36
+    daily: 30
+    monthly: 1
+    yearly: 0
+    autosnap: false
+    autoprune: true
 
 sanoid::syncoid::enabled: true
-sanoid::syncoid::replications: {}
+sanoid::syncoid::allow_ssh_from: []
 sanoid::syncoid::default_options:
   compress: 'lz4'
   no_sync_snap: true

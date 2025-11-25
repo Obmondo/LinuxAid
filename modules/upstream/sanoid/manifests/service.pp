@@ -1,6 +1,6 @@
 # Sanoid Service
 class sanoid::service (
-  Stdlib::Ensure::Service $ensure = $sanoid::ensure_service,
+  Boolean $ensure = $sanoid::ensure_service,
 ) {
 
   service {
@@ -8,7 +8,7 @@ class sanoid::service (
       'sanoid.timer',
       'sanoid-prune.service'
     ]:
-    ensure  => $ensure,
+    ensure  => stdlib::ensure($ensure, 'service'),
     require => Package[$sanoid::package_name]
   }
 }

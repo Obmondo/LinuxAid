@@ -1,7 +1,7 @@
 # Sanoid Install packages
 class sanoid::install (
-  Stdlib::Ensure::Package $ensure       = $sanoid::ensure_package,
-  String                  $package_name = $sanoid::package_name,
+  Boolean $ensure       = $sanoid::ensure_package,
+  String  $package_name = $sanoid::package_name,
 ) {
 
   package {
@@ -11,7 +11,7 @@ class sanoid::install (
       'lzop',
       'mbuffer',
     ]:
-    ensure => $ensure,
-    notify => File["/etc/default/${sanoid::config_file}"],
+    ensure => stdlib::ensure($ensure, 'package'),
+    notify => File["/etc/sanoid/${sanoid::config_file}"],
   }
 }

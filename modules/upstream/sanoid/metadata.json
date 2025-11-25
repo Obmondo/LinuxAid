@@ -22,6 +22,10 @@
   ],
   "dependencies": [
     {
+      "name": "puppetlabs/sshkeys_core",
+      "version_requirement": ">= 2.5.1"
+    },
+    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.1.0"
     }
