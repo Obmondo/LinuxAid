@@ -12,8 +12,8 @@
 #   The version of RustDesk server to install.  
 #   Must be a valid version string conforming to SemVer.  
 #
-# @param dependencies  
-#   Array of package names that are required dependencies for the RustDesk server.  
+# @param extra_dependencies  
+#   Array of OS specific package names that are required dependencies for the RustDesk server.  
 #   These packages will be installed before the RustDesk server.  
 #  
 # @example Basic usage with defaults  
@@ -30,18 +30,18 @@
 #   }  
 #  
 class rustdesk::server (
-  Boolean            $enable       = $rustdesk::server_enable,
-  SemVer             $version      = $rustdesk::server_version,
-  Array[String]      $dependencies = $rustdesk::server::dependencies,
+  Boolean            $enable             = $rustdesk::server_enable,
+  SemVer             $version            = $rustdesk::server_version,
+  Array[String]      $extra_dependencies = $rustdesk::server_extra_dependencies,
 ) {
   # Fixed common dependencies
-  $common_deps = []
+  $common_deps = lookup('rustdesk::server_dependencies')
 
   # Merge common + OS-specific dependencies
-  $extra_dependencies = concat($common_deps, $dependencies)
+  $dependencies = concat($common_deps, $extra_dependencies)
 
   # Ensure dependencies are installed first
-  package { $extra_dependencies:
+  package { $dependencies:
     ensure => installed,
   }
 

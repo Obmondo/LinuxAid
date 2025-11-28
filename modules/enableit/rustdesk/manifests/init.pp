@@ -12,6 +12,10 @@
 #   The version of RustDesk client to install.  
 #   Must be a valid version string conforming to SemVer.  
 #  
+# @param client_extra_dependencies  
+#   Array of OS specific package names that are required dependencies for the RustDesk client.  
+#   These packages will be installed before the RustDesk client.  
+#
 # @param server_enable  
 #   Whether to enable and manage the RustDesk server component.  
 #   When set to true, the rustdesk::server class will be included and managed.  
@@ -20,6 +24,10 @@
 #   The version of RustDesk server to install.  
 #   Must be a valid version string conforming to SemVer.  
 #  
+# @param server_extra_dependencies  
+#   Array of OS specific package names that are required dependencies for the RustDesk server.  
+#   These packages will be installed before the RustDesk server.  
+#
 # @example Enable only the client with specific version  
 #   class { 'rustdesk':  
 #     client_enable  => true,  
@@ -39,11 +47,13 @@
 #   include rustdesk  
 #
 class rustdesk (
-  Boolean   $client_enable        = $rustdesk::client_enable,
-  SemVer    $client_version       = $rustdesk::client_version,
+  Boolean            $client_enable             = $rustdesk::client_enable,
+  SemVer             $client_version            = $rustdesk::client_version,
+  Array[String]      $client_extra_dependencies = $rustdesk::client_extra_dependencies,
 
-  Boolean   $server_enable        = $rustdesk::server_enable,
-  SemVer    $server_version       = $rustdesk::server_version,
+  Boolean            $server_enable             = $rustdesk::server_enable,
+  SemVer             $server_version            = $rustdesk::server_version,
+  Array[String]      $server_extra_dependencies = $rustdesk::server_extra_dependencies,
 ) {
   $_osfamily =$facts['os']['family']
   if $_osfamily != 'Ubuntu' {

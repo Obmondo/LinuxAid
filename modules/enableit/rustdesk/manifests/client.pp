@@ -12,8 +12,8 @@
 #   The version of RustDesk client to install.  
 #   Must be a valid version string conforming to SemVer.  
 #  
-# @param dependencies  
-#   Array of package names that are required dependencies for the RustDesk client.  
+# @param extra_dependencies  
+#   Array of OS specific package names that are required dependencies for the RustDesk client.  
 #   These packages will be installed before the RustDesk client.  
 #  
 # @example Basic usage with defaults  
@@ -30,33 +30,22 @@
 #   }  
 #  
 class rustdesk::client (
-  Boolean            $enable       = $rustdesk::client_enable,
-  SemVer             $version      = $rustdesk::client_version,
-  Array[String]      $dependencies = $rustdesk::client::dependencies,
+  Boolean            $enable             = $rustdesk::client_enable,
+  SemVer             $version            = $rustdesk::client_version,
+  Array[String]      $extra_dependencies = $rustdesk::client_extra_dependencies,
 ) {
   # Fixed common dependencies
-  $common_deps = [
-    'libxcb-randr0',
-    'libxdo3',
-    'libxfixes3',
-    'libxcb-shape0',
-    'libxcb-xfixes0',
-    'libva2',
-    'libva-drm2',
-    'libva-x11-2',
-    'libgstreamer-plugins-base1.0-0',
-    'gstreamer1.0-pipewire',
-  ]
+  $common_deps = lookup('rustdesk::client_dependencies')
 
   # Merge common + OS-specific dependencies
-  $extra_dependencies = concat($common_deps, $dependencies)
+  $dependencies = concat($common_deps, $extra_dependencies)
 
   $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/rustdesk-${version}-x86_64.deb"
   $package_name  = "rustdesk-${version}-x86_64.deb"
   $download_path = "/tmp/${package_name}"
 
   # Ensure dependencies are installed first
-  package { $extra_dependencies:
+  package { $dependencies:
     ensure => installed,
   }
 

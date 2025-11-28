@@ -1,13 +1,20 @@
 ---
 rustdesk::server_enable: false
 rustdesk::server_version: 1.7.1
-rustdesk::server::dependencies: []
+rustdesk::server_dependencies: []
 rustdesk::server::signal::package_name: rustdesk-server-hbbs
-rustdesk::server::rekay::package_name: rustdesk-server-hbbr
-
-# ------------
+rustdesk::server::relay::package_name: rustdesk-server-hbbr
 
 rustdesk::client_enable: false
 rustdesk::client_version: 1.4.3
-rustdesk::client::dependencies: []
-# rustdesk::client::package_name: rustdesk-server-hbbs
+rustdesk::client_dependencies:
+  - "libxcb-randr0"
+  - "libxdo3"
+  - "libxfixes3"
+  - "libxcb-shape0"
+  - "libxcb-xfixes0"
+  - "libva2"
+  - "libva-drm2"
+  - "libva-x11-2"
+  - "libgstreamer-plugins-base1.0-0"
+  - "gstreamer1.0-pipewire"
