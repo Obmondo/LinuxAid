@@ -1,0 +1,33 @@
+---
+version: 2
+
+release:
+  footer: >-
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
+changelog:
+  use: gitea
+  sort: asc
+  format: "[{{ .SHA }}](https://gitea.obmondo.com/EnableIT/linuxaid/commit/{{ .SHA }}) {{ .Message }}{{ with .AuthorUsername }} (@{{ . }}){{ end }}"
+  abbrev: 7
+  filters:
+    exclude:
+      - init
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  # Group commits messages by given regex and title.
+  groups:
+    - title: 💫 Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 🐛 Bug fixes
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 🥴 Others
+      order: 999
+
+gitea_urls:
+  api: https://gitea.obmondo.com/api/v1
+  download: https://gitea.obmondo.com
+  skip_tls_verify: false

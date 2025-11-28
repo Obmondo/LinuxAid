@@ -1,5 +1,4 @@
 ---
-
 extends: default
 
 ignore: |
@@ -18,6 +17,8 @@ rules:
   indentation:
     ignore: |
       modules/include/**
+  truthy:
+    level: warning
 # Local Variables:
 # mode: yaml
 # End:

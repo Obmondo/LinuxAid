@@ -1,0 +1,28 @@
+---
+version: 2
+
+release:
+  footer: >-
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
+changelog:
+  use: github
+  sort: asc
+  format: "[{{ .SHA }}](https://github.com/obmondo/linuxaid/commit/{{ .SHA }}) {{ .Message }}{{ with .AuthorUsername }} (@{{ . }}){{ end }}"
+  abbrev: 7
+  filters:
+    exclude:
+      - init
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  # Group commits messages by given regex and title.
+  groups:
+    - title: 💫 Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 🐛 Bug fixes
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 🥴 Others
+      order: 999
