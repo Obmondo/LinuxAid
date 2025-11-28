@@ -67,3 +67,4 @@ class rustdesk::server (
       require => Package[$server],
     }
   }
+}
