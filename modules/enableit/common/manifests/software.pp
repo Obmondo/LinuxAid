@@ -34,8 +34,7 @@ class common::software {
   }
 
   if lookup('common::software::insights::manage', Boolean, undef, false) {
-    common::software::insights.include    # inclu
-
+    common::software::insights.include
   }
 
   if lookup('common::software::vncserver::manage', Boolean, undef, false) {

@@ -1,64 +1,33 @@
-# Rustdesk Setup
+# @summary Class for managing the Rustdesk software
+#
+# @param client_enable Boolean parameter to enable or disable the Rustdesk client. Defaults to false.
+#
+# @param client_version SemVer parameter to control Rustdesk client version. Defaults to false.
+#
+# @param client_extra_dependencies Array[String] parameter to install OS specific dependencies. Defaults to [].
+#
+# @param server_enable Boolean parameter to enable or disable the Rustdesk server. Defaults to false.
+#
+# @param server_version SemVer parameter to control Rustdesk server version. Defaults to false.
+#
+# @param server_extra_dependencies Array[String] parameter to install OS specific dependencies. Defaults to [].
+#
 class profile::software::rustdesk (
-  Boolean               $enable       = $common::software::rustdesk::enable,
-  Eit_types::Version    $version      = $common::software::rustdesk::version,
-  Eit_types::Noop_Value $noop_value   = $common::software::rustdesk::noop_value,
-  Array[String]         $dependencies = $common::software::rustdesk::dependencies,
+  Boolean            $client_enable             = $common::software::rustdesk::client_enable,
+  SemVer             $client_version            = $common::software::rustdesk::client_version,
+  Array[String]      $client_extra_dependencies = $common::software::rustdesk::client_extra_dependencies,
+
+  Boolean            $server_enable             = $common::software::rustdesk::server_enable,
+  SemVer             $server_version            = $common::software::rustdesk::server_version,
+  Array[String]      $server_extra_dependencies = $common::software::rustdesk::server_extra_dependencies,
 ) {
+  class { 'rustdesk':
+    client_enable             => $client_enable,
+    client_version            => $client_version,
+    client_extra_dependencies => $client_extra_dependencies,
 
-  # Fixed common dependencies
-  $common_deps = [
-    'libxcb-randr0',
-    'libxdo3',
-    'libxfixes3',
-    'libxcb-shape0',
-    'libxcb-xfixes0',
-    'libva2',
-    'libva-drm2',
-    'libva-x11-2',
-    'libgstreamer-plugins-base1.0-0',
-    'gstreamer1.0-pipewire',
-  ]
-
-  # Merge common + OS-specific dependencies
-  $extra_dependencies = concat($common_deps, $dependencies)
-
-  $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/rustdesk-${version}-x86_64.deb"
-  $package_name  = "rustdesk-${version}-x86_64.deb"
-  $download_path = "/tmp/${package_name}"
-
-  Package {
-    noop => $noop_value,
-  }
-
-  Exec {
-    noop => $noop_value,
-  }
-
-  Service {
-    noop => $noop_value,
-  }
-
-  # Ensure dependencies are installed first
-  package { $extra_dependencies:
-    ensure => installed,
-  }
-
-  archive { $download_path:
-    ensure => ensure_present($enable),
-    source => $package_url,
-  }
-
-  package { 'rustdesk':
-    ensure   => installed,
-    provider => 'dpkg',
-    source   => $download_path,
-    require  => Archive[$download_path],
-  }
-
-  service { 'rustdesk.service':
-    ensure  => ensure_service($enable),
-    enable  => $enable,
-    require => Package['rustdesk'],
+    server_enable             => $server_enable,
+    server_version            => $server_version,
+    server_extra_dependencies => $server_extra_dependencies,
   }
 }
