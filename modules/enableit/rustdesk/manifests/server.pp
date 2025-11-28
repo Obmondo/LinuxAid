@@ -45,8 +45,6 @@ class rustdesk::server (
     ensure => installed,
   }
 
-  # ----------------
-
   ['relay', 'signal'].each |$server| {
     $_server_type = lookup("rustdesk::server::${server}::package_name")
     $_package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${_server_type}_${version}_amd64.deb"
@@ -69,5 +67,3 @@ class rustdesk::server (
       require => Package[$server],
     }
   }
-
-  # ----------------
