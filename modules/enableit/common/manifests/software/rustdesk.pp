@@ -26,14 +26,6 @@ class common::software::rustdesk (
   Array[String]      $server_extra_dependencies = [],
 ) {
   if $manage {
-    class { 'rustdesk':
-      client_enable             => $client_enable,
-      client_version            => $client_version,
-      client_extra_dependencies => $client_extra_dependencies,
-
-      server_enable             => $server_enable,
-      server_version            => $server_version,
-      server_extra_dependencies => $server_extra_dependencies,
-    }
+    include profile::software::rustdesk
   }
 }
