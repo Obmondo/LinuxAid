@@ -40,9 +40,9 @@ OPTIONS:
                         Requires: Upstream module name
                         Optional: Commit hash to pin to specific version
 
-  --add-module <module-url> [commit-hash|]
-                        Update a specific Openvox module
-                        Requires: Upstream module name
+  --add-module <module-url> [commit-hash]
+                        Add a specific Openvox module (defaults to latest tag)
+                        Requires: Upstream module git URL
                         Optional: Commit hash to pin to specific version
 
   --puppetfile          Path to Puppetfile
@@ -51,6 +51,13 @@ OPTIONS:
   -h, --help            Display this help message and exit
 
 EXAMPLES:
+  # Add a specific module with latest tag
+  ${SCRIPT_NAME} --add-module <git-url>
+
+  # Add a specific module with pinned commit or specific tag
+  ${SCRIPT_NAME} --add-module <git-url> <commit-hash>
+  ${SCRIPT_NAME} --add-module <git-url> <tag>
+
   # Update a specific module with pinned commit or specific tag
   ${SCRIPT_NAME} --update-module <module-name> <commit-hash>
   ${SCRIPT_NAME} --update-module <module-name> <tag>
@@ -241,6 +248,8 @@ mod 'obmondo/${MODULE_NAME}',
 EOF
     echo "Added ${MODULE_NAME} at ${LATEST_TAG} to Puppetfile"
   fi
+
+  git add "$PUPPETFILE"  
 }
 
 # Function to add new module in linuxaid
@@ -263,8 +272,8 @@ Source: ${GIT_URL}/commit/${COMMIT_HASH}"
 Source: ${GIT_URL}/releases/tag/${LATEST_TAG}"
   fi
 
+  update_puppetfile
   sync_module_to_linuxaid "$MODULE_NAME" "$COMMIT_MESSAGE"
-  update_puppetfile "Added"
 }
 
 # Check each repository for updates
@@ -300,8 +309,8 @@ Source: ${GIT_URL}/commit/${COMMIT_HASH}"
 Source: ${GIT_URL}/releases/tag/${LATEST_TAG}"
   fi
 
+  update_puppetfile
   sync_module_to_linuxaid "$MODULE_NAME" "$COMMIT_MESSAGE"
-  update_puppetfile "Update"
 }
 
 function sync_module_to_linuxaid() {
