@@ -42,29 +42,30 @@ class rustdesk::server (
 
   # Ensure dependencies are installed first
   package { $dependencies:
-    ensure => installed,
+    ensure => stdlib::ensure($enable, 'package'),
   }
 
-  ['relay', 'signal'].each |$server| {
-    $_server_type = lookup("rustdesk::server::${server}::package_name")
-    $_package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${_server_type}_${version}_amd64.deb"
+  $servers = lookup('rustdesk::server::package_names')
 
-    archive { $server :
-      ensure => $enable,
-      source => $_package_url,
+  $servers.each | $server_type, $package_name | {
+    $package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${package_name}_${version}_amd64.deb"
+    $download_path = "/tmp/${package_name}_${version}_amd64.deb"
+
+    archive { $download_path :
+      ensure => stdlib::ensure($enable),
+      source => $package_url,
     }
 
-    package { $_server_type:
-      ensure   => installed,
-      provider => 'dpkg',
-      source   => "/tmp/${server}",
-      require  => Archive[$server],
+    package { $package_name:
+      ensure  => stdlib::ensure($enable, 'package'),
+      source  => $download_path,
+      require => Archive[$download_path],
     }
 
-    service { $_server_type:
-      ensure  => $enable,
+    service { regsubst($package_name, '-server', '', 'G'):
+      ensure  => stdlib::ensure($enable, 'service'),
       enable  => $enable,
-      require => Package[$server],
+      require => Package[$package_name],
     }
   }
 }

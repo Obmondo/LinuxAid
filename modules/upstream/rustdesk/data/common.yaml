@@ -2,8 +2,9 @@
 rustdesk::server_enable: false
 rustdesk::server_version: 1.7.1
 rustdesk::server_dependencies: []
-rustdesk::server::signal::package_name: rustdesk-server-hbbs
-rustdesk::server::relay::package_name: rustdesk-server-hbbr
+rustdesk::server::package_names:
+  signal: rustdesk-server-hbbs
+  relay: rustdesk-server-hbbr
 
 rustdesk::client_enable: false
 rustdesk::client_version: 1.4.3
