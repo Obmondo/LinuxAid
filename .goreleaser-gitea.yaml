@@ -1,10 +1,6 @@
 ---
 version: 2
 
-release:
-  footer: >-
-    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
-
 changelog:
   use: gitea
   sort: asc
@@ -24,6 +20,9 @@ changelog:
     - title: 🐛 Bug fixes
       regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
       order: 1
+    - title: 🎭 Puppet Modules
+      regexp: '^chore:\s(pin|update|added)\spuppet-.*'
+      order: 998
     - title: 🥴 Others
       order: 999
 builds:
