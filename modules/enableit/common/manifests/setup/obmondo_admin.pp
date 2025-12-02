@@ -18,6 +18,10 @@ class common::setup::obmondo_admin (
 ) {
   contain common::setup
 
+  File {
+    noop => $noop_value,
+  }
+
   if $manage {
     $_enable = $::obmondo_monitor and $enable #lint:ignore:top_scope_facts
     $__opt_dir = $common::setup::__opt_dir
@@ -28,7 +32,6 @@ class common::setup::obmondo_admin (
     file {
       default:
         ensure => stdlib::ensure($_enable, 'directory'),
-        noop   => $noop_value,
       ;
 
       $_home_admin:
