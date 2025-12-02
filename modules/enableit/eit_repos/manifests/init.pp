@@ -69,9 +69,13 @@ class eit_repos (
       }
 
       if $purge {
-        # Skip the Redhat repos, it's managed via rh_repo in common::repo::rhrepos
+        # Skip the Redhat and Oracle repos, it's managed via rh_repo in common::repo::rhrepos
+
         purge { 'yumrepo':
-          unless => ['baseurl', '=~', '^https://cdn.redhat.com' ],
+          unless => [
+            ['baseurl', '=~', '^https://cdn.redhat.com'],
+            ['baseurl', '=~', '^https://yum.oracle.com'],
+          ],
           noop   => $noop_value,
           notify => Exec['remove empty yum repo files'],
         }
@@ -104,6 +108,14 @@ class eit_repos (
           class { 'yum':
             manage_os_default_repos => $upstream,
           }
+        }
+        'OracleLinux': {
+          include yum
+
+          if $upstream {
+            eit_repos::yum::oracle.include
+          }
+
         }
         default: {
           fail("This ${distro_id} is not supported for upstream repos")

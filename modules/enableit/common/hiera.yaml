@@ -33,7 +33,7 @@ hierarchy:
       - "facts/os.family=%{facts.os.family}.yaml"
 
   - name: "OS name"
-    path: "os/name/%{facts.os.name}.yaml"
+    path: "os/%{facts.os.name}.yaml"
 
   - name: "OS family"
     path: "os/%{facts.os.family}.yaml"

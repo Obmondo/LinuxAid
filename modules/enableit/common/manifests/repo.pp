@@ -244,22 +244,23 @@ class common::repo (
                 noop_value => $noop_value,
               }
             }
-          }
-          yumrepo { 'epel_local':
-            ensure   => present,
-            noop     => $noop_value,
-            enabled  => 1,
-            gpgcheck => 1,
-            gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-${_os_major}",
-            descr    => "Extra Packages for Enterprise Linux ${_os_major} \$basearch",
-            baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/epel/${_os_major}/\$basearch/",
-            target   => '/etc/yum.repos.d/epel.repo',
-          }
-          eit_repos::yum::gpgkey { 'epel_local':
-            ensure     => present,
-            path       => "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-${_os_major}",
-            source     => "puppet:///modules/eit_repos/yum/RPM-GPG-KEY-EPEL-${_os_major}",
-            noop_value => $noop_value,
+
+            yumrepo { 'epel_local':
+              ensure   => present,
+              noop     => $noop_value,
+              enabled  => 1,
+              gpgcheck => 1,
+              gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-${_os_major}",
+              descr    => "Extra Packages for Enterprise Linux ${_os_major} \$basearch",
+              baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/epel/${_os_major}/\$basearch/",
+              target   => '/etc/yum.repos.d/epel.repo',
+            }
+            eit_repos::yum::gpgkey { 'epel_local':
+              ensure     => present,
+              path       => "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-${_os_major}",
+              source     => "puppet:///modules/eit_repos/yum/RPM-GPG-KEY-EPEL-${_os_major}",
+              noop_value => $noop_value,
+            }
           }
         }
         'Debian': {
