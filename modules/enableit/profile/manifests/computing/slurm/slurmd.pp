@@ -16,7 +16,7 @@ class profile::computing::slurm::slurmd (
       dport => 6818,
       ;
 
-    '100 allow  slurm controller traffic':
+    '100 allow slurm controller traffic':
       dport => '1024-60535',
       ;
   }
