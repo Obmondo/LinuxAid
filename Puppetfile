@@ -476,4 +476,4 @@ mod 'jcpunk/vnc',
 
 mod 'obmondo/rustdesk',
     :git => 'https://github.com/Obmondo/puppet-rustdesk',
-    :ref => 'v1.0.0'
+    :ref => 'v1.0.1'

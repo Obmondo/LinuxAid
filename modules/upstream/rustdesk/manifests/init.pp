@@ -55,9 +55,9 @@ class rustdesk (
   SemVer             $server_version            = $rustdesk::server_version,
   Array[String]      $server_extra_dependencies = $rustdesk::server_extra_dependencies,
 ) {
-  $_osfamily =$facts['os']['family']
-  if $_osfamily != 'Ubuntu' {
-    fail("The OS you running (${_osfamily}) isn't supported to setup RustDesk")
+  $_osname = $facts['os']['name']
+  if $_osname != 'Ubuntu' {
+    fail("The OS you running (${_osname}) isn't supported to setup RustDesk")
   }
 
   [

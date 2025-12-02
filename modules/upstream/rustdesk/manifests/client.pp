@@ -40,29 +40,28 @@ class rustdesk::client (
   # Merge common + OS-specific dependencies
   $dependencies = concat($common_deps, $extra_dependencies)
 
-  $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/rustdesk-${version}-x86_64.deb"
   $package_name  = "rustdesk-${version}-x86_64.deb"
+  $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/${package_name}"
   $download_path = "/tmp/${package_name}"
 
   # Ensure dependencies are installed first
   package { $dependencies:
-    ensure => installed,
+    ensure => stdlib::ensure($enable, 'package'),
   }
 
   archive { $download_path:
-    ensure => ensure_present($enable),
+    ensure => stdlib::ensure($enable),
     source => $package_url,
   }
 
   package { 'rustdesk':
-    ensure   => installed,
-    provider => 'dpkg',
-    source   => $download_path,
-    require  => Archive[$download_path],
+    ensure  => stdlib::ensure($enable, 'package'),
+    source  => $download_path,
+    require => Archive[$download_path],
   }
 
-  service { 'rustdesk.service':
-    ensure  => ensure_service($enable),
+  service { 'rustdesk':
+    ensure  => stdlib::ensure($enable, 'service'),
     enable  => $enable,
     require => Package['rustdesk'],
   }
