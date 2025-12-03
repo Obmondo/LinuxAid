@@ -137,7 +137,7 @@ class profile::openvox (
       'onetime'                          => false,
       'certname'                         => $::trusted['certname'],
       'manage_internal_file_permissions' => false,
-      'environment'                      => $environment,
+      'environment'                      => regsubst($environment, '\.', '_', 'G'),
       'runtimeout'                       => '10m',
       'masterport'                       => $server_port,
       'extra_main_settings'              => $extra_main_settings,
