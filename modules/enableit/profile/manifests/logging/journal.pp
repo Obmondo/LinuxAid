@@ -32,8 +32,8 @@ class profile::logging::journal (
   $_service = @(EOT)
     [Unit]
     # Disable start-limit so the service doesn't give up after rapid failures
-    StartLimitIntervalSec=0
-    StartLimitBurst=0
+    StartLimitIntervalSec=5min
+    StartLimitBurst=50
 
     [Service]
     # Disable watchdog
