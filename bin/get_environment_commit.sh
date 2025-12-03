@@ -12,7 +12,7 @@ GITDIR="${ENVROOT}/${1}/.git"
 # check to make sure the env repo exists
 if [ -d "${GITDIR}" ];
 then
-  git --git-dir "${GITDIR}" rev-parse --short HEAD
+  "${1}:$(git --git-dir "${GITDIR}" rev-parse --short HEAD)"
 else
   date '+%s'
 fi

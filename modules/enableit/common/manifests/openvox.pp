@@ -26,7 +26,7 @@ class common::openvox (
   Optional[Hash]        $extra_main_settings = undef,
 
   # TODO: lets control  via enc script
-  String                $environment         = 'master',
+  String                $environment         = 'v1.1.1',
 ) {
 
   if $manage {
