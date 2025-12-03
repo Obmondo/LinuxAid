@@ -11,5 +11,6 @@ common::system::updates::noop_value: false
 
 common::setup::obmondo_admin::manage: true
 common::setup::obmondo_admin::enable: true
-
+common::setup::obmondo_admin::noop_value: false
+common::monitor:noop_value: false
 common::openvox::noop_value: false
