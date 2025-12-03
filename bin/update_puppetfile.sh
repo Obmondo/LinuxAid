@@ -77,7 +77,7 @@ declare OPENVOX_UPSTREAM_MODULES_PATH
 declare PUPPETFILE
 
 OPENVOX_UPSTREAM_MODULES_PATH="$(dirname "$(readlink -f "${SCRIPT_NAME}/..")")/modules/upstream"
-PUPPETFILE="$(dirname "$(readlink -f "${SCRIPT_NAME}/..")")/Puppetfile"
+PUPPETFILE="$(dirname "$(readlink -f "${SCRIPT_NAME}/..")")/modules/Puppetfile"
 
 [ $# -eq 0 ] && { ARGFAIL; exit 1; }
 
@@ -249,7 +249,7 @@ EOF
     echo "Added ${MODULE_NAME} at ${LATEST_TAG} to Puppetfile"
   fi
 
-  git add "$PUPPETFILE"  
+  git add "$PUPPETFILE"
 }
 
 # Function to add new module in linuxaid
