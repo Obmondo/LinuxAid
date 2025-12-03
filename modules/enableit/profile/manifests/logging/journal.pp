@@ -30,10 +30,21 @@ class profile::logging::journal (
   confine($facts['init_system'] != 'systemd', 'Only systemd is supported')
 
   $_service = @(EOT)
+    [Unit]
+    # Disable start-limit so the service doesn't give up after rapid failures
+    StartLimitIntervalSec=0
+    StartLimitBurst=0
+
     [Service]
-    # https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#WatchdogSec=
+    # Disable watchdog
     WatchdogSec=0
+
+    # Keep retrying if it fails
     Restart=always
+
+    # Restart every 30s not every 100ms
+    RestartSec=30s
+
     | EOT
 
   systemd::dropin_file { 'upload-remote_dropin':
