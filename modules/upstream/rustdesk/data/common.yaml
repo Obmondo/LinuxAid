@@ -1,13 +1,13 @@
 ---
 rustdesk::server_enable: false
-rustdesk::server_version: 1.7.1
+rustdesk::server_version: 1.7.2
 rustdesk::server_dependencies: []
 rustdesk::server::package_names:
   signal: rustdesk-server-hbbs
   relay: rustdesk-server-hbbr
 
 rustdesk::client_enable: false
-rustdesk::client_version: 1.4.3
+rustdesk::client_version: 1.4.4
 rustdesk::client_dependencies:
   - "libxcb-randr0"
   - "libxdo3"

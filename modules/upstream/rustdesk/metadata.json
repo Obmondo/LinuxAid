@@ -1,6 +1,6 @@
 {
   "name": "puppet-rustdesk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Obmondo",
   "summary": "Rustdesk Puppet/Openvox module",
   "license": "Apache-2.0",
