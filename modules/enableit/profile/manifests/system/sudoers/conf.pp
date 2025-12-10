@@ -8,9 +8,6 @@ define profile::system::sudoers::conf (
   Optional[String]                  $template   = undef,
   Eit_types::Noop_Value             $noop_value = undef,
 ) {
-
-  include profile::system::sudoers
-
   $sudoers_d_dir = lookup('common::system::authentication::sudo::sudoers_d_dir', Stdlib::Absolutepath, 'first', '/etc/obmondo/sudoers.d')
 
   $_sudo_conf_name = safe_string($name)
@@ -21,9 +18,7 @@ define profile::system::sudoers::conf (
   }
 
   if (!$content or $content.size == 0) and !$source {
-    fail("Broken sudoers rule; content is empty! as well as no source file has been provided
-name: ${name}
-")
+    fail("Broken sudoers rule; content is empty! as well as no source file has been provided name: ${name}")
   }
 
   sudo::conf { $_sudo_conf_name:
@@ -36,5 +31,4 @@ name: ${name}
     noop            => $noop_value,
     require         => File[$sudoers_d_dir],
   }
-
 }

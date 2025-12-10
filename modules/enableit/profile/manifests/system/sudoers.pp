@@ -4,17 +4,7 @@ class profile::system::sudoers (
   Eit_types::Sudoers   $sudoers       = $common::system::authentication::sudo::sudoers,
   Stdlib::Absolutepath $sudoers_d_dir = $common::system::authentication::sudo::sudoers_d_dir,
 ) {
-
   contain sudo::params
-
-  # Setup the directory
-  file { $sudoers_d_dir :
-    ensure  => directory,
-    purge   => true,
-    recurse => true,
-    noop    => false,
-    before  => Class['sudo'],
-  }
 
   # Some files in sudoers have wrong permissions, which can cause the execution
   # of `visudo -c` to fail. If this happens then sudoers rules won't be
@@ -33,7 +23,7 @@ class profile::system::sudoers (
   $_sudoedit_paths = [
     '/bin/sudoedit',
     '/usr/bin/sudoedit',
-    ]
+  ]
 
   Package {
     noop   => false,

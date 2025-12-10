@@ -17,7 +17,6 @@ class common::setup (
   Stdlib::Absolutepath  $__opt_dir  = '/opt/obmondo',
   Stdlib::Absolutepath  $__bin_dir  = '/opt/obmondo/bin',
 ) {
-
   # Create Obmondo group for exporter to run under this group
   group { 'obmondo':
     ensure => present,
@@ -27,8 +26,8 @@ class common::setup (
 
   file {
     default:
-    ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
-    noop   => $noop_value,
+      ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
+      noop   => $noop_value,
       ;
 
     [
@@ -38,6 +37,7 @@ class common::setup (
       "${__opt_dir}/home",
       "${__opt_dir}/share",
       "${__opt_dir}/etc",
+      "${__conf_dir}/sudoers.d",
     ]:
       ;
   }
