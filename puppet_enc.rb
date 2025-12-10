@@ -7,7 +7,7 @@ require 'json'
 require 'open3'
 require 'yaml'
 
-BASEDIR = Dir.pwd
+BASEDIR = BASEDIR = Dir.pwd == '/' ? '/etc/puppetlabs/code/environments/master' : Dir.pwd
 
 $LOAD_PATH.unshift("#{BASEDIR}/modules/enableit/functions/lib")
 
