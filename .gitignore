@@ -32,3 +32,6 @@ var/
 
 # Ignore custom/user-specific VS Code configs
 *.vscode/
+
+# Ignore local certs
+.certs/

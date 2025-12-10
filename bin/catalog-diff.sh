@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# This script exists to make it easier to test alternate branches of octocatalog-diff.
+# It is intended as a one-for-one replacement of `octocatalog-diff` as installed by the gem.
+
+PATH=/opt/puppetlabs/puppet/bin:$PATH
+
+CURRENT_PWD="$(pwd)"
+CHECKOUT_BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+if [ -z "$OCTOCATALOG_DIFF_CONFIG_FILE" ]; then
+  if [ -f "${CURRENT_PWD}/.octocatalog-diff.cfg.rb" ]; then
+    export OCTOCATALOG_DIFF_CONFIG_FILE="${CURRENT_PWD}/.octocatalog-diff.cfg.rb"
+  fi
+fi
+
+cd "$CHECKOUT_BASE"
+export OCTOCATALOG_DIFF_CUSTOM_VERSION="@$(git rev-parse HEAD)"
+bundle exec octocatalog-diff --basedir "$CURRENT_PWD" $*
