@@ -5,7 +5,7 @@ We welcome pull requests that improve LinuxAid docs, modules, tooling, or workfl
 ## Before You Start
 
 - Confirm you are familiar with Git, GitHub, and your local development environment. There are plenty of good tutorials available on the internet. Here's one to get started - https://www.atlassian.com/git
-- Read `README.md` to understand the project structure and coding conventions that way you understand the project better.
+- Read [`README.md`](./README.md) to understand the project structure and coding conventions that way you understand the project better.
 - Look through open issues and pull requests to avoid duplicating existing work.
 - Before proceeding to implement any feature, open up an issue and tag repo mastertainers so that they can give you their insights.
 
