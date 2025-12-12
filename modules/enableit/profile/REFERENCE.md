@@ -21,7 +21,7 @@
 * [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
 * [`profile::cron`](#profile--cron): cron
 * [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
-* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when
+* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when 
 * [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
 * [`profile::db::elasticsearch::kibana`](#profile--db--elasticsearch--kibana): Elasticsearch Kibana dashboard  Generate the pem cert from the cert created by elasticsearch Get the password /usr/share/elasticsearch/bin/el
 * [`profile::db::mongodb`](#profile--db--mongodb): MongoDB class
@@ -55,6 +55,10 @@
 * [`profile::nivisa`](#profile--nivisa): NI-VISA Profile
 * [`profile::nodejs`](#profile--nodejs): NodeJs Profile
 * [`profile::ntpd`](#profile--ntpd): NTP
+* [`profile::openvox`](#profile--openvox): Manage openvox-agent so we can setup openvox-agent package
+* [`profile::openvox::clientbucket`](#profile--openvox--clientbucket): profile::openvox::clientbucket for puppet clientbucket cache cleanup
+* [`profile::openvox::linuxaid_cli`](#profile--openvox--linuxaid_cli): Linuxaid-cli setup
+* [`profile::openvox::run_openvox`](#profile--openvox--run_openvox): Run openvox-agent on client nodes
 * [`profile::package_management::guix`](#profile--package_management--guix): Guix server
 * [`profile::package_management::guix::client`](#profile--package_management--guix--client): Guix client
 * [`profile::package_management::packagesign`](#profile--package_management--packagesign): Freight package signing tool
@@ -73,9 +77,6 @@
 * [`profile::projectmanagement::readthedocs`](#profile--projectmanagement--readthedocs): Read The Docs
 * [`profile::projectmanagement::subversion`](#profile--projectmanagement--subversion): Subversion enable
 * [`profile::provisioning::razor`](#profile--provisioning--razor): razor
-* [`profile::puppet`](#profile--puppet): Manage puppet agent We want to stick to PC1 repo so we can setup puppet-agent package
-* [`profile::puppet::clientbucket`](#profile--puppet--clientbucket): profile::puppet::clientbucket for puppet clientbucket cache cleanup
-* [`profile::puppet::run_puppet`](#profile--puppet--run_puppet): Run puppet on client nodes
 * [`profile::puppetdb`](#profile--puppetdb): PuppetDB
 * [`profile::python`](#profile--python): Python Profile
 * [`profile::redis`](#profile--redis): Redis Profile
@@ -91,10 +92,12 @@
 * [`profile::software::insights`](#profile--software--insights): Redhat insights-client
 * [`profile::software::iptables_api`](#profile--software--iptables_api): iptables_api
 * [`profile::software::microsoft_mde`](#profile--software--microsoft_mde): Microsoft Defender for Endpoint
+* [`profile::software::miniforge`](#profile--software--miniforge): Class for managing the Miniforge software
 * [`profile::software::msftlinuxpatchautoassess`](#profile--software--msftlinuxpatchautoassess): Azure Linux VM Patch Extension
 * [`profile::software::nvidia_driver`](#profile--software--nvidia_driver): Nvidia Driver
+* [`profile::software::pycharm`](#profile--software--pycharm): Class for managing the PyCharm software
 * [`profile::software::rubrik`](#profile--software--rubrik): Rubrik backup
-* [`profile::software::rustdesk`](#profile--software--rustdesk): Rustdesk Setup
+* [`profile::software::rustdesk`](#profile--software--rustdesk): Class for managing the Rustdesk software
 * [`profile::software::teleport`](#profile--software--teleport): teleport
 * [`profile::software::vncserver`](#profile--software--vncserver): VNC Server
 * [`profile::software::vscode`](#profile--software--vscode): Vscode
@@ -1036,7 +1039,6 @@ The following parameters are available in the `profile::computing::slurm::slurmd
 
 * [`interface`](#-profile--computing--slurm--slurmd--interface)
 * [`node_cidrs`](#-profile--computing--slurm--slurmd--node_cidrs)
-* [`srun_port_range`](#-profile--computing--slurm--slurmd--srun_port_range)
 
 ##### <a name="-profile--computing--slurm--slurmd--interface"></a>`interface`
 
@@ -1049,14 +1051,6 @@ Data type: `Eit_types::SimpleString`
 Data type: `Array[Eit_types::IPCIDR]`
 
 
-
-##### <a name="-profile--computing--slurm--slurmd--srun_port_range"></a>`srun_port_range`
-
-Data type: `String`
-
-
-
-Default value: `'50000-53000'`
 
 ### <a name="profile--computing--slurm--slurmdbd"></a>`profile::computing::slurm::slurmdbd`
 
@@ -2604,7 +2598,7 @@ Default value: `$common::logging::journal::remote_url`
 
 ##### <a name="-profile--logging--journal--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -3073,7 +3067,7 @@ Default value: `$common::monitoring::scom::scom_user`
 
 ##### <a name="-profile--monitoring--scom--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -3108,7 +3102,7 @@ Default value: `$common::monitoring::splunk::forwarder::enable`
 
 ##### <a name="-profile--monitoring--splunk--forwarder--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -3506,6 +3500,14 @@ Default value: `$common::network::firewall::rules`
 
 Class for managing Netbird Agent
 
+#### Examples
+
+##### Valid Netbird client version
+
+```puppet
+version = "0.59.3"
+```
+
 #### Parameters
 
 The following parameters are available in the `profile::network::netbird` class:
@@ -3535,9 +3537,9 @@ Default value: `$common::network::netbird::enable`
 
 ##### <a name="-profile--network--netbird--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
-Optional boolean to enable no-operation mode.
+Eit_types::Noop_Value to enable no-operation mode.
 
 Default value: `$common::network::netbird::noop_value`
 
@@ -3554,6 +3556,7 @@ Default value: `$common::network::netbird::server`
 Data type: `Eit_types::Version`
 
 The Netbird version to install. The default is the type Eit_types::Version.
+Link to netbird client releases page: https://github.com/netbirdio/netbird/releases
 
 Default value: `$common::network::netbird::version`
 
@@ -3719,6 +3722,169 @@ Data type: `Optional[Integer[0]]`
 
 
 Default value: `undef`
+
+### <a name="profile--openvox"></a>`profile::openvox`
+
+Manage openvox-agent
+so we can setup openvox-agent package
+
+#### Parameters
+
+The following parameters are available in the `profile::openvox` class:
+
+* [`server`](#-profile--openvox--server)
+* [`server_port`](#-profile--openvox--server_port)
+* [`version`](#-profile--openvox--version)
+* [`config_file`](#-profile--openvox--config_file)
+* [`run_agent_as_noop`](#-profile--openvox--run_agent_as_noop)
+* [`extra_main_settings`](#-profile--openvox--extra_main_settings)
+* [`aio_package_name`](#-profile--openvox--aio_package_name)
+* [`environment`](#-profile--openvox--environment)
+* [`noop_value`](#-profile--openvox--noop_value)
+* [`package_version_suffix`](#-profile--openvox--package_version_suffix)
+* [`package_version_prefix`](#-profile--openvox--package_version_prefix)
+
+##### <a name="-profile--openvox--server"></a>`server`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: `$common::openvox::server`
+
+##### <a name="-profile--openvox--server_port"></a>`server_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: `$common::openvox::server_port`
+
+##### <a name="-profile--openvox--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `$common::openvox::version`
+
+##### <a name="-profile--openvox--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$common::openvox::config_file`
+
+##### <a name="-profile--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
+
+Data type: `Boolean`
+
+
+
+Default value: `$common::openvox::run_agent_as_noop`
+
+##### <a name="-profile--openvox--extra_main_settings"></a>`extra_main_settings`
+
+Data type: `Optional[Hash]`
+
+
+
+Default value: `$common::openvox::extra_main_settings`
+
+##### <a name="-profile--openvox--aio_package_name"></a>`aio_package_name`
+
+Data type: `String`
+
+
+
+Default value: `$common::openvox::package_name`
+
+##### <a name="-profile--openvox--environment"></a>`environment`
+
+Data type: `String`
+
+
+
+Default value: `$common::openvox::environment`
+
+##### <a name="-profile--openvox--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::openvox::noop_value`
+
+##### <a name="-profile--openvox--package_version_suffix"></a>`package_version_suffix`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-profile--openvox--package_version_prefix"></a>`package_version_prefix`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--openvox--clientbucket"></a>`profile::openvox::clientbucket`
+
+profile::openvox::clientbucket for puppet clientbucket cache cleanup
+
+#### Parameters
+
+The following parameters are available in the `profile::openvox::clientbucket` class:
+
+* [`noop_value`](#-profile--openvox--clientbucket--noop_value)
+
+##### <a name="-profile--openvox--clientbucket--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::openvox::noop_value`
+
+### <a name="profile--openvox--linuxaid_cli"></a>`profile::openvox::linuxaid_cli`
+
+Linuxaid-cli setup
+
+#### Parameters
+
+The following parameters are available in the `profile::openvox::linuxaid_cli` class:
+
+* [`noop_value`](#-profile--openvox--linuxaid_cli--noop_value)
+
+##### <a name="-profile--openvox--linuxaid_cli--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::openvox::noop_value`
+
+### <a name="profile--openvox--run_openvox"></a>`profile::openvox::run_openvox`
+
+Run openvox-agent on client nodes
+
+#### Parameters
+
+The following parameters are available in the `profile::openvox::run_openvox` class:
+
+* [`noop_value`](#-profile--openvox--run_openvox--noop_value)
+
+##### <a name="-profile--openvox--run_openvox--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::openvox::noop_value`
 
 ### <a name="profile--package_management--guix"></a>`profile::package_management::guix`
 
@@ -5504,7 +5670,7 @@ Default value: `$role::projectmanagement::subversion::password`
 
 ##### <a name="-profile--projectmanagement--subversion--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -5617,142 +5783,6 @@ Data type: `Boolean`
 
 
 Default value: `$role::provisioning::razor::manage_tftpd`
-
-### <a name="profile--puppet"></a>`profile::puppet`
-
-Manage puppet agent
-We want to stick to PC1 repo
-so we can setup puppet-agent package
-
-#### Parameters
-
-The following parameters are available in the `profile::puppet` class:
-
-* [`noop_value`](#-profile--puppet--noop_value)
-* [`server`](#-profile--puppet--server)
-* [`server_port`](#-profile--puppet--server_port)
-* [`version`](#-profile--puppet--version)
-* [`setup_agent`](#-profile--puppet--setup_agent)
-* [`configure_agent`](#-profile--puppet--configure_agent)
-* [`config_file`](#-profile--puppet--config_file)
-* [`run_agent_as_noop`](#-profile--puppet--run_agent_as_noop)
-* [`extra_main_settings`](#-profile--puppet--extra_main_settings)
-* [`package_version_suffix`](#-profile--puppet--package_version_suffix)
-* [`package_version_prefix`](#-profile--puppet--package_version_prefix)
-* [`aio_package_name`](#-profile--puppet--aio_package_name)
-* [`environment`](#-profile--puppet--environment)
-
-##### <a name="-profile--puppet--noop_value"></a>`noop_value`
-
-Data type: `Boolean`
-
-
-
-Default value: `false`
-
-##### <a name="-profile--puppet--server"></a>`server`
-
-Data type: `Stdlib::Host`
-
-
-
-Default value: `$::common::puppet::server`
-
-##### <a name="-profile--puppet--server_port"></a>`server_port`
-
-Data type: `Stdlib::Port`
-
-
-
-Default value: `$::common::puppet::server_port`
-
-##### <a name="-profile--puppet--version"></a>`version`
-
-Data type: `Eit_types::Version`
-
-
-
-Default value: `$::common::puppet::version`
-
-##### <a name="-profile--puppet--setup_agent"></a>`setup_agent`
-
-Data type: `Boolean`
-
-
-
-Default value: `$::common::puppet::setup_agent`
-
-##### <a name="-profile--puppet--configure_agent"></a>`configure_agent`
-
-Data type: `Boolean`
-
-
-
-Default value: `$::common::puppet::configure_agent`
-
-##### <a name="-profile--puppet--config_file"></a>`config_file`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `$::common::puppet::config_file`
-
-##### <a name="-profile--puppet--run_agent_as_noop"></a>`run_agent_as_noop`
-
-Data type: `Boolean`
-
-
-
-Default value: `$::common::puppet::run_agent_as_noop`
-
-##### <a name="-profile--puppet--extra_main_settings"></a>`extra_main_settings`
-
-Data type: `Optional[Hash]`
-
-
-
-Default value: `$::common::puppet::extra_main_settings`
-
-##### <a name="-profile--puppet--package_version_suffix"></a>`package_version_suffix`
-
-Data type: `Optional[String]`
-
-
-
-Default value: `undef`
-
-##### <a name="-profile--puppet--package_version_prefix"></a>`package_version_prefix`
-
-Data type: `Optional[String]`
-
-
-
-Default value: `undef`
-
-##### <a name="-profile--puppet--aio_package_name"></a>`aio_package_name`
-
-Data type: `String`
-
-
-
-Default value: `$::common::puppet::package_name`
-
-##### <a name="-profile--puppet--environment"></a>`environment`
-
-Data type: `String`
-
-
-
-Default value: `$::common::puppet::environment`
-
-### <a name="profile--puppet--clientbucket"></a>`profile::puppet::clientbucket`
-
-profile::puppet::clientbucket for puppet clientbucket cache cleanup
-
-### <a name="profile--puppet--run_puppet"></a>`profile::puppet::run_puppet`
-
-Run puppet on client nodes
 
 ### <a name="profile--puppetdb"></a>`profile::puppetdb`
 
@@ -6460,7 +6490,7 @@ Default value: `$common::software::cloudamize::customer_key`
 
 ##### <a name="-profile--software--cloudamize--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6487,7 +6517,7 @@ Default value: `$common::software::dependencyagent::enable`
 
 ##### <a name="-profile--software--dependencyagent--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6514,7 +6544,7 @@ Default value: `$common::software::fwupd::enable`
 
 ##### <a name="-profile--software--fwupd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6541,7 +6571,7 @@ Default value: `$common::software::insights::enable`
 
 ##### <a name="-profile--software--insights--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6569,7 +6599,7 @@ Default value: `$common::software::iptables_api::enable`
 
 ##### <a name="-profile--software--iptables_api--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6607,7 +6637,7 @@ Default value: `$common::software::microsoft_mde::enable`
 
 ##### <a name="-profile--software--microsoft_mde--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6636,6 +6666,51 @@ Data type: `Eit_types::Microsoft::Mde::Exclusions`
 
 
 Default value: `$common::software::microsoft_mde::exclusions`
+
+### <a name="profile--software--miniforge"></a>`profile::software::miniforge`
+
+Miniforge3 Setup
+
+#### Parameters
+
+The following parameters are available in the `profile::software::miniforge` class:
+
+* [`manage`](#-profile--software--miniforge--manage)
+* [`enable`](#-profile--software--miniforge--enable)
+* [`version`](#-profile--software--miniforge--version)
+* [`install_dir`](#-profile--software--miniforge--install_dir)
+
+##### <a name="-profile--software--miniforge--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean parameter to control management of Miniforge.
+
+Default value: `$common::software::miniforge::manage`
+
+##### <a name="-profile--software--miniforge--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to control whether Miniforge is installed or not.
+
+Default value: `$common::software::miniforge::enable`
+
+##### <a name="-profile--software--miniforge--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+Eit_types::Version parameter to control version of Miniforge3.
+
+Default value: `$common::software::miniforge::version`
+
+##### <a name="-profile--software--miniforge--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Stdlib::Absolutepath parameter to control installation directory of Miniforge3.
+
+Default value: `$common::software::miniforge::install_dir`
 
 ### <a name="profile--software--msftlinuxpatchautoassess"></a>`profile::software::msftlinuxpatchautoassess`
 
@@ -6676,11 +6751,47 @@ Default value: `$common::software::nvidia_driver::enable`
 
 ##### <a name="-profile--software--nvidia_driver--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
 Default value: `$common::software::nvidia_driver::noop_value`
+
+### <a name="profile--software--pycharm"></a>`profile::software::pycharm`
+
+Pycharm Setup
+
+#### Parameters
+
+The following parameters are available in the `profile::software::pycharm` class:
+
+* [`enable`](#-profile--software--pycharm--enable)
+* [`version`](#-profile--software--pycharm--version)
+* [`noop_value`](#-profile--software--pycharm--noop_value)
+
+##### <a name="-profile--software--pycharm--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable PyCharm. Defaults to true.
+
+Default value: `$common::software::pycharm::enable`
+
+##### <a name="-profile--software--pycharm--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+String parameter to control version of PyCharm.
+
+Default value: `$common::software::pycharm::version`
+
+##### <a name="-profile--software--pycharm--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+Optional boolean to specify noop mode value.
+
+Default value: `$common::software::pycharm::noop_value`
 
 ### <a name="profile--software--rubrik"></a>`profile::software::rubrik`
 
@@ -6703,7 +6814,7 @@ Default value: `$common::software::rubrik::enable`
 
 ##### <a name="-profile--software--rubrik--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6711,48 +6822,66 @@ Default value: `$common::software::rubrik::noop_value`
 
 ### <a name="profile--software--rustdesk"></a>`profile::software::rustdesk`
 
-Rustdesk Setup
+Class for managing the Rustdesk software
 
 #### Parameters
 
 The following parameters are available in the `profile::software::rustdesk` class:
 
-* [`enable`](#-profile--software--rustdesk--enable)
-* [`version`](#-profile--software--rustdesk--version)
-* [`noop_value`](#-profile--software--rustdesk--noop_value)
-* [`dependencies`](#-profile--software--rustdesk--dependencies)
+* [`client_enable`](#-profile--software--rustdesk--client_enable)
+* [`client_version`](#-profile--software--rustdesk--client_version)
+* [`client_extra_dependencies`](#-profile--software--rustdesk--client_extra_dependencies)
+* [`server_enable`](#-profile--software--rustdesk--server_enable)
+* [`server_version`](#-profile--software--rustdesk--server_version)
+* [`server_extra_dependencies`](#-profile--software--rustdesk--server_extra_dependencies)
 
-##### <a name="-profile--software--rustdesk--enable"></a>`enable`
+##### <a name="-profile--software--rustdesk--client_enable"></a>`client_enable`
 
 Data type: `Boolean`
 
+Boolean parameter to enable or disable the Rustdesk client. Defaults to false.
 
+Default value: `$common::software::rustdesk::client_enable`
 
-Default value: `$common::software::rustdesk::enable`
-
-##### <a name="-profile--software--rustdesk--version"></a>`version`
+##### <a name="-profile--software--rustdesk--client_version"></a>`client_version`
 
 Data type: `Eit_types::Version`
 
+SemVer parameter to control Rustdesk client version. Defaults to 1.4.3.
 
+Default value: `$common::software::rustdesk::client_version`
 
-Default value: `$common::software::rustdesk::version`
-
-##### <a name="-profile--software--rustdesk--noop_value"></a>`noop_value`
-
-Data type: `Optional[Boolean]`
-
-
-
-Default value: `$common::software::rustdesk::noop_value`
-
-##### <a name="-profile--software--rustdesk--dependencies"></a>`dependencies`
+##### <a name="-profile--software--rustdesk--client_extra_dependencies"></a>`client_extra_dependencies`
 
 Data type: `Array[String]`
 
+Array[String] parameter to install OS specific dependencies. Defaults to [].
 
+Default value: `$common::software::rustdesk::client_extra_dependencies`
 
-Default value: `$common::software::rustdesk::dependencies`
+##### <a name="-profile--software--rustdesk--server_enable"></a>`server_enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable the Rustdesk server. Defaults to false.
+
+Default value: `$common::software::rustdesk::server_enable`
+
+##### <a name="-profile--software--rustdesk--server_version"></a>`server_version`
+
+Data type: `Eit_types::Version`
+
+SemVer parameter to control Rustdesk server version. Defaults to 1.7.1.
+
+Default value: `$common::software::rustdesk::server_version`
+
+##### <a name="-profile--software--rustdesk--server_extra_dependencies"></a>`server_extra_dependencies`
+
+Data type: `Array[String]`
+
+Array[String] parameter to install OS specific dependencies. Defaults to [].
+
+Default value: `$common::software::rustdesk::server_extra_dependencies`
 
 ### <a name="profile--software--teleport"></a>`profile::software::teleport`
 
@@ -6777,7 +6906,7 @@ Default value: `$common::software::teleport::enable`
 
 ##### <a name="-profile--software--teleport--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6823,7 +6952,7 @@ Default value: `$common::software::vncserver::enable`
 
 ##### <a name="-profile--software--vncserver--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6882,7 +7011,7 @@ Default value: `$common::software::vscode::enable`
 
 ##### <a name="-profile--software--vscode--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -6921,7 +7050,7 @@ Default value: `$common::software::walinuxagent::manage`
 
 ##### <a name="-profile--software--walinuxagent--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -7467,17 +7596,12 @@ ZFS and utilities
 
 The following parameters are available in the `profile::storage::zfs` class:
 
-* [`pool_names`](#-profile--storage--zfs--pool_names)
 * [`remove_sysstat_cron`](#-profile--storage--zfs--remove_sysstat_cron)
+* [`pools`](#-profile--storage--zfs--pools)
+* [`allow_sync_from`](#-profile--storage--zfs--allow_sync_from)
+* [`templates`](#-profile--storage--zfs--templates)
+* [`replications`](#-profile--storage--zfs--replications)
 * [`scrub`](#-profile--storage--zfs--scrub)
-
-##### <a name="-profile--storage--zfs--pool_names"></a>`pool_names`
-
-Data type: `Array[Eit_types::SimpleString]`
-
-
-
-Default value: `$::common::storage::zfs::pool_names`
 
 ##### <a name="-profile--storage--zfs--remove_sysstat_cron"></a>`remove_sysstat_cron`
 
@@ -7485,7 +7609,39 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::storage::zfs::remove_sysstat_cron`
+Default value: `$common::storage::zfs::remove_sysstat_cron`
+
+##### <a name="-profile--storage--zfs--pools"></a>`pools`
+
+Data type: `Sanoid::Pools`
+
+
+
+Default value: `$common::storage::zfs::pools`
+
+##### <a name="-profile--storage--zfs--allow_sync_from"></a>`allow_sync_from`
+
+Data type: `Array[String]`
+
+
+
+Default value: `$common::storage::zfs::allow_sync_from`
+
+##### <a name="-profile--storage--zfs--templates"></a>`templates`
+
+Data type: `Optional[Sanoid::Templates]`
+
+
+
+Default value: `$common::storage::zfs::templates`
+
+##### <a name="-profile--storage--zfs--replications"></a>`replications`
+
+Data type: `Sanoid::Syncoid::Replications`
+
+
+
+Default value: `$common::storage::zfs::replications`
 
 ##### <a name="-profile--storage--zfs--scrub"></a>`scrub`
 
@@ -7493,7 +7649,7 @@ Data type: `Eit_types::Common::Storage::Zfs::Scrub_interval`
 
 
 
-Default value: `$::common::storage::zfs::scrub`
+Default value: `$common::storage::zfs::scrub`
 
 ### <a name="profile--system"></a>`profile::system`
 
@@ -7675,7 +7831,7 @@ Default value: `$common::system::authentication::kerberos::ldaps`
 
 ##### <a name="-profile--system--authentication--kerberos--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -8043,7 +8199,7 @@ Default value: `$common::system::authentication::sssd::override_config`
 
 ##### <a name="-profile--system--authentication--sssd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -8170,7 +8326,7 @@ Default value: `$common::system::dns::allow_external`
 
 ##### <a name="-profile--system--dns--noop_value"></a>`noop_value`
 
-Data type: `Variant[Undef, Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -8795,7 +8951,7 @@ Default value: `$common::system::time::ntp::servers`
 
 ##### <a name="-profile--system--time--ntp--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -9171,11 +9327,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-profile--virtualization--docker--cadvisor--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-profile--virtualization--docker--cadvisor--listen_port"></a>`listen_port`
 
@@ -10411,7 +10567,7 @@ Default value: `{}`
 
 ##### <a name="-profile--cron--job--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 
@@ -10636,11 +10792,11 @@ Default value: `true`
 
 ##### <a name="-profile--system--service_oneshot--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `false`
+Default value: `undef`
 
 ### <a name="profile--system--sudoers--conf"></a>`profile::system::sudoers::conf`
 
@@ -10650,22 +10806,13 @@ sudo conf wrapper
 
 The following parameters are available in the `profile::system::sudoers::conf` defined type:
 
-* [`filename`](#-profile--system--sudoers--conf--filename)
 * [`ensure`](#-profile--system--sudoers--conf--ensure)
+* [`filename`](#-profile--system--sudoers--conf--filename)
 * [`priority`](#-profile--system--sudoers--conf--priority)
 * [`content`](#-profile--system--sudoers--conf--content)
 * [`source`](#-profile--system--sudoers--conf--source)
 * [`template`](#-profile--system--sudoers--conf--template)
-* [`sudoers_d_dir`](#-profile--system--sudoers--conf--sudoers_d_dir)
 * [`noop_value`](#-profile--system--sudoers--conf--noop_value)
-
-##### <a name="-profile--system--sudoers--conf--filename"></a>`filename`
-
-Data type: `Optional[Eit_types::SimpleString]`
-
-
-
-Default value: `undef`
 
 ##### <a name="-profile--system--sudoers--conf--ensure"></a>`ensure`
 
@@ -10674,6 +10821,14 @@ Data type: `Eit_types::Ensure`
 
 
 Default value: `present`
+
+##### <a name="-profile--system--sudoers--conf--filename"></a>`filename`
+
+Data type: `Optional[Eit_types::SimpleString]`
+
+
+
+Default value: `undef`
 
 ##### <a name="-profile--system--sudoers--conf--priority"></a>`priority`
 
@@ -10707,17 +10862,9 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
-##### <a name="-profile--system--sudoers--conf--sudoers_d_dir"></a>`sudoers_d_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `$common::system::authentication::sudo::sudoers_d_dir`
-
 ##### <a name="-profile--system--sudoers--conf--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 
 

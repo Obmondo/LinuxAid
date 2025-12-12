@@ -56,7 +56,6 @@
 * [`common::monitor::exporter::node::topprocesses`](#common--monitor--exporter--node--topprocesses): Class for managing the Topprocesses Prometheus exporter
 * [`common::monitor::exporter::ntp`](#common--monitor--exporter--ntp): Class for managing NTP Exporter
 * [`common::monitor::exporter::process`](#common--monitor--exporter--process): Class for managing the Prometheus process exporter
-* [`common::monitor::exporter::pushprox`](#common--monitor--exporter--pushprox): Class for managing the Prometheus Blackbox Exporter
 * [`common::monitor::exporter::security`](#common--monitor--exporter--security): Prometheus Security Exporter
 * [`common::monitor::exporter::systemd`](#common--monitor--exporter--systemd): Class for managing Prometheus Systemd Exporter
 * [`common::monitor::exporter::tcpshaker`](#common--monitor--exporter--tcpshaker): Class for managing the Prometheus tcpshaker daemon mode / exporter
@@ -74,9 +73,8 @@
 * [`common::network::tcpshaker`](#common--network--tcpshaker): Class for installing and setting up tcp shaker in daemon mode
 * [`common::network::vrrp`](#common--network--vrrp): Class for managing VRRP configuration
 * [`common::network::wireguard`](#common--network--wireguard): Class for managing Wireguard network configuration
+* [`common::openvox`](#common--openvox): Class for managing openvox installation and configuration
 * [`common::package`](#common--package): Class for managing the installation and removal of packages
-* [`common::puppet`](#common--puppet): Class for managing Puppet installation and configuration
-* [`common::puppet::clientbucket`](#common--puppet--clientbucket): Class clientbucket contains settings for puppet cache cleanup
 * [`common::repo`](#common--repo): Class for managing software repositories
 * [`common::security`](#common--security): Class for managing security settings including certs and auditd
 * [`common::security::auditd`](#common--security--auditd): Class for managing auditd configuration
@@ -94,8 +92,10 @@
 * [`common::software::insights`](#common--software--insights): Class for managing insights client access
 * [`common::software::iptables_api`](#common--software--iptables_api): Class for installing iptables-api
 * [`common::software::microsoft_mde`](#common--software--microsoft_mde): Class for managing Microsoft Defender for Endpoint installation and configuration
+* [`common::software::miniforge`](#common--software--miniforge): Class for managing the Miniforge software
 * [`common::software::msftlinuxpatchautoassess`](#common--software--msftlinuxpatchautoassess): Class for managing the Azure Linux VM Patch Extension
 * [`common::software::nvidia_driver`](#common--software--nvidia_driver): Class for managing Nvidia Driver installation
+* [`common::software::pycharm`](#common--software--pycharm): Class for managing the PyCharm software
 * [`common::software::rubrik`](#common--software--rubrik): Class for managing the Rubrik Agent software
 * [`common::software::rustdesk`](#common--software--rustdesk): Class for managing the Rustdesk software
 * [`common::software::teleport`](#common--software--teleport): Class for managing the OMS Agent
@@ -247,6 +247,7 @@ The following parameters are available in the `common::backup` class:
 * [`lvm_extents_min_required`](#-common--backup--lvm_extents_min_required)
 * [`push`](#-common--backup--push)
 * [`encrypt_params`](#-common--backup--encrypt_params)
+* [`root_password`](#-common--backup--root_password)
 
 ##### <a name="-common--backup--manage"></a>`manage`
 
@@ -398,6 +399,14 @@ Data type: `Eit_types::Encrypt::Params`
 The list of params, which needs to be encrypted
 
 Default value: `['backup_user_password']`
+
+##### <a name="-common--backup--root_password"></a>`root_password`
+
+Data type: `Optional[Eit_types::Password]`
+
+
+
+Default value: `undef`
 
 ### <a name="common--backup--borg"></a>`common::backup::borg`
 
@@ -1379,7 +1388,7 @@ Default value: `false`
 
 ##### <a name="-common--backup--gitea--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean value for noop mode. Defaults to undef.
 
@@ -1661,11 +1670,11 @@ Default value: `true`
 
 ##### <a name="-common--convenience--bash--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Whether to perform no-operation. Defaults to false.
 
-Default value: `false`
+Default value: `undef`
 
 ### <a name="common--convenience--tmux"></a>`common::convenience::tmux`
 
@@ -1688,11 +1697,11 @@ Default value: `true`
 
 ##### <a name="-common--convenience--tmux--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional Boolean for noop operations. Defaults to false.
 
-Default value: `false`
+Default value: `undef`
 
 ### <a name="common--cron"></a>`common::cron`
 
@@ -1926,7 +1935,7 @@ Default value: `undef`
 
 ##### <a name="-common--logging--journal--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional noop value for testing. Defaults to undef.
 
@@ -2386,7 +2395,7 @@ Default value: `'u+rwX,g-r,g+wX'`
 
 ##### <a name="-common--mail--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional noop value. Defaults to undef.
 
@@ -2401,6 +2410,7 @@ Class for managing monitoring defaults
 The following parameters are available in the `common::monitor` class:
 
 * [`enable`](#-common--monitor--enable)
+* [`noop_value`](#-common--monitor--noop_value)
 
 ##### <a name="-common--monitor--enable"></a>`enable`
 
@@ -2409,6 +2419,14 @@ Data type: `Boolean`
 Whether to enable monitoring. Defaults to the value of $::obmondo_monitoring_status.
 
 Default value: `$::obmondo_monitoring_status`
+
+##### <a name="-common--monitor--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `undef`
 
 ### <a name="common--monitor--exporter"></a>`common::monitor::exporter`
 
@@ -2432,11 +2450,11 @@ Default value: `$common::monitor::enable`
 
 ##### <a name="-common--monitor--exporter--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 The noop value for the exporter. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::noop_value`
 
 ##### <a name="-common--monitor--exporter--config_dir"></a>`config_dir`
 
@@ -2474,19 +2492,19 @@ The port on which the exporter listens.
 
 ##### <a name="-common--monitor--exporter--blackbox--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
-Boolean to indicate if operations should be in noop mode. Defaults to false.
+Eit_types::Noop_Value to indicate if operations should be in noop mode. Defaults to $common::monitor::exporter::noop_value.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--blackbox--config_file"></a>`config_file`
 
 Data type: `Stdlib::Absolutepath`
 
-The absolute path to the configuration file. Defaults to "${::common::monitor::exporter::config_dir}/blackbox.yml".
+The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
 
-Default value: `"${::common::monitor::exporter::config_dir}/blackbox.yml"`
+Default value: `"${common::monitor::exporter::config_dir}/blackbox.yml"`
 
 ##### <a name="-common--monitor--exporter--blackbox--targets"></a>`targets`
 
@@ -2519,11 +2537,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--cadvisor--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The value to use for noop setting. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--cadvisor--listen_port"></a>`listen_port`
 
@@ -2564,11 +2582,11 @@ Default value: `false`
 
 ##### <a name="-common--monitor--exporter--dellhw--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean indicating whether to run in noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--dellhw--manage_repo"></a>`manage_repo`
 
@@ -2610,11 +2628,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--dns--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The value to use for noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--dns--listen_address"></a>`listen_address`
 
@@ -2678,11 +2696,11 @@ Default value: `'127.254.254.254:9105'`
 
 ##### <a name="-common--monitor--exporter--elasticsearch--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean for noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ### <a name="common--monitor--exporter--filestat"></a>`common::monitor::exporter::filestat`
 
@@ -2709,11 +2727,11 @@ Default value: `false`
 
 ##### <a name="-common--monitor--exporter--filestat--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
-Boolean value used for noop operations during testing. Defaults to false.
+Eit_types::Noop_Value value used for noop operations during testing. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--filestat--config_file"></a>`config_file`
 
@@ -2770,11 +2788,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--gitlab_runner--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The value for noop. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--gitlab_runner--listen_address"></a>`listen_address`
 
@@ -2815,11 +2833,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--haproxy--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean value for noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--haproxy--listen_port"></a>`listen_port`
 
@@ -2855,13 +2873,15 @@ Data type: `Boolean`
 
 Boolean parameter to enable or disable the exporter.
 
+Default value: `true`
+
 ##### <a name="-common--monitor--exporter--iptables--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean value to specify noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--iptables--listen_address"></a>`listen_address`
 
@@ -2895,11 +2915,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--mtail--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The noop value for resources. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--mtail--listen_address"></a>`listen_address`
 
@@ -2927,15 +2947,15 @@ Default value: `"${common::monitor::exporter::config_dir}/mtail"`
 
 ### <a name="common--monitor--exporter--mysql"></a>`common::monitor::exporter::mysql`
 
-Whether to enable the exporter. Defaults to the value of $::common::monitor::exporter::enable.
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 
-The MySQL monitor username. Defaults to the value of $::profile::mysql::mysql_monitor_username.
+The MySQL monitor username. Defaults to the value of $profile::mysql::mysql_monitor_username.
 
-The MySQL monitor password. Defaults to the value of $::profile::mysql::mysql_monitor_password.
+The MySQL monitor password. Defaults to the value of $profile::mysql::mysql_monitor_password.
 
-The port used by MySQL. Defaults to the value of $::profile::mysql::mysql_port.
+The port used by MySQL. Defaults to the value of $profile::mysql::mysql_port.
 
-The hostname for MySQL monitoring. Defaults to the value of $::profile::mysql::mysql_monitor_hostname.
+The hostname for MySQL monitoring. Defaults to the value of $profile::mysql::mysql_monitor_hostname.
 
 The port for Prometheus to scrape metrics. Defaults to 9104.
 
@@ -2960,7 +2980,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::monitor::exporter::enable`
+Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--mysql--username"></a>`username`
 
@@ -2968,7 +2988,7 @@ Data type: `String`
 
 
 
-Default value: `$::profile::mysql::mysql_monitor_username`
+Default value: `$profile::mysql::mysql_monitor_username`
 
 ##### <a name="-common--monitor--exporter--mysql--password"></a>`password`
 
@@ -2976,7 +2996,7 @@ Data type: `Eit_types::Password`
 
 
 
-Default value: `$::profile::mysql::mysql_monitor_password`
+Default value: `$profile::mysql::mysql_monitor_password`
 
 ##### <a name="-common--monitor--exporter--mysql--mysql_port"></a>`mysql_port`
 
@@ -2984,7 +3004,7 @@ Data type: `Stdlib::Port`
 
 
 
-Default value: `$::profile::mysql::mysql_port`
+Default value: `$profile::mysql::mysql_port`
 
 ##### <a name="-common--monitor--exporter--mysql--mysql_monitor_hostname"></a>`mysql_monitor_hostname`
 
@@ -2992,7 +3012,7 @@ Data type: `String`
 
 
 
-Default value: `$::profile::mysql::mysql_monitor_hostname`
+Default value: `$profile::mysql::mysql_monitor_hostname`
 
 ##### <a name="-common--monitor--exporter--mysql--listen_port"></a>`listen_port`
 
@@ -3004,11 +3024,11 @@ Default value: `9104`
 
 ##### <a name="-common--monitor--exporter--mysql--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--mysql--encrypt_params"></a>`encrypt_params`
 
@@ -3057,6 +3077,7 @@ The following parameters are available in the `common::monitor::exporter::node` 
 * [`enable`](#-common--monitor--exporter--node--enable)
 * [`noop_value`](#-common--monitor--exporter--node--noop_value)
 * [`host`](#-common--monitor--exporter--node--host)
+* [`version`](#-common--monitor--exporter--node--version)
 
 ##### <a name="-common--monitor--exporter--node--buddyinfo"></a>`buddyinfo`
 
@@ -3236,11 +3257,11 @@ Default value: `true`
 
 ##### <a name="-common--monitor--exporter--node--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean value for noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--node--host"></a>`host`
 
@@ -3249,6 +3270,14 @@ Data type: `Eit_types::Certname`
 
 
 Default value: `$trusted['certname']`
+
+##### <a name="-common--monitor--exporter--node--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+
+
+Default value: `'1.10.2'`
 
 ### <a name="common--monitor--exporter--node--lsof"></a>`common::monitor::exporter::node::lsof`
 
@@ -3265,17 +3294,17 @@ The following parameters are available in the `common::monitor::exporter::node::
 
 Data type: `Boolean`
 
-Whether to enable the exporter. Defaults to the value of $::common::monitor::exporter::node::enable.
+Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
 
-Default value: `$::common::monitor::exporter::node::enable`
+Default value: `$common::monitor::exporter::node::enable`
 
 ##### <a name="-common--monitor--exporter--node--lsof--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
-Optional boolean to control noop behavior. Defaults to false.
+Eit_types::Noop_Value to control noop behavior. Defaults to $common::monitor::exporter::node::noop_value.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::node::noop_value`
 
 ### <a name="common--monitor--exporter--node--smartmon"></a>`common::monitor::exporter::node::smartmon`
 
@@ -3298,11 +3327,11 @@ Default value: `$common::monitor::exporter::node::enable`
 
 ##### <a name="-common--monitor--exporter--node--smartmon--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional Boolean for no-operation mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::node::noop_value`
 
 ### <a name="common--monitor--exporter--node--ssacli"></a>`common::monitor::exporter::node::ssacli`
 
@@ -3325,11 +3354,11 @@ Default value: `$common::monitor::exporter::node::enable`
 
 ##### <a name="-common--monitor--exporter--node--ssacli--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional[Boolean], the noop value for resources. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::node::noop_value`
 
 ### <a name="common--monitor--exporter--node--topprocesses"></a>`common::monitor::exporter::node::topprocesses`
 
@@ -3352,11 +3381,11 @@ Default value: `$common::monitor::exporter::node::enable`
 
 ##### <a name="-common--monitor--exporter--node--topprocesses--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional. The value for noop attribute. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::node::noop_value`
 
 ### <a name="common--monitor--exporter--ntp"></a>`common::monitor::exporter::ntp`
 
@@ -3389,11 +3418,11 @@ Default value: `'127.254.254.254:9559'`
 
 ##### <a name="-common--monitor--exporter--ntp--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to specify noop mode. Defaults to undef.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--ntp--telemetry_path"></a>`telemetry_path`
 
@@ -3425,11 +3454,11 @@ Default value: `true`
 
 ##### <a name="-common--monitor--exporter--process--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Whether to perform noop operations. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--process--listen_address"></a>`listen_address`
 
@@ -3438,33 +3467,6 @@ Data type: `Eit_types::IPPort`
 
 
 Default value: `'127.254.254.254:63388'`
-
-### <a name="common--monitor--exporter--pushprox"></a>`common::monitor::exporter::pushprox`
-
-Class for managing the Prometheus Blackbox Exporter
-
-#### Parameters
-
-The following parameters are available in the `common::monitor::exporter::pushprox` class:
-
-* [`enable`](#-common--monitor--exporter--pushprox--enable)
-* [`noop_value`](#-common--monitor--exporter--pushprox--noop_value)
-
-##### <a name="-common--monitor--exporter--pushprox--enable"></a>`enable`
-
-Data type: `Boolean`
-
-Boolean to enable or disable the exporter. Defaults to false.
-
-Default value: `false`
-
-##### <a name="-common--monitor--exporter--pushprox--noop_value"></a>`noop_value`
-
-Data type: `Boolean`
-
-Boolean to set noop for resources. Defaults to false.
-
-Default value: `false`
 
 ### <a name="common--monitor--exporter--security"></a>`common::monitor::exporter::security`
 
@@ -3491,11 +3493,11 @@ Default value: `false`
 
 ##### <a name="-common--monitor--exporter--security--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
-Boolean flag to run in noop mode. Defaults to false.
+Eit_types::Noop_Value flag to run in noop mode. Defaults to $common::monitor::exporter::noop_value.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--security--host"></a>`host`
 
@@ -3525,9 +3527,9 @@ Default value: `63396`
 
 Data type: `Stdlib::Absolutepath`
 
-Path to the configuration YAML file. Defaults to "${::common::monitor::exporter::config_dir}/security_exporter.yaml".
+Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
 
-Default value: `"${::common::monitor::exporter::config_dir}/security_exporter.yaml"`
+Default value: `"${common::monitor::exporter::config_dir}/security_exporter.yaml"`
 
 ### <a name="common--monitor--exporter--systemd"></a>`common::monitor::exporter::systemd`
 
@@ -3555,11 +3557,11 @@ Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--systemd--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ##### <a name="-common--monitor--exporter--systemd--listen_address"></a>`listen_address`
 
@@ -3608,11 +3610,11 @@ Default value: `$trusted['certname']`
 
 ##### <a name="-common--monitor--exporter--tcpshaker--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The noop flag for Puppet resources. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ### <a name="common--monitor--exporter--wireguard"></a>`common::monitor::exporter::wireguard`
 
@@ -3644,11 +3646,11 @@ Default value: `'127.254.254.254:63390'`
 
 ##### <a name="-common--monitor--exporter--wireguard--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Whether to run in noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `$common::monitor::exporter::noop_value`
 
 ### <a name="common--monitor--prometheus"></a>`common::monitor::prometheus`
 
@@ -3667,11 +3669,11 @@ The following parameters are available in the `common::monitor::prometheus` clas
 
 ##### <a name="-common--monitor--prometheus--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `false`
+Default value: `$common::monitor::noop_value`
 
 ##### <a name="-common--monitor--prometheus--install_method"></a>`install_method`
 
@@ -3716,6 +3718,7 @@ The following parameters are available in the `common::monitor::prometheus::serv
 * [`config_dir`](#-common--monitor--prometheus--server--config_dir)
 * [`listen_address`](#-common--monitor--prometheus--server--listen_address)
 * [`enable`](#-common--monitor--prometheus--server--enable)
+* [`noop_value`](#-common--monitor--prometheus--server--noop_value)
 
 ##### <a name="-common--monitor--prometheus--server--version"></a>`version`
 
@@ -3748,6 +3751,14 @@ Data type: `Boolean`
 Boolean to enable or disable the monitoring. Defaults to true.
 
 Default value: `$common::monitor::enable`
+
+##### <a name="-common--monitor--prometheus--server--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::monitor::noop_value`
 
 ### <a name="common--monitoring"></a>`common::monitoring`
 
@@ -3842,7 +3853,7 @@ Default value: `'svclinuxmon'`
 
 ##### <a name="-common--monitoring--scom--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The noop value for testing purposes. Defaults to undef.
 
@@ -3939,7 +3950,7 @@ Default value: `false`
 
 ##### <a name="-common--monitoring--splunk--forwarder--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 No-operation mode value. Defaults to undef.
 
@@ -4241,6 +4252,14 @@ Default value: `{}`
 
 Class for managing Netbird Agent
 
+#### Examples
+
+##### Valid Netbird client version
+
+```puppet
+version = "0.59.3"
+```
+
 #### Parameters
 
 The following parameters are available in the `common::network::netbird` class:
@@ -4266,7 +4285,7 @@ Boolean to enable or disable the Netbird agent.
 
 ##### <a name="-common--network--netbird--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to enable no-operation mode.
 
@@ -4283,6 +4302,7 @@ The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:44
 Data type: `Eit_types::Version`
 
 The Netbird version to install. The default is the type Eit_types::Version.
+Link to netbird client releases page: https://github.com/netbirdio/netbird/releases
 
 ##### <a name="-common--network--netbird--install_method"></a>`install_method`
 
@@ -4366,7 +4386,7 @@ Default value: `[]`
 
 ##### <a name="-common--network--tcpshaker--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to control noop behavior. Defaults to undef.
 
@@ -4453,6 +4473,99 @@ The list of params, which needs to be encrypted
 
 Default value: `['tunnels.*.private_key']`
 
+### <a name="common--openvox"></a>`common::openvox`
+
+Class for managing openvox installation and configuration
+
+#### Parameters
+
+The following parameters are available in the `common::openvox` class:
+
+* [`version`](#-common--openvox--version)
+* [`server`](#-common--openvox--server)
+* [`server_port`](#-common--openvox--server_port)
+* [`config_file`](#-common--openvox--config_file)
+* [`run_agent_as_noop`](#-common--openvox--run_agent_as_noop)
+* [`extra_main_settings`](#-common--openvox--extra_main_settings)
+* [`environment`](#-common--openvox--environment)
+* [`package_name`](#-common--openvox--package_name)
+* [`manage`](#-common--openvox--manage)
+* [`noop_value`](#-common--openvox--noop_value)
+
+##### <a name="-common--openvox--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+The openvox version to install. The default is the type Eit_types::Version.
+
+##### <a name="-common--openvox--server"></a>`server`
+
+Data type: `Stdlib::Host`
+
+The hostname or IP address of the openvox server.
+
+##### <a name="-common--openvox--server_port"></a>`server_port`
+
+Data type: `Stdlib::Port`
+
+The port number for the openvox server. Defaults to 443.
+
+Default value: `443`
+
+##### <a name="-common--openvox--config_file"></a>`config_file`
+
+Data type: `Stdlib::Absolutepath`
+
+The path to the openvox configuration file. Defaults to `$facts['openvox_config']`.
+
+Default value: `$facts['puppet_config']`
+
+##### <a name="-common--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
+
+Data type: `Boolean`
+
+Whether to run the openvox agent in noop mode. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--openvox--extra_main_settings"></a>`extra_main_settings`
+
+Data type: `Optional[Hash]`
+
+Optional hash of extra settings for the main openvox configuration. Defaults to undef.
+
+Default value: `undef`
+
+##### <a name="-common--openvox--environment"></a>`environment`
+
+Data type: `String`
+
+The openvox environment to use. Defaults to 'master'.
+
+Default value: `'v1.1.0'`
+
+##### <a name="-common--openvox--package_name"></a>`package_name`
+
+Data type: `String`
+
+
+
+##### <a name="-common--openvox--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-common--openvox--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `undef`
+
 ### <a name="common--package"></a>`common::package`
 
 Class for managing the installation and removal of packages
@@ -4518,126 +4631,6 @@ Array of package names that are required to be installed.
 
 Default value: `[]`
 
-### <a name="common--puppet"></a>`common::puppet`
-
-Class for managing Puppet installation and configuration
-
-#### Parameters
-
-The following parameters are available in the `common::puppet` class:
-
-* [`version`](#-common--puppet--version)
-* [`server`](#-common--puppet--server)
-* [`server_port`](#-common--puppet--server_port)
-* [`configure_agent`](#-common--puppet--configure_agent)
-* [`setup_agent`](#-common--puppet--setup_agent)
-* [`config_file`](#-common--puppet--config_file)
-* [`run_agent_as_noop`](#-common--puppet--run_agent_as_noop)
-* [`extra_main_settings`](#-common--puppet--extra_main_settings)
-* [`environment`](#-common--puppet--environment)
-* [`package_name`](#-common--puppet--package_name)
-
-##### <a name="-common--puppet--version"></a>`version`
-
-Data type: `Eit_types::Version`
-
-The Puppet version to install. The default is the type Eit_types::Version.
-
-##### <a name="-common--puppet--server"></a>`server`
-
-Data type: `Stdlib::Host`
-
-The hostname or IP address of the Puppet server.
-
-##### <a name="-common--puppet--server_port"></a>`server_port`
-
-Data type: `Stdlib::Port`
-
-The port number for the Puppet server. Defaults to 443.
-
-Default value: `443`
-
-##### <a name="-common--puppet--configure_agent"></a>`configure_agent`
-
-Data type: `Boolean`
-
-Whether to configure the Puppet agent. Defaults to true.
-
-Default value: `true`
-
-##### <a name="-common--puppet--setup_agent"></a>`setup_agent`
-
-Data type: `Boolean`
-
-Whether to set up the Puppet agent. Defaults to true.
-
-Default value: `true`
-
-##### <a name="-common--puppet--config_file"></a>`config_file`
-
-Data type: `Stdlib::Absolutepath`
-
-The path to the Puppet configuration file. Defaults to `$facts['puppet_config']`.
-
-Default value: `$facts['puppet_config']`
-
-##### <a name="-common--puppet--run_agent_as_noop"></a>`run_agent_as_noop`
-
-Data type: `Boolean`
-
-Whether to run the Puppet agent in noop mode. Defaults to true.
-
-Default value: `true`
-
-##### <a name="-common--puppet--extra_main_settings"></a>`extra_main_settings`
-
-Data type: `Optional[Hash]`
-
-Optional hash of extra settings for the main Puppet configuration. Defaults to undef.
-
-Default value: `undef`
-
-##### <a name="-common--puppet--environment"></a>`environment`
-
-Data type: `String`
-
-The Puppet environment to use. Defaults to 'master'.
-
-Default value: `'master'`
-
-##### <a name="-common--puppet--package_name"></a>`package_name`
-
-Data type: `String`
-
-
-
-### <a name="common--puppet--clientbucket"></a>`common::puppet::clientbucket`
-
-Class clientbucket contains settings for puppet cache cleanup
-
-#### Parameters
-
-The following parameters are available in the `common::puppet::clientbucket` class:
-
-* [`enable`](#-common--puppet--clientbucket--enable)
-* [`cleanup_hour`](#-common--puppet--clientbucket--cleanup_hour)
-
-##### <a name="-common--puppet--clientbucket--enable"></a>`enable`
-
-Data type: `Boolean`
-
-Enable or disable puppet cache cleanup. Defaults to true.
-
-Default value: `true`
-
-##### <a name="-common--puppet--clientbucket--cleanup_hour"></a>`cleanup_hour`
-
-Data type: `Integer[0,23]`
-
-The hour of the day (0-23) when cleanup should run. Defaults to 0.
-
-Default value: `0`
-
 ### <a name="common--repo"></a>`common::repo`
 
 ]] - Specific zypper repository configurations. Defaults to empty hash.
@@ -4672,7 +4665,7 @@ Default value: `true`
 
 ##### <a name="-common--repo--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional[Boolean] - Specify whether to perform actions in noop mode. Defaults to undef.
 
@@ -4870,7 +4863,7 @@ Default value: `{}`
 
 ##### <a name="-common--security--effective_group--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional parameter to set noop mode. Defaults to undef.
 
@@ -4897,7 +4890,7 @@ Default value: `true`
 
 ##### <a name="-common--security--pkexec--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional. If set, Puppet will not modify the file system but will simulate changes.
 
@@ -4991,24 +4984,6 @@ Default value: `[]`
 
 ### <a name="common--setup"></a>`common::setup`
 
-Class for setting up common configurations
-
-#### Parameters
-
-The following parameters are available in the `common::setup` class:
-
-* [`noop_value`](#-common--setup--noop_value)
-
-##### <a name="-common--setup--noop_value"></a>`noop_value`
-
-Data type: `Boolean`
-
-Boolean value to control noop execution mode. Defaults to false.
-
-Default value: `false`
-
-### <a name="common--setup--obmondo_admin"></a>`common::setup::obmondo_admin`
-
 Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
 
 Absolute path to the optional directory. Defaults to '/opt/obmondo'.
@@ -5017,18 +4992,74 @@ Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
 
 #### Parameters
 
+The following parameters are available in the `common::setup` class:
+
+* [`noop_value`](#-common--setup--noop_value)
+* [`$__conf_dir`](#-common--setup---__conf_dir)
+* [`$__opt_dir`](#-common--setup---__opt_dir)
+* [`$__bin_dir`](#-common--setup---__bin_dir)
+* [`__conf_dir`](#-common--setup--__conf_dir)
+* [`__opt_dir`](#-common--setup--__opt_dir)
+* [`__bin_dir`](#-common--setup--__bin_dir)
+
+##### <a name="-common--setup--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+Boolean value to control noop execution mode. Defaults to false.
+
+Default value: `undef`
+
+##### <a name="-common--setup---__conf_dir"></a>`$__conf_dir`
+
+
+
+##### <a name="-common--setup---__opt_dir"></a>`$__opt_dir`
+
+
+
+##### <a name="-common--setup---__bin_dir"></a>`$__bin_dir`
+
+
+
+##### <a name="-common--setup--__conf_dir"></a>`__conf_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/etc/obmondo'`
+
+##### <a name="-common--setup--__opt_dir"></a>`__opt_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/opt/obmondo'`
+
+##### <a name="-common--setup--__bin_dir"></a>`__bin_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `'/opt/obmondo/bin'`
+
+### <a name="common--setup--obmondo_admin"></a>`common::setup::obmondo_admin`
+
+Class for setting up obmondo-admin account configurations
+
+#### Parameters
+
 The following parameters are available in the `common::setup::obmondo_admin` class:
 
 * [`manager_pubkeys`](#-common--setup--obmondo_admin--manager_pubkeys)
 * [`sre_pubkeys`](#-common--setup--obmondo_admin--sre_pubkeys)
 * [`allow_sre`](#-common--setup--obmondo_admin--allow_sre)
-* [`$__conf_dir`](#-common--setup--obmondo_admin---__conf_dir)
-* [`$__opt_dir`](#-common--setup--obmondo_admin---__opt_dir)
-* [`$__bin_dir`](#-common--setup--obmondo_admin---__bin_dir)
 * [`noop_value`](#-common--setup--obmondo_admin--noop_value)
-* [`__conf_dir`](#-common--setup--obmondo_admin--__conf_dir)
-* [`__opt_dir`](#-common--setup--obmondo_admin--__opt_dir)
-* [`__bin_dir`](#-common--setup--obmondo_admin--__bin_dir)
+* [`manage`](#-common--setup--obmondo_admin--manage)
+* [`enable`](#-common--setup--obmondo_admin--enable)
 
 ##### <a name="-common--setup--obmondo_admin--manager_pubkeys"></a>`manager_pubkeys`
 
@@ -5054,49 +5085,29 @@ Boolean value to allow SRE to login. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--setup--obmondo_admin---__conf_dir"></a>`$__conf_dir`
-
-
-
-##### <a name="-common--setup--obmondo_admin---__opt_dir"></a>`$__opt_dir`
-
-
-
-##### <a name="-common--setup--obmondo_admin---__bin_dir"></a>`$__bin_dir`
-
-
-
 ##### <a name="-common--setup--obmondo_admin--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 Boolean value to control noop execution mode. Defaults to false.
 
+Default value: `undef`
+
+##### <a name="-common--setup--obmondo_admin--manage"></a>`manage`
+
+Data type: `Boolean`
+
+
+
 Default value: `false`
 
-##### <a name="-common--setup--obmondo_admin--__conf_dir"></a>`__conf_dir`
+##### <a name="-common--setup--obmondo_admin--enable"></a>`enable`
 
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `'/etc/obmondo'`
-
-##### <a name="-common--setup--obmondo_admin--__opt_dir"></a>`__opt_dir`
-
-Data type: `Stdlib::Absolutepath`
+Data type: `Boolean`
 
 
 
-Default value: `'/opt/obmondo'`
-
-##### <a name="-common--setup--obmondo_admin--__bin_dir"></a>`__bin_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `'/opt/obmondo/bin'`
+Default value: `false`
 
 ### <a name="common--software"></a>`common::software`
 
@@ -5197,7 +5208,7 @@ Default value: `undef`
 
 ##### <a name="-common--software--cloudamize--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional parameter for noop mode.
 
@@ -5233,7 +5244,7 @@ Default value: `false`
 
 ##### <a name="-common--software--dependencyagent--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional parameter for noop mode value. Defaults to undef.
 
@@ -5269,7 +5280,7 @@ Default value: `false`
 
 ##### <a name="-common--software--fwupd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional parameter to specify noop mode value.
 
@@ -5305,7 +5316,7 @@ Default value: `false`
 
 ##### <a name="-common--software--insights--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop value. Defaults to undef.
 
@@ -5342,7 +5353,7 @@ Default value: `false`
 
 ##### <a name="-common--software--iptables_api--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to specify noop mode. Defaults to undef.
 
@@ -5389,7 +5400,7 @@ Default value: `false`
 
 ##### <a name="-common--software--microsoft_mde--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional value for noop mode. Defaults to undef.
 
@@ -5418,6 +5429,51 @@ Data type: `Optional[Eit_Files::Source]`
 Optional onboard configuration source. Defaults to undef.
 
 Default value: `undef`
+
+### <a name="common--software--miniforge"></a>`common::software::miniforge`
+
+Class for managing the Miniforge software
+
+#### Parameters
+
+The following parameters are available in the `common::software::miniforge` class:
+
+* [`manage`](#-common--software--miniforge--manage)
+* [`enable`](#-common--software--miniforge--enable)
+* [`version`](#-common--software--miniforge--version)
+* [`install_dir`](#-common--software--miniforge--install_dir)
+
+##### <a name="-common--software--miniforge--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean parameter to control management of Miniforge. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--miniforge--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to control whether Miniforge is installed or not. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--software--miniforge--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+Eit_types::Version parameter to control version of Miniforge3.
+
+Default value: `'25.9.1-0'`
+
+##### <a name="-common--software--miniforge--install_dir"></a>`install_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Stdlib::Absolutepath parameter to control installation directory of Miniforge3.
+
+Default value: `'/opt/miniforge'`
 
 ### <a name="common--software--msftlinuxpatchautoassess"></a>`common::software::msftlinuxpatchautoassess`
 
@@ -5476,9 +5532,54 @@ Default value: `false`
 
 ##### <a name="-common--software--nvidia_driver--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop mode. Defaults to undef.
+
+Default value: `undef`
+
+### <a name="common--software--pycharm"></a>`common::software::pycharm`
+
+Class for managing the PyCharm software
+
+#### Parameters
+
+The following parameters are available in the `common::software::pycharm` class:
+
+* [`manage`](#-common--software--pycharm--manage)
+* [`enable`](#-common--software--pycharm--enable)
+* [`version`](#-common--software--pycharm--version)
+* [`noop_value`](#-common--software--pycharm--noop_value)
+
+##### <a name="-common--software--pycharm--manage"></a>`manage`
+
+Data type: `Boolean`
+
+Boolean parameter to control management of PyCharm. Defaults to true.
+
+Default value: `false`
+
+##### <a name="-common--software--pycharm--enable"></a>`enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable PyCharm. Defaults to true.
+
+Default value: `true`
+
+##### <a name="-common--software--pycharm--version"></a>`version`
+
+Data type: `Eit_types::Version`
+
+String parameter to control version of PyCharm.
+
+Default value: `undef`
+
+##### <a name="-common--software--pycharm--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+Optional boolean to specify noop mode value.
 
 Default value: `undef`
 
@@ -5512,7 +5613,7 @@ Default value: `false`
 
 ##### <a name="-common--software--rubrik--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to specify noop mode value.
 
@@ -5527,48 +5628,66 @@ Class for managing the Rustdesk software
 The following parameters are available in the `common::software::rustdesk` class:
 
 * [`manage`](#-common--software--rustdesk--manage)
-* [`enable`](#-common--software--rustdesk--enable)
-* [`version`](#-common--software--rustdesk--version)
-* [`noop_value`](#-common--software--rustdesk--noop_value)
-* [`dependencies`](#-common--software--rustdesk--dependencies)
+* [`client_enable`](#-common--software--rustdesk--client_enable)
+* [`client_version`](#-common--software--rustdesk--client_version)
+* [`client_extra_dependencies`](#-common--software--rustdesk--client_extra_dependencies)
+* [`server_enable`](#-common--software--rustdesk--server_enable)
+* [`server_version`](#-common--software--rustdesk--server_version)
+* [`server_extra_dependencies`](#-common--software--rustdesk--server_extra_dependencies)
 
 ##### <a name="-common--software--rustdesk--manage"></a>`manage`
 
 Data type: `Boolean`
 
-Boolean parameter to control management of the Rustdesk. Defaults to false.
+Boolean parameter to control management of Rustdesk module. Defaults to false.
 
-Default value: `true`
+Default value: `false`
 
-##### <a name="-common--software--rustdesk--enable"></a>`enable`
+##### <a name="-common--software--rustdesk--client_enable"></a>`client_enable`
 
 Data type: `Boolean`
 
-Boolean parameter to enable or disable the Rustdesk. Defaults to false.
+Boolean parameter to enable or disable the Rustdesk client. Defaults to false.
 
-Default value: `true`
+Default value: `false`
 
-##### <a name="-common--software--rustdesk--version"></a>`version`
+##### <a name="-common--software--rustdesk--client_version"></a>`client_version`
 
 Data type: `Eit_types::Version`
 
-String parameter to control version of the Rustdesk.
+SemVer parameter to control Rustdesk client version. Defaults to 1.4.3.
 
-Default value: `undef`
+Default value: `'1.4.3'`
 
-##### <a name="-common--software--rustdesk--noop_value"></a>`noop_value`
-
-Data type: `Optional[Boolean]`
-
-Optional boolean to specify noop mode value.
-
-Default value: `undef`
-
-##### <a name="-common--software--rustdesk--dependencies"></a>`dependencies`
+##### <a name="-common--software--rustdesk--client_extra_dependencies"></a>`client_extra_dependencies`
 
 Data type: `Array[String]`
 
+Array[String] parameter to install OS specific dependencies. Defaults to [].
 
+Default value: `[]`
+
+##### <a name="-common--software--rustdesk--server_enable"></a>`server_enable`
+
+Data type: `Boolean`
+
+Boolean parameter to enable or disable the Rustdesk server. Defaults to false.
+
+Default value: `false`
+
+##### <a name="-common--software--rustdesk--server_version"></a>`server_version`
+
+Data type: `Eit_types::Version`
+
+SemVer parameter to control Rustdesk server version. Default to 1.7.1.
+
+Default value: `'1.7.1'`
+
+##### <a name="-common--software--rustdesk--server_extra_dependencies"></a>`server_extra_dependencies`
+
+Data type: `Array[String]`
+
+Array[String] parameter to install OS specific dependencies. Defaults to [].
 
 Default value: `[]`
 
@@ -5596,7 +5715,7 @@ Default value: `false`
 
 ##### <a name="-common--software--teleport--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop mode. Defaults to undef.
 
@@ -5683,11 +5802,11 @@ Default value: `{}`
 
 ##### <a name="-common--software--vncserver--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop mode. Defaults to false.
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-common--software--vncserver--systemd_service"></a>`systemd_service`
 
@@ -5727,7 +5846,7 @@ Default value: `false`
 
 ##### <a name="-common--software--vscode--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop mode. Defaults to undef.
 
@@ -5770,7 +5889,7 @@ Default value: `false`
 
 ##### <a name="-common--software--walinuxagent--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for noop mode. Defaults to undef.
 
@@ -6089,6 +6208,10 @@ The following parameters are available in the `common::storage::zfs` class:
 * [`pool_names`](#-common--storage--zfs--pool_names)
 * [`remove_sysstat_cron`](#-common--storage--zfs--remove_sysstat_cron)
 * [`scrub`](#-common--storage--zfs--scrub)
+* [`allow_sync_from`](#-common--storage--zfs--allow_sync_from)
+* [`pools`](#-common--storage--zfs--pools)
+* [`templates`](#-common--storage--zfs--templates)
+* [`replications`](#-common--storage--zfs--replications)
 
 ##### <a name="-common--storage--zfs--enable"></a>`enable`
 
@@ -6100,11 +6223,7 @@ Default value: `false`
 
 ##### <a name="-common--storage--zfs--pool_names"></a>`pool_names`
 
-Data type: `Array[Eit_types::SimpleString]`
-
 List of pool names for ZFS pools. Defaults to an empty array.
-
-Default value: `[]`
 
 ##### <a name="-common--storage--zfs--remove_sysstat_cron"></a>`remove_sysstat_cron`
 
@@ -6121,6 +6240,38 @@ Data type: `Eit_types::Common::Storage::Zfs::Scrub_interval`
 Interval for ZFS scrubbing. Defaults to 'monthly'.
 
 Default value: `'monthly'`
+
+##### <a name="-common--storage--zfs--allow_sync_from"></a>`allow_sync_from`
+
+Data type: `Array[String]`
+
+
+
+Default value: `[]`
+
+##### <a name="-common--storage--zfs--pools"></a>`pools`
+
+Data type: `Sanoid::Pools`
+
+
+
+Default value: `{}`
+
+##### <a name="-common--storage--zfs--templates"></a>`templates`
+
+Data type: `Optional[Sanoid::Templates]`
+
+
+
+Default value: `undef`
+
+##### <a name="-common--storage--zfs--replications"></a>`replications`
+
+Data type: `Sanoid::Syncoid::Replications`
+
+
+
+Default value: `{}`
 
 ### <a name="common--system"></a>`common::system`
 
@@ -6263,6 +6414,7 @@ The following parameters are available in the `common::system::authentication` c
 * [`purge_ubuntu_user`](#-common--system--authentication--purge_ubuntu_user)
 * [`purge_users`](#-common--system--authentication--purge_users)
 * [`protected_users`](#-common--system--authentication--protected_users)
+* [`manage_sudo`](#-common--system--authentication--manage_sudo)
 
 ##### <a name="-common--system--authentication--allowed_users"></a>`allowed_users`
 
@@ -6333,6 +6485,12 @@ Data type: `Array[Eit_types::User]`
 Array of type Eit_types::User specifying protected users. Defaults to an empty array.
 
 Default value: `[]`
+
+##### <a name="-common--system--authentication--manage_sudo"></a>`manage_sudo`
+
+Data type: `Boolean`
+
+
 
 ### <a name="common--system--authentication--kerberos"></a>`common::system::authentication::kerberos`
 
@@ -6448,7 +6606,7 @@ Default value: `false`
 
 ##### <a name="-common--system--authentication--kerberos--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional value for noop configuration. Defaults to undef.
 
@@ -6772,7 +6930,7 @@ Default value: `{}`
 
 ##### <a name="-common--system--authentication--sssd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean for no-op mode. Defaults to undef.
 
@@ -6814,7 +6972,7 @@ Data type: `Boolean`
 
 Boolean - If true, will manage the authentication sudo settings. Defaults to true.
 
-Default value: `true`
+Default value: `$common::system::authentication::manage_sudo`
 
 ##### <a name="-common--system--authentication--sudo--purge"></a>`purge`
 
@@ -6961,7 +7119,7 @@ Default value: `false`
 
 ##### <a name="-common--system--dns--noop_value"></a>`noop_value`
 
-Data type: `Variant[Undef, Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Value used for noop operations. Defaults to undef.
 
@@ -7226,7 +7384,7 @@ Default value: `true`
 
 ##### <a name="-common--system--motd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to specify noop mode for file resources. Defaults to undef.
 
@@ -7568,7 +7726,7 @@ Data type: `Boolean`
 
 Enable SELinux. Defaults to the value of $facts['selinux'].
 
-Default value: `$facts['selinux']`
+Default value: `$facts['os']['selinux']['enabled']`
 
 ##### <a name="-common--system--selinux--enforce"></a>`enforce`
 
@@ -8014,7 +8172,7 @@ Default value: `[]`
 
 ##### <a name="-common--system--time--ntp--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional parameter for noop mode. Defaults to undef.
 
@@ -8044,7 +8202,7 @@ Data type: `Boolean`
 
 Boolean determines if the system updates service is managed. Defaults to true.
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-common--system--updates--enable"></a>`enable`
 
@@ -8052,7 +8210,7 @@ Data type: `Boolean`
 
 Boolean indicating whether automatic updates are enabled. Defaults to true.
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-common--system--updates--snapshot"></a>`snapshot`
 
@@ -8104,11 +8262,11 @@ Default value: `'ops@obmondo.com'`
 
 ##### <a name="-common--system--updates--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional Boolean to perform no-op runs for testing. Defaults to false.
 
-Default value: `false`
+Default value: `undef`
 
 ### <a name="common--virtualization"></a>`common::virtualization`
 
@@ -8622,7 +8780,7 @@ Default value: `undef`
 
 ##### <a name="-common--services--systemd--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional. The noop setting for resource types. Defaults to undef.
 
@@ -8640,7 +8798,7 @@ The following parameters are available in the `common::system::selinux::module` 
 
 ##### <a name="-common--system--selinux--module--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional boolean to control noop behavior, defaults to undef.
 
@@ -8775,7 +8933,7 @@ Default value: `undef`
 
 ##### <a name="-common--systemd--timer--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Optional noop value to disable actual execution. Defaults to undef.
 

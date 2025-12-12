@@ -72,11 +72,11 @@ Default value: `$::obmondo_monitoring_status`
 
 ##### <a name="-monitor--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 No-operation mode value. Defaults to false.
 
-Default value: `false`
+Default value: `undef`
 
 ### <a name="monitor--domains--health"></a>`monitor::domains::health`
 
@@ -336,6 +336,7 @@ The following parameters are available in the `monitor::system::disk::usage` cla
 * [`disable`](#-monitor--system--disk--usage--disable)
 * [`labels`](#-monitor--system--disk--usage--labels)
 * [`override`](#-monitor--system--disk--usage--override)
+* [`ignore_mountpoints`](#-monitor--system--disk--usage--ignore_mountpoints)
 
 ##### <a name="-monitor--system--disk--usage--enable"></a>`enable`
 
@@ -376,6 +377,14 @@ Data type: `Monitor::Override`
 Override settings for the monitor. Defaults to undef.
 
 Default value: `undef`
+
+##### <a name="-monitor--system--disk--usage--ignore_mountpoints"></a>`ignore_mountpoints`
+
+Data type: `Array[Stdlib::Unixpath]`
+
+
+
+Default value: `[]`
 
 ### <a name="monitor--system--dns"></a>`monitor::system::dns`
 
@@ -996,9 +1005,9 @@ Default value: `[]`
 
 ##### <a name="-monitor--system--service--sssd--auth--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
-Boolean for noop mode value, defaults to $monitor::noop_value..
+The noop value for the monitor. Defaults to $monitor::noop_value.
 
 Default value: `$monitor::noop_value`
 
@@ -1062,7 +1071,7 @@ Default value: `true`
 
 ##### <a name="-monitor--alert--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The noop value used in monitoring. Defaults to $monitor::noop_value.
 
@@ -1145,7 +1154,7 @@ Default value: `true`
 
 ##### <a name="-monitor--threshold--noop_value"></a>`noop_value`
 
-Data type: `Boolean`
+Data type: `Eit_types::Noop_Value`
 
 The noop value for the monitor. Defaults to $monitor::noop_value.
 
