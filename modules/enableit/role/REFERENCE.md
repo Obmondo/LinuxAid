@@ -1740,9 +1740,9 @@ Default value: `true`
 
 Data type: `Boolean`
 
-Whether to create an admin user. Defaults to true.
+Whether to create an admin user. Defaults to false.
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-role--db--mongodb--directory_per_db"></a>`directory_per_db`
 
@@ -1836,9 +1836,9 @@ Default value: `['root']`
 
 Data type: `Boolean`
 
-Whether to store credentials for the admin user. Defaults to true.
+Whether to store credentials for the admin user. Defaults to false.
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-role--db--mongodb--log_file"></a>`log_file`
 
@@ -2780,7 +2780,7 @@ Default value: `'u+rwX,g-r,g+wX'`
 
 ##### <a name="-role--mail--postfix--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 A value for no-operation configurations. Defaults to undef.
 
@@ -4584,7 +4584,7 @@ Default value: `undef`
 
 ##### <a name="-role--projectmanagement--subversion--noop_value"></a>`noop_value`
 
-Data type: `Optional[Boolean]`
+Data type: `Eit_types::Noop_Value`
 
 Whether to enable noop mode. Defaults to false.
 
