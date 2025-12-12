@@ -8,7 +8,12 @@
 #
 # @param server The HTTPS URL of the Netbird server. Defaults to 'https://netbird.obmondo.com:443'.
 #
-# @param version The Netbird version to install. The default is the type Eit_types::Version.
+# @param version
+#   The Netbird version to install. The default is the type Eit_types::Version.
+#   Link to netbird client releases page: https://github.com/netbirdio/netbird/releases
+#
+# @example Valid Netbird client version  
+#   version = "0.59.3"
 #
 # @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
 #
