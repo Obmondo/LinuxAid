@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 4.2.2
+
+PDK update
+
 ## Release 4.2.1
 
 **Bugfix**

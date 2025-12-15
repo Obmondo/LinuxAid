@@ -1,6 +1,6 @@
 {
   "name": "jcpunk-vnc",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "author": "Pat Riehecky",
   "summary": "Manage tigervnc with systemd-logind support",
   "license": "Apache-2.0",
@@ -74,7 +74,7 @@
     "tigervnc",
     "vnc"
   ],
-  "pdk-version": "3.3.0",
-  "template-url": "pdk-default#3.3.0",
-  "template-ref": "tags/3.3.0-0-g5d17ec1"
+  "pdk-version": "3.5.1 (g2719cbc)",
+  "template-url": "pdk-default#3.5.1.2",
+  "template-ref": "tags/3.5.1.2-0-gfa96b82"
 }
