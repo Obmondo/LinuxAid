@@ -16,7 +16,6 @@ define eit_users::user (
   Array[Eit_types::Ssh_pubkey]        $ssh_authorized_keys = [],
   Eit_types::Noop_Value               $noop_value          = undef,
 ) {
-
   # Make sure we don't try to set the homedir of root to `/home/root`, unless
   # the $home parameter is set
   $_homedir = pick($home, $name ? {
