@@ -99,13 +99,14 @@ class common::monitor::exporter::node (
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 
   $_checksum = lookup('common::monitor::exporter::node::checksums')
+  $install_method = lookup('common::monitor::prometheus::install_method')
 
   File {
     noop => $noop_value,
   }
 
   # NOTE: The underlying packages only works with systemd
-  if $facts['init_system'] == 'systemd' {
+  if $facts['service_provider'] == 'systemd' {
     include common::monitor::exporter::node::smartmon
     include common::monitor::exporter::node::topprocesses
     include common::monitor::exporter::node::lsof
@@ -158,10 +159,16 @@ class common::monitor::exporter::node (
     if $zoneinfo { 'zoneinfo' },
   ].delete_undef_values
 
+  $_init_style = $enable ? {
+    true    => $facts['init_system'],
+    default => 'none'
+  }
+
   class { 'prometheus::node_exporter':
     package_name      => 'obmondo-node-exporter',
     version           => $version,
-    install_method    => $common::monitor::prometheus::install_method,
+    install_method    => $install_method,
+    init_style        => $_init_style,
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
