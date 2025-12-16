@@ -104,8 +104,6 @@ class common::monitor::exporter::node (
     noop => $noop_value,
   }
 
-  include common::monitor::prometheus
-
   # NOTE: The underlying packages only works with systemd
   if $facts['init_system'] == 'systemd' {
     include common::monitor::exporter::node::smartmon
@@ -161,10 +159,12 @@ class common::monitor::exporter::node (
   ].delete_undef_values
 
   class { 'prometheus::node_exporter':
+    package_name      => 'obmondo-node-exporter',
     version           => $version,
-    install_method    => 'url',
+    install_method    => $common::monitor::prometheus::install_method,
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
+    package_ensure    => ensure_latest($enable),
     user              => 'node_exporter',
     group             => 'node_exporter',
     export_scrape_job => ! $enable,

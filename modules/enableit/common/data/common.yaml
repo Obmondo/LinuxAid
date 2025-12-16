@@ -495,15 +495,15 @@ common::system::updates::enable: true
 common::setup::obmondo_admin::manage: false
 common::setup::obmondo_admin::enable: false
 
-prometheus::bin_dir: /opt/obmondo/bin
-prometheus::install_method: package
-
+## Software
 common::software::vncserver::config_defaults:
   session: "gnome"
   geometry: "1920x1080"
 
+## Mail
 common::mail::myhostname: "%{facts.networking.fqdn}"
 common::mail::mydomain: "%{facts.networking.domain}"
 
+## DNS
 common::system::dns::listen_address:
   - "192.168.0.1"

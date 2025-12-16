@@ -41,9 +41,11 @@ hierarchy:
   - name: "OS kernel"
     path: "%{kernel}.yaml"
 
+  - name: "OS Architecture"
+    path: "architectures/%{facts.os.architecture}.yaml"
+
   - name: "Subscription"
-    paths:
-      - "subscriptions/%{::subscription}.yaml"
+    path: "subscriptions/%{::subscription}.yaml"
 
   - name: "common"
     path: "common.yaml"

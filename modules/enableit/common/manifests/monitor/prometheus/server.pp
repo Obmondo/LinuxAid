@@ -11,10 +11,10 @@
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
 class common::monitor::prometheus::server (
-  Eit_types::Version   $version,
-  Array[Hash]          $collect_scrape_jobs,
-  Stdlib::Absolutepath $config_dir,
-  Eit_types::IPPort    $listen_address,
+  Eit_types::Version    $version,
+  Array[Hash]           $collect_scrape_jobs,
+  Stdlib::Absolutepath  $config_dir,
+  Eit_types::IPPort     $listen_address,
 
   Boolean               $enable     = $common::monitor::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
@@ -57,7 +57,7 @@ class common::monitor::prometheus::server (
     include_default_scrape_configs => false,
     config_dir                     => $config_dir,
     manage_config_dir              => true,
-    install_method                 => 'package',
+    install_method                 => $common::monitor::prometheus::install_method,
     restart_on_change              => true,
     package_name                   => 'obmondo-prometheus',
     bin_dir                        => '/opt/obmondo/bin',

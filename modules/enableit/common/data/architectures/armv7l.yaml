@@ -4,6 +4,7 @@ common::openvox::version: "7.37.2"
 common::openvox::linuxaid_cli::checksums:
   1.0.2: "0c3785eab3c0af5d042146017721f77ebcd905d6308a307537e64cb4201814ec"
 
+common::monitor::prometheus::install_method: 'url'
 common::monitor::prometheus::env_file_path: "/etc/default"
 
 common::logging::manage: false
