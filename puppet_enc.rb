@@ -51,6 +51,10 @@ subscription = if TESTING
                  end
                end
 
+puts "Hello friends this is subscription"
+puts subscription
+puts ""
+
 tag_keys = if TESTING
              ['tag1']
            else
