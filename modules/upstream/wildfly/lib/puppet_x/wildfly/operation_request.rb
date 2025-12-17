@@ -23,6 +23,8 @@ module PuppetX
 
         response = exec(command, :ignore_failed_outcome => true)
 
+        return response[variable].nil? if value == 'undefined'
+
         condition = if operator == 'has'
                       "#{response[variable].inspect}.include?(#{value})"
                     else

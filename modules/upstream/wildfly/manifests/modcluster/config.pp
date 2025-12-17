@@ -1,19 +1,19 @@
 #
 # Configures modcluster subsystem
 #
-define wildfly::modcluster::config(
-  $advertise_socket = 'modcluster',
-  $connector = 'ajp',
-  $type = 'busyness',
-  $excluded_contexts = undef,
-  $balancer = undef,
+define wildfly::modcluster::config (
+  $advertise_socket     = 'modcluster',
+  $connector            = 'ajp',
+  $type                 = 'busyness',
+  $excluded_contexts    = undef,
+  $balancer             = undef,
   $load_balancing_group = undef,
-  $proxy_list = undef,
-  $proxies = undef,
-  $proxy_url = undef,
-  $sticky_session = undef,
-  $target_profile = undef) {
-
+  $proxy_list           = undef,
+  $proxies              = undef,
+  $proxy_url            = undef,
+  $sticky_session       = undef,
+  $target_profile       = undef,
+) {
   $config = {
     'advertise-socket' => $advertise_socket,
     'balancer' => $balancer,
@@ -30,17 +30,16 @@ define wildfly::modcluster::config(
     content => $config,
     profile => $target_profile,
   }
-  ->
-  wildfly::resource { '/subsystem=modcluster/mod-cluster-config=configuration/dynamic-load-provider=configuration':
+
+  -> wildfly::resource { '/subsystem=modcluster/mod-cluster-config=configuration/dynamic-load-provider=configuration':
     content => {},
     profile => $target_profile,
   }
-  ->
-  wildfly::resource { "/subsystem=modcluster/mod-cluster-config=configuration/dynamic-load-provider=configuration/load-metric=${type}":
+
+  -> wildfly::resource { "/subsystem=modcluster/mod-cluster-config=configuration/dynamic-load-provider=configuration/load-metric=${type}":
     content => {
-      'type' => $type
+      'type' => $type,
     },
     profile => $target_profile,
   }
-
 }

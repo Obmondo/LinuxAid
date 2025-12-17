@@ -1,6 +1,9 @@
 #
-define wildfly::security::group_role_mapping($role, $group = $title, $realm = undef) {
-
+define wildfly::security::group_role_mapping (
+  $role,
+  $group = $title,
+  $realm = undef,
+) {
   $_group = upcase($group)
 
   wildfly::resource { "/core-service=management/access=authorization/role-mapping=${role}/include=group-${_group}":
@@ -10,5 +13,4 @@ define wildfly::security::group_role_mapping($role, $group = $title, $realm = un
       'type'  => 'GROUP',
     },
   }
-
 }

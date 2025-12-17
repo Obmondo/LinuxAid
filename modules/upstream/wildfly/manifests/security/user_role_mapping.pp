@@ -1,6 +1,9 @@
 #
-define wildfly::security::user_role_mapping($role, $username = $title, $realm = undef) {
-
+define wildfly::security::user_role_mapping (
+  $role,
+  $username = $title,
+  $realm    = undef,
+) {
   $_username = upcase($username)
 
   wildfly::resource { "/core-service=management/access=authorization/role-mapping=${role}/include=user-${_username}":
@@ -10,5 +13,4 @@ define wildfly::security::user_role_mapping($role, $username = $title, $realm = 
       'type'  => 'USER',
     },
   }
-
 }

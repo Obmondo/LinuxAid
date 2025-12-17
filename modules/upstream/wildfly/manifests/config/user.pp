@@ -1,10 +1,12 @@
 # Generic Wildfly user management.
 #
-define wildfly::config::user(
-  $password,
-  $file_name,
+# @param password User password.
+# @param file_name Name of config file.
+#
+define wildfly::config::user (
+  String $password,
+  String $file_name,
 ) {
-
   $user_info = split($title, ':')
   $username = $user_info[0]
   $realm = $user_info[1]

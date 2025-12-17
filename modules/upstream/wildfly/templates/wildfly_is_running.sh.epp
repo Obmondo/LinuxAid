@@ -1,0 +1,9 @@
+#!/bin/bash
+
+wildfly_pid=$(pgrep -f "<%= $wildfly::dirname %>" | head -n 1)
+
+if [ -z "$wildfly_pid" ]; then
+  echo "wildfly_is_running="
+else
+  echo "wildfly_is_running=1"
+fi

@@ -1,3 +1,5 @@
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:wildfly_cli) do
   desc 'Executes JBoss-CLI commmands'
 
@@ -7,12 +9,22 @@ Puppet::Type.newtype(:wildfly_cli) do
     desc 'The actual commmand to execute'
   end
 
+  newparam(:skip_absent, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc 'If this parameter is set, then CLI command will only run if resource is present'
+    defaultto false
+  end
+
   newparam(:unless) do
     desc 'If this parameter is set, then CLI command will only run if this command returns true'
   end
 
   newparam(:onlyif) do
     desc 'If this parameter is set, then CLI command will only run if this command returns false'
+  end
+
+  newparam(:refreshonly, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+    desc 'If this parameter is set, then CLI command will only run if the resource was notified'
+    defaultto false
   end
 
   newparam(:username) do
@@ -33,6 +45,11 @@ Puppet::Type.newtype(:wildfly_cli) do
     defaultto 9990
   end
 
+  newparam(:secure) do
+    desc 'Use TLS to connect with the management API'
+    defaultto false
+  end
+
   newproperty(:executed) do
     desc 'Whether the command should be executed or not'
 
@@ -43,7 +60,14 @@ Puppet::Type.newtype(:wildfly_cli) do
     end
 
     def sync
-      provider.exec(@resource[:command])
+      provider.exec_command unless resource.refreshonly?
+    end
+  end
+
+  def refresh
+    if refreshonly? and provider.should_execute?
+      Puppet.debug 'Executing wildfly_cli because resource received a refresh signal and refreshonly is true'
+      provider.exec_command
     end
   end
 end

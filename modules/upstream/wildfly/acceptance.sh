@@ -9,3 +9,5 @@ do
     PUPPET_INSTALL_TYPE="agent" TEST_profile="${TEST_profile}" BEAKER_set="${BOX}" bundle exec rake beaker
   done
 done
+
+BEAKER_TESTMODE=agent BEAKER_set=centos7m_centos7a PUPPET_INSTALL_TYPE=agent bundle exec rake beaker

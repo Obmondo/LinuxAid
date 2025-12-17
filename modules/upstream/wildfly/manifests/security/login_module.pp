@@ -21,14 +21,17 @@
 #    name2: value2
 #  ```
 #
-define wildfly::security::login_module($domain, $code, $flag, $module_options={}) {
-
-  wildfly::resource { "/subsystem=security/security-domain=${domain}/authentication=classic/login-module=${code}":
+define wildfly::security::login_module (
+  String                                                  $code,
+  String                                                  $domain_name    = $title,
+  Enum['requisite', 'required', 'sufficient', 'optional'] $flag           = 'required',
+  Hash                                                    $module_options = {},
+) {
+  wildfly::resource { "/subsystem=security/security-domain=${domain_name}/authentication=classic/login-module=${code}":
     content => {
       'code'           => $code,
       'flag'           => $flag,
       'module-options' => $module_options,
     },
   }
-
 }

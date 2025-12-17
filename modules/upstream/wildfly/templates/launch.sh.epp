@@ -1,0 +1,15 @@
+#!/bin/bash
+# THIS FILE IS MANAGED BY PUPPET
+
+if [ "x$WILDFLY_HOME" = "x" ]; then
+    WILDFLY_HOME="<%= $wildfly::dirname %>"
+fi
+
+mode="$1"
+shift
+
+if [[ "$mode" == "domain" ]]; then
+    exec $WILDFLY_HOME/bin/domain.sh -c "$@"
+else
+    exec $WILDFLY_HOME/bin/standalone.sh -c "$@"
+fi

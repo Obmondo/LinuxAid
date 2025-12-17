@@ -19,24 +19,22 @@
 #      }
 #    }
 #
-define wildfly::security::domain(
-  $domain_name   = $title,
-  $login_modules = {}
+define wildfly::security::domain (
+  String $domain_name   = $title,
+  Hash   $login_modules = {},
 ) {
-
   wildfly::resource { "/subsystem=security/security-domain=${domain_name}":
     content => {
       'cache-type' => 'default',
     },
-  } ->
+  }
 
-  wildfly::resource { "/subsystem=security/security-domain=${domain_name}/authentication=classic":
+  -> wildfly::resource { "/subsystem=security/security-domain=${domain_name}/authentication=classic":
     content => {},
   }
 
   create_resources('wildfly::security::login_module', $login_modules)
 
-  Wildfly::Resource[ "/subsystem=security/security-domain=${domain_name}/authentication=classic"] ->
-    Wildfly::Security::Login_module<|tag == 'wildfly'|>
-
+  Wildfly::Resource["/subsystem=security/security-domain=${domain_name}/authentication=classic"]
+  -> Wildfly::Security::Login_module<|tag == 'wildfly'|>
 }

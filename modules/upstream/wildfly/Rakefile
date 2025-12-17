@@ -1,45 +1,44 @@
-require 'rubygems'
-require 'puppetlabs_spec_helper/rake_tasks'
-require 'puppet-lint/tasks/puppet-lint'
-require 'puppet-syntax/tasks/puppet-syntax'
-require 'puppet-strings/tasks'
-require 'pathname'
-require 'puppet_blacksmith/rake_tasks'
-require 'rake'
-require 'rspec/core/rake_task'
+# Managed by modulesync - DO NOT EDIT
+# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
-desc "Run acceptance tests"
-RSpec::Core::RakeTask.new(:acceptance) do |t|
-  t.pattern = 'spec/acceptance'
-end
-
-#task :spec => :test
-
-desc "Run the tests"
-RSpec::Core::RakeTask.new(:test) do |t|
-  t.rspec_opts = ['--color', '-f d']
-  t.pattern = 'spec/classes/*_spec.rb'
-end
-
-PuppetLint.configuration.send("disable_80chars")
-PuppetLint.configuration.send("disable_class_inherits_from_params_class")
-PuppetLint.configuration.send("disable_variable_scope")
-PuppetLint.configuration.send("disable_case_without_default")
-
-exclude_paths = [
-  "pkg/**/*",
-  "vendor/**/*",
-  "spec/**/*",
-]
-PuppetLint.configuration.ignore_paths = exclude_paths
-PuppetSyntax.exclude_paths = exclude_paths
-
+# Attempt to load voxpupuli-test (which pulls in puppetlabs_spec_helper),
+# otherwise attempt to load it directly.
 begin
-  require 'rubocop/rake_task'
-  desc 'Run RuboCop on the lib directory'
-  Rubocop::RakeTask.new(:rubocop) do |task|
-    task.patterns = ['lib/**/*.rb']
-    task.fail_on_error = true
+  require 'voxpupuli/test/rake'
+rescue LoadError
+  begin
+    require 'puppetlabs_spec_helper/rake_tasks'
+  rescue LoadError
   end
-rescue LoadError, NameError
 end
+
+# load optional tasks for acceptance
+# only available if gem group releases is installed
+begin
+  require 'voxpupuli/acceptance/rake'
+rescue LoadError
+end
+
+# load optional tasks for releases
+# only available if gem group releases is installed
+begin
+  require 'voxpupuli/release/rake_tasks'
+rescue LoadError
+  # voxpupuli-release not present
+else
+  GCGConfig.user = 'voxpupuli'
+  GCGConfig.project = 'puppet-wildfly'
+end
+
+desc "Run main 'test' task and report merged results to coveralls"
+task test_with_coveralls: [:test] do
+  if Dir.exist?(File.expand_path('../lib', __FILE__))
+    require 'coveralls/rake/task'
+    Coveralls::RakeTask.new
+    Rake::Task['coveralls:push'].invoke
+  else
+    puts 'Skipping reporting to coveralls.  Module has no lib dir'
+  end
+end
+
+# vim: syntax=ruby

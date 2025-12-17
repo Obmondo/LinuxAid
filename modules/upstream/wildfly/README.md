@@ -1,6 +1,14 @@
 # wildfly
 
-[![Build Status](https://travis-ci.org/biemond/biemond-wildfly.svg?branch=master)](https://travis-ci.org/biemond/biemond-wildfly) ![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/biemond/wildfly.svg) ![Puppet Forge Version](https://img.shields.io/puppetforge/v/biemond/wildfly.svg) ![Puppet Forge Score](https://img.shields.io/puppetforge/f/biemond/wildfly.svg)  ![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/biemond/wildfly.svg) [![Code Climate](https://codeclimate.com/github/biemond/biemond-wildfly/badges/gpa.svg)](https://codeclimate.com/github/biemond/biemond-wildfly) [![Coverage Status](https://coveralls.io/repos/biemond/biemond-wildfly/badge.svg?branch=master&service=github)](https://coveralls.io/github/biemond/biemond-wildfly?branch=master)
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-wildfly.svg)](https://github.com/voxpupuli/puppet-wildfly/blob/master/LICENSE)
+[![puppetmodule.info docs](https://www.puppetmodule.info/images/badge.png)](https://www.puppetmodule.info/m/puppet-wildfly)
+[![CI](https://github.com/voxpupuli/puppet-wildfly/actions/workflows/ci.yml/badge.svg)](https://github.com/voxpupuli/puppet-wildfly/actions/workflows/ci.yml)
+[![Donated by biemond](https://img.shields.io/badge/donated%20by-biemond-fb7047.svg)](#transfer-notice)
+
+[![Puppet Forge Endorsement](https://img.shields.io/puppetforge/e/puppet/wildfly.svg)](https://forge.puppetlabs.com/puppet/wildfly)
+[![Puppet Forge Version](https://img.shields.io/puppetforge/v/puppet/wildfly.svg)](https://forge.puppetlabs.com/puppet/wildfly)
+[![Puppet Forge Score](https://img.shields.io/puppetforge/f/puppet/wildfly.svg)](https://forge.puppetlabs.com/puppet/wildfly)
+[![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/puppet/wildfly.svg)](https://forge.puppetlabs.com/puppet/wildfly)
 
 ## Table of Contents
 
@@ -12,7 +20,10 @@
 4. [Upgrade](#upgrade)
     * [to 1.2.0](#to-120)
     * [to 2.0.0](#to-200)
+    * [to 2.1.0](#to-210)
 5. [Usage - Configuration options and additional functionality](#usage)
+    * [Wildfly 25.0.0](#wildfly-2500)
+    * [Wildfly 23.0.2](#wildfly-2302)
     * [Wildfly 10.1.0](#wildfly-1010)
     * [Wildfly 9.0.2](#wildfly-902)
     * [Wildfly 8.2.1](#wildfly-821)
@@ -21,43 +32,44 @@
     * [Keycloak](#keycloak)
     * [apiman](#apiman)
     * [Infinispan Server](#infinispan-server)
-    * [Wildfly's Configuration Management](#wildfly-configuration-management)
+    * [Wildfly's Configuration Management](#wildflys-configuration-management)
     * [Patch management](#patch-management)
     * [Unmanaged installation](#unmanaged-installation)
     * [Domain Mode](#domain-mode)
+    * [Java Virtual Machine options](#java-virtual-machine-options)
     * [Deployment](#deployment)
     * [User management](#user-management)
     * [Module installation](#module-installation)
     * [Datasources](#datasources)
     * [HTTPS/SSL](#httpsssl)
+    * [Management over HTTPS/SSL](#mgmtssl)
     * [Server reload](#server-reload)
     * [Messaging](#messaging)
     * [Logging](#logging)
     * [Modcluster](#modcluster)
+    * [JGroups](#jgroups)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Guide for contributing to the module](#development)
+8. [Documentation](#documentation)
 
 ## Overview
 
-created by Edwin Biemond email biemond at gmail dot com
+Originally created by Edwin Biemond email biemond at gmail dot com
 [biemond.blogspot.com](http://biemond.blogspot.com)
-[Github homepage](https://github.com/biemond/biemond-wildfly)
 
 Install, configures and manages Wildfly.
 
 Should work on every Redhat or Debian family member, tested with Wildfly 10.1, 10.0, 9.0, 8.2, 8.1 & 8.0 and with JBoss EAP (tested on 6.1/6.2/6.3/6.4 and 7.0). Some defines may work only in certain versions.
 
-[Vagrant Fedora 21, Puppet 4.2.1 example](https://github.com/biemond/vagrant-fedora20-puppet) with Wildfly 8.2 and Apache AJP, Postgres db.
+[Vagrant Fedora 21, Puppet 4.2.1 example](https://github.com/biemond/vagrant-fedora20-puppet) with Wildfly 8.2, Apache AJP and PostgreSQL.
 
 [Vagrant CentOS Standalone HA + Gossip Router example](https://github.com/jairojunior/wildfly-ha-tcpgossip-vagrant-puppet) with two nodes, a gossip router and a load balancer (httpd + mod_cluster).
 
 [Vagrant CentOS 7.2 Domain Mode](https://github.com/jairojunior/wildfly-domain-vagrant-puppet) with two nodes (Domain master and slave) and a load balancer.
 
-[MCollective JBoss Agent Plugin](https://github.com/jairojunior/mcollective-jboss-agent) might be useful if you want to make consistent large scale changes.
-
 ## Module Description
 
-The wildfly module can install, configure and manage - through its HTTP Management API - Wildfly (8/9/10) and JBoss EAP (6.1+/7.0+).
+The wildfly module can install, configure and manage - through its HTTP Management API - Wildfly (8/9/10+) and JBoss EAP (6.1+/7.0+).
 
 ## Setup
 
@@ -77,9 +89,9 @@ Three gems are bundled with this module: `treetop` (parsing JBoss-CLI commands),
 
 Acceptance tests works with **puppetlabs/java** in both CentOS and Debian.
 
-This module requires `puppetlabs-stdlib` and `jethrocarr/initfact` (it uses `init_system` fact provided by this module by default, but it's overridable in `wildfly::initsystem` parameter)
+This module requires `puppetlabs-stdlib`.
 
-It should work on every operating system with the following init systems: sysvinit, systemd and upstart
+It should work on every modern Linux. TO see a list of all tested OSes, please check the metadata.json.
 
 ## Upgrade
 
@@ -87,10 +99,10 @@ It should work on every operating system with the following init systems: sysvin
 
 ### wildfly class
 
-The main changes in `wildfly` class are bellow:
+The main changes in `wildfly` class are below:
 
 ```puppet
-class { '::wildfly':
+class { 'wildfly':
   distribution     => 'jboss-eap|wildfly',
   properties       => {
     'jboss.bind.address'            => $public_bind,
@@ -106,7 +118,7 @@ class { '::wildfly':
 }
 ```
 
-`distribution` was introduced to provided out of the box support for JBoss EAP and `properties` to replace fine-grained parameters for address/port binding like `public_bind`, `mgmt_bind` and `public_http_port`. (*Reason*: It's easier to manage a properties file than Wildfly's XML through augeas)
+`distribution` was introduced to provide out of the box support for JBoss EAP and `properties` to replace fine-grained parameters for address/port binding like `public_bind`, `mgmt_bind` and `public_http_port`. (*Reason*: It's easier - and more reliable - to manage a properties file than Wildfly's XML through augeas)
 
 `users_mgmt` was replaced by `mgmt_user`, and additional users should be managed by `wildfly::config::mgtm_user` defined type. The hash format and default value also changed.
 
@@ -124,14 +136,40 @@ All resources from `wildfly::util` were moved to `wildfly`, hence you need to se
 
 ## to 2.0.0
 
-This version requires Puppet 4.4+ and heavily uses Puppet 4 new features: data types, epp templates and Ruby 2.1+, but there is no breaking change per se.
+This version requires Puppet 4.4+ and heavily uses Puppet 4 new features: data types, epp templates and Ruby 2.1+, but there is no breaking change per se. Meaning that if you're using 1.x version with Puppet 4 you should be able to migrate without any problems.
 
-If you're still using Puppet 3.x with Ruby 1.8.7+ check version 1.2.x.
+If you're still using Puppet 3.x with Ruby 1.8.7+ check version 1.2.x (**unsupported**).
+
+## to 2.1.0
+
+This version will no longer stringify values for `wildfly_resource`'s state or sort arrays values. In other words, you'll have to declare attributes using a type that matches Wildfly's Management Model type and in the same order returned by the API (in case of an array/LIST).
 
 ## Usage
 
 ```puppet
 class { 'wildfly': }
+```
+
+### Wildfly 25.0.0
+
+```puppet
+class { 'wildfly':
+  version           => '25.0.0',
+  install_source    => 'https://github.com/wildfly/wildfly/releases/download/25.0.0.Final/wildfly-25.0.0.Final.tar.gz',
+  install_cache_dir => '/tmp',
+  java_home         => '/usr/lib/jvm/java-17-openjdk-amd64',
+}
+```
+
+### Wildfly 23.0.2
+
+```puppet
+class { 'wildfly':
+  version           => '23.0.2',
+  install_source    => 'https://download.jboss.org/wildfly/23.0.2.Final/wildfly-23.0.2.Final.tar.gz',
+  install_cache_dir => '/tmp',
+  java_home         => '/usr/lib/jvm/java-17-openjdk-amd64',
+}
 ```
 
 ### Wildfly 10.1.0
@@ -164,7 +202,7 @@ class { 'wildfly':
 ### JBoss EAP 6.x (with hiera)
 
 ```puppet
-include ::wildfly
+include wildfly
 ```
 
 ```yaml
@@ -205,7 +243,7 @@ class { 'wildfly':
 ```
 > **NOTE:** Just make sure to point to the right version/distribution it was built upon.
 
-Some Keycloak configuration can be managed in the same way of a regular Wildfly/Jboss configuration:
+Some Keycloak configuration can be managed in the same way as a regular Wildfly/Jboss configuration:
 
 ```puppet
 wildfly::datasources::datasource { 'KeycloakDS':
@@ -227,12 +265,12 @@ wildfly::datasources::datasource { 'KeycloakDS':
 
 [apiman](http://www.apiman.io) is an API Manager built on top of Wildfly/JBoss, therefore you should be able to use this module to install and config it.
 
-Currently there aren't no prebuilt packages, but download page provides instruction to build it for Wildfly 10, 9 and EAP 7.
+Currently there aren't no prebuilt packages, but [download page](http://www.apiman.io/latest/download.html) provides instruction to build it for Wildfly 10, 9 and EAP 7.
 
 
 #### Example
 
-```shell
+```sh
 wget http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip
 wget http://downloads.jboss.org/apiman/1.2.9.Final/apiman-distro-wildfly10-1.2.9.Final-overlay.zip
 unzip wildfly-10.1.0.Final.zip
@@ -344,7 +382,7 @@ Offline patching requires the server to be down, but don't leave the server in a
 ##### EAP/Offline example
 
 ```puppet
-class { '::wildfly':
+class { 'wildfly':
   distribution   => 'jboss-eap',
   version        => '6.4',
 }
@@ -366,7 +404,7 @@ Online patching requires the server to be up and requires a restart after being 
 ##### Wildfly/Online example
 
 ```puppet
-class { '::wildfly':
+class { 'wildfly':
   version        => '10.0.0',
   install_source => 'http://download.jboss.org/wildfly/10.0.0.Final/wildfly-10.0.0.Final.tar.gz',
 }
@@ -444,6 +482,8 @@ class { 'wildfly':
 }
 ```
 
+>**NOTE:** Host Controller name has to match a mgmt user name in Domain Controller, since, by default, HC uses it own name as the username for connecting with DC. You can always set a different one by overriding `remote_username` parameter.
+
 #### Domain Management
 
 Make sure you remove default resources (server-groups and server-config) if you're not going to use it.
@@ -451,20 +491,131 @@ Make sure you remove default resources (server-groups and server-config) if you'
 Domain controller:
 
 ```puppet
-wildfly::resource { ['/server-group=main-server-group', '/server-group=other-server-group'] :
+wildfly::domain::server_group { ['main-server-group', 'other-server-group']:
   ensure => absent,
 }
 ```
 
 Host controller:
 
-``` puppet
-wildlfy::resource { ['/host=slave1/server-config=server-one', '/host=slave1/server-config=server-two']:
-  ensure => absent,
+```puppet
+wildfly::host::server_config { ['server-one', 'server-two']:
+ ensure   => absent,
+ hostname => $hostname,
+ username => $username,
+ password => $password,
+ before   => Class['wildfly::setup'],
 }
 ```
 
-Then start managing your own `server-groups` and `server-config` with `wildfly::domain::server-group` and `wildfly::host::server_config`
+You can also use a `overlay_class` instead of use `before`.
+
+Host controller:
+
+```puppet
+class { 'wildfly':
+  # ...
+  overlay_class => 'app::cleanup'
+}
+
+class app::cleanup {
+  wildfly::host::server_config { ['server-one', 'server-two']:
+   ensure   => absent,
+   hostname => $hostname,
+   username => $username,
+   password => $password,
+  }
+}
+```
+
+`Username` and `password` are the credentials used to connect to domain controller and make the desired changes. In the first provision this resource will be applied with augeas and will not need that, but in the other these parameters will be required to guarantee that the server-configs no longer exists.
+
+After that, start managing your own `server-groups` and `server-config` with `wildfly::domain::server-group` and `wildfly::host::server_config`:
+
+Domain controller:
+
+```puppet
+wildfly::domain::server_group { 'app-server-group':
+  profile              => 'full-ha',
+  socket_binding_group => 'full-ha-sockets',
+}
+```
+
+Host controller:
+
+```puppet
+wildfly::host::server_config { 'app':
+  server_group       => 'app-server-group',
+  hostname           => $hostname,
+  username           => $username,
+  password           => $password,
+}
+```
+
+Please note that you'll need to enable external facts (`wildfly::external_facts`) since `wildfly::host::server_config` relies on `wildfly_is_running` fact to know if it should use augeas or connect to the domain controller to remove a server-config.
+
+#### Custom Java options
+
+Domain controller:
+
+```puppet
+class { 'wildfly':
+  ...,
+  java_opts                    => ['<java_opt_1>', '<java_opt_2>']
+  process_controller_java_opts => ['<controller_opt_1>', '<controller_opt_2>']
+}
+```
+
+Results in a `domain.conf` with:
+
+```shell
+if [ "x$JAVA_OPTS" = "x" ]; then
+    JAVA_OPTS=...
+    JAVA_OPTS="$JAVA_OPTS <java_opt_1> <java_opt_2>"
+    ...
+fi
+...
+if [ "x$PROCESS_CONTROLLER_JAVA_OPTS" = "x" ]; then
+    PROCESS_CONTROLLER_JAVA_OPTS="$JAVA_OPTS <controller_opt_1>, <controller_opt_2>"
+fi
+```
+
+Host controller:
+
+```puppet
+class { 'wildfly':
+  ...,
+  java_opts                 => ['<java_opt_1>', '<java_opt_2>']
+  host_controller_java_opts => ['<managed_opt_1>', '<managed_opt_2>']
+}
+```
+
+Results in a `domain.conf` with:
+
+```shell
+if [ "x$JAVA_OPTS" = "x" ]; then
+    JAVA_OPTS=...
+    JAVA_OPTS="$JAVA_OPTS <java_opt_1> <java_opt_2>"
+    ...
+fi
+...
+if [ "x$HOST_CONTROLLER_JAVA_OPTS" = "x" ]; then
+    HOST_CONTROLLER_JAVA_OPTS="$JAVA_OPTS <managed_opt_1> <managed_opt_2>"
+fi
+```
+
+### Java Virtual Machine options
+
+To adjust [JVM heap memory settings](https://www.baeldung.com/jvm-parameters#explicit-heap-memory---xms-and-xmx-options), use `wildfly` class `java_xmx`, `java_xms` and/or `java_maxmetaspace_size` parameters:
+
+```puppet
+class { 'wildfly':
+  # ...
+  java_xms               => '<Minimum heap size>',
+  java_xmx               => '<Maximum heap size>',
+  java_maxmetaspace_size => '<Maximum Metaspace size>',
+}
+```
 
 ### Deployment
 
@@ -707,6 +858,47 @@ java_ks { 'demo:/opt/identitystore.jks':
 }
 ```
 
+### Management over HTTPS/SSL
+
+This feature is currently implemented for standalone mode only.  The default http management console and API can be changed to run over HTTPS/TLS.
+
+#### Basic use with a self signed certificate
+This will generate and use a basic self signed certificate for the Management interface.  Requires the puppetlabs/java_ks module:
+
+```puppet
+class { 'wildfly':
+	secure_mgmt_api => true,
+}
+```
+
+#### Providing your own certificate
+The module will create the approprate keystores, truststores, and configuration if given paths to the private key and certificate.  Use your favorite method to ensure the key and certificate exist on the endpoint.  Requires the puppetlabs/java_ks module:
+
+```puppet
+class { 'wildfly':
+	secure_mgmt_api => true,
+	mgmt_ssl_key => '/etc/pki/tls/private/key.pem',
+	mgmt_ssl_cert => '/etc/pki/tls/certs/cert.pem',
+}
+```
+
+#### Unmanaged keystores
+If preferred, the management API can be configured to use keystores/truststores managed outside this module.  These will need to exist before running the wildfly class.
+
+Be aware of the following:
+- The existing keystore needs to be readable by the wildfly user.
+- Truststores need to exist in the home directories for the wildfly user and the root user.
+
+```puppet
+class { 'wildfly':
+	secure_mgmt_api => true,
+    mgmt_create_keystores => false,
+    mgmt_keystore => '/etc/pki/keystores/wf_ks.jks',
+	mgmt_keystore_pass => 'password',
+	mgmt_keystore_alias => 'wfmgmt',
+}
+```
+
 ### Server Reload
 
 Some configurations like SSL and modcluster requires a server reload (i.e. `server-state = reload-required`), and it can be achieved with the following snippet:
@@ -714,7 +906,7 @@ Some configurations like SSL and modcluster requires a server reload (i.e. `serv
 ```puppet
 ## a_resource_that_requires_reload_when_changed {}
 ~>
-widlfly::reload { 'Reload if necessary':
+wildfly::reload { 'Reload if necessary':
   retries => 2,
   wait    => 15,
 }
@@ -741,7 +933,7 @@ wildfly::resource { '/some=resource':
 
 ### Messaging
 
-> **NOTE** `full` profiles only
+> **NOTE:** `full` profiles only
 
 ```puppet
 wildfly::messaging::queue { 'DemoQueue':
@@ -789,7 +981,7 @@ wildfly::system::property { 'DemoSysProperty':
 
 ### Modcluster
 
-*`full` and `ha` profiles only
+> **NOTE:**`full` and `ha` profiles only
 
 ```puppet
 wildfly::modcluster::config { "Modcluster mybalancer":
@@ -802,15 +994,33 @@ wildfly::modcluster::config { "Modcluster mybalancer":
 
 > **NOTE:** For apache/httpd mod_cluster configuration check [::apache::mod::cluster](https://github.com/puppetlabs/puppetlabs-apache#class-apachemodcluster)
 
+### JGroups
+
+> **NOTE:** `ha` profiles only
+
+```puppet
+wildfly::jgroups::stack::tcpgossip { 'TCPGOSSIP':
+  initial_hosts       => '172.28.128.1[12001]',
+  num_initial_members => 2
+}
+```
+
+```puppet
+wildfly::jgroups::stack::tcpping { 'TCPPING':
+  initial_hosts       => '172.28.128.10[7600],17228.128.20[7600]',
+  num_initial_members => 2
+}
+```
+
 ## Limitations
 
-Some of this module public defined types  (`widfly::datasources`, `wildfly::messaging`, `wildfly::undertow`, etc) are built for Wildfly 8.x and may not work with other versions. When there is a proven alternative for a different version, examples might be provided, otherwise you'll need to build your own abstraction using `wildfly_resource` or `wildfly::resource`.
+Some of this module public defined types  (`widfly::datasources`, `wildfly::messaging`, `wildfly::undertow`, etc) were built for Wildfly 8.x and may not work with other versions. When there is a proven alternative for a different version, examples might be provided, otherwise you'll need to build your own abstraction using `wildfly_resource` or `wildfly::resource`.
 
-One discussed approach would be to generate defined types based on Wildfly's configuration schemas (`$WILDFLY_HOME/docs/schema`).
+One discussed approach would be to generate defined types based on Wildfly's configuration schemas (`$WILDFLY_HOME/docs/schema`) or DMR (See [Issue 174](https://github.com/voxpupuli/puppet-wildfly/issues/174)).
 
 JBoss EAP only works with RHEL-based OS's unless you provide custom scripts.
 
-[This bug](https://bugzilla.redhat.com/show_bug.cgi?id=1224170) might also be a problem for `standalone-full-ha` users in JBoss EAP.
+[This bug](https://bugzilla.redhat.com/show_bug.cgi?id=1224170) might also be a problem for `standalone-full-ha` users of JBoss EAP < 7.
 
 ## Development
 
@@ -818,9 +1028,33 @@ JBoss EAP only works with RHEL-based OS's unless you provide custom scripts.
 
 This module uses puppet-lint, rubocop, rspec-puppet, beaker and travis-ci. We hope you use them before submitting your PR.
 
+Hopefully, you'll need rvm to get the correct gems installed (and not messing with your computer's Ruby setup). Pls follow [official installation instructions](https://rvm.io/rvm/install), plus:
+
+```Shell
+sudo usermod -aG rvm $USER
+echo 'source "/etc/profile.d/rvm.sh"' >> ~/.bashrc
+```
+
+Reboot for all changes to take effect, then install Ruby 2.7:
+
 ```shell
-gem install bundler --no-rdoc --no-ri
-bundle install --without development
+# Didn't work for installing Ruby 2.7, but looks wise:
+rvm autolibs enable
+# Ruby 2.7 dependency
+rvm pkg install openssl
+Beware, 'rvm pkg ...' is deprecated, read about the new autolibs feature: 'rvm help autolibs'.
+# Inside this project's root directory:
+rvm install ruby-2.7 --with-openssl-dir=/usr/share/rvm/usr
+rvm use ruby-2.7
+# Validate
+ruby -v
+ruby 2.7.x (20XX-YY-ZZ revision &lt;Hash&gt;) [x86_64-linux]
+```
+
+```shell
+gem install bundler --no-document
+bundle config set --local without 'development'
+bundle install
 
 bundle exec rake syntax
 bundle exec rake lint
@@ -828,7 +1062,7 @@ bundle exec rubocop
 bundle exec rake spec
 ```
 
-Acceptance tests (Beaker) can be executed using `./acceptance.sh`. There is a 4x4 matrix (Wildfly 8/8.2/9/10 X Centos 6/7 and Debian 7/8).
+Acceptance tests (Beaker) can be executed using `./acceptance.sh`. There is a 4x6 matrix (Wildfly 8/8.2/9/10 X Centos 6/7, Debian 7/8, Ubuntu 12.04/14.04).
 
 I suggest you create a `~/.vagrant.d/Vagrantfile` file and install `vagrant-cachier` plugin with the following content to speed up the execution:
 
@@ -857,4 +1091,15 @@ If you can't figure out how to achieve your configuration, feel free to open an 
 
 - Edwin Biemond (biemond at gmail dot com)
 - Jairo Junior (junior.jairo1 at gmail dot com)
-- [More](https://github.com/biemond/biemond-wildfly/graphs/contributors)
+- [More](https://github.com/voxpupuli/puppet-wildfly/graphs/contributors)
+
+## Documentation
+
+see [REFERENCE.md](REFERENCE.md)
+
+Transfer Notice
+---------------
+
+This project was originally authored by [biemond](http://github.com/biemond).
+The maintainer preferred that Vox Pupuli take ownership of the project for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute here instead of biemond-wildlfy.

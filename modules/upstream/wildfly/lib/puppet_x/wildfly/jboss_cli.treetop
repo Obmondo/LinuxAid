@@ -51,7 +51,7 @@ grammar JBossCLI
   end
 
   rule identifier
-    ([a-zA-Z0-9_\.\-]+ / '"' [a-zA-Z0-9_\.\-:/]+ '"')
+    ([a-zA-Z0-9_\.\-@\$#]+ / '"' [a-zA-Z0-9_\.\-:/]+ '"')
   end
 
 end

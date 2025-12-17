@@ -1,21 +1,17 @@
 {
-  "author": "Edwin Biemond",
+  "author": "Vox Pupuli",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">=4.13.1 < 5.0.0"
-    },
-    {
-      "name": "jethrocarr/initfact",
-      "version_requirement": ">=1.0.1 < 2.0.0"
+      "version_requirement": ">=4.13.1 < 10.0.0"
     }
   ],
   "license": "Apache-2.0",
-  "name": "biemond-wildfly",
-  "project_page": "https://github.com/biemond/biemond-wildfly",
-  "source": "https://github.com/biemond/biemond-wildfly",
-  "summary": "Install, configure and manage Wildfly (8/9/10), JBoss EAP (6.1+/7.0+) and some Wildfly based products like apiman, Keycloak anInfinispan.",
-  "version": "2.0.0",
+  "name": "puppet-wildfly",
+  "project_page": "https://github.com/voxpupuli/puppet-wildfly",
+  "source": "https://github.com/voxpupuli/puppet-wildfly",
+  "summary": "Install, configure and manage Wildfly (8/9/10/11+), JBoss EAP (6.1+/7.0+) and some Wildfly based products like apiman, Keycloak and Infinispan.",
+  "version": "4.0.0",
   "tags": [
     "jboss",
     "wildfly",
@@ -24,73 +20,56 @@
     "infinispan",
     "EAP",
     "AS",
-    "jdk8",
-    "java",
-    "jdk7"
+    "jdk",
+    "java"
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "4",
-        "5",
-        "6",
-        "7"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "4",
-        "5",
-        "6",
-        "7"
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "4",
-        "5",
-        "6"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "4",
-        "5",
-        "6"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "11 SP1"
+        "12 SP5",
+        "15 SP5"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7",
-        "8"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "10.04",
-        "12.04",
-        "14.04",
-        "16.04"
+        "20.04",
+        "22.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">=4.4.2 < 5.0.0"
+      "version_requirement": ">7.0.0 < 9.0.0"
     }
   ]
 }

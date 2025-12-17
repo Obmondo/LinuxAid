@@ -190,9 +190,9 @@ mod 'maestrodev/wget',
     :git => "https://github.com/maestrodev/puppet-wget.git",
     :ref => 'v2.0.1'
 
-mod 'biemond/wildfly',
-    :git => 'https://github.com/biemond/biemond-wildfly.git',
-    :ref => 'v.2.0.0'
+mod 'obmondo/wildfly',
+    :git => 'https://github.com/Obmondo/puppet-wildfly',
+    :ref => 'v4.0.1'
 
 mod 'hunner/wordpress',
     :git => 'https://github.com/hunner/puppet-wordpress.git',

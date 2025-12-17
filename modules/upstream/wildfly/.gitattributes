@@ -1,3 +1,0 @@
-*.erb eol=lf
-*.pp  eol=lf
-*.rb  eol=lf

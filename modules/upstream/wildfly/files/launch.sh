@@ -4,8 +4,11 @@ if [ "x$WILDFLY_HOME" = "x" ]; then
     WILDFLY_HOME="/opt/wildfly"
 fi
 
-if [[ "$1" == "domain" ]]; then
-    $WILDFLY_HOME/bin/domain.sh -c $2
+mode="$1"
+shift
+
+if [[ "$mode" == "domain" ]]; then
+    exec $WILDFLY_HOME/bin/domain.sh -c "$@"
 else
-    $WILDFLY_HOME/bin/standalone.sh -c $2
+    exec $WILDFLY_HOME/bin/standalone.sh -c "$@"
 fi

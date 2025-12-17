@@ -1,21 +1,20 @@
-define wildfly::web::connector(
+define wildfly::web::connector (
   $scheme,
   $protocol,
   $socket_binding,
   $enable_lookups,
-  $secure,) {
-
+  $secure,
+) {
   $params = {
     'name' => $title,
     'scheme' => $scheme,
     'protocol' => $protocol,
     'socket-binding' => $socket_binding,
     'enable-lookups' => $enable_lookups,
-    'secure' => $secure
+    'secure' => $secure,
   }
 
   wildfly::resource { "/subsystem=web/connector=${title}":
-    content => $params
+    content => $params,
   }
-
 }

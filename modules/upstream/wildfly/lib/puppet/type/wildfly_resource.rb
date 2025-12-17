@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'puppet_x/wildfly/hash'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'puppet_x/wildfly/deep_hash'))
 
 Puppet::Type.newtype(:wildfly_resource) do
   desc 'Manages JBoss resources like datasources, messaging, ssl, modcluster, etc'
@@ -42,6 +42,11 @@ Puppet::Type.newtype(:wildfly_resource) do
     isnamevar
   end
 
+  newparam(:secure) do
+    desc 'Use TLS to connect with the management API'
+    defaultto false 
+  end
+
   newparam(:recursive) do
     desc 'Recursively manage resource. Defaults to false'
     defaultto false
@@ -57,53 +62,39 @@ Puppet::Type.newtype(:wildfly_resource) do
   end
 
   def self.title_patterns
-    identity = lambda { |x| x }
     [
       [
         /^(.*):(.*):(.*)$/,
         [
-          [:path, identity],
-          [:host, identity],
-          [:port, identity]
+          [:path],
+          [:host],
+          [:port]
         ]
       ],
       [
         /^(.*):(.*)$/,
         [
-          [:path, identity],
-          [:host, identity]
+          [:path],
+          [:host]
         ]
       ],
       [
         /^([^:]+)$/,
         [
-          [:path, identity]
+          [:path]
         ]
       ]
     ]
   end
 
   newproperty(:state) do
+    include PuppetX::Wildfly::DeepHash
+
     desc 'Resource state'
     defaultto {}
 
     validate do |value|
       raise("#{value} is not a Hash") unless value.is_a?(Hash)
-    end
-
-    def insync?(is)
-      debug "Should: #{should.inspect} Is: #{is.inspect}"
-
-      should.insync?(is)
-    end
-
-    def change_to_s(current_value, new_value)
-      changed_keys = (new_value.to_a - current_value.to_a).collect { |key, _| key }
-
-      current_value = current_value.delete_if { |key, _| !changed_keys.include? key }.deep_obfuscate_sensitive_values.inspect
-      new_value = new_value.delete_if { |key, _| !changed_keys.include? key }.deep_obfuscate_sensitive_values.inspect
-
-      super(current_value, new_value)
     end
   end
 end

@@ -1,11 +1,15 @@
 #
 # Configures connection property in a database
 #
-define wildfly::datasources::db_property(
-  $database,
-  $value = undef,
-  $target_profile = undef) {
-
+# @param database datasource database
+# @param value datasource db property value
+# @param target_profile for domain mode you need to set this parameter
+#
+define wildfly::datasources::db_property (
+  String           $database,
+  Optional[String] $value          = undef,
+  Optional[String] $target_profile = undef,
+) {
   $params = {
     'value' => $value,
   }
@@ -14,5 +18,4 @@ define wildfly::datasources::db_property(
     content => $params,
     profile => $target_profile,
   }
-
 }

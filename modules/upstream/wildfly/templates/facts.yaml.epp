@@ -1,0 +1,5 @@
+---
+wildfly:
+  home: <%= $wildfly::dirname %>
+  version: <%= $wildfly::version %>
+  java_home: <%= $wildfly::java_home %>

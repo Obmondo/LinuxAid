@@ -23,6 +23,11 @@ Puppet::Type.newtype(:wildfly_restart) do
     defaultto 9990
   end
 
+  newparam(:secure) do
+    desc 'Use TLS  to connect with the management API'
+    defaultto false 
+  end
+
   newparam(:retries) do
     desc 'Number of times it will check if server is running after a restart'
     defaultto 3

@@ -1,15 +1,17 @@
+# THIS FILE IS MANAGED BY PUPPET
 [Unit]
-Description=The WildFly Application Server
-After=syslog.target network.target
-Before=httpd.service
+Description=WildFly application server
+Wants=network-online.target
+After=network-online.target
 
 [Service]
-Environment=LAUNCH_JBOSS_IN_BACKGROUND=1
-EnvironmentFile=/etc/wildfly/wildfly.conf
 User=<%= $wildfly::user %>
+Group=<%= $wildfly::group %>
+EnvironmentFile=/etc/wildfly/wildfly.conf
 LimitNOFILE=102642
-PIDFile=/var/run/wildfly/wildfly.pid
-ExecStart=<%= $wildfly::dirname %>/bin/launch.sh $WILDFLY_MODE $WILDFLY_CONFIG
+ExecStart=<%= $wildfly::dirname %>/bin/launch.sh ${WILDFLY_MODE} ${WILDFLY_CONFIG}
+Restart=always
+RestartSec=20
 StandardOutput=null
 
 [Install]

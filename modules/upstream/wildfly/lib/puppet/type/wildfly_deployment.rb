@@ -37,6 +37,11 @@ Puppet::Type.newtype(:wildfly_deployment) do
     desc 'Management port. Defaults to 9990'
     defaultto 9990
   end
+  
+  newparam(:secure) do
+    desc 'Use TLS to connect with the management API'
+    defaultto false
+  end
 
   newparam(:timeout) do
     desc 'Operation timeout. Defaults to 120'

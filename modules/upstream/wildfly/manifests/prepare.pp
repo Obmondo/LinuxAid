@@ -1,8 +1,6 @@
 # Manages Wildfly requirements (user, group, dirs and packages)
 class wildfly::prepare {
-
   if $wildfly::manage_user {
-
     group { $wildfly::group :
       ensure => present,
       gid    => $wildfly::gid,
@@ -14,29 +12,30 @@ class wildfly::prepare {
       gid        => $wildfly::gid,
       groups     => $wildfly::group,
       shell      => '/bin/bash',
-      home       => "/home/${wildfly::user}",
+      home       => $wildfly::user_home,
       comment    => "${wildfly::user} user created by Puppet",
       managehome => true,
       require    => Group[$wildfly::group],
     }
   }
 
-  file { $wildfly::dirname :
-    ensure  => directory,
-    owner   => $wildfly::user,
-    group   => $wildfly::group,
-    mode    => '0755',
-    require => User[$wildfly::user],
+  unless $wildfly::package_name {
+    file { $wildfly::dirname :
+      ensure  => directory,
+      owner   => $wildfly::user,
+      group   => $wildfly::group,
+      mode    => '0755',
+      require => User[$wildfly::user],
+    }
   }
 
   if $wildfly::package_ensure {
-    $libaiopackage  = $::osfamily ? {
+    $libaiopackage  = $facts['os']['family'] ? {
       'RedHat' => 'libaio',
       'Debian' => 'libaio1',
       default  => 'libaio',
     }
 
-    ensure_resource('package', $libaiopackage, {'ensure' => $wildfly::package_ensure})
+    ensure_packages({ $libaiopackage => { 'ensure' => $wildfly::package_ensure } })
   }
-
 }

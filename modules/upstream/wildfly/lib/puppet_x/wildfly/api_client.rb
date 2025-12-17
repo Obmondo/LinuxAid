@@ -7,16 +7,22 @@ require 'net/http/digest_auth'
 module PuppetX
   module Wildfly
     class APIClient
-      def initialize(address, port, user, password, timeout)
+      def initialize(address, port, user, password, timeout, secure)
         @username = user
         @password = password
-
-        @uri = URI.parse "http://#{address}:#{port}/management"
+        @uri = if secure
+                 URI.parse "https://#{address}:#{port}/management"
+               else
+                 URI.parse "http://#{address}:#{port}/management"
+               end
         @uri.user = CGI.escape(user)
         @uri.password = CGI.escape(password)
 
         @http_client = Net::HTTP.new @uri.host, @uri.port, nil
         @http_client.read_timeout = timeout
+        return unless secure == true
+        @http_client.use_ssl = true
+        @http_client.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
 
       def authz_header
@@ -35,6 +41,8 @@ module PuppetX
           sleep 10
           retry
         end
+
+        sleep 0.05 # We've been returned an auth token.  But if we don't wait a small amount of time before using it, we might stil get a 401. :(
 
         if response['www-authenticate'] =~ /digest/i
           digest_auth.auth_header @uri, response['www-authenticate'], 'POST'

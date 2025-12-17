@@ -1,12 +1,12 @@
-define wildfly::web::ssl(
+define wildfly::web::ssl (
   $connector,
   $password,
   $protocol,
   $cipher_suite,
   $key_alias,
   $certificate_key_file,
-  $ca_certificate_file = undef) {
-
+  $ca_certificate_file = undef,
+) {
   $params = {
     'name' => $title,
     'password' => $password,
@@ -18,7 +18,6 @@ define wildfly::web::ssl(
   }
 
   wildfly::resource { "/subsystem=web/connector=${connector}/ssl=configuration":
-    content => $params
+    content => $params,
   }
-
 }

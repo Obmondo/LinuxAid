@@ -13,7 +13,7 @@ class Puppet::Provider::Wildfly < Puppet::Provider
     require 'puppet_x/wildfly/operation_request'
     timeout = @resource.parameters.include?(:timeout) ? resource[:timeout] : 60
 
-    api_client = PuppetX::Wildfly::APIClient.new(@resource[:host], @resource[:port], @resource[:username], @resource[:password], timeout)
+    api_client = PuppetX::Wildfly::APIClient.new(@resource[:host], @resource[:port], @resource[:username], @resource[:password], timeout, @resource[:secure])
     PuppetX::Wildfly::OperationRequest.new(api_client)
   end
 end
