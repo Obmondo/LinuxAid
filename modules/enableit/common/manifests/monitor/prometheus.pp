@@ -54,4 +54,7 @@ class common::monitor::prometheus (
     env_file_path     => $env_file_path,
     init_style        => $_init_style,
   }
+
+  include common::monitor::prometheus::server
+  include common::monitor::exporter
 }

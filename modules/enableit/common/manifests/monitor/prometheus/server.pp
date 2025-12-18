@@ -20,8 +20,6 @@ class common::monitor::prometheus::server (
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
 
-  include common::monitor::prometheus
-
   Exec {
     noop => $noop_value,
   }
