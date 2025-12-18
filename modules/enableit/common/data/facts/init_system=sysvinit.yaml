@@ -1,3 +1,4 @@
 ---
+common::monitor::prometheus::init_style: 'sysv'
 common::logging::rsyslog::log_local: true
 common::system::time::ntp::ntp_client: 'ntpd'

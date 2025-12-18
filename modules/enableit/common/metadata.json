@@ -32,6 +32,9 @@
       "version_requirement": ">= 4.x"
     },
     {
+      "name": "voxpupuli/prometheus"
+    },
+    {
       "name": "voxpupuli/logrotate"
     }
   ],

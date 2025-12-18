@@ -15,6 +15,7 @@
 #
 class common::monitor::prometheus (
   Enum['package','url'] $install_method,
+  Prometheus::Initstyle $init_style,
   Stdlib::Absolutepath  $env_file_path,
   Stdlib::Absolutepath  $bin_dir,
   Stdlib::Absolutepath  $usershell,
@@ -41,18 +42,13 @@ class common::monitor::prometheus (
     noop => $noop_value,
   }
 
-  $_init_style = $facts['init_system'] ? {
-    'sysvinit' => 'sysv',
-    default    => 'systemd',
-  }
-
   class { 'prometheus':
     install_method    => $install_method,
     bin_dir           => $bin_dir,
     usershell         => $usershell,
     restart_on_change => true,
     env_file_path     => $env_file_path,
-    init_style        => $_init_style,
+    init_style        => $init_style,
   }
 
   include common::monitor::prometheus::server

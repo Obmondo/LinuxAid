@@ -131,6 +131,11 @@ class common::monitor::exporter::node (
     ]
   }
 
+  $_init_style = $enable ? {
+    true    => lookup('common::monitor::prometheus::init_style'),
+    default => 'none',
+  }
+
   $default_collectors = [
     if $buddyinfo { 'buddyinfo' },
     if $cgroups { 'cgroups' },
@@ -158,11 +163,6 @@ class common::monitor::exporter::node (
     if $wifi { 'wifi' },
     if $zoneinfo { 'zoneinfo' },
   ].delete_undef_values
-
-  $_init_style = $enable ? {
-    true    => $facts['init_system'],
-    default => 'none'
-  }
 
   class { 'prometheus::node_exporter':
     package_name      => 'obmondo-node-exporter',
