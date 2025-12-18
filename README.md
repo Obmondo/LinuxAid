@@ -120,11 +120,11 @@ graph TB
 
 ## Key Features & Managed Responsibilities
 
-The detailed feature breakdown and the managed responsibilities checklist now live in `./docs/features-and-responsibilities.md`. See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
+The detailed feature breakdown and the managed responsibilities checklist now live in [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md). See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
 
 ## Managed Responsibilities Checklist
 
-The full checklist and guidance are available at [https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist](https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist).
+The full checklist and guidance are available in the [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md#managed-responsibilities-checklist).
 
 ### 10. Data Ownership and Licensing
 
@@ -157,11 +157,11 @@ Under each module that you use in LinuxAid, you can see the documentation in the
 
 ### LinuxAid Modules
 
-- **[Roles](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/role/REFERENCE.md)**: The list of roles (software and configs currently supported). Note: some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
+- **[Roles](./modules/enableit/role/REFERENCE.md)**: The list of roles (software and configs currently supported). Note: some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
 
-- **[Common Settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/REFERENCE.md)**: The list of common configurations you can roll out for any server, regardless of its configured role.
+- **[Common Settings](./modules/enableit/common/REFERENCE.md)**: The list of common configurations you can roll out for any server, regardless of its configured role.
 
-- **[Monitoring Settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/monitor/REFERENCE.md)**: Settings for monitoring
+- **[Monitoring Settings](./modules/enableit/monitor/REFERENCE.md)**: Settings for monitoring
 
 ### Configuration Scopes
 
@@ -190,7 +190,7 @@ LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated dat
 - Clear separation between code logic and environment-specific data
 - Similar flexibility to Helm values in Kubernetes
 
-**View the hierarchy:** <https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10>
+**View the hierarchy:** See `hiera.yaml` (also available as [./hiera.yaml](./hiera.yaml)) for the full hierarchy configuration starting at the `hierarchy:` section.
 
 ### 60+ Supported Applications
 
@@ -283,5 +283,5 @@ To add a new node to LinuxAid:
 - [Monitoring](./docs/monitoring)
 - [Roles](./docs/roles)
 - [Setup](./docs/setup)
-- [Comparison with other IaC tools](./docs/comparisons.md)
+- [Comparison with other IaC tools](./docs/comparisonMetrics.md)
 - [Contributing](./CONTRIBUTING.md)
