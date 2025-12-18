@@ -5,7 +5,7 @@ require 'yaml'
 
 CERTNAME = ARGV[0]
 MAX_TAGS = 10
-DEFAULT_HIERA_BRANCH = 'enc'
+DEFAULT_HIERA_BRANCH = 'encnew'
 OBMONDO_MONITOR = true
 SUBSCRIPTION = false
 HIERA_DATADIR = '../../hiera-data'
