@@ -7,6 +7,7 @@ type Repository::Mirrors::Configurations = Hash[
     'microsoft',
     'jenkins',
     'openvox',
+    'ubuntu_armhf'
   ], Struct[{
     yum => Optional[Struct[{
       enable => Boolean,
