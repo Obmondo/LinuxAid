@@ -1,6 +1,6 @@
 ---
 common::openvox::package_name: "openvox"
-common::openvox::version: "7.37.2"
+common::openvox::version: "8.24.1"
 common::openvox::linuxaid_cli::checksums:
   1.0.2: "0c3785eab3c0af5d042146017721f77ebcd905d6308a307537e64cb4201814ec"
 
