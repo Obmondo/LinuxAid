@@ -160,6 +160,7 @@ common::default::classes:
   - common::setup
   - common::openvox
   - common::monitor
+  - common::system
 
 common::system::classes:
   - common::system::authentication
