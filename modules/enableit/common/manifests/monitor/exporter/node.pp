@@ -136,6 +136,11 @@ class common::monitor::exporter::node (
     default => 'none',
   }
 
+  $_package_name = $install_method ? {
+    'package' => 'obmondo-node-exporter',
+    default   => 'node_exporter'
+  }
+
   $default_collectors = [
     if $buddyinfo { 'buddyinfo' },
     if $cgroups { 'cgroups' },
@@ -165,13 +170,13 @@ class common::monitor::exporter::node (
   ].delete_undef_values
 
   class { 'prometheus::node_exporter':
-    package_name      => 'obmondo-node-exporter',
+    package_name      => $_package_name,
     version           => $version,
     install_method    => $install_method,
     init_style        => $_init_style,
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
-    package_ensure    => ensure_latest($enable),
+    package_ensure    => $version,
     user              => 'node_exporter',
     group             => 'node_exporter',
     export_scrape_job => ! $enable,

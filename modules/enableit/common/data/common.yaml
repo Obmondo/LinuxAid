@@ -319,6 +319,7 @@ common::openvox::configure_agent: true
 common::openvox::linuxaid_cli::version: 1.0.3
 common::openvox::linuxaid_cli::checksums:
   1.0.2: "050a95ed7fc634b31da68118be057b0650333c14cee8bfd0b3922bfc376b1b7d"
+  1.0.3: "59a2ff6a6bbdd37396737b5a47a417b9212d49659f13605783e4dbd0b27451c6"
 
 # KeepAlived
 common::keepalived::global_defs:

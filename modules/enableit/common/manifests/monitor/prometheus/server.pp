@@ -43,6 +43,12 @@ class common::monitor::prometheus::server (
     undef   => "https://${common::monitor::prometheus::server}/api/v1/write",
     default => "https://${common::monitor::prometheus::server}/${::obmondo['customer_id']}/api/v1/write" # lint:ignore:top_scope_facts
   }
+  $install_method = lookup('common::monitor::prometheus::install_method')
+
+  $_package_name = $install_method ? {
+    'package' => 'obmondo-prometheus',
+    default   => 'prometheus',
+  }
 
   class { 'prometheus::server':
     version                        => $version,
@@ -52,12 +58,12 @@ class common::monitor::prometheus::server (
     collect_scrape_jobs            => $collect_scrape_jobs,
     collect_tag                    => $::trusted['certname'],
     extra_groups                   => ['obmondo'],
+    install_method                 => $install_method,
     include_default_scrape_configs => false,
     config_dir                     => $config_dir,
     manage_config_dir              => true,
-    install_method                 => $common::monitor::prometheus::install_method,
     restart_on_change              => true,
-    package_name                   => 'obmondo-prometheus',
+    package_name                   => $_package_name,
     bin_dir                        => '/opt/obmondo/bin',
     extra_options                  => $_extra_options,
     scrape_configs                 => [{
