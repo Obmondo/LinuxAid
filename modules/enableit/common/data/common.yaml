@@ -469,10 +469,10 @@ common::network::wireguard::enable: false
 # Netbird
 common::network::netbird::enable: false
 common::network::netbird::install_method: repo
-common::network::netbird::version: 0.59.3
+common::network::netbird::version: 0.60.8
 common::network::netbird::checksums:
-  0.59.3: 1a251bfecd6ffbe633bc985e382b12efb1f5b5bd9ec8c2543b5cfa7d7ce4070a
   0.60.0: 0774801213f95392684efe3f13b746bab0f633b3546b9063860b073fe153c6e4
+  0.60.8: ec68147682a0e6c469a806398bbc37ecd5b4c30af8467ffd860684348215116d
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
