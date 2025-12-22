@@ -5,7 +5,7 @@ common::openvox::linuxaid_cli::checksums:
   1.0.2: "0c3785eab3c0af5d042146017721f77ebcd905d6308a307537e64cb4201814ec"
   1.0.3: "517ed4dcd11663e82fb992960b8b3fe50f03ed4d72cbb946a9c7c66c4704196d"
 
-common::monitor::prometheus::install_method: 'url'
+common::monitor::prometheus::install_method: "url"
 common::monitor::prometheus::env_file_path: "/etc/default"
 
 common::logging::manage: false
@@ -43,8 +43,8 @@ common::system::updates::enable: false
 common::system::updates::manage: false
 
 common::network::netbird::checksums:
-  0.59.3: 9287e9528b5f01d5e4fbbc45330224fe712e9e93f6150446223d0b4edcb6d23f
   0.60.0: 803e909938314368662d5ef50afe6759915e670745a6defbfebe63b610ef8d08
+  0.60.8: 5fcf73112ff1adbd3c2a89b904fe13573c4694253b5fc6159b524709e3f14145
 
 common::monitor::exporter::node::lsof::enable: false
 common::monitor::exporter::node::topprocesses::enable: false
