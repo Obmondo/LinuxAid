@@ -338,6 +338,8 @@ common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
 common::monitor::prometheus::server: prometheus.obmondo.com
 common::monitor::prometheus::server::version: 3.8.1
+common::monitor::prometheus::server::checksums:
+  3.8.1: a09972ced892cd298e353eb9559f1a90f499da3fb4ff0845be352fc138780ee7
 common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
 common::monitor::prometheus::server::config_dir: "/etc/prometheus"
 common::monitor::prometheus::server::collect_scrape_jobs:

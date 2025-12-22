@@ -7,6 +7,8 @@ common::openvox::linuxaid_cli::checksums:
 
 common::monitor::prometheus::install_method: "url"
 common::monitor::prometheus::env_file_path: "/etc/default"
+common::monitor::prometheus::server::checksums:
+  3.8.1: 70159946928dce8e11a5d38b6f478b5b6b65533e67c7909644cf613eb59cdf5c
 
 common::logging::manage: false
 
