@@ -45,6 +45,11 @@ class common::monitor::prometheus::server (
   }
   $install_method = lookup('common::monitor::prometheus::install_method')
 
+  $_shared_dir = $install_method ? {
+    'package' => '/usr/local/share/prometheus',
+    default => '/usr/share/prometheus',
+  }
+
   $_package_name = $install_method ? {
     'package' => 'obmondo-prometheus',
     default   => 'prometheus',
@@ -59,6 +64,7 @@ class common::monitor::prometheus::server (
     collect_tag                    => $::trusted['certname'],
     extra_groups                   => ['obmondo'],
     install_method                 => $install_method,
+    shared_dir                     => $_shared_dir,
     include_default_scrape_configs => false,
     config_dir                     => $config_dir,
     manage_config_dir              => true,
