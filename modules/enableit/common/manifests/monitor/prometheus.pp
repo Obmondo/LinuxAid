@@ -14,12 +14,12 @@
 # @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
 #
 class common::monitor::prometheus (
-  Enum['package']      $install_method,
-  Stdlib::Absolutepath $env_file_path,
-  Stdlib::Absolutepath $bin_dir,
-  Stdlib::Absolutepath $usershell,
-  Stdlib::Fqdn         $server,
-
+  Enum['package','url'] $install_method,
+  Prometheus::Initstyle $init_style,
+  Stdlib::Absolutepath  $env_file_path,
+  Stdlib::Absolutepath  $bin_dir,
+  Stdlib::Absolutepath  $usershell,
+  Stdlib::Fqdn          $server,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
   File {
@@ -42,17 +42,15 @@ class common::monitor::prometheus (
     noop => $noop_value,
   }
 
-  $_init_style = $facts['init_system'] ? {
-    'sysvinit' => 'sysv',
-    default    => 'systemd',
-  }
-
   class { 'prometheus':
     install_method    => $install_method,
     bin_dir           => $bin_dir,
     usershell         => $usershell,
     restart_on_change => true,
     env_file_path     => $env_file_path,
-    init_style        => $_init_style,
+    init_style        => $init_style,
   }
+
+  include common::monitor::prometheus::server
+  include common::monitor::exporter
 }

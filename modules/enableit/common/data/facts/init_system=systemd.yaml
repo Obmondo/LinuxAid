@@ -2,6 +2,7 @@
 common::system::systemd::manage_journald: true
 common::system::time::ntp::ntp_client: 'systemd-timesyncd'
 common::monitor::exporter::node::systemd: true
+common::monitor::prometheus::init_style: 'systemd'
 
 common::logging::rsyslog::enable: true
 common::logging::rsyslog::purge_rsyslog_d: false

@@ -19,7 +19,6 @@ class profile::openvox (
   $os_major = $facts['os']['release']['major']
   $os_name = $facts['os']['name']
   $os_arch = $facts['os']['architecture']
-  $package_provider = lookup('eit_repos::package_provider', String, undef, $facts['package_provider'])
 
   $_version = if $version == 'latest' {
     $version
@@ -54,10 +53,15 @@ class profile::openvox (
     }
   }
 
+  $_package_provider = $os_name ? {
+    'TurrisOS' => 'gem',
+    default    => $facts['package_provider']
+  }
+
   package { $aio_package_name:
     ensure   => $_version,
     noop     => $noop_value,
-    provider => $package_provider,
+    provider => $_package_provider,
   }
 
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])

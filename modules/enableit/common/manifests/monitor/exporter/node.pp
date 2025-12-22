@@ -99,15 +99,14 @@ class common::monitor::exporter::node (
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 
   $_checksum = lookup('common::monitor::exporter::node::checksums')
+  $install_method = lookup('common::monitor::prometheus::install_method')
 
   File {
     noop => $noop_value,
   }
 
-  include common::monitor::prometheus
-
   # NOTE: The underlying packages only works with systemd
-  if $facts['init_system'] == 'systemd' {
+  if $facts['service_provider'] == 'systemd' {
     include common::monitor::exporter::node::smartmon
     include common::monitor::exporter::node::topprocesses
     include common::monitor::exporter::node::lsof
@@ -130,6 +129,16 @@ class common::monitor::exporter::node (
       File[$lib_directory],
       Group['obmondo'],
     ]
+  }
+
+  $_init_style = $enable ? {
+    true    => lookup('common::monitor::prometheus::init_style'),
+    default => 'none',
+  }
+
+  $_package_name = $install_method ? {
+    'package' => 'obmondo-node-exporter',
+    default   => 'node_exporter'
   }
 
   $default_collectors = [
@@ -161,10 +170,13 @@ class common::monitor::exporter::node (
   ].delete_undef_values
 
   class { 'prometheus::node_exporter':
+    package_name      => $_package_name,
     version           => $version,
-    install_method    => 'url',
+    install_method    => $install_method,
+    init_style        => $_init_style,
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
+    package_ensure    => $version,
     user              => 'node_exporter',
     group             => 'node_exporter',
     export_scrape_job => ! $enable,

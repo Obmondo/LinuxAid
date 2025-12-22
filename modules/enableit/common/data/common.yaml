@@ -316,9 +316,10 @@ common::openvox::server: enableit.puppet.obmondo.com
 common::openvox::package_name: "openvox-agent"
 common::openvox::configure_agent: true
 
-common::openvox::linuxaid_cli::version: 1.0.2
+common::openvox::linuxaid_cli::version: 1.0.3
 common::openvox::linuxaid_cli::checksums:
   1.0.2: "050a95ed7fc634b31da68118be057b0650333c14cee8bfd0b3922bfc376b1b7d"
+  1.0.3: "59a2ff6a6bbdd37396737b5a47a417b9212d49659f13605783e4dbd0b27451c6"
 
 # KeepAlived
 common::keepalived::global_defs:
@@ -336,7 +337,7 @@ common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
 common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
 common::monitor::prometheus::server: prometheus.obmondo.com
-common::monitor::prometheus::server::version: 2.55.1
+common::monitor::prometheus::server::version: 3.8.1
 common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
 common::monitor::prometheus::server::config_dir: "/etc/prometheus"
 common::monitor::prometheus::server::collect_scrape_jobs:
@@ -495,15 +496,15 @@ common::system::updates::enable: true
 common::setup::obmondo_admin::manage: false
 common::setup::obmondo_admin::enable: false
 
-prometheus::bin_dir: /opt/obmondo/bin
-prometheus::install_method: package
-
+## Software
 common::software::vncserver::config_defaults:
   session: "gnome"
   geometry: "1920x1080"
 
+## Mail
 common::mail::myhostname: "%{facts.networking.fqdn}"
 common::mail::mydomain: "%{facts.networking.domain}"
 
+## DNS
 common::system::dns::listen_address:
   - "192.168.0.1"

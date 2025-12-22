@@ -11,16 +11,14 @@
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
 class common::monitor::prometheus::server (
-  Eit_types::Version   $version,
-  Array[Hash]          $collect_scrape_jobs,
-  Stdlib::Absolutepath $config_dir,
-  Eit_types::IPPort    $listen_address,
+  Eit_types::Version    $version,
+  Array[Hash]           $collect_scrape_jobs,
+  Stdlib::Absolutepath  $config_dir,
+  Eit_types::IPPort     $listen_address,
 
   Boolean               $enable     = $common::monitor::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
-
-  include common::monitor::prometheus
 
   Exec {
     noop => $noop_value,
@@ -45,6 +43,17 @@ class common::monitor::prometheus::server (
     undef   => "https://${common::monitor::prometheus::server}/api/v1/write",
     default => "https://${common::monitor::prometheus::server}/${::obmondo['customer_id']}/api/v1/write" # lint:ignore:top_scope_facts
   }
+  $install_method = lookup('common::monitor::prometheus::install_method')
+
+  $_shared_dir = $install_method ? {
+    'package' => '/usr/local/share/prometheus',
+    default => '/usr/share/prometheus',
+  }
+
+  $_package_name = $install_method ? {
+    'package' => 'obmondo-prometheus',
+    default   => 'prometheus',
+  }
 
   class { 'prometheus::server':
     version                        => $version,
@@ -54,12 +63,13 @@ class common::monitor::prometheus::server (
     collect_scrape_jobs            => $collect_scrape_jobs,
     collect_tag                    => $::trusted['certname'],
     extra_groups                   => ['obmondo'],
+    install_method                 => $install_method,
+    shared_dir                     => $_shared_dir,
     include_default_scrape_configs => false,
     config_dir                     => $config_dir,
     manage_config_dir              => true,
-    install_method                 => 'package',
     restart_on_change              => true,
-    package_name                   => 'obmondo-prometheus',
+    package_name                   => $_package_name,
     bin_dir                        => '/opt/obmondo/bin',
     extra_options                  => $_extra_options,
     scrape_configs                 => [{

@@ -1,9 +1,11 @@
 ---
 common::openvox::package_name: "openvox"
-common::openvox::version: "7.37.2"
+common::openvox::version: "8.24.1"
 common::openvox::linuxaid_cli::checksums:
   1.0.2: "0c3785eab3c0af5d042146017721f77ebcd905d6308a307537e64cb4201814ec"
+  1.0.3: "517ed4dcd11663e82fb992960b8b3fe50f03ed4d72cbb946a9c7c66c4704196d"
 
+common::monitor::prometheus::install_method: 'url'
 common::monitor::prometheus::env_file_path: "/etc/default"
 
 common::logging::manage: false
