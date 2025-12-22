@@ -108,4 +108,13 @@ class common::monitor::prometheus::server (
 
   Monitor::Threshold <<| tag == $::trusted['certname'] |>>
   Monitor::Alert <<| tag == $::trusted['certname'] |>>
+
+  $_checksum = lookup('common::monitor::exporter::node::checksums')
+
+  Archive <| tag == "/tmp/prometheus-${version}.tar.gz" |> {
+    checksum        => $_checksum[$version],
+    checksum_verify => true,
+    noop            => $noop_value,
+  }
+
 }
