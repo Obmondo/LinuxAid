@@ -60,6 +60,13 @@ class common::monitor::prometheus::server (
     collect_scrape_jobs            => $collect_scrape_jobs,
     collect_tag                    => $::trusted['certname'],
     extra_groups                   => ['obmondo'],
+    global_config                  => {
+      scrape_interval => '15s',
+      evaluation_interval => '15s',
+      external_labels => {
+        product => 'linuxaid',
+      },
+    },
     install_method                 => $install_method,
     shared_dir                     => $_shared_dir,
     include_default_scrape_configs => false,
