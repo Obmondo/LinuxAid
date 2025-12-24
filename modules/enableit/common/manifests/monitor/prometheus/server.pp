@@ -39,10 +39,7 @@ class common::monitor::prometheus::server (
   $scrape_port = Integer($listen_address.split(':')[1])
   $scrape_host = $trusted['certname']
   $_extra_options = "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus"
-  $_prometheus_url = $::obmondo['customer_id'] ? { # lint:ignore:top_scope_facts
-    undef   => "https://${common::monitor::prometheus::server}/api/v1/write",
-    default => "https://${common::monitor::prometheus::server}/${::obmondo['customer_id']}/api/v1/write" # lint:ignore:top_scope_facts
-  }
+  $_prometheus_url = "https://${common::monitor::prometheus::server}/api/v1/write"
   $install_method = lookup('common::monitor::prometheus::install_method')
 
   $_shared_dir = $install_method ? {
