@@ -62,6 +62,7 @@ class common::repo (
   Enum['http', 'https']     $source_protocol = 'https',
   Boolean                   $local           = false,
   Optional[Stdlib::Fqdn]    $domain          = undef,
+  Optional[Array]           $extra_arch      = ['armhf'],
   Optional[Eit_types::Date] $snapshot        = undef,
 ) {
   File {
@@ -72,10 +73,15 @@ class common::repo (
   }
 
   # Get the architecture
-  $architecture = $facts['os']['architecture'] ? {
+  $fact_arch = $facts['os']['architecture'] ? {
     'aarch64' => 'arm64',
     default   => 'amd64',
   }
+
+  # Final architecture list
+  $architecture = $extra_arch.empty ?
+    [$fact_arch] :
+    unique([$fact_arch] + $estra_arch)
 
   if $manage {
     class { 'eit_repos':
