@@ -18,7 +18,6 @@ define eit_files::file (
   Optional[Stdlib::Unixpath]       $target       = undef,
   Optional[Stdlib::AbsolutePath]   $ensure_mount = undef,
   Eit_types::Noop_Value            $noop_value   = undef,
-  Optional[Boolean]                $recurse      = true,
 ) {
 
   if $source and $content {
@@ -38,7 +37,6 @@ define eit_files::file (
     content => $content,
     target  => $target,
     noop    => $noop_value,
-    recurse => $recurse,
   }
 
   $_obmondo_file = if $source {
