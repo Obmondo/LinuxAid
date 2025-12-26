@@ -2,7 +2,9 @@
 class profile::computing::slurm::slurmdbd (
   Eit_types::SimpleString  $interface,
   Array[Eit_types::IPCIDR] $node_cidrs,
-  String            $storagehost = '127.0.0.1',
+  String                   $db_buffer_pool_size,
+  String                   $db_log_file_size,
+  String                   $storagehost = '127.0.0.1',
 ) {
 
   firewall_multi {'100 allow slurmdbd':
@@ -20,8 +22,10 @@ class profile::computing::slurm::slurmdbd (
   }
 
   class { '::slurm::slurmdbd' :
-    storagehost    => $storagehost,
-    storagecharset => 'utf8',
-    storagecollate => 'utf8_general_ci',
+    storagehost             => $storagehost,
+    storagecharset          => 'utf8',
+    storagecollate          => 'utf8_general_ci',
+    innodb_buffer_pool_size => $db_buffer_pool_size,
+    innodb_log_file_size    => $db_log_file_size,
   }
 }

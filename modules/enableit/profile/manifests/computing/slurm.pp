@@ -7,6 +7,7 @@
 #
 class profile::computing::slurm (
   Boolean                        $enable                  = $::role::computing::slurm::enable,
+  Boolean                        $noop_value              = true,
   Eit_types::SimpleString        $interface               = $::role::computing::slurm::interface,
   Array[Eit_types::IPCIDR]       $node_cidrs              = $::role::computing::slurm::node_cidrs,
   Eit_types::Version             $slurm_version           = $::role::computing::slurm::slurm_version,
@@ -15,6 +16,7 @@ class profile::computing::slurm (
     Eit_Files::Source,
     String
   ]]                             $munge_key               = $::role::computing::slurm::munge_key,
+  Optional[Eit_Files::Source]    $jwt_key                 = $::role::computing::slurm::jwt_key,
   Boolean                        $slurmctld               = $::role::computing::slurm::slurmctld,
   Boolean                        $slurmdbd                = $::role::computing::slurm::slurmdbd,
   Boolean                        $slurmd                  = $::role::computing::slurm::slurmd,
@@ -30,6 +32,8 @@ class profile::computing::slurm (
   Boolean                        $disable_root_jobs       = $::role::computing::slurm::disable_root_jobs,
   Boolean                        $use_pam                 = $::role::computing::slurm::use_pam,
   Boolean                        $hwloc_enabled           = $::role::computing::slurm::hwloc_enabled,
+  String                         $db_buffer_pool_size     = $::role::computing::slurm::db_buffer_pool_size,
+  String                         $db_log_file_size        = $::role::computing::slurm::db_log_file_size,
 ) inherits ::profile::computing {
 
   # We manually install SLURM and munge packages because we're using packages
@@ -49,6 +53,18 @@ class profile::computing::slurm (
   $_munge_key = type($munge_key) ? {
     String  => { munge_key_content => $munge_key.node_encrypt::secret },
     default => { munge_key_source => eit_files::to_file($munge_key)['resource']['source'] },
+  }
+
+  # Determine whether jwt_key should be managed
+  $_jwt_key = $jwt_key ? {
+    undef   => false,
+    default => true,
+  }
+
+  if versioncmp($slurm_version, '24.0.11') >= 0 {
+    $selecttype_value = 'cons_tres'
+  } else {
+    $selecttype_value = 'cons_res'
   }
 
   class { '::slurm':
@@ -80,12 +96,16 @@ class profile::computing::slurm (
     accountingstoragehost     => $accounting_storage_host,
     # Control
     slurmctldhost             => $control_machine,
-
+    selecttype                => $selecttype_value,
     # Munge
     manage_munge              => true,
     munge_create_key          => false,
     munge_uid                 => 64031,
     munge_gid                 => 64031,
+
+    #JWT
+    authalttypes              => if $_jwt_key {[ 'auth/jwt' ]},
+    authaltparameters         => if $_jwt_key {[ 'jwt_key=/var/spool/slurm/jwt_hs256.key' ]},
 
     # Disable the Lua job submit plugin; broken/unnecessary
     jobsubmitplugins          => [],
@@ -117,8 +137,10 @@ class profile::computing::slurm (
     })
 
     class { '::profile::computing::slurm::slurmdbd':
-      interface  => $interface,
-      node_cidrs => $node_cidrs,
+      interface           => $interface,
+      node_cidrs          => $node_cidrs,
+      db_buffer_pool_size => '256M',
+      db_log_file_size    => '24M',
     }
   }
 
@@ -131,6 +153,18 @@ class profile::computing::slurm (
       interface  => $interface,
       node_cidrs => $node_cidrs,
     }
+  }
+
+  package { ['libjwt', 'libjwt-devel']:
+    ensure => ensure_present($_jwt_key),
+    noop   => $noop_value,
+  }
+
+  file { '/var/spool/slurm/jwt_hs256.key':
+    ensure  => ensure_file($_jwt_key),
+    source  => eit_files::to_file($jwt_key)['source'],
+    noop    => $noop_value,
+    require => Package['libjwt', 'libjwt-devel'],
   }
 
   if !$enable {

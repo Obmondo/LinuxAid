@@ -1,0 +1,17 @@
+<%- |
+  Eit_types::Slurm::Policy $policy
+| -%>
+# =====================================
+# Slurm Policy Configuration
+# =====================================
+# THIS FILE IS MANAGED BY PUPPET.
+
+[roles]
+user=<%= Array($policy['roles']['user']).join(',') %>
+admin=<%= Array($policy['roles']['admin']).join(',') %>
+
+[user]
+actions=<%= Array($policy['user']['actions']).join(',') %>
+
+[admin]
+actions=<%= Array($policy['admin']['actions']).join(',') %>
