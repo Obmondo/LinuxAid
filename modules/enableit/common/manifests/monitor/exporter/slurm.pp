@@ -39,7 +39,7 @@ class common::monitor::exporter::slurm (
     "--port=${_port}",
   ]
 
-  prometheus::daemon { 'slurm_exporter':
+  prometheus::daemon { 'prometheus-slurm-exporter':
     package_name      => 'obmondo-slurm-exporter',
     version           => '1.8.0',
     service_enable    => $enable,
@@ -48,9 +48,9 @@ class common::monitor::exporter::slurm (
     init_style        => if !$enable { 'none' },
     install_method    => 'package',
     tag               => $::trusted['certname'],
-    user              => 'slurm_exporter',
-    group             => 'slurm_exporter',
-    notify_service    => Service['slurm_exporter'],
+    user              => 'prometheus-slurm-exporter',
+    group             => 'prometheus-slurm-exporter',
+    notify_service    => Service['prometheus-slurm-exporter'],
     real_download_url => 'https://github.com/rivosinc/prometheus-slurm-exporter',
     export_scrape_job => $enable,
     options           => $_options.join(' '),
@@ -62,8 +62,8 @@ class common::monitor::exporter::slurm (
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module can't handle noop. (which is correct)
-  Exec <| tag == 'systemd-slurm_exporter.service-systemctl-daemon-reload' |> {
+  Exec <| tag == 'systemd-prometheus-slurm-exporter.service-systemctl-daemon-reload' |> {
     noop      => $noop_value,
-    subscribe => File['/etc/systemd/system/slurm_exporter.service'],
-  } ~> Service['slurm_exporter']
+    subscribe => File['/etc/systemd/system/prometheus-slurm-exporter.service'],
+  } ~> Service['prometheus-slurm-exporter']
 }
