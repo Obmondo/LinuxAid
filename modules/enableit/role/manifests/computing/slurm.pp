@@ -48,7 +48,10 @@ class role::computing::slurm (
     Eit_Files::Source,
     String
   ]]                                  $munge_key               = undef,
-  Optional[Eit_Files::Source]         $jwt_key                 = undef,
+  Optional[Variant[
+    Eit_Files::Source,
+    String
+  ]]                                  $jwt_key                 = undef,
   Boolean                             $enable                  = false,
   Boolean                             $noop_value              = true,
   Eit_types::SimpleString             $interface               = undef,
@@ -77,9 +80,9 @@ class role::computing::slurm (
 
 ) inherits ::role::computing {
   contain 'profile::computing::slurm'
-  contain 'profile::computing::slurm::slurm_web'
 
   if $slurm_web {
+    contain profile::computing::slurm::slurm_web
     contain role::web::haproxy
   }
 }

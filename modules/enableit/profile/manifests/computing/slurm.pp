@@ -16,7 +16,10 @@ class profile::computing::slurm (
     Eit_Files::Source,
     String
   ]]                             $munge_key               = $::role::computing::slurm::munge_key,
-  Optional[Eit_Files::Source]    $jwt_key                 = $::role::computing::slurm::jwt_key,
+  Optional[Variant[
+   Eit_Files::Source,
+    String
+  ]]                             $jwt_key                 = $::role::computing::slurm::jwt_key,
   Boolean                        $slurmctld               = $::role::computing::slurm::slurmctld,
   Boolean                        $slurmdbd                = $::role::computing::slurm::slurmdbd,
   Boolean                        $slurmd                  = $::role::computing::slurm::slurmd,
@@ -55,6 +58,7 @@ class profile::computing::slurm (
     default => { munge_key_source => eit_files::to_file($munge_key)['resource']['source'] },
   }
 
+  # Determine whether jwt_key should be managed
   # Determine whether jwt_key should be managed
   $_jwt_key = $jwt_key ? {
     undef   => false,
@@ -129,6 +133,8 @@ class profile::computing::slurm (
       interface  => $interface ,
       node_cidrs => $node_cidrs,
     }
+
+    include common::monitor::exporter::slurm
   }
 
   if $enable and $slurmdbd {
@@ -153,18 +159,6 @@ class profile::computing::slurm (
       interface  => $interface,
       node_cidrs => $node_cidrs,
     }
-  }
-
-  package { ['libjwt', 'libjwt-devel']:
-    ensure => ensure_present($_jwt_key),
-    noop   => $noop_value,
-  }
-
-  file { '/var/spool/slurm/jwt_hs256.key':
-    ensure  => ensure_file($_jwt_key),
-    source  => eit_files::to_file($jwt_key)['source'],
-    noop    => $noop_value,
-    require => Package['libjwt', 'libjwt-devel'],
   }
 
   if !$enable {

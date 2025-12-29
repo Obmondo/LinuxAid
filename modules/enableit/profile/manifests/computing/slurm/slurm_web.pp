@@ -94,6 +94,10 @@
 class profile::computing::slurm::slurm_web (
   Boolean                   $enable     = $::role::computing::slurm::slurm_web,
   Boolean                   $noop_value = $::role::computing::slurm::noop_value,
+  Optional[Variant[
+    Eit_Files::Source,
+    String
+  ]]                        $jwt_key    = $::role::computing::slurm::jwt_key,
   Eit_types::Slurm::Agent   $agent      = $::role::computing::slurm::slurm_agent,
   Eit_types::Slurm::Gateway $gateway    = $::role::computing::slurm::slurm_gateway,
   Eit_types::Slurm::Policy  $policy     = $::role::computing::slurm::slurm_policy,
@@ -121,6 +125,11 @@ class profile::computing::slurm::slurm_web (
     ensure  => ensure_present($enable),
     require => Eit_repos::Repo['rackslab_slurmweb'],
     noop    => $noop_value,
+  }
+
+  package { ['libjwt', 'libjwt-devel']:
+    ensure => ensure_present($enable),
+    noop   => $noop_value,
   }
 
   # -------------------------------------------------------
@@ -173,6 +182,13 @@ class profile::computing::slurm::slurm_web (
     group  => 'root',
     mode   => '0755',
     noop   => $noop_value,
+  }
+
+  file { '/var/spool/slurm/jwt_hs256.key':
+    ensure  => ensure_file($enable),
+    source  => eit_files::to_file($jwt_key)['source'],
+    noop    => $noop_value,
+    require => Package['libjwt', 'libjwt-devel'],
   }
 
   file { '/etc/slurm-web/agent.ini':
