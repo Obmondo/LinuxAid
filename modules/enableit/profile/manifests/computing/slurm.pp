@@ -155,18 +155,6 @@ class profile::computing::slurm (
     }
   }
 
-  package { ['libjwt', 'libjwt-devel']:
-    ensure => ensure_present($_jwt_key),
-    noop   => $noop_value,
-  }
-
-  file { '/var/spool/slurm/jwt_hs256.key':
-    ensure  => ensure_file($_jwt_key),
-    source  => eit_files::to_file($jwt_key)['source'],
-    noop    => $noop_value,
-    require => Package['libjwt', 'libjwt-devel'],
-  }
-
   if !$enable {
     package::remove( ['slurm', 'slurm-slurmdbd', 'slurm-slurmctld', 'slurm-slurmd', 'munge'])
   }
