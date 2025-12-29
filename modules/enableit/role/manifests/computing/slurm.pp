@@ -80,6 +80,7 @@ class role::computing::slurm (
   contain 'profile::computing::slurm::slurm_web'
 
   if $slurm_web {
+    contain profile::computing::slurm::slurm_web
     contain role::web::haproxy
   }
 }

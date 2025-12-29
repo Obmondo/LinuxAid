@@ -7,11 +7,19 @@
 # THIS FILE IS MANAGED BY PUPPET.
 
 [roles]
+<% if $policy['roles']['user'] { -%>
 user=<%= Array($policy['roles']['user']).join(',') %>
+<% } -%>
+<% if $policy['roles']['admin'] { -%>
 admin=<%= Array($policy['roles']['admin']).join(',') %>
+<% } -%>
 
+<% if $policy['roles']['user'] { -%>
 [user]
 actions=<%= Array($policy['user']['actions']).join(',') %>
+<% } -%>
 
+<% if $policy['roles']['admin'] { -%>
 [admin]
 actions=<%= Array($policy['admin']['actions']).join(',') %>
+<% } -%>
