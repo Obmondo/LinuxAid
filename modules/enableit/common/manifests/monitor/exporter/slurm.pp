@@ -56,7 +56,7 @@ class common::monitor::exporter::slurm (
     options           => $_options.join(' '),
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
-    scrape_job_name   => 'wireguard',
+    scrape_job_name   => 'slurm',
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
