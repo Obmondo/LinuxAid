@@ -129,6 +129,8 @@ class profile::computing::slurm (
       interface  => $interface ,
       node_cidrs => $node_cidrs,
     }
+
+    include common::monitor::exporter::slurm
   }
 
   if $enable and $slurmdbd {
