@@ -43,33 +43,43 @@
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 class role::computing::slurm (
-  Boolean                        $__blendable,
+  Boolean                             $__blendable,
   Optional[Variant[
     Eit_Files::Source,
     String
-  ]]                             $munge_key               = undef,
-  Boolean                        $enable                  = false,
-  Eit_types::SimpleString        $interface               = undef,
-  Array[Eit_types::IPCIDR]       $node_cidrs              = [],
-  Eit_types::Version             $slurm_version           = '18.08.7',
-  Eit_types::Version             $munge_version           = '0.5.11',
-  Boolean                        $slurmctld               = false,
-  Boolean                        $slurmdbd                = false,
-  Boolean                        $slurmd                  = true,
-  Hash                           $nodes                   = {},
-  Hash                           $partitions              = {},
-  String                         $srun_port_range         = '50000-53000',
-  Stdlib::Host                   $accounting_storage_host = $facts['networking']['hostname'],
-  Stdlib::Host                   $control_machine         = $facts['networking']['hostname'],
-  Integer[0,2]                   $return_to_service       = 2,
-  Boolean                        $disable_root_jobs       = false,
-  Boolean                        $use_pam                 = false,
-  Boolean                        $hwloc_enabled           = false,
-
-  Eit_types::Encrypt::Params     $encrypt_params               = [
-    'munge_key',
-  ]
+  ]]                                  $munge_key               = undef,
+  Optional[Eit_Files::Source]         $jwt_key                 = undef,
+  Boolean                             $enable                  = false,
+  Boolean                             $noop_value              = true,
+  Eit_types::SimpleString             $interface               = undef,
+  Array[Eit_types::IPCIDR]            $node_cidrs              = [],
+  Eit_types::Version                  $slurm_version           = '18.08.7',
+  Eit_types::Version                  $munge_version           = '0.5.11',
+  Boolean                             $slurmctld               = false,
+  Boolean                             $slurmdbd                = false,
+  Boolean                             $slurmd                  = true,
+  Hash                                $nodes                   = {},
+  Hash                                $partitions              = {},
+  String                              $srun_port_range         = '50000-53000',
+  Stdlib::Host                        $accounting_storage_host = $facts['networking']['hostname'],
+  Stdlib::Host                        $control_machine         = $facts['networking']['hostname'],
+  Integer[0,2]                        $return_to_service       = 2,
+  Boolean                             $disable_root_jobs       = false,
+  Boolean                             $use_pam                 = false,
+  Boolean                             $hwloc_enabled           = false,
+  Boolean                             $slurm_web               = false,
+  Optional[Eit_types::Slurm::Agent]   $slurm_agent             = undef,
+  Optional[Eit_types::Slurm::Gateway] $slurm_gateway           = undef,
+  Optional[Eit_types::Slurm::Policy]  $slurm_policy            = undef,
+  String                              $db_buffer_pool_size     = '256M',
+  String                              $db_log_file_size        = '24M',
+  Eit_types::Encrypt::Params          $encrypt_params          = ['munge_key', 'jwt_key','slurm_gateway.*.bind_password']
 
 ) inherits ::role::computing {
   contain 'profile::computing::slurm'
+  contain 'profile::computing::slurm::slurm_web'
+
+  if $slurm_web {
+    contain role::web::haproxy
+  }
 }

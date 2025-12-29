@@ -1,0 +1,14 @@
+<%- |
+  Eit_types::Slurm::Agent $agent_config
+| -%>
+# =====================================
+# Slurm Agent Configuration
+# =====================================
+# THIS FILE IS MANAGED BY PUPPET.
+
+[service]
+cluster=<%= $agent_config['service']['cluster'] %>
+
+[slurmrestd]
+jwt_mode=<%= $agent_config['slurmrestd']['jwt_mode'] %>
+jwt_token=<%= $agent_config['slurmrestd']['jwt_token'] %>

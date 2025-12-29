@@ -1,0 +1,54 @@
+<%- |
+  Eit_types::Slurm::Gateway $gateway_config
+| -%>
+# =====================================
+# Slurm Gateway Configuration
+# =====================================
+# THIS FILE IS MANAGED BY PUPPET.
+
+[service]
+interface=<%= $gateway_config['service']['interface'] %>
+<% if $gateway_config['service']['port'] { -%>
+port=<%= $gateway_config['service']['port'] %>
+<% } -%>
+
+[ui]
+host=<%= $gateway_config['ui']['host'] %>
+
+[authentication]
+<% if $gateway_config['authentication']['enabled'] { -%>
+enabled=yes
+<% } else { -%>
+enabled=no
+<% } -%>
+
+[ldap]
+uri=<%= $gateway_config['ldap']['uri'] %>
+user_base=<%= $gateway_config['ldap']['user_base'] %>
+group_base=<%= $gateway_config['ldap']['group_base'] %>
+<% if $gateway_config['ldap']['group_name_attribute'] { -%>
+group_name_attribute=<%= $gateway_config['ldap']['group_name_attribute'] %>
+<% } -%>
+<% if $gateway_config['ldap']['user_class'] { -%>
+user_class=<%= $gateway_config['ldap']['user_class'] %>
+<% } -%>
+<% if $gateway_config['ldap']['group_object_classes'] { -%>
+group_object_classes=<%= $gateway_config['ldap']['group_object_classes'] %>
+<% } -%>
+<% if $gateway_config['ldap']['user_name_attribute'] { -%>
+user_name_attribute=<%= $gateway_config['ldap']['user_name_attribute'] %>
+<% } -%>
+<% if $gateway_config['ldap']['user_fullname_attribute'] { -%>
+user_fullname_attribute=<%= $gateway_config['ldap']['user_fullname_attribute'] %>
+<% } -%>
+<% if $gateway_config['ldap']['user_primary_group_attribute'] { -%>
+user_primary_group_attribute=<%= $gateway_config['ldap']['user_primary_group_attribute'] %>
+<% } -%>
+<% if $gateway_config['ldap']['starttls'] { -%>
+starttls=<%= $gateway_config['ldap']['starttls'] %>
+<% } -%>
+bind_dn=<%= $gateway_config['ldap']['bind_dn'] %>
+bind_password=<%= $gateway_config['ldap']['bind_password'].unwrap %>
+
+[agents]
+url=<%= $gateway_config['agents']['url'] %>
