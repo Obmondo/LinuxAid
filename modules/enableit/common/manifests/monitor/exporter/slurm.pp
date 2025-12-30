@@ -35,21 +35,21 @@ class common::monitor::exporter::slurm (
   $_address = $listen_address.split(':')[0]
   $_port = $listen_address.split(':')[1]
 
-  prometheus::daemon { 'prometheus-slurm-exporter':
+  prometheus::daemon { 'slurm_exporter':
     package_name      => 'obmondo-slurm-exporter',
-    version           => '1.8.0',
+    version           => '1.1.1',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
     init_style        => if !$enable { 'none' },
     install_method    => 'package',
     tag               => $::trusted['certname'],
-    user              => 'prometheus-slurm-exporter',
-    group             => 'prometheus-slurm-exporter',
-    notify_service    => Service['prometheus-slurm-exporter'],
-    real_download_url => 'https://github.com/rivosinc/prometheus-slurm-exporter',
+    user              => 'slurm_exporter',
+    group             => 'slurm_exporter',
+    notify_service    => Service['slurm_exporter'],
+    real_download_url => 'https://github.com/sckyzo/slurm_exporter',
     export_scrape_job => $enable,
-    options           => "-web.listen-address ${listen_address}",
+    options           => "-web.listen-address=${listen_address}",
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'slurm',
@@ -58,8 +58,8 @@ class common::monitor::exporter::slurm (
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
   # upstream module can't handle noop. (which is correct)
-  Exec <| tag == 'systemd-prometheus-slurm-exporter.service-systemctl-daemon-reload' |> {
+  Exec <| tag == 'systemd-slurm_exporter.service-systemctl-daemon-reload' |> {
     noop      => $noop_value,
-    subscribe => File['/etc/systemd/system/prometheus-slurm-exporter.service'],
-  } ~> Service['prometheus-slurm-exporter']
+    subscribe => File['/etc/systemd/system/slurm_exporter.service'],
+  } ~> Service['slurm_exporter']
 }
