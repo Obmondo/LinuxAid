@@ -49,7 +49,7 @@ class common::monitor::exporter::slurm (
     notify_service    => Service['slurm_exporter'],
     real_download_url => 'https://github.com/sckyzo/slurm_exporter',
     export_scrape_job => $enable,
-    options           => "-web.listen-address=${listen_address}",
+    options           => "--web.listen-address=${listen_address}",
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'slurm',
