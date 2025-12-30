@@ -26,9 +26,8 @@ class common::openvox (
   Optional[Hash]        $extra_main_settings = undef,
 
   # TODO: lets control  via enc script
-  String                $environment         = 'v1.2.0',
+  String                $environment         = 'v1.3.0',
 ) {
-
   if $manage {
     contain profile::openvox
   }
