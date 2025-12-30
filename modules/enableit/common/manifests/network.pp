@@ -79,6 +79,7 @@ class common::network (
           'the default route should be have parameter `network` set to "default"')
 
   if $manage {
+    notify { 'check networkd-waitonline service': withpath => true }
     # NOTE: We don't use network manager at any place.
     service { [
       'NetworkManager',
