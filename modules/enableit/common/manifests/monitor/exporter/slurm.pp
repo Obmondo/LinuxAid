@@ -34,10 +34,6 @@ class common::monitor::exporter::slurm (
 
   $_address = $listen_address.split(':')[0]
   $_port = $listen_address.split(':')[1]
-  $_options = [
-    "--address=${_address}",
-    "--port=${_port}",
-  ]
 
   prometheus::daemon { 'prometheus-slurm-exporter':
     package_name      => 'obmondo-slurm-exporter',
@@ -53,7 +49,7 @@ class common::monitor::exporter::slurm (
     notify_service    => Service['prometheus-slurm-exporter'],
     real_download_url => 'https://github.com/rivosinc/prometheus-slurm-exporter',
     export_scrape_job => $enable,
-    options           => $_options.join(' '),
+    options           => "-web.listen-address ${listen_address}",
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'slurm',
