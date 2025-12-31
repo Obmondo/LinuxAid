@@ -13,4 +13,6 @@ class profile::computing::slurm::slurmctld (
   }
 
   include ::slurm::slurmctld
+  include common::monitor::exporter::slurm
+  include monitor::system::slurm
 }
