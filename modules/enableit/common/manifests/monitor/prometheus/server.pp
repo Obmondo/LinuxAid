@@ -38,7 +38,7 @@ class common::monitor::prometheus::server (
 
   $scrape_port = Integer($listen_address.split(':')[1])
   $scrape_host = $trusted['certname']
-  $_extra_options = "--web.listen-address=${listen_address} --enable-feature=agent --storage.agent.path=/opt/obmondo/prometheus"
+  $_extra_options = "--web.listen-address=${listen_address} --agent --storage.agent.path=/opt/obmondo/prometheus"
   $_prometheus_url = "https://${common::monitor::prometheus::server}/api/v1/write"
   $install_method = lookup('common::monitor::prometheus::install_method')
 
