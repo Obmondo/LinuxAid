@@ -284,6 +284,7 @@ function update_module() {
 
   # Pin to specific commit
   if [[ -n "$COMMIT_HASH" ]]; then
+    LATEST_TAG="${COMMIT_HASH}"
     setup_module_git_clone "$COMMIT_HASH"
     echo "Using ref ${COMMIT_HASH}"
     COMMIT_MESSAGE="chore: updated puppet-${MODULE_NAME} module @${COMMIT_HASH}
