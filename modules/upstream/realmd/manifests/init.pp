@@ -96,7 +96,6 @@ class realmd (
   Boolean $manage_sssd_config,
   Boolean $manage_sssd_service,
   Boolean $manage_sssd_package,
-  Boolean $manage_krb5_package,
   String $domain,
   String $netbiosname,
   Variant[String, Undef] $domain_join_user,
