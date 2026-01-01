@@ -31,6 +31,38 @@ repository::mirror::default_configurations:
         repodir: "jenkins/debian-stable"
         package_format: "deb"
         deb_sync_type: "debmirror"
+  zabbix:
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: "https://repo.zabbix.com/zabbix/5.0/rhel"
+        repodir: "zabbix/yum/supported"
+        dists: ["8", "9", "10"]
+        architectures: ["x86_64"]
+        package_format: "rpm"
+    apt:
+      enable: false
+      all:
+        enable: false
+        mirror_url: "https://repo.zabbix.com/zabbix/5.0/ubuntu"
+        repodir: "zabbix/apt"
+        package_format: "deb"
+        dists: ["focal", "jammy", "noble"]
+        architectures: ["amd64"]
+        deb_sync_type: "debmirror"
+  zabbix_non-supported:
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: "https://repo.zabbix.com/non-supported/rhel"
+        repodir: "zabbix/yum/non-supported"
+        dists: ["8", "9", "10"]
+        architectures: ["x86_64"]
+        package_format: "rpm"
+    apt:
+      enable: false
   openvox:
     yum:
       enable: false

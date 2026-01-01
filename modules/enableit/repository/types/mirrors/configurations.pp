@@ -2,6 +2,8 @@ type Repository::Mirrors::Configurations = Hash[
   Enum[
     'ubuntu',
     'ubuntu_arm64',
+    'zabbix',
+    'zabbix_non-supported',
     'epel',
     'docker',
     'microsoft',

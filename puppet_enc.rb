@@ -26,7 +26,7 @@ CERTNAME = if TESTING && CERTNAME == 'puppetdb'
 MAX_TAGS = 10
 
 # NOTE: Change this to your feature branch, if you want to test your input from hiera
-DEFAULT_HIERA_BRANCH = 'main'
+DEFAULT_HIERA_BRANCH = 'zabbix'
 
 (hostname, customer_id) = CERTNAME.split('.', 2)
 customer_host_re = /^[a-z0-9-]+$/
