@@ -32,9 +32,9 @@ mod 'voxpupuli/archive',
     :git => "https://github.com/voxpupuli/puppet-archive.git",
     :ref => 'v8.1.0'
 
-mod 'thias/bind',
-    :git => 'https://github.com/thias/puppet-bind.git',
-    :ref => '0.5.8'
+mod 'obmondo/bind',
+    :git => 'https://github.com/Obmondo/puppet-bind.git',
+    :ref => '0.5.9'
 
 mod 'puppetlabs/concat',
     :git => "https://github.com/puppetlabs/puppetlabs-concat.git",
