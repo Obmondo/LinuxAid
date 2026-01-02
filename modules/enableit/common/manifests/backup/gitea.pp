@@ -25,7 +25,7 @@ Description=Run gitea backup
 WantedBy=timers.target
 
 [Timer]
-OnCalendar=daily
+OnCalendar=*-*-* 05:00:00
 Persistent=true
 Unit=gitea-backup.service
 RandomizedDelaySec=1h
