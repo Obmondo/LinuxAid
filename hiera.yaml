@@ -4,7 +4,7 @@ version: 5
 defaults:
   # relative path as per puppetserver on k8s, defaulting to main branch
   # in case of opensource the customer_id will be empty
-  datadir: ../../hiera-data/%{hiera_datapath}
+  datadir: ../../hiera-data/%7ejidqmfi9/masksssdpac
   data_hash: yaml_data
 
 hierarchy:
