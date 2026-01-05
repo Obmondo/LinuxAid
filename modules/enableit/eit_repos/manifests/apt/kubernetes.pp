@@ -13,7 +13,6 @@ class eit_repos::apt::kubernetes (
       architecture => 'amd64',
       # NOTE: empty string is on purpose, since all k8s package works for all distros
       release      => '',
-      repos        => '',
       key          => {
         'name'   => "kubernetes_${version}.gpg",
         'source' => 'puppet:///modules/eit_repos/apt/kubernetes-apt-keyring.gpg',
