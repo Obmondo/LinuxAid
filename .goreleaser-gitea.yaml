@@ -1,30 +1,6 @@
 ---
 version: 2
 
-changelog:
-  use: gitea
-  sort: asc
-  format: "[{{ .SHA }}](https://gitea.obmondo.com/EnableIT/linuxaid/commit/{{ .SHA }}) {{ .Message }}{{ with .AuthorUsername }} (@{{ . }}){{ end }}"
-  abbrev: 7
-  filters:
-    exclude:
-      - init
-      - Merge pull request
-      - Merge remote-tracking branch
-      - Merge branch
-  # Group commits messages by given regex and title.
-  groups:
-    - title: 💫 Features
-      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
-      order: 0
-    - title: 🐛 Bug fixes
-      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
-      order: 1
-    - title: 🎭 Puppet Modules
-      regexp: '^chore:\s(pin|update|added)\spuppet-.*'
-      order: 998
-    - title: 🥴 Others
-      order: 999
 builds:
   - skip: true
 
