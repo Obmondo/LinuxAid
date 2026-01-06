@@ -23,6 +23,12 @@
 #
 # @param remote_servers Hash of remote server IPs for remote logging. Defaults to an empty hash.
 #
+# @groups management manage, enable, purge_rsyslog_d.
+#
+# @groups logging_options log_remote, log_local, system_log, log_cron, log_mail, log_auth, log_boot.
+#
+# @groups remote_logging remote_servers.
+#
 class common::logging::rsyslog (
   Boolean                       $manage          = $common::logging::manage,
   Boolean                       $enable          = true,

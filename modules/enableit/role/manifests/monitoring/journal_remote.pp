@@ -7,6 +7,10 @@
 #
 # @param output The path for the output journal. Defaults to '/var/log/journal/remote'.
 #
+# @groups settings remote_enable, manage_output.
+#
+# @groups paths output
+#
 class role::monitoring::journal_remote (
   Boolean          $remote_enable = false,
   Boolean          $manage_output = true,

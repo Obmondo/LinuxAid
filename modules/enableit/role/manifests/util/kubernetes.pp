@@ -47,6 +47,18 @@
 #
 # @param front_proxy_ca_key The CA key for the front proxy. Defaults to undef.
 #
+# @groups cluster_info cluster_public_dns, cluster_public_port, version, semver_version.
+#
+# @groups role_info role, token, node_join_token, ceph_client, users.
+#
+# @groups cidr_info pod_cidr, service_cidr.
+#
+# @groups etcd_certs etcd_ca_crt, etcd_ca_key, apiserver2etcd_crt, apiserver2etcd_key, etcdpeer_crt, etcdpeer_key.
+#
+# @groups kubernetes_certs kubernetes_ca_crt, kubernetes_ca_key, sa_pub, sa_key.
+#
+# @groups front_proxy_certs front_proxy_ca_crt, front_proxy_ca_key.
+#
 class role::util::kubernetes (
   String                      $cluster_public_dns,
   Integer                     $cluster_public_port,

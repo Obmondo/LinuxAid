@@ -18,6 +18,12 @@
 #
 # @param override_oom Optional override parameter for OOM alert.
 #
+# @groups thresholds warning, critical
+#
+# @groups disable disable_used, disable_used_high, disable_oom
+#
+# @groups override override_used, override_used_high, override_oom
+#
 class monitor::system::ram (
   Boolean               $enable   = true,
   Eit_types::Percentage $warning  = 80,

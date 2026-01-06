@@ -4,6 +4,8 @@
 #
 # @param daemon Whether to run atop as a daemon. Defaults to false.
 #
+# @groups service install, daemon.
+#
 class common::monitoring::atop (
   Boolean $install = true,
   Boolean $daemon  = false,

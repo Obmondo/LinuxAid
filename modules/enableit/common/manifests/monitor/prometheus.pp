@@ -13,6 +13,14 @@
 #
 # @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
 #
+# @groups noop_settings noop_value.
+#
+# @groups installation install_method.
+#
+# @groups paths env_file_path, bin_dir, usershell.
+#
+# @groups server_config server.
+#
 class common::monitor::prometheus (
   Enum['package','url'] $install_method,
   Prometheus::Initstyle $init_style,

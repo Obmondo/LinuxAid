@@ -2,6 +2,8 @@
 #
 # @param parameters Hash of parameters for grub configuration. Defaults to an empty hash.
 #
+# @groups parameters parameters
+#
 class common::system::grub (
   Hash[String, Struct[
     {

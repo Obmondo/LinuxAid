@@ -79,6 +79,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups identity role, discovery_token_hash, token
+#
+# @groups networking controller_address, pod_cidr, apiserver_extra_args, extra_public_ports
+#
+# @groups security etcd_peers, allow_k8s_api, etcdserver_crt, etcdserver_key, etcdpeer_crt, etcdpeer_key, etcd_ca_crt, etcd_ca_key, etcdclient_crt, etcdclient_key, kubernetes_ca_crt, kubernetes_ca_key
+#
+# @groups keycloak keycloak_oidc_domain, keycloak_oidc_client_id, keycloak_oidc_groups_claim
+#
+# @groups master expose_https_on_master, expose_http_on_master, sa_pub, sa_key, apiserver_cert_extra_sans, front_proxy_ca_crt, front_proxy_ca_key
+#
+# @groups container docker_storage_driver, containerd_version, image_repository, containerd_install_method, containerd_snapshotter
+#
 class role::virtualization::kubernetes (
   Enum['controller','worker'] $role,
   String                      $discovery_token_hash,

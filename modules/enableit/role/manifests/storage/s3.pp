@@ -15,6 +15,12 @@
 #
 # @param image The Docker image to use for S3. Defaults to 'zenko/cloudserver:latest-7.10.19'.
 #
+# @groups directories data_dir, metadata_dir, conf_dir.
+#
+# @groups settings roles, manage, image.
+#
+# @groups network endpoint.
+#
 class role::storage::s3 (
   Stdlib::Fqdn     $endpoint,
   Stdlib::Unixpath $data_dir,

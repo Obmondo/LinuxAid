@@ -4,6 +4,8 @@
 #
 # @param quotas Hash of quotas configuration per filesystem, default is empty hash.
 #
+# @groups configuration enable, quotas
+#
 class common::storage::quota (
   Boolean $enable = false,
   Hash[Stdlib::Absolutepath, Struct[{

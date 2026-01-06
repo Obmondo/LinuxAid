@@ -13,6 +13,12 @@
 #
 # @param memory_limit Sets the memory limit for PHP. Defaults to undef.
 #
+# @groups server url, http_server
+#
+# @groups resources opcodecache, memory_limit
+#
+# @groups security ssl, mysql
+#
 class role::appeng::mod_php (
   Optional[Enum['apc', 'xcache']] $opcodecache  = undef,
   Optional[Eit_types::URL] $url                 = undef,

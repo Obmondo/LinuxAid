@@ -47,6 +47,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups ssl ssl, ssl_cert, ssl_key
+#
+# @groups signing packagesign, signing_password, script_tag
+#
+# @groups snapshot snapshot, snapshot_tag
+#
+# @groups nginx nginx_path, nginx_tag
+#
+# @groups git gitserver_url, gitserver_token
+#
+# @groups misc user, basedir, registry_path, volumes, manage, locations, configurations, weekday, server_tag, provider, encrypt_params
+#
 class role::package_management::repo (
   Eit_types::User  $user,
   Stdlib::Unixpath $basedir,

@@ -4,6 +4,8 @@
 #
 # @param instances Hash of failover instances configuration. Defaults to an empty hash.
 #
+# @groups configuration enable, instances
+#
 class common::system::failover (
   Boolean $enable       = false,
   Eit_types::Common::System::Failover::Instances $instances = {},

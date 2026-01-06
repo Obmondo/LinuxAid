@@ -9,6 +9,10 @@
 #
 # @param http_server The HTTP server to use. Defaults to 'apache'.
 #
+# @groups java version, edition
+#
+# @groups server variant, http_server
+#
 class role::web::java (
   Enum[6,7] $version      = 7,
   Enum['openjdk', 'oracle'] $edition = 'openjdk',

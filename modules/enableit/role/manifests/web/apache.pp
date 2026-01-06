@@ -17,6 +17,12 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups connection https, http, manage_haproxy
+#
+# @groups security ciphers
+#
+# @groups configuration modules, domains, vhosts, encrypt_params
+#
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,

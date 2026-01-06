@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable the Prometheus monitoring. Defaults to true.
 #
+# @groups settings enable
+#
 class monitor::prometheus (
   Boolean $enable = true,
 ) {

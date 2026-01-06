@@ -6,6 +6,10 @@
 #
 # @param noop_value Optional boolean for noop mode. Defaults to undef.
 #
+# @groups management enable, manage.
+#
+# @groups configuration noop_value.
+#
 class common::software::nvidia_driver (
   Boolean               $enable     = false,
   Boolean               $manage     = false,

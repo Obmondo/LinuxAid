@@ -20,6 +20,12 @@
 #
 # @param protected_users Array of type Eit_types::User specifying protected users. Defaults to an empty array.
 #
+# @groups management manage, manage_pam, manage_sssd, manage_nis, manage_sudo
+#
+# @groups users allowed_users, allow_managed_users, protected_users
+#
+# @groups purge purge_ubuntu_user, purge_users, ignore_expired_root_password
+#
 class common::system::authentication (
   Eit_types::Common::Allowed_users $allowed_users,
   Boolean                          $manage_pam,

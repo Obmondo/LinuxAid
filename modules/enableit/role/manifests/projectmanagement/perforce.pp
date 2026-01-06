@@ -43,6 +43,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups credentials service_password, admin_password, operator_password, encrypt_params
+#
+# @groups service service_name, service_root, service_port, ssl, service_ssldir, license_content, version
+#
+# @groups users user, admin_user, operator_user
+#
+# @groups logging log_dir, log_level
+#
+# @groups features icmanage, git_connector
+#
+# @groups backup backup_dir, backup_retention
+#
 class role::projectmanagement::perforce (
   Eit_types::Password       $service_password,
   Eit_types::Password       $admin_password,

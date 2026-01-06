@@ -6,6 +6,10 @@
 #
 # @param noop_value The noop value for the monitor. Defaults to $monitor::noop_value.
 #
+# @groups configuration enable, noop_value.
+#
+# @groups users test_users.
+#
 class monitor::system::service::sssd::auth (
   Boolean                $enable     = $monitor::system::service::sssd::enable,
   Array[Eit_types::User] $test_users = [],

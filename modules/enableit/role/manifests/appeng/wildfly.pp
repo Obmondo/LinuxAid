@@ -5,6 +5,8 @@
 #
 # @param http_server The HTTP server to use. Defaults to 'apache'.
 #
+# @groups server http_server, version
+#
 class role::appeng::wildfly (
   Enum['8.2.0', '9.0.0'] $version     = '8.2.0',
   Enum['apache'] $http_server         = 'apache',

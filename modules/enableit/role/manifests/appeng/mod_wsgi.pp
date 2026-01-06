@@ -7,6 +7,10 @@
 #
 # @param enable_python Specifies whether to enable Python support. Defaults to true.
 #
+# @groups application domains, enable_python
+#
+# @groups security ssl
+#
 class role::appeng::mod_wsgi (
   Array[Stdlib::Fqdn] $domains,
   Boolean              $ssl         = false,

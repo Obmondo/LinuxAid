@@ -5,6 +5,8 @@
 #
 # @param variant The application server variant to use. Defaults to '::role::appeng::uwsgi'.
 #
+# @groups application url, variant
+#
 class role::web::python (
   String $url = undef,
   Enum['::role::appeng::uwsgi', '::role::appeng::passenger'] $variant = '::role::appeng::uwsgi',

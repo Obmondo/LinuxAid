@@ -5,6 +5,10 @@
 #
 # @param clients The list of clients. Defaults to undef.
 #
+# @groups network listen_interface.
+#
+# @groups client_config clients.
+#
 class role::package_management::guix (
   Optional[Eit_types::SimpleString] $listen_interface,
   Optional[Array[Stdlib::Host]]     $clients,

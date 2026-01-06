@@ -6,6 +6,8 @@
 #
 # @param server The server hostname for Guix. Defaults to 'localhost'.
 #
+# @groups configuration enable, manage_mounts, server
+#
 class common::system::package_management::guix::client (
   Boolean $enable       = false,
   Boolean $manage_mounts = true,

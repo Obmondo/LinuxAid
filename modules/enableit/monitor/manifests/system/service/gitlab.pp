@@ -4,6 +4,8 @@
 #
 # @param ci_builds The threshold for CI pending builds. Defaults to 10.
 #
+# @groups monitoring enable, ci_builds
+#
 class monitor::system::service::gitlab (
   Boolean $enable    = true,
   Integer $ci_builds = 10,

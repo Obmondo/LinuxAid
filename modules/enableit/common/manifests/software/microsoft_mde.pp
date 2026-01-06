@@ -12,6 +12,10 @@
 #
 # @param onboard_config Optional onboard configuration source. Defaults to undef.
 #
+# @groups management manage, enable.
+#
+# @groups configuration noop_value, version, exclusions, onboard_config.
+#
 class common::software::microsoft_mde (
   Boolean                                $manage         = false,
   Boolean                                $enable         = false,

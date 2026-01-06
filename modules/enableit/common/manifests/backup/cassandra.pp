@@ -12,6 +12,18 @@
 # @param enable_cleanup Enable automatic cleanup of old backups using Medusa purge
 # @param cleanup_hour Hour to run cleanup (should be different from backup_hour)
 #
+# @groups schedule backup_hour, cleanup_hour.
+#
+# @groups cleanup enable_cleanup, max_backup_count, max_backup_age.
+#
+# @groups storage medusa_bucket_name, medusa_base_path.
+#
+# @groups user cassandra_user.
+#
+# @groups config cassandra_config_file.
+#
+# @groups snapshot snapshot_name.
+#
 class common::backup::cassandra (
   Boolean          $enable                = false,
   String           $cassandra_user        = 'cassandra',

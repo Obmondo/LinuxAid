@@ -34,6 +34,16 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params
+#
+# @groups storage dump_dir, keep_days, backup_window_starthour, backup_window_lasthour
+#
+# @groups encryption luks, lukspass, luks_service_name
+#
+# @groups lvm lvm, lvm_vg, lvm_extents_min_required
+#
+# @groups push_config push
+#
 class common::backup (
   Boolean                        $manage                   = true,
   Boolean                        $install_client           = false,

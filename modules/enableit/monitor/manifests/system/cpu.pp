@@ -16,6 +16,10 @@
 #
 # @param override_temp Optional override parameter for temperature threshold.
 #
+# @groups enable disable, enable, override, usage
+#
+# @groups temperature enable_temp, temperature, disable_temp, override_temp
+#
 class monitor::system::cpu (
   Boolean               $enable        = true,
   Boolean               $enable_temp   = false,

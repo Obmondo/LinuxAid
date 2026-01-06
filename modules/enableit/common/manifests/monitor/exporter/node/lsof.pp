@@ -4,6 +4,8 @@
 #
 # @param noop_value Eit_types::Noop_Value to control noop behavior. Defaults to $common::monitor::exporter::node::noop_value.
 #
+# @groups configuration enable, noop_value
+#
 class common::monitor::exporter::node::lsof (
   Boolean               $enable     = $common::monitor::exporter::node::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,

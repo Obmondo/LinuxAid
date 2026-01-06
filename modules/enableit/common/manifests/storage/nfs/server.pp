@@ -6,6 +6,10 @@
 #
 # @param exports Hash of export configurations, where each key is the export name and value is a struct containing path, options, and clients.
 #
+# @groups server enable, listen_interface.
+#
+# @groups exports exports.
+#
 class common::storage::nfs::server (
   Boolean $enable           = false,
   Optional[Eit_types::SimpleString] $listen_interface = undef,

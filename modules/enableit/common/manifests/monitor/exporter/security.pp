@@ -1,4 +1,4 @@
-# Prometheus Security Exporter
+# @summary Prometheus Security Exporter
 #
 # @param enable Boolean flag to enable or disable the exporter. Defaults to false.
 #
@@ -11,6 +11,10 @@
 # @param listen_port The port to listen on. Defaults to 63396.
 #
 # @param config_file Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
+#
+# @groups general enable, noop_value, host, config_file
+#
+# @groups network listen_host, listen_port
 #
 class common::monitor::exporter::security (
   Boolean               $enable      = false,

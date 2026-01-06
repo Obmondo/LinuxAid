@@ -27,6 +27,16 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups basic_settings enable, ha, version.
+#
+# @groups hosts masters, agents, agent_hostname, master_hostname.
+#
+# @groups session_settings max_session_per_user, shadowing_shadow_mode, shadowing_allowed_shadowers.
+#
+# @groups load_balancer loadbalancer_ip.
+#
+# @groups security webadm_password, encrypt_params.
+#
 class role::communication::thinlinc (
   Eit_types::Password    $webadm_password,
   String                 $version                     = '4.9.0',

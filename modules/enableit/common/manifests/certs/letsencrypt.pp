@@ -22,6 +22,12 @@
 #
 # @param distribute_to List of hosts or locations to distribute the certificates to.
 #
+# @groups certificate email, ca, cert_host, renew, challenges, domains
+#
+# @groups distribution http_01_port, deploy_hook_command, distribute_to
+#
+# @groups thresholds warning, critical
+#
 class common::certs::letsencrypt (
   Eit_types::Email                                        $email               = 'ops@obmondo.com',
   Enum[

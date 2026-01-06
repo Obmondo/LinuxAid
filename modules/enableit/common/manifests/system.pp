@@ -24,6 +24,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups service_config services, service_oneshot
+#
+# @groups user_management users, user_groups, ssh_authorized_keys, purge_root_ssh_keys
+#
+# @groups system_config remove_fstrim_cron, disable_ipv6
+#
+# @groups network_config locations
+#
+# @groups file_management files
+#
+# @groups group_management groups
+#
 class common::system (
   Boolean $remove_fstrim_cron = false,
   Boolean $purge_root_ssh_keys = true,

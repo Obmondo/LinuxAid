@@ -10,6 +10,10 @@
 # @param $__blendable
 # An internal parameter.
 #
+# @groups configuration concurrency, runners, runner_defaults.
+#
+# @groups internal $__blendable.
+#
 class role::projectmanagement::gitlab_ci_runner (
   Integer[1,10]                     $concurrency     = 2,
   Eit_types::Gitlab::Runner         $runners         = {},

@@ -7,6 +7,8 @@
 #
 # @param target The target mount point.
 #
+# @groups device_config devices, fs_type, target
+#
 define common::device::filesystem (
   Array[Variant[Stdlib::Absolutepath, Eit_types::SimpleString]] $devices,
   Enum['zfs'] $fs_type,

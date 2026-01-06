@@ -6,6 +6,8 @@
 #
 # @param enable Boolean to enable NIS authentication. Defaults to false.
 #
+# @groups configuration domain, servers, enable
+#
 class common::system::authentication::nis (
   Variant[Eit_types::SimpleString, Stdlib::Host] $domain  = 'nis',
   Array[Stdlib::IP::Address]                     $servers = [],

@@ -11,6 +11,10 @@
 #
 # @param noop_value Optional boolean to specify noop mode for file resources. Defaults to undef.
 #
+# @groups motd enable, header, footer, diplay_system_stats.
+#
+# @groups file_resources noop_value.
+#
 class common::system::motd (
   Boolean               $enable              = true,
   Optional[String]      $header              = undef,

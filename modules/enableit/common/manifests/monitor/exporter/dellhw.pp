@@ -8,6 +8,10 @@
 #
 # @param listen_address IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63386'.
 #
+# @groups general enable, noop_value, manage_repo
+#
+# @groups network listen_address
+#
 class common::monitor::exporter::dellhw (
   Boolean               $enable         = false,
   Boolean               $manage_repo    = false,

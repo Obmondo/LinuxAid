@@ -31,6 +31,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups connection allow_remote_hosts, listen_address, max_connections
+#
+# @groups databases_management databases, pg_hba_rule
+#
+# @groups operational_mode mode, application_name
+#
+# @groups recovery recovery_username, recovery_password, recovery_host, recovery_port, recovery_trigger
+#
+# @groups replication replication_username, replication_password
+#
+# @groups encryption encrypt_params
+#
 class role::db::pgsql (
   Array[Stdlib::IP::Address]         $allow_remote_hosts   = [],
   Integer[0, default]                $max_connections      = 100,

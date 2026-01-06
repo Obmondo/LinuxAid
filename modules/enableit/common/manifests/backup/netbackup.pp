@@ -16,6 +16,16 @@
 #
 # @param excludes List of paths to exclude from backup. Defaults to empty array.
 #
+# @groups activation enable.
+#
+# @groups installation installer_path, version.
+#
+# @groups servers master_server, media_servers.
+#
+# @groups security authorization_token, ca_cert.
+#
+# @groups configuration excludes.
+#
 class common::backup::netbackup (
   Boolean                     $enable = false,
   Stdlib::Absolutepath        $installer_path,

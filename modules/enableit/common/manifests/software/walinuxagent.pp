@@ -14,6 +14,12 @@
 #
 # @param waagent_memory_limit Optional memory limit for waagent. Defaults to undef.
 #
+# @groups management enable, manage, noop_value.
+#
+# @groups azure_package $__linux_azure_package, $__linux_azure_service.
+#
+# @groups resource waagent_memory_limit.
+#
 class common::software::walinuxagent (
   Boolean                           $enable                 = false,
   Boolean                           $manage                 = false,

@@ -31,6 +31,14 @@
 #
 # @param noop_value Optional. The noop setting for resource types. Defaults to undef.
 #
+# @groups basic ensure, enable, unit_name
+#
+# @groups config unit, service, slice, mount, path, automount, install, timer
+#
+# @groups file script, override, unit_file_path
+#
+# @groups noop noop_value
+#
 define common::services::systemd (
   Variant[Eit_types::Service_Ensure, Enum['present', 'absent']] $ensure = true,
 

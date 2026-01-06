@@ -2,6 +2,8 @@
 #
 # @param exports The exports for the NFS storage. Defaults to undef.
 #
+# @groups exports exports
+#
 class role::storage::nfs (
   Optional[Hash[
     String,

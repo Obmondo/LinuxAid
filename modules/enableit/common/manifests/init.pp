@@ -8,6 +8,10 @@
 #
 # @param filepermissions Hash specifying file permission settings.
 #
+# @groups management full_host_management
+#
+# @groups configuration devices, mounts, filepermissions
+#
 class common (
   Boolean $full_host_management,
   Hash    $devices              = {},

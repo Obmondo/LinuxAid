@@ -17,6 +17,10 @@
 #
 # @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
 #
+# @groups authentication setup_key, enable, noop_value.
+#
+# @groups server_details server, version, install_method.
+#
 class common::network::netbird (
   Boolean                  $enable,
   Stdlib::HTTPSUrl         $server,

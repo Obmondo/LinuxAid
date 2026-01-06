@@ -2,6 +2,8 @@
 #
 # @param enable Enable or disable hwmon checks. Defaults to true.
 #
+# @groups settings enable
+#
 class monitor::system::hwmon (
   Boolean $enable = true,
 ) {

@@ -8,6 +8,8 @@
 #   - fs_type: Filesystem type for the LV.
 #   - lv_size: Size of the logical volume.
 #
+# @groups logical_volumes lvs
+#
 class common::lvm (
   Hash[String, Struct[{
     ensure  => Eit_types::Ensure,

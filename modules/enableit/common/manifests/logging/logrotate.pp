@@ -12,6 +12,12 @@
 #
 # @param rules Hash of custom logrotate rules. Defaults to empty hash.
 #
+# @groups management manage, purge.
+#
+# @groups options dateext, compress, su.
+#
+# @groups custom rules.
+#
 class common::logging::logrotate (
   Boolean $manage   = false,
   Boolean $purge    = false,

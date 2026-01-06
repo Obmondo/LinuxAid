@@ -8,6 +8,10 @@
 #
 # @param noop_value Optional boolean to specify noop mode value.
 #
+# @groups management manage, enable.
+#
+# @groups configuration version, noop_value.
+#
 class common::software::pycharm (
   Boolean               $manage     = false,
   Boolean               $enable     = true,

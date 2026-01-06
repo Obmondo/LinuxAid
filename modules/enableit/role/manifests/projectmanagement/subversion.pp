@@ -17,6 +17,12 @@
 #
 # @param noop_value Whether to enable noop mode. Defaults to false.
 #
+# @groups service enable, noop_value
+#
+# @groups server domain, path, dir, backup_dir
+#
+# @groups authentication user, password
+#
 class role::projectmanagement::subversion (
   Boolean                        $enable      = true,
   Optional[Stdlib::Fqdn]         $domain      = 'svn.hbkworkd.com',

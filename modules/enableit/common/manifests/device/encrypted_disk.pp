@@ -12,6 +12,12 @@
 #
 # @param pool_name The name of the ZFS pool, if applicable. Defaults to undef.
 #
+# @groups device device.
+#
+# @groups encryption luks_key, luks_key_size_b, luks_key_service_url, luks_key_service_headers.
+#
+# @groups pool pool_name.
+#
 define common::device::encrypted_disk (
   Stdlib::Absolutepath $device,
   Optional[Eit_types::URL] $luks_key_service_url          = undef,

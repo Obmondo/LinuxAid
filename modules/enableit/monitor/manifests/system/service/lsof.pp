@@ -3,6 +3,8 @@
 # @param enable 
 # Whether to enable monitoring of open deleted files. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::service::lsof (
   Boolean $enable = true,
 ) inherits monitor::system::service {

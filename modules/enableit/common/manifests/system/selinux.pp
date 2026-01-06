@@ -10,6 +10,10 @@
 #
 # @param enable_setroubleshoot Enable setroubleshoot. Defaults to false.
 #
+# @groups management manage, enable, enforce, enable_setroubleshoot
+#
+# @groups configuration fcontext
+#
 class common::system::selinux (
   Boolean            $manage                = false,
   Boolean            $enable                = $facts['os']['selinux']['enabled'],

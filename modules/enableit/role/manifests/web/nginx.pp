@@ -24,6 +24,12 @@
 #
 # @param package_source The package source for Nginx. Defaults to 'nginx'.
 #
+# @groups network ssl, http, monitor_port
+#
+# @groups config manage_repo, cfg_prepend, http_cfg_prepend, extra_cfg_option, servers
+#
+# @groups enhancements modules, package_source
+#
 class role::web::nginx (
   Boolean                    $ssl              = false,
   Boolean                    $http             = true,

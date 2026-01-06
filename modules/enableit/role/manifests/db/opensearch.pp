@@ -28,6 +28,18 @@
 # @param dashboard Whether to include the Opensearch Dashboard. Defaults to false.
 #
 # @param expose Whether to expose the service. Defaults to false.
+#
+# @groups ssl_configuration ssl_combined_pem, ssl
+#
+# @groups performance_configuration es_heap_size_pct, es_heap_size_max_gb
+#
+# @groups node_configuration host, nodes, access_9200_port_from 
+#
+# @groups data_configuration datadir, curate_filters
+#
+# @groups service_exposure expose, dashboard, cerebro
+#
+# @groups cluster_configuration version, cluster_name
 class role::db::opensearch (
   Optional[String]                    $ssl_combined_pem      = undef,
   Eit_types::Version                  $version               = '2.11.0',

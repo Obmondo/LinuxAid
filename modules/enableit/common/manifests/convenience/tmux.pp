@@ -4,6 +4,8 @@
 #
 # @param noop_value Optional Boolean for noop operations. Defaults to false.
 #
+# @groups management manage, noop_value
+#
 class common::convenience::tmux (
   Boolean               $manage     = true,
   Eit_types::Noop_Value $noop_value = undef,

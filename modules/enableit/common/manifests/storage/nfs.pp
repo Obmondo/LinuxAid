@@ -4,6 +4,8 @@
 #
 # @param unmount_snapshots Whether to unmount snapshots. Defaults to true.
 #
+# @groups server_config enable, unmount_snapshots
+#
 class common::storage::nfs (
   Boolean $enable            = false,
   Boolean $unmount_snapshots = true,

@@ -9,6 +9,10 @@
 #
 # @param plugins A hash of Jenkins plugins to install. Defaults to an empty hash.
 #
+# @groups certification ssl_combined_pem
+#
+# @groups jenkins_info version, config_hash, plugins
+#
 class role::ci::jenkins (
   String                      $ssl_combined_pem,
   Eit_types::Version          $version          = 'installed',

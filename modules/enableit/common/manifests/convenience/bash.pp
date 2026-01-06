@@ -4,6 +4,8 @@
 #
 # @param noop_value Whether to perform no-operation. Defaults to false.
 #
+# @groups management manage, noop_value
+#
 class common::convenience::bash (
   Boolean               $manage     = true,
   Eit_types::Noop_Value $noop_value = undef,

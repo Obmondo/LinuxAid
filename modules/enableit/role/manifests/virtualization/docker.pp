@@ -40,6 +40,18 @@
 #
 # @param prune_duration The parameter prune_duration specifies the duration in days for which unused Docker resources will be retained before being pruned . Defaults to '30'.
 #
+# @groups network fixed_cidr, bip, default_gateway, bridge_interface, dns, dns_search, networks
+#
+# @groups compose manage_compose, compose_instances, compose_version
+#
+# @groups storage docker_lib_dir, prune_system, prune_volume, prune_duration
+#
+# @groups security insecure_registries, users
+#
+# @groups registry registry, upstream_repo
+#
+# @groups cadvisor cadvisor_image
+#
 class role::virtualization::docker (
   Stdlib::Absolutepath                 $docker_lib_dir      = '/var/lib/docker',
   Optional[Eit_types::IPCIDR]          $fixed_cidr          = undef,

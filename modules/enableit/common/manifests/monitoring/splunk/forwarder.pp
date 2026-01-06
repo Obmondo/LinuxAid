@@ -20,6 +20,18 @@
 #
 # @param noop_value No-operation mode value. Defaults to undef.
 #
+# @groups authentication password_hash, seed_password
+#
+# @groups versioning version, build
+#
+# @groups deployment deploymentserver
+#
+# @groups logging log_keep_count, log_max_file_size_b
+#
+# @groups configuration forwarder_output
+#
+# @groups control enable, noop_value
+#
 class common::monitoring::splunk::forwarder (
   String[1]             $password_hash,
   Eit_types::Version    $version             = '7.2.4',

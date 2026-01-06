@@ -11,6 +11,10 @@
 #
 # @param requires_filesystems An array of required filesystems. Defaults to an empty array.
 #
+# @groups network_settings network, lxd_bridge.
+#
+# @groups config storage, instances, requires_filesystems.
+#
 class role::virtualization::lxd (
   Boolean $storage                        = true,
   Eit_types::IP $network                  = '10.0.3.0',

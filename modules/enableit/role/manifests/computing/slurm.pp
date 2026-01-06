@@ -42,6 +42,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups authentication munge_key, jwt_key, encrypt_params
+#
+# @groups daemon_control slurmctld, slurmdbd, slurmd
+#
+# @groups network interface, node_cidrs, accounting_storage_host, control_machine
+#
+# @groups version_control slurm_version, munge_version
+#
+# @groups configuration nodes, partitions, srun_port_range, disable_root_jobs, return_to_service, use_pam, hwloc_enabled
+#
+# @groups management enable, $__blendable
+#
 class role::computing::slurm (
   Boolean                             $__blendable,
   Optional[Variant[

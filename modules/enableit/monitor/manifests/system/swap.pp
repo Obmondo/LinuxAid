@@ -4,6 +4,8 @@
 #
 # @param warning The percentage threshold for warning alert. Defaults to 80.
 #
+# @groups settings enable, warning.
+#
 class monitor::system::swap (
   Boolean $enable       = true,
   Eit_types::Percentage $warning = 80,

@@ -15,6 +15,16 @@
 #
 # @param public_domainname The public domain name.
 #
+# @groups ssl_configuration ssl_combined_pem.
+#
+# @groups git_configuration upstream_git_repo, revision.
+#
+# @groups network_configuration bind, port.
+#
+# @groups haproxy_configuration manage_haproxy.
+#
+# @groups domain_configuration public_domainname.
+#
 class role::projectmanagement::readthedocs (
   String                  $ssl_combined_pem,
   Eit_types::URL          $upstream_git_repo  = 'https://github.com/rtfd/readthedocs.org.git',

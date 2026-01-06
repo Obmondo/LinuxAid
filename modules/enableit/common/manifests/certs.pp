@@ -8,6 +8,12 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups directory_params __base_dir
+#
+# @groups manual_params manual, encrypt_params
+#
+# @groups ca_params ca_certs
+#
 class common::certs (
   Stdlib::Absolutepath $__base_dir,
   Hash[Stdlib::Fqdn, Struct[{

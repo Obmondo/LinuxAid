@@ -73,6 +73,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups connection listen_ips, port, use_ipv6, max_connections
+#
+# @groups security remote_user_auth, disable_auth, ssl, ssl_ca, ssl_key, encrypt_params
+#
+# @groups storage journal, smallfiles, db_dir, storage_engine, directory_per_db
+#
+# @groups admin create_admin, admin_username, admin_password, admin_roles, admin_store_credentials
+#
+# @groups interface http_interface, enable_rest_api, monitor_user
+#
+# @groups logging verbosity, log_file, object_check
+#
 class role::db::mongodb (
   Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = '8.0',
   Boolean $use_upstream_repo                             = true,

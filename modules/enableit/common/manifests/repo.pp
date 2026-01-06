@@ -38,6 +38,16 @@
 #
 # @param snapshot Optional[Eit_types::Date] - Date for snapshot repositories. Defaults to undef.
 #
+# @groups configuration manage, noop_value
+#
+# @groups repositories repos, rhrepos, yumrepos, zypprepos, aptrepos
+#
+# @groups operations purge, upstream
+#
+# @groups connection source_protocol, local, domain
+#
+# @groups snapshot snapshot
+#
 class common::repo (
   Boolean                   $manage          = true,
   Eit_types::Noop_Value     $noop_value      = undef,

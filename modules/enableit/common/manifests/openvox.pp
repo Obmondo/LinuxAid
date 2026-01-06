@@ -14,6 +14,14 @@
 #
 # @param environment The openvox environment to use. Defaults to 'master'.
 #
+# @groups server_config server, server_port, config_file
+#
+# @groups agent run_agent_as_noop, noop_value
+#
+# @groups settings extra_main_settings, environment
+#
+# @groups versioning version, package_name
+#
 class common::openvox (
   Eit_types::Version    $version,
   Stdlib::Host          $server,

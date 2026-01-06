@@ -3,6 +3,8 @@
 #
 # @param admin_email The email of the administrator for notifications. No default value.
 #
+# @groups notifications admin_email.
+#
 class role::util::docker_registry (
   Eit_types::Email $admin_email
 ) inherits role::util {

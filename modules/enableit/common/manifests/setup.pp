@@ -11,6 +11,8 @@
 # @param $__bin_dir
 # Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
 #
+# @groups directories __conf_dir, __opt_dir, __bin_dir
+#
 class common::setup (
   Eit_types::Noop_Value $noop_value = undef,
   Stdlib::Absolutepath  $__conf_dir = '/etc/obmondo',

@@ -7,6 +7,10 @@
 #
 # @param content The content of the init script. Defaults to undef.
 #
+# @groups state ensure.
+#
+# @groups script source, content.
+#
 define common::services::initscript (
   Optional[
     Variant[

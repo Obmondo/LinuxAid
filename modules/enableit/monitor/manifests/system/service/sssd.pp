@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable SSSD checks. Defaults to true.
 #
+# @groups main enable
+#
 class monitor::system::service::sssd (
   Boolean $enable = true,
 ) inherits monitor::system::service {

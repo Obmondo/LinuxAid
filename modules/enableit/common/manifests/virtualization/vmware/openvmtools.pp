@@ -4,6 +4,8 @@
 #
 # @param autoupgrade Whether to enable automatic upgrade of openvmtools. Defaults to true.
 #
+# @groups package_management ensure, autoupgrade
+#
 class common::virtualization::vmware::openvmtools (
   Boolean $ensure      = false,
   Boolean $autoupgrade = true,

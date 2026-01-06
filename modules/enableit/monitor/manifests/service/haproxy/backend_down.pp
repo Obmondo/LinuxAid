@@ -4,6 +4,10 @@
 #
 # @param ignore_backends List of backends to ignore for the alert.
 #
+# @groups alert_settings enable.
+#
+# @groups backends ignore_backends.
+#
 class monitor::service::haproxy::backend_down (
   Boolean       $enable          = true,
   Array[String] $ignore_backends = [],

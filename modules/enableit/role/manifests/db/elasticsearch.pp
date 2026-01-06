@@ -53,6 +53,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups memory es_heap_size_pct, es_heap_size_max_gb
+#
+# @groups components cerebro, kibana, cache_only_node
+#
+# @groups network host, access_9200_port_from, nodes
+#
+# @groups storage datadir, curate_filters
+#
+# @groups security_options security, ssl, ssl_combined_pem, ca_cert
+#
+# @groups configuration version, cluster_name, plugins, oss, expose, secrets, kibana_elasticsearch, http, transport, kibana_username, kibana_password, encrypt_params
+#
 class role::db::elasticsearch (
   Eit_types::Version                  $version               = '7.10.2',
   Eit_types::Percentage               $es_heap_size_pct      = 50,

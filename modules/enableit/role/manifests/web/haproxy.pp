@@ -42,6 +42,16 @@
 #
 # @param log_summary_recipients The recipients for log summaries. Defaults to ['info@enableit.dk'].
 #
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers
+#
+# @groups configuration manual_config, configure, service_options, version
+#
+# @groups networking domains, listens, listen_on, firewall
+#
+# @groups logging log_compressed, log_dir, send_log_summary, log_summary_recipients
+#
+# @groups mode mode, http
+#
 class role::web::haproxy (
   Optional[String]              $manual_config          = undef,
   Eit_haproxy::Domains          $domains                = {},

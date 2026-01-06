@@ -10,6 +10,10 @@
 #
 # @param noop_value Optional boolean for noop mode. Defaults to false.
 #
+# @groups management manage, enable, noop_value.
+#
+# @groups configuration config_defaults, vnc_users.
+#
 class common::software::vncserver (
   Boolean                                  $manage           = false,
   Boolean                                  $enable           = false,

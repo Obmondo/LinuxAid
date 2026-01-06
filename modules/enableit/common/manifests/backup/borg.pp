@@ -41,6 +41,14 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups config __dir, prune_keep, timespec, randomized_delay, last_borgbackup
+#
+# @groups remote remote_user, remote_ip, remote_backup_root, authorized_keys
+#
+# @groups local backup_root, repos, archives
+#
+# @groups server server
+#
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,
   Eit_types::Borg_prune_numbers        $prune_keep = {

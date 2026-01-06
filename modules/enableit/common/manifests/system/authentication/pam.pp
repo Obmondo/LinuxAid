@@ -34,6 +34,18 @@
 #
 # @param nologin_allowed_group Array of Group, 0 or 1 elements, specifying allowed groups for nologin.
 #
+# @groups authentication auth_lines, password_auth_lines, sshd_auth_lines
+#
+# @groups account account_lines, password_account_lines, sshd_account_lines
+#
+# @groups password password_lines, password_password_lines, sshd_password_lines
+#
+# @groups session session_lines, password_session_lines, sshd_session_lines
+#
+# @groups management manage, manage_pwquality, allow_managed_users, nologin_allowed_group
+#
+# @groups users allowed_users
+#
 class common::system::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $auth_lines,
   Array[Tuple[Integer[0,99], String]] $account_lines,

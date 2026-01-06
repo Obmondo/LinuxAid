@@ -8,6 +8,12 @@
 #
 # @param noop_value Optional parameter for noop mode. Defaults to undef.
 #
+# @groups client_config ntp_client, manage.
+#
+# @groups server_config servers.
+#
+# @groups misc noop_value.
+#
 class common::system::time::ntp (
   Enum['chrony', 'ntpd', 'systemd-timesyncd'] $ntp_client,
 

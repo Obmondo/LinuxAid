@@ -12,6 +12,16 @@
 #
 # @param backup_retention Duration in days to retain backups. Defaults to the value of $common::backup::db::backup_retention.
 #
+# @groups enablement enable.
+#
+# @groups timing backup_hour.
+#
+# @groups user backup_user.
+#
+# @groups storage dump_dir, backup_retention.
+#
+# @groups advanced ignore_tables.
+#
 class common::backup::db::pgsql (
   Boolean                    $enable           = $common::backup::db::enable,
   Integer[0,23]             $backup_hour      = $common::backup::db::backup_hour,

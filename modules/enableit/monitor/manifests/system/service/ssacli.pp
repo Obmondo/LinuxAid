@@ -2,6 +2,8 @@
 #
 # @param enable Boolean flag to enable or disable the SSacli checks. Defaults to false.
 #
+# @groups settings enable
+#
 class monitor::system::service::ssacli (
   Boolean $enable = false,
 ) inherits monitor::system::service {

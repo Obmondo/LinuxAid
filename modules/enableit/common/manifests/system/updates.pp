@@ -18,6 +18,10 @@
 #
 # @param noop_value Optional Boolean to perform no-op runs for testing. Defaults to false.
 #
+# @groups general manage, enable, snapshot, reboot, mail_to
+#
+# @groups packages blacklist, remove_unused_packages, remove_unused_kernels
+#
 class common::system::updates (
   Boolean               $manage                 = false,
   Boolean               $enable                 = false,

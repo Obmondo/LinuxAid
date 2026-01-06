@@ -4,6 +4,8 @@
 #
 # @param noop_value Optional boolean value for noop mode. Defaults to undef.
 #
+# @groups backup enable, noop_value
+#
 class common::backup::gitea (
   Boolean               $enable = false,
   Eit_types::Noop_Value $noop_value = undef,

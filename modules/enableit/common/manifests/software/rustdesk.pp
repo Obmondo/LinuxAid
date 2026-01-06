@@ -14,6 +14,12 @@
 #
 # @param server_extra_dependencies Array[String] parameter to install OS specific dependencies. Defaults to [].
 #
+# @groups management manage.
+#
+# @groups client client_enable, client_version, client_extra_dependencies.
+#
+# @groups server server_enable, server_version, server_extra_dependencies.
+#
 class common::software::rustdesk (
   Boolean             $manage                    = false,
 

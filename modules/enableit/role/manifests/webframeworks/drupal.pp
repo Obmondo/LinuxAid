@@ -15,6 +15,12 @@
 #
 # @param password The password for the Drupal application. Defaults to 'drupal_xyz'.
 #
+# @groups application url, php, http_server, password
+#
+# @groups cache reverse_cache, memcached
+#
+# @groups database db
+# 
 class role::webframeworks::drupal (
   String $url,
   Enum['::role::appeng::phpfpm', '::role::appeng::mod_php'] $php           = '::role::appeng::phpfpm',

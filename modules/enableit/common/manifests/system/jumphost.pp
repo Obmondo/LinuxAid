@@ -4,6 +4,8 @@
 #
 # @param enable Boolean flag to enable or disable the service. Defaults to false.
 #
+# @groups service configs, enable
+#
 class common::system::jumphost (
   Eit_types::Common::System::Jumphosts $configs,
   Boolean                              $enable = false,
@@ -32,5 +34,5 @@ class common::system::jumphost (
         'WantedBy' => 'multi-user.target',
       }
     }
-  }
-}
+      }
+    }

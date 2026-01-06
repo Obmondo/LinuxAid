@@ -6,6 +6,10 @@
 #
 # @param noop_value Optional boolean for noop value. Defaults to undef.
 #
+# @groups client manage, enable.
+#
+# @groups optional noop_value.
+#
 class common::software::insights (
   Boolean               $manage     = false,
   Boolean               $enable     = false,

@@ -17,6 +17,10 @@
 #   Used in both environment variables and ExecStart.
 #   Defaults to value from `common::software::ansoftrsmservice::ansysrsm_path`.
 #
+# @groups service enable, manage.
+# 
+# @groups configuration environment, ansysrsm_path.
+#
 class common::software::ansoftrsmservice (
   Boolean $enable        = true,
   Boolean $manage        = false,
