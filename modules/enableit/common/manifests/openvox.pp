@@ -18,15 +18,13 @@ class common::openvox (
   Eit_types::Version    $version,
   Stdlib::Host          $server,
   String                $package_name,
+  String                $environment,
   Stdlib::Port          $server_port         = 443,
   Boolean               $manage              = true,
   Eit_types::Noop_Value $noop_value          = undef,
   Stdlib::Absolutepath  $config_file         = $facts['puppet_config'],
   Boolean               $run_agent_as_noop   = true,
   Optional[Hash]        $extra_main_settings = undef,
-
-  # TODO: lets control  via enc script
-  String                $environment         = 'v1.3.0',
 ) {
   if $manage {
     contain profile::openvox
