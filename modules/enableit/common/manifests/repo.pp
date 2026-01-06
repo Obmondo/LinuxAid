@@ -174,7 +174,7 @@ class common::repo (
             release      => $_os_codename,
             comment      => "${key} repo server",
             location     => $value['url'].inline_epp({ snapshot => $snapshot, }),
-            repos        => pick($value['repos'], main),
+            repos        => pick($value['repos'], 'main'),
             keyring      => "/etc/apt/keyrings/${key}.asc",
             include      => {
               'src' => false,
