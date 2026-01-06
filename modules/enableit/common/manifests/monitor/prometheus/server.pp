@@ -10,6 +10,10 @@
 #
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
+# @groups configuration version, config_dir, enable.
+#
+# @groups network collect_scrape_jobs, listen_address.
+#
 class common::monitor::prometheus::server (
   Eit_types::Version    $version,
   Array[Hash]           $collect_scrape_jobs,

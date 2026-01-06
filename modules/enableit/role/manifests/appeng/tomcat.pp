@@ -5,6 +5,8 @@
 #
 # @param http_server The HTTP server to use. Defaults to 'apache'.
 #
+# @groups server version, http_server
+#
 class role::appeng::tomcat (
   Enum['6', '7']           $version     = '7',
   Enum['apache', 'nginx'] $http_server = 'apache',

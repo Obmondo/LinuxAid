@@ -11,6 +11,12 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups core enable, noop_value.
+#
+# @groups credentials join_token, ca_pin.
+#
+# @groups encryption encrypt_params.
+#
 class common::software::teleport (
   Boolean                           $enable        = false,
   Eit_types::Noop_Value             $noop_value    = undef,

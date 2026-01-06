@@ -6,6 +6,8 @@
 #
 # @param domain The domain to monitor. Defaults to $title.
 #
+# @groups monitoring enable, expiry_days, domain
+#
 define monitor::domains (
   Boolean $enable      = true,
   Integer[1,25] $expiry_days = 25,

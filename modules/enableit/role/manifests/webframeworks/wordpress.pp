@@ -16,6 +16,14 @@
 #
 # @param php_memory_limit The PHP memory limit. Defaults to '512M'.
 #
+# @groups server php, url, http_server, php_memory_limit
+#
+# @groups caching memcached
+#
+# @groups database db
+#
+# @groups security force_https
+#
 class role::webframeworks::wordpress (
   Enum['::role::appeng::phpfpm', '::role::appeng::mod_php'] $php = '::role::appeng::phpfpm',
   String $url = undef,

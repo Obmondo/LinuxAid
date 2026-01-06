@@ -17,6 +17,12 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups network hostname, force_https, use_forwarded_for, use_forwarded_host
+#
+# @groups database database_password, database
+#
+# @groups php variant, encrypt_params
+#
 class role::web::piwik (
   String $hostname,
   Eit_types::Password $database_password,

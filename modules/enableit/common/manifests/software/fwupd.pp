@@ -6,6 +6,10 @@
 #
 # @param noop_value Optional parameter to specify noop mode value.
 #
+# @groups control manage, enable.
+#
+# @groups mode noop_value.
+#
 class common::software::fwupd (
   Boolean               $manage     = false,
   Boolean               $enable     = false,

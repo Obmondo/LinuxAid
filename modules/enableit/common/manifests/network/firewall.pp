@@ -34,6 +34,12 @@
 #
 # @param rules Custom firewall rules. Defaults to {}.
 #
+# @groups management manage, enable, enable_ipv6, enable_forwarding, drop_all, drop_action
+#
+# @groups allow_traffic allow_docker, allow_k8s, allow_azure, allow_netbird
+#
+# @groups block_traffic block_bogons, block_mdns, block_kaspersky_sccc, block_hasp_lm, block_dhcp_broadcast, block_netbios_broadcast
+#
 class common::network::firewall (
   Boolean             $manage            = false,
   Boolean             $enable            = true,

@@ -1,4 +1,4 @@
-# Service downclass monitor::system::service::down
+# @summary Class for monitoring system services that are down
 #
 # @param enable Boolean to enable or disable the monitor. Defaults to true.
 #
@@ -7,6 +7,10 @@
 # @param disable Optional Monitor::Disable to disable the monitor.
 #
 # @param override Optional Monitor::Override for overriding threshold conditions.
+#
+# @groups activation enable, disable.
+#
+# @groups configuration blacklist, override.
 #
 class monitor::system::service::down (
   Boolean       $enable    = true,

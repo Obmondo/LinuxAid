@@ -2,6 +2,8 @@
 #
 # @param enable Boolean to enable or disable alerts. Defaults to false.
 #
+# @groups settings enable
+#
 class monitor::service::haproxy::requests_denied (
   Boolean $enable = false,
 ) inherits monitor::service::haproxy {

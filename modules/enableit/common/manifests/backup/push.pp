@@ -14,6 +14,14 @@
 #
 # @param exclude (Optional) An array of additional paths or patterns to exclude from backup. Defaults to an empty array.
 #
+# @groups paths source, destination, exclude
+#
+# @groups time keep_time, hour
+#
+# @groups notification email
+#
+# @groups target target
+#
 define common::backup::push (
   Eit_types::Host $target,
   Stdlib::Absolutepath $source,

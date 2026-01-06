@@ -2,6 +2,8 @@
 #
 # @param mounts Hash of mounts configurations. Defaults to an empty hash.
 #
+# @groups storage mounts
+#
 class common::storage (
   Eit_types::Common::Storage::Mounts $mounts = {},
 ) {

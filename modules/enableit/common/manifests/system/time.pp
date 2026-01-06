@@ -6,6 +6,10 @@
 #
 # @param timezone The timezone to set. Defaults to 'Europe/Copenhagen'.
 #
+# @groups management manage_timezone, manage_ntp
+# 
+# @groups configuration timezone
+#
 class common::system::time (
   Boolean             $manage_timezone = true,
   Boolean             $manage_ntp      = false,

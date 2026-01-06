@@ -8,6 +8,12 @@
 #
 # @param sync_groups Hash defining synchronization groups with their configurations. Defaults to an empty hash.
 #
+# @groups general enable.
+#
+# @groups network hosts.
+#
+# @groups configuration instances, sync_groups.
+#
 class common::network::vrrp (
   Boolean                    $enable       = false,
   Array[Stdlib::IP::Address] $hosts        = [],

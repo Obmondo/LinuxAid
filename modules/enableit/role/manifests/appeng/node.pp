@@ -9,6 +9,10 @@
 #
 # @param version The version of Node.js to install. Defaults to 'present'.
 #
+# @groups url_management url.
+#
+# @groups repo_management repo, manage_repo, version.
+#
 class role::appeng::node (
   Eit_types::URL $url         = undef,
   Boolean        $manage_repo = false,

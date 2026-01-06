@@ -35,6 +35,16 @@
 # @param $__blendable
 # A flag for blendable functionality.
 #
+# @groups services client, mgmtd, storage, meta, admon.
+#
+# @groups management mgmtd_host, mgmtd_port.
+#
+# @groups storage_params storage_directory, storage_port.
+#
+# @groups ports admon_http_port, client_udp_port, meta_port, helperd_tcp_port, admon_udp_port.
+#
+# @groups network interfaces.
+#
 class role::storage::beegfs (
   Boolean                     $enable,
   Eit_types::Host             $mgmtd_host        = 'localhost',

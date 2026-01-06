@@ -4,6 +4,8 @@
 #
 # @param enable Whether to enable the MsftLinuxPatchAutoAssess service. Defaults to false.
 #
+# @groups service manage, enable
+#
 class common::software::msftlinuxpatchautoassess (
   Boolean $manage = false,
   Boolean $enable = false,

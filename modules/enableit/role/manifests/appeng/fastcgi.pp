@@ -5,6 +5,8 @@
 #
 # @param http_server The HTTP server to use. Defaults to 'apache'.
 #
+# @groups server url, http_server
+#
 class role::appeng::fastcgi (
   Eit_types::URL $url         = undef,
   Enum['apache'] $http_server  = 'apache',

@@ -33,6 +33,16 @@
 #
 # @param access_mysql_from Array of IP addresses allowed to access MySQL. Defaults to ['0.0.0.0/0'].
 #
+# @groups authentication root_password, local_tcp_root_access
+#
+# @groups data_configuration datadir, memlimit, override_options
+#
+# @groups binlog_configuration binlog, binlog_format, binlog_dir, binlog_max_size_bytes, binlog_sync, binlog_backup_target, binlog_backup_target_dir, binlog_backup_interval
+#
+# @groups access_control access_mysql_from, mysql_restart_on_config_change
+#
+# @groups backup_configuration backup
+#
 class role::db::mysql (
   Eit_types::MysqlPassword              $root_password,
   String                                $datadir                        = '/var/lib/mysql',

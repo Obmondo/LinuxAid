@@ -50,12 +50,24 @@
 #
 # @param match Hash of match conditions. Defaults to empty hash.
 #
+# @groups management manage, distribute_hostkeys, managed_users_only, permit_root_login
+#
+# @groups network ports, listenaddresses, tcp_forwarding, x11_forwarding, x11_use_localhost
+#
+# @groups security compression, password_authentication, max_auth_tries, max_sessions, login_grace_time
+#
+# @groups config version, log_level, client_options, accept_env, match
+#
+# @groups crypto hostkeys, kexalgorithms, ciphers, macs
+#
+# @groups subsystems subsystems, permit_user_rc
+#
 class common::system::sshd (
   Boolean                                $manage                  = false,
   Variant[Boolean, Enum['no-noop']]     $distribute_hostkeys     = false,
   Eit_types::Package::Version::Installed $version                 = 'latest',
   Array[Stdlib::Port]                    $ports                   = [22],
-  Array[Eit_types::IPPort]                $listenaddresses         = [],
+  Array[Eit_types::IPPort]               $listenaddresses         = [],
   Boolean                                $managed_users_only      = true,
   Boolean                                $compression             = true,
   Boolean                                $password_authentication = false,

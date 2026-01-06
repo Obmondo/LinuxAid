@@ -21,6 +21,18 @@
 # @param $__required_packages
 # Array of package names required for networking.
 #
+# @groups service service_name, restart_on_change
+#
+# @groups management_settings manage, purge
+#
+# @groups ip_management ipaddress_package, ipaddress_provider
+#
+# @groups interface_config interfaces, bonded_interfaces
+#
+# @groups routing_config routes
+#
+# @groups required_packages __required_packages
+#
 class common::network (
   Enum[
     'systemd-networkd',

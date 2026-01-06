@@ -16,6 +16,12 @@
 #
 # @param use_socket_activation Boolean to enable socket activation. Defaults to false.
 #
+# @groups management manage, ensure.
+#
+# @groups caching cache_passwd, cache_group, cache_netgroup, cache_services.
+#
+# @groups configuration debug_level, use_socket_activation.
+#
 class common::system::nscd (
   Boolean      $manage                = true,
   Boolean      $ensure                = true,

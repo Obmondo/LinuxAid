@@ -6,6 +6,8 @@
 #
 # @param noop_value Optional parameter for noop mode value. Defaults to undef.
 #
+# @groups management manage, enable, noop_value
+#
 class common::software::dependencyagent (
   Boolean               $manage     = false,
   Boolean               $enable     = false,

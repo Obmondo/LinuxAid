@@ -23,6 +23,12 @@
 #
 # @param custom_fragment A custom fragment for configuration. Defaults to an empty string.
 #
+# @groups server servername, serveralias, location
+#
+# @groups database database
+#
+# @groups configuration version, plugins, custom_fragment
+#
 class role::projectmanagement::easyredmine (
   Stdlib::Fqdn                $servername,
   # NOTE: Local filesystem path where the easyredmine zip file has been placed manually, 

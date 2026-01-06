@@ -12,6 +12,10 @@
 #
 # @param override Optional override for threshold parameters. Defaults to undef.
 #
+# @groups general record, enable, override
+#
+# @groups config expr, labels, noop_value
+#
 define monitor::threshold (
   String  $record     = $title,
   Boolean $enable     = true,

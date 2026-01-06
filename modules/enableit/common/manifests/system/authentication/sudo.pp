@@ -10,6 +10,8 @@
 #
 # @param sudoers_d_dir The absolute path to the sudoers.d directory. Defaults to '/etc/obmondo/sudoers.d'.
 #
+# @groups configuration manage, purge, ssh_agent_auth, sudoers, sudoers_d_dir.
+#
 class common::system::authentication::sudo (
   Boolean              $manage         = $common::system::authentication::manage_sudo,
   Boolean              $purge          = false,

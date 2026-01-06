@@ -4,6 +4,8 @@
 #
 # @param authorized_keys Hash of authorized SSH keys with associated user keys.
 #
+# @groups backup_parameters backup_root, authorized_keys.
+#
 define common::backup::borg::server (
   Stdlib::Absolutepath $backup_root     = $::common::backup::dump_dir,
   Hash                 $authorized_keys = $::common::backup::borg::authorized_keys,
@@ -26,4 +28,4 @@ define common::backup::borg::server (
       ],
     }
   }
-}
+    }

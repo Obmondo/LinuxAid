@@ -5,6 +5,8 @@
 #
 # @param manage_haproxy Whether to manage HAProxy for the service. Defaults to true.
 #
+# @groups service version, manage_haproxy
+#
 class role::projectmanagement::foswiki (
   Variant[Integer, String] $version,
   Boolean $manage_haproxy = true,

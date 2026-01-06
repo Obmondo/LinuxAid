@@ -8,6 +8,10 @@
 #
 # @param noop_value Optional parameter for noop mode.
 #
+# @groups management_params manage, enable
+#
+# @groups optional_params customer_key, noop_value
+#
 class common::software::cloudamize (
   Boolean               $manage       = false,
   Boolean               $enable       = false,

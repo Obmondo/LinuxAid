@@ -54,6 +54,18 @@
 #
 # @param noop_value Optional noop value. Defaults to undef.
 #
+# @groups main manage, myhostname, mydomain, relayhost, run_newaliases, aliases, _extra_main_parameters.
+#
+# @groups smtp smtp_sasl_auth, smtp_sasl_password_maps, smtp_sasl_security_options, smtp_tls_security_level, smtp_tls_loglevel, smtpd_tls_auth_only, smtp_connection_cache_destinations.
+#
+# @groups tls tls_ssl_options, smtpd_tls_protocols, smtpd_tls_mandatory_protocols, smtpd_tls_mandatory_ciphers, smtpd_tls_eecdh_grade, tls_preempt_cipherlist, tls_high_cipherlist.
+#
+# @groups performance default_destination_concurrency_limit, soft_bounce, inet_interfaces.
+#
+# @groups permissions maildrop_perms, noop_value.
+#
+# @groups logging stats_daemon_port.
+#
 class common::mail (
   Boolean $manage                                            = false,
   Variant[

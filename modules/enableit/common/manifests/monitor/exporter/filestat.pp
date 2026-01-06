@@ -12,6 +12,10 @@
 #
 # @param listen_address The IP and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63387'.
 #
+# @groups operational enable, noop_value
+#
+# @groups configuration config_file, working_directory, file_pattern, listen_address
+#
 class common::monitor::exporter::filestat (
   Boolean                     $enable            = false,
   Eit_types::Noop_Value       $noop_value        = $common::monitor::exporter::noop_value,

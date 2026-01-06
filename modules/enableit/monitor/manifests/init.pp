@@ -4,6 +4,8 @@
 #
 # @param noop_value No-operation mode value. Defaults to false.
 #
+# @groups monitoring_settings enable, noop_value.
+#
 class monitor (
   Boolean               $enable     = $::obmondo_monitoring_status, #lint:ignore:top_scope_facts
   Eit_types::Noop_Value $noop_value = undef,

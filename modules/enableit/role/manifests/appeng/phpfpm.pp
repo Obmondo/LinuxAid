@@ -37,7 +37,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-
+# @groups ssl ssl, ssl_cert, ssl_key
+#
+# @groups database mysql, mssql
+#
+# @groups workers catch_workers_output, max_children, start_servers, min_spare_servers, max_spare_servers
+#
+# @groups server manage_webserver, http_cfg_prepend, virtualhosts
+#
+# @groups cache opcodecache, modules
+#
+# @groups config version, memory_limit, encrypt_params
+#
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
   Optional[String]                    $ssl_cert             = undef,

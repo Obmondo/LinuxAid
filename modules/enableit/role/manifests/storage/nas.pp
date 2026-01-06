@@ -5,6 +5,10 @@
 #
 # @param backuphost Whether to enable the backup host. Defaults to true.
 #
+# @groups storage devices.
+#
+# @groups backup backuphost.
+#
 class role::storage::nas (
   Hash[
     String,

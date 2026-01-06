@@ -7,6 +7,10 @@
 #
 # @param log_dir_mode Mode for the log directory. Defaults to '0755'.
 #
+# @groups management manage.
+#
+# @groups directory_permissions log_dir_group, log_dir_mode.
+#
 class common::logging (
   Boolean                    $manage,
   Optional[Eit_types::Group] $log_dir_group = undef,

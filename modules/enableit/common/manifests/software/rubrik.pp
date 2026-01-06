@@ -6,6 +6,10 @@
 #
 # @param noop_value Optional boolean to specify noop mode value.
 #
+# @groups agent_management manage, enable.
+#
+# @groups settings noop_value.
+#
 class common::software::rubrik (
   Boolean               $manage     = false,
   Boolean               $enable     = false,

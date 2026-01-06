@@ -6,6 +6,8 @@
 #
 # @param filesystems Hash of filesystem configurations. Defaults to empty hash.
 #
+# @groups device_management devices, encrypted_devices, filesystems
+#
 class common::devices (
   Hash $devices = {},
   Hash $encrypted_devices = {},

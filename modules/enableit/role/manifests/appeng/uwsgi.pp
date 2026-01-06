@@ -7,6 +7,10 @@
 #
 # @param ssl Whether to enable SSL. Defaults to false.
 #
+# @groups services enable_python, ssl
+#
+# @groups networking domains
+#
 class role::appeng::uwsgi (
   Array[Stdlib::Fqdn]     $domains,
   Boolean                 $enable_python = true,

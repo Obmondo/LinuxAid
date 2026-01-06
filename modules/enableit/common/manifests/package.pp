@@ -10,6 +10,10 @@
 #
 # @param required_packages Array of package names that are required to be installed.
 #
+# @groups general install_default_packages, manage.
+#
+# @groups packages default_packages, removed_packages, required_packages.
+#
 class common::package (
   Boolean                $install_default_packages  = false,
   Hash[

@@ -6,6 +6,10 @@
 #
 # @param journald_settings Settings for journald configuration. Defaults to undef.
 #
+# @groups management manage_journald, manage_resolved
+# 
+# @groups settings journald_settings
+# 
 class common::system::systemd (
   Boolean                   $manage_journald,
   Boolean                   $manage_resolved,

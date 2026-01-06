@@ -30,6 +30,14 @@
 #
 # @param global_options Global options of type Eit_types::Storage::Samba::Global.
 #
+# @groups master_configuration local_master, domain_master, preferred_master.
+#
+# @groups global_settings global_options, map_to_guest, idmap_config, shares, security, enable.
+#
+# @groups network_settings listen_interfaces, workgroup, server_string, realm.
+#
+# @groups printer_settings load_printers, printcap_name.
+#
 class common::storage::samba (
   Boolean                          $enable = false,
   String                           $workgroup,

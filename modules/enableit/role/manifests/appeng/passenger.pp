@@ -11,6 +11,10 @@
 #
 # @param manage_web_server A boolean to manage the web server. Defaults to false.
 #
+# @groups server url, http_server, manage_web_server
+#
+# @groups passenger version, provider
+#
 class role::appeng::passenger (
   Eit_types::URL $url              = undef,
   Enum['4', '5'] $version          = '5',

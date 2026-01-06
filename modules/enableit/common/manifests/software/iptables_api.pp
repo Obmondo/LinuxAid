@@ -9,6 +9,10 @@
 #
 # @param listen_address The IP address and port to listen on. Defaults to '0.0.0.0:58080'.
 #
+# @groups management enable, manage.
+#
+# @groups configuration noop_value, listen_address.
+#
 class common::software::iptables_api (
   Boolean               $enable         = false,
   Boolean               $manage         = false,

@@ -6,6 +6,10 @@
 #
 # @param listen_address The IP and port the exporter listens on. Defaults to '127.254.254.254:63393'.
 #
+# @groups control enable, noop_value
+#
+# @groups network listen_address
+#
 class common::monitor::exporter::iptables (
   Boolean               $enable         = true,
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,

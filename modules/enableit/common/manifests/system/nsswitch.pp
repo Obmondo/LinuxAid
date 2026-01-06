@@ -36,6 +36,16 @@
 #
 # @param publickey An array of publickey entries. Defaults to empty array.
 #
+# @groups authentication passwd, shadow, gshadow, group.
+#
+# @groups networking ethers, hosts, networks, netmasks.
+#
+# @groups services protocols, services, rpc, sudoers.
+#
+# @groups additional aliases, automount, bootparams, netgroup, publickey.
+#
+# @groups management manage.
+#
 class common::system::nsswitch (
   Array[String] $ethers,
   Array[String] $group,

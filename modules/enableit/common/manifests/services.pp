@@ -8,6 +8,10 @@
 #
 # @param disabled_services Array of services to be disabled. Defaults to an empty array.
 #
+# @groups management manage, disabled_services
+#
+# @groups configuration systemd, initscript
+#
 class common::services (
   Boolean $manage     = false,
   Hash    $systemd    = {},

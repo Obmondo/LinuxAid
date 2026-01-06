@@ -45,6 +45,18 @@
 #
 # @param curator_delete_days Number of days to keep logs before deletion by Curator. Defaults to 7.
 #
+# @groups elasticsearch clustername, es_config, es_version, es_datadir, cluster_hosts
+#
+# @groups nxlog nxlog_windowseventlog, nxlog_ssl_windowseventlog, nxlog_json, nxlog_ssl_json
+#
+# @groups nginx nginx_cfg_append, nginx_ssl_mode, ssl_cert, ssl_key
+#
+# @groups cerebro install_cerebro
+#
+# @groups redis enable_redis, redis_datadir, redis_bind, redis_port
+#
+# @groups curator_tasks curator, curator_delete_days
+#
 class role::monitoring::elk (
   Pattern[/[A-Za-z0-9_.-]+/] $clustername                         = 'elkstack',
   Hash[String, Data] $es_config                                   = {},

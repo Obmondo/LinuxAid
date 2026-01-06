@@ -14,6 +14,12 @@
 #
 # @param noop_value Optional boolean to control noop behavior. Defaults to undef.
 #
+# @groups network listen_port, tcp_addresses.
+#
+# @groups operation check_interval, requests_per_check, concurrency.
+#
+# @groups service_control enable, noop_value.
+#
 class common::network::tcpshaker (
   Stdlib::Port      $listen_port,
   Integer           $check_interval,

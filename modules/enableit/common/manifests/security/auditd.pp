@@ -4,6 +4,8 @@
 #
 # @param root_audit_level The audit level for root. Can be 'basic', 'aggressive', or 'insane'. Defaults to 'aggressive'.
 #
+# @groups configuration enable, root_audit_level
+#
 class common::security::auditd (
   Boolean                               $enable           = false,
   Enum['basic', 'aggressive', 'insane'] $root_audit_level = 'aggressive',

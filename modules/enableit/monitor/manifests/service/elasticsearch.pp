@@ -4,6 +4,8 @@
 #
 # @param record The record name for the monitor. Defaults to the resource title.
 #
+# @groups monitor enable, record.
+#
 class monitor::service::elasticsearch (
   Boolean $enable = true,
   String $record  = $title,

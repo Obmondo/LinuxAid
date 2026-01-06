@@ -6,6 +6,10 @@
 #
 # @param noop_value Optional parameter to set noop mode. Defaults to undef.
 #
+# @groups general enable, noop_value
+#
+# @groups mappings group_mappings
+#
 class common::security::effective_group (
   Boolean                     $enable         = false,
   Hash[String, Array[String]] $group_mappings = {},

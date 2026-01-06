@@ -55,6 +55,26 @@
 #
 # @param noop_value A value for no-operation configurations. Defaults to undef.
 #
+# @groups management manage, run_newaliases, _extra_main_parameters.
+#
+# @groups interfaces inet_interfaces, myhostname, mydomain.
+#
+# @groups relay relayhost, smtp_sasl_auth, smtp_sasl_password_maps, smtp_sasl_security_options.
+#
+# @groups concurrency default_destination_concurrency_limit, soft_bounce.
+#
+# @groups cache smtp_connection_cache_destinations.
+#
+# @groups tls_security smtp_tls_security_level, smtp_tls_loglevel, smtpd_tls_auth_only, tls_ssl_options, smtpd_tls_protocols, smtpd_tls_mandatory_protocols, smtpd_tls_mandatory_ciphers, smtpd_tls_eecdh_grade, tls_preempt_cipherlist, tls_high_cipherlist.
+#
+# @groups port stats_daemon_port.
+#
+# @groups aliases_mapping aliases.
+#
+# @groups permissions maildrop_perms.
+#
+# @groups miscellaneous noop_value.
+#
 class role::mail::postfix (
   Boolean $manage                                            = false,
   Variant[    Eit_types::IP,    Enum['all', 'localhost']  ] $inet_interfaces                                         = 'localhost',

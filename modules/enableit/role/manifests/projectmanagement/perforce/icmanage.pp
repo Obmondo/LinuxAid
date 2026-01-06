@@ -37,6 +37,14 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups db db_user, db_password, db_backup, db_admin_user, db_admin_password, db_charset, db_collate, access_mysql_from, mysql_version
+#
+# @groups install version, install_path, config_file
+#
+# @groups credentials root_password, encrypt_params
+#
+# @groups config __blendable, hostname, manage_db, backup_dir
+# 
 class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
   Eit_types::Password      $db_password,

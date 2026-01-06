@@ -2,6 +2,8 @@
 #
 # @param entries A hash of IP addresses mapped to host entries. Defaults to an empty hash.
 #
+# @groups entries entries
+#
 class common::hosts (
   Hash[
     Eit_types::IP,

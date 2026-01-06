@@ -6,6 +6,10 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups control enable, encrypt_params
+#
+# @groups config tunnels
+#
 class common::network::wireguard (
   Boolean $enable   = true,
   Hash    $tunnels  = {},

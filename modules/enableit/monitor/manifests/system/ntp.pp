@@ -4,6 +4,8 @@
 #
 # @param offset Integer representing the offset threshold for NTP skew in milliseconds. Defaults to 3000.
 #
+# @groups configuration enable, offset
+#
 class monitor::system::ntp (
   Boolean            $enable = true,
   Integer[0,default] $offset = 3000,

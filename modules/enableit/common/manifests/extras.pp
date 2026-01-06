@@ -2,6 +2,8 @@
 #
 # @param manage Boolean parameter to determine if computing management should be included. Defaults to false.
 #
+# @groups management manage
+#
 class common::extras (
   Boolean $manage = false,
 ) inherits ::common {

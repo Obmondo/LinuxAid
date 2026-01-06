@@ -8,6 +8,10 @@
 #
 # @param host The host certname. Defaults to $trusted['certname'].
 #
+# @groups settings enable, noop_value.
+#
+# @groups connection listen_port, host.
+#
 class common::monitor::exporter::cadvisor (
   Boolean               $enable      = $common::monitor::exporter::enable,
   Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,

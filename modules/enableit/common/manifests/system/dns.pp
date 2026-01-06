@@ -20,6 +20,14 @@
 #
 # @param noop_value Value used for noop operations. Defaults to undef.
 #
+# @groups configuration resolver, manage, nameservers, fallback_nameservers, searchpath.
+#
+# @groups security dnssec, dns_over_tls, allow_external.
+#
+# @groups network listen_address.
+#
+# @groups operations noop_value.
+#
 class common::system::dns (
   Enum['dnsmasq', 'systemd-resolved', 'resolv'] $resolver,
   Boolean                                       $manage               = false,

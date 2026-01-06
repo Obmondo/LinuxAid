@@ -2,6 +2,8 @@
 #
 # @param enable Boolean flag to enable or disable Smartmon checks. Defaults to false.
 #
+# @groups settings enable
+#
 class monitor::system::service::smartmon (
   Boolean $enable = false,
 ) inherits monitor::system::service {

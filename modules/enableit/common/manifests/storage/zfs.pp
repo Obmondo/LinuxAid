@@ -8,6 +8,10 @@
 #
 # @param scrub Interval for ZFS scrubbing. Defaults to 'monthly'.
 #
+# @groups general enable, remove_sysstat_cron, scrub
+#
+# @groups replication allow_sync_from, pools, templates, replications
+#
 class common::storage::zfs (
   Boolean                       $enable              = false,
   Boolean                       $remove_sysstat_cron = true,

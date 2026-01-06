@@ -14,6 +14,14 @@
 #
 # @param manage_web_server Whether to manage the web server or not. Defaults to false.
 #
+# @groups database db.
+#
+# @groups ruby_version ruby, version.
+#
+# @groups server http_server, manage_web_server.
+#
+# @groups installation provider.
+#
 class role::webframeworks::rubyonrails (
   Optional[Enum['::role::db::mysql', '::role::db::pgsql']] $db = '::role::db::mysql',
   Enum['::role::appeng::passenger'] $ruby = '::role::appeng::passenger',

@@ -4,6 +4,8 @@
 #
 # @param noop_value Optional. The value for noop attribute. Defaults to false.
 #
+# @groups control enable, noop_value
+#
 class common::monitor::exporter::node::topprocesses (
   Boolean $enable     = $common::monitor::exporter::node::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,

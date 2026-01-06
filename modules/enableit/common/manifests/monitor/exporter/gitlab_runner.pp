@@ -8,6 +8,10 @@
 #
 # @param host The hostname. Defaults to $trusted['certname'].
 #
+# @groups configuration enable, noop_value.
+#
+# @groups network listen_address, host.
+#
 class common::monitor::exporter::gitlab_runner (
   Boolean               $enable         = $common::monitor::exporter::enable,
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,

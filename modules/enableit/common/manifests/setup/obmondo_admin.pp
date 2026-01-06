@@ -8,6 +8,10 @@
 #
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
+# @groups pubkeys manager_pubkeys, sre_pubkeys
+#
+# @groups access allow_sre, noop_value
+#
 class common::setup::obmondo_admin (
   Boolean                 $manage          = false,
   Boolean                 $enable          = false,

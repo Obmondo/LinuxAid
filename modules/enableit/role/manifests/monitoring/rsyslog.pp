@@ -30,6 +30,14 @@
 # @param $__blendable 
 # Boolean indicating if the configuration is blendable. No default.
 #
+# @groups configs global_config, legacy_config, custom_config.
+#
+# @groups filters property_filters, expression_filters.
+#
+# @groups structures templates, actions, inputs, modules, lookup_tables, parsers, rulesets.
+#
+# @groups options main_queue_opts.
+#
 class role::monitoring::rsyslog (
   Optional[Hash] $global_config      = {},
   Optional[Hash] $legacy_config      = {},

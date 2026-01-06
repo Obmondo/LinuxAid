@@ -11,6 +11,10 @@
 #
 # @param panic The panic threshold in seconds. Defaults to undef.
 #
+# @groups config burst, restrict, tinker, panic
+#
+# @groups network servers
+#
 class role::ntpd (
   Array[Stdlib::Host]     $servers,
   Optional[Boolean]       $burst    = false,

@@ -7,6 +7,10 @@
 #
 # @param php The PHP implementation to use. Defaults to 'role::appeng::phpfpm'.
 #
+# @groups database db
+#
+# @groups server webserver, php
+#
 class role::webframeworks::lamp (
   Enum['role::db::mysql', 'role::db::pgsql']  $db        = 'role::db::mysql',
   Enum['role::web::apache', 'role::web::nginx']  $webserver = 'role::web::apache',

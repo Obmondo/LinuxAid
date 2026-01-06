@@ -18,6 +18,14 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups access backup_user, backup_user_password, encrypt_params
+#
+# @groups schedule backup_hour
+#
+# @groups method backup_method
+#
+# @groups storage dump_dir, backup_databases, backup_retention
+#
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,
   Eit_types::User           $backup_user           = $::common::backup::db::backup_user,

@@ -22,6 +22,14 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups authentication backup_user_password, backup_user, root_password.
+#
+# @groups files_and_directories dump_dir.
+#
+# @groups retention backup_retention, ignore_tables.
+#
+# @groups schedule backup_hour, host, backup_method.
+#
 class common::backup::db (
   Boolean                       $enable                = $::common::backup::enable,
   Optional[Eit_types::Password] $backup_user_password  = $::common::backup::backup_user_password,

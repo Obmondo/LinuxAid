@@ -6,6 +6,10 @@
 #
 # @param noop_value Boolean for noop mode. Defaults to false.
 #
+# @groups settings enable, noop_value
+#
+# @groups network listen_address
+#
 class common::monitor::exporter::elasticsearch (
   Boolean               $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort     $listen_address = '127.254.254.254:9105',

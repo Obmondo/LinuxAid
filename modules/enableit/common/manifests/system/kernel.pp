@@ -6,6 +6,10 @@
 # @param sysctl A hash for sysctl configurations, key-value pairs.
 # Defaults to an empty hash.
 #
+# @groups module_params modules.
+#
+# @groups sysctl_params sysctl.
+#
 class common::system::kernel (
   Struct[{
     blacklist => Optional[Array[String]],

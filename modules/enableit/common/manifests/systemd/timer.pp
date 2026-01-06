@@ -28,6 +28,12 @@
 #
 # @param noop_value Optional noop value to disable actual execution. Defaults to undef.
 #
+# @groups execution enable, command, environment, user, noop_value
+#
+# @groups timing weekday, day, month, year, hour, minute
+#
+# @groups config ensure, mode, description
+#
 define common::systemd::timer (
   Boolean                          $enable      = true,
   Optional[String[1]]              $command     = undef,

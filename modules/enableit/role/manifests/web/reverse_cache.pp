@@ -15,6 +15,14 @@
 #
 # @param purgers The purgers. Defaults to ['localhost'].
 #
+# @groups backend backendip, backendport.
+#
+# @groups admin adminacl, adminlistens.
+#
+# @groups auth secret.
+#
+# @groups role variant, purgers.
+#
 class role::web::reverse_cache (
   Enum['drupal'] $variant,
   Eit_types::UUID $secret,

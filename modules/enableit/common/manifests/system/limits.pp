@@ -6,6 +6,10 @@
 #
 # @param ulimits The ulimits configuration. Defaults to an empty hash.
 #
+# @groups management manage, purge.
+#
+# @groups configuration ulimits.
+#
 class common::system::limits (
   Boolean                    $manage  = false,
   Boolean                    $purge   = false,

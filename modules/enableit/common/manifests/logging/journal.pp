@@ -10,6 +10,10 @@
 #
 # @param noop_value Optional noop value for testing. Defaults to undef.
 #
+# @groups management manage, upload_enable.
+#
+# @groups configuration package_name, remote_url, noop_value.
+#
 class common::logging::journal (
   Boolean                  $manage        = true,
   Boolean                  $upload_enable = false,

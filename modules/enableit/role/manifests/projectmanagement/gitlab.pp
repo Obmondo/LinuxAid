@@ -79,6 +79,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups domain domain, registry_domain, mattermost_domain, pages_domain.
+#
+# @groups notification email_enabled, email_display_name.
+#
+# @groups ssl ssl_cert, ssl_key, registry_ssl_cert, registry_ssl_key, mattermost_ssl_cert, mattermost_ssl_key, pages_ssl_cert, pages_ssl_key.
+#
+# @groups backup backup, backup_cron_hour, backup_path, backup_keep_days, public_keys, backupcron_user.
+#
+# @groups registry registry, registry_ssl_cert, registry_ssl_key, trusted_proxies.
+#
+# @groups mattermost mattermost, mattermost_ssl_cert, mattermost_ssl_key, mattermost_domain, mattermost_config.
+#
 class role::projectmanagement::gitlab (
   Stdlib::Fqdn                         $domain,
   Boolean                              $email_enabled,

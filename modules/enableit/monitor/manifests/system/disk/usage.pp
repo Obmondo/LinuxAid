@@ -10,6 +10,14 @@
 #
 # @param override Override settings for the monitor. Defaults to undef.
 #
+# @param ignore_mountpoints Mountpoints to be ignored during monitoring. Defaults to an empty array.
+#
+# @groups monitor_settings enable, disable, override
+#
+# @groups disk_settings space, ignore_mountpoints
+#
+# @groups metadata labels
+#
 class monitor::system::disk::usage (
   Boolean               $enable   = true,
   Eit_types::Percentage $space    = 80,

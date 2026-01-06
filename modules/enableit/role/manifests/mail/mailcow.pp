@@ -39,6 +39,18 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups database dbroot, dbpass, redispass.
+#
+# @groups domain domain.
+#
+# @groups install install_dir, version.
+#
+# @groups backup backup_dir, backup_retention.
+#
+# @groups management manage, letsencrypt, acme_contact, skip_unbound_healthcheck.
+#
+# @groups exporter exporter_image, exporter_listen_address, exporter_api_key.
+#
 class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,

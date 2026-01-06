@@ -4,6 +4,8 @@
 #
 # @param jobs Hash of jobs to configure. Defaults to an empty hash.
 #
+# @groups management purge_unmanaged, jobs
+#
 class common::cron (
   Variant[Boolean, Enum['root-only']] $purge_unmanaged = false,
   Hash                                $jobs            = {},

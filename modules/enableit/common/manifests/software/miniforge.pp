@@ -8,6 +8,10 @@
 #
 # @param install_dir Stdlib::Absolutepath parameter to control installation directory of Miniforge3.
 #
+# @groups management manage, enable.
+#
+# @groups installation version, install_dir.
+#
 class common::software::miniforge (
   Boolean              $manage      = false,
   Boolean              $enable      = true,

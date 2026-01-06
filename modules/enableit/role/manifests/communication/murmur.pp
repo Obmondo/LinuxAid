@@ -39,6 +39,18 @@
 #
 # @param ssl_key The path to the SSL key. Defaults to undef.
 #
+# @groups connection port, host, ssl_cert, ssl_key
+#
+# @groups registration register_name, password
+#
+# @groups server_limits bandwidth, max_users, text_length_limit
+#
+# @groups security autoban_attempts, autoban_time_frame, autoban_time
+#
+# @groups appearance allow_html, welcome_text
+#
+# @groups execution user, group, database_path, log_path, log_days
+#
 class role::communication::murmur (
   Optional[String] $password               = undef,
   Stdlib::Port $port                        = 64738,

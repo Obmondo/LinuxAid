@@ -25,6 +25,12 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @groups db manage_postgres, db_server, db_name, db_user, db_password, encrypt_params
+# 
+# @groups dhcp dhcp_domain, dhcp_start, dhcp_end, dhcp_route, dhcp_dns
+# 
+# @groups tftp manage_tftpd
+# 
 class role::provisioning::razor (
   Eit_types::Password $db_password,
   Eit_types::Domain $dhcp_domain,

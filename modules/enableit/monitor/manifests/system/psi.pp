@@ -20,6 +20,14 @@
 #
 # @param override_cpu Optional override setting for CPU pressure threshold.
 #
+# @groups enablement enable.
+#
+# @groups threshold io, memory, cpu.
+#
+# @groups disable_conditions disable_io, disable_memory, disable_cpu.
+#
+# @groups overrides override_io, override_memory, override_cpu.
+#
 class monitor::system::psi (
   Boolean $enable = false,
   Float   $io     = 0.5,

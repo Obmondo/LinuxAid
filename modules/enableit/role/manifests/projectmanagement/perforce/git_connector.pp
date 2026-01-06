@@ -26,6 +26,16 @@
 # @param $__blendable
 # Whether the configuration is blendable. No default value.
 #
+# @groups versioning version, p4_gconn_user
+#
+# @groups paths git_user_home, gconn_dir, repos_dir
+#
+# @groups logging log_dir, gconn_log_file, gconn_log_level, p4gc_log_file, p4gc_log_level
+#
+# @groups service service_port
+#
+# @groups configuration $__blendable
+#
 class role::projectmanagement::perforce::git_connector (
   Perforce::Version    $version         = $::role::projectmanagement::perforce::version,
   Stdlib::Port         $service_port    = $::role::projectmanagement::perforce::service_port,
