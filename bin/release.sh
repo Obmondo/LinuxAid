@@ -19,6 +19,14 @@ if [ -z "$NEW_TAG" ]; then
   exit
 fi
 
+# Check if current branch is master
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [[ "${CURRENT_BRANCH}" != "master" ]]; then
+    echo "Error: Not on master branch. Current branch: ${CURRENT_BRANCH}"
+    exit 1
+fi
+
 if [ -z "$PREVIOUS_TAG" ]; then
     echo "No previous tag found, using all commits"
     COMMIT_RANGE="HEAD"
@@ -115,7 +123,6 @@ rm -fr $CHANGELOG_FILE.tmp
 sed -i "s/$OPENVOX_ENVIRONMENT: \"$PREVIOUS_TAG\"/$OPENVOX_ENVIRONMENT: \"$NEW_TAG\"/g" "$COMMON_HIERA_FILE"
 echo "Openvox environment is updated to $NEW_TAG"
 
-exit
 if [[ -n "$(git status --porcelain)" ]]; then
   git add -A "$CHANGELOG_FILE" "$RELEASE_NOTES_FILE" "$COMMON_HIERA_FILE"
   git commit -m "chore(doc): Update changelog"
