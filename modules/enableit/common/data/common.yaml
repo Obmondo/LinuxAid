@@ -240,8 +240,9 @@ common::system::nsswitch::manage: false
 common::system::nsswitch::sudoers:
   - "files"
 
-### SSHD
-common::system::sshd::manage: false
+### SSHD - ISO 27001/NIS2 Compliance
+# This logs SSH key fingerprints for authentication audit trails
+common::system::sshd::manage: true
 common::system::sshd::kexalgorithms:
   - "curve25519-sha256@libssh.org"
   - "ecdh-sha2-nistp521"
