@@ -183,6 +183,7 @@
 # @param maxarraysize             [Integer]     Default: undef
 # @param maxjobcount              [Integer]     Default: undef
 # @param maxtaskspernode          [Integer]     Default: 512
+# @param metrics                  [String]      Default: 'openmetrics'
 # @param mpidefault               [String]      Default: 'none'
 #           Default type of MPI to be used. Srun may override this configuration parameter in any case.
 #           Elligible values in ['lam','mpich1_p4','mpich1_shmem','mpichgm','mpichmx','mvapich','none','openmpi','pmi2']
@@ -604,6 +605,7 @@ class slurm (
   Optional[Integer] $maxjobcount          = $slurm::params::maxjobcount,
   Integer $maxtaskspernode                = $slurm::params::maxtaskspernode,
   Integer $messagetimeout                 = $slurm::params::messagetimeout,
+  String  $metrics                        = $slurm::params::metrics,
   # Default type of MPI to be used.
   String  $mpidefault                     = $slurm::params::mpidefault,
   String  $mpiparams                      = $slurm::params::mpiparams,
