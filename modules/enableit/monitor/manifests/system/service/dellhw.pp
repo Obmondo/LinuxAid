@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable the SSD checks. Defaults to false.
 #
+# @groups enable enable
+#
 class monitor::system::service::dellhw (
   Boolean $enable = false,
 ) inherits monitor::system::service {

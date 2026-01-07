@@ -2,6 +2,8 @@
 #
 # @param relocate_to The absolute path to move /tmp to. An Optional[Stdlib::Absolutepath]. Defaults to undef.
 #
+# @groups relocate_to relocate_to
+#
 class common::system::relocatetmp (
   Optional[Stdlib::Absolutepath] $relocate_to = undef,
 ) {

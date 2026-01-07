@@ -2,6 +2,8 @@
 #
 # @param enable Boolean flag to enable or disable NI-VISA. Defaults to false.
 #
+# @groups enable enable
+#
 class common::extras::computing::nivisa (
   Boolean $enable = false,
 ) inherits ::common::extras::computing {

@@ -6,6 +6,8 @@
 #
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
+# @groups settings enable, listen_address, noop_value
+#
 class common::monitor::exporter::slurm (
   Boolean               $enable         = $common::monitor::exporter::enable,
   Eit_types::IPPort     $listen_address = '127.254.254.254:63397',

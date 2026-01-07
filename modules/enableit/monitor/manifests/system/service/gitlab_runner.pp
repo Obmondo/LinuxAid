@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable monitoring for the gitlab_runner service error state. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::service::gitlab_runner (
   Boolean $enable = true,
 ) {

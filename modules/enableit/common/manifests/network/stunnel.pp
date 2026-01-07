@@ -2,6 +2,8 @@
 #
 # @param tunnels A hash of tunnel configurations. Defaults to an empty hash.
 #
+# @groups tunnels tunnels
+#
 class common::network::stunnel (
   Hash $tunnels = {},
 ) inherits common::network {

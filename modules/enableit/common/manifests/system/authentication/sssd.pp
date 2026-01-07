@@ -1,10 +1,8 @@
 # @summary Class for managing SSSD profile for system authentication
 #
-# @param services
-# Array of SSSD services to enable. Defaults to ['nss', 'pam', 'ssh', 'sudo'].
+# @param services Array of SSSD services to enable. Defaults to ['nss', 'pam', 'ssh', 'sudo'].
 #
-# @param $_available_services
-# Available services for SSSD. Defaults to undef.
+# @param _available_services Available services for SSSD. Defaults to undef.
 #
 # @param enable Boolean to enable or disable SSSD. Defaults to false.
 #
@@ -28,7 +26,7 @@
 #
 # @param required_packages List of required packages for SSSD. Defaults to ['realmd', 'samba-common-tools', 'fprintd-pam'].
 #
-# @groups services_management services, manage, $_available_services.
+# @groups services_management services, manage, _available_services.
 #
 # @groups domains_management domains, default_domain_suffix.
 #

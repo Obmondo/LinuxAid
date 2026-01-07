@@ -2,6 +2,8 @@
 #
 # @param enable Boolean to enable or disable the DRBD checks. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::drbd (
   Boolean $enable = true,
 ) {
