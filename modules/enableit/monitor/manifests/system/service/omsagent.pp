@@ -2,6 +2,8 @@
 #
 # @param enable Boolean flag to enable or disable the update check. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::service::omsagent (
   Boolean $enable = true,
 ) {

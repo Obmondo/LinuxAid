@@ -2,6 +2,8 @@
 #
 # @param enable Boolean flag to enable or disable monitoring. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::raid::mdraid (
   Boolean $enable = true,
 ) {

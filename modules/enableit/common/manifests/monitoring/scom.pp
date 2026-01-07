@@ -10,6 +10,10 @@
 #
 # @param noop_value The noop value for testing purposes. Defaults to undef.
 #
+# @groups scom scom_masters, scom_user
+#
+# @groups settings enable, install_sudo_rules, noop_value, 
+# 
 class common::monitoring::scom (
   Boolean                       $enable             = false,
   Optional[Array[Stdlib::Host]] $scom_masters       = undef,

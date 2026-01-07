@@ -2,6 +2,8 @@
 #
 # @param enable Enable or disable Docker monitoring. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::docker (
   Boolean $enable = true,
 ) {

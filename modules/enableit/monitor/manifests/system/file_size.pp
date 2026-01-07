@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable the monitoring. Defaults to true.
 #
+# @groups enable enable
+#
 class monitor::system::file_size (
   Boolean $enable = true,
 ) {
