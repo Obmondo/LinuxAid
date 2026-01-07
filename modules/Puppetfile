@@ -264,7 +264,7 @@ mod 'smoeding/debconf',
 
 mod 'h0tw1r3/realmd',
     :git => 'https://github.com/h0tw1r3/puppet-realmd.git',
-    :ref => '30c2464d77c3b27ca127eb398c76179c9149876b'
+    :ref => 'b7ff74a47f9bff2fa29dc7fb2838b1f4a57f6f11'
 
 mod 'obmondo/sssd',
     :git => 'https://github.com/obmondo/sgnl05-sssd.git',

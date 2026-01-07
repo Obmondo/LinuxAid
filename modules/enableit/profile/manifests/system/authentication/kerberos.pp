@@ -82,17 +82,17 @@ class profile::system::authentication::kerberos (
 
     if $join {
       class { 'realmd':
-        domain               => $default_realm,
-        ou                   => $ou,
-        domain_join_user     => $join_user,
-        domain_join_password => $join_password,
-        krb_ticket_join      => false,
-        manage_sssd_config   => false,
-        manage_sssd_service  => false,
-        manage_krb_config    => false,
-        manage_krb5_package  => false,
-        before               => Class['sssd'],
-        notify               => Service['sssd'],
+        domain                    => $default_realm,
+        ou                        => $ou,
+        domain_join_user          => $join_user,
+        domain_join_password      => $join_password,
+        krb_ticket_join           => false,
+        manage_sssd_config        => false,
+        manage_sssd_service       => false,
+        manage_krb_config         => false,
+        manage_krb_client_package => false,
+        before                    => Class['sssd'],
+        notify                    => Service['sssd'],
       }
     }
 
