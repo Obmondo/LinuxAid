@@ -4,6 +4,91 @@ Changelog
 
 (unreleased)
 ------------
+- Merge tag 'v1.5.4' into devel. [Mike Massonnet]
+
+  v1.5.4
+- Update Gemfile (due to rake version:bump:patch) [Mike Massonnet]
+
+
+v1.5.4 (2025-10-27)
+-------------------
+- Merge branch 'release/1.5.4' into production. [Mike Massonnet]
+- Bump to version '1.5.4' [Mike Massonnet]
+- Update Gemfile (due to rake version:bump:patch) [Mike Massonnet]
+- Merge pull request #88 from ULHPC/m8t/minor_fixes. [Mike Massonnet]
+
+  Short cleanup:
+  - no need to download pmix sources when not building from source
+  - Fix setting key s/AcctGatherInfinibandType/AcctGatherInterconnectType/ (Since Slurm 20)
+  - And also its value s/acct_gather_infiniband/acct_gather_interconnect/ (Since Slurm 17.11)
+  - Permit customization of slurmdbd listening port
+- [templates/slurm.conf] Use preferred setting
+  AcctGatherInterconnectType. [Mike Massonnet]
+
+  Starting Slurm 20 the documentation started to refer to the prefered
+  setting AcctGatherInterconnectType instead of AcctGatherInfinibandType.
+
+  https://github.com/SchedMD/slurm/commit/d2f1729f1d297ed1b2808bfa850076c5e135aa44
+
+  AcctGatherInfinibandType is still supported for backward compatibility.
+
+  Accepted values are:
+  - none
+  - acct_gather_interconnect/ofed
+  - acct_gather_interconnect/sysfs
+
+  Plugin type acct_gather_interconnect replaces acct_gather_infiniband.
+  This has been replaced since Slurm 17.11.
+- [templates/slurmdbd.conf] DbdPort setting is customizable. [Mike
+  Massonnet]
+- [manifests/params] Update comment with acceptable values for
+  PrivateData. [Mike Massonnet]
+
+  https://slurm.schedmd.com/slurmdbd.conf.html#OPT_PrivateData
+- [templates/slurm.conf] Minor typo (parameters are case insensitive)
+  [Mike Massonnet]
+- [manifests/pmix] No need to download source when do_build is false.
+  [Mike Massonnet]
+- [docs] Fix link to RTD management. [Mike Massonnet]
+- Update Gemfile. [Hyacinthe Cartiaux]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
+- Merge tag 'v1.5.3' into devel. [Hyacinthe Cartiaux]
+
+  v1.5.3
+
+
+v1.5.3 (2025-08-26)
+-------------------
+- Merge branch 'release/1.5.3' into production. [Hyacinthe Cartiaux]
+- Bump to version '1.5.3' [Hyacinthe Cartiaux]
+- Update ruby environment. [Hyacinthe Cartiaux]
+- Merge pull request #87 from uvNikita/rebootprogram. [Hyacinthe
+  Cartiaux]
+
+  Add "RebootProgram" parameter
+- Add "RebootProgram" parameter. [Nikita Uvarov]
+- Merge pull request #86 from ULHPC/dependabot/bundler/thor-1.4.0.
+  [Hyacinthe Cartiaux]
+
+  Bump thor from 1.3.2 to 1.4.0
+- Bump thor from 1.3.2 to 1.4.0. [dependabot[bot]]
+
+  Bumps [thor](https://github.com/rails/thor) from 1.3.2 to 1.4.0.
+  - [Release notes](https://github.com/rails/thor/releases)
+  - [Commits](https://github.com/rails/thor/compare/v1.3.2...v1.4.0)
+
+  ---
+  updated-dependencies:
+  - dependency-name: thor
+    dependency-version: 1.4.0
+    dependency-type: indirect
+  ...
+- Merge pull request #84 from uvNikita/accounting/typo. [Hyacinthe
+  Cartiaux]
+
+  Fix typo in accounting.pp
+- Fix typo in accounting.pp. [Nikita Uvarov]
+- Synchronize Changelog with latest commits. [Hyacinthe Cartiaux]
 - Merge tag 'v1.5.2' into devel. [Hyacinthe Cartiaux]
 
   v1.5.2

@@ -56,13 +56,13 @@
 # @param archiveusage       [Boolean]     Default: false
 #           When purging usage data (Cluster, Association and WCKey) also archive it.
 # @param commitdelay        [Integer]     Default: 0
-# @param dbhost             [String]      Default: localhost
+# @param dbdhost            [String]      Default: localhost
 #           The short, or long, name of the machine where the Slurm Database Daemon is executed
 # @param dbdbackuphost      [String]      Default: ''
 #           The short, or long, name of the machine where the backup Slurm Database Daemon is executed
 # @param dbdaddr            [String]      Default: localhost
 #           Name that DbdHost should be referred to in establishing a communications path
-# @param dbddport           [Integer]     Default: 6819
+# @param dbdport            [Integer]     Default: 6819
 #           The port number that the Slurm Database Daemon (slurmdbd) listens to for work.
 # @param debuglevel         [String ]     Default: info
 #           The level of detail to provide the Slurm Database Daemon's logs.
