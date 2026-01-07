@@ -26,6 +26,7 @@ realmd::netbiosname: ''
 realmd::krb_ticket_join: false
 realmd::krb_keytab: ~
 realmd::krb_config_file: /etc/krb5.conf
+realmd::manage_krb_client_package: true
 realmd::manage_krb_config: true
 realmd::krb_client_package_ensure: installed
 realmd::extra_join_options: ~
