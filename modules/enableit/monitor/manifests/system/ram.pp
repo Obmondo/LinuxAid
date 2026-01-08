@@ -24,6 +24,8 @@
 #
 # @groups override override_used, override_used_high, override_oom
 #
+# @groups general enable
+#
 class monitor::system::ram (
   Boolean               $enable   = true,
   Eit_types::Percentage $warning  = 80,

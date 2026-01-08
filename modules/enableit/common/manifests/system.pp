@@ -36,6 +36,8 @@
 #
 # @groups group_management groups
 #
+# @groups encryption_config encrypt_params
+#
 class common::system (
   Boolean $remove_fstrim_cron = false,
   Boolean $purge_root_ssh_keys = true,

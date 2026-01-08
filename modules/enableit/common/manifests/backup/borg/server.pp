@@ -28,4 +28,4 @@ define common::backup::borg::server (
       ],
     }
   }
-    }
+}

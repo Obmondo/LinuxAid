@@ -2,6 +2,8 @@
 #
 # @param manage Whether to manage Guix setup. Defaults to true.
 #
+# @groups management manage
+#
 class common::system::package_management::guix (
   Boolean $manage = true,
 ) inherits ::common::system {

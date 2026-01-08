@@ -4,7 +4,7 @@
 #
 # @param noop_value Optional[Boolean], the noop value for resources. Defaults to false.
 #
-# @groups common enable, noop_value.
+# @groups exporter_management enable, noop_value.
 #
 class common::monitor::exporter::node::ssacli (
   Boolean $enable     = $common::monitor::exporter::node::enable,

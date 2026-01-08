@@ -6,17 +6,15 @@
 #
 # @param noop_value Optional boolean for noop mode. Defaults to undef.
 #
-# @param $__linux_azure_package
-# The Linux Azure package name. Defaults to undef.
+# @param __linux_azure_package The Linux Azure package name. Defaults to undef.
 #
-# @param $__linux_azure_service
-# The Linux Azure service name. Defaults to undef.
+# @param __linux_azure_service The Linux Azure service name. Defaults to undef.
 #
 # @param waagent_memory_limit Optional memory limit for waagent. Defaults to undef.
 #
 # @groups management enable, manage, noop_value.
 #
-# @groups azure_package $__linux_azure_package, $__linux_azure_service.
+# @groups azure_package __linux_azure_package, __linux_azure_service.
 #
 # @groups resource waagent_memory_limit.
 #

@@ -40,6 +40,8 @@
 #
 # @groups block_traffic block_bogons, block_mdns, block_kaspersky_sccc, block_hasp_lm, block_dhcp_broadcast, block_netbios_broadcast
 #
+# @groups custom_rules rules
+#
 class common::network::firewall (
   Boolean             $manage            = false,
   Boolean             $enable            = true,

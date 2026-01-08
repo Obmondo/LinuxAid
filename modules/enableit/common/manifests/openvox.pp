@@ -22,6 +22,8 @@
 #
 # @groups versioning version, package_name
 #
+# @groups misc manage
+#
 class common::openvox (
   Eit_types::Version    $version,
   Stdlib::Host          $server,

@@ -8,9 +8,15 @@
 #
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
+# @param manage Boolean value to control whether the user should be managed. Defaults to false.
+#
+# @param enable Boolean value to control whether the user should be enabled. Defaults to false.
+#
 # @groups pubkeys manager_pubkeys, sre_pubkeys
 #
 # @groups access allow_sre, noop_value
+#
+# @groups control manage, enable
 #
 class common::setup::obmondo_admin (
   Boolean                 $manage          = false,

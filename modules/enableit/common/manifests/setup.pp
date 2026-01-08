@@ -2,16 +2,15 @@
 #
 # @param noop_value Boolean value to control noop execution mode. Defaults to false.
 #
-# @param $__conf_dir
-# Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
+# @param __conf_dir Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
 #
-# @param $__opt_dir
-# Absolute path to the optional directory. Defaults to '/opt/obmondo'.
+# @param __opt_dir Absolute path to the optional directory. Defaults to '/opt/obmondo'.
 #
-# @param $__bin_dir
-# Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
+# @param __bin_dir Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
 #
 # @groups directories __conf_dir, __opt_dir, __bin_dir
+#
+# @groups execution noop_value
 #
 class common::setup (
   Eit_types::Noop_Value $noop_value = undef,

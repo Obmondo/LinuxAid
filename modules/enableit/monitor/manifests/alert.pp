@@ -8,6 +8,10 @@
 #
 # @param disable Optional disable configuration.
 #
+# @groups general alert_id, enable
+#
+# @groups configuration noop_value, disable
+#
 define monitor::alert (
   String                $alert_id   = $title,
   Boolean               $enable     = true,

@@ -1,43 +1,32 @@
 # @summary Class for setting up Borg backup and installing necessary packages
 #
-# @param $__dir
-# The absolute path to the backup configuration directory.
+# @param __dir The absolute path to the backup configuration directory.
 #
-# @param $prune_keep
-# Hash defining retention periods for daily, weekly, and monthly backups. Defaults to {'daily' => 7, 'weekly' => 2, 'monthly' => 2}.
+# @param prune_keep Hash defining retention periods for daily, weekly, and monthly backups. Defaults to {'daily' => 7, 'weekly' => 2, 'monthly' => 2}.
 #
-# @param $timespec
-# Hash specifying the schedule time. Defaults to { 'weekday' => undef, 'year' => '*', 'month' => '*', 'day' => '*', 'hour' => 02, 'minute' => 0, 'second' => 0 }.
+# @param timespec Hash specifying the schedule time. Defaults to { 'weekday' => undef, 'year' => '*', 'month' => '*', 'day' => '*', 'hour' => 02, 'minute' => 0, 'second' => 0 }.
 #
-# @param $randomized_delay
-# Optional delay to introduce randomness in schedule. Defaults to '10 minutes'.
+# @param randomized_del Optional delay to introduce randomness in schedule. Defaults to '10 minutes'.
 #
-# @param $remote_user
-# Optional user for remote backups. Defaults to $::common::backup::backup_user.
+# @param remote_user Optional user for remote backups. Defaults to $::common::backup::backup_user.
 #
-# @param $remote_ip
-# Optional IP address for remote backup destination.
+# @param remote_ip Optional IP address for remote backup destination.
 #
-# @param $remote_backup_root
-# Optional path for remote backup root.
+# @param remote_backup_root Optional path for remote backup root.
 #
-# @param $backup_root
-# Path for local backup root. Defaults to $::common::backup::dump_dir.
+# @param backup_root Path for local backup root. Defaults to $::common::backup::dump_dir.
 #
-# @param $repos
-# Hash of repositories to backup.
+# @param repos Hash of repositories to backup.
 #
-# @param $archives
-# Array of archive paths to include in backup.
+# @param archives Array of archive paths to include in backup.
 #
-# @param $authorized_keys
-# Optional hash of authorized keys for remote backup.
+# @param authorized_keys Optional hash of authorized keys for remote backup.
 #
-# @param $server
-# Boolean indicating whether this node is a backup server. Defaults to false.
+# @param server Boolean indicating whether this node is a backup server. Defaults to false.
 #
-# @param $last_borgbackup
-# Path to store last backup timestamp. Defaults to '/var/tmp'.
+# @param last_borgbackup Path to store last backup timestamp. Defaults to '/var/tmp'.
+#
+# @param randomized_delay Randomized delay
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
@@ -48,6 +37,8 @@
 # @groups local backup_root, repos, archives
 #
 # @groups server server
+#
+# @groups encryption encrypt_params
 #
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,

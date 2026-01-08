@@ -22,6 +22,8 @@
 #
 # @groups packages blacklist, remove_unused_packages, remove_unused_kernels
 #
+# @groups noop noop_value
+#
 class common::system::updates (
   Boolean               $manage                 = false,
   Boolean               $enable                 = false,

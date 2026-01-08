@@ -34,6 +34,8 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @param root_password The root password for secure operations. Defaults to undef.
+#
 # @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params
 #
 # @groups storage dump_dir, keep_days, backup_window_starthour, backup_window_lasthour
@@ -43,6 +45,8 @@
 # @groups lvm lvm, lvm_vg, lvm_extents_min_required
 #
 # @groups push_config push
+#
+# @groups security root_password
 #
 class common::backup (
   Boolean                        $manage                   = true,
@@ -73,7 +77,7 @@ class common::backup (
       email       => Optional[Eit_types::Email],
       exclude     => Array[Variant[Stdlib::Absolutepath,String]],
   }]]                            $push                     = {},
-  Eit_types::Encrypt::Params     $encrypt_params            = ['backup_user_password'],
+  Eit_types::Encrypt::Params     $encrypt_params            = ['backup_user_password', 'root_password'],
 
 ) {
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')

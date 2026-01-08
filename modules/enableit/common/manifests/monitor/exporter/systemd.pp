@@ -3,8 +3,7 @@
 # @param enable
 # Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 #
-# @param noop_value
-# Whether to perform noop actions. Defaults to false.
+# @param noop_value Whether to perform noop actions. Defaults to false.
 #
 # @param listen_address
 # The IP and port to listen on. Defaults to '127.254.254.254:63391'.

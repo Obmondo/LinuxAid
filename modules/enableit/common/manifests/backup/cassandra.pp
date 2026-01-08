@@ -24,6 +24,8 @@
 #
 # @groups snapshot snapshot_name.
 #
+# @groups enable enable.
+#
 class common::backup::cassandra (
   Boolean          $enable                = false,
   String           $cassandra_user        = 'cassandra',

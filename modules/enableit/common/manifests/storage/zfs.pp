@@ -2,11 +2,17 @@
 #
 # @param enable Boolean indicating if ZFS should be enabled. Defaults to false.
 #
-# @param pool_names List of pool names for ZFS pools. Defaults to an empty array.
-#
 # @param remove_sysstat_cron Boolean to remove sysstat cron jobs. Defaults to true.
 #
 # @param scrub Interval for ZFS scrubbing. Defaults to 'monthly'.
+#
+# @param allow_sync_from List of authorized sync sources.
+#
+# @param pools ZFS storage pool configurations.
+#
+# @param templates Templates for pool setup.
+#
+# @param replications Configurations for data replications.
 #
 # @groups general enable, remove_sysstat_cron, scrub
 #

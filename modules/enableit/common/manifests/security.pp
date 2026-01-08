@@ -2,6 +2,8 @@
 #
 # @param manage Boolean flag to enable or disable security management. Defaults to true.
 #
+# @groups management manage
+#
 class common::security (
   Boolean $manage = true,
 ) {
