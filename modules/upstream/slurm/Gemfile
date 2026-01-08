@@ -14,7 +14,8 @@ def location_for(place_or_version, fake_version = nil)
 end
 
 group :development do
-  gem 'falkorlib', ">= 0.9.1" #, :path => '~/git/github.com/Falkor/falkorlib'
+  gem 'falkorlib', git: 'https://github.com/Falkor/falkorlib.git', ref: 'ed25efb'
+  gem 'pdk', '~> 3.4.0'
   gem "json", '= 2.1.0',                         require: false if Gem::Requirement.create(['>= 2.5.0', '< 2.7.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "json", '= 2.3.0',                         require: false if Gem::Requirement.create(['>= 2.7.0', '< 3.0.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
   gem "json", '= 2.5.1',                         require: false if Gem::Requirement.create(['>= 3.0.0', '< 3.0.5']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
@@ -28,7 +29,7 @@ group :development do
   gem "rspec-puppet-facts", '~> 3.0',            require: false
   gem "dependency_checker", '~> 1.0.0',          require: false
   gem "parallel_tests", '= 3.12.1',              require: false
-  gem "pry", '~> 0.10.0',                          require: false
+  gem "pry", '~> 0.10.0',                        require: false
   gem "simplecov-console", '~> 0.9',             require: false
   gem "puppet-debugger", '~> 1.0',               require: false
   gem "rubocop", '~> 1.50.0',                    require: false

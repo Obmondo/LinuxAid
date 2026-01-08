@@ -233,7 +233,7 @@ SlurmdTimeout=<%= scope['slurm::slurmdtimeout'] %>
 UnkillableStepTimeout=<%= scope['slurm::unkillablesteptimeout'] %>
 <% end -%>
 #VSizeFactor=0
-Waittime=<%= scope['slurm::waittime'] %>
+WaitTime=<%= scope['slurm::waittime'] %>
 
 ### POWER SAVE SUPPORT FOR IDLE NODES (optional)
 <% if scope['slurm::suspendprogram'].empty? -%>
@@ -323,7 +323,7 @@ AccountingStoreFlags=<%= scope['slurm::accountingstoreflags'].join(',') %>
 
 AcctGatherEnergyType=acct_gather_energy/<%=         scope['slurm::acctgatherenergytype'] %>
 AcctGatherFilesystemType=acct_gather_filesystem/<%= scope['slurm::acctgatherfilesystemtype'] %>
-AcctGatherInfinibandType=acct_gather_infiniband/<%= scope['slurm::acctgatherinfinibandtype'] %>
+AcctGatherInterconnectType=acct_gather_interconnect/<%= scope['slurm::acctgatherinterconnecttype'] %>
 AcctGatherProfileType=acct_gather_profile/<%=       scope['slurm::acctgatherprofiletype'] %>
 
 JobAcctGatherFrequency=<%= scope['slurm::jobacctgatherfrequency'] %>
@@ -563,6 +563,16 @@ SwitchType=switch/<%=  scope['slurm::switchtype'] %>
 TopologyPlugin=topology/<%= scope['slurm::topology'] %>
 <% end -%>
 
+<% unless scope.call_function('versioncmp', [scope['slurm::version'], '25.11']) <= 0 %>
+#######################
+###     Metrics     ###
+#######################
+<% if scope['slurm::metrics'].empty? -%>
+#MetricsType=
+<% else -%>
+MetricsType=metrics/<%= scope['slurm::metrics'] %>
+<% end -%>
+<% end -%>
 
 #######################
 ### Node definition ###

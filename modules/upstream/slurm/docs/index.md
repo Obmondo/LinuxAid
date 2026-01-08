@@ -27,4 +27,4 @@ It proposes to detail the following elements:
 	 - the steps to follow to [setup this repository](contributing/setup.md)
 	 - information as regard the [semantic versioning](contributing/versioning.md) of this Puppet module.
      - Apart form the directory layout, we will cover various configuration aspects ([git-flow](https://github.com/nvie/gitflow), [RVM](https://rvm.io/), [Bundler](http://bundler.io/) etc.)
-* Details on the [Read the Docs](http://ulhpc-puppet-slurm.readthedocs.org/en/latest/) management.
+* Details on the [Read the Docs](http://ulhpc-puppet-slurm.readthedocs.org/en/latest/rtfd/) management.

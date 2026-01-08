@@ -50,15 +50,15 @@ class slurm::pmix (
 ) {
   include slurm::params
 
-  # Download the PMIx sources
-  slurm::pmix::download { $version :
-    ensure        => $ensure,
-    target        => $srcdir,
-    checksum      => $src_checksum,
-    checksum_type => $src_checksum_type,
-  }
-
   if $do_build {
+    # Download the PMIx sources
+    slurm::pmix::download { $version :
+      ensure        => $ensure,
+      target        => $srcdir,
+      checksum      => $src_checksum,
+      checksum_type => $src_checksum_type,
+    }
+
     # Now build them
     slurm::pmix::build { $version :
       ensure  => $ensure,
