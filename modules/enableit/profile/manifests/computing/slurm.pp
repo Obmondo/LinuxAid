@@ -23,6 +23,8 @@ class profile::computing::slurm (
   Hash                           $nodes                   = $::role::computing::slurm::nodes,
   Hash                           $partitions              = $::role::computing::slurm::partitions,
   String                         $srun_port_range         = $::role::computing::slurm::srun_port_range,
+  Stdlib::Port                   $slurmctldport           = $::role::computing::slurm::slurmctldport,
+  Eit_types::Slurm::Metrics       $metrics                 = $::role::computing::slurm::metrics,
   Stdlib::Host                   $accounting_storage_host = $::role::computing::slurm::accounting_storage_host,
   Stdlib::Host                   $control_machine         = $::role::computing::slurm::control_machine,
   # Make DOWN nodes available automatically, even after unexpected reboots. This
@@ -96,6 +98,7 @@ class profile::computing::slurm (
     accountingstoragehost     => $accounting_storage_host,
     # Control
     slurmctldhost             => $control_machine,
+    slurmctldport             => $slurmctldport,
     selecttype                => $selecttype_value,
     # Munge
     manage_munge              => true,
@@ -126,8 +129,11 @@ class profile::computing::slurm (
     })
 
     class { '::profile::computing::slurm::slurmctld':
-      interface  => $interface ,
-      node_cidrs => $node_cidrs,
+      interface     => $interface ,
+      node_cidrs    => $node_cidrs,
+      metrics       => $metrics,
+      slurm_version => $slurm_version, 
+      slurmctldport => $slurmctldport,
     }
   }
 
