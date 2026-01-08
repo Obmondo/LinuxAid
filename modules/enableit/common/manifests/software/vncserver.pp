@@ -10,9 +10,13 @@
 #
 # @param noop_value Optional boolean for noop mode. Defaults to false.
 #
+# @param systemd_service Systemd service to run, either vncserver or tigervncserver.
+#
 # @groups management manage, enable, noop_value.
 #
 # @groups configuration config_defaults, vnc_users.
+#
+# @groups service systemd_service.
 #
 class common::software::vncserver (
   Boolean                                  $manage           = false,

@@ -51,6 +51,10 @@
 #
 # @groups exporter exporter_image, exporter_listen_address, exporter_api_key.
 #
+# @groups http_settings http_bind.
+#
+# @groups other timezone, extra_settings, encrypt_params.
+#
 class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,

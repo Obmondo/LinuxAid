@@ -2,6 +2,8 @@
 #
 # @param noop_value Optional boolean to control noop behavior, defaults to undef.
 #
+# @groups settings noop_value
+#
 define common::system::selinux::module (
   Eit_types::Noop_Value $noop_value = undef,
 ) {

@@ -38,7 +38,7 @@
 #
 # @param cadvisor_image The cAdvisor image to use. Defaults to 'gcr.io/cadvisor/cadvisor:v0.39.0'.
 #
-# @param prune_duration The parameter prune_duration specifies the duration in days for which unused Docker resources will be retained before being pruned . Defaults to '30'.
+# @param prune_duration The parameter prune_duration specifies the duration in days for which unused Docker resources will be retained before being pruned. Defaults to '30'.
 #
 # @groups network fixed_cidr, bip, default_gateway, bridge_interface, dns, dns_search, networks
 #
@@ -51,6 +51,8 @@
 # @groups registry registry, upstream_repo
 #
 # @groups cadvisor cadvisor_image
+#
+# @groups instances instances
 #
 class role::virtualization::docker (
   Stdlib::Absolutepath                 $docker_lib_dir      = '/var/lib/docker',

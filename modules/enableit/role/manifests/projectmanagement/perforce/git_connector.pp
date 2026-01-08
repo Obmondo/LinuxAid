@@ -23,8 +23,7 @@
 #
 # @param p4gc_log_level The log level for the p4gc. Defaults to 1.
 #
-# @param $__blendable
-# Whether the configuration is blendable. No default value.
+# @param __blendable Whether the configuration is blendable. No default value.
 #
 # @groups versioning version, p4_gconn_user
 #
@@ -34,7 +33,7 @@
 #
 # @groups service service_port
 #
-# @groups configuration $__blendable
+# @groups configuration __blendable
 #
 class role::projectmanagement::perforce::git_connector (
   Perforce::Version    $version         = $::role::projectmanagement::perforce::version,

@@ -14,11 +14,13 @@
 #
 # @param override_load5 Optional override for load5_percpu threshold. Defaults to undef.
 #
+# @param override_load15 Optional override for load15_percpu threshold. Defaults to undef.
+#
 # @groups basic_settings enable, disable.
 #
 # @groups load_thresholds load1_percpu, load5_percpu, load15_percpu.
 #
-# @groups overrides override_load1, override_load5, override_load15.
+# @groups overrides override_load1, override_load5, override_load15
 #
 class monitor::system::load (
   Boolean              $enable          = true,

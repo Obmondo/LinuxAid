@@ -3,8 +3,7 @@
 #
 # @param munge_key The munge key for authentication. Defaults to undef.
 #
-# @param $__blendable
-# Indicates if the role is blendable.
+# @param __blendable Indicates if the role is blendable.
 #
 # @param enable Whether to enable Slurm. Defaults to false.
 #
@@ -42,6 +41,22 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
+# @param noop_value The noop value.
+#
+# @param jwt_key Secret key for signing JSON Web Tokens securely.
+#
+# @param slurm_web Web interface for managing SLURM cluster operations.
+#
+# @param slurm_agent Agent responsible for executing SLURM job tasks efficiently.
+#
+# @param slurm_gateway Gateway facilitating client access to the SLURM system.
+#
+# @param slurm_policy Rules governing resource allocation in SLURM clusters.
+#
+# @param db_buffer_pool_size Size of memory pool for database caching operations.
+#
+# @param db_log_file_size Maximum size allocated for database log files.
+#
 # @groups authentication munge_key, jwt_key, encrypt_params
 #
 # @groups daemon_control slurmctld, slurmdbd, slurmd
@@ -52,7 +67,11 @@
 #
 # @groups configuration nodes, partitions, srun_port_range, disable_root_jobs, return_to_service, use_pam, hwloc_enabled
 #
-# @groups management enable, $__blendable
+# @groups management enable, noop_value
+#
+# @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy
+#
+# @groups db db_buffer_pool_size, db_log_file_size
 #
 class role::computing::slurm (
   Boolean                             $__blendable,

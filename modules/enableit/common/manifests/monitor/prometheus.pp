@@ -1,7 +1,6 @@
 # @summary Class for managing Prometheus server monitoring configuration
 #
-# @param noop_value
-# Whether to run resources in noop mode. Defaults to false.
+# @param noop_value Whether to run resources in noop mode. Defaults to false.
 #
 # @param install_method The installation method to use. Defaults to 'package'.
 #
@@ -11,11 +10,13 @@
 #
 # @param usershell The absolute path to the user's shell.
 #
+# @param init_style Init style
+#
 # @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
 #
 # @groups noop_settings noop_value.
 #
-# @groups installation install_method.
+# @groups installation install_method, init_style.
 #
 # @groups paths env_file_path, bin_dir, usershell.
 #

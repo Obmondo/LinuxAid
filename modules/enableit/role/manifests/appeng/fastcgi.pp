@@ -1,5 +1,5 @@
 
-# @summary Class for managing the Appeng fastcgi role
+# summary Class for managing the Appeng fastcgi role
 #
 # @param url The URL for the fastcgi application. Defaults to undef.
 #

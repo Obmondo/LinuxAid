@@ -26,6 +26,8 @@
 #
 # @groups storage dump_dir, backup_databases, backup_retention
 #
+# @groups enable_config enable
+#
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,
   Eit_types::User           $backup_user           = $::common::backup::db::backup_user,

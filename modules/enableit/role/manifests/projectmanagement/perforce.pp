@@ -55,6 +55,8 @@
 #
 # @groups backup backup_dir, backup_retention
 #
+# @groups hostname hostname
+#
 class role::projectmanagement::perforce (
   Eit_types::Password       $service_password,
   Eit_types::Password       $admin_password,

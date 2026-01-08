@@ -12,7 +12,7 @@
 #
 # @groups scom scom_masters, scom_user
 #
-# @groups settings enable, install_sudo_rules, noop_value, 
+# @groups settings enable, install_sudo_rules, noop_value
 # 
 class common::monitoring::scom (
   Boolean                       $enable             = false,

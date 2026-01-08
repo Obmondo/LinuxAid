@@ -7,7 +7,7 @@
 # @param config_dir The directory for exporter configuration files. Defaults to '/opt/obmondo/etc/exporter'.
 #
 # @groups configuration enable, noop_value, config_dir.
-
+#
 class common::monitor::exporter (
   Boolean               $enable     = $common::monitor::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,

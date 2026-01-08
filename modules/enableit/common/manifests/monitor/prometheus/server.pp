@@ -10,7 +10,9 @@
 #
 # @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
-# @groups configuration version, config_dir, enable.
+# @param noop_value Notifies Puppet to define if changes are to be made to the system or simulated.
+#
+# @groups configuration version, config_dir, enable, noop_value.
 #
 # @groups network collect_scrape_jobs, listen_address.
 #

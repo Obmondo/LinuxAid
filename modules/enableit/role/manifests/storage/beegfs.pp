@@ -32,8 +32,7 @@
 #
 # @param interfaces An array of network interfaces to bind to. Defaults to an empty array.
 #
-# @param $__blendable
-# A flag for blendable functionality.
+# @param __blendable A flag for blendable functionality.
 #
 # @groups services client, mgmtd, storage, meta, admon.
 #
@@ -44,6 +43,10 @@
 # @groups ports admon_http_port, client_udp_port, meta_port, helperd_tcp_port, admon_udp_port.
 #
 # @groups network interfaces.
+#
+# @groups blendable __blendable.
+# 
+# @groups enable enable.
 #
 class role::storage::beegfs (
   Boolean                     $enable,

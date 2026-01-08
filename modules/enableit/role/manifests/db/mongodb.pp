@@ -85,6 +85,8 @@
 #
 # @groups logging verbosity, log_file, object_check
 #
+# @groups miscellaneous version, use_upstream_repo, extra_server_options, disable_scripting, disable_tablescan, disable_prealloc, default_namespace_file_size, restart_on_change, quota, backup
+#
 class role::db::mongodb (
   Variant[Pattern[/[0-9]+\.[0-9]+/]] $version            = '8.0',
   Boolean $use_upstream_repo                             = true,

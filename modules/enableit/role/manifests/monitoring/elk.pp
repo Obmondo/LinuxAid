@@ -57,6 +57,8 @@
 #
 # @groups curator_tasks curator, curator_delete_days
 #
+# @groups additional logstash_redis_to_es_workers, install_search_guard
+#
 class role::monitoring::elk (
   Pattern[/[A-Za-z0-9_.-]+/] $clustername                         = 'elkstack',
   Hash[String, Data] $es_config                                   = {},

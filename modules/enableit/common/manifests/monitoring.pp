@@ -2,6 +2,8 @@
 #
 # @param manage Whether to enable managing monitoring components. Defaults to true.
 #
+# @groups management manage
+#
 class common::monitoring (
   Boolean $manage = true,
 ) {

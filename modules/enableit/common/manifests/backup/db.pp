@@ -30,6 +30,8 @@
 #
 # @groups schedule backup_hour, host, backup_method.
 #
+# @groups general enable, encrypt_params.
+#
 class common::backup::db (
   Boolean                       $enable                = $::common::backup::enable,
   Optional[Eit_types::Password] $backup_user_password  = $::common::backup::backup_user_password,

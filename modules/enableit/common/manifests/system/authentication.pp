@@ -18,6 +18,8 @@
 #
 # @param purge_users Boolean to purge users. Defaults to false.
 #
+# @param manage_sudo Boolean to manage sudo user.
+#
 # @param protected_users Array of type Eit_types::User specifying protected users. Defaults to an empty array.
 #
 # @groups management manage, manage_pam, manage_sssd, manage_nis, manage_sudo
