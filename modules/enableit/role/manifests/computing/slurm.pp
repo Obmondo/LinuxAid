@@ -94,6 +94,8 @@ class role::computing::slurm (
   Hash                                $nodes                   = {},
   Hash                                $partitions              = {},
   String                              $srun_port_range         = '50000-53000',
+  Stdlib::Port                        $slurmctldport           = 6817,
+  Eit_types::Slurm::Metrics           $metrics                 = [],
   Stdlib::Host                        $accounting_storage_host = $facts['networking']['hostname'],
   Stdlib::Host                        $control_machine         = $facts['networking']['hostname'],
   Integer[0,2]                        $return_to_service       = 2,
