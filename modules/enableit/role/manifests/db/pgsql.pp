@@ -45,6 +45,8 @@
 #
 # @groups backup backup
 #
+# @encrypt_params recovery_password, replication_password
+#
 class role::db::pgsql (
   Array[Stdlib::IP::Address]         $allow_remote_hosts   = [],
   Integer[0, default]                $max_connections      = 100,

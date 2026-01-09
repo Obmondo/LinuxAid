@@ -38,6 +38,8 @@
 #
 # @groups encryption_config encrypt_params
 #
+# @encrypt_params ssh_authorized_keys.*.key
+#
 class common::system (
   Boolean $remove_fstrim_cron = false,
   Boolean $purge_root_ssh_keys = true,

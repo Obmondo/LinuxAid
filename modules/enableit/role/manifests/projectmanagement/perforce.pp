@@ -57,6 +57,8 @@
 #
 # @groups hostname hostname
 #
+# @encrypt_params service_password, admin_password, operator_password
+#
 class role::projectmanagement::perforce (
   Eit_types::Password       $service_password,
   Eit_types::Password       $admin_password,

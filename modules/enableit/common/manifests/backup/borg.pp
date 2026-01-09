@@ -40,6 +40,8 @@
 #
 # @groups encryption encrypt_params
 #
+# @encrypt_params repos.*.password
+#
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,
   Eit_types::Borg_prune_numbers        $prune_keep = {

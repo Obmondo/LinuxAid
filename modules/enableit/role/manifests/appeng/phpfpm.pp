@@ -49,6 +49,8 @@
 #
 # @groups config version, memory_limit, encrypt_params
 #
+# @encrypt_params ssl_cert, ssl_key
+#
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
   Optional[String]                    $ssl_cert             = undef,

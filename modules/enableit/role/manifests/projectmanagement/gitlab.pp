@@ -101,6 +101,8 @@
 #
 # @groups others time_zone, puma_bug, default_theme, package_version, encrypt_params, enable_pages
 #
+# @encrypt_params  ssl_cert, ssl_key, registry_ssl_cert, registry_ssl_key, mattermost_ssl_cert, mattermost_ssl_key
+#
 class role::projectmanagement::gitlab (
   Stdlib::Fqdn                         $domain,
   Boolean                              $email_enabled,

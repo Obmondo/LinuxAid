@@ -17,6 +17,8 @@
 #
 # @groups encryption encrypt_params.
 #
+# @encrypt_params join_token, ca_pin.
+#
 class common::software::teleport (
   Boolean                           $enable        = false,
   Eit_types::Noop_Value             $noop_value    = undef,

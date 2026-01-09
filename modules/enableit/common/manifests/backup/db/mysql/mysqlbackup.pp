@@ -22,6 +22,8 @@
 #
 # @groups configuration enable, backup_retention, ignore_tables, dump_dir
 #
+# @encrypt_params backup_user_password
+#
 class common::backup::db::mysql::mysqlbackup (
   Boolean                   $enable                = $::common::backup::db::enable,
   Eit_types::Password       $backup_user_password  = $::common::backup::db::backup_user_password,

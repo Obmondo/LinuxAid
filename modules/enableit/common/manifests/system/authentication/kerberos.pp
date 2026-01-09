@@ -42,6 +42,8 @@
 #
 # @groups encryption encrypt_params.
 #
+# @encrypt_params join_password.
+#
 class common::system::authentication::kerberos (
   Boolean                       $manage         = $common::system::authentication::manage_sssd,
   Boolean                       $enable         = false,

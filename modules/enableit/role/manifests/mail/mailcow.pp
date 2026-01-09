@@ -55,6 +55,8 @@
 #
 # @groups other timezone, extra_settings, encrypt_params.
 #
+# @encrypt_params dbroot, dbpass, redispass, exporter_api_key.
+#
 class role::mail::mailcow (
   String                      $dbroot,
   String                      $dbpass,

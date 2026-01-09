@@ -65,6 +65,8 @@
 #
 # @groups configuration version, cluster_name, plugins, oss, expose, secrets, kibana_elasticsearch, http, transport, kibana_username, kibana_password, encrypt_params
 #
+# @encrypt_params kibana_username, kibana_password
+#
 class role::db::elasticsearch (
   Eit_types::Version                  $version               = '7.10.2',
   Eit_types::Percentage               $es_heap_size_pct      = 50,

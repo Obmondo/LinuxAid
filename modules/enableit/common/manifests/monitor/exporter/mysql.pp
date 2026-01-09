@@ -20,6 +20,8 @@
 #
 # @groups exporter enable, listen_port, noop_value, encrypt_params
 #
+# @encrypt_params password
+#
 class common::monitor::exporter::mysql (
   Boolean             $enable                 = $common::monitor::exporter::enable,
   String              $username               = $profile::mysql::mysql_monitor_username,

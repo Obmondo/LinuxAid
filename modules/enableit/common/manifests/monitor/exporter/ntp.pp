@@ -1,7 +1,6 @@
 # @summary Class for managing NTP Exporter
 #
-# @param enable
-# Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
+# @param enable Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
 #
 # @param listen_address The IP and port to listen on, default is '127.254.254.254:9559'.
 #
