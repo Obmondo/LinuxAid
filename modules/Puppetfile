@@ -300,7 +300,7 @@ mod 'puppetlabs/puppet_agent',
 
 mod 'ULHPC/slurm',
     :git => 'https://github.com/ULHPC/puppet-slurm.git',
-    :ref => 'v1.5.3'
+    :ref => '8b1988aeeba726afe8fe1af67849b1a88b91a81e'
 
 mod 'bodgit/rngd',
     :git => 'https://github.com/bodgit/puppet-rngd.git',

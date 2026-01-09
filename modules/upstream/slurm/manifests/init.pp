@@ -100,10 +100,10 @@
 # @param acctgatherfilesystemtype [String]      Default: 'none'
 #          plugin to be used for filesystem traffic accounting.
 #          Elligible values in [ 'none', 'lustre' ]
-# @param acctgatherinfinibandtype      [String]       Default: 'none'
+# @param acctgatherinterconnecttype [String]    Default: 'none'
 #          Identifies the plugin to be used for infiniband network traffic
 #          accounting.
-#          Elligible values in [ 'none', 'ofed' ]
+#          Elligible values in [ 'none', 'ofed', 'sysfs' ]
 # @param acctgatherprofiletype    [String]      Default: 'none'
 #          Plugin to be used for detailed job profiling.
 #          Require to define acct_gather.conf for non-none values
@@ -183,6 +183,7 @@
 # @param maxarraysize             [Integer]     Default: undef
 # @param maxjobcount              [Integer]     Default: undef
 # @param maxtaskspernode          [Integer]     Default: 512
+# @param metrics                  [String]      Default: 'openmetrics'
 # @param mpidefault               [String]      Default: 'none'
 #           Default type of MPI to be used. Srun may override this configuration parameter in any case.
 #           Elligible values in ['lam','mpich1_p4','mpich1_shmem','mpichgm','mpichmx','mvapich','none','openmpi','pmi2']
@@ -543,7 +544,7 @@ class slurm (
   Array   $accountingstorageenforce       = $slurm::params::accountingstorageenforce,
   String  $acctgatherenergytype           = $slurm::params::acctgatherenergytype,
   String  $acctgatherfilesystemtype       = $slurm::params::acctgatherfilesystemtype,
-  String  $acctgatherinfinibandtype       = $slurm::params::acctgatherinfinibandtype,
+  String  $acctgatherinterconnecttype     = $slurm::params::acctgatherinterconnecttype,
   String  $acctgatherprofiletype          = $slurm::params::acctgatherprofiletype,
   String  $configdir                      = $slurm::params::configdir,
   String  $clustername                    = $slurm::params::clustername,
@@ -604,6 +605,7 @@ class slurm (
   Optional[Integer] $maxjobcount          = $slurm::params::maxjobcount,
   Integer $maxtaskspernode                = $slurm::params::maxtaskspernode,
   Integer $messagetimeout                 = $slurm::params::messagetimeout,
+  String  $metrics                        = $slurm::params::metrics,
   # Default type of MPI to be used.
   String  $mpidefault                     = $slurm::params::mpidefault,
   String  $mpiparams                      = $slurm::params::mpiparams,

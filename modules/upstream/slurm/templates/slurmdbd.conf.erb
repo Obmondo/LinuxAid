@@ -125,7 +125,7 @@ ArchiveUsage=yes
 ####################
 DbdHost=<%= scope['slurm::slurmdbd::dbdhost'] %>
 DbdAddr=<%= scope['slurm::slurmdbd::dbdaddr'] %>
-#DbdPort=<%= scope['slurm::slurmdbdport'] %>
+DbdPort=<%= scope['slurm::slurmdbd::dbdport'] %>
 <% if scope['slurm::slurmdbd::dbdbackuphost'].empty? -%>
 #DbdBackupHost=
 <% else -%>

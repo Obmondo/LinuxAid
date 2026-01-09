@@ -153,7 +153,7 @@ class slurm::params {
   $accountingstoragetres    = ''
   $acctgatherenergytype     = 'none'
   $acctgatherfilesystemtype = 'none'
-  $acctgatherinfinibandtype = 'none'
+  $acctgatherinterconnecttype = 'none'
   $acctgatherprofiletype    = 'none'
   $batchstarttimeout       = 10
   $getenvtimeout           = 2
@@ -199,7 +199,7 @@ class slurm::params {
   $maxarraysize            = undef
   $maxjobcount             = undef
   $maxtaskspernode         = 512
-
+  $metrics                 = 'openmetrics'
   # Default type of MPI to be used. Srun may override this configuration parameter in any case.
   # in ['lam','mpich1_p4','mpich1_shmem','mpichgm','mpichmx','mvapich','none','openmpi','pmi2']
   $mpidefault              = 'none'   # See https://slurm.schedmd.com/mpi_guide.html
@@ -233,7 +233,7 @@ class slurm::params {
   $priorityweightjobsize   = 0
   $priorityweightpartition = 0
   $priorityweightqos       = 0
-  $privatedata             = []  # in ['accounts','cloud','jobs','nodes','partitions','reservations','usage','users']
+  $privatedata             = []  # in ['accounts','events','jobs','nodes','partitions','reservations','usage','users']
   $proctracktype           = 'cgroup'      # in ['cgroup', 'cray', 'linuxproc', 'lua', 'sgi_job','pgid']
 
   $prolog                  = ''
