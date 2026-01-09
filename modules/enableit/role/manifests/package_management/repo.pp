@@ -59,6 +59,8 @@
 #
 # @groups misc user, basedir, registry_path, volumes, manage, locations, configurations, weekday, server_tag, provider, encrypt_params
 #
+# @encrypt_params signing_password, gitserver_token
+#
 class role::package_management::repo (
   Eit_types::User  $user,
   Stdlib::Unixpath $basedir,

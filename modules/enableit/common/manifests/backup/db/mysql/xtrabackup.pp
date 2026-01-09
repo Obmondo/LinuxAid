@@ -22,6 +22,8 @@
 #
 # @groups storage_params dump_dir, backup_retention, ignore_tables
 #
+# @encrypt_params backup_user_password
+#
 class common::backup::db::mysql::xtrabackup (
   Eit_types::Password       $backup_user_password  = $::common::backup::db::backup_user_password,
   Boolean                   $enable                = $::common::backup::db::enable,

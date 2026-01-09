@@ -23,6 +23,8 @@
 #
 # @groups php variant, encrypt_params
 #
+# @encrypt_params database_password
+#
 class role::web::piwik (
   String $hostname,
   Eit_types::Password $database_password,

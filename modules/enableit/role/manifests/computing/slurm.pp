@@ -73,6 +73,8 @@
 #
 # @groups db db_buffer_pool_size, db_log_file_size
 #
+# @encrypt_params munge_key, jwt_key, slurm_gateway.*.bind_password
+#
 class role::computing::slurm (
   Boolean                             $__blendable,
   Optional[Variant[

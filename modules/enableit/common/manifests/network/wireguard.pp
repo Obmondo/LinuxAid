@@ -10,6 +10,8 @@
 #
 # @groups config tunnels
 #
+# @encrypt_params tunnels.*.private_key
+#
 class common::network::wireguard (
   Boolean $enable   = true,
   Hash    $tunnels  = {},

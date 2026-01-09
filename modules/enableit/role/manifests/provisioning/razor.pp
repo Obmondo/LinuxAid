@@ -31,6 +31,8 @@
 # 
 # @groups tftp manage_tftpd
 # 
+# @encrypt_params db_password
+# 
 class role::provisioning::razor (
   Eit_types::Password $db_password,
   Eit_types::Domain $dhcp_domain,

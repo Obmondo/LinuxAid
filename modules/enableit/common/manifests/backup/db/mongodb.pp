@@ -28,6 +28,8 @@
 #
 # @groups enable_config enable
 #
+# @encrypt_params backup_user_password
+#
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,
   Eit_types::User           $backup_user           = $::common::backup::db::backup_user,

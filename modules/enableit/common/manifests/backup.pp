@@ -48,6 +48,8 @@
 #
 # @groups security root_password
 #
+# @encrypt_params backup_user_password, root_password
+#
 class common::backup (
   Boolean                        $manage                   = true,
   Boolean                        $install_client           = false,

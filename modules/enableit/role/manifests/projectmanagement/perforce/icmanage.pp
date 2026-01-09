@@ -45,6 +45,8 @@
 #
 # @groups config __blendable, hostname, manage_db, backup_dir
 # 
+# @encrypt_params db_password, root_password, db_admin_password
+# 
 class role::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version,
   Eit_types::Password      $db_password,

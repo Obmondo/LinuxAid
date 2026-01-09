@@ -37,6 +37,8 @@
 #
 # @groups security webadm_password, encrypt_params.
 #
+# @encrypt_params webadm_password.
+#
 class role::communication::thinlinc (
   Eit_types::Password    $webadm_password,
   String                 $version                     = '4.9.0',

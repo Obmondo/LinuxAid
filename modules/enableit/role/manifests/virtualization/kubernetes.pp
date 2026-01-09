@@ -93,6 +93,8 @@
 #
 # @groups dashboard install_dashboard, version, worker_peers, encrypt_params
 #
+# @encrypt_params discovery_token_hash, token, etcdserver_key, etcdpeer_key, etcd_ca_key, etcdclient_key, kubernetes_ca_key, sa_key, front_proxy_ca_key
+#
 class role::virtualization::kubernetes (
   Enum['controller','worker'] $role,
   String                      $discovery_token_hash,

@@ -14,6 +14,8 @@
 #
 # @groups ca_params ca_certs
 #
+# @encrypt_params manual.*.key, manual.*.cert, manual.*.ca.
+#
 class common::certs (
   Stdlib::Absolutepath $__base_dir,
   Hash[Stdlib::Fqdn, Struct[{

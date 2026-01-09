@@ -23,6 +23,8 @@
 #
 # @groups configuration modules, domains, vhosts, encrypt_params
 #
+# @encrypt_params vhosts.*.ssl_key, vhosts.*.ssl_cert
+# 
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,
