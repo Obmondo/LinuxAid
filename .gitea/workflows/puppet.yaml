@@ -9,6 +9,18 @@ name: Puppet CI for shellcheck, erb, epp and lint
       - closed
 
 jobs:
+  puppet_docstring:
+    name: Puppet docstring ci
+    runs-on: ubuntu-latest
+    container:
+      image: harbor.obmondo.com/obmondo/linuxaid-ci:v0.0.1
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: ci
+        run: /script/linuxaid-ci.rb ./modules/enableit/
+
   puppet_ci:
     name: Puppet CI
     runs-on: ubuntu-latest
