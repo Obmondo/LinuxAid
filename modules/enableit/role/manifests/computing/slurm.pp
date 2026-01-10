@@ -55,13 +55,17 @@
 #
 # @param db_buffer_pool_size Size of memory pool for database caching operations.
 #
+# @param slurmctldport Port for slurm slurmctld.
+#
+# @param metrics Optional metrics array.
+#
 # @param db_log_file_size Maximum size allocated for database log files.
 #
 # @groups authentication munge_key, jwt_key, encrypt_params
 #
 # @groups daemon_control slurmctld, slurmdbd, slurmd
 #
-# @groups network interface, node_cidrs, accounting_storage_host, control_machine
+# @groups network interface, node_cidrs, accounting_storage_host, control_machine, metrics
 #
 # @groups version_control slurm_version, munge_version
 #
@@ -69,7 +73,7 @@
 #
 # @groups management enable, noop_value
 #
-# @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy
+# @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy, slurmctldport
 #
 # @groups db db_buffer_pool_size, db_log_file_size
 #
