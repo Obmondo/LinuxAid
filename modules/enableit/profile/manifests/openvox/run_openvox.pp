@@ -3,6 +3,8 @@ class profile::openvox::run_openvox (
   Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
 
+  $linuxaid_cli_install_method = lookup('common::openvox::linuxaid_cli::install_method')
+
   if $facts['init_system'] == 'sysvinit' {
     cron { 'run-openvox':
       ensure  => present,
@@ -70,13 +72,18 @@ class profile::openvox::run_openvox (
       ensure => absent,
     }
 
+    $linuxaid_require = $linuxaid_cli_install_method ? {
+      'archive' => Archive['linuxaid-cli'],
+      default   => Package['linuxaid-cli'],
+    }
+
     systemd::timer { 'run-openvox.timer':
       ensure          => present,
       timer_content   => $_timer,
       service_content => $_service,
       active          => true,
       enable          => true,
-      require         => Archive['linuxaid-cli'],
+      require         => $linuxaid_require,
     }
   }
 }

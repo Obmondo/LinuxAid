@@ -4,22 +4,38 @@ class profile::openvox::linuxaid_cli (
 ) {
   $version   = lookup('common::openvox::linuxaid_cli::version')
   $_checksum = lookup('common::openvox::linuxaid_cli::checksums')
+  $install_method = lookup('common::openvox::linuxaid_cli::install_method')
 
   $_arch    = profile::arch()
   $_os_name = $facts['os']['name']
   $_kernel  = $facts['kernel'].downcase
 
-  archive { 'linuxaid-cli':
-    ensure          => present,
-    source          => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_v${version}_linux_${_arch}.tar.gz",
-    extract         => true,
-    extract_command => 'tar xzf %s linuxaid-cli',
-    path            => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
-    extract_path    => '/opt/obmondo/bin',
-    checksum        => $_checksum[$version],
-    checksum_type   => 'sha256',
-    cleanup         => true,
-    noop            => $noop_value,
+  $linuxaid_install_method = $install_method ? {
+    'archive' => Archive['linuxaid-cli'],
+    default   => Package['linuxaid-cli'],
+  }
+
+  case $linuxaid_install_method {
+    'archive': {
+      archive { 'linuxaid-cli':
+        ensure          => present,
+        source          => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${version}/linuxaid-cli_v${version}_linux_${_arch}.tar.gz",
+        extract         => true,
+        extract_command => 'tar xzf %s linuxaid-cli',
+        path            => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
+        extract_path    => '/opt/obmondo/bin',
+        checksum        => $_checksum[$version],
+        checksum_type   => 'sha256',
+        cleanup         => true,
+        noop            => $noop_value,
+      }
+    }
+    default: {
+      package { 'linuxaid-cli':
+        ensure => "${version}-1",
+        noop   => $noop_value,
+      }
+    }
   }
 
   ensure_resource('file', '/etc/default', {
