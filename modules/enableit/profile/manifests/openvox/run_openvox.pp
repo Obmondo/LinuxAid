@@ -2,7 +2,6 @@
 class profile::openvox::run_openvox (
   Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
 ) {
-
   if $facts['init_system'] == 'sysvinit' {
     cron { 'run-openvox':
       ensure  => present,
@@ -76,7 +75,6 @@ class profile::openvox::run_openvox (
       service_content => $_service,
       active          => true,
       enable          => true,
-      require         => Archive['linuxaid-cli'],
     }
   }
 }

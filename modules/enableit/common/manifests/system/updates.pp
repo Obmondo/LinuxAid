@@ -75,6 +75,20 @@ class common::system::updates (
       noop   => $noop_value,
     }
 
+    if $facts['init_system'] == 'sysvinit' {
+      cron { 'obmondo-system-update':
+        # NOTE: We're disabling the system update cron for older init systems (in this case turrisos)
+        # because we still need to test how it will work out. For now, we'll see how the mechanism working
+        # for latest OS, and then maybe later  we'll add this cron back again.
+        ensure  => false, # ensure_present($enable),
+        command => '/opt/obmondo/bin/linuxaid-cli obmondo-system-update',
+        user    => 'root',
+        minute  => fqdn_rand(59, $facts['networking']['hostname']),
+        hour    => '*',
+        noop    => $noop_value,
+      }
+    }
+
     if $facts['init_system'] == 'systemd' {
       # Change the upgrade service timer timing.
       $_minutes = fqdn_rand(30, $facts['networking']['hostname'])

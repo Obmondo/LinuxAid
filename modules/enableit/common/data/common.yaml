@@ -327,6 +327,7 @@ common::openvox::configure_agent: true
 # In this file, we maintain for amd64 (which is default).
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
+common::openvox::linuxaid_cli::install_method: package
 common::openvox::linuxaid_cli::version: 1.1.0
 common::openvox::linuxaid_cli::checksums:
   1.0.4: "7f8f68550107ec8a509f50fa8a127dfb230720a81f6ace4e58aef528e33cb708"
