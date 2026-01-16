@@ -71,4 +71,8 @@ class common::software {
   if lookup('common::software::miniforge::manage', Boolean, undef, false) {
     include common::software::miniforge
   }
+
+  if lookup('common::software::openvmtools::manage', Boolean, undef, false) {
+    include common::software::opemvmtools
+  }
 }

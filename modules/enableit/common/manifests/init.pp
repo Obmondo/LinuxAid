@@ -72,7 +72,6 @@ class common (
       contain common::system
       contain common::software
       contain common::devices
-      contain common::virtualization
       contain common::monitoring
       contain common::hosts
       contain common::storage
