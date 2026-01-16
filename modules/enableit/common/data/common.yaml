@@ -318,10 +318,19 @@ common::openvox::server: enableit.puppet.obmondo.com
 common::openvox::package_name: "openvox-agent"
 common::openvox::configure_agent: true
 
-common::openvox::linuxaid_cli::version: 1.0.3
+# Update the linuxaid-cli version as per the latest release on Github
+# https://github.com/Obmondo/linuxaid-cli/releases/latest
+#
+# Additionally, we maintain linuxaid-cli archive's sha256 checksums of last 2 releases.
+# This way we can easily roll-back to previous version with ease.
+# This can be obtained easily in the specific release page's asset section.
+# In this file, we maintain for amd64 (which is default).
+# Update other architecture checksums in their respective heira config file.
+# https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
+common::openvox::linuxaid_cli::version: 1.1.0
 common::openvox::linuxaid_cli::checksums:
-  1.0.2: "050a95ed7fc634b31da68118be057b0650333c14cee8bfd0b3922bfc376b1b7d"
-  1.0.3: "59a2ff6a6bbdd37396737b5a47a417b9212d49659f13605783e4dbd0b27451c6"
+  1.0.4: "7f8f68550107ec8a509f50fa8a127dfb230720a81f6ace4e58aef528e33cb708"
+  1.1.0: "db627eec043542d991eacd447fcdb44986ea58d7b8c9986ca6d540083d136233"
 
 # KeepAlived
 common::keepalived::global_defs:
