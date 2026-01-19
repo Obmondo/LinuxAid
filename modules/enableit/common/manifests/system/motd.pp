@@ -1,7 +1,6 @@
 # @summary Class for managing the MOTD configuration
 #
-# @param enable
-# Enable or disable the MOTD. Defaults to true.
+# @param enable Enable or disable the MOTD. Defaults to true.
 #
 # @param header The header content for the MOTD. Defaults to undef.
 #

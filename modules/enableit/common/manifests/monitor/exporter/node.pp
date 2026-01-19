@@ -58,6 +58,10 @@
 #
 # @param enable Boolean indicating whether the exporter is enabled. Defaults to true.
 #
+# @param host The host certname. Defaults to $trusted['certname'].
+#
+# @param version Note exporter version. Defaults to '1.10.2'.
+#
 # @param noop_value Boolean value for noop mode. Defaults to false.
 #
 # @groups filesystem buddyinfo, cgroups, ksmd, meminfo_numa, slabinfo, zoneinfo.

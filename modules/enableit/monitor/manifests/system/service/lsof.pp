@@ -1,7 +1,6 @@
 # @summary Class for managing the monitor::system::service::lsof resource
 #
-# @param enable 
-# Whether to enable monitoring of open deleted files. Defaults to true.
+# @param enable Whether to enable monitoring of open deleted files. Defaults to true.
 #
 # @groups enable enable
 #

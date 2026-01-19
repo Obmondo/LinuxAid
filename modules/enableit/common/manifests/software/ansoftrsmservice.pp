@@ -19,6 +19,8 @@
 #
 # @param env Environment variables
 #
+# @param manage Whether to manage ansoftrsmservice. Defaults to false.
+#
 # @groups service enable, manage.
 #
 # @groups configuration env, ansysrsm_path.

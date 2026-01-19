@@ -2,6 +2,8 @@
 #
 # @param enable Whether to enable monitoring. Defaults to the value of $::obmondo_monitoring_status.
 #
+# @param noop_value Boolean value for noop mode. Defaults to undef.
+#
 # @groups settings enable, noop_value
 #
 class common::monitor (
