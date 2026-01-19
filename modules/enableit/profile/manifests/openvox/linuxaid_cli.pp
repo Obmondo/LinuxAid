@@ -14,7 +14,7 @@ class profile::openvox::linuxaid_cli (
   $_arch        = profile::arch()
   $_os_family   = $facts['os']['family']
   $_kernel      = $facts['kernel'].downcase
-  $_init_system = facts['init_system']
+  $_init_system = $facts['init_system']
 
   $_notify_res = $_init_system ? {
     'sysvinit' => Cron['run-openvox'],
@@ -24,9 +24,10 @@ class profile::openvox::linuxaid_cli (
   case $_install_method {
     'package': {
       $_linuxaid_cli_package_version = $_os_family ? {
-        'Debian'           => "v${_version}",
-        ['RedHat', 'Suse'] => "v${_version}-1",
-        default            => fail("Unsupported OS family: ${_os_family}. Try installing linuxaid-cli via archive install method"),
+        'Debian' => "v${_version}",
+        'RedHat' => "v${_version}-1",
+        'Suse'   => "v${_version}-1",
+        default  => fail("Unsupported OS family: ${_os_family}. Try installing linuxaid-cli via archive install method"),
       }
       package { 'linuxaid-cli':
         ensure => $_linuxaid_cli_package_version,
