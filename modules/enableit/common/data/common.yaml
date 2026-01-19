@@ -313,7 +313,7 @@ common::system::services:
 
 # Puppet
 common::openvox::version: "8.23.0"
-common::openvox::environment: "v1.4.0"
+common::openvox::environment: "v1.4.1"
 common::openvox::server: enableit.puppet.obmondo.com
 common::openvox::package_name: "openvox-agent"
 common::openvox::configure_agent: true
