@@ -152,7 +152,6 @@ common::cron::purge_unmanaged: false
 common::network::manage: false
 common::services::manage: true
 common::security::manage: true
-common::monitoring::manage: true
 common::extras::manage: false
 common::mail::manage: false
 
@@ -431,8 +430,8 @@ common::monitor::exporter::node::zoneinfo: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
 
-common::monitoring::atop::install: false
-common::monitoring::atop::daemon: false
+common::utility::atop::install: false
+common::utility::atop::daemon: false
 
 common::hosts::entries:
   127.254.254.254:
@@ -498,8 +497,9 @@ common::network::tcpshaker::concurrency: 50
 common::network::vrrp::enable: false
 
 ## Monitoring
-common::monitoring::splunk::forwarder::enable: false
-common::monitoring::scom::enable: false
+common::monitor::splunk::forwarder::enable: false
+common::monitor::scom::manage: false
+common::monitor::scom::enable: false
 
 ## Security
 common::security::auditd::enable: false

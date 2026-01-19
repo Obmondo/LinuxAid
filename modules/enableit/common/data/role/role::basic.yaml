@@ -1,8 +1,6 @@
 ---
 common::full_host_management: false
 common::system::updates::enable: false
-common::monitoring::manage: true
-
 common::logging::manage: false
 common::backup::manage: false
 common::cron::purge_unmanaged: false

@@ -1,5 +1,5 @@
 # Microsoft SCOM
-class profile::monitoring::scom (
+class profile::monitor::scom (
   Optional[Array[Stdlib::Host]] $scom_masters       = $common::monitoring::scom::scom_masters,
   Boolean                       $install_sudo_rules = $common::monitoring::scom::install_sudo_rules,
   Eit_types::User               $scom_user          = $common::monitoring::scom::scom_user,

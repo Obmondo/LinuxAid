@@ -13,8 +13,8 @@
 # @groups scom scom_masters, scom_user
 #
 # @groups settings enable, install_sudo_rules, noop_value
-# 
-class common::monitoring::scom (
+#
+class common::monitor::scom (
   Boolean                       $enable             = false,
   Optional[Array[Stdlib::Host]] $scom_masters       = undef,
   Boolean                       $install_sudo_rules = true,
