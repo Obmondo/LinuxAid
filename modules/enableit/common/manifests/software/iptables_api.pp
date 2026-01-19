@@ -1,7 +1,6 @@
 # @summary Class for installing iptables-api
 #
-# @param enable
-# Enable the iptables-api installation. Defaults to false.
+# @param enable Enable the iptables-api installation. Defaults to false.
 #
 # @param manage Whether to manage the iptables-api resource. Defaults to false.
 #

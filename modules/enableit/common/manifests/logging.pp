@@ -1,7 +1,6 @@
 # @summary Class for managing common logging configuration
 #
-# @param manage 
-# Whether to manage logging components. Defaults to true.
+# @param manage Whether to manage logging components. Defaults to true.
 #
 # @param log_dir_group Optional group for log directory permissions.
 #

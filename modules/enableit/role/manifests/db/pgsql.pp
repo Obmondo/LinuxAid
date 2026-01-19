@@ -29,6 +29,8 @@
 #
 # @param application_name The name of the application. Defaults to undef.
 #
+# @param backup Boolean to enable backup. Defaults to false.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups connection allow_remote_hosts, listen_address, max_connections

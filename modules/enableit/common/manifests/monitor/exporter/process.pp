@@ -4,8 +4,7 @@
 #
 # @param noop_value Whether to perform noop operations. Defaults to false.
 #
-# @param listen_address
-# The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
+# @param listen_address The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
 #
 # @groups basic enable, noop_value.
 #

@@ -14,6 +14,12 @@
 #
 # @param environment The openvox environment to use. Defaults to 'master'.
 #
+# @param package_name The package name.
+#
+# @param manage Whether to manage the openvox. Defaults to true.
+#
+# @param noop_value Boolean value for noop mode. Defaults to undef.
+#
 # @groups server_config server, server_port, config_file
 #
 # @groups agent run_agent_as_noop, noop_value

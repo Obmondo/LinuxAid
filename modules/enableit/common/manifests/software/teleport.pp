@@ -1,7 +1,6 @@
 # @summary Class for managing the OMS Agent
 #
-# @param enable
-# Whether to enable the OMS Agent. Defaults to false.
+# @param enable Whether to enable the OMS Agent. Defaults to false.
 #
 # @param noop_value Optional boolean for noop mode. Defaults to undef.
 #

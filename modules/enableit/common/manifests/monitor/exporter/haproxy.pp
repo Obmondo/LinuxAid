@@ -1,7 +1,6 @@
 # @summary Class for managing the Prometheus HAProxy exporter
 #
-# @param enable
-# Boolean flag to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
+# @param enable Boolean flag to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 #
 # @param noop_value Boolean value for noop mode. Defaults to false.
 #

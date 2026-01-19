@@ -1,7 +1,6 @@
 # @summary Class for managing rsyslog configuration
 #
-# @param manage 
-# Whether to manage rsyslog. Defaults to the value of $common::logging::manage.
+# @param manage Whether to manage rsyslog. Defaults to the value of $common::logging::manage.
 #
 # @param enable Enable rsyslog. Defaults to true.
 #
