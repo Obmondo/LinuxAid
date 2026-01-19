@@ -2,6 +2,14 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.2
+
+### Bug Fixes
+- 73671d9a fix the bug for calling the facts for init_system and fix os family selector for linuxaid-cli package version
+
+### Other Changes
+- 0ff54dee ci: update linuxaid-ci image to v0.0.2, fix ci issues
+
 ## LinuxAid Release Version v1.4.1
 
 ### Features
