@@ -24,9 +24,9 @@ class profile::openvox::linuxaid_cli (
   case $_install_method {
     'package': {
       $_linuxaid_cli_package_version = $_os_family ? {
-        'Debian' => "v${_version}",
-        'RedHat' => "v${_version}-1",
-        'Suse'   => "v${_version}-1",
+        'Debian' => $_version,
+        'RedHat' => "${_version}-1",
+        'Suse'   => "${_version}-1",
         default  => fail("Unsupported OS family: ${_os_family}. Try installing linuxaid-cli via archive install method"),
       }
       package { 'linuxaid-cli':
