@@ -1,6 +1,6 @@
 # Systemd_journal_remote
 # https://dangibbs.uk/projects/puppet-systemd-journal-remote/
-class profile::monitoring::journal_remote (
+class profile::monitor::journal_remote (
   Boolean          $enable        = $role::monitoring::journal_remote::remote_enable,
   Boolean          $manage_output = $role::monitoring::journal_remote::manage_output,
   Stdlib::Unixpath $output        = $role::monitoring::journal_remote::output,
