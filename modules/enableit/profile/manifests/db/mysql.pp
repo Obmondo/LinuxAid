@@ -1,5 +1,5 @@
 # Mysql Profile
-class profile::mysql (
+class profile::db::mysql (
   Stdlib::Absolutepath                  $datadir                        = '/var/lib/mysql',
   Optional[Eit_types::Password]         $root_password                  = undef,
   Array[Stdlib::IP::Address]            $access_mysql_from              = ['0.0.0.0/0'],
