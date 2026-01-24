@@ -47,7 +47,6 @@ class common::system (
   Eit_types::Users               $users               = {},
   Hash[String,Array[String]]     $user_groups         = {},
   Hash[String,Hash]              $groups              = {},
-  Hash[String, Hash]             $services            = {},
   Hash[String,Hash]              $files               = {},
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
@@ -56,14 +55,24 @@ class common::system (
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
   Eit_types::Encrypt::Params    $encrypt_params           = ['ssh_authorized_keys.*.key'],
+  Optional[Hash[String, Hash]]        $services = {},
+  Array[Eit_types::SimpleString] $disabled_services = []
 ) {
   ############
   # Services #
   ############
 
   $services.each |$_service_name, $_config| {
-    service { $_service_name:
+    systemd::manage_unit { $_service_name:
       * => $_config,
+    }
+  }
+
+  $disabled_services.each |$_service_name| {
+    service { $_service_name:
+      ensure => false,
+      enable => false,
+      mask   => true,
     }
   }
 
