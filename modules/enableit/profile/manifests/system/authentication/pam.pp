@@ -53,6 +53,7 @@ class profile::system::authentication::pam (
       $sshd_account_lines
     }
 
+  notify{"The allowed user name1 is ${allowed_users}":}
   class { 'pam':
     allowed_users               => $allowed_users.functions::knockout + $_managed_users,
     manage_nsswitch             => false,

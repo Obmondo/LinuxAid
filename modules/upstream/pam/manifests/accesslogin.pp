@@ -35,6 +35,8 @@ class pam::accesslogin (
   # transform $allowed_users into a valid hash
   # origin defaults to 'ALL' if unset
   # if origin is an array, create a space separated list
+
+  notify{"The allowed user name2 is ${allowed_users}":}
   case $allowed_users {
     String: {
       $allowed_users_hash = { $allowed_users => 'ALL' }
