@@ -13,25 +13,10 @@
 # @groups configuration devices, mounts, filepermissions
 #
 class common (
-  Boolean $full_host_management,
-  Hash    $devices              = {},
-  Hash[Stdlib::Absolutepath,
-    Tuple[
-      Eit_types::Mount,
-      [
-        Variant[
-          Eit_types::MountLuks,
-          Eit_types::MountNfs,
-        ]
-      ],
-    ]
-  ] $mounts = {},
-  Hash[Stdlib::Absolutepath,
-    Struct[
-      {
-        mode => Stdlib::Filemode,
-        apply_recursively => Boolean,
-  }]] $filepermissions = {},
+  Boolean              $full_host_management,
+  Stdlib::Absolutepath $__conf_dir = '/etc/obmondo',
+  Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
+  Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
 ) {
   Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
   Stage['setup'] -> Stage['main']
@@ -44,6 +29,31 @@ class common (
       eit_repos::repo { 'enableit_client':
         noop_value => false,
       }
+    }
+
+    # Create Obmondo group for exporter to run under this group
+    group { 'obmondo':
+      ensure => present,
+      system => true,
+      noop   => $noop_value,
+    }
+
+    file {
+      default:
+        ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
+        noop   => $noop_value,
+        ;
+
+      [
+        $__conf_dir,
+        $__bin_dir,
+        $__opt_dir,
+        "${__opt_dir}/home",
+        "${__opt_dir}/share",
+        "${__opt_dir}/etc",
+        "${__conf_dir}/sudoers.d",
+      ]:
+        ;
     }
 
     # NOTE: Need these classes to be setup as a bare minimum on all roles

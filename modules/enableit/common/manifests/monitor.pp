@@ -7,7 +7,8 @@
 # @groups settings enable, noop_value
 #
 class common::monitor (
-  Boolean               $enable     = $::obmondo_monitoring_status, #lint:ignore:top_scope_facts
+  Boolean               $manage     = $::obmondo_monitoring_status,
+  Boolean               $enable     = $::obmondo_monitoring_status,
   Eit_types::Noop_Value $noop_value = undef,
 ) {
   if $enable {

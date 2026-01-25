@@ -80,17 +80,12 @@ class common::backup (
       exclude     => Array[Variant[Stdlib::Absolutepath,String]],
   }]]                            $push                     = {},
   Eit_types::Encrypt::Params     $encrypt_params            = ['backup_user_password', 'root_password'],
-
 ) {
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')
   confine($luks, !($lukspass or $luks_service_name),
     'A LUKS passphrase or the name of the service that starts LUKS must be defined if `luks` is enabled')
   confine($luks, $lukspass, $luks_service_name, 'Only one of `lukspass` and `luks_service_name` may be set')
-  # TODO: this is not used anymore rdiff-backup.
-  # remove it later
-  unless empty($push) {
-    create_resources('common::backup::push', $push)
-  }
+
   if $manage {
     user { $backup_user:
       ensure         => present,

@@ -10,7 +10,7 @@
 #
 # @groups logical_volumes lvs
 #
-class common::lvm (
+class common::storage::lvm (
   Hash[String, Struct[{
     ensure  => Eit_types::Ensure,
     vg_name => String,
