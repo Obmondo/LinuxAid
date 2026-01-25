@@ -1,11 +1,12 @@
 # @summary Class for managing SELinux modules
 #
 # @param noop_value Optional boolean to control noop behavior, defaults to undef.
-define common::system::selinux::module (
+define profile::system::security::selinux::module (
   Eit_types::Noop_Value $noop_value = undef,
 ) {
-  if lookup('common::system::selinux::enable', Boolean, undef, false) {
-    include common::system::selinux
+  if lookup('common::system::security::selinux::enable', Boolean, undef, false) {
+    include common::system::security::selinux
+
     if $noop_value == false {
       Exec {
         noop => false,

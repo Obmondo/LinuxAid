@@ -11,7 +11,7 @@ common::package::default_packages:
 common::software::walinuxagent::__linux_azure_package: "walinuxagent"
 common::software::walinuxagent::__linux_azure_service: "walinuxagent"
 
-common::system::selinux::enable: false
+common::system::security::selinux::enable: false
 
 common::system::sshd::subsystems:
   sftp: "/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO"

@@ -3,7 +3,7 @@ common::mail::maildrop_perms: 'o=rwx,g=wx'
 
 common::logging::log_dir_group: 'root'
 
-common::system::selinux::enable: true
+common::system::security::selinux::enable: true
 
 common::system::sshd::subsystems:
   sftp:

@@ -14,7 +14,7 @@
 #
 # @groups configuration fcontext
 #
-class common::system::selinux (
+class common::system::security::selinux (
   Boolean            $manage                = false,
   Boolean            $enable                = $facts['os']['selinux']['enabled'],
   Boolean            $enforce               = false,
@@ -22,6 +22,6 @@ class common::system::selinux (
   Boolean            $enable_setroubleshoot = false,
 ) {
   if $manage and $facts['os']['family'] == 'RedHat' {
-    include ::profile::system::selinux
+    include ::profile::system::security::selinux
   }
 }

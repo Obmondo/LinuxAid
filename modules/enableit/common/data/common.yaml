@@ -174,7 +174,7 @@ common::system::classes:
   - common::system::sshd
   - common::system::time
   - common::system::cloud_init
-  - common::system::selinux
+  - common::system::security
 
 ## System Settings
 common::system::systemd::manage_journald: false
@@ -274,9 +274,6 @@ common::system::time::ntp::servers:
 
 ### Cloud Init
 common::system::cloud_init::manage: false
-
-### Selinux
-common::system::selinux::enable: false
 
 ### Jumphost
 common::system::jumphost::enable: false
@@ -502,7 +499,8 @@ common::monitor::scom::manage: false
 common::monitor::scom::enable: false
 
 ## Security
-common::security::auditd::enable: false
+common::system::security::auditd::enable: false
+common::system::security::selinux::enable: false
 
 ## System Updates
 common::system::updates::enable: true

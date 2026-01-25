@@ -1,5 +1,5 @@
 #
-define profile::system::selinux::fcontext (
+define profile::system::security::selinux::fcontext (
   String                                       $pathspec = $title,
   Eit_types::Ensure                            $ensure   = 'present',
   Optional[String]                             $seltype  = undef,
