@@ -15,13 +15,6 @@
 # @param backup_retention Duration (in days) to retain backups. Defaults to the value of ::common::backup::db::backup_retention.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
-#
-# @groups database_params backup_user_password, backup_user, encrypt_params
-#
-# @groups enable_params enable, backup_hour
-#
-# @groups storage_params dump_dir, backup_retention, ignore_tables
-#
 # @encrypt_params backup_user_password
 #
 class common::backup::db::mysql::xtrabackup (

@@ -7,9 +7,6 @@
 # @param listen_port The port to listen on. Defaults to 63661.
 #
 # @param host The hostname or certname to use. Defaults to $trusted['certname'].
-#
-# @groups configuration enable, noop_value, listen_port, host.
-#
 class common::monitor::exporter::haproxy (
   Boolean               $enable      = $common::monitor::exporter::enable,
   Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,

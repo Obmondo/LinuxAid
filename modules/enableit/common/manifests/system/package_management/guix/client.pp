@@ -5,9 +5,6 @@
 # @param manage_mounts Whether to manage mounts for Guix client. Defaults to true.
 #
 # @param server The server hostname for Guix. Defaults to 'localhost'.
-#
-# @groups configuration enable, manage_mounts, server
-#
 class common::system::package_management::guix::client (
   Boolean $enable       = false,
   Boolean $manage_mounts = true,

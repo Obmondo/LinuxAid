@@ -9,13 +9,6 @@
 # @param logs An array of log file paths to monitor. Defaults to an empty array.
 #
 # @param progs The path to the programs directory. Defaults to "${common::monitor::exporter::config_dir}/mtail".
-#
-# @groups control enable, noop_value
-#
-# @groups connection listen_address
-#
-# @groups filesystem logs, progs
-#
 class common::monitor::exporter::mtail (
   Boolean                     $enable         = $common::monitor::exporter::enable,
   Eit_types::Noop_Value       $noop_value     = $common::monitor::exporter::noop_value,

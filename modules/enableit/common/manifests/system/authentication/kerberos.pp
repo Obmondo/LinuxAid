@@ -30,18 +30,6 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups management manage, enable, install_client.
-#
-# @groups join join, join_password, join_user.
-#
-# @groups realm_config base_dn, ou, default_realm, realms.
-#
-# @groups ssl ldaps, cacert_path.
-#
-# @groups config appdefaults, noop_value.
-#
-# @groups encryption encrypt_params.
-#
 # @encrypt_params join_password.
 #
 class common::system::authentication::kerberos (

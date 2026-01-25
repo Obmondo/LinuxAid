@@ -13,13 +13,6 @@
 # @param randomized_delay Optional delay to randomize backup timing. Defaults to $::common::backup::borg::randomized_delay.
 #
 # @param timespec Scheduled time for backups. Defaults to $::common::backup::borg::timespec.
-#
-# @groups connection remote_user, remote_ip, password.
-#
-# @groups timing randomized_delay, timespec.
-#
-# @groups backup archives, remote_backup_root.
-#
 define common::backup::borg::push (
   Array[Stdlib::Absolutepath]             $archives,
   Optional[Eit_types::User]               $remote_user        = $::common::backup::borg::remote_user,

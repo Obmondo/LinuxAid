@@ -12,10 +12,6 @@
 #
 # @param noop_value Notifies Puppet to define if changes are to be made to the system or simulated.
 #
-# @groups configuration version, config_dir, enable, noop_value.
-#
-# @groups network collect_scrape_jobs, listen_address.
-#
 class common::monitor::prometheus::server (
   Eit_types::Version    $version,
   Array[Hash]           $collect_scrape_jobs,

@@ -10,13 +10,6 @@
 # @param config_file The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
 #
 # @param targets An array of domain targets to monitor. Defaults to an empty array.
-#
-# @groups control enable, noop_value
-#
-# @groups configuration config_file, listen_port
-#
-# @groups monitoring targets
-#
 class common::monitor::exporter::blackbox (
   Boolean                $enable,
   Stdlib::Port           $listen_port,

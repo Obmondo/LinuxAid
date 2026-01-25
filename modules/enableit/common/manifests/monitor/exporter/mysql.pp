@@ -16,10 +16,6 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups mysql username, password, mysql_port, mysql_monitor_hostname
-#
-# @groups exporter enable, listen_port, noop_value, encrypt_params
-#
 # @encrypt_params password
 #
 class common::monitor::exporter::mysql (

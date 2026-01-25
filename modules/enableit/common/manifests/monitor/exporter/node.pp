@@ -64,18 +64,6 @@
 #
 # @param noop_value Boolean value for noop mode. Defaults to false.
 #
-# @groups filesystem buddyinfo, cgroups, ksmd, meminfo_numa, slabinfo, zoneinfo.
-#
-# @groups network drbd, ethtool, lnstat, network_route, qdisc, tcpstat, wifi.
-#
-# @groups system drm, interrupts, logind, mountstats, runit, supervisord, sysctl, systemd, thermal_zone, ntp.
-#
-# @groups processes perf, processes.
-#
-# @groups config textfile_directory, lib_directory, listen_address, enable, noop_value.
-#
-# @groups extras host, version
-#
 class common::monitor::exporter::node (
   Boolean      $buddyinfo,
   Boolean      $cgroups,

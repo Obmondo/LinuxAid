@@ -15,13 +15,6 @@
 # @param backup_retention Number of days to retain backups. Defaults to $::common::backup::db::backup_retention.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
-#
-# @groups credentials backup_user, backup_user_password, encrypt_params
-#
-# @groups schedule backup_hour
-#
-# @groups configuration enable, backup_retention, ignore_tables, dump_dir
-#
 # @encrypt_params backup_user_password
 #
 class common::backup::db::mysql::mysqlbackup (

@@ -25,17 +25,6 @@
 # @param noop_value Optional boolean for no-op mode. Defaults to undef.
 #
 # @param required_packages List of required packages for SSSD. Defaults to ['realmd', 'samba-common-tools', 'fprintd-pam'].
-#
-# @groups services_management services, manage, _available_services.
-#
-# @groups domains_management domains, default_domain_suffix.
-#
-# @groups configuration_management debug_level, manage_oddjobd, full_name_format, override_homedir, override_config.
-#
-# @groups operation_mode enable, noop_value.
-#
-# @groups packages required_packages.
-#
 class common::system::authentication::sssd (
   Array[Eit_types::Sssd::Service] $services = [
     'nss',

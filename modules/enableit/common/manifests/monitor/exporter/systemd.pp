@@ -6,10 +6,6 @@
 #
 # @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63391'.
 #
-# @groups main enable, noop_value
-#
-# @groups network listen_address
-#
 class common::monitor::exporter::systemd (
   Boolean               $enable         = $common::monitor::exporter::enable,
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
