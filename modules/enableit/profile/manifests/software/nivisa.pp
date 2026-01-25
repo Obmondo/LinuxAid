@@ -1,5 +1,5 @@
 # NI-VISA Profile
-class profile::nivisa (
+class profile::software::nivisa (
   Boolean $enable = $common::extras::computing::nivisa::enable,
 ) {
 
