@@ -1,0 +1,17 @@
+#!/bin/sh
+
+cd <%= @dir %>
+for repo in *; do
+  VER=`svnlook youngest <%= @dir %>/$repo`
+  if ! [ -e <%= @backupdir %>/$repo-$VER.tar.bz2 ]; then
+    <%= @hotbackupname %>  <%= @dir %>/$repo <%= @backupdir %> > /dev/null
+    cd <%= @backupdir %>
+    for f in  `find <%= @backupdir %> -regex ".*/$repo-[-0-9]+\.tar.bz2"`; do
+      rm $f
+    done
+    tar cjf $repo-$VER.tar.bz2 $repo-$VER && rm -rf $repo-$VER
+  #else
+  #  echo "$repo already latest"
+  fi
+done
+
