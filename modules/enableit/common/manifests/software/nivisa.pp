@@ -2,6 +2,7 @@
 #
 # @param enable Boolean flag to enable or disable NI-VISA. Defaults to false.
 class common::software::nivisa (
+  Boolean $manage = false,
   Boolean $enable = false,
 ) {
   confine($facts['os']['family'] != 'RedHat',

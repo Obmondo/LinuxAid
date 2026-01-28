@@ -6,7 +6,7 @@
 #
 # @groups management manage, noop_value
 #
-class common::convenience::tmux (
+class common::system::utility::tmux (
   Boolean               $manage     = true,
   Eit_types::Noop_Value $noop_value = undef,
 ) {

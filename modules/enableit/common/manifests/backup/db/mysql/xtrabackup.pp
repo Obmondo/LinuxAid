@@ -75,7 +75,7 @@ class common::backup::db::mysql::xtrabackup (
     'MYSQL_IGNORE_TABLES' => $ignore_tables,
     'MYSQL_BACKUP_USER'   => $backup_user,
   }
-  $env_file = "${common::setup::__conf_dir}/mysql/backup.env"
+  $env_file = "${common::backup::__conf_dir}/mysql/backup.env"
   file { $env_file:
     ensure  => file,
     content => hash_to_ini($env, {

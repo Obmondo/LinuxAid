@@ -1,11 +1,11 @@
 ---
 common::logging::log_dir_mode: "775"
-common::mail::maildrop_perms: "1730"
+common::system::mail::maildrop_perms: "1730"
 
-common::services::disabled_services:
+common::system::disabled_services:
   - "kdump-tools"
 
-common::package::default_packages:
+common::system::package::default_packages:
   - "molly-guard"
 
 common::software::walinuxagent::__linux_azure_package: "walinuxagent"

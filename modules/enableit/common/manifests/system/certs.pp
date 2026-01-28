@@ -16,7 +16,7 @@
 #
 # @encrypt_params manual.*.key, manual.*.cert, manual.*.ca.
 #
-class common::certs (
+class common::system::certs (
   Stdlib::Absolutepath $__base_dir,
   Hash[Stdlib::Fqdn, Struct[{
       key   => String,
@@ -42,7 +42,7 @@ class common::certs (
     noop => false,
   }
   include ::trusted_ca
-  include ::common::certs::letsencrypt
+  include ::common::system::certs::letsencrypt
   if $manual.size {
     $_base_dir_parts = "${__base_dir}/parts"
     $_base_dir_combined = "${__base_dir}/combined"
@@ -59,7 +59,7 @@ class common::certs (
     # Get only the first part of the domain name to keep directory name smaller
     # and to maintain compatibility with previous manual certs setup
     $x_name = regsubst($_name, '^(\w+)(.*)$', '\1')
-    profile::certs::manual { $x_name:
+    profile::system::certs::manual { $x_name:
       base_dir_parts    => $_base_dir_parts,
       base_dir_combined => $_base_dir_combined,
       domain            => $_name,
@@ -71,7 +71,7 @@ class common::certs (
     }
   }
   $ca_certs.each |$_name, $params| {
-    profile::certs::ca_cert { $_name:
+    profile::system::certs::ca_cert { $_name:
       * => $params,
     }
   }

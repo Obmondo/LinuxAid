@@ -1,5 +1,5 @@
 # Wordpress profile
-class profile::wordpress (
+class profile::webframeworks::wordpress (
   Boolean $ssl                               = false,
   Boolean $multisite                         = false,
   Optional[Eit_types::Hostname] $site_domain = undef,
@@ -9,6 +9,7 @@ class profile::wordpress (
   $php                                       = '::role::appeng::mod_php',
   Boolean $force_https                       = false,
   Stdlib::Absolutepath $install_dir          = '/var/www/wordpress',
+  Stdlib::Absolutepath $config_dir           = '/opt/wordpress',
 ) {
 
   confine($multisite, !$site_domain, 'When using multisite, `site_domain` must be provided')
@@ -81,11 +82,11 @@ class profile::wordpress (
   }
 
   # local wordpress customization
-  file { "${common::settings::custom_config_dir}/wordpress":
+  file { "${config_dir}/wordpress":
     ensure => directory,
   }
 
-  file { "${common::settings::custom_config_dir}/wordpress/wp-config-local.php":
+  file { "${config_dir}/wordpress/wp-config-local.php":
     ensure => file,
   }
 }

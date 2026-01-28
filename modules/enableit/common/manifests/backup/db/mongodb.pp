@@ -32,7 +32,7 @@ class common::backup::db::mongodb (
   Optional[String]          $backup_databases      = $::common::backup::db::backup_databases,
   Eit_types::Duration::Days $backup_retention      = $::common::backup::db::backup_retention,
   Eit_types::Encrypt::Params $encrypt_params       = ['backup_user_password'],
-) inherits ::common::backup::db {
+) {
 
   package::install ( 'obmondo-scripts-backup-mongodb' )
 
@@ -49,7 +49,7 @@ class common::backup::db::mongodb (
     'PRUNE_BACKUPS'    => true,
   }
 
-  $env_dir  = "${common::setup::__conf_dir}/mongodb"
+  $env_dir  = "${common::backup::__conf_dir}/mongodb"
   $env_file = "${env_dir}/backup.env"
 
   file { $env_dir:

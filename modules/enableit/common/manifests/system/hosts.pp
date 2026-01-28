@@ -4,7 +4,7 @@
 #
 # @groups entries entries
 #
-class common::hosts (
+class common::system::hosts (
   Hash[
     Eit_types::IP,
     Variant[

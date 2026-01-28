@@ -1,11 +1,11 @@
 ---
 lookup_options:
-  common::repo::repos:
+  common::system::repo::repos:
     merge: "unique"
-  common::repo::aptrepos:
+  common::system::repo::aptrepos:
     merge:
       strategy: "deep"
-  common::repo::yumrepos:
+  common::system::repo::yumrepos:
     merge:
       strategy: "deep"
   common::monitor::prometheus::server::collect_scrape_jobs:
@@ -22,7 +22,7 @@ lookup_options:
     merge: "deep"
   common::services::disabled_services:
     merge: "unique"
-  common::package::manage:
+  common::system::package::manage:
     merge: "deep"
   common::network::firewall::rules:
     merge: "hash"
@@ -145,15 +145,12 @@ lookup_options:
 
 ## Global settings for common class
 common::full_host_management: true
-common::repo::manage: true
 common::logging::manage: false
 common::backup::manage: true
-common::cron::purge_unmanaged: false
 common::network::manage: false
-common::services::manage: true
-common::security::manage: true
-common::extras::manage: false
-common::mail::manage: false
+common::software::manage: false
+common::storage::manage: false
+common::system::manage: false
 
 common::default::classes:
   - common::setup
@@ -177,10 +174,17 @@ common::system::classes:
   - common::system::security
 
 ## System Settings
+common::system::repo::manage: true
+common::system::cron::purge_unmanaged: false
+common::system::services::manage: true
+common::system::security::manage: true
+common::system::mail::manage: false
+
+## System Systemd
 common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false
 
-### Authentication
+## System Authentication
 common::system::authentication::manage_nis: false
 common::system::authentication::manage_pam: false
 common::system::authentication::manage_sssd: false
@@ -206,40 +210,40 @@ common::system::authentication::allowed_users:
     - "cron"
     - "crond"
 
-### DNS
+## DNS
 common::system::dns::manage: false
 common::system::dns::dnssec: "allow-downgrade"
 common::system::dns::dns_over_tls: false
 common::system::dns::nameservers: []
 common::system::dns::searchpath: []
 
-### Kernel Modules
+## Kernel Modules
 common::system::kernel::modules:
   blacklist:
     - "floppy"
 
-### Keepalived Failover
+## Keepalived Failover
 common::system::failover::enable: false
 
-### Hardware
+## Hardware
 common::system::hardware::manage_multipath: false
 
-### Limits
+## Limits
 common::system::limits::manage: false
 common::system::limits::purge: false
 
 ## Guix
-common::system::package_management::guix::manage: false
+common::system::guix::manage: false
 
 ### Motd
 common::system::motd::enable: true
 
-### Nsswitch
+## Nsswitch
 common::system::nsswitch::manage: false
 common::system::nsswitch::sudoers:
   - "files"
 
-### SSHD - ISO 27001/NIS2 Compliance
+## SSHD - ISO 27001/NIS2 Compliance
 # This logs SSH key fingerprints for authentication audit trails
 common::system::sshd::manage: true
 common::system::sshd::kexalgorithms:
@@ -263,7 +267,7 @@ common::system::sshd::macs:
   - "hmac-sha2-256"
   - "umac-128@openssh.com"
 
-### NTP
+## NTP
 common::system::time::manage_timezone: true
 common::system::time::manage_ntp: false
 common::system::time::ntp::servers:
@@ -272,16 +276,15 @@ common::system::time::ntp::servers:
   - "1.dk.pool.ntp.org"
   - "ntp.inet.tele.dk"
 
-### Cloud Init
+## Cloud Init
 common::system::cloud_init::manage: false
 
-### Jumphost
+## Jumphost
 common::system::jumphost::enable: false
 
-common::settings::custom_config_dir: "/opt/custom"
-common::settings::pgp_keyserver: "pgp.mit.edu"
-common::package::install_default_packages: true
-common::package::default_packages:
+## Packages
+common::system::package::install_default_packages: true
+common::system::package::default_packages:
   - "bash-completion"
   - "curl"
   - "less"
@@ -294,12 +297,10 @@ common::package::default_packages:
   - "tmux"
   - "net-tools"
 
-common::setup::__conf_dir: "/etc/obmondo"
-
-common::mail::stats_daemon_port: 63777
-
-common::services::disabled_services:
+common::system::services::disabled_services:
   - "smartd"
+  - "rpc-svcgssd"
+  - "sssd-pac"
 
 common::system::services:
   "rpc-svcgssd":
@@ -307,12 +308,12 @@ common::system::services:
   "sssd-pac":
     enable: "mask"
 
-# Puppet
-common::openvox::version: "8.24.2"
-common::openvox::environment: "v1.5.1"
-common::openvox::server: enableit.puppet.obmondo.com
-common::openvox::package_name: "openvox-agent"
-common::openvox::configure_agent: true
+# Puppet/Openvox
+common::system::openvox::version: "8.24.2"
+common::system::openvox::environment: "v1.5.1"
+common::system::openvox::server: enableit.puppet.obmondo.com
+common::system::openvox::package_name: "openvox-agent"
+common::system::openvox::configure_agent: true
 
 # Update the linuxaid-cli version as per the latest release on Github
 # https://github.com/Obmondo/linuxaid-cli/releases/latest
@@ -323,22 +324,49 @@ common::openvox::configure_agent: true
 # In this file, we maintain for amd64 (which is default).
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
-common::openvox::linuxaid_cli::install_method: package
-common::openvox::linuxaid_cli::version: 1.2.1
-common::openvox::linuxaid_cli::checksums:
+common::system::openvox::linuxaid_cli::install_method: package
+common::system::openvox::linuxaid_cli::version: 1.2.0
+common::system::openvox::linuxaid_cli::checksums:
   1.2.0: 53d285fb6a8fca93609fe0ce71fc31ea0158aafefb3e7890b82b09a6d18134e4
   1.2.1: 4b3f7e4acc244a17e8c1294ce2029107b542cec9b6627f39387397a6406bd0af
 
-# KeepAlived
-common::keepalived::global_defs:
-  notification_email: "info@obmondo.com"
-  notification_email_from: "keepalived@enableit.dk"
+## KeepAlived
+common::system::keepalived::global_defs:
   smtp_server: "127.0.0.1"
   smtp_connect_timeout: 30
 
-common::certs::__base_dir: "/etc/ssl/private/static-certs"
-common::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
+## Certs
+common::system::certs::__base_dir: "/etc/ssl/private/static-certs"
+common::system::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
+## Utility
+common::system::utility::atop::install: false
+common::system::utility::atop::daemon: false
+
+## Hosts entries
+common::system::hosts::entries:
+  127.254.254.254:
+    - "%{trusted.certname}"
+
+## Security
+common::system::security::auditd::enable: false
+common::system::security::selinux::enable: false
+
+## System Updates
+common::system::updates::enable: true
+
+## Obmondo Admin
+common::setup::obmondo_admin::manage: false
+common::setup::obmondo_admin::enable: false
+
+## Mail
+common::system::mail::myhostname: "%{facts.networking.fqdn}"
+common::system::mail::mydomain: "%{facts.networking.domain}"
+common::system::mail::stats_daemon_port: 63777
+
+## DNS
+common::system::dns::listen_address:
+  - "192.168.0.1"
 # Prometheus Server
 common::monitor::prometheus::install_method: package
 common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
@@ -427,12 +455,12 @@ common::monitor::exporter::node::zoneinfo: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
 
-common::utility::atop::install: false
-common::utility::atop::daemon: false
+## Splunk
+common::monitor::splunk::forwarder::enable: false
 
-common::hosts::entries:
-  127.254.254.254:
-    - "%{trusted.certname}"
+## Scom
+common::monitor::scom::manage: false
+common::monitor::scom::enable: false
 
 # Storage
 common::storage::zfs::enable: false
@@ -451,6 +479,11 @@ common::software::rubrik::manage: false
 common::software::teleport::manage: false
 common::software::vscode::manage: false
 common::software::insights::manage: false
+
+## VNC
+common::software::vncserver::config_defaults:
+  session: "gnome"
+  geometry: "1920x1080"
 
 # Logging
 common::logging::logrotate::manage: true
@@ -477,7 +510,7 @@ common::backup::db::pgsql::backup_retention: 30
 common::network::firewall::enable: false
 common::network::wireguard::enable: false
 
-# Netbird
+## Netbird
 common::network::netbird::enable: false
 common::network::netbird::install_method: repo
 common::network::netbird::version: 0.65.1
@@ -491,33 +524,5 @@ common::network::tcpshaker::check_interval: 15
 common::network::tcpshaker::requests_per_check: 50
 common::network::tcpshaker::concurrency: 50
 
+## Vrrp
 common::network::vrrp::enable: false
-
-## Monitoring
-common::monitor::splunk::forwarder::enable: false
-common::monitor::scom::manage: false
-common::monitor::scom::enable: false
-
-## Security
-common::system::security::auditd::enable: false
-common::system::security::selinux::enable: false
-
-## System Updates
-common::system::updates::enable: true
-
-## Obmondo Admin
-common::setup::obmondo_admin::manage: false
-common::setup::obmondo_admin::enable: false
-
-## Software
-common::software::vncserver::config_defaults:
-  session: "gnome"
-  geometry: "1920x1080"
-
-## Mail
-common::mail::myhostname: "%{facts.networking.fqdn}"
-common::mail::mydomain: "%{facts.networking.domain}"
-
-## DNS
-common::system::dns::listen_address:
-  - "192.168.0.1"

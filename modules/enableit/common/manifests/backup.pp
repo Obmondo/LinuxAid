@@ -66,19 +66,8 @@ class common::backup (
   Optional[Boolean]              $lvm                      = undef,
   Optional[String]               $lvm_vg                   = undef,
   Optional[Eit_types::Password]  $root_password            = undef,
+  Stdlib::Absolutepath           $conf_dir                 = $common::__conf_dir,
   Eit_types::Percentage          $lvm_extents_min_required = 15,
-  Hash[
-    String,
-    Struct[
-      {
-      target      => Eit_types::Host,
-      source      => Stdlib::Absolutepath,
-      destination => Stdlib::Absolutepath,
-      keep_time   => Pattern[/[0-9]+[DMWY]/],
-      hour        => Eit_types::TimeHour,
-      email       => Optional[Eit_types::Email],
-      exclude     => Array[Variant[Stdlib::Absolutepath,String]],
-  }]]                            $push                     = {},
   Eit_types::Encrypt::Params     $encrypt_params            = ['backup_user_password', 'root_password'],
 ) {
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')

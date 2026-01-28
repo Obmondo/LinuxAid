@@ -99,6 +99,11 @@ class common::monitor::exporter::node (
   Boolean               $enable     = true,
   Eit_types::Version    $version    = '1.10.2',
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
+
+  Boolean               $manage_lsof = $enable,
+  Boolean               $manage_smartmon = $enable,
+  Boolean               $manage_ssacli = $enable,
+  Boolean               $manage_topprocesses = $enable,
 ) {
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 
@@ -111,10 +116,21 @@ class common::monitor::exporter::node (
 
   # NOTE: The underlying packages only works with systemd
   if $facts['service_provider'] == 'systemd' {
-    include common::monitor::exporter::node::smartmon
-    include common::monitor::exporter::node::topprocesses
-    include common::monitor::exporter::node::lsof
-    include common::monitor::exporter::node::ssacli
+    if $manage_smartmon {
+      include common::monitor::exporter::node::smartmon
+    }
+
+    if $manage_topprocesses {
+      include common::monitor::exporter::node::topprocesses
+    }
+
+    if $manage_lsof {
+      include common::monitor::exporter::node::lsof
+    }
+
+    if $manage_ssacli {
+      include common::monitor::exporter::node::ssacli
+    }
   }
 
   file { $lib_directory:

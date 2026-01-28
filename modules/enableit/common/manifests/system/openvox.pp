@@ -30,7 +30,7 @@
 #
 # @groups misc manage
 #
-class common::openvox (
+class common::system::openvox (
   Eit_types::Version    $version,
   Stdlib::Host          $server,
   String                $package_name,
@@ -43,6 +43,6 @@ class common::openvox (
   Optional[Hash]        $extra_main_settings = undef,
 ) {
   if $manage {
-    contain profile::openvox
+    contain profile::system::openvox
   }
 }

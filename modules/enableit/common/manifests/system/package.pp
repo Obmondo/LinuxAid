@@ -14,7 +14,7 @@
 #
 # @groups packages default_packages, removed_packages, required_packages.
 #
-class common::package (
+class common::system::package (
   Boolean                $install_default_packages  = false,
   Hash[
     String,

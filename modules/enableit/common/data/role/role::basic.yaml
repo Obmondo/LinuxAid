@@ -3,9 +3,7 @@ common::full_host_management: false
 common::system::updates::enable: false
 common::logging::manage: false
 common::backup::manage: false
-common::cron::purge_unmanaged: false
 common::network::manage: false
-common::services::manage: false
 common::security::manage: false
-common::extras::manage: false
-common::mail::manage: false
+common::system::mail::manage: false
+common::system::cron::purge_unmanaged: false

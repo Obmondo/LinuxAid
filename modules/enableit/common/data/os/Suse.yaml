@@ -1,5 +1,5 @@
 ---
-common::mail::maildrop_perms: 'o=rwx,g=wx'
+common::system::mail::maildrop_perms: 'o=rwx,g=wx'
 
 common::logging::log_dir_group: 'root'
 

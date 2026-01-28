@@ -1,7 +1,7 @@
 ---
 common::system::time::ntp::manage: false
 common::system::grub::manage: false
-common::services::disabled_services:
+common::system::disabled_services:
   - 'lvm2-lvmetad.service'
   - 'lvm2-lvmetad.socket'
   - 'lvm2-lvmpolld.service'

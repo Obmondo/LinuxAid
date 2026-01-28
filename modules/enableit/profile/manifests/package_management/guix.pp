@@ -1,5 +1,5 @@
 # Guix server
-class profile::package_management::guix (
+class profile::system::package_management::guix (
   Optional[Eit_types::SimpleString] $listen_interface,
   Optional[Array[Stdlib::Host]] $clients,
   Integer[1,99] $guix_builders = 10,

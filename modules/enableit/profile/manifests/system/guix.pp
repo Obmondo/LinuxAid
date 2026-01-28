@@ -1,12 +1,12 @@
 # Guix client
-class profile::package_management::guix::client (
-  Boolean      $enable        = $::common::system::package_management::guix::client::enable,
-  Boolean      $manage_mounts = $::common::system::package_management::guix::client::manage_mounts,
-  Stdlib::Host $server        = $::common::system::package_management::guix::client::server,
+class profile::system::guix (
+  Boolean      $enable        = $::common::system::guix::enable,
+  Boolean      $manage_mounts = $::common::system::guix::manage_mounts,
+  Stdlib::Host $server        = $::common::system::guix::server,
   Optional[String] $nfs_base = undef,
 ) {
 
-  ::common::system::nscd.contain
+  ::profile::system::nscd.contain
 
   $_do_mount = $enable and !($server in ['localhost', $facts['networking']['fqdn']])
   $_ensure_link = ensure_present($enable, 'link')
@@ -26,7 +26,6 @@ class profile::package_management::guix::client (
 
       ['/gnu/store', '/var/guix']:
         ;
-
     }
 
     if $_do_mount {
@@ -79,6 +78,4 @@ class profile::package_management::guix::client (
     ensure => $_ensure_link,
     target => '/var/guix/profiles/per-user/root/guix-profile',
   }
-
-
 }

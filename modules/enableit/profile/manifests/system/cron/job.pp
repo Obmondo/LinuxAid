@@ -1,5 +1,5 @@
 # Wrapper that escapes cron command for easy use
-define profile::cron::job (
+define profile::system::cron::job (
   String                                        $command,
   Boolean                                       $enable      = true,
   Eit_types::User                               $user        = 'root',

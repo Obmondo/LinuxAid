@@ -6,7 +6,7 @@
 #
 # @groups service install, daemon.
 #
-class common::monitoring::atop (
+class common::system::utility::atop (
   Boolean $install = true,
   Boolean $daemon  = false,
 ) {

@@ -46,7 +46,7 @@ common::system::kernel::modules:
 
 common::logging::logrotate::su: false
 
-common::repo::source_protocol: 'http'
+common::system::repo::source_protocol: 'http'
 
 common::system::nsswitch::passwd:
   - 'files'

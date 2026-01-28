@@ -6,9 +6,9 @@
 #
 # @groups management purge_unmanaged, jobs
 #
-class common::cron (
+class common::system::cron (
   Variant[Boolean, Enum['root-only']] $purge_unmanaged = false,
   Hash                                $jobs            = {},
 ) {
-  include ::profile::cron
+  include ::profile::system::cron
 }

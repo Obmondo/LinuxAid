@@ -13,10 +13,11 @@
 # @groups configuration devices, mounts, filepermissions
 #
 class common (
-  Boolean              $full_host_management,
-  Stdlib::Absolutepath $__conf_dir = '/etc/obmondo',
-  Stdlib::Absolutepath $__opt_dir  = '/opt/obmondo',
-  Stdlib::Absolutepath $__bin_dir  = '/opt/obmondo/bin',
+  Boolean               $full_host_management,
+  Eit_types::Noop_Value $noop_value = undef,
+  Stdlib::Absolutepath  $__conf_dir = '/etc/obmondo',
+  Stdlib::Absolutepath  $__opt_dir  = '/opt/obmondo',
+  Stdlib::Absolutepath  $__bin_dir  = '/opt/obmondo/bin',
 ) {
   Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
   Stage['setup'] -> Stage['main']

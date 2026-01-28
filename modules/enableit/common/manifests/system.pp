@@ -46,8 +46,10 @@ class common::system (
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
   Eit_types::Users               $users               = {},
   Hash[String,Array[String]]     $user_groups         = {},
+  Hash[String,Array[String]]     $cron_jobs
   Hash[String,Hash]              $groups              = {},
   Hash[String,Hash]              $files               = {},
+  Optional[Array[Eit_types::IP]] $publicips          = undef,
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
           content => Stdlib::Base64,

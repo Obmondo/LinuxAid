@@ -48,7 +48,7 @@
 #
 # @groups snapshot snapshot
 #
-class common::repo (
+class common::system::repo (
   Boolean                   $manage          = true,
   Eit_types::Noop_Value     $noop_value      = undef,
   Array[

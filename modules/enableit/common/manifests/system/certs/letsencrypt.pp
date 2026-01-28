@@ -28,7 +28,7 @@
 #
 # @groups thresholds warning, critical
 #
-class common::certs::letsencrypt (
+class common::system::certs::letsencrypt (
   Eit_types::Email                                        $email               = 'ops@obmondo.com',
   Enum[
     'production',
@@ -49,7 +49,7 @@ class common::certs::letsencrypt (
 
   if $domains.size > 0 {
     sort_domains_on_tld($domains, $public_ips).each |$cn, $san| {
-      profile::certs::letsencrypt::domain { $cn:
+      profile::system::certs::letsencrypt::domain { $cn:
         domains => $san,
       }
     }

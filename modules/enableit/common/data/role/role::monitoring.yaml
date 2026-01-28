@@ -1,6 +1,6 @@
 ---
 common::full_host_management: false
-common::repo::manage: false
+common::system::repo::manage: false
 
 common::system::updates::enable: false
 common::system::kernel::modules: {}

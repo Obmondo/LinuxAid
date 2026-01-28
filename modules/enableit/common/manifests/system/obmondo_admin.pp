@@ -18,7 +18,7 @@
 #
 # @groups control manage, enable
 #
-class common::setup::obmondo_admin (
+class common::system::obmondo_admin (
   Boolean                 $manage          = false,
   Boolean                 $enable          = false,
   Optional[Array[String]] $manager_pubkeys = [],
@@ -26,7 +26,6 @@ class common::setup::obmondo_admin (
   Boolean                 $allow_sre       = true,
   Eit_types::Noop_Value   $noop_value      = undef,
 ) {
-  contain common::setup
 
   File {
     noop => $noop_value,
@@ -34,7 +33,7 @@ class common::setup::obmondo_admin (
 
   if $manage {
     $_enable = $::obmondo_monitor and $enable #lint:ignore:top_scope_facts
-    $__opt_dir = $common::setup::__opt_dir
+    $__opt_dir = $common::__opt_dir
     $_home = "${__opt_dir}/home"
     $_home_admin = "${_home}/obmondo-admin"
     $_home_admin_ssh = "${_home_admin}/.ssh"

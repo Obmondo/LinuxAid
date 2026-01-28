@@ -1,5 +1,5 @@
 # cron
-class profile::cron (
+class profile::system::cron (
   Variant[Boolean, Enum['root-only']] $purge_unmanaged = $common::cron::purge_unmanaged,
   Hash                                $jobs            = $common::cron::jobs,
 ) {

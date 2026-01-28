@@ -13,12 +13,12 @@
 # @param backup_retention Duration in days to retain backups. Defaults to the value of $common::backup::db::backup_retention.
 class common::backup::db::pgsql (
   Boolean                    $enable           = $common::backup::db::enable,
-  Integer[0,23]             $backup_hour      = $common::backup::db::backup_hour,
+  Integer[0,23]              $backup_hour      = $common::backup::db::backup_hour,
   Eit_types::SimpleString    $backup_user      = $common::backup::db::backup_user,
   Array[String]              $ignore_tables    = $common::backup::db::ignore_tables,
   Optional[Stdlib::Unixpath] $dump_dir         = $common::backup::db::dump_dir,
   Eit_types::Duration::Days  $backup_retention = $common::backup::db::backup_retention,
-) inherits common::backup::db {
+) {
 
   confine($enable, !$dump_dir,
           '`$dump_dir` must be set if backup is enabled')
@@ -37,7 +37,7 @@ class common::backup::db::pgsql (
       owner  => $backup_user,
       mode   => '0755',
     }
-    file { "${common::setup::__conf_dir}/pgsql":
+    file { "${common::backup::__conf_dir}/pgsql":
       ensure => directory,
     }
   }
@@ -66,7 +66,7 @@ class common::backup::db::pgsql (
     'BACKUP_DIR'          => $dump_dir,
     'PGSQL_IGNORE_TABLES' => $ignore_tables,
   }
-  $env_file = "${common::setup::__conf_dir}/pgsql/backup.env"
+  $env_file = "${common::backup::__conf_dir}/pgsql/backup.env"
   functions::create_ini_file($env_file, $env, {
     ensure => $enable ? {
       true    => 'present',

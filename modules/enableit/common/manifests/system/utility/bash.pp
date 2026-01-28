@@ -6,7 +6,7 @@
 #
 # @groups management manage, noop_value
 #
-class common::convenience::bash (
+class common::system::utility::bash (
   Boolean               $manage     = true,
   Eit_types::Noop_Value $noop_value = undef,
 ) {

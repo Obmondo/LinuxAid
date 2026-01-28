@@ -1,8 +1,6 @@
 
 # @summary Class for managing common software installation and dependencies
 #
-# @groups software_management dependencyagent, cloudamize, microsoft_mde, teleport, rubrik, fwupd, vscode, nvidia_driver, insights, vncserver, msftlinuxpatchautoassess, walinuxagent, iptables_api, ansoftrsmservice, rustdesk, pycharm, miniforge
-#
 class common::software {
   if lookup('common::software::dependencyagent::enable', Boolean, undef, false) {
     common::software::dependencyagent.include
@@ -73,6 +71,10 @@ class common::software {
   }
 
   if lookup('common::software::openvmtools::manage', Boolean, undef, false) {
+    include common::software::opemvmtools
+  }
+
+  if lookup('common::software::nivisa::manage', Boolean, undef, false) {
     include common::software::opemvmtools
   }
 }

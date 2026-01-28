@@ -66,7 +66,7 @@
 #
 # @groups logging stats_daemon_port.
 #
-class common::mail (
+class common::system::mail (
   Boolean $manage                                            = false,
   Variant[
     Eit_types::IP,
