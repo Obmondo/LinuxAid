@@ -7,7 +7,7 @@ set -e
 CHANGELOG_FILE="CHANGELOG.md"
 RELEASE_NOTES_FILE=".release-notes.md"
 COMMON_HIERA_FILE="modules/enableit/common/data/common.yaml"
-OPENVOX_ENVIRONMENT="common::openvox::environment"
+OPENVOX_ENVIRONMENT="common::system::openvox::environment"
 # Run this when the helm chart update PR is merged into master
 NEW_TAG=$1
 
