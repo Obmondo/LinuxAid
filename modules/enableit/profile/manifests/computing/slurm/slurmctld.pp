@@ -18,7 +18,6 @@ class profile::computing::slurm::slurmctld (
   }
 
   include ::slurm::slurmctld
-  include common::monitor::exporter::slurm
 
   if versioncmp($slurm_version, '25.11') >= 0 {
     $metrics.each |$metric| {
