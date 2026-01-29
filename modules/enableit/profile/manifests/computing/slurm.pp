@@ -145,8 +145,8 @@ class profile::computing::slurm (
     class { '::profile::computing::slurm::slurmdbd':
       interface           => $interface,
       node_cidrs          => $node_cidrs,
-      db_buffer_pool_size => '256M',
-      db_log_file_size    => '24M',
+      db_buffer_pool_size => $db_buffer_pool_size,
+      db_log_file_size    => $db_log_file_size,
     }
   }
 
