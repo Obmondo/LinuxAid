@@ -2,6 +2,16 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.4
+
+### Bug Fixes
+- 9b815b584 fix: read db buffer pool and log file size from variables
+
+### Configuration Changes
+- 00fd9494a chore: basic auth is still used for tags endpoint, have asked the team to fix this
+- 1f130300a chore(fix); removed the unwanted logic to figure out the func to talk to api and fallback to good old method and removed the basic auth as well, since its not used anymore
+- ac5a6d43b chore: added puppet-subversion module 867e10c4611e5712d64e632cc9b8aedaf1499e39
+
 ## LinuxAid Release Version v1.4.3
 
 ### Configuration Changes
