@@ -43,6 +43,10 @@ def obmondo_api(endpoint, method = "GET", use_basic_auth = true)
         raise ArgumentError, "Unsupported HTTP method: #{method}"
       end
 
+      if use_basic_auth
+        request["Authorization"] = "Basic cmVhZG9ubHk6cmVhZG9ubHk=" # Base64-encoded username:password
+      end
+
       response = http.request(request)
 
       case response.code.to_i
