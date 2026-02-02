@@ -2,17 +2,14 @@
 # frozen_string_literal: true
 
 require 'rubygems'
-
 require 'json'
 require 'open3'
 require 'yaml'
 
-BASEDIR = Dir.pwd == '/opt/puppetlabs/server/apps/puppetserver' ? '/etc/puppetlabs/code/environments/master' : Dir.pwd
+require_relative './modules/enableit/functions/lib/puppet/functions/api.rb'
+require_relative './modules/enableit/functions/lib/facter/customer_utils.rb'
 
-$LOAD_PATH.unshift("#{BASEDIR}/modules/enableit/functions/lib")
-
-require 'puppet/functions/api.rb'
-require 'facter/customer_utils.rb'
+BASEDIR = File.expand_path File.dirname(__FILE__)
 
 # If we run the Puppetlabs Docker Puppetserver image (puppetlabs/puppetserver),
 # `DUMB_INIT_VERSION` will be set inside the container, and we can use this to
