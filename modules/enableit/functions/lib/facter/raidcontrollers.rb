@@ -14,8 +14,7 @@ Facter.add('raidcontrollers') do
                            .grep(/controller/)
                            .map do |pci|
       x = lspci_re.match(pci)
-      if x['type'] =~ /Serial Attached SCSI controller/ ||
-         x['type'] =~ /RAID bus controller/
+      if x && (x['type'] =~ /Serial Attached SCSI controller/ || x['type'] =~ /RAID bus controller/)
         matches << x['vendor']
       end
     end
