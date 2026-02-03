@@ -328,10 +328,10 @@ common::openvox::configure_agent: true
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
 common::openvox::linuxaid_cli::install_method: package
-common::openvox::linuxaid_cli::version: 1.2.0
+common::openvox::linuxaid_cli::version: 1.2.1
 common::openvox::linuxaid_cli::checksums:
-  1.1.0: "db627eec043542d991eacd447fcdb44986ea58d7b8c9986ca6d540083d136233"
-  1.2.0: "53d285fb6a8fca93609fe0ce71fc31ea0158aafefb3e7890b82b09a6d18134e4"
+  1.2.0: 53d285fb6a8fca93609fe0ce71fc31ea0158aafefb3e7890b82b09a6d18134e4
+  1.2.1: 4b3f7e4acc244a17e8c1294ce2029107b542cec9b6627f39387397a6406bd0af
 
 # KeepAlived
 common::keepalived::global_defs:
@@ -484,10 +484,10 @@ common::network::wireguard::enable: false
 # Netbird
 common::network::netbird::enable: false
 common::network::netbird::install_method: repo
-common::network::netbird::version: 0.60.8
+common::network::netbird::version: 0.64.5
 common::network::netbird::checksums:
-  0.60.0: 0774801213f95392684efe3f13b746bab0f633b3546b9063860b073fe153c6e4
   0.60.8: ec68147682a0e6c469a806398bbc37ecd5b4c30af8467ffd860684348215116d
+  0.64.5: 661732289c5ceb0e2742a0bc0a06834f84c0656662fae55983937538f1774c1b
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
