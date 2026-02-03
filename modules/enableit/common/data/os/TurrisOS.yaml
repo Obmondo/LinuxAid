@@ -1,0 +1,48 @@
+---
+common::openvox::package_name: "openvox"
+common::openvox::version: "8.24.1"
+common::openvox::linuxaid_cli::install_method: archive
+
+common::monitor::prometheus::install_method: "url"
+common::monitor::prometheus::env_file_path: "/etc/default"
+common::monitor::prometheus::server::checksums:
+  3.8.1: 70159946928dce8e11a5d38b6f478b5b6b65533e67c7909644cf613eb59cdf5c
+
+common::logging::manage: false
+
+common::default::classes:
+  - common::network
+
+common::role_basic::classes: []
+
+common::full_host_management: false
+
+common::repo::manage: false
+
+common::system::authentication::sudo::manage: false
+common::system::dns::resolver: "dnsmasq"
+common::system::motd::enable: false
+
+common::setup::obmondo_admin::manage: false
+
+common::system::nsswitch::ethers: []
+common::system::nsswitch::group: []
+common::system::nsswitch::hosts: []
+common::system::nsswitch::networks: []
+common::system::nsswitch::passwd: []
+common::system::nsswitch::protocols: []
+common::system::nsswitch::rpc: []
+common::system::nsswitch::services: []
+common::system::nsswitch::shadow: []
+
+common::network::service_name: "network"
+common::network::ipaddress_package: "rubygem-ipaddress"
+common::network::ipaddress_provider: "gem"
+
+common::system::updates::enable: false
+common::system::updates::manage: false
+
+common::monitor::exporter::node::lsof::enable: false
+common::monitor::exporter::node::topprocesses::enable: false
+common::monitor::exporter::node::ssacli::enable: false
+common::monitor::exporter::node::smartmon::enable: false

@@ -1,55 +1,7 @@
----
-common::openvox::package_name: "openvox"
-common::openvox::version: "8.24.1"
-common::openvox::linuxaid_cli::install_method: archive
 common::openvox::linuxaid_cli::checksums:
-  1.1.0: "b921adfa9c93592d464168f3990a6d906bb8c099af21e4831c8cff71f81f5b10"
-  1.2.0: "d0478e011fb94e31aebaa1e42b6ef601f65e4de29c8b98d30b6f3e20ff1e722f"
-
-common::monitor::prometheus::install_method: "url"
-common::monitor::prometheus::env_file_path: "/etc/default"
-common::monitor::prometheus::server::checksums:
-  3.8.1: 70159946928dce8e11a5d38b6f478b5b6b65533e67c7909644cf613eb59cdf5c
-
-common::logging::manage: false
-
-common::default::classes:
-  - common::network
-
-common::role_basic::classes: []
-
-common::full_host_management: false
-
-common::repo::manage: false
-
-common::system::authentication::sudo::manage: false
-common::system::dns::resolver: "dnsmasq"
-common::system::motd::enable: false
-
-common::setup::obmondo_admin::manage: false
-
-common::system::nsswitch::ethers: []
-common::system::nsswitch::group: []
-common::system::nsswitch::hosts: []
-common::system::nsswitch::networks: []
-common::system::nsswitch::passwd: []
-common::system::nsswitch::protocols: []
-common::system::nsswitch::rpc: []
-common::system::nsswitch::services: []
-common::system::nsswitch::shadow: []
-
-common::network::service_name: "network"
-common::network::ipaddress_package: "rubygem-ipaddress"
-common::network::ipaddress_provider: "gem"
-
-common::system::updates::enable: false
-common::system::updates::manage: false
+  1.2.0: d0478e011fb94e31aebaa1e42b6ef601f65e4de29c8b98d30b6f3e20ff1e722f
+  1.2.1: 2c1bb8242fe5c838ddddb4ae5d5da2d9d0d302da49b30171066fa1e555e20884
 
 common::network::netbird::checksums:
-  0.60.0: 803e909938314368662d5ef50afe6759915e670745a6defbfebe63b610ef8d08
   0.60.8: 5fcf73112ff1adbd3c2a89b904fe13573c4694253b5fc6159b524709e3f14145
-
-common::monitor::exporter::node::lsof::enable: false
-common::monitor::exporter::node::topprocesses::enable: false
-common::monitor::exporter::node::ssacli::enable: false
-common::monitor::exporter::node::smartmon::enable: false
+  0.64.5: 422cd803c52ebecc5fc3f1769c443d25b0efdf84e7796760cfa0b4295c55f1a5
