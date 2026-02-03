@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: harbor.obmondo.com/obmondo/linuxaid-ci:v0.0.2
+      credentials:
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -26,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: harbor.obmondo.com/obmondo/dockerfiles/puppet-ci:1.1.0
+      credentials:
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
