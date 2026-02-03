@@ -32,6 +32,9 @@ function profile::arch {
     /^arm/:{
       $os_arch.chop # return armv7
     }
+    'aarch64': {
+      'arm64'
+    }
     default: {
       'amd64'
     }
