@@ -10,6 +10,7 @@ MAX_LOCAL_BACKUPS=1 # Maximum number of local backups to retain
 MAX_S3_BACKUPS=3 # Maximum number of S3 backups to retain
 S3_BUCKET="s3://gitea-backup/"
 S3_ENDPOINT="https://s3.obmondo.com"
+SOURCE_DIR="/opt/gitea/data/git"
 
 # Logging function
 log() {
@@ -19,33 +20,47 @@ log() {
     logger -t gitea-backup "$1"  # Send message to syslog
 }
 
-# Function to create backup directory
+# 1. Clean disk before creating a new backup
+check_and_clean_source() {
+
+    # Clean Gitea container's temp folder (Always do this to prevent stuck files)
+    log "Cleaning Gitea container /tmp directory..."
+    docker exec -u "$GITEA_USER" "$GITEA_CONTAINER" bash -c "rm -rf /tmp/gitea-dump-*" || true
+
+    # Remove leftover zips on the HOST source directory
+    rm -f "$SOURCE_DIR"/gitea-dump-*.zip
+}
+
+# 2. Create local backup directory
 create_backup_directory() {
     mkdir -p "$BACKUP_DIR"
     log "Backup directory created: $BACKUP_DIR"
 }
 
-# Function to dump Gitea data
+# 3. Dump Gitea data (Generates the NEW backup)
 dump_gitea_data() {
     log "Dumping Gitea data..."
     docker exec -u "$GITEA_USER" "$GITEA_CONTAINER" bash -c \
         "cd ~ && /app/gitea/gitea dump -c /data/gitea/conf/app.ini"
 }
 
-# Function to find and copy the latest dump
+# 4. Move the NEW dump and upload to S3
 copy_latest_dump() {
-    local latest_dump
-    latest_dump=$(docker exec "$GITEA_CONTAINER" ls -t '/data/git' | grep "$GITEA_DUMP_FILENAME" | head -n 1)
-    
+    # Move the newly generated backup
+    if ls "$SOURCE_DIR"/gitea-dump-*.zip 1> /dev/null 2>&1; then
+        mv "$SOURCE_DIR"/gitea-dump-*.zip "$BACKUP_DIR"
+    else
+        log "Error: New backup file was not found after dump command."
+        exit 1
+    fi
+
+    local latest_dump=$(ls -t "$BACKUP_DIR"/gitea-dump-*.zip 2>/dev/null | head -n 1)
+
     if [ -n "$latest_dump" ]; then
-        docker cp "$GITEA_CONTAINER:/data/git/$latest_dump" "$BACKUP_DIR"
-        log "Latest dump copied to $BACKUP_DIR: $latest_dump"
-
-        docker exec "$GITEA_CONTAINER" rm "/data/git/$latest_dump"
-        log "Backup deleted from the container: $latest_dump"
-
-        log "Copying backup to S3..."
-        aws s3 cp "$BACKUP_DIR/$latest_dump" "$S3_BUCKET" --endpoint-url="$S3_ENDPOINT"
+        log "Latest dump moved to $BACKUP_DIR: $(basename "$latest_dump")"
+        log "Moving backup to S3..."
+        
+        aws s3 cp "$latest_dump" "$S3_BUCKET" --endpoint-url="$S3_ENDPOINT"
 
         perform_s3_backup_rotation
     else
@@ -53,7 +68,7 @@ copy_latest_dump() {
     fi
 }
 
-# Function to perform S3 backup rotation
+# 5. Rotate S3 backups
 perform_s3_backup_rotation() {
     log "Performing S3 backup rotation: Deleting older backups..."
     s3_backups=$(aws s3 ls "$S3_BUCKET" --recursive --endpoint-url="$S3_ENDPOINT" | sort -k1,2 | awk '{print $4}')
@@ -87,6 +102,7 @@ perform_local_backup_rotation() {
 }
 
 # Execute functions directly
+check_and_clean_source
 create_backup_directory
 dump_gitea_data
 copy_latest_dump
