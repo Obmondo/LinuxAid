@@ -2,6 +2,16 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.5
+
+### Bug Fixes
+- 067471edf fix: handle turrisos multi-arch for netbird install
+- 51301212b fix: handle regex match existence for raidcontrollers
+
+### Configuration Changes
+- 007109564 chore: move armv7l arch hiera config to turrisos with proper segregation and update netbird version
+- c3df9279a chore: update the gitea workflow to accept harbor creds from org secrets
+
 ## LinuxAid Release Version v1.4.4
 
 ### Bug Fixes
