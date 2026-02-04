@@ -1,6 +1,6 @@
 ---
 common::openvox::package_name: "openvox"
-common::openvox::version: "8.24.1"
+common::openvox::version: "8.24.2"
 common::openvox::linuxaid_cli::install_method: archive
 
 common::monitor::prometheus::install_method: "url"
