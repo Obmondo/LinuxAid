@@ -38,31 +38,21 @@ class profile::network::netbird (
   # Install NetBird service
   if $enable {
     $_checksum = lookup('common::network::netbird::checksums')
-    $_arch = profile::arch()
+
+    # NOTE: There are few TurrisOS routers which run on armv7l architecture.
+    # However, netbird officially don't release armv7, but armv6 binaries.
+    # Coincidentally, we tested the armv6 netbird binaries run perfectly fine.
+    # Hence, we're using that in this case.
+    $_arch = profile::arch() == 'armv7' ? {
+      true    => 'armv6',
+      default => profile::arch(),
+    }
 
     if $_os_name == 'TurrisOS' {
-      # NOTE: only tested on TurrisOS which has only armv6 packages
-      # even though TurrisOS comes with armv7
-      if $_arch == 'armv7' {
-        $_arch = 'armv6'
+      package { 'kmod-tun':
+        ensure => ensure_present($enable),
+        noop   => $noop_value,
       }
-
-      exec { 'update_package_repo':
-        command => 'opkg update; opkg install kmod-tun',
-        path    => '/usr/bin:/usr/sbin:/bin:/sbin',
-        unless  => 'opkg list-installed | grep kmod-tun >/dev/null',
-        noop    => $noop_value,
-      }
-
-      # Uncomment the following piece of code when
-      # https://github.com/OpenVoxProject/openvox/pull/221 is merged
-      # and we've migrated from Puppet to OpenVox.
-      # package { 'kmod-tun':
-      #   ensure   => ensure_present($enable),
-      #   provider => 'opkg',
-      #   noop     => $noop_value,
-      #   require  => Exec['update_package_repo'],
-      # }
     }
 
     # Download and extract NetBird binary from GitHub releases
