@@ -16,7 +16,7 @@
 #
 # @groups domain domains.
 #
-class common::monitor::exporter::dns (
+class common::monitor::exporter::dns inherits common::monitor::exporter (
   Boolean                      $enable           = $common::monitor::exporter::enable,
   Eit_types::Noop_Value        $noop_value       = $common::monitor::exporter::noop_value,
   Eit_types::IPPort            $listen_address   = '127.254.254.254:63395',

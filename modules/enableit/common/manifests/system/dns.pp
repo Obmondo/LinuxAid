@@ -53,7 +53,7 @@ class common::system::dns (
     contain profile::system::systemd
   }
 
-  # if $facts['init_system'] == 'systemd' {
-  #   include common::monitor::exporter
-  # }
+  if $facts['init_system'] == 'systemd' {
+    include common::monitor::exporter::dns
+  }
 }

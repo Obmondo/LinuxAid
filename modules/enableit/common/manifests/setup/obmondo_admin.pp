@@ -32,6 +32,8 @@ class common::setup::obmondo_admin (
     noop => $noop_value,
   }
 
+  notify{"add debug statement in obmondo_admin class to check if it's being applied ${manage}": }
+
   if $manage {
     $_enable = $::obmondo_monitor and $enable #lint:ignore:top_scope_facts
     $__opt_dir = $common::setup::__opt_dir
