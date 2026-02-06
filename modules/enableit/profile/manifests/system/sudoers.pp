@@ -50,14 +50,20 @@ class profile::system::sudoers (
     require         => File[$sudoers_d_dir],
   }
 
+  $_ssh_agent_auth_ensure = ensure_present($common::system::authentication::sudo::ssh_agent_auth)
+   
   sudo::conf { 'yubikey_sudo_enable':
-    ensure   => ensure_present($common::system::authentication::sudo::ssh_agent_auth),
+    ensure   => $_ssh_agent_auth_ensure,
     priority => 1,
     content  => 'Defaults env_keep += "SSH_AUTH_SOCK"',
     require  => File[$sudoers_d_dir],
   }
 
-  package::install('pam-ssh-agent-auth', ensure_present($common::system::authentication::sudo::ssh_agent_auth))
+  package::install('pam-ssh-agent-auth', $_ssh_agent_auth_ensure)
+
+  pam::service { 'sudo':
+    content => 'auth sufficient pam_ssh_agent_auth.so file=%h/.ssh/authorized_keys',
+  }
 
   $sudoers.each |$name, $v| {
     profile::system::sudoers::conf { $name:

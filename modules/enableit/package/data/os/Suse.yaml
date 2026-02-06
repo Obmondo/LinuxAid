@@ -1,3 +1,4 @@
 ---
 package::openldap-clients: 'openldap2-client'
 package::samba-common-tools: 'samba-tool'
+package::pam-ssh-agent-auth: 'pam-ssh-agent-auth'

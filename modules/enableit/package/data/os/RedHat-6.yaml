@@ -2,3 +2,4 @@
 package::libpam-systemd: null
 package::samba-common-tools: 'samba4-common'
 package::realmd: 'adcli'
+package::pam-ssh-agent-auth: 'pam-ssh-agent-auth'
