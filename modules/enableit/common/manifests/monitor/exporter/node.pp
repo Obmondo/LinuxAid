@@ -107,7 +107,7 @@ class common::monitor::exporter::node (
   Stdlib::AbsolutePath $lib_directory,
   Eit_types::IPPort    $listen_address,
 
-  Eit_types::Certname   $host       = $trusted['certname'],
+  Eit_types::Certname   $host       = 'ubuntu',
   Boolean               $enable     = true,
   Eit_types::Version    $version    = '1.10.2',
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
