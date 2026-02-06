@@ -19,9 +19,8 @@ class common::monitor::exporter (
     noop   => $noop_value,
   }
 
-  include common::monitor::exporter::node
-
   if $enable and $facts['init_system'] == 'systemd' {
+    include common::monitor::exporter::node
     include common::monitor::exporter::dns
     include common::monitor::exporter::dellhw
     include common::monitor::exporter::iptables
