@@ -43,6 +43,7 @@ class common::openvox (
   Optional[Hash]        $extra_main_settings = undef,
 ) {
   if $manage {
+    include eit_repos 
     contain profile::openvox
   }
 }
