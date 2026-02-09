@@ -59,6 +59,9 @@ class common::monitor::exporter::blackbox (
         'http'    => {
           'fail_if_not_ssl'       => true,
           'preferred_ip_protocol' => 'ip4',
+          'tls_config'            => {
+            'insecure_skip_verify' => true,
+          },
         },
       },
     }

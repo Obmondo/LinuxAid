@@ -109,7 +109,7 @@ class common::monitor::prometheus::server (
         },
         {
           source_labels => ['certname'],
-          regex         => $trusted['certname'],
+          regex         => regsubst($trusted['certname'], '^[^.]+\.(.*)', '.*\.\1'),
           action        => 'keep',
         },
       ],
