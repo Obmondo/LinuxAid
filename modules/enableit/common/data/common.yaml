@@ -153,8 +153,7 @@ common::storage::manage: false
 common::system::manage: false
 
 common::default::classes:
-  - common::setup
-  - common::openvox
+  - common::system::openvox
   - common::monitor
 
 common::system::classes:

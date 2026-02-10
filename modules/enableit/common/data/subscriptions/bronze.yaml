@@ -3,7 +3,7 @@ common::system::classes:
   - common::system::updates
 
 common::default::classes:
-  - common::setup::obmondo_admin
+  - common::system::obmondo_admin
 
 common::system::updates::enable: true
 common::system::updates::manage: true
