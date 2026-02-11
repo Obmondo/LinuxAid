@@ -59,6 +59,12 @@ class common::monitor::exporter::blackbox (
         'http'    => {
           'fail_if_not_ssl'       => true,
           'preferred_ip_protocol' => 'ip4',
+          # NOTE: this is needed to monitor if the cert is expired.
+          # if tls verification is set to false, we will never be able to
+          # scrape and ends up with 0 (domain down alert) but no cert expiry alert
+          'tls_config'            => {
+            'insecure_skip_verify' => true,
+          },
         },
       },
     }
