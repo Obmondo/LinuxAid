@@ -1,16 +1,16 @@
 # Manage openvox-agent
 # so we can setup openvox-agent package
-class profile::openvox (
-  Stdlib::Host         $server                 = $common::openvox::server,
-  Stdlib::Port         $server_port            = $common::openvox::server_port,
-  Eit_types::Version   $version                = $common::openvox::version,
-  Stdlib::Absolutepath $config_file            = $common::openvox::config_file,
-  Boolean              $run_agent_as_noop      = $common::openvox::run_agent_as_noop,
-  Optional[Hash]       $extra_main_settings    = $common::openvox::extra_main_settings,
-  String               $aio_package_name       = $common::openvox::package_name,
-  String               $environment            = $common::openvox::environment,
+class profile::system::openvox (
+  Stdlib::Host         $server                 = $common::system::openvox::server,
+  Stdlib::Port         $server_port            = $common::system::openvox::server_port,
+  Eit_types::Version   $version                = $common::system::openvox::version,
+  Stdlib::Absolutepath $config_file            = $common::system::openvox::config_file,
+  Boolean              $run_agent_as_noop      = $common::system::openvox::run_agent_as_noop,
+  Optional[Hash]       $extra_main_settings    = $common::system::openvox::extra_main_settings,
+  String               $aio_package_name       = $common::system::openvox::package_name,
+  String               $environment            = $common::system::openvox::environment,
 
-  Eit_types::Noop_Value $noop_value             = $common::openvox::noop_value,
+  Eit_types::Noop_Value $noop_value             = $common::system::openvox::noop_value,
   Optional[String]      $package_version_suffix = undef,
   Optional[String]      $package_version_prefix = undef,
 ) {
@@ -257,7 +257,7 @@ class profile::openvox (
       ;
   }
 
-  contain profile::openvox::linuxaid_cli
-  contain profile::openvox::run_openvox
-  contain profile::openvox::clientbucket
+  contain profile::system::openvox::linuxaid_cli
+  contain profile::system::openvox::run_openvox
+  contain profile::system::openvox::clientbucket
 }

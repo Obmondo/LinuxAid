@@ -1,6 +1,6 @@
 # Run openvox-agent on client nodes
-class profile::openvox::run_openvox (
-  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
+class profile::system::openvox::run_openvox (
+  Eit_types::Noop_Value $noop_value = $common::system::openvox::noop_value,
 ) {
   if $facts['init_system'] == 'sysvinit' {
     cron { 'run-openvox':

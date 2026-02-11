@@ -1,6 +1,6 @@
 # profile::openvox::clientbucket for puppet clientbucket cache cleanup
-class profile::openvox::clientbucket (
-  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
+class profile::system::openvox::clientbucket (
+  Eit_types::Noop_Value $noop_value = $common::system::openvox::noop_value,
 ) {
 
   if $facts['init_system'] == 'sysvinit' {

@@ -1,7 +1,7 @@
 ---
-common::openvox::package_name: "openvox"
-common::openvox::version: "8.24.2"
-common::openvox::linuxaid_cli::install_method: archive
+common::system::openvox::package_name: "openvox"
+common::system::openvox::version: "8.24.2"
+common::system::openvox::linuxaid_cli::install_method: archive
 
 common::monitor::prometheus::install_method: "url"
 common::monitor::prometheus::env_file_path: "/etc/default"

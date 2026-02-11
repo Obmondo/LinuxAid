@@ -4,12 +4,12 @@
 #
 # @param noop_value Eit_types::Noop_Value to enable no-operation mode.
 #
-class profile::openvox::linuxaid_cli (
-  Eit_types::Noop_Value $noop_value = $common::openvox::noop_value,
+class profile::system::openvox::linuxaid_cli (
+  Eit_types::Noop_Value $noop_value = $common::system::openvox::noop_value,
 ) {
-  $_version        = lookup('common::openvox::linuxaid_cli::version')
-  $_checksum       = lookup('common::openvox::linuxaid_cli::checksums')
-  $_install_method = lookup('common::openvox::linuxaid_cli::install_method')
+  $_version        = lookup('common::system::openvox::linuxaid_cli::version')
+  $_checksum       = lookup('common::system::openvox::linuxaid_cli::checksums')
+  $_install_method = lookup('common::system::openvox::linuxaid_cli::install_method')
 
   $_arch        = profile::arch()
   $_os_family   = $facts['os']['family']
