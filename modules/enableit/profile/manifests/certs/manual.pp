@@ -75,7 +75,7 @@ define profile::certs::manual (
   } else {
     $ports.each |$port| {
       monitor::domains { "${_domain}_${port}":
-        domain => "https://${_domain}:${port}",
+        domain => "${_domain}:${port}",
       }
     }
   }

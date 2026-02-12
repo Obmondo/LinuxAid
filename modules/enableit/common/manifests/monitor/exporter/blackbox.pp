@@ -4,7 +4,8 @@
 #
 # @param listen_port The port on which the exporter listens.
 #
-# @param noop_value Eit_types::Noop_Value to indicate if operations should be in noop mode. Defaults to $common::monitor::exporter::noop_value.
+# @param noop_value Eit_types::Noop_Value to indicate if operations should be in noop mode.
+# Defaults to $common::monitor::exporter::noop_value.
 #
 # @param config_file The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
 #
@@ -59,6 +60,12 @@ class common::monitor::exporter::blackbox (
         'http'    => {
           'fail_if_not_ssl'       => true,
           'preferred_ip_protocol' => 'ip4',
+          # NOTE: this is needed to monitor if the cert is expired.
+          # if tls verification is set to false, we will never be able to
+          # scrape and ends up with 0 (domain down alert) but no cert expiry alert
+          'tls_config'            => {
+            'insecure_skip_verify' => true,
+          },
         },
       },
     }
