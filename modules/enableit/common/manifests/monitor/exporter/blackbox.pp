@@ -4,7 +4,8 @@
 #
 # @param listen_port The port on which the exporter listens.
 #
-# @param noop_value Eit_types::Noop_Value to indicate if operations should be in noop mode. Defaults to $common::monitor::exporter::noop_value.
+# @param noop_value Eit_types::Noop_Value to indicate if operations should be in noop mode.
+# Defaults to $common::monitor::exporter::noop_value.
 #
 # @param config_file The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
 #
