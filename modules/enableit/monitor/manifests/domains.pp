@@ -18,8 +18,9 @@ define monitor::domains (
 
   $job_name = 'probe_blackbox_domains'
   $collect_dir = '/etc/prometheus/file_sd_config.d'
+  $_domain = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0]
 
-  @@prometheus::scrape_job { $domain :
+  @@prometheus::scrape_job { $_domain :
     job_name    => $job_name,
     tag         => [
       $trusted['certname'],
@@ -34,17 +35,17 @@ define monitor::domains (
   $blackbox_node = if $enable { lookup('common::monitor::exporter::blackbox::node') }
   # NOTE: skip deleting the files on the actual blackbox node
   if $blackbox_node != $trusted['certname'] {
-    File <| title == "${collect_dir}/${job_name}_${domain}.yaml" |> {
+    File <| title == "${collect_dir}/${job_name}_${_domain}.yaml" |> {
       ensure => absent
     }
   }
 
-  @@monitor::threshold { "monitor::domains::expiry::${domain}" :
+  @@monitor::threshold { "monitor::domains::expiry::${_domain}" :
     enable => $enable,
     record => 'monitor::domains::cert_expiry_days',
     tag    => $trusted['certname'],
     labels => {
-      'domain' => $domain,
+      'domain' => $_domain,
     },
     expr   => $expiry_days,
   }
