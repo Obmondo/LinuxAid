@@ -364,10 +364,9 @@ common::monitor::prometheus::server::collect_scrape_jobs:
       module: [http_2xx]
     relabel_configs:
       - source_labels: [__address__]
-        target_label: domain
+        target_label: url
       - source_labels: [__address__]
         target_label: __param_target
-        replacement: https://$1/
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__

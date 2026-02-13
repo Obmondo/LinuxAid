@@ -109,7 +109,7 @@ class common::monitor::prometheus::server (
         },
         {
           source_labels => ['certname'],
-          regex         => $trusted['certname'],
+          regex         => ".*.${::obmondo['customer_id']}",
           action        => 'keep',
         },
       ],

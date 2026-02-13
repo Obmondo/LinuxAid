@@ -18,12 +18,11 @@
 # @groups monitoring targets
 #
 class common::monitor::exporter::blackbox (
-  Boolean               $enable,
-  Stdlib::Port          $listen_port,
-  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
-  Stdlib::Absolutepath  $config_file = "${common::monitor::exporter::config_dir}/blackbox.yml",
-
-  Array[Eit_types::Monitor::Domains] $targets = [],
+  Boolean                $enable,
+  Stdlib::Port           $listen_port,
+  Eit_types::Noop_Value  $noop_value  = $common::monitor::exporter::noop_value,
+  Stdlib::Absolutepath   $config_file = "${common::monitor::exporter::config_dir}/blackbox.yml",
+  Array[Stdlib::HttpUrl] $targets     = [],
 ) {
 
   $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }
@@ -78,8 +77,14 @@ class common::monitor::exporter::blackbox (
   } ~> Service['blackbox_exporter']
 
   if $targets.size > 0 {
+
     $targets.each |$domain| {
-      monitor::domains { $domain: }
+      # NOTE: for better resource name
+      $_domain = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0]
+
+      monitor::domains { $_domain:
+        domain => $domain,
+      }
     }
   }
   # Collect all the resources only on the node where blackbox is enabled
