@@ -28,7 +28,10 @@ define monitor::domains (
     ],
     targets     => [$domain],
     noop        => false,
-    labels      => { 'certname' => $trusted['certname'] },
+    labels      => {
+      'certname' => $trusted['certname'],
+      'domain'   => $_domain,
+    },
     collect_dir => $collect_dir,
   }
 
