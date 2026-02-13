@@ -2,6 +2,28 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.6
+
+### Bug Fixes
+- b5b66dad fix: allow metrics which matches the certname, this is required to allow nodes like blackbox exporter nodes to send the metrics to the upstream prom server, since the exported resource have a diff certname and it wont match the node certname, which is correct
+- cf6744ea fix: include node name when setting up netbird
+- 75c18660 fix: added a strict check on target give for blackbox that it needs to be a https url and handle resource naming
+- 62b9fafa fix: created domain and url label for blackbox exporter, so we match exactly on the threshold record label, since it had only domain, we could have added url in the threshold record, but domains sound fine to read and understand and url is easy to showcase the actual url, since some url has some endpoints too
+- ea5930b1 fix: let monitor::domains handle https url as well
+- c18b95a3 fix: added back the httpurl type check for monitoring, since user can give url with some endpoints as well to monitor
+- 8366faaa fix: domains is now just fqdn and fqdn:port
+- 042b2959 fix(blackbox_exporter) allow TLS inspection to expose expired certificate metrics
+- cac281e8 fix: install kmod-tun via package resource
+- 2fe09956 fix(gitea-backup): add pre-run cleanup and simplify rotation logic
+
+### Configuration Changes
+- bfc5e3b0 chore: add doc for installing linuxaid on turris routers with netbird integration
+- 32aee323 chore: address the yaml lint failures
+- d3d0e9a6 chore: update openvox version to 8.24.2
+
+### Other Changes
+- d400a51e Add --volumes to Docker system prune cron job
+
 ## LinuxAid Release Version v1.4.5
 
 ### Bug Fixes
