@@ -34,6 +34,7 @@ class profile::network::netbird (
   $_installed_netbird_version = $facts['netbird_client_version']
   $_os_name                   = $facts['os']['name']
   $_kernel                    = $facts['kernel'].downcase
+  $_node_name                 = functions::split_certname($facts['obmondo']['certname'])['node_name']
 
   # Install NetBird service
   if $enable {
@@ -95,7 +96,7 @@ class profile::network::netbird (
     }
 
     exec { 'netbird_up':
-      command     => 'netbird up',
+      command     => "netbird up -n ${_node_name}",
       noop        => $noop_value,
       path        => '/usr/bin:/usr/sbin:/bin:/sbin',
       environment => [
