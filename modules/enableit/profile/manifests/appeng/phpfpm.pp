@@ -16,7 +16,7 @@ class profile::appeng::phpfpm (
   Integer[1,512]                      $start_servers        = 64,
   Integer[1,512]                      $min_spare_servers    = 64,
   Integer[1,512]                      $max_spare_servers    = 100,
-  Hash[String,Struct[{
+  Hash[Stdlib::Fqdn,Struct[{
     ensure        => Boolean,
     document_root => Stdlib::Unixpath,
     ssl_key       => Optional[String],
@@ -99,6 +99,12 @@ class profile::appeng::phpfpm (
             content => pick($opts['ssl_key'], $ssl_key).node_encrypt::secret,
           ;
         }
+
+        # Monitor domains if ssl cert is passed.
+        monitor::domains { $virtualhost:
+          domain => "https://${virtualhost}",
+        }
+
       }
 
       nginx::resource::location { "${virtualhost}_php" :

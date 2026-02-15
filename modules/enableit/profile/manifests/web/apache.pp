@@ -4,9 +4,8 @@ class profile::web::apache (
   Boolean                              $http    = $role::web::apache::http,
   Optional[Enum['default','insecure']] $ciphers = $role::web::apache::ciphers,
   Array                                $modules = $role::web::apache::modules,
-
-  Eit_types::Web::Apache::Vhosts     $vhosts  = $role::web::apache::vhosts,
-  Array[Eit_types::Monitor::Domains] $domains = $role::web::apache::domains,
+  Eit_types::Web::Apache::Vhosts       $vhosts  = $role::web::apache::vhosts,
+  Array[Stdlib::Fqdn]                  $domains = $role::web::apache::domains,
 ) {
 
   $listen_ports = [
