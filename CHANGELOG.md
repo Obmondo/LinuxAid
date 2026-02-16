@@ -2,6 +2,11 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.8
+
+### Bug Fixes
+- fc74c59d fix: apache vhost can have any string, but the underlying domains needs to be fqdn, since its useful incase the entry is common in tags hiera
+
 ## LinuxAid Release Version v1.4.7
 
 ### Bug Fixes
