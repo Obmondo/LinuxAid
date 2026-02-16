@@ -2,7 +2,7 @@
 # This class is for obmondo clients
 class eit_repos::apt::enableit_client (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   # Get the architecture

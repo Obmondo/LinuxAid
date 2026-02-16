@@ -1,7 +1,7 @@
 # Docket yum repos
 class eit_repos::yum::docker (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   # The dockerrepo only provides "centos" (not rhel) as distribution.

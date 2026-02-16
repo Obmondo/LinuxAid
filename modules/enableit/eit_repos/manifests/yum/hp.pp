@@ -1,7 +1,7 @@
 # HP MCP for community OS and SPP for RHEL and SUSE
 class eit_repos::yum::hp (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $osname = $facts.dig('os','name')

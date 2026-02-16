@@ -2,7 +2,7 @@
 class eit_repos::yum::mariadb (
   Boolean               $ensure     = true,
   String                $version    = '10.4',
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $_release = $facts['os']['name'].downcase

@@ -1,7 +1,7 @@
 # Docker APT repos
 class eit_repos::apt::docker (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $distro = $facts['os']['distro']['codename']

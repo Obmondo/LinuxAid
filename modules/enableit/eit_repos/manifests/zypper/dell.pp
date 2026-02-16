@@ -1,7 +1,7 @@
 # Docker sles repos
 class eit_repos::zypper::dell (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits eit_repos::zypper {
 
   if $facts['os']['release']['major'] == 15 { $dsu = 'dsu' } else { $dsu = 'DSU_19.12.02' }

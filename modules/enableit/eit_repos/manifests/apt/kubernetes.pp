@@ -2,7 +2,7 @@
 class eit_repos::apt::kubernetes (
   Boolean               $ensure     = true,
   Array[String]         $versions   = ['v1.27'],
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $versions.each |$version| {

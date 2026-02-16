@@ -1,7 +1,7 @@
 # Dell yum repos
 class eit_repos::yum::dell (
   Boolean               $ensure     = false,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits eit_repos::yum {
 
   $repos = {
