@@ -2,6 +2,11 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.7
+
+### Bug Fixes
+- be75e8f7 fix: underlying profile input data type were too broad, so limited those to fqdn input only and added domain monitoring for phpfpm role
+
 ## LinuxAid Release Version v1.4.6
 
 ### Bug Fixes
