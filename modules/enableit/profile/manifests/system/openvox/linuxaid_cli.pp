@@ -16,11 +16,6 @@ class profile::system::openvox::linuxaid_cli (
   $_kernel      = $facts['kernel'].downcase
   $_init_system = $facts['init_system']
 
-  $_notify_res = $_init_system ? {
-    'sysvinit' => Cron['run-openvox'],
-    default    => Systemd::Timer['run-openvox.timer', 'obmondo-system-update.timer'],
-  }
-
   case $_install_method {
     'package': {
       $_linuxaid_cli_package_version = $_os_family ? {
@@ -32,7 +27,6 @@ class profile::system::openvox::linuxaid_cli (
       package { 'linuxaid-cli':
         ensure => $_linuxaid_cli_package_version,
         noop   => $noop_value,
-        notify => $_notify_res,
       }
     }
     'archive': {
@@ -47,7 +41,6 @@ class profile::system::openvox::linuxaid_cli (
         checksum_type   => 'sha256',
         cleanup         => true,
         noop            => $noop_value,
-        notify          => $_notify_res,
       }
     }
     default: {
