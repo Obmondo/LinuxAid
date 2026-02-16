@@ -4,6 +4,7 @@
 class eit_haproxy::basic_config (
   Eit_haproxy::Domains          $domains,
   Eit_haproxy::Listen           $listens            = {},
+  Eit_haproxy::Timeout          $frontend_timeout   = {},
   Boolean                       $ddos_protection    = false,
   Boolean                       $https              = true,
   Boolean                       $http               = false,
@@ -204,12 +205,18 @@ class eit_haproxy::basic_config (
         { 'http-request'  => 'deny deny_status 429 if !is_priority ww_rl_reached' },
       ]
 
+      $_frontend_timeout = Hash(
+        $frontend_timeout.map |$k, $v| {
+          ["timeout ${k}", $v]
+        }
+      )
 
       haproxy::frontend { 'web':
         mode    => $mode,
         bind    => $binds,
         options => [
           {'option' => "${mode}log"},
+          $_frontend_timeout,
           if $https and $use_lets_encrypt {
             { 'acl is_letsencrypt' => 'path_beg /.well-known/acme-challenge/' }
           },
