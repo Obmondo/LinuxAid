@@ -13,7 +13,6 @@ class eit_haproxy::basic_config (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
 ) {
-
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
   # Strict == Modern
@@ -83,22 +82,21 @@ class eit_haproxy::basic_config (
 
   # Setup binds and required haproxy rule
   $binds = functions::array_to_hash($bind_ports.map |$port| {
-    $_ssl = if $port == 443 and $mode == 'http' {
-      [
-        'ssl',
-        if $use_lets_encrypt {
-          'crt /etc/ssl/private/letsencrypt'
-        },
-        'crt /etc/ssl/private/static-certs/combined',
-      ].delete_undef_values.join(' ')
+      $_ssl = if $port == 443 and $mode == 'http' {
+        [
+          'ssl',
+          if $use_lets_encrypt {
+            'crt /etc/ssl/private/letsencrypt'
+          },
+          'crt /etc/ssl/private/static-certs/combined',
+        ].delete_undef_values.join(' ')
+      }
 
-    }
-
-    $listen_on.map |$listen| {
-      Hash([
-        "${listen}:${port}", $_ssl
-      ])
-    }
+      $listen_on.map |$listen| {
+        Hash([
+            "${listen}:${port}", $_ssl,
+        ])
+      }
   })
 
   if $domains.size {
@@ -118,7 +116,7 @@ class eit_haproxy::basic_config (
       },
       { 'http-request redirect scheme https if !{ ssl_fc }' => [
           if $https and $use_lets_encrypt { '!is_letsencrypt' },
-          if $_allow_http_acl { '!allow_http' }
+          if $_allow_http_acl { '!allow_http' },
         ].delete_undef_values.join(' '),
       }
     ].delete_undef_values
@@ -133,7 +131,7 @@ class eit_haproxy::basic_config (
     }.flatten.delete_undef_values.sort
 
     $alldomains = flatten($domains.map |$x, $opts| {
-      $opts['domains']
+        $opts['domains']
     })
 
     $public_ips = lookup('common::settings::publicips', Array, undef, [])
@@ -164,7 +162,7 @@ class eit_haproxy::basic_config (
         mode    => 'http',
         options => {
           'server letsencrypt_0' => '127.0.0.1:63480',
-        }
+        },
       }
     }
 
@@ -204,12 +202,11 @@ class eit_haproxy::basic_config (
         { 'http-request'  => 'deny deny_status 429 if !is_priority ww_rl_reached' },
       ]
 
-
       haproxy::frontend { 'web':
         mode    => $mode,
         bind    => $binds,
         options => [
-          {'option' => "${mode}log"},
+          { 'option' => "${mode}log" },
           if $https and $use_lets_encrypt {
             { 'acl is_letsencrypt' => 'path_beg /.well-known/acme-challenge/' }
           },
@@ -219,31 +216,31 @@ class eit_haproxy::basic_config (
             $ddos_protection_options
           },
           if $https and $use_lets_encrypt {
-            [{'use_backend letsencrypt' => 'if is_letsencrypt'}]
+            [{ 'use_backend letsencrypt' => 'if is_letsencrypt' }]
           },
-          [{'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]'}]
+          [{ 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]' }]
         ].delete_undef_values.flatten,
       }
 
       haproxy::mapfile { 'domains-to-backends':
         ensure   => 'present',
-        mappings => $domains_with_backend
+        mappings => $domains_with_backend,
       }
 
       $domains.each | $domain, $opts | {
         $domain_backend = regsubst($domain, /\./, '_', 'G')
-        $extra_options  = if $opts['extra_opts'] {
-                            $opts['extra_opts']
-                          }
-                          else {
-                            'check'
-                          }
+        $extra_options  = if $opts['extra_opts'].length > 0 {
+          $opts['extra_opts']
+        }
+        else {
+          'check'
+        }
         # Setup the Backend
         haproxy::backend { $domain_backend:
           mode    => $mode,
           options => $opts['servers'].map |$index, $endpoint| {
             { "server ${domain_backend}_${index}" => "${endpoint} ${extra_options}" }
-          }
+          },
         }
       }
     }
