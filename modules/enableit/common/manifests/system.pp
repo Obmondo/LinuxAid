@@ -41,24 +41,24 @@
 # @encrypt_params ssh_authorized_keys.*.key
 #
 class common::system (
-  Boolean $remove_fstrim_cron = false,
-  Boolean $purge_root_ssh_keys = true,
+  Hash[String,Array[String]]     $cron_jobs,
+  Boolean                        $remove_fstrim_cron  = false,
+  Boolean                        $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
   Eit_types::Users               $users               = {},
   Hash[String,Array[String]]     $user_groups         = {},
-  Hash[String,Array[String]]     $cron_jobs
   Hash[String,Hash]              $groups              = {},
   Hash[String,Hash]              $files               = {},
-  Optional[Array[Eit_types::IP]] $publicips          = undef,
+  Optional[Array[Eit_types::IP]] $publicips           = undef,
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
           content => Stdlib::Base64,
   }]]] $service_oneshot  = undef,
 
-  Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
-  Eit_types::Encrypt::Params    $encrypt_params           = ['ssh_authorized_keys.*.key'],
-  Optional[Hash[String, Hash]]        $services = {},
-  Array[Eit_types::SimpleString] $disabled_services = []
+  Hash[String, Array[Stdlib::IP::Address::V4]] $locations         = {},
+  Eit_types::Encrypt::Params                   $encrypt_params    = ['ssh_authorized_keys.*.key'],
+  Optional[Hash[String, Hash]]                 $services          = {},
+  Array[Eit_types::SimpleString]               $disabled_services = []
 ) {
   ############
   # Services #
