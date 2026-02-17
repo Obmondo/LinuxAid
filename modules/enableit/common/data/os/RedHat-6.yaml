@@ -1,17 +1,17 @@
 ---
-common::system::authentication::ignore_expired_root_password: true
+common::user_management::authentication::ignore_expired_root_password: true
 
 # Since we don't have a postfix-stats init script for non-systemd we may as well
 # disable this
 common::monitor::postfix::enable_stats: false
 
-common::system::sshd::kexalgorithms:
+common::user_management::sshd::kexalgorithms:
   - 'diffie-hellman-group-exchange-sha256'
   - 'diffie-hellman-group-exchange-sha1'
   - 'diffie-hellman-group14-sha1'
   - 'diffie-hellman-group1-sha1'
 
-common::system::sshd::ciphers:
+common::user_management::sshd::ciphers:
   - 'aes128-ctr'
   - 'aes192-ctr'
   - 'aes256-ctr'
@@ -26,10 +26,10 @@ common::system::sshd::ciphers:
   - 'arcfour'
   - 'rijndael-cbc@lysator.liu.se'
 
-common::system::sshd::hostkeys:
+common::user_management::sshd::hostkeys:
   - '/etc/ssh/ssh_host_rsa_key'
 
-common::system::sshd::macs:
+common::user_management::sshd::macs:
   - 'hmac-md5'
   - 'hmac-sha1'
   - 'umac-64@openssh.com'

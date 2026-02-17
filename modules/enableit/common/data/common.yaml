@@ -10,13 +10,13 @@ lookup_options:
       strategy: "deep"
   common::monitor::prometheus::server::collect_scrape_jobs:
     merge: "deep"
-  common::system::authentication::allowed_users:
+  common::user_management::authentication::allowed_users:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
   common::system::grub::parameters:
     merge: "deep"
-  common::system::authentication::protected_users:
+  common::user_management::authentication::protected_users:
     merge: "unique"
   common::system::ssh_authorized_keys:
     merge: "deep"
@@ -31,7 +31,7 @@ lookup_options:
   common::package::default_packages:
     merge: "unique"
 
-  common::system::authentication::sudo::sudoers:
+  common::user_management::authentication::sudo::sudoers:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
@@ -47,7 +47,7 @@ lookup_options:
     merge:
       strategy: "deep"
       knockout_prefix: "!"
-  common::system::authentication::sssd::domains:
+  common::user_management::authentication::sssd::domains:
     merge:
       strategy: "deep"
       knockout_prefix: "!"
@@ -63,62 +63,62 @@ lookup_options:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::account_lines:
+  common::user_management::authentication::pam::account_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::auth_lines:
+  common::user_management::authentication::pam::auth_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::password_account_lines:
+  common::user_management::authentication::pam::password_account_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::password_auth_lines:
+  common::user_management::authentication::pam::password_auth_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::password_lines:
+  common::user_management::authentication::pam::password_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::password_password_lines:
+  common::user_management::authentication::pam::password_password_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::password_session_lines:
+  common::user_management::authentication::pam::password_session_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::session_lines:
+  common::user_management::authentication::pam::session_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::sshd_account_lines:
+  common::user_management::authentication::pam::sshd_account_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::sshd_auth_lines:
+  common::user_management::authentication::pam::sshd_auth_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::sshd_password_lines:
+  common::user_management::authentication::pam::sshd_password_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
 
-  common::system::authentication::pam::sshd_session_lines:
+  common::user_management::authentication::pam::sshd_session_lines:
     merge:
       strategy: "deep"
       knockout_prefix: "!!"
@@ -157,7 +157,7 @@ common::default::classes:
   - common::monitor
 
 common::system::classes:
-  - common::system::authentication
+  - common::user_management::authentication
   - common::system::dns
   - common::system::kernel
   - common::system::grub
@@ -165,18 +165,18 @@ common::system::classes:
   - common::system::hardware
   - common::system::limits
   - common::system::package_management
-  - common::system::motd
+  - common::user_management::motd
   - common::system::nsswitch
-  - common::system::sshd
+  - common::user_management::sshd
   - common::system::time
   - common::system::cloud_init
-  - common::system::security
+  - common::user_management::security
 
 ## System Settings
 common::system::repo::manage: true
 common::system::cron::purge_unmanaged: false
 common::system::services::manage: true
-common::system::security::manage: true
+common::user_management::security::manage: true
 common::system::mail::manage: false
 
 ## System Systemd
@@ -184,16 +184,16 @@ common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false
 
 ## System Authentication
-common::system::authentication::manage_nis: false
-common::system::authentication::manage_pam: false
-common::system::authentication::manage_sssd: false
-common::system::authentication::manage_sudo: false
-common::system::authentication::ignore_expired_root_password: false
-common::system::authentication::purge_ubuntu_user: false
-common::system::authentication::purge_user: false
-common::system::authentication::sudo::purge: false
-common::system::authentication::manage: false
-common::system::authentication::allowed_users:
+common::user_management::authentication::manage_nis: false
+common::user_management::authentication::manage_pam: false
+common::user_management::authentication::manage_sssd: false
+common::user_management::authentication::manage_sudo: false
+common::user_management::authentication::ignore_expired_root_password: false
+common::user_management::authentication::purge_ubuntu_user: false
+common::user_management::authentication::purge_user: false
+common::user_management::authentication::sudo::purge: false
+common::user_management::authentication::manage: false
+common::user_management::authentication::allowed_users:
   "root":
     - "ALL"
   "(obmondo)":
@@ -235,7 +235,7 @@ common::system::limits::purge: false
 common::system::guix::manage: false
 
 ### Motd
-common::system::motd::enable: true
+common::user_management::motd::enable: true
 
 ## Nsswitch
 common::system::nsswitch::manage: false
@@ -244,21 +244,21 @@ common::system::nsswitch::sudoers:
 
 ## SSHD - ISO 27001/NIS2 Compliance
 # This logs SSH key fingerprints for authentication audit trails
-common::system::sshd::manage: true
-common::system::sshd::kexalgorithms:
+common::user_management::sshd::manage: true
+common::user_management::sshd::kexalgorithms:
   - "curve25519-sha256@libssh.org"
   - "ecdh-sha2-nistp521"
   - "ecdh-sha2-nistp384"
   - "ecdh-sha2-nistp256"
   - "diffie-hellman-group-exchange-sha256"
-common::system::sshd::ciphers:
+common::user_management::sshd::ciphers:
   - "chacha20-poly1305@openssh.com"
   - "aes256-gcm@openssh.com"
   - "aes128-gcm@openssh.com"
   - "aes256-ctr"
   - "aes192-ctr"
   - "aes128-ctr"
-common::system::sshd::macs:
+common::user_management::sshd::macs:
   - "hmac-sha2-512-etm@openssh.com"
   - "hmac-sha2-256-etm@openssh.com"
   - "umac-128-etm@openssh.com"
@@ -279,7 +279,7 @@ common::system::time::ntp::servers:
 common::system::cloud_init::manage: false
 
 ## Jumphost
-common::system::jumphost::enable: false
+common::user_management::jumphost::enable: false
 
 ## Packages
 common::system::package::install_default_packages: true
@@ -348,8 +348,8 @@ common::system::hosts::entries:
     - "%{trusted.certname}"
 
 ## Security
-common::system::security::auditd::enable: false
-common::system::security::selinux::enable: false
+common::user_management::security::auditd::enable: false
+common::user_management::security::selinux::enable: false
 
 ## System Updates
 common::system::updates::enable: true

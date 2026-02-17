@@ -1,5 +1,5 @@
 ---
-common::system::authentication::ignore_expired_root_password: true
+common::user_management::authentication::ignore_expired_root_password: true
 common::logging::rsyslog::log_local: true
 common::system::disabled_services:
   - 'abrtd'
@@ -48,14 +48,14 @@ common::system::nsswitch::aliases:
 common::system::dns::resolver: 'resolv'
 common::monitor::exporter::enable: true
 
-common::system::authentication::sssd::manage_oddjobd: false
-common::system::authentication::sssd::required_packages:
+common::user_management::authentication::sssd::manage_oddjobd: false
+common::user_management::authentication::sssd::required_packages:
   - 'realmd'
   - 'samba-common-tools'
-common::system::authentication::pam::password_session_lines:
+common::user_management::authentication::pam::password_session_lines:
   - - 40
     - 'optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077'
 
-common::system::authentication::pam::session_lines:
+common::user_management::authentication::pam::session_lines:
   - - 40
     - 'optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077'

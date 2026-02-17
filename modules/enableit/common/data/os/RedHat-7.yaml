@@ -1,5 +1,5 @@
 ---
-common::system::authentication::ignore_expired_root_password: true
+common::user_management::authentication::ignore_expired_root_password: true
 
 common::logging::rsyslog::log_local: true
 common::system::disabled_services:

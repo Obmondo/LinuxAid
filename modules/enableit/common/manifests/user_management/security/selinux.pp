@@ -14,7 +14,7 @@
 #
 # @groups configuration fcontext
 #
-class common::system::security::selinux (
+class common::user_management::security::selinux (
   Boolean            $manage                = false,
   Boolean            $enable                = $facts['os']['selinux']['enabled'],
   Boolean            $enforce               = false,

@@ -4,6 +4,6 @@ common::system::updates::enable: false
 common::logging::manage: false
 common::backup::manage: false
 common::network::manage: false
-common::security::manage: false
+common::user_management::security::manage: false
 common::system::mail::manage: false
 common::system::cron::purge_unmanaged: false

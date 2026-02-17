@@ -14,7 +14,7 @@
 #
 # @groups file_resources noop_value.
 #
-class common::system::motd (
+class common::user_management::motd (
   Boolean               $enable              = true,
   Optional[String]      $header              = undef,
   Optional[String]      $footer              = undef,

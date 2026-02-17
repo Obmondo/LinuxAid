@@ -76,10 +76,10 @@
 * [`common::openvox`](#common--openvox): Class for managing openvox installation and configuration
 * [`common::package`](#common--package): Class for managing the installation and removal of packages
 * [`common::repo`](#common--repo): Class for managing software repositories
-* [`common::security`](#common--security): Class for managing security settings including certs and auditd
-* [`common::security::auditd`](#common--security--auditd): Class for managing auditd configuration
-* [`common::security::effective_group`](#common--security--effective_group): Class for managing the effective group ID setting
-* [`common::security::pkexec`](#common--security--pkexec): Class for managing the CVE-2021-4034 polkit pkexec vulnerability
+* [`common::user_management::security`](#common--security): Class for managing security settings including certs and auditd
+* [`common::user_management::security::auditd`](#common--security--auditd): Class for managing auditd configuration
+* [`common::user_management::security::effective_group`](#common--security--effective_group): Class for managing the effective group ID setting
+* [`common::user_management::security::pkexec`](#common--security--pkexec): Class for managing the CVE-2021-4034 polkit pkexec vulnerability
 * [`common::services`](#common--services): Class for managing common services
 * [`common::settings`](#common--settings): Class for common settings for per customers
 * [`common::setup`](#common--setup): Class for setting up common configurations
@@ -109,22 +109,22 @@
 * [`common::storage::samba`](#common--storage--samba): Class for managing common Samba storage configuration
 * [`common::storage::zfs`](#common--storage--zfs): Class for managing ZFS storage and utilities
 * [`common::system`](#common--system): Class for managing common system configuration
-* [`common::system::authentication`](#common--system--authentication): Class for managing system authentication
-* [`common::system::authentication::kerberos`](#common--system--authentication--kerberos): Class for managing Kerberos integration
-* [`common::system::authentication::nis`](#common--system--authentication--nis): Class for managing the NIS/ypclass common::system::authentication::nis
-* [`common::system::authentication::pam`](#common--system--authentication--pam): Class for managing common::system::authentication::pam
-* [`common::system::authentication::sssd`](#common--system--authentication--sssd): Class for managing SSSD profile for system authentication
-* [`common::system::authentication::sudo`](#common--system--authentication--sudo): Class for managing the sudo settings in the common system authentication
+* [`common::user_management::authentication`](#common--system--authentication): Class for managing system authentication
+* [`common::user_management::authentication::kerberos`](#common--system--authentication--kerberos): Class for managing Kerberos integration
+* [`common::user_management::authentication::nis`](#common--system--authentication--nis): Class for managing the NIS/ypclass common::user_management::authentication::nis
+* [`common::user_management::authentication::pam`](#common--system--authentication--pam): Class for managing common::user_management::authentication::pam
+* [`common::user_management::authentication::sssd`](#common--system--authentication--sssd): Class for managing SSSD profile for system authentication
+* [`common::user_management::authentication::sudo`](#common--system--authentication--sudo): Class for managing the sudo settings in the common system authentication
 * [`common::system::cloud_init`](#common--system--cloud_init): Class for managing system cloud init configuration
 * [`common::system::container`](#common--system--container): Class for managing the container specifics
 * [`common::system::dns`](#common--system--dns): Class for handling DNS client configuration
 * [`common::system::failover`](#common--system--failover): Class for managing system failover configuration
 * [`common::system::grub`](#common--system--grub): Class for managing grubclass common::system::grub
 * [`common::system::hardware`](#common--system--hardware): Class for managing hardware features
-* [`common::system::jumphost`](#common--system--jumphost): Class for setting up reverse proxy
+* [`common::user_management::jumphost`](#common--system--jumphost): Class for setting up reverse proxy
 * [`common::system::kernel`](#common--system--kernel): Class for managing the common system kernel configuration
 * [`common::system::limits`](#common--system--limits): Class for managing system limits
-* [`common::system::motd`](#common--system--motd): Class for managing the MOTD configuration
+* [`common::user_management::motd`](#common--system--motd): Class for managing the MOTD configuration
 * [`common::system::nscd`](#common--system--nscd): Class for managing NSCD setup, caching DNS daemon, locally on client
 * [`common::system::nsswitch`](#common--system--nsswitch): Class for managing the nsswitch configuration
 * [`common::system::package_management`](#common--system--package_management): Class for managing system package management
@@ -132,7 +132,7 @@
 * [`common::system::package_management::guix::client`](#common--system--package_management--guix--client): Class for managing the Guix client in system packages
 * [`common::system::relocatetmp`](#common--system--relocatetmp): Class for relocating /tmp directory to a specified path
 * [`common::system::selinux`](#common--system--selinux): Class for managing SELinux fcontext
-* [`common::system::sshd`](#common--system--sshd): Class for managing the common SSHD configuration
+* [`common::user_management::sshd`](#common--system--sshd): Class for managing the common SSHD configuration
 * [`common::system::systemd`](#common--system--systemd): Class for managing systemd configuration
 * [`common::system::time`](#common--system--time): Class for managing system time settings
 * [`common::system::time::ntp`](#common--system--time--ntp): Class for managing NTP configuration
@@ -4788,13 +4788,13 @@ Optional[Eit_types::Date] - Date for snapshot repositories. Defaults to undef.
 
 Default value: `undef`
 
-### <a name="common--security"></a>`common::security`
+### <a name="common--security"></a>`common::user_management::security`
 
 Class for managing security settings including certs and auditd
 
 #### Parameters
 
-The following parameters are available in the `common::security` class:
+The following parameters are available in the `common::user_management::security` class:
 
 * [`manage`](#-common--security--manage)
 
@@ -4806,13 +4806,13 @@ Boolean flag to enable or disable security management. Defaults to true.
 
 Default value: `true`
 
-### <a name="common--security--auditd"></a>`common::security::auditd`
+### <a name="common--security--auditd"></a>`common::user_management::security::auditd`
 
 Class for managing auditd configuration
 
 #### Parameters
 
-The following parameters are available in the `common::security::auditd` class:
+The following parameters are available in the `common::user_management::security::auditd` class:
 
 * [`enable`](#-common--security--auditd--enable)
 * [`root_audit_level`](#-common--security--auditd--root_audit_level)
@@ -4833,13 +4833,13 @@ The audit level for root. Can be 'basic', 'aggressive', or 'insane'. Defaults to
 
 Default value: `'aggressive'`
 
-### <a name="common--security--effective_group"></a>`common::security::effective_group`
+### <a name="common--security--effective_group"></a>`common::user_management::security::effective_group`
 
 Class for managing the effective group ID setting
 
 #### Parameters
 
-The following parameters are available in the `common::security::effective_group` class:
+The following parameters are available in the `common::user_management::security::effective_group` class:
 
 * [`enable`](#-common--security--effective_group--enable)
 * [`group_mappings`](#-common--security--effective_group--group_mappings)
@@ -4869,13 +4869,13 @@ Optional parameter to set noop mode. Defaults to undef.
 
 Default value: `undef`
 
-### <a name="common--security--pkexec"></a>`common::security::pkexec`
+### <a name="common--security--pkexec"></a>`common::user_management::security::pkexec`
 
 Class for managing the CVE-2021-4034 polkit pkexec vulnerability
 
 #### Parameters
 
-The following parameters are available in the `common::security::pkexec` class:
+The following parameters are available in the `common::user_management::security::pkexec` class:
 
 * [`setuid`](#-common--security--pkexec--setuid)
 * [`noop_value`](#-common--security--pkexec--noop_value)
@@ -6396,13 +6396,13 @@ The list of params, which needs to be encrypted
 
 Default value: `['ssh_authorized_keys.*.key']`
 
-### <a name="common--system--authentication"></a>`common::system::authentication`
+### <a name="common--system--authentication"></a>`common::user_management::authentication`
 
 Class for managing system authentication
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication` class:
+The following parameters are available in the `common::user_management::authentication` class:
 
 * [`allowed_users`](#-common--system--authentication--allowed_users)
 * [`manage_pam`](#-common--system--authentication--manage_pam)
@@ -6492,13 +6492,13 @@ Data type: `Boolean`
 
 
 
-### <a name="common--system--authentication--kerberos"></a>`common::system::authentication::kerberos`
+### <a name="common--system--authentication--kerberos"></a>`common::user_management::authentication::kerberos`
 
 Class for managing Kerberos integration
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication::kerberos` class:
+The following parameters are available in the `common::user_management::authentication::kerberos` class:
 
 * [`manage`](#-common--system--authentication--kerberos--manage)
 * [`enable`](#-common--system--authentication--kerberos--enable)
@@ -6520,9 +6520,9 @@ The following parameters are available in the `common::system::authentication::k
 
 Data type: `Boolean`
 
-Whether to manage the Kerberos configuration. Defaults to the value of $common::system::authentication::manage_sssd.
+Whether to manage the Kerberos configuration. Defaults to the value of $common::user_management::authentication::manage_sssd.
 
-Default value: `$common::system::authentication::manage_sssd`
+Default value: `$common::user_management::authentication::manage_sssd`
 
 ##### <a name="-common--system--authentication--kerberos--enable"></a>`enable`
 
@@ -6636,13 +6636,13 @@ The list of params, which needs to be encrypted
 
 Default value: `['join_password']`
 
-### <a name="common--system--authentication--nis"></a>`common::system::authentication::nis`
+### <a name="common--system--authentication--nis"></a>`common::user_management::authentication::nis`
 
-Class for managing the NIS/ypclass common::system::authentication::nis
+Class for managing the NIS/ypclass common::user_management::authentication::nis
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication::nis` class:
+The following parameters are available in the `common::user_management::authentication::nis` class:
 
 * [`domain`](#-common--system--authentication--nis--domain)
 * [`servers`](#-common--system--authentication--nis--servers)
@@ -6672,13 +6672,13 @@ Boolean to enable NIS authentication. Defaults to false.
 
 Default value: `false`
 
-### <a name="common--system--authentication--pam"></a>`common::system::authentication::pam`
+### <a name="common--system--authentication--pam"></a>`common::user_management::authentication::pam`
 
-Class for managing common::system::authentication::pam
+Class for managing common::user_management::authentication::pam
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication::pam` class:
+The following parameters are available in the `common::user_management::authentication::pam` class:
 
 * [`auth_lines`](#-common--system--authentication--pam--auth_lines)
 * [`account_lines`](#-common--system--authentication--pam--account_lines)
@@ -6774,17 +6774,17 @@ Array of tuples containing integers (0-99) and strings representing SSHD session
 
 Data type: `Boolean`
 
-Boolean to manage PAM configuration. Defaults to $common::system::authentication::manage_pam.
+Boolean to manage PAM configuration. Defaults to $common::user_management::authentication::manage_pam.
 
-Default value: `$common::system::authentication::manage_pam`
+Default value: `$common::user_management::authentication::manage_pam`
 
 ##### <a name="-common--system--authentication--pam--allowed_users"></a>`allowed_users`
 
 Data type: `Eit_types::Common::Allowed_users`
 
-Allowed users list. Defaults to $common::system::authentication::allowed_users.
+Allowed users list. Defaults to $common::user_management::authentication::allowed_users.
 
-Default value: `$common::system::authentication::allowed_users`
+Default value: `$common::user_management::authentication::allowed_users`
 
 ##### <a name="-common--system--authentication--pam--allow_managed_users"></a>`allow_managed_users`
 
@@ -6810,7 +6810,7 @@ Array of Group, 0 or 1 elements, specifying allowed groups for nologin.
 
 Default value: `[]`
 
-### <a name="common--system--authentication--sssd"></a>`common::system::authentication::sssd`
+### <a name="common--system--authentication--sssd"></a>`common::user_management::authentication::sssd`
 
 Array of SSSD services to enable. Defaults to ['nss', 'pam', 'ssh', 'sudo'].
 
@@ -6818,7 +6818,7 @@ Available services for SSSD. Defaults to undef.
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication::sssd` class:
+The following parameters are available in the `common::user_management::authentication::sssd` class:
 
 * [`services`](#-common--system--authentication--sssd--services)
 * [`$_available_services`](#-common--system--authentication--sssd---_available_services)
@@ -6868,9 +6868,9 @@ Default value: `false`
 
 Data type: `Boolean`
 
-Boolean to determine if the class should manage SSSD. Defaults to value of $common::system::authentication::manage_sssd.
+Boolean to determine if the class should manage SSSD. Defaults to value of $common::user_management::authentication::manage_sssd.
 
-Default value: `$common::system::authentication::manage_sssd`
+Default value: `$common::user_management::authentication::manage_sssd`
 
 ##### <a name="-common--system--authentication--sssd--domains"></a>`domains`
 
@@ -6952,13 +6952,13 @@ Data type: `Array[Eit_types::Sssd::Service]`
 
 Default value: `undef`
 
-### <a name="common--system--authentication--sudo"></a>`common::system::authentication::sudo`
+### <a name="common--system--authentication--sudo"></a>`common::user_management::authentication::sudo`
 
 Class for managing the sudo settings in the common system authentication
 
 #### Parameters
 
-The following parameters are available in the `common::system::authentication::sudo` class:
+The following parameters are available in the `common::user_management::authentication::sudo` class:
 
 * [`manage`](#-common--system--authentication--sudo--manage)
 * [`purge`](#-common--system--authentication--sudo--purge)
@@ -6972,7 +6972,7 @@ Data type: `Boolean`
 
 Boolean - If true, will manage the authentication sudo settings. Defaults to true.
 
-Default value: `$common::system::authentication::manage_sudo`
+Default value: `$common::user_management::authentication::manage_sudo`
 
 ##### <a name="-common--system--authentication--sudo--purge"></a>`purge`
 
@@ -7238,13 +7238,13 @@ Default value:
   ]
 ```
 
-### <a name="common--system--jumphost"></a>`common::system::jumphost`
+### <a name="common--system--jumphost"></a>`common::user_management::jumphost`
 
 Class for setting up reverse proxy
 
 #### Parameters
 
-The following parameters are available in the `common::system::jumphost` class:
+The following parameters are available in the `common::user_management::jumphost` class:
 
 * [`configs`](#-common--system--jumphost--configs)
 * [`enable`](#-common--system--jumphost--enable)
@@ -7336,13 +7336,13 @@ The ulimits configuration. Defaults to an empty hash.
 
 Default value: `{}`
 
-### <a name="common--system--motd"></a>`common::system::motd`
+### <a name="common--system--motd"></a>`common::user_management::motd`
 
 Enable or disable the MOTD. Defaults to true.
 
 #### Parameters
 
-The following parameters are available in the `common::system::motd` class:
+The following parameters are available in the `common::user_management::motd` class:
 
 * [`enable`](#-common--system--motd--enable)
 * [`header`](#-common--system--motd--header)
@@ -7752,13 +7752,13 @@ Enable setroubleshoot. Defaults to false.
 
 Default value: `false`
 
-### <a name="common--system--sshd"></a>`common::system::sshd`
+### <a name="common--system--sshd"></a>`common::user_management::sshd`
 
 Class for managing the common SSHD configuration
 
 #### Parameters
 
-The following parameters are available in the `common::system::sshd` class:
+The following parameters are available in the `common::user_management::sshd` class:
 
 * [`manage`](#-common--system--sshd--manage)
 * [`distribute_hostkeys`](#-common--system--sshd--distribute_hostkeys)

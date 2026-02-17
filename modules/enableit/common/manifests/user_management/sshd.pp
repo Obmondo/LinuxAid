@@ -26,7 +26,8 @@
 #
 # @param login_grace_time Login grace time in seconds. Defaults to 30.
 #
-# @param hostkeys Array of host key file paths. Defaults to ['/etc/ssh/ssh_host_ed25519_key', '/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key'].
+# @param hostkeys Array of host key file paths.
+# Defaults to ['/etc/ssh/ssh_host_ed25519_key', '/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_ecdsa_key'].
 #
 # @param log_level Logging level. Defaults to 'VERBOSE'.
 #
@@ -62,9 +63,9 @@
 #
 # @groups subsystems subsystems, permit_user_rc
 #
-class common::system::sshd (
+class common::user_management::sshd (
   Boolean                                $manage                  = false,
-  Variant[Boolean, Enum['no-noop']]     $distribute_hostkeys     = false,
+  Variant[Boolean, Enum['no-noop']]      $distribute_hostkeys     = false,
   Eit_types::Package::Version::Installed $version                 = 'latest',
   Array[Stdlib::Port]                    $ports                   = [22],
   Array[Eit_types::IPPort]               $listenaddresses         = [],

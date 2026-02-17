@@ -19,9 +19,9 @@ common::full_host_management: false
 
 common::repo::manage: false
 
-common::system::authentication::sudo::manage: false
+common::user_management::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
-common::system::motd::enable: false
+common::user_management::motd::enable: false
 
 common::setup::obmondo_admin::manage: false
 

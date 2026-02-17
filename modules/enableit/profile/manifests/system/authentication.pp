@@ -1,12 +1,12 @@
 #
 class profile::system::authentication (
-  Eit_types::Common::Allowed_users $allowed_users                = $::common::system::authentication::allowed_users,
-  Boolean                          $allow_managed_users          = $::common::system::authentication::allow_managed_users,
-  Boolean                          $manage_pam                   = $::common::system::authentication::manage_pam,
-  Boolean                          $ignore_expired_root_password = $::common::system::authentication::ignore_expired_root_password,
-  Boolean                          $purge_ubuntu_user            = $::common::system::authentication::purge_ubuntu_user,
-  Boolean                          $purge_users                  = $::common::system::authentication::purge_users,
-  Array[Eit_types::User]           $protected_users              = $::common::system::authentication::protected_users,
+  Eit_types::Common::Allowed_users $allowed_users                = $::common::user_management::authentication::allowed_users,
+  Boolean                          $allow_managed_users          = $::common::user_management::authentication::allow_managed_users,
+  Boolean                          $manage_pam                   = $::common::user_management::authentication::manage_pam,
+  Boolean                          $ignore_expired_root_password = $::common::user_management::authentication::ignore_expired_root_password,
+  Boolean                          $purge_ubuntu_user            = $::common::user_management::authentication::purge_ubuntu_user,
+  Boolean                          $purge_users                  = $::common::user_management::authentication::purge_users,
+  Array[Eit_types::User]           $protected_users              = $::common::user_management::authentication::protected_users,
 ) {
 
   if $ignore_expired_root_password {

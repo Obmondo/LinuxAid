@@ -6,7 +6,7 @@
 #
 # @param enable Boolean to enable or disable SSSD. Defaults to false.
 #
-# @param manage Boolean to determine if the class should manage SSSD. Defaults to value of $common::system::authentication::manage_sssd.
+# @param manage Boolean to determine if the class should manage SSSD. Defaults to value of $common::user_management::authentication::manage_sssd.
 #
 # @param domains SSSD domain configurations. Defaults to empty hash.
 #
@@ -25,7 +25,7 @@
 # @param noop_value Optional boolean for no-op mode. Defaults to undef.
 #
 # @param required_packages List of required packages for SSSD. Defaults to ['realmd', 'samba-common-tools', 'fprintd-pam'].
-class common::system::authentication::sssd (
+class common::user_management::authentication::sssd (
   Array[Eit_types::Sssd::Service] $services = [
     'nss',
     'pam',
@@ -34,7 +34,7 @@ class common::system::authentication::sssd (
   ],
   Array[Eit_types::Sssd::Service]             $_available_services   = undef,
   Boolean                                     $enable                = false,
-  Boolean                                     $manage                = $common::system::authentication::manage_sssd,
+  Boolean                                     $manage                = $common::user_management::authentication::manage_sssd,
   Eit_types::Sssd::Domains                    $domains               = {},
   Optional[Eit_types::Domain]                 $default_domain_suffix = undef,
   Optional[Eit_types::Sssd::Debug_Level]      $debug_level           = '0x0620',

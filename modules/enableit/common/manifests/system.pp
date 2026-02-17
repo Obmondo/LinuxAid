@@ -271,7 +271,7 @@ class common::system (
     include $subclass
   }
 
-  unless lookup('common::system::jumphost::configs', Hash, undef, {}).empty {
-    include common::system::jumphost
+  unless lookup('common::user_management::jumphost::configs', Hash, undef, {}).empty {
+    include common::user_management::jumphost
   }
 }

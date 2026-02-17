@@ -4,8 +4,8 @@
 define profile::system::security::selinux::module (
   Eit_types::Noop_Value $noop_value = undef,
 ) {
-  if lookup('common::system::security::selinux::enable', Boolean, undef, false) {
-    include common::system::security::selinux
+  if lookup('common::user_management::security::selinux::enable', Boolean, undef, false) {
+    include common::user_management::security::selinux
 
     if $noop_value == false {
       Exec {

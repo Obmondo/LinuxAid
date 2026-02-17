@@ -1,4 +1,4 @@
-# @summary Class for managing common::system::authentication::pam
+# @summary Class for managing common::user_management::authentication::pam
 #
 # @param auth_lines Array of tuples containing integers (0-99) and strings representing authentication lines.
 #
@@ -24,9 +24,9 @@
 #
 # @param sshd_session_lines Array of tuples containing integers (0-99) and strings representing SSHD session lines.
 #
-# @param manage Boolean to manage PAM configuration. Defaults to $common::system::authentication::manage_pam.
+# @param manage Boolean to manage PAM configuration. Defaults to $common::user_management::authentication::manage_pam.
 #
-# @param allowed_users Allowed users list. Defaults to $common::system::authentication::allowed_users.
+# @param allowed_users Allowed users list. Defaults to $common::user_management::authentication::allowed_users.
 #
 # @param allow_managed_users Boolean to allow managed users. Defaults to true.
 #
@@ -34,7 +34,7 @@
 #
 # @param nologin_allowed_group Array of Group, 0 or 1 elements, specifying allowed groups for nologin.
 #
-class common::system::authentication::pam (
+class common::user_management::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $auth_lines,
   Array[Tuple[Integer[0,99], String]] $account_lines,
   Array[Tuple[Integer[0,99], String]] $password_lines,
@@ -48,8 +48,8 @@ class common::system::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $sshd_password_lines,
   Array[Tuple[Integer[0,99], String]] $sshd_session_lines,
 
-  Boolean                             $manage                = $common::system::authentication::manage_pam,
-  Eit_types::Common::Allowed_users    $allowed_users         = $common::system::authentication::allowed_users,
+  Boolean                             $manage                = $common::user_management::authentication::manage_pam,
+  Eit_types::Common::Allowed_users    $allowed_users         = $common::user_management::authentication::allowed_users,
   Boolean                             $allow_managed_users   = true,
   Boolean                             $manage_pwquality      = false,
   Array[Eit_types::Group, 0, 1]       $nologin_allowed_group = [],

@@ -1,7 +1,7 @@
 ---
 common::network::firewall::enable: false
 
-common::system::authentication::sssd::_available_services:
+common::user_management::authentication::sssd::_available_services:
   - 'autofs'
   - 'ifp'
   - 'nss'

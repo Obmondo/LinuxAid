@@ -3,9 +3,9 @@ common::mail::maildrop_perms: 'o=rwx,g=wx'
 
 common::logging::log_dir_group: 'root'
 
-common::system::security::selinux::enable: true
+common::user_management::security::selinux::enable: true
 
-common::system::sshd::subsystems:
+common::user_management::sshd::subsystems:
   sftp:
     '/usr/libexec/openssh/sftp-server -f AUTHPRIV -l INFO'
 
@@ -16,7 +16,7 @@ common::network::ipaddress_provider: 'yum'
 common::software::walinuxagent::__linux_azure_package: 'WALinuxAgent'
 common::software::walinuxagent::__linux_azure_service: 'waagent'
 
-common::system::authentication::pam::auth_lines:
+common::user_management::authentication::pam::auth_lines:
   - - 10
     - 'required      pam_env.so'
   - - 20
@@ -35,7 +35,7 @@ common::system::authentication::pam::auth_lines:
     - 'required      pam_deny.so'
 
 
-common::system::authentication::pam::account_lines:
+common::user_management::authentication::pam::account_lines:
   - - 10
     - 'required      pam_unix.so'
   - - 20
@@ -47,7 +47,7 @@ common::system::authentication::pam::account_lines:
   - - 99
     - 'required      pam_permit.so'
 
-common::system::authentication::pam::password_lines:
+common::user_management::authentication::pam::password_lines:
   - - 10
     - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
   - - 20
@@ -58,7 +58,7 @@ common::system::authentication::pam::password_lines:
     - 'required      pam_deny.so'
 
 
-common::system::authentication::pam::session_lines:
+common::user_management::authentication::pam::session_lines:
   - - 10
     - 'optional      pam_keyinit.so revoke'
   - - 20
@@ -74,7 +74,7 @@ common::system::authentication::pam::session_lines:
   - - 99
     - 'optional      pam_sss.so'
 
-common::system::authentication::pam::password_auth_lines:
+common::user_management::authentication::pam::password_auth_lines:
   - - 10
     - 'required      pam_env.so'
   - - 20
@@ -92,13 +92,13 @@ common::system::authentication::pam::password_auth_lines:
   - - 99
     - 'required      pam_deny.so'
 
-common::system::authentication::pam::sshd_auth_lines:
+common::user_management::authentication::pam::sshd_auth_lines:
   - - 10
     - 'required      pam_sepermit.so'
   - - 99
     - 'include       password-auth'
 
-common::system::authentication::pam::sshd_account_lines:
+common::user_management::authentication::pam::sshd_account_lines:
   - - 10
     - 'required      pam_access.so listsep=,'
   - - 30
@@ -106,11 +106,11 @@ common::system::authentication::pam::sshd_account_lines:
   - - 99
     - 'include       password-auth'
 
-common::system::authentication::pam::sshd_password_lines:
+common::user_management::authentication::pam::sshd_password_lines:
   - - 10
     - 'include       password-auth'
 
-common::system::authentication::pam::sshd_session_lines:
+common::user_management::authentication::pam::sshd_session_lines:
   - - 10
     - 'required      pam_selinux.so close'
   - - 20
@@ -122,7 +122,7 @@ common::system::authentication::pam::sshd_session_lines:
   - - 99
     - 'include       password-auth'
 
-common::system::authentication::pam::password_account_lines:
+common::user_management::authentication::pam::password_account_lines:
   - - 10
     - 'required      pam_unix.so'
   - - 20
@@ -134,7 +134,7 @@ common::system::authentication::pam::password_account_lines:
   - - 99
     - 'required      pam_permit.so'
 
-common::system::authentication::pam::password_password_lines:
+common::user_management::authentication::pam::password_password_lines:
   - - 20
     - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
   - - 30
@@ -144,7 +144,7 @@ common::system::authentication::pam::password_password_lines:
   - - 99
     - 'required      pam_deny.so'
 
-common::system::authentication::pam::password_session_lines:
+common::user_management::authentication::pam::password_session_lines:
   - - 10
     - 'optional      pam_keyinit.so revoke'
   - - 20

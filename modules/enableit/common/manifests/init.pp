@@ -87,13 +87,13 @@ class common (
       # but keeping, so we can enable or improve it later
       # contain ::common::mount
       contain common::services
-      contain common::security
+      contain common::user_management::security
       contain common::extras
       # Only manage mail if not using a role that provides it
       if $::obmondo_classes.grep('::mailcow').empty {
         contain common::mail
       }
-      $filepermissions.each |$path, $params| {
+      $::filepermissions.each |$path, $params| {
         $recurse = if $params[apply_recursively] { '-r' } else { '' }
         $mode = $params[mode]
         exec { "chmod ${recurse} ${mode} ${path}":

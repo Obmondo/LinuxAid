@@ -7677,7 +7677,7 @@ Data type: `Eit_types::Common::Allowed_users`
 
 
 
-Default value: `$::common::system::authentication::allowed_users`
+Default value: `$::common::user_management::authentication::allowed_users`
 
 ##### <a name="-profile--system--authentication--allow_managed_users"></a>`allow_managed_users`
 
@@ -7685,7 +7685,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::allow_managed_users`
+Default value: `$::common::user_management::authentication::allow_managed_users`
 
 ##### <a name="-profile--system--authentication--manage_pam"></a>`manage_pam`
 
@@ -7693,7 +7693,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::manage_pam`
+Default value: `$::common::user_management::authentication::manage_pam`
 
 ##### <a name="-profile--system--authentication--ignore_expired_root_password"></a>`ignore_expired_root_password`
 
@@ -7701,7 +7701,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::ignore_expired_root_password`
+Default value: `$::common::user_management::authentication::ignore_expired_root_password`
 
 ##### <a name="-profile--system--authentication--purge_ubuntu_user"></a>`purge_ubuntu_user`
 
@@ -7709,7 +7709,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::purge_ubuntu_user`
+Default value: `$::common::user_management::authentication::purge_ubuntu_user`
 
 ##### <a name="-profile--system--authentication--purge_users"></a>`purge_users`
 
@@ -7717,7 +7717,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::purge_users`
+Default value: `$::common::user_management::authentication::purge_users`
 
 ##### <a name="-profile--system--authentication--protected_users"></a>`protected_users`
 
@@ -7725,7 +7725,7 @@ Data type: `Array[Eit_types::User]`
 
 
 
-Default value: `$::common::system::authentication::protected_users`
+Default value: `$::common::user_management::authentication::protected_users`
 
 ### <a name="profile--system--authentication--kerberos"></a>`profile::system::authentication::kerberos`
 
@@ -7755,7 +7755,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::enable`
+Default value: `$common::user_management::authentication::kerberos::enable`
 
 ##### <a name="-profile--system--authentication--kerberos--base_dn"></a>`base_dn`
 
@@ -7763,7 +7763,7 @@ Data type: `Optional[String]`
 
 
 
-Default value: `$common::system::authentication::kerberos::base_dn`
+Default value: `$common::user_management::authentication::kerberos::base_dn`
 
 ##### <a name="-profile--system--authentication--kerberos--ou"></a>`ou`
 
@@ -7771,7 +7771,7 @@ Data type: `Optional[String]`
 
 
 
-Default value: `$common::system::authentication::kerberos::ou`
+Default value: `$common::user_management::authentication::kerberos::ou`
 
 ##### <a name="-profile--system--authentication--kerberos--default_realm"></a>`default_realm`
 
@@ -7779,7 +7779,7 @@ Data type: `Eit_types::Domain`
 
 
 
-Default value: `$common::system::authentication::kerberos::default_realm`
+Default value: `$common::user_management::authentication::kerberos::default_realm`
 
 ##### <a name="-profile--system--authentication--kerberos--join"></a>`join`
 
@@ -7787,7 +7787,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::join`
+Default value: `$common::user_management::authentication::kerberos::join`
 
 ##### <a name="-profile--system--authentication--kerberos--appdefaults"></a>`appdefaults`
 
@@ -7795,7 +7795,7 @@ Data type: `Optional[Hash]`
 
 
 
-Default value: `$common::system::authentication::kerberos::appdefaults`
+Default value: `$common::user_management::authentication::kerberos::appdefaults`
 
 ##### <a name="-profile--system--authentication--kerberos--join_password"></a>`join_password`
 
@@ -7803,7 +7803,7 @@ Data type: `Optional[Eit_types::Password]`
 
 
 
-Default value: `$common::system::authentication::kerberos::join_password`
+Default value: `$common::user_management::authentication::kerberos::join_password`
 
 ##### <a name="-profile--system--authentication--kerberos--join_user"></a>`join_user`
 
@@ -7811,7 +7811,7 @@ Data type: `Optional[Eit_types::User]`
 
 
 
-Default value: `$common::system::authentication::kerberos::join_user`
+Default value: `$common::user_management::authentication::kerberos::join_user`
 
 ##### <a name="-profile--system--authentication--kerberos--install_client"></a>`install_client`
 
@@ -7819,7 +7819,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::install_client`
+Default value: `$common::user_management::authentication::kerberos::install_client`
 
 ##### <a name="-profile--system--authentication--kerberos--ldaps"></a>`ldaps`
 
@@ -7827,7 +7827,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::ldaps`
+Default value: `$common::user_management::authentication::kerberos::ldaps`
 
 ##### <a name="-profile--system--authentication--kerberos--noop_value"></a>`noop_value`
 
@@ -7835,7 +7835,7 @@ Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::system::authentication::kerberos::noop_value`
+Default value: `$common::user_management::authentication::kerberos::noop_value`
 
 ##### <a name="-profile--system--authentication--kerberos--cacert_path"></a>`cacert_path`
 
@@ -7843,7 +7843,7 @@ Data type: `Optional[Stdlib::Unixpath]`
 
 
 
-Default value: `$common::system::authentication::kerberos::cacert_path`
+Default value: `$common::user_management::authentication::kerberos::cacert_path`
 
 ##### <a name="-profile--system--authentication--kerberos--realms"></a>`realms`
 
@@ -7851,7 +7851,7 @@ Data type: `Eit_types::Common::System::Authentication::Kerberos::Realms`
 
 
 
-Default value: `$common::system::authentication::kerberos::realms`
+Default value: `$common::user_management::authentication::kerberos::realms`
 
 ### <a name="profile--system--authentication--ldap_auth_daemon"></a>`profile::system::authentication::ldap_auth_daemon`
 
@@ -7907,7 +7907,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::nis::enable`
+Default value: `$common::user_management::authentication::nis::enable`
 
 ##### <a name="-profile--system--authentication--nis--domain"></a>`domain`
 
@@ -7915,7 +7915,7 @@ Data type: `Variant[Eit_types::SimpleString, Stdlib::Host]`
 
 
 
-Default value: `$common::system::authentication::nis::domain`
+Default value: `$common::user_management::authentication::nis::domain`
 
 ##### <a name="-profile--system--authentication--nis--servers"></a>`servers`
 
@@ -7923,7 +7923,7 @@ Data type: `Array[Stdlib::IP::Address]`
 
 
 
-Default value: `$common::system::authentication::nis::servers`
+Default value: `$common::user_management::authentication::nis::servers`
 
 ### <a name="profile--system--authentication--pam"></a>`profile::system::authentication::pam`
 
@@ -7957,7 +7957,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::manage`
+Default value: `$common::user_management::authentication::pam::manage`
 
 ##### <a name="-profile--system--authentication--pam--allowed_users"></a>`allowed_users`
 
@@ -7965,7 +7965,7 @@ Data type: `Eit_types::Common::Allowed_users`
 
 
 
-Default value: `$common::system::authentication::pam::allowed_users`
+Default value: `$common::user_management::authentication::pam::allowed_users`
 
 ##### <a name="-profile--system--authentication--pam--allow_managed_users"></a>`allow_managed_users`
 
@@ -7973,7 +7973,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::allow_managed_users`
+Default value: `$common::user_management::authentication::pam::allow_managed_users`
 
 ##### <a name="-profile--system--authentication--pam--manage_pwquality"></a>`manage_pwquality`
 
@@ -7981,7 +7981,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::manage_pwquality`
+Default value: `$common::user_management::authentication::pam::manage_pwquality`
 
 ##### <a name="-profile--system--authentication--pam--nologin_allowed_group"></a>`nologin_allowed_group`
 
@@ -7989,7 +7989,7 @@ Data type: `Array[Eit_types::Group, 0, 1]`
 
 
 
-Default value: `$common::system::authentication::pam::nologin_allowed_group`
+Default value: `$common::user_management::authentication::pam::nologin_allowed_group`
 
 ##### <a name="-profile--system--authentication--pam--auth_lines"></a>`auth_lines`
 
@@ -7997,7 +7997,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::auth_lines`
+Default value: `$common::user_management::authentication::pam::auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--account_lines"></a>`account_lines`
 
@@ -8005,7 +8005,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::account_lines`
+Default value: `$common::user_management::authentication::pam::account_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_lines"></a>`password_lines`
 
@@ -8013,7 +8013,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_lines`
+Default value: `$common::user_management::authentication::pam::password_lines`
 
 ##### <a name="-profile--system--authentication--pam--session_lines"></a>`session_lines`
 
@@ -8021,7 +8021,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::session_lines`
+Default value: `$common::user_management::authentication::pam::session_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_auth_lines"></a>`password_auth_lines`
 
@@ -8029,7 +8029,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_auth_lines`
+Default value: `$common::user_management::authentication::pam::password_auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_account_lines"></a>`password_account_lines`
 
@@ -8037,7 +8037,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_account_lines`
+Default value: `$common::user_management::authentication::pam::password_account_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_password_lines"></a>`password_password_lines`
 
@@ -8045,7 +8045,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_password_lines`
+Default value: `$common::user_management::authentication::pam::password_password_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_session_lines"></a>`password_session_lines`
 
@@ -8053,7 +8053,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_session_lines`
+Default value: `$common::user_management::authentication::pam::password_session_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_auth_lines"></a>`sshd_auth_lines`
 
@@ -8061,7 +8061,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_auth_lines`
+Default value: `$common::user_management::authentication::pam::sshd_auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_account_lines"></a>`sshd_account_lines`
 
@@ -8069,7 +8069,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_account_lines`
+Default value: `$common::user_management::authentication::pam::sshd_account_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_password_lines"></a>`sshd_password_lines`
 
@@ -8077,7 +8077,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_password_lines`
+Default value: `$common::user_management::authentication::pam::sshd_password_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_session_lines"></a>`sshd_session_lines`
 
@@ -8085,7 +8085,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_session_lines`
+Default value: `$common::user_management::authentication::pam::sshd_session_lines`
 
 ### <a name="profile--system--authentication--sssd"></a>`profile::system::authentication::sssd`
 
@@ -8117,7 +8117,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sssd::enable`
+Default value: `$common::user_management::authentication::sssd::enable`
 
 ##### <a name="-profile--system--authentication--sssd--extra_packages"></a>`extra_packages`
 
@@ -8131,7 +8131,7 @@ Data type: `Array[Eit_types::Sssd::Service]`
 
 
 
-Default value: `$common::system::authentication::sssd::services`
+Default value: `$common::user_management::authentication::sssd::services`
 
 ##### <a name="-profile--system--authentication--sssd--_available_services"></a>`_available_services`
 
@@ -8139,7 +8139,7 @@ Data type: `Array[Eit_types::Sssd::Service]`
 
 
 
-Default value: `$common::system::authentication::sssd::_available_services`
+Default value: `$common::user_management::authentication::sssd::_available_services`
 
 ##### <a name="-profile--system--authentication--sssd--domains"></a>`domains`
 
@@ -8147,7 +8147,7 @@ Data type: `Eit_types::Sssd::Domains`
 
 
 
-Default value: `$common::system::authentication::sssd::domains`
+Default value: `$common::user_management::authentication::sssd::domains`
 
 ##### <a name="-profile--system--authentication--sssd--default_domain_suffix"></a>`default_domain_suffix`
 
@@ -8155,7 +8155,7 @@ Data type: `Optional[Eit_types::Domain]`
 
 
 
-Default value: `$common::system::authentication::sssd::default_domain_suffix`
+Default value: `$common::user_management::authentication::sssd::default_domain_suffix`
 
 ##### <a name="-profile--system--authentication--sssd--debug_level"></a>`debug_level`
 
@@ -8163,7 +8163,7 @@ Data type: `Optional[Eit_types::Sssd::Debug_Level]`
 
 
 
-Default value: `$common::system::authentication::sssd::debug_level`
+Default value: `$common::user_management::authentication::sssd::debug_level`
 
 ##### <a name="-profile--system--authentication--sssd--manage_oddjobd"></a>`manage_oddjobd`
 
@@ -8171,7 +8171,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sssd::manage_oddjobd`
+Default value: `$common::user_management::authentication::sssd::manage_oddjobd`
 
 ##### <a name="-profile--system--authentication--sssd--full_name_format"></a>`full_name_format`
 
@@ -8179,7 +8179,7 @@ Data type: `Eit_types::Sssd::Full_name_format`
 
 
 
-Default value: `$common::system::authentication::sssd::full_name_format`
+Default value: `$common::user_management::authentication::sssd::full_name_format`
 
 ##### <a name="-profile--system--authentication--sssd--override_homedir"></a>`override_homedir`
 
@@ -8187,7 +8187,7 @@ Data type: `Optional[Eit_types::Sssd::Override_homedir]`
 
 
 
-Default value: `$common::system::authentication::sssd::override_homedir`
+Default value: `$common::user_management::authentication::sssd::override_homedir`
 
 ##### <a name="-profile--system--authentication--sssd--override_config"></a>`override_config`
 
@@ -8195,7 +8195,7 @@ Data type: `Hash`
 
 
 
-Default value: `$common::system::authentication::sssd::override_config`
+Default value: `$common::user_management::authentication::sssd::override_config`
 
 ##### <a name="-profile--system--authentication--sssd--noop_value"></a>`noop_value`
 
@@ -8203,7 +8203,7 @@ Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::system::authentication::sssd::noop_value`
+Default value: `$common::user_management::authentication::sssd::noop_value`
 
 ##### <a name="-profile--system--authentication--sssd--required_packages"></a>`required_packages`
 
@@ -8211,7 +8211,7 @@ Data type: `Array`
 
 
 
-Default value: `$common::system::authentication::sssd::required_packages`
+Default value: `$common::user_management::authentication::sssd::required_packages`
 
 ### <a name="profile--system--cloud_init"></a>`profile::system::cloud_init`
 
@@ -8607,7 +8607,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::manage`
+Default value: `$common::user_management::sshd::manage`
 
 ##### <a name="-profile--system--sshd--distribute_hostkeys"></a>`distribute_hostkeys`
 
@@ -8615,7 +8615,7 @@ Data type: `Variant[Boolean, Enum['no-noop']]`
 
 
 
-Default value: `$common::system::sshd::distribute_hostkeys`
+Default value: `$common::user_management::sshd::distribute_hostkeys`
 
 ##### <a name="-profile--system--sshd--version"></a>`version`
 
@@ -8623,7 +8623,7 @@ Data type: `Eit_types::Package::Version::Installed`
 
 
 
-Default value: `$common::system::sshd::version`
+Default value: `$common::user_management::sshd::version`
 
 ##### <a name="-profile--system--sshd--ports"></a>`ports`
 
@@ -8631,7 +8631,7 @@ Data type: `Array[Stdlib::Port]`
 
 
 
-Default value: `$common::system::sshd::ports`
+Default value: `$common::user_management::sshd::ports`
 
 ##### <a name="-profile--system--sshd--listenaddresses"></a>`listenaddresses`
 
@@ -8639,7 +8639,7 @@ Data type: `Array[Eit_types::IPPort]`
 
 
 
-Default value: `$common::system::sshd::listenaddresses`
+Default value: `$common::user_management::sshd::listenaddresses`
 
 ##### <a name="-profile--system--sshd--managed_users_only"></a>`managed_users_only`
 
@@ -8647,7 +8647,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::managed_users_only`
+Default value: `$common::user_management::sshd::managed_users_only`
 
 ##### <a name="-profile--system--sshd--compression"></a>`compression`
 
@@ -8655,7 +8655,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::compression`
+Default value: `$common::user_management::sshd::compression`
 
 ##### <a name="-profile--system--sshd--password_authentication"></a>`password_authentication`
 
@@ -8663,7 +8663,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::password_authentication`
+Default value: `$common::user_management::sshd::password_authentication`
 
 ##### <a name="-profile--system--sshd--tcp_forwarding"></a>`tcp_forwarding`
 
@@ -8671,7 +8671,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::tcp_forwarding`
+Default value: `$common::user_management::sshd::tcp_forwarding`
 
 ##### <a name="-profile--system--sshd--permit_user_rc"></a>`permit_user_rc`
 
@@ -8679,7 +8679,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::permit_user_rc`
+Default value: `$common::user_management::sshd::permit_user_rc`
 
 ##### <a name="-profile--system--sshd--max_auth_tries"></a>`max_auth_tries`
 
@@ -8687,7 +8687,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::max_auth_tries`
+Default value: `$common::user_management::sshd::max_auth_tries`
 
 ##### <a name="-profile--system--sshd--max_sessions"></a>`max_sessions`
 
@@ -8695,7 +8695,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::max_sessions`
+Default value: `$common::user_management::sshd::max_sessions`
 
 ##### <a name="-profile--system--sshd--login_grace_time"></a>`login_grace_time`
 
@@ -8703,7 +8703,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::login_grace_time`
+Default value: `$common::user_management::sshd::login_grace_time`
 
 ##### <a name="-profile--system--sshd--hostkeys"></a>`hostkeys`
 
@@ -8711,7 +8711,7 @@ Data type: `Array[Stdlib::Absolutepath]`
 
 
 
-Default value: `$common::system::sshd::hostkeys`
+Default value: `$common::user_management::sshd::hostkeys`
 
 ##### <a name="-profile--system--sshd--log_level"></a>`log_level`
 
@@ -8733,7 +8733,7 @@ Enum[
 
 
 
-Default value: `$common::system::sshd::log_level`
+Default value: `$common::user_management::sshd::log_level`
 
 ##### <a name="-profile--system--sshd--kexalgorithms"></a>`kexalgorithms`
 
@@ -8741,7 +8741,7 @@ Data type: `Array[Eit_types::Ssh::Kexalgorithms]`
 
 
 
-Default value: `$common::system::sshd::kexalgorithms`
+Default value: `$common::user_management::sshd::kexalgorithms`
 
 ##### <a name="-profile--system--sshd--ciphers"></a>`ciphers`
 
@@ -8749,7 +8749,7 @@ Data type: `Array[Eit_types::Ssh::Ciphers]`
 
 
 
-Default value: `$common::system::sshd::ciphers`
+Default value: `$common::user_management::sshd::ciphers`
 
 ##### <a name="-profile--system--sshd--macs"></a>`macs`
 
@@ -8757,7 +8757,7 @@ Data type: `Array[Eit_types::Ssh::Macs]`
 
 
 
-Default value: `$common::system::sshd::macs`
+Default value: `$common::user_management::sshd::macs`
 
 ##### <a name="-profile--system--sshd--subsystems"></a>`subsystems`
 
@@ -8765,7 +8765,7 @@ Data type: `Hash[Eit_types::SimpleString, String]`
 
 
 
-Default value: `$common::system::sshd::subsystems`
+Default value: `$common::user_management::sshd::subsystems`
 
 ##### <a name="-profile--system--sshd--permit_root_login"></a>`permit_root_login`
 
@@ -8780,7 +8780,7 @@ Variant[
 
 
 
-Default value: `$common::system::sshd::permit_root_login`
+Default value: `$common::user_management::sshd::permit_root_login`
 
 ##### <a name="-profile--system--sshd--x11_forwarding"></a>`x11_forwarding`
 
@@ -8788,7 +8788,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::x11_forwarding`
+Default value: `$common::user_management::sshd::x11_forwarding`
 
 ##### <a name="-profile--system--sshd--x11_use_localhost"></a>`x11_use_localhost`
 
@@ -8796,7 +8796,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::x11_use_localhost`
+Default value: `$common::user_management::sshd::x11_use_localhost`
 
 ##### <a name="-profile--system--sshd--client_options"></a>`client_options`
 
@@ -8804,7 +8804,7 @@ Data type: `Hash`
 
 
 
-Default value: `$common::system::sshd::client_options`
+Default value: `$common::user_management::sshd::client_options`
 
 ##### <a name="-profile--system--sshd--accept_env"></a>`accept_env`
 
@@ -8812,7 +8812,7 @@ Data type: `Array[String]`
 
 
 
-Default value: `$common::system::sshd::accept_env`
+Default value: `$common::user_management::sshd::accept_env`
 
 ##### <a name="-profile--system--sshd--match"></a>`match`
 
@@ -8820,7 +8820,7 @@ Data type: `Hash[String, Hash[String, Any]]`
 
 
 
-Default value: `$common::system::sshd::match`
+Default value: `$common::user_management::sshd::match`
 
 ### <a name="profile--system--sudoers"></a>`profile::system::sudoers`
 
@@ -8840,7 +8840,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sudo::purge`
+Default value: `$common::user_management::authentication::sudo::purge`
 
 ##### <a name="-profile--system--sudoers--sudoers"></a>`sudoers`
 
@@ -8848,7 +8848,7 @@ Data type: `Eit_types::Sudoers`
 
 
 
-Default value: `$common::system::authentication::sudo::sudoers`
+Default value: `$common::user_management::authentication::sudo::sudoers`
 
 ##### <a name="-profile--system--sudoers--sudoers_d_dir"></a>`sudoers_d_dir`
 
@@ -8856,7 +8856,7 @@ Data type: `Stdlib::Absolutepath`
 
 
 
-Default value: `$common::system::authentication::sudo::sudoers_d_dir`
+Default value: `$common::user_management::authentication::sudo::sudoers_d_dir`
 
 ### <a name="profile--system--systemd"></a>`profile::system::systemd`
 

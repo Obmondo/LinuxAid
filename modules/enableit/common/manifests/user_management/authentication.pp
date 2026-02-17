@@ -28,7 +28,7 @@
 #
 # @groups purge purge_ubuntu_user, purge_users, ignore_expired_root_password
 #
-class common::system::authentication (
+class common::user_management::authentication (
   Eit_types::Common::Allowed_users $allowed_users,
   Boolean                          $manage_pam,
   Boolean                          $manage_sssd,
@@ -44,18 +44,18 @@ class common::system::authentication (
   if $manage {
     if $manage_sssd {
       confine($manage_sssd, !$manage_pam, 'if sssd is enabled, pam can\'t be set to false, please enable it')
-      include common::system::authentication::kerberos
-      include common::system::authentication::pam
-      include common::system::authentication::sssd
+      include common::user_management::authentication::kerberos
+      include common::user_management::authentication::pam
+      include common::user_management::authentication::sssd
     }
     if $manage_pam {
-      include common::system::authentication::pam
+      include common::user_management::authentication::pam
     }
     if $manage_nis {
-      include common::system::authentication::nis
+      include common::user_management::authentication::nis
     }
     if $manage_sudo {
-      include common::system::authentication::sudo
+      include common::user_management::authentication::sudo
     }
     if $purge_ubuntu_user or $purge_users or $ignore_expired_root_password {
       include profile::system::authentication

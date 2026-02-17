@@ -1,4 +1,4 @@
 ---
-common::system::authentication::allowed_users:
+common::user_management::authentication::allowed_users:
   'git':
     - 'ALL'

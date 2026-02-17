@@ -6,7 +6,7 @@
 #
 # @groups service configs, enable
 #
-class common::system::jumphost (
+class common::user_management::jumphost (
   Eit_types::Common::System::Jumphosts $configs,
   Boolean                              $enable = false,
 ) {

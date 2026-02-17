@@ -1,20 +1,20 @@
 #
 class profile::system::sshd (
-  Boolean                                $manage                  = $common::system::sshd::manage,
-  Variant[Boolean, Enum['no-noop']]      $distribute_hostkeys     = $common::system::sshd::distribute_hostkeys,
-  Eit_types::Package::Version::Installed $version                 = $common::system::sshd::version,
-  Array[Stdlib::Port]                    $ports                   = $common::system::sshd::ports,
-  Array[Eit_types::IPPort]               $listenaddresses         = $common::system::sshd::listenaddresses,
-  Boolean                                $managed_users_only      = $common::system::sshd::managed_users_only,
-  Boolean                                $compression             = $common::system::sshd::compression,
-  Boolean                                $password_authentication = $common::system::sshd::password_authentication,
-  Boolean                                $tcp_forwarding          = $common::system::sshd::tcp_forwarding,
-  Boolean                                $permit_user_rc          = $common::system::sshd::permit_user_rc,
-  Integer[0,default]                     $max_auth_tries          = $common::system::sshd::max_auth_tries,
-  Integer[0,default]                     $max_sessions            = $common::system::sshd::max_sessions,
-  Integer[0,default]                     $login_grace_time        = $common::system::sshd::login_grace_time,
+  Boolean                                $manage                  = $common::user_management::sshd::manage,
+  Variant[Boolean, Enum['no-noop']]      $distribute_hostkeys     = $common::user_management::sshd::distribute_hostkeys,
+  Eit_types::Package::Version::Installed $version                 = $common::user_management::sshd::version,
+  Array[Stdlib::Port]                    $ports                   = $common::user_management::sshd::ports,
+  Array[Eit_types::IPPort]               $listenaddresses         = $common::user_management::sshd::listenaddresses,
+  Boolean                                $managed_users_only      = $common::user_management::sshd::managed_users_only,
+  Boolean                                $compression             = $common::user_management::sshd::compression,
+  Boolean                                $password_authentication = $common::user_management::sshd::password_authentication,
+  Boolean                                $tcp_forwarding          = $common::user_management::sshd::tcp_forwarding,
+  Boolean                                $permit_user_rc          = $common::user_management::sshd::permit_user_rc,
+  Integer[0,default]                     $max_auth_tries          = $common::user_management::sshd::max_auth_tries,
+  Integer[0,default]                     $max_sessions            = $common::user_management::sshd::max_sessions,
+  Integer[0,default]                     $login_grace_time        = $common::user_management::sshd::login_grace_time,
 
-  Array[Stdlib::Absolutepath] $hostkeys                = $common::system::sshd::hostkeys,
+  Array[Stdlib::Absolutepath] $hostkeys                = $common::user_management::sshd::hostkeys,
   Enum[
     'QUIET',
     'FATAL',
@@ -25,26 +25,26 @@ class profile::system::sshd (
     'DEBUG1',
     'DEBUG2',
     'DEBUG3'
-  ] $log_level                                         = $common::system::sshd::log_level,
+  ] $log_level                                         = $common::user_management::sshd::log_level,
 
-  Array[Eit_types::Ssh::Kexalgorithms] $kexalgorithms  = $common::system::sshd::kexalgorithms,
-  Array[Eit_types::Ssh::Ciphers]       $ciphers        = $common::system::sshd::ciphers,
-  Array[Eit_types::Ssh::Macs]          $macs           = $common::system::sshd::macs,
+  Array[Eit_types::Ssh::Kexalgorithms] $kexalgorithms  = $common::user_management::sshd::kexalgorithms,
+  Array[Eit_types::Ssh::Ciphers]       $ciphers        = $common::user_management::sshd::ciphers,
+  Array[Eit_types::Ssh::Macs]          $macs           = $common::user_management::sshd::macs,
 
   Hash[Eit_types::SimpleString, String]
-  $subsystems                          = $common::system::sshd::subsystems,
+  $subsystems                          = $common::user_management::sshd::subsystems,
 
   Variant[
     Boolean,
     Enum['forced-commands-only', 'prohibit-password']
-  ] $permit_root_login                     = $common::system::sshd::permit_root_login,
+  ] $permit_root_login                     = $common::user_management::sshd::permit_root_login,
 
-  Boolean $x11_forwarding    = $common::system::sshd::x11_forwarding,
-  Boolean $x11_use_localhost = $common::system::sshd::x11_use_localhost,
-  Hash    $client_options    = $common::system::sshd::client_options,
+  Boolean $x11_forwarding    = $common::user_management::sshd::x11_forwarding,
+  Boolean $x11_use_localhost = $common::user_management::sshd::x11_use_localhost,
+  Hash    $client_options    = $common::user_management::sshd::client_options,
 
-  Array[String]                      $accept_env = $common::system::sshd::accept_env,
-  Hash[String, Hash[String, Any]] $match      = $common::system::sshd::match,
+  Array[String]                      $accept_env = $common::user_management::sshd::accept_env,
+  Hash[String, Hash[String, Any]] $match      = $common::user_management::sshd::match,
 ) {
 
   File { '/etc/ssh/sshd_config' :

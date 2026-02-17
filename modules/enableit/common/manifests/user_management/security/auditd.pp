@@ -6,10 +6,10 @@
 #
 # @groups configuration enable, root_audit_level
 #
-class common::security::auditd (
+class common::user_management::security::auditd (
   Boolean                               $enable           = false,
   Enum['basic', 'aggressive', 'insane'] $root_audit_level = 'aggressive',
-) inherits ::common::security {
+) inherits ::common::user_management::security {
 
   if $enable {
     class { 'auditd':

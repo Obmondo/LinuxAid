@@ -16,9 +16,9 @@ common::full_host_management: false
 
 common::system::repo::manage: false
 
-common::system::authentication::sudo::manage: false
+common::user_management::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
-common::system::motd::enable: false
+common::user_management::motd::enable: false
 
 common::system::openvox::package_name: "openvox"
 common::system::openvox::version: "8.24.1"

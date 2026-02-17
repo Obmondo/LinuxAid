@@ -11,9 +11,9 @@ common::system::package::default_packages:
 common::software::walinuxagent::__linux_azure_package: "walinuxagent"
 common::software::walinuxagent::__linux_azure_service: "walinuxagent"
 
-common::system::security::selinux::enable: false
+common::user_management::security::selinux::enable: false
 
-common::system::sshd::subsystems:
+common::user_management::sshd::subsystems:
   sftp: "/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO"
 
 common::network::ipaddress_package: "ruby-ipaddress"
@@ -56,9 +56,9 @@ common::system::dns::resolver: "systemd-resolved"
 common::system::hardware::__multipath_packages:
   - "multipath-tools"
 
-common::system::authentication::pam::manage_pwquality: true
+common::user_management::authentication::pam::manage_pwquality: true
 
-common::system::authentication::pam::auth_lines:
+common::user_management::authentication::pam::auth_lines:
   - - 10
     - "required      pam_env.so"
   - - 20
@@ -76,7 +76,7 @@ common::system::authentication::pam::auth_lines:
   - - 99
     - "required      pam_deny.so"
 
-common::system::authentication::pam::account_lines:
+common::user_management::authentication::pam::account_lines:
   - - 10
     - "required      pam_unix.so"
   - - 20
@@ -88,7 +88,7 @@ common::system::authentication::pam::account_lines:
   - - 99
     - "required      pam_permit.so"
 
-common::system::authentication::pam::password_lines:
+common::user_management::authentication::pam::password_lines:
   - - 10
     - "requisite     pam_pwquality.so try_first_pass retry=3 type="
   - - 20
@@ -98,7 +98,7 @@ common::system::authentication::pam::password_lines:
   - - 99
     - "required      pam_deny.so"
 
-common::system::authentication::pam::session_lines:
+common::user_management::authentication::pam::session_lines:
   - - 10
     - "optional      pam_keyinit.so revoke"
   - - 20
@@ -114,7 +114,7 @@ common::system::authentication::pam::session_lines:
   - - 99
     - "optional      pam_sss.so"
 
-common::system::authentication::pam::password_auth_lines:
+common::user_management::authentication::pam::password_auth_lines:
   - - 10
     - "required      pam_env.so"
   - - 20
@@ -132,11 +132,11 @@ common::system::authentication::pam::password_auth_lines:
   - - 99
     - "required      pam_deny.so"
 
-common::system::authentication::pam::sshd_auth_lines:
+common::user_management::authentication::pam::sshd_auth_lines:
   - - 10
     - "include       common-auth"
 
-common::system::authentication::pam::sshd_account_lines:
+common::user_management::authentication::pam::sshd_account_lines:
   - - 10
     - "required      pam_access.so listsep=,"
   - - 30
@@ -144,11 +144,11 @@ common::system::authentication::pam::sshd_account_lines:
   - - 99
     - "include       common-account"
 
-common::system::authentication::pam::sshd_password_lines:
+common::user_management::authentication::pam::sshd_password_lines:
   - - 10
     - "include       common-password"
 
-common::system::authentication::pam::sshd_session_lines:
+common::user_management::authentication::pam::sshd_session_lines:
   - - 10
     - "required      pam_loginuid.so"
   - - 20
@@ -156,7 +156,7 @@ common::system::authentication::pam::sshd_session_lines:
   - - 99
     - "include       common-session"
 
-common::system::authentication::pam::password_account_lines:
+common::user_management::authentication::pam::password_account_lines:
   - - 10
     - "required      pam_unix.so"
   - - 20
@@ -168,7 +168,7 @@ common::system::authentication::pam::password_account_lines:
   - - 99
     - "required      pam_permit.so"
 
-common::system::authentication::pam::password_password_lines:
+common::user_management::authentication::pam::password_password_lines:
   - - 20
     - "requisite     pam_pwquality.so try_first_pass retry=3 type="
   - - 30
@@ -178,7 +178,7 @@ common::system::authentication::pam::password_password_lines:
   - - 99
     - "required      pam_deny.so"
 
-common::system::authentication::pam::password_session_lines:
+common::user_management::authentication::pam::password_session_lines:
   - - 10
     - "optional      pam_keyinit.so revoke"
   - - 20

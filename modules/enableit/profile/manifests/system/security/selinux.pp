@@ -1,12 +1,12 @@
 #
 class profile::system::security::selinux (
-  Boolean            $enable                = $common::system::security::selinux::enable,
-  Boolean            $enforce               = $common::system::security::selinux::enforce,
-  Boolean            $enable_setroubleshoot = $common::system::security::selinux::enable_setroubleshoot,
-  Hash[String, Hash] $fcontext              = $common::system::security::selinux::fcontext,
+  Boolean            $enable                = $common::user_management::security::selinux::enable,
+  Boolean            $enforce               = $common::user_management::security::selinux::enforce,
+  Boolean            $enable_setroubleshoot = $common::user_management::security::selinux::enable_setroubleshoot,
+  Hash[String, Hash] $fcontext              = $common::user_management::security::selinux::fcontext,
 ) {
 
-  if !lookup('common::system::security::auditd::enable', Boolean, undef, false) {
+  if !lookup('common::user_management::security::auditd::enable', Boolean, undef, false) {
     contain ::auditd
   }
 

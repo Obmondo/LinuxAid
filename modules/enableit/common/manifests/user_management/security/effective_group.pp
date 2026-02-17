@@ -10,7 +10,7 @@
 #
 # @groups mappings group_mappings
 #
-class common::security::effective_group (
+class common::user_management::security::effective_group (
   Boolean                     $enable         = false,
   Hash[String, Array[String]] $group_mappings = {},
   Eit_types::Noop_Value       $noop_value     = undef,

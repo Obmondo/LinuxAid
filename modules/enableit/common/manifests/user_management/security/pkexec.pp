@@ -6,7 +6,7 @@
 #
 # @groups settings setuid, noop_value
 #
-class common::security::pkexec (
+class common::user_management::security::pkexec (
   Boolean               $setuid     = true,
   Eit_types::Noop_Value $noop_value = undef,
 ) {

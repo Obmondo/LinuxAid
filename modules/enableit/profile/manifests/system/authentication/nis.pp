@@ -1,8 +1,8 @@
 # NIS/yp
 class profile::system::authentication::nis (
-  Boolean                                        $enable  = $common::system::authentication::nis::enable,
-  Variant[Eit_types::SimpleString, Stdlib::Host] $domain  = $common::system::authentication::nis::domain,
-  Array[Stdlib::IP::Address]                     $servers = $common::system::authentication::nis::servers,
+  Boolean                                        $enable  = $common::user_management::authentication::nis::enable,
+  Variant[Eit_types::SimpleString, Stdlib::Host] $domain  = $common::user_management::authentication::nis::domain,
+  Array[Stdlib::IP::Address]                     $servers = $common::user_management::authentication::nis::servers,
 ) {
 
   if $enable {

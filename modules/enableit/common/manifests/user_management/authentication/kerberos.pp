@@ -1,6 +1,6 @@
 # @summary Class for managing Kerberos integration
 #
-# @param manage Whether to manage the Kerberos configuration. Defaults to the value of $common::system::authentication::manage_sssd.
+# @param manage Whether to manage the Kerberos configuration. Defaults to the value of $common::user_management::authentication::manage_sssd.
 #
 # @param enable Enable or disable Kerberos. Defaults to false.
 #
@@ -32,8 +32,8 @@
 #
 # @encrypt_params join_password.
 #
-class common::system::authentication::kerberos (
-  Boolean                       $manage         = $common::system::authentication::manage_sssd,
+class common::user_management::authentication::kerberos (
+  Boolean                       $manage         = $common::user_management::authentication::manage_sssd,
   Boolean                       $enable         = false,
   Optional[String]              $base_dn        = undef,
   Optional[String]              $ou             = undef,
