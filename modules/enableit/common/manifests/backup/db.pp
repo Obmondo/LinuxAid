@@ -14,10 +14,6 @@
 #
 # @param ignore_tables Array of table names to ignore during backup. Defaults to [].
 #
-# @param host Hostname for database. Defaults to 'localhost'.
-#
-# @param backup_method Backup method to use ('mysqldump', 'mysqlbackup', 'xtrabackup'). Defaults to 'mysqldump'.
-#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups authentication backup_user_password, backup_user.
@@ -26,7 +22,7 @@
 #
 # @groups retention backup_retention, ignore_tables.
 #
-# @groups schedule backup_hour, host, backup_method.
+# @groups schedule backup_hour.
 #
 # @groups general enable, encrypt_params.
 #

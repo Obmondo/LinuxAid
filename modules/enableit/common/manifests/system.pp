@@ -22,15 +22,21 @@
 #
 # @param locations Hash mapping location names to arrays of IP addresses or IP ranges for location detection. Defaults to {}.
 #
+# @param cron_jobs Hash of cron job configurations. Keys are job names, values are arrays of strings.
+#
+# @param publicips Optional array of public IP addresses. Defaults to undef.
+#
+# @param disabled_services Array of service names to disable. Defaults to an empty array.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups service_config services, service_oneshot
 #
 # @groups user_management users, user_groups, ssh_authorized_keys, purge_root_ssh_keys
 #
-# @groups system_config remove_fstrim_cron, disable_ipv6
+# @groups system_config remove_fstrim_cron, disable_ipv6, cron_jobs, disabled_services
 #
-# @groups network_config locations
+# @groups network_config locations, publicips
 #
 # @groups file_management files
 #

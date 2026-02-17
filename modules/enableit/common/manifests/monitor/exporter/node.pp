@@ -64,6 +64,24 @@
 #
 # @param noop_value Boolean value for noop mode. Defaults to false.
 #
+# @param manage_lsof Whether to manage the lsof exporter. Defaults to $enable.
+#
+# @param manage_smartmon Whether to manage the smartmon exporter. Defaults to $enable.
+#
+# @param manage_ssacli Whether to manage the ssacli exporter. Defaults to $enable.
+#
+# @param manage_topprocesses Whether to manage the topprocesses exporter. Defaults to $enable.
+#
+# @groups settings enable, noop_value, version
+#
+# @groups network listen_address, host
+#
+# @groups collectors buddyinfo, cgroups, drbd, drm, ethtool, interrupts, ksmd, lnstat, logind, meminfo_numa, mountstats, network_route, ntp, perf, processes, qdisc, runit, slabinfo, supervisord, sysctl, systemd, tcpstat, thermal_zone, wifi, zoneinfo
+#
+# @groups directories textfile_directory, lib_directory
+#
+# @groups sub_exporters manage_lsof, manage_smartmon, manage_ssacli, manage_topprocesses
+#
 class common::monitor::exporter::node (
   Boolean      $buddyinfo,
   Boolean      $cgroups,

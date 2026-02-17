@@ -2,15 +2,11 @@
 #
 # @param full_host_management Boolean to enable or disable full host management functionalities. Defaults to true.
 #
-# @param devices Hash containing device configurations. Defaults to an empty hash.
-#
-# @param mounts Hash mapping absolute paths to mount points and their types. Defaults to an empty hash.
-#
-# @param filepermissions Hash specifying file permission settings.
+# @param noop_value Noop value for the common class. Defaults to undef.
 #
 # @groups management full_host_management
 #
-# @groups configuration devices, mounts, filepermissions
+# @groups configuration noop_value
 #
 class common (
   Boolean               $full_host_management,

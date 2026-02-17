@@ -17,7 +17,20 @@
 # @param backup_retention Duration to retain backups in days. Defaults to the value of $::common::backup::db::backup_retention.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
+#
 # @encrypt_params backup_user_password
+#
+# @groups general enable, encrypt_params
+#
+# @groups authentication backup_user, backup_user_password
+#
+# @groups schedule backup_hour
+#
+# @groups storage dump_dir
+#
+# @groups retention backup_retention, backup_databases
+#
+# @groups backup_config backup_method
 #
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,

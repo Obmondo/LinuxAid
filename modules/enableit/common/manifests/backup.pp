@@ -30,21 +30,19 @@
 #
 # @param lvm_extents_min_required The minimum required LVM extents percentage. Defaults to 15.
 #
-# @param push A hash for push configurations. Defaults to empty hash.
+# @param conf_dir The configuration directory path. Defaults to $common::__conf_dir.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @param root_password The root password for secure operations. Defaults to undef.
 #
-# @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params
+# @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params, conf_dir
 #
 # @groups storage dump_dir, keep_days, backup_window_starthour, backup_window_lasthour
 #
 # @groups encryption luks, lukspass, luks_service_name
 #
 # @groups lvm lvm, lvm_vg, lvm_extents_min_required
-#
-# @groups push_config push
 #
 # @groups security root_password
 #

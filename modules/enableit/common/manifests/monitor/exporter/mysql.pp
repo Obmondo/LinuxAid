@@ -18,6 +18,12 @@
 #
 # @encrypt_params password
 #
+# @groups settings enable, noop_value, encrypt_params
+#
+# @groups network listen_port
+#
+# @groups configuration username, password, mysql_port, mysql_monitor_hostname
+#
 class common::monitor::exporter::mysql (
   Boolean             $enable                 = $common::monitor::exporter::enable,
   String              $username               = $profile::mysql::mysql_monitor_username,

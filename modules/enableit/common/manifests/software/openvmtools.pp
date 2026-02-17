@@ -6,7 +6,7 @@
 #
 # @param autoupgrade Whether to enable automatic upgrade of openvmtools. Defaults to true.
 #
-# @groups package_management ensure, autoupgrade
+# @groups package_management manage, ensure, autoupgrade
 #
 class common::software::openvmtools (
   Boolean $manage      = false,

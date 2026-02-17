@@ -3,6 +3,9 @@
 # @param enable Boolean to enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
 #
 # @param noop_value Optional[Boolean], the noop value for resources. Defaults to false.
+#
+# @groups settings enable, noop_value
+#
 class common::monitor::exporter::node::ssacli (
   Boolean $enable     = $common::monitor::exporter::node::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,

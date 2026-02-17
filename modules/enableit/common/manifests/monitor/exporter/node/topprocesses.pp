@@ -3,6 +3,9 @@
 # @param enable Enable or disable the exporter. Defaults to the value of $common::monitor::exporter::node::enable.
 #
 # @param noop_value Optional. The value for noop attribute. Defaults to false.
+#
+# @groups settings enable, noop_value
+#
 class common::monitor::exporter::node::topprocesses (
   Boolean $enable     = $common::monitor::exporter::node::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::node::noop_value,

@@ -12,6 +12,12 @@
 #
 # @param config_file Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
 #
+# @groups settings enable, noop_value
+#
+# @groups network host, listen_host, listen_port
+#
+# @groups configuration config_file
+#
 class common::monitor::exporter::security (
   Boolean               $enable      = false,
   Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,

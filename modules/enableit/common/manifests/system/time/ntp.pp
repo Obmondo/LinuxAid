@@ -7,6 +7,11 @@
 # @param servers Array of NTP server hostnames or IPs. Defaults to an empty array.
 #
 # @param noop_value Optional parameter for noop mode. Defaults to undef.
+#
+# @groups settings manage, noop_value
+#
+# @groups configuration ntp_client, servers
+#
 class common::system::time::ntp (
   Enum['chrony', 'ntpd', 'systemd-timesyncd'] $ntp_client,
 

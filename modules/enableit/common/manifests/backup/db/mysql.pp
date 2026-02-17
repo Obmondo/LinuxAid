@@ -16,8 +16,25 @@
 #
 # @param backup_retention Duration to retain backups. Defaults to $::common::backup::db::backup_retention.
 #
+# @param host The database host. Defaults to 'localhost'.
+#
+# @param root_password The root password for the database. Defaults to $::common::backup::root_password.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
-# @encrypt_params backup_user_password
+#
+# @encrypt_params backup_user_password, root_password
+#
+# @groups general enable, encrypt_params
+#
+# @groups authentication backup_user, backup_user_password, root_password, host
+#
+# @groups schedule backup_hour
+#
+# @groups storage dump_dir
+#
+# @groups retention backup_retention, ignore_tables
+#
+# @groups backup_config backup_method
 #
 class common::backup::db::mysql (
   Eit_types::Password        $backup_user_password  = $::common::backup::db::backup_user_password,
