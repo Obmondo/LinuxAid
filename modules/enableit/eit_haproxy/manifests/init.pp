@@ -5,6 +5,7 @@ class eit_haproxy (
   Enum['auto', 'manual']        $configure,
   Eit_haproxy::Domains          $domains,
   Eit_haproxy::Listen           $listens,
+  Eit_haproxy::Timeout          $frontend_timeout,
   Hash[Eit_types::IP,Variant[
     Array[Stdlib::Port],
     Stdlib::Port
@@ -64,6 +65,7 @@ class eit_haproxy (
       listens            => $listens,
       mode               => $mode,
       listen_on          => $listen_on,
+      frontend_timeout   => $frontend_timeout,
       encryption_ciphers => $encryption_ciphers,
     }
   }
