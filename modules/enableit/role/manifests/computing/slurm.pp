@@ -61,6 +61,10 @@
 #
 # @param db_log_file_size Maximum size allocated for database log files.
 #
+# @param all_users_limit_nofile Optional PAM `nofile` value for all users.
+#
+# @param slurmd_limit_nofile Optional systemd `LimitNOFILE` value for slurmd service.
+#
 # @groups authentication munge_key, jwt_key, encrypt_params
 #
 # @groups daemon_control slurmctld, slurmdbd, slurmd
@@ -76,6 +80,8 @@
 # @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy, slurmctldport
 #
 # @groups db db_buffer_pool_size, db_log_file_size
+#
+# @groups limits all_users_limit_nofile, slurmd_limit_nofile
 #
 # @encrypt_params munge_key, jwt_key, slurm_gateway.*.bind_password
 #
@@ -112,6 +118,8 @@ class role::computing::slurm (
   Optional[Eit_types::Slurm::Policy]  $slurm_policy            = undef,
   String                              $db_buffer_pool_size     = '256M',
   String                              $db_log_file_size        = '24M',
+  Optional[Integer[1]]                $all_users_limit_nofile  = undef,
+  Optional[Integer[1]]                $slurmd_limit_nofile     = undef,
   Eit_types::Encrypt::Params          $encrypt_params          = ['munge_key', 'jwt_key','slurm_gateway.*.bind_password']
 
 ) inherits ::role::computing {
