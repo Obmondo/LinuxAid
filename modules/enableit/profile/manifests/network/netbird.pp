@@ -54,6 +54,16 @@ class profile::network::netbird (
         ensure => ensure_present($enable),
         noop   => $noop_value,
       }
+
+      # Create log directory for TurrisOS/OpenWRT as it is tmpfs and often missing
+      file { '/var/log/netbird':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+        before => Service['netbird'],
+        noop   => $noop_value,
+      }
     }
 
     # Download and extract NetBird binary from GitHub releases
@@ -96,12 +106,13 @@ class profile::network::netbird (
     }
 
     exec { 'netbird_up':
-      command     => "netbird up -n ${_node_name}",
+      command     => 'netbird up',
       noop        => $noop_value,
       path        => '/usr/bin:/usr/sbin:/bin:/sbin',
       environment => [
         "NB_SETUP_KEY=${setup_key}",
         "NB_MANAGEMENT_URL=${server}",
+        "NB_HOSTNAME=${_node_name}",
       ],
       unless      => "netbird status -d | grep -i 'Management: Connected'",
       require     => Service['netbird'],
