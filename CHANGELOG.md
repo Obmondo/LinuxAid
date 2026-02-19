@@ -2,6 +2,32 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.4.9
+
+### Bug Fixes
+- 4922c379b fix: ensures creation of log directory before installing netbird for openwrt systems
+- 5c1b97a0d fix: handle non existence of extra opts in haproxy configs
+
+### Configuration Changes
+- 60df9a13b chore: update netbird client version and checksum to v0.65.1
+- a3878e616 chore: set the hostname via env var when installing netbird
+
+### Other Changes
+- 858e5a73b Revert "Merge pull request 'Add --volumes to Docker system prune cron job to clean unused volumes' (#1456) from volumes into master"
+
+## LinuxAid Release Version v1.4.9
+
+### Bug Fixes
+- 4922c379b fix: ensures creation of log directory before installing netbird for openwrt systems
+- 5c1b97a0d fix: handle non existence of extra opts in haproxy configs
+
+### Configuration Changes
+- 60df9a13b chore: update netbird client version and checksum to v0.65.1
+- a3878e616 chore: set the hostname via env var when installing netbird
+
+### Other Changes
+- 858e5a73b Revert "Merge pull request 'Add --volumes to Docker system prune cron job to clean unused volumes' (#1456) from volumes into master"
+
 ## LinuxAid Release Version v1.4.8
 
 ### Bug Fixes
