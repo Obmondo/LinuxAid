@@ -72,6 +72,7 @@ class common::repo (
   Enum['http', 'https']     $source_protocol = 'https',
   Boolean                   $local           = false,
   Optional[Stdlib::Fqdn]    $domain          = undef,
+  Optional[Array]           $extra_arch      = ['armhf'],
   Optional[Eit_types::Date] $snapshot        = undef,
 ) {
   File {
@@ -82,9 +83,15 @@ class common::repo (
   }
 
   # Get the architecture
-  $architecture = $facts['os']['architecture'] ? {
+  $fact_arch = $facts['os']['architecture'] ? {
     'aarch64' => 'arm64',
     default   => 'amd64',
+  }
+
+  # Final architecture list
+  $architecture = $extra_arch.empty ? {
+    true => [$fact_arch],
+    false => unique([$fact_arch] + $extra_arch),
   }
 
   if $manage {
@@ -166,11 +173,15 @@ class common::repo (
         }
       }
       'Debian': {
+        $arch = $facts['os']['architecture'] ? {
+          'aarch64' => 'arm64',
+          default   => 'amd64',
+        }
         $aptrepos.each |$key, $value| {
           apt::source { $key:
             ensure       => present,
             noop         => $noop_value,
-            architecture => $architecture,
+            architecture => $arch,
             release      => $_os_codename,
             comment      => "${key} repo server",
             location     => $value['url'].inline_epp({ snapshot => $snapshot, }),
@@ -291,7 +302,7 @@ class common::repo (
             apt::source { "local_apt_repo_${_os_codename}-${repo}":
               ensure       => present,
               noop         => $noop_value,
-              architecture => $architecture,
+              architecture => $architecture.join(','),
               release      => "${_os_codename}-${repo}",
               comment      => "local apt ${_os_codename}-${repo} server",
               location     => "https://${domain}/${_snapshot_uri_fragment}apt/${apt_repo}",
@@ -306,7 +317,7 @@ class common::repo (
           apt::source { "local_apt_repo_${_os_codename}":
             ensure       => present,
             noop         => $noop_value,
-            architecture => $architecture,
+            architecture => $architecture.join(','),
             release      => $_os_codename,
             comment      => 'local apt repo server',
             location     => "https://${domain}/${_snapshot_uri_fragment}apt/${apt_repo}",
