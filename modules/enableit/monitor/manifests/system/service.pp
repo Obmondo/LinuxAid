@@ -6,4 +6,5 @@ class monitor::system::service () {
   contain monitor::system::service::smartmon
   contain monitor::system::service::ssacli
   contain monitor::system::service::dellhw
+  contain monitor::system::service::security_exporter
 }
