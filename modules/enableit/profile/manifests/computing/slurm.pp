@@ -36,6 +36,8 @@ class profile::computing::slurm (
   Boolean                        $hwloc_enabled           = $::role::computing::slurm::hwloc_enabled,
   String                         $db_buffer_pool_size     = $::role::computing::slurm::db_buffer_pool_size,
   String                         $db_log_file_size        = $::role::computing::slurm::db_log_file_size,
+  Integer[1]                     $all_users_limit_nofile  = $::role::computing::slurm::all_users_limit_nofile,
+  Integer[1]                     $slurmd_limit_nofile     = $::role::computing::slurm::slurmd_limit_nofile,
 ) inherits ::profile::computing {
 
   # We manually install SLURM and munge packages because we're using packages
@@ -156,9 +158,19 @@ class profile::computing::slurm (
     })
 
     class { '::profile::computing::slurm::slurmd':
-      interface  => $interface,
-      node_cidrs => $node_cidrs,
+      interface           => $interface,
+      node_cidrs          => $node_cidrs,
+      slurmd_limit_nofile => $slurmd_limit_nofile,
     }
+  }
+
+  # Configure PAM file descriptor limits for all users on SLURM nodes
+  pam::limits::fragment { 'slurm_nofile':
+    ensure => 'present',
+    list   => [
+      "* soft nofile ${all_users_limit_nofile}",
+      "* hard nofile ${all_users_limit_nofile}",
+    ],
   }
 
   if !$enable {
