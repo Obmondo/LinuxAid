@@ -1,4 +1,3 @@
-
 # @summary Class for managing the Haproxy web role
 #
 # @param manual_config Optional manual configuration for the haproxy. Defaults to undef.
@@ -28,6 +27,10 @@
 # @param firewall The firewall configurations. Defaults to an empty hash.
 #
 # @param version The version of haproxy. Defaults to 'present'.
+#
+# @param manage_community_repo Boolean to enable the Ubuntu community haproxy repository on Noble. Defaults to false.
+#
+# @param community_track The haproxy community repository track (for example, '3.3'). Defaults to '3.3'.
 #
 # @param service_options Additional options for the haproxy service. Defaults to an empty hash.
 #
@@ -65,8 +68,13 @@ class role::web::haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
-  Hash[Eit_types::IP,Variant[    Array[Stdlib::Port],    Stdlib::Port  ]]                            $firewall               = {},
+  Hash[Eit_types::IP,Variant[
+      Array[Stdlib::Port],
+      Stdlib::Port
+  ]]                            $firewall               = {},
   Eit_types::Package_version    $version                = 'present',
+  Boolean                       $manage_community_repo  = false,
+  String[1]                     $community_track        = '3.2',
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
   Stdlib::Absolutepath          $log_dir                = '/var/log',
@@ -74,7 +82,6 @@ class role::web::haproxy (
   Boolean                       $send_log_summary       = false,
   Array[String]                 $log_summary_recipients = ['info@enableit.dk'],
 ) inherits role::web {
-
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
   confine($send_log_summary, $log_summary_recipients.size == 0, 'Log summary sender needs at least 1 recipient')
 
@@ -89,6 +96,8 @@ class role::web::haproxy (
     mode                   => $mode,
     manual_config          => $manual_config,
     version                => $version,
+    manage_community_repo  => $manage_community_repo,
+    community_track        => $community_track,
     configure              => $configure,
     listen_on              => $listen_on,
     encryption_ciphers     => $encryption_ciphers,

@@ -7,6 +7,7 @@ class eit_haproxy::auto_config (
   Eit_types::HaproxyListens       $listens             = {},
   Optional[Eit_types::Http::Cors] $cors_font_domain    = undef,
   Optional[Boolean]               $redirect_http       = true,
+  Eit_types::Package_version      $version             = $::eit_haproxy::version,
 ) {
 
   # https://wiki.mozilla.org/Security/Server_Side_TLS
@@ -38,6 +39,7 @@ class eit_haproxy::auto_config (
 
   # Default copied from haproxy::params
   class { 'haproxy':
+    package_ensure  => $version,
     global_options   => {
       'log'                       => '127.0.0.1 local0',
       'crt-base'                  => '/etc/ssl/private',

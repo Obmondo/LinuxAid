@@ -6,8 +6,8 @@ class eit_haproxy (
   Eit_haproxy::Domains          $domains,
   Eit_haproxy::Listen           $listens,
   Hash[Eit_types::IP,Variant[
-    Array[Stdlib::Port],
-    Stdlib::Port
+      Array[Stdlib::Port],
+      Stdlib::Port
   ]]                            $firewall,
   Optional[String]              $restart_command,
 
@@ -21,13 +21,14 @@ class eit_haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Package_version    $version            = 'present',
+  Boolean                       $manage_community_repo = false,
+  String[1]                     $community_track       = '3.2',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
   String                        $service_name       = 'haproxy',
   Boolean                       $log_compressed     = false,
   Stdlib::Absolutepath          $log_dir            = '/var/log',
 ) {
-
   if $configure == 'manual' {
     contain eit_haproxy::install
     contain eit_haproxy::service
@@ -38,6 +39,18 @@ class eit_haproxy (
   }
 
   if $configure == 'auto' {
+    if $manage_community_repo {
+      if $facts['os']['name'] == 'Ubuntu' and $facts['os']['distro']['codename'] == 'noble' {
+        contain apt
+
+        apt::ppa { "ppa:vbernat/haproxy-${community_track}": }
+
+        Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${community_track}"] -> Class['eit_haproxy::basic_config']
+      } else {
+        warning('eit_haproxy::manage_community_repo is only supported on Ubuntu Noble')
+      }
+    }
+
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
       $_service = @(EOT)
@@ -56,6 +69,7 @@ class eit_haproxy (
 
     class { 'eit_haproxy::basic_config':
       domains            => $domains,
+      version            => $version,
       ddos_protection    => $ddos_protection,
       https              => $https,
       http               => $http,

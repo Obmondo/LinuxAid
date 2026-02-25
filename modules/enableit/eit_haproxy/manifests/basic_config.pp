@@ -12,6 +12,7 @@ class eit_haproxy::basic_config (
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
+  Eit_types::Package_version    $version            = $::eit_haproxy::version,
 ) {
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
@@ -36,6 +37,7 @@ class eit_haproxy::basic_config (
 
   # Default copied from haproxy::params
   class { 'haproxy':
+    package_ensure  => $version,
     global_options   => {
       'log'                       => '127.0.0.1 local0',
       'crt-base'                  => '/etc/ssl/private',
