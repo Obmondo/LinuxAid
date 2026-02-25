@@ -43,6 +43,7 @@ class common::monitor::exporter::wireguard (
   $_options = [
     "--address=${_address}",
     "--port=${_port}",
+    "--prepend_sudo=true",
   ]
 
   prometheus::daemon { 'wireguard_exporter':
