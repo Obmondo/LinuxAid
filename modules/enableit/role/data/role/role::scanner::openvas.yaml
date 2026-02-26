@@ -1,0 +1,4 @@
+---
+common::network::firewall::allow_docker: true
+common::system::dns::listen_address:
+  - "192.168.0.1"

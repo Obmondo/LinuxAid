@@ -1,6 +1,6 @@
 {
   "name": "enableit-nfs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "EnableIT",
   "summary": "NFS Client and Server",
   "license": "Apache-2.0",
@@ -48,7 +48,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": "4.x.x"
+      "version_requirement": "10.x.x"
     },
     {
       "name": "enableit/eit_types"

@@ -95,7 +95,7 @@ services:
     image: <%= $registry %>/gsa:<%= $gsa_version %>
     restart: on-failure
     ports:
-      - <%= $web_bind_address %>:<%= $web_port %>:80
+      - <%= $web_addressport %>:80
     volumes:
       - gvmd_socket_vol:<%= $gvmd_socket_path %>
     depends_on:
@@ -144,7 +144,7 @@ services:
       # if you want to utilize openvasd directly removed `OPENVASD_MODE`
       OPENVASD_MODE: <%= $openvasd_mode %>
       GNUPGHOME: <%= $openvas_config_path %>/gnupg
-      LISTENING: <%= $openvasd_addressport %>
+      LISTENING: 0.0.0.0:80
     volumes:
       - openvas_data_vol:<%= $openvas_config_path %>
       - openvas_log_data_vol:<%= $openvas_log_path %>

@@ -215,7 +215,6 @@ class profile::openvox (
   }
 
   $facts_blocklist = [
-    'packages',
     'kmods',
     'network_ports',
     'login_defs',

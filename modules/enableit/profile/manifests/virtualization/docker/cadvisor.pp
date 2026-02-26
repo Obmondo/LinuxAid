@@ -4,7 +4,7 @@ class profile::virtualization::docker::cadvisor (
   Eit_types::Noop_Value $noop_value     = undef,
   Stdlib::Port          $listen_port    = 63392,
   String                $cadvisor_image = $role::virtualization::docker::cadvisor_image,
-) inherits profile::virtualization::docker {
+) {
 
   Exec {
     noop => $noop_value,
