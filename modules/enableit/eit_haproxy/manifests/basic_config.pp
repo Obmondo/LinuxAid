@@ -263,7 +263,7 @@ class eit_haproxy::basic_config (
             Hash([ "${listen}:80", [] ])
           }),
           options => [
-            { 'http-request' => 'use-service acme-http-01 if { path_beg /.well-known/acme-challenge/ }' },
+            { 'http-request' => 'return status 200 content-type text/plain lf-string "%[path,field(-1,/)].%[path,field(-1,/),map(virt@acme)]\n" if { path_beg \'/.well-known/acme-challenge/\' }' },
             { 'http-request redirect scheme https' => [
                 if $_allow_http_acl { '!allow_http' },
               ].delete_undef_values.join(' '),
