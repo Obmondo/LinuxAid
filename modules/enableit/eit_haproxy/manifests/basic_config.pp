@@ -13,6 +13,9 @@ class eit_haproxy::basic_config (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Package_version    $version            = 'latest',
+  Boolean                       $use_native_acme    = $::eit_haproxy::use_native_acme,
+  String                        $acme_contact       = $::eit_haproxy::acme_contact,
+  String                        $acme_directory     = $::eit_haproxy::acme_directory,
 ) {
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
@@ -35,6 +38,15 @@ class eit_haproxy::basic_config (
     }
   }
 
+  $_native_acme_global_options = if $use_native_acme {
+    {
+      'expose-experimental-directives'  => '',
+      'ssl-default-bind-ciphersuites'   => 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256',
+    }
+  } else {
+    {}
+  }
+
   # Default copied from haproxy::params
   class { 'haproxy':
     package_ensure  => $version,
@@ -49,7 +61,7 @@ class eit_haproxy::basic_config (
       'daemon'                    => '',
       'stats'                     => 'socket /var/run/haproxy.sock mode 600 level admin',
       'tune.ssl.default-dh-param' => '2048',
-    } + $_ssl_options,
+    } + $_ssl_options + $_native_acme_global_options,
     defaults_options => {
       'log'     => 'global',
       'stats'   => 'enable',
@@ -70,6 +82,17 @@ class eit_haproxy::basic_config (
     }
   }
 
+  if $use_native_acme {
+    concat::fragment { 'haproxy_acme_section':
+      target  => $haproxy::config_file,
+      order   => '12-acme',
+      content => epp('eit_haproxy/acme_section.epp', {
+        'contact'   => $acme_contact,
+        'directory' => $acme_directory,
+      }),
+    }
+  }
+
   $bind_ports = [
     if $https { 443 },
     if $http { 80 },
@@ -82,16 +105,25 @@ class eit_haproxy::basic_config (
     jump  => 'accept',
   }
 
+  $web_bind_ports = [
+    if $https { 443 },
+    if $http and !$use_native_acme { 80 },
+  ].delete_undef_values
+
   # Setup binds and required haproxy rule
-  $binds = functions::array_to_hash($bind_ports.map |$port| {
+  $binds = functions::array_to_hash($web_bind_ports.map |$port| {
       $_ssl = if $port == 443 and $mode == 'http' {
-        [
-          'ssl',
-          if $use_lets_encrypt {
-            'crt /etc/ssl/private/letsencrypt'
-          },
-          'crt /etc/ssl/private/static-certs/combined',
-        ].delete_undef_values.join(' ')
+        if $use_native_acme {
+          'ssl crt /etc/ssl/private/ alpn h2,http/1.1 strict-sni'
+        } else {
+          [
+            'ssl',
+            if $use_lets_encrypt {
+              'crt /etc/ssl/private/letsencrypt'
+            },
+            'crt /etc/ssl/private/static-certs/combined',
+          ].delete_undef_values.join(' ')
+        }
       }
 
       $listen_on.map |$listen| {
@@ -117,7 +149,7 @@ class eit_haproxy::basic_config (
         { 'http-response set-header' => 'Strict-Transport-Security include_subdomains;\ preload;\ max-age=31536000; if { ssl_fc }' }
       },
       { 'http-request redirect scheme https if !{ ssl_fc }' => [
-          if $https and $use_lets_encrypt { '!is_letsencrypt' },
+          if $https and $use_lets_encrypt and !$use_native_acme { '!is_letsencrypt' },
           if $_allow_http_acl { '!allow_http' },
         ].delete_undef_values.join(' '),
       }
@@ -158,7 +190,7 @@ class eit_haproxy::basic_config (
       }
     }.flatten
 
-    if $https and $use_lets_encrypt {
+    if $https and $use_lets_encrypt and !$use_native_acme {
       # letsencrypt backend
       haproxy::backend { 'letsencrypt':
         mode    => 'http',
@@ -209,7 +241,7 @@ class eit_haproxy::basic_config (
         bind    => $binds,
         options => [
           { 'option' => "${mode}log" },
-          if $https and $use_lets_encrypt {
+          if $https and $use_lets_encrypt and !$use_native_acme {
             { 'acl is_letsencrypt' => 'path_beg /.well-known/acme-challenge/' }
           },
           $http_only_domains_options,
@@ -217,11 +249,29 @@ class eit_haproxy::basic_config (
           if $ddos_protection {
             $ddos_protection_options
           },
-          if $https and $use_lets_encrypt {
+          if $https and $use_lets_encrypt and !$use_native_acme {
             [{ 'use_backend letsencrypt' => 'if is_letsencrypt' }]
           },
           [{ 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]' }]
         ].delete_undef_values.flatten,
+      }
+
+      if $use_native_acme {
+        haproxy::frontend { 'acme':
+          mode    => 'http',
+          bind    => functions::array_to_hash($listen_on.map |$listen| {
+            Hash([ "${listen}:80", [] ])
+          }),
+          options => [
+            { 'http-request' => 'use-service acme-http-01 if { path_beg /.well-known/acme-challenge/ }' },
+            { 'http-request redirect scheme https' => [
+                if $_allow_http_acl { '!allow_http' },
+              ].delete_undef_values.join(' '),
+            },
+            $http_only_domains_options,
+            [{ 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]' }]
+          ].delete_undef_values.flatten,
+        }
       }
 
       haproxy::mapfile { 'domains-to-backends':

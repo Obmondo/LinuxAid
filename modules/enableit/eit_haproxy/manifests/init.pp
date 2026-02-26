@@ -21,6 +21,9 @@ class eit_haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Package_version    $version            = 'present',
+  Boolean                       $use_native_acme    = false,
+  String                        $acme_contact       = 'ops@enableit.dk',
+  String                        $acme_directory     = 'https://acme-v02.api.letsencrypt.org/directory',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
   String                        $service_name       = 'haproxy',
@@ -50,6 +53,11 @@ class eit_haproxy (
       }
     }
 
+    if $use_native_acme {
+      contain eit_haproxy::dummy_cert
+      Class['eit_haproxy::dummy_cert'] -> Class['eit_haproxy::basic_config']
+    }
+
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
       $_service = @(EOT)
@@ -74,6 +82,9 @@ class eit_haproxy (
       http               => $http,
       use_hsts           => $use_hsts,
       use_lets_encrypt   => $use_lets_encrypt,
+      use_native_acme    => $use_native_acme,
+      acme_contact       => $acme_contact,
+      acme_directory     => $acme_directory,
       listens            => $listens,
       mode               => $mode,
       listen_on          => $listen_on,
