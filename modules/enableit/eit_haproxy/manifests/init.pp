@@ -54,7 +54,9 @@ class eit_haproxy (
     }
 
     if $use_native_acme {
-      contain eit_haproxy::dummy_cert
+      class { 'eit_haproxy::dummy_cert':
+        domains => $domains,
+      }
       Class['eit_haproxy::dummy_cert'] -> Class['eit_haproxy::basic_config']
     }
 

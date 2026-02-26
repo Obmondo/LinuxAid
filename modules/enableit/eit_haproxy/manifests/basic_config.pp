@@ -236,6 +236,18 @@ class eit_haproxy::basic_config (
         { 'http-request'  => 'deny deny_status 429 if !is_priority ww_rl_reached' },
       ]
 
+      $_native_acme_frontend_options = if $use_native_acme {
+        $domains.filter |$group_name, $opts| {
+          if $opts['force_https'] { true } else { false }
+        }.map |$group_name, $opts| {
+          $_all_domains_in_group = $opts['domains'].join(',')
+          $_cert_filename = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
+          Hash(['ssl-f-use', "crt /etc/ssl/private/${_cert_filename}.pem acme LE domains ${_all_domains_in_group}"])
+        }
+      } else {
+        []
+      }
+
       haproxy::frontend { 'web':
         mode    => $mode,
         bind    => $binds,
@@ -252,6 +264,7 @@ class eit_haproxy::basic_config (
           if $https and $use_lets_encrypt and !$use_native_acme {
             [{ 'use_backend letsencrypt' => 'if is_letsencrypt' }]
           },
+          $_native_acme_frontend_options,
           [{ 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]' }]
         ].delete_undef_values.flatten,
       }
