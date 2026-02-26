@@ -11,13 +11,11 @@ class profile::haproxy (
   Boolean                       $use_lets_encrypt       = true,
   Enum['http','tcp']            $mode                   = 'http',
   Eit_types::Package_version    $version                = 'present',
-  Boolean                       $manage_community_repo  = false,
-  String[1]                     $community_track        = '3.3',
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Hash[Eit_types::IP,Variant[
-    Array[Stdlib::Port],
-    Stdlib::Port
+      Array[Stdlib::Port],
+      Stdlib::Port
   ]]                            $firewall               = {},
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = $role::web::haproxy::log_compressed,
@@ -25,12 +23,11 @@ class profile::haproxy (
   Boolean                       $send_log_summary       = $role::web::haproxy::send_log_summary,
   Array[String]                 $log_summary_recipients = $role::web::haproxy::log_summary_recipients,
 ) inherits profile {
-
   # Monitoring
   $facts.dig('haproxy_version').then |$_haproxy_version| {
     # if version is >= 2.0.0
     if versioncmp($_haproxy_version, '2.0.0') >= 0 {
-      contain ::common::monitor::exporter::haproxy
+      contain common::monitor::exporter::haproxy
     }
   }
 
@@ -40,32 +37,30 @@ class profile::haproxy (
   }
 
   # Haproxy Setup
-  class { '::eit_haproxy':
-    domains               => $domains,
-    listens               => $listens,
-    version               => $version,
-    manage_community_repo => $manage_community_repo,
-    community_track       => $community_track,
-    ddos_protection       => $ddos_protection,
-    https                 => $https,
-    http                  => $http,
-    use_lets_encrypt      => $use_lets_encrypt,
-    use_hsts              => $use_hsts,
-    mode                  => $mode,
-    listen_on             => $listen_on,
-    manual_config         => $manual_config,
-    configure             => $configure,
-    firewall              => $firewall,
-    encryption_ciphers    => $encryption_ciphers,
-    service_options       => $service_options,
-    log_compressed        => $log_compressed,
-    log_dir               => $log_dir,
+  class { 'eit_haproxy':
+    domains            => $domains,
+    listens            => $listens,
+    version            => $version,
+    ddos_protection    => $ddos_protection,
+    https              => $https,
+    http               => $http,
+    use_lets_encrypt   => $use_lets_encrypt,
+    use_hsts           => $use_hsts,
+    mode               => $mode,
+    listen_on          => $listen_on,
+    manual_config      => $manual_config,
+    configure          => $configure,
+    firewall           => $firewall,
+    encryption_ciphers => $encryption_ciphers,
+    service_options    => $service_options,
+    log_compressed     => $log_compressed,
+    log_dir            => $log_dir,
   }
 
   # Install log summary sender
   if $send_log_summary {
     package::install('obmondo-haproxy-script', {
-      ensure  => 'latest',
+        ensure  => 'latest',
     })
     file_line { 'logdir_env_var':
       ensure  => 'present',

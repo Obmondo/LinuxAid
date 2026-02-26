@@ -12,7 +12,7 @@ class eit_haproxy::basic_config (
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Package_version    $version            = $::eit_haproxy::version,
+  Eit_types::Package_version    $version            = 'latest',
 ) {
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate

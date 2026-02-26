@@ -28,10 +28,6 @@
 #
 # @param version The version of haproxy. Defaults to 'present'.
 #
-# @param manage_community_repo Boolean to enable the Ubuntu community haproxy repository on Noble. Defaults to false.
-#
-# @param community_track The haproxy community repository track (for example, '3.3'). Defaults to '3.3'.
-#
 # @param service_options Additional options for the haproxy service. Defaults to an empty hash.
 #
 # @param log_compressed Boolean to enable or disable compressed logs. Defaults to true.
@@ -73,8 +69,6 @@ class role::web::haproxy (
       Stdlib::Port
   ]]                            $firewall               = {},
   Eit_types::Package_version    $version                = 'present',
-  Boolean                       $manage_community_repo  = false,
-  String[1]                     $community_track        = '3.2',
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
   Stdlib::Absolutepath          $log_dir                = '/var/log',
@@ -96,8 +90,6 @@ class role::web::haproxy (
     mode                   => $mode,
     manual_config          => $manual_config,
     version                => $version,
-    manage_community_repo  => $manage_community_repo,
-    community_track        => $community_track,
     configure              => $configure,
     listen_on              => $listen_on,
     encryption_ciphers     => $encryption_ciphers,

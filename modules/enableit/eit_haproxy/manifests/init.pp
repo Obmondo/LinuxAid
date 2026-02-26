@@ -21,8 +21,6 @@ class eit_haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Package_version    $version            = 'present',
-  Boolean                       $manage_community_repo = false,
-  String[1]                     $community_track       = '3.2',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
   String                        $service_name       = 'haproxy',
@@ -39,13 +37,14 @@ class eit_haproxy (
   }
 
   if $configure == 'auto' {
-    if $manage_community_repo {
+    if $version == 'latest' {
       if $facts['os']['name'] == 'Ubuntu' and $facts['os']['distro']['codename'] == 'noble' {
         contain apt
 
-        apt::ppa { "ppa:vbernat/haproxy-${community_track}": }
+        $haproxy_lts_version = '3.2'
+        apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
 
-        Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${community_track}"] -> Class['eit_haproxy::basic_config']
+        Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
       } else {
         warning('eit_haproxy::manage_community_repo is only supported on Ubuntu Noble')
       }
