@@ -4,6 +4,9 @@ All releases and the changes included in them (pulled from git commits added sin
 
 ## LinuxAid Release Version v1.5.0
 
+No changes in this release.
+## LinuxAid Release Version v1.5.0
+
 ### Bug Fixes
 - c4f72e72 fix: remove unwanted 'main' component from kubernetes apt repo
 
