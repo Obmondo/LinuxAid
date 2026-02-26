@@ -21,5 +21,17 @@ class profile::computing::slurm::slurmd (
       ;
   }
 
+  logrotate::rule { 'slurmd':
+    ensure        => 'present',
+    path          => "/var/log/slurm/*.log",
+    rotate_every  => 'day',
+    rotate        => 30,
+    compress      => true,
+    copy          => false,
+    create        => false,
+    delaycompress => true,
+    missingok     => true,
+  }
+
   include ::slurm::slurmd
 }
