@@ -54,7 +54,7 @@ class eit_haproxy (
     }
 
     if $use_native_acme {
-      ensure_packages(['socat'])
+      ensure_packages(['socat', 'openssl'])
 
       class { 'eit_haproxy::dummy_cert':
         domains => $domains,

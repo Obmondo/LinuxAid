@@ -14,7 +14,7 @@ class eit_haproxy::dummy_cert (
       $_first_domain = $opts['domains'][0]
 
       exec { "generate_haproxy_dummy_cert_${_cert_filename}":
-        command => "/usr/bin/openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/${_cert_filename}.pem -out /etc/ssl/private/${_cert_filename}.pem -subj \"/CN=${_first_domain}\"",
+        command => "/usr/bin/openssl req -x509 -nodes -days 1 -newkey rsa:2048 -keyout /etc/ssl/private/${_cert_filename}.pem -out /etc/ssl/private/${_cert_filename}.pem -subj \"/CN=${_first_domain}\"",
         creates => "/etc/ssl/private/${_cert_filename}.pem",
         require => Exec['ensure_ssl_private_dir'],
       }
@@ -23,7 +23,7 @@ class eit_haproxy::dummy_cert (
 
   # Always keep one default fallback cert just in case
   exec { 'generate_haproxy_dummy_cert':
-    command => '/usr/bin/openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/haproxy-dummy.pem -out /etc/ssl/private/haproxy-dummy.pem -subj "/CN=localhost"',
+    command => '/usr/bin/openssl req -x509 -nodes -days 1 -newkey rsa:2048 -keyout /etc/ssl/private/haproxy-dummy.pem -out /etc/ssl/private/haproxy-dummy.pem -subj "/CN=localhost"',
     creates => '/etc/ssl/private/haproxy-dummy.pem',
     require => Exec['ensure_ssl_private_dir'],
   }
