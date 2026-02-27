@@ -114,7 +114,7 @@ class eit_haproxy::basic_config (
   $binds = functions::array_to_hash($web_bind_ports.map |$port| {
       $_ssl = if $port == 443 and $mode == 'http' {
         if $use_native_acme {
-          'ssl crt /etc/ssl/private/ alpn h2,http/1.1 strict-sni'
+          'ssl crt /etc/ssl/private/haproxy-dummy.pem alpn h2,http/1.1 strict-sni'
         } else {
           [
             'ssl',

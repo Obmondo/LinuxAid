@@ -109,7 +109,7 @@ class eit_haproxy (
       https              => $https,
       http               => $http,
       use_hsts           => $use_hsts,
-      use_lets_encrypt   => $use_lets_encrypt,
+      use_lets_encrypt   => if $use_native_acme { false } else { $use_lets_encrypt },
       use_native_acme    => $use_native_acme,
       acme_contact       => $acme_contact,
       acme_directory     => $acme_directory,
