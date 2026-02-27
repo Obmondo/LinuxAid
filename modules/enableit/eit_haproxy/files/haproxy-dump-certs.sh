@@ -1,0 +1,235 @@
+#!/bin/bash
+#
+# Dump certificates from the HAProxy stats or master socket to the filesystem
+# Experimental script
+#
+
+set -e
+
+export BASEPATH=${BASEPATH:-/etc/haproxy}/
+export SOCKET=${SOCKET:-/var/run/haproxy-master.sock}
+export DRY_RUN=0
+export DEBUG=
+export VERBOSE=
+export M="@1 "
+export TMP
+
+vecho() {
+
+	[ -n "$VERBOSE" ] && echo "$@"
+	return 0
+}
+
+read_certificate() {
+	name=$1
+	crt_filename=
+	key_filename=
+
+	OFS=$IFS
+	IFS=":"
+
+	while read -r key value; do
+		case "$key" in
+			"Crt filename")
+				crt_filename="${value# }"
+				key_filename="${value# }"
+			;;
+			"Key filename")
+				key_filename="${value# }"
+			;;
+		esac
+	done < <(echo "${M}show ssl cert ${name}" | socat "${SOCKET}" -)
+	IFS=$OFS
+
+	if [ -z "$crt_filename" ] || [ -z "$key_filename" ]; then
+		return 1
+	fi
+
+	# handle fields without a crt-base/key-base
+	[ "${crt_filename:0:1}" != "/" ] && crt_filename="${BASEPATH}${crt_filename}"
+	[ "${key_filename:0:1}" != "/" ] && key_filename="${BASEPATH}${key_filename}"
+
+	vecho "name:$name"
+	vecho "crt:$crt_filename"
+	vecho "key:$key_filename"
+
+	export NAME="$name"
+	export CRT_FILENAME="$crt_filename"
+	export KEY_FILENAME="$key_filename"
+
+	return 0
+}
+
+cmp_certkey() {
+	prev=$1
+	new=$2
+
+	if [ ! -f "$prev" ]; then
+		return 1;
+	fi
+
+	if ! cmp -s <(openssl x509 -in "$prev" -noout -fingerprint -sha256) <(openssl x509 -in "$new" -noout -fingerprint -sha256); then
+		return 1
+	fi
+
+	return 0
+}
+
+dump_certificate() {
+	name=$1
+	prev_crt=$2
+	prev_key=$3
+	r="tmp.${RANDOM}"
+	d="old.$(date +%s)"
+	new_crt="$TMP/$(basename "$prev_crt").${r}"
+	new_key="$TMP/$(basename "$prev_key").${r}"
+
+	if ! touch "${new_crt}" || ! touch "${new_key}"; then
+		echo "[ALERT] ($$) : can't dump \"$name\", can't create tmp files" >&2
+		return 1
+	fi
+
+	echo "${M}dump ssl cert ${name}" | socat "${SOCKET}" - | openssl pkey >> "${new_key}"
+	# use crl2pkcs7 as a way to dump multiple x509, storeutl could be used in modern versions of openssl
+	echo "${M}dump ssl cert ${name}" | socat "${SOCKET}" - | openssl crl2pkcs7 -nocrl -certfile /dev/stdin | openssl pkcs7 -print_certs  >> "${new_crt}"
+
+	if ! cmp -s <(openssl x509 -in "${new_crt}" -pubkey -noout) <(openssl pkey -in "${new_key}" -pubout); then
+		echo "[ALERT] ($$) : Private key \"${new_key}\"  and public key \"${new_crt}\" don't match" >&2
+		return 1
+	fi
+
+	if cmp_certkey "${prev_crt}" "${new_crt}"; then
+		echo "[NOTICE] ($$) : ${crt_filename} is already up to date" >&2
+		return 0
+	fi
+
+	# dry run will just return before trying to move the files
+	if [ "${DRY_RUN}" != "0" ]; then
+		return 0
+	fi
+
+	# move the current certificates to ".old.timestamp"
+	if [ -f "${prev_crt}" ] && [ -f "${prev_key}" ]; then
+		mv "${prev_crt}" "${prev_crt}.${d}"
+		[ "${prev_crt}" != "${prev_key}" ] && mv "${prev_key}" "${prev_key}.${d}"
+	fi
+
+	# move the new certificates to old place
+	mv "${new_crt}" "${prev_crt}"
+	[ "${prev_crt}" != "${prev_key}" ] && mv "${new_key}" "${prev_key}"
+
+	return 0
+}
+
+dump_all_certificates() {
+	echo "${M}show ssl cert" | socat "${SOCKET}" - | grep -v '^#' | grep -v '^$' | while read -r line; do
+		export NAME
+		export CRT_FILENAME
+		export KEY_FILENAME
+
+		if read_certificate "$line"; then
+			dump_certificate "$NAME" "$CRT_FILENAME" "$KEY_FILENAME"
+		else
+			echo "[WARNING] ($$) : can't dump \"$name\", crt/key filename details not found in \"show ssl cert\"" >&2
+		fi
+
+	done
+}
+
+usage() {
+	echo "Usage:"
+	echo " $0 [options]* [cert]*"
+	echo ""
+	echo " Dump certificates from the HAProxy stats or master socket to the filesystem"
+	echo " Require socat and openssl"
+	echo " EXPERIMENTAL script, backup your files!"
+	echo " The script will move your previous files to FILE.old.unixtimestamp (ex: foo.com.pem.old.1759044998)"
+
+	echo ""
+	echo "Options:"
+	echo "  -S, --master-socket <path>   Use the master socket at <path> (default: ${SOCKET})"
+	echo "  -s, --socket <path>          Use the stats socket at <path>"
+	echo "  -p, --path <path>            Specifiy a base path for relative files (default: ${BASEPATH})"
+	echo "  -n, --dry-run                Read certificates on the socket but don't dump them"
+	echo "  -d, --debug                  Debug mode, set -x"
+	echo "  -v, --verbose                Verbose mode"
+	echo "  -h, --help                   This help"
+	echo "  --                           End of options"
+	echo ""
+	echo "Examples:"
+	echo "  $0 -v -p ${BASEPATH} -S ${SOCKET}"
+	echo "  $0 -v -p ${BASEPATH} -S ${SOCKET} bar.com.rsa.pem"
+	echo "  $0 -v -p ${BASEPATH} -S ${SOCKET} -- foo.com.ecdsa.pem bar.com.rsa.pem"
+}
+
+main() {
+	while [ -n "$1" ]; do
+		case "$1" in
+			-S|--master-socket)
+				SOCKET="$2"
+				M="@1 "
+				shift 2
+				;;
+			-s|--socket)
+				SOCKET="$2"
+				M=
+				shift 2
+				;;
+			-p|--path)
+				BASEPATH="$2/"
+				shift 2
+				;;
+			-n|--dry-run)
+				DRY_RUN=1
+				shift
+				;;
+			-d|--debug)
+				DEBUG=1
+				shift
+				;;
+			-v|--verbose)
+				VERBOSE=1
+				shift
+				;;
+			-h|--help)
+				usage "$@"
+				exit 0
+				;;
+			--)
+				shift
+				break
+				;;
+			-*)
+				echo "[ALERT] ($$) : Unknown option '$1'" >&2
+				usage "$@"
+				exit 1
+				;;
+			*)
+				break
+				;;
+		esac
+	done
+
+	if [ -n "$DEBUG" ]; then
+		set -x
+	fi
+
+	TMP=${TMP:-$(mktemp -d)}
+
+	if [ -z "$1" ]; then
+		dump_all_certificates
+	else
+		# compute the certificates names at the end of the command
+		while [ -n "$1" ]; do
+			if ! read_certificate "$1"; then
+				echo "[ALERT] ($$) : can't dump \"$1\", crt/key filename details not found in \"show ssl cert\"" >&2
+				exit 1
+			fi
+			[ "${DRY_RUN}" = "0" ] && dump_certificate "$NAME" "$CRT_FILENAME" "$KEY_FILENAME"
+			shift
+		done
+	fi
+}
+
+trap 'rm -rf -- "$TMP"' EXIT
+main "$@"

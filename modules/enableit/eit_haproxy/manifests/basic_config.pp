@@ -170,12 +170,21 @@ class eit_haproxy::basic_config (
 
     $public_ips = lookup('common::settings::publicips', Array, undef, [])
 
-    if $use_lets_encrypt {
+    if $use_lets_encrypt and !$use_native_acme {
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
         profile::certs::letsencrypt::domain { $cn:
           domains             => $san,
           deploy_hook_command => '/opt/obmondo/bin/letsencrypt_deploy_hook.sh',
           cert_host           => '0.0.0.0',
+        }
+      }
+    }
+
+    if $use_native_acme {
+      # Add Native ACME Monitoring which will loop and directly call monitor::domains
+      sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
+        monitor::domains { $cn:
+          enable => true,
         }
       }
     }

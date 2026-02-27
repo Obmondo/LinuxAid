@@ -12,4 +12,8 @@ class eit_haproxy::install (
   package { 'haproxyctl':
     ensure => 'present'
   }
+
+  package { 'socat':
+    ensure => 'present'
+  }
 }

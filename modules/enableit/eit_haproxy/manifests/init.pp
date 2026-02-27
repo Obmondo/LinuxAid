@@ -54,18 +54,44 @@ class eit_haproxy (
     }
 
     if $use_native_acme {
+      ensure_packages(['socat'])
+
       class { 'eit_haproxy::dummy_cert':
         domains => $domains,
       }
       Class['eit_haproxy::dummy_cert'] -> Class['eit_haproxy::basic_config']
+
+      file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
+        ensure => file,
+        source => 'puppet:///modules/eit_haproxy/haproxy-dump-certs.sh',
+        mode   => '0755',
+        owner  => 'root',
+        group  => 'root',
+      }
+
+      cron { 'haproxy-dump-certs':
+        command => '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print \$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/ >/dev/null 2>&1',
+        user    => 'root',
+        minute  => '0',
+        hour    => '3',
+        require => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
+      }
     }
 
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_service = @(EOT)
+      $_acme_flush = if $use_native_acme {
+        @(EOT)
+        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\\*/ {print \\$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\\*/ {print \\$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        | EOT
+      } else { '' }
+
+      $_service = @("EOT")
         [Service]
         ExecStartPre=
-        ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
+        ExecStartPre=/usr/sbin/haproxy -f \$CONFIG -c -q
+        ${_acme_flush}
         | EOT
 
       systemd::dropin_file { 'haproxy_dropin':
