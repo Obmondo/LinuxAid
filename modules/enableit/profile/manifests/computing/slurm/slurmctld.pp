@@ -18,7 +18,7 @@ class profile::computing::slurm::slurmctld (
   }
 
   include ::slurm::slurmctld
-
+  notify { "The slurm metrics whihc we are enabling is ${metrics}": }
   if versioncmp($slurm_version, '25.11') >= 0 {
     $metrics.each |$metric| {
       prometheus::scrape_job { "${metric}_${scrape_host}_${slurmctldport}":
