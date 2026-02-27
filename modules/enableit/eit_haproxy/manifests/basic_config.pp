@@ -13,9 +13,9 @@ class eit_haproxy::basic_config (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Package_version    $version            = 'latest',
-  Boolean                       $use_native_acme    = $::eit_haproxy::use_native_acme,
-  String                        $acme_contact       = $::eit_haproxy::acme_contact,
-  String                        $acme_directory     = $::eit_haproxy::acme_directory,
+  Boolean                       $use_native_acme    = $eit_haproxy::use_native_acme,
+  String                        $acme_contact       = $eit_haproxy::acme_contact,
+  String                        $acme_directory     = $eit_haproxy::acme_directory,
 ) {
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
@@ -87,8 +87,8 @@ class eit_haproxy::basic_config (
       target  => $haproxy::config_file,
       order   => '12-acme',
       content => epp('eit_haproxy/acme_section.epp', {
-        'contact'   => $acme_contact,
-        'directory' => $acme_directory,
+          'contact'   => $acme_contact,
+          'directory' => $acme_directory,
       }),
     }
   }
@@ -282,7 +282,7 @@ class eit_haproxy::basic_config (
         haproxy::frontend { 'acme':
           mode    => 'http',
           bind    => functions::array_to_hash($listen_on.map |$listen| {
-            Hash([ "${listen}:80", [] ])
+              Hash(["${listen}:80", []])
           }),
           options => [
             { 'http-request' => 'return status 200 content-type text/plain lf-string "%[path,field(-1,/)].%[path,field(-1,/),map(virt@acme)]\n" if { path_beg \'/.well-known/acme-challenge/\' }' },

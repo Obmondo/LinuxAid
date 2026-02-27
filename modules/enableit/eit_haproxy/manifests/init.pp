@@ -80,19 +80,19 @@ class eit_haproxy (
 
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_acme_flush = if $use_native_acme {
-        @(EOT)
-        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\\*/ {print \\$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\\*/ {print \\$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+      $_acme_flush = if $use_native_acme { @(EOT)
+        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
         | EOT
       } else { '' }
 
-      $_service = @("EOT")
+      $_service_base = @(EOT)
         [Service]
         ExecStartPre=
-        ExecStartPre=/usr/sbin/haproxy -f \$CONFIG -c -q
-        ${_acme_flush}
+        ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
         | EOT
+
+      $_service = "${_service_base}${_acme_flush}"
 
       systemd::dropin_file { 'haproxy_dropin':
         filename => 'haproxy-override.conf',
