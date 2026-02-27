@@ -1,6 +1,41 @@
-# Haproxy Basic Config Setup
-# It can either setup http or tcp mode and not both
-# well we can do both, then option would become more complex
+# @summary Class for Haproxy Basic Config Setup
+#
+# @param domains The domains to be managed by haproxy.
+#
+# @param listens The listening configurations for haproxy. Defaults to an empty hash.
+#
+# @param ddos_protection Boolean to enable or disable DDoS protection. Defaults to false.
+#
+# @param https Boolean to enable or disable HTTPS. Defaults to true.
+#
+# @param http Boolean to enable or disable HTTP. Defaults to false.
+#
+# @param use_hsts Boolean to enable or disable HSTS. Defaults to true.
+#
+# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt. Defaults to true.
+#
+# @param mode The mode of haproxy. Defaults to 'http'.
+#
+# @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
+#
+# @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
+#
+# @param version The version of haproxy. Defaults to 'latest'.
+#
+# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+#
+# @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
+#
+# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+#
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+#
+# @groups networking domains, listens, listen_on
+#
+# @groups configuration version
+#
+# @groups mode mode, http
+#
 class eit_haproxy::basic_config (
   Eit_haproxy::Domains          $domains,
   Eit_haproxy::Listen           $listens            = {},

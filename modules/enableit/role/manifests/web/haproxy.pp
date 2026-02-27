@@ -28,6 +28,12 @@
 #
 # @param version The version of haproxy. Defaults to 'present'.
 #
+# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+#
+# @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
+#
+# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+#
 # @param service_options Additional options for the haproxy service. Defaults to an empty hash.
 #
 # @param log_compressed Boolean to enable or disable compressed logs. Defaults to true.
@@ -41,7 +47,7 @@
 #
 # @param log_summary_recipients The recipients for log summaries. Defaults to ['info@enableit.dk'].
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
 #
 # @groups configuration manual_config, configure, service_options, version
 #

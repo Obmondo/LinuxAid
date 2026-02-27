@@ -1,4 +1,67 @@
-# Haproxy
+# @summary Class for managing Haproxy
+#
+# @param service_options Additional options for the haproxy service.
+#
+# @param defaults_file_path The absolute path to the defaults file.
+#
+# @param configure The configuration method to use.
+#
+# @param domains The domains to be managed by haproxy.
+#
+# @param listens The listening configurations for haproxy.
+#
+# @param firewall The firewall configurations.
+#
+# @param restart_command The command to restart haproxy.
+#
+# @param manual_config Optional manual configuration for the haproxy.
+#
+# @param ddos_protection Boolean to enable or disable DDoS protection. Defaults to false.
+#
+# @param https Boolean to enable or disable HTTPS. Defaults to true.
+#
+# @param http Boolean to enable or disable HTTP. Defaults to false.
+#
+# @param use_hsts Boolean to enable or disable HSTS. Defaults to true.
+#
+# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt. Defaults to true.
+#
+# @param mode The mode of haproxy. Defaults to 'http'.
+#
+# @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
+#
+# @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
+#
+# @param version The version of haproxy. Defaults to 'present'.
+#
+# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+#
+# @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
+#
+# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+#
+# @param service_ensure The desired state of the haproxy service. Defaults to true.
+#
+# @param service_enable Whether the haproxy service should be enabled. Defaults to true.
+#
+# @param service_name The name of the haproxy service. Defaults to 'haproxy'.
+#
+# @param log_compressed Boolean to enable or disable compressed logs. Defaults to false.
+#
+# @param log_dir The directory for log files. Defaults to '/var/log'.
+#
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+#
+# @groups configuration manual_config, configure, service_options, version, defaults_file_path, restart_command
+#
+# @groups networking domains, listens, listen_on, firewall
+#
+# @groups logging log_compressed, log_dir
+#
+# @groups service service_ensure, service_enable, service_name
+#
+# @groups mode mode, http
+#
 class eit_haproxy (
   Hash                          $service_options,
   String                        $defaults_file_path,

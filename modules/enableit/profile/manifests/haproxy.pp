@@ -1,4 +1,37 @@
-# Haproxy Profile
+# @param version The version of haproxy. Defaults to 'present'.
+#
+# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+#
+# @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
+#
+# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+#
+# @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
+#
+# @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
+#
+# @param firewall The firewall configurations. Defaults to an empty hash.
+#
+# @param service_options Additional options for the haproxy service. Defaults to an empty hash.
+#
+# @param log_compressed Boolean to enable or disable compressed logs.
+#
+# @param log_dir The directory for log files.
+#
+# @param send_log_summary Boolean to enable or disable sending log summaries.
+#
+# @param log_summary_recipients The recipients for log summaries.
+#
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+#
+# @groups configuration manual_config, configure, service_options, version
+#
+# @groups networking domains, listens, listen_on, firewall
+#
+# @groups logging log_compressed, log_dir, send_log_summary, log_summary_recipients
+#
+# @groups mode mode, http
+#
 class profile::haproxy (
   Enum['auto', 'manual']        $configure,
   Optional[String]              $manual_config,
