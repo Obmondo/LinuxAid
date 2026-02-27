@@ -19,8 +19,12 @@ class profile::computing::slurm::slurmctld (
 
   include ::slurm::slurmctld
 
+  notify { "This is slurmctld enabling metrics": }
+
   if versioncmp($slurm_version, '25.11') >= 0 {
+    notify { "The slurm version which we are using is ${slurm_version}": }
     $metrics.each |$metric| {
+      notify { "The slurm metrics which we are enabling is ${metric}": }
       prometheus::scrape_job { "${metric}_${scrape_host}_${slurmctldport}":
         job_name    => 'slurm',
         collect_dir => '/etc/prometheus/file_sd_config.d',
