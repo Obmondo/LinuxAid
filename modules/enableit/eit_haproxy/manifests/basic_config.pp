@@ -183,8 +183,23 @@ class eit_haproxy::basic_config (
     if $use_native_acme {
       # Add Native ACME Monitoring which will loop and directly call monitor::domains
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
-        monitor::domains { $cn:
-          enable => true,
+        if $cn == 'rejected_domains' {
+          if $san.size > 0 {
+            notify { "These domains got rejected because its not pointing to correct server = ${san}": }
+            file { '/etc/puppetlabs/facter/facts.d/obmondo_certs_rejected.json':
+              ensure  => file,
+              mode    => '0644',
+              content => stdlib::to_json({
+                  'rejected_domains' => $san,
+              }),
+              noop    => false,
+            }
+          }
+        } else {
+          # Monitor the CN, since SAN are part of same cert, so expiry would be same ofcourse :)
+          monitor::domains { $cn:
+            enable => true,
+          }
         }
       }
     }
