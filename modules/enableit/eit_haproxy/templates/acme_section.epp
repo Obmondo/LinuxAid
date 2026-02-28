@@ -1,9 +1,9 @@
-<%- | String $contact,
-      String $directory
+<%- | Eit_types::Email $contact,
+      String $acme_ca
 | -%>
 
 acme LE
-  directory <%= $directory %>
+  directory <%= $acme_ca %>
   account-key /etc/ssl/private/letsencrypt.account.key
   contact <%= $contact %>
   challenge http-01

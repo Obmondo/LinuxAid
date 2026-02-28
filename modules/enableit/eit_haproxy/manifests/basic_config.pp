@@ -22,13 +22,13 @@
 #
 # @param version The version of haproxy. Defaults to 'latest'.
 #
-# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+# @param native_acme Internal switch for native ACME mode.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+# @param acme_ca The ACME CA directory URL used internally.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact
 #
 # @groups networking domains, listens, listen_on
 #
@@ -47,11 +47,13 @@ class eit_haproxy::basic_config (
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Package_version    $version            = 'latest',
-  Boolean                       $use_native_acme    = $eit_haproxy::use_native_acme,
-  String                        $acme_contact       = $eit_haproxy::acme_contact,
-  String                        $acme_directory     = $eit_haproxy::acme_directory,
+  Eit_types::Version            $version            = 'latest',
+  Boolean                       $native_acme        = false,
+  Eit_types::Email              $acme_contact       = $eit_haproxy::acme_contact,
+  String                        $acme_ca            = 'https://acme-v02.api.letsencrypt.org/directory',
 ) {
+  $_use_native_acme = $native_acme
+
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
   # Strict == Modern
@@ -73,7 +75,7 @@ class eit_haproxy::basic_config (
     }
   }
 
-  $_native_acme_global_options = if $use_native_acme {
+  $_native_acme_global_options = if $_use_native_acme {
     {
       'expose-experimental-directives'  => '',
       'ssl-default-bind-ciphersuites'   => 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256',
@@ -117,13 +119,13 @@ class eit_haproxy::basic_config (
     }
   }
 
-  if $use_native_acme {
+  if $_use_native_acme {
     concat::fragment { 'haproxy_acme_section':
       target  => $haproxy::config_file,
       order   => '12-acme',
       content => epp('eit_haproxy/acme_section.epp', {
-          'contact'   => $acme_contact,
-          'directory' => $acme_directory,
+        'contact' => $acme_contact,
+        'acme_ca' => $acme_ca,
       }),
     }
   }
@@ -142,13 +144,13 @@ class eit_haproxy::basic_config (
 
   $web_bind_ports = [
     if $https { 443 },
-    if $http and !$use_native_acme { 80 },
+    if $http and !$_use_native_acme { 80 },
   ].delete_undef_values
 
   # Setup binds and required haproxy rule
   $binds = functions::array_to_hash($web_bind_ports.map |$port| {
       $_ssl = if $port == 443 and $mode == 'http' {
-        if $use_native_acme {
+        if $_use_native_acme {
           'ssl crt /etc/ssl/private/haproxy-dummy.pem alpn h2,http/1.1 strict-sni'
         } else {
           [
@@ -184,7 +186,7 @@ class eit_haproxy::basic_config (
         { 'http-response set-header' => 'Strict-Transport-Security include_subdomains;\ preload;\ max-age=31536000; if { ssl_fc }' }
       },
       { 'http-request redirect scheme https if !{ ssl_fc }' => [
-          if $https and $use_lets_encrypt and !$use_native_acme { '!is_letsencrypt' },
+          if $https and $use_lets_encrypt and !$_use_native_acme { '!is_letsencrypt' },
           if $_allow_http_acl { '!allow_http' },
         ].delete_undef_values.join(' '),
       }
@@ -205,7 +207,7 @@ class eit_haproxy::basic_config (
 
     $public_ips = lookup('common::settings::publicips', Array, undef, [])
 
-    if $use_lets_encrypt and !$use_native_acme {
+    if $use_lets_encrypt and !$_use_native_acme {
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
         profile::certs::letsencrypt::domain { $cn:
           domains             => $san,
@@ -215,7 +217,7 @@ class eit_haproxy::basic_config (
       }
     }
 
-    if $use_native_acme {
+    if $_use_native_acme {
       # Add Native ACME Monitoring which will loop and directly call monitor::domains
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
         if $cn == 'rejected_domains' {
@@ -249,7 +251,7 @@ class eit_haproxy::basic_config (
       }
     }.flatten
 
-    if $https and $use_lets_encrypt and !$use_native_acme {
+    if $https and $use_lets_encrypt and !$_use_native_acme {
       # letsencrypt backend
       haproxy::backend { 'letsencrypt':
         mode    => 'http',
@@ -295,7 +297,7 @@ class eit_haproxy::basic_config (
         { 'http-request'  => 'deny deny_status 429 if !is_priority ww_rl_reached' },
       ]
 
-      $_native_acme_frontend_options = if $use_native_acme {
+      $_native_acme_frontend_options = if $_use_native_acme {
         $domains.filter |$group_name, $opts| {
           if $opts['force_https'] { true } else { false }
         }.map |$group_name, $opts| {
@@ -312,7 +314,7 @@ class eit_haproxy::basic_config (
         bind    => $binds,
         options => [
           { 'option' => "${mode}log" },
-          if $https and $use_lets_encrypt and !$use_native_acme {
+          if $https and $use_lets_encrypt and !$_use_native_acme {
             { 'acl is_letsencrypt' => 'path_beg /.well-known/acme-challenge/' }
           },
           $http_only_domains_options,
@@ -320,7 +322,7 @@ class eit_haproxy::basic_config (
           if $ddos_protection {
             $ddos_protection_options
           },
-          if $https and $use_lets_encrypt and !$use_native_acme {
+          if $https and $use_lets_encrypt and !$_use_native_acme {
             [{ 'use_backend letsencrypt' => 'if is_letsencrypt' }]
           },
           $_native_acme_frontend_options,
@@ -328,7 +330,7 @@ class eit_haproxy::basic_config (
         ].delete_undef_values.flatten,
       }
 
-      if $use_native_acme {
+      if $_use_native_acme {
         haproxy::frontend { 'acme':
           mode    => 'http',
           bind    => functions::array_to_hash($listen_on.map |$listen| {

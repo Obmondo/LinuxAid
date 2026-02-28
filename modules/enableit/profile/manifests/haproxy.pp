@@ -1,10 +1,8 @@
 # @param version The version of haproxy. Defaults to 'present'.
 #
-# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
-#
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
 #
 # @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
 #
@@ -22,7 +20,7 @@
 #
 # @param log_summary_recipients The recipients for log summaries.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version
 #
@@ -43,10 +41,9 @@ class profile::haproxy (
   Boolean                       $use_hsts               = true,
   Boolean                       $use_lets_encrypt       = true,
   Enum['http','tcp']            $mode                   = 'http',
-  Eit_types::Package_version    $version                = 'present',
-  Boolean                       $use_native_acme        = false,
-  String                        $acme_contact           = 'ops@enableit.dk',
-  String                        $acme_directory         = 'https://acme-v02.api.letsencrypt.org/directory',
+  Eit_types::Version            $version                = 'latest',
+  Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
+  Enum['production','staging']  $ca_type                = 'production',
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Hash[Eit_types::IP,Variant[
@@ -81,9 +78,8 @@ class profile::haproxy (
     https              => $https,
     http               => $http,
     use_lets_encrypt   => $use_lets_encrypt,
-    use_native_acme    => $use_native_acme,
     acme_contact       => $acme_contact,
-    acme_directory     => $acme_directory,
+    ca_type            => $ca_type,
     use_hsts           => $use_hsts,
     mode               => $mode,
     listen_on          => $listen_on,

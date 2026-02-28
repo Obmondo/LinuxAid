@@ -28,11 +28,9 @@
 #
 # @param version The version of haproxy. Defaults to 'present'.
 #
-# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
-#
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
 #
 # @param service_options Additional options for the haproxy service. Defaults to an empty hash.
 #
@@ -47,7 +45,7 @@
 #
 # @param log_summary_recipients The recipients for log summaries. Defaults to ['info@enableit.dk'].
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version
 #
@@ -74,10 +72,9 @@ class role::web::haproxy (
       Array[Stdlib::Port],
       Stdlib::Port
   ]]                            $firewall               = {},
-  Eit_types::Package_version    $version                = 'present',
-  Boolean                       $use_native_acme        = false,
-  String                        $acme_contact           = 'ops@enableit.dk',
-  String                        $acme_directory         = 'https://acme-v02.api.letsencrypt.org/directory',
+  Eit_types::Version            $version                = 'latest',
+  Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
+  Enum['production','staging']  $ca_type                = 'production',
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
   Stdlib::Absolutepath          $log_dir                = '/var/log',
@@ -99,9 +96,8 @@ class role::web::haproxy (
     mode                   => $mode,
     manual_config          => $manual_config,
     version                => $version,
-    use_native_acme        => $use_native_acme,
     acme_contact           => $acme_contact,
-    acme_directory         => $acme_directory,
+    ca_type                => $ca_type,
     configure              => $configure,
     listen_on              => $listen_on,
     encryption_ciphers     => $encryption_ciphers,

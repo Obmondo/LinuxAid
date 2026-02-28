@@ -32,13 +32,11 @@
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
-# @param version The version of haproxy. Defaults to 'present'.
-#
-# @param use_native_acme Boolean to enable or disable HAProxy 3.2+ native ACME. Defaults to false.
+# @param version The version of haproxy. Defaults to 'latest'.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param acme_directory The ACME directory URL. Defaults to Let's Encrypt production.
+# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
 #
 # @param service_ensure The desired state of the haproxy service. Defaults to true.
 #
@@ -50,7 +48,7 @@
 #
 # @param log_dir The directory for log files. Defaults to '/var/log'.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, use_native_acme, acme_contact, acme_directory
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version, defaults_file_path, restart_command
 #
@@ -83,10 +81,9 @@ class eit_haproxy (
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Package_version    $version            = 'present',
-  Boolean                       $use_native_acme    = false,
-  String                        $acme_contact       = 'ops@enableit.dk',
-  String                        $acme_directory     = 'https://acme-v02.api.letsencrypt.org/directory',
+  Eit_types::Version            $version            = 'latest',
+  Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
+  Enum['production','staging']  $ca_type            = 'production',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
   String                        $service_name       = 'haproxy',
@@ -103,8 +100,16 @@ class eit_haproxy (
   }
 
   if $configure == 'auto' {
-    if $version == 'latest' {
-      if $facts['os']['name'] == 'Ubuntu' and $facts['os']['distro']['codename'] == 'noble' {
+    $_is_ubuntu = $facts['os']['name'] == 'Ubuntu'
+    $_wants_haproxy3 = $version == 'latest' or String($version) =~ Pattern[/^3(\.|$)/]
+    $_use_native_acme = $_is_ubuntu and $_wants_haproxy3
+    $_acme_ca = $ca_type ? {
+      'staging'    => 'https://acme-staging-v02.api.letsencrypt.org/directory',
+      default      => 'https://acme-v02.api.letsencrypt.org/directory',
+    }
+
+    if $_wants_haproxy3 {
+      if $_is_ubuntu {
         contain apt
 
         $haproxy_lts_version = '3.2'
@@ -112,11 +117,11 @@ class eit_haproxy (
 
         Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
       } else {
-        warning('eit_haproxy::manage_community_repo is only supported on Ubuntu Noble')
+        warning('HAProxy 3.x auto-native ACME path is only supported on Ubuntu')
       }
     }
 
-    if $use_native_acme {
+    if $_use_native_acme {
       ensure_packages(['socat', 'openssl'])
 
       class { 'eit_haproxy::dummy_cert':
@@ -132,18 +137,36 @@ class eit_haproxy (
         group  => 'root',
       }
 
-      cron { 'haproxy-dump-certs':
-        command => '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print \$2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/ >/dev/null 2>&1',
-        user    => 'root',
-        minute  => '0',
-        hour    => '3',
-        require => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
+      $_dump_timer = @(EOT)
+        [Unit]
+        Description=Dump HAProxy in-memory certificates to disk
+        Requires=haproxy-dump-certs.service
+        [Timer]
+        OnCalendar=*-*-* 03:00:00
+        RandomizedDelaySec=5m
+        | EOT
+
+      $_dump_service = @(EOT)
+        [Unit]
+        Description=Dump HAProxy in-memory certificates to disk
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        | EOT
+
+      systemd::timer { 'haproxy-dump-certs.timer':
+        ensure          => present,
+        timer_content   => $_dump_timer,
+        service_content => $_dump_service,
+        active          => true,
+        enable          => true,
+        require         => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
       }
     }
 
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_acme_flush = if $use_native_acme { @(EOT)
+      $_acme_flush = if $_use_native_acme { @(EOT)
         ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
         ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
         | EOT
@@ -168,14 +191,14 @@ class eit_haproxy (
     class { 'eit_haproxy::basic_config':
       domains            => $domains,
       version            => $version,
+      native_acme        => $_use_native_acme,
       ddos_protection    => $ddos_protection,
       https              => $https,
       http               => $http,
       use_hsts           => $use_hsts,
-      use_lets_encrypt   => if $use_native_acme { false } else { $use_lets_encrypt },
-      use_native_acme    => $use_native_acme,
+      use_lets_encrypt   => if $_use_native_acme { false } else { $use_lets_encrypt },
       acme_contact       => $acme_contact,
-      acme_directory     => $acme_directory,
+      acme_ca            => $_acme_ca,
       listens            => $listens,
       mode               => $mode,
       listen_on          => $listen_on,

@@ -7,7 +7,7 @@ class eit_haproxy::auto_config (
   Eit_types::HaproxyListens       $listens             = {},
   Optional[Eit_types::Http::Cors] $cors_font_domain    = undef,
   Optional[Boolean]               $redirect_http       = true,
-  Eit_types::Package_version      $version             = 'latest',
+  Eit_types::Version              $version             = 'latest',
 ) {
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
