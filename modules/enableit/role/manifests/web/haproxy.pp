@@ -65,7 +65,6 @@ class role::web::haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
-  Hash[Eit_types::IP,Variant[    Array[Stdlib::Port],    Stdlib::Port  ]]                            $firewall               = {},
   Eit_types::Package_version    $version                = 'present',
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
@@ -73,6 +72,8 @@ class role::web::haproxy (
   Boolean                       $__blendable,
   Boolean                       $send_log_summary       = false,
   Array[String]                 $log_summary_recipients = ['info@enableit.dk'],
+
+  Hash[Eit_types::IP,Variant[Array[Stdlib::Port], Stdlib::Port]] $firewall = {},
 ) inherits role::web {
 
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')

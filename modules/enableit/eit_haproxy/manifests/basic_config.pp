@@ -229,12 +229,8 @@ class eit_haproxy::basic_config (
 
       $domains.each | $domain, $opts | {
         $domain_backend = regsubst($domain, /\./, '_', 'G')
-        $extra_options  = if $opts['extra_opts'].length > 0 {
-          $opts['extra_opts']
-        }
-        else {
-          'check'
-        }
+        $extra_options = pick($opts['extra_opts'], 'check')
+
         # Setup the Backend
         haproxy::backend { $domain_backend:
           mode    => $mode,

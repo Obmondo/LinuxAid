@@ -192,7 +192,7 @@ mod 'maestrodev/wget',
 
 mod 'biemond/wildfly',
     :git => 'https://github.com/biemond/biemond-wildfly.git',
-    :ref => 'v.2.0.0'
+    :ref => 'v4.0.0'
 
 mod 'hunner/wordpress',
     :git => 'https://github.com/hunner/puppet-wordpress.git',
@@ -309,6 +309,8 @@ mod 'bodgit/rngd',
 mod 'bodgit/zfs',
     :git => 'https://github.com/bodgit/puppet-zfs.git',
     :ref => 'v3.0.0'
+
+mod 'cirrax-borgbackup', '1.8.1'
 
 mod 'deric/beegfs',
     :git => 'https://github.com/deric/puppet-beegfs.git',

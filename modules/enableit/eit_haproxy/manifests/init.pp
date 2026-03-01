@@ -38,19 +38,20 @@ class eit_haproxy (
   }
 
   if $configure == 'auto' {
-    # NOTE: Needed this, we install our own haproxy 2.9 on centos7
-    if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_service = @(EOT)
-        [Service]
-        ExecStartPre=
-        ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
-        | EOT
+    if $facts['packages']['haproxy'] {
+      if versioncmp($facts['packages']['haproxy']['version'], '2.5.0') >= 0 {
+        $_service = @(EOT)
+          [Service]
+          ExecStartPre=
+          ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
+          | EOT
 
-      systemd::dropin_file { 'haproxy_dropin':
-        filename => 'haproxy-override.conf',
-        unit     => 'haproxy.service',
-        content  => $_service,
-        notify   => Service['haproxy'],
+        systemd::dropin_file { 'haproxy_dropin':
+          filename => 'haproxy-override.conf',
+          unit     => 'haproxy.service',
+          content  => $_service,
+          require  => Package['haproxy'],
+        }
       }
     }
 
