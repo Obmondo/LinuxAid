@@ -2,6 +2,31 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.1
+
+### Features
+- b9195d47 feat: add acme support for haproxy 3
+- bd16f65f feat: add haproxy 3
+
+### Bug Fixes
+- 1e32716a fix: auto-enable native ACME for 3.x on Noble and add ACME CA/timer flow with other fixes
+- 04cd9c2b fix: address lint issues for puppet strings docs
+- 463d539f fix: handle immediate scheduling of certificate renewals
+- 32a26417 fix: handle rejected domains in the Native acme monitoring loop
+- af20c7ac fix: address the formatting lint issues
+- 09f48dec fix: handle configuration conflict and the unintended certbot execution
+- 5f141b7e fix: write the automated renewed certificates from memory to disk via cron script
+- 6e7ddfa8 fix: handle certificate issuing for multiple group of domains
+- 4fa62a38 fix: handle unknown service name error for haproxy challenge response
+- e8782a71 fix: remove dependency on extra variables for version and use the existing one
+- b70f4fe7 fix: handle setting config version when a git directory for a repo exists
+- b1b6f21f fix extra_options parameter while passing undef
+- c4f72e72 fix: remove unwanted 'main' component from kubernetes apt repo
+
+### Other Changes
+- c9981f7e Fixed the logrotate rule
+- 8e4bc737 Rotate slurmd logs
+
 ## LinuxAid Release Version v1.4.9
 
 ### Bug Fixes
