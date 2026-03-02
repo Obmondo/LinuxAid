@@ -1,10 +1,5 @@
-####################################################
-# Loaded by ALL customers                          #
-####################################################
+# Profile entry point
 class profile (
 ) {
-
-  # Contain Class
   contain ::common
-  contain ::profile::system
 }
