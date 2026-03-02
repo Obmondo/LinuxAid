@@ -101,8 +101,13 @@ class eit_haproxy (
 
   if $configure == 'auto' {
     $_is_ubuntu = $facts['os']['name'] == 'Ubuntu'
-    $_wants_haproxy3 = $version == 'latest' or String($version) =~ Pattern[/^3(\.|$)/]
+    $_wants_haproxy3 = if String($version) =~ Pattern[/^3(\.|$)/] {
+      versioncmp(String($version), '3.2.0') >= 0
+    } else {
+      false
+    }
     $_use_native_acme = $_is_ubuntu and $_wants_haproxy3
+
     $_acme_ca = $ca_type ? {
       'staging'    => 'https://acme-staging-v02.api.letsencrypt.org/directory',
       default      => 'https://acme-v02.api.letsencrypt.org/directory',
@@ -122,7 +127,7 @@ class eit_haproxy (
     }
 
     if $_use_native_acme {
-      ensure_packages(['socat', 'openssl'])
+      ensure_packages(['socat', 'openssl', 'ssl-cert'])
 
       class { 'eit_haproxy::dummy_cert':
         domains => $domains,
@@ -151,7 +156,7 @@ class eit_haproxy (
         Description=Dump HAProxy in-memory certificates to disk
         [Service]
         Type=oneshot
-        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
         | EOT
 
       systemd::timer { 'haproxy-dump-certs.timer':
@@ -167,8 +172,8 @@ class eit_haproxy (
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
       $_acme_flush = if $_use_native_acme { @(EOT)
-        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | awk "/^\*/ {print $2}" | xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
         | EOT
       } else { '' }
 

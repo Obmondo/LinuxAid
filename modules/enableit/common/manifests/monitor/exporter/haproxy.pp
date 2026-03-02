@@ -2,7 +2,7 @@
 #
 # @param enable Boolean flag to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 #
-# @param noop_value Boolean value for noop mode. Defaults to false.
+# @param noop_value Boolean value for noop mode. Defaults to the value of $common::monitor::exporter::noop_value.
 #
 # @param listen_port The port to listen on. Defaults to 63661.
 #

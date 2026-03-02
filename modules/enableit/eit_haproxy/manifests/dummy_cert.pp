@@ -2,29 +2,74 @@
 class eit_haproxy::dummy_cert (
   Eit_haproxy::Domains $domains = {},
 ) {
-  exec { 'ensure_ssl_private_dir':
-    command => '/bin/mkdir -p /etc/ssl/private',
-    creates => '/etc/ssl/private',
+  $_bootstrap_dir = '/etc/ssl/private/haproxy-bootstrap'
+  $_snakeoil_cert = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
+  $_snakeoil_key = '/etc/ssl/private/ssl-cert-snakeoil.key'
+  $_pem_validate_cmd = eit_haproxy::pem_validate_cmd()
+
+  file { '/etc/ssl/private':
+    ensure => directory,
+    mode   => '0710',
   }
 
-  $domains.each | $group_name, $opts | {
-    if $opts['force_https'] {
-      # Make filename match what basic_config will use
-      $_cert_filename = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
-      $_first_domain = $opts['domains'][0]
+  file { $_bootstrap_dir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    recurse => true,
+    purge   => true,
+    force   => true,
+    require => File['/etc/ssl/private'],
+  }
 
-      exec { "generate_haproxy_dummy_cert_${_cert_filename}":
-        command => "/usr/bin/openssl req -x509 -nodes -days 1 -newkey rsa:2048 -keyout /etc/ssl/private/${_cert_filename}.pem -out /etc/ssl/private/${_cert_filename}.pem -subj \"/CN=${_first_domain}\"",
-        creates => "/etc/ssl/private/${_cert_filename}.pem",
-        require => Exec['ensure_ssl_private_dir'],
-      }
+  file { $_snakeoil_cert:
+    ensure  => file,
+    require => Package['ssl-cert'],
+  }
+
+  file { $_snakeoil_key:
+    ensure  => file,
+    require => Package['ssl-cert'],
+  }
+
+  $_managed_domain_cert_files = $domains.filter |$group_name, $opts| {
+    $opts['force_https']
+  }.map |$group_name, $opts| {
+    $_cert_filename = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
+    "${_bootstrap_dir}/${_cert_filename}.pem"
+  }
+
+  $_managed_domain_cert_files.each |$cert_file| {
+    file { $cert_file:
+      ensure       => file,
+      owner        => 'root',
+      group        => 'root',
+      mode         => '0600',
+      source       => ["file://${_snakeoil_cert}", "file://${_snakeoil_key}"],
+      sourceselect => 'all',
+      validate_cmd => $_pem_validate_cmd,
+      require      => [
+        File[$_bootstrap_dir],
+        File[$_snakeoil_cert],
+        File[$_snakeoil_key],
+      ],
     }
   }
 
   # Always keep one default fallback cert just in case
-  exec { 'generate_haproxy_dummy_cert':
-    command => '/usr/bin/openssl req -x509 -nodes -days 1 -newkey rsa:2048 -keyout /etc/ssl/private/haproxy-dummy.pem -out /etc/ssl/private/haproxy-dummy.pem -subj "/CN=localhost"',
-    creates => '/etc/ssl/private/haproxy-dummy.pem',
-    require => Exec['ensure_ssl_private_dir'],
+  file { "${_bootstrap_dir}/haproxy-dummy.pem":
+    ensure       => file,
+    owner        => 'root',
+    group        => 'root',
+    mode         => '0600',
+    source       => ["file://${_snakeoil_cert}", "file://${_snakeoil_key}"],
+    sourceselect => 'all',
+    validate_cmd => $_pem_validate_cmd,
+    require      => [
+      File[$_bootstrap_dir],
+      File[$_snakeoil_cert],
+      File[$_snakeoil_key],
+    ],
   }
 }
