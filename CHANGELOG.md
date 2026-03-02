@@ -4,6 +4,9 @@ All releases and the changes included in them (pulled from git commits added sin
 
 ## LinuxAid Release Version v1.5.1
 
+No changes in this release.
+## LinuxAid Release Version v1.5.1
+
 ### Features
 - b9195d47 feat: add acme support for haproxy 3
 - bd16f65f feat: add haproxy 3
