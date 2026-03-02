@@ -37,28 +37,31 @@ raise ArgumentError, "Certname is wrong: '#{CERTNAME}" if certname_parts.nil?
 customer_id = certname_parts['customer_id']
 node_name = certname_parts['node_name']
 
-# When running tests we let everyone have a subscription
-subscription = if TESTING
-                 {'product_id' => 'silver'}
-               else
-                 begin
-                   obmondo_api("/subscription/#{CERTNAME}")
-                 rescue
-                   nil
-                 end
-               end
+# Single API call to get server data (subscription, tags, environment, etc.)
+server_data = if TESTING
+                {
+                  'tags' => ['tag1'],
+                  'product_id' => 'silver',
+                  'linuxaid_tag' => nil,
+                }
+              else
+                begin
+                  response = obmondo_api("/servers/customer/#{customer_id}?certname=#{CERTNAME}")
+                  if response['data'] && !response['data'].empty?
+                    response['data'].first
+                  else
+                    nil
+                  end
+                rescue => e
+                  warn 'API is down; no server data available!'
+                  warn "#{e.class}: #{e}"
+                  nil
+                end
+              end
 
-tag_keys = if TESTING
-             ['tag1']
-           else
-             begin
-               obmondo_api("/server/#{CERTNAME}/tags")
-             rescue ArgumentError => e
-               warn 'API is down; no tags available!'
-               warn "#{e.class}: #{e}"
-               []
-             end
-           end
+subscription_product_id = server_data&.dig('product_id')
+tag_keys = server_data&.dig('tags') || []
+linuxaid_tag = server_data&.dig('linuxaid_tag')
 
 # ensure that we don't have too many tags -- if we allow for more tags, we also
 # need to update hiera.yaml!
@@ -82,11 +85,11 @@ parameters = {
     'customer_id'  => customer_id,
     'node_name'    => node_name,
     'tags'         => tag_keys,
-    'monitor'      => !subscription.nil?,
-    'subscription' => (subscription['product_id'] unless subscription.nil?),
+    'monitor'      => !subscription_product_id.nil?,
+    'subscription' => subscription_product_id,
   },
-  'subscription'    => (subscription['product_id'] unless subscription.nil?),
-  'obmondo_monitor' => !subscription.nil?,
+  'subscription'    => subscription_product_id,
+  'obmondo_monitor' => !subscription_product_id.nil?,
   'hiera_datapath'  => customer_id + '/' + DEFAULT_HIERA_BRANCH,
   'obmondo_tags'    => tag_keys,
 }.merge(tags)
@@ -94,5 +97,7 @@ parameters = {
 output = {
   'parameters' => parameters
 }
+
+output['environment'] = linuxaid_tag if linuxaid_tag
 
 puts YAML.dump(output)
