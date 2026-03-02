@@ -1,4 +1,3 @@
-
 # @summary Class for managing the Haproxy web role
 #
 # @param manual_config Optional manual configuration for the haproxy. Defaults to undef.
@@ -29,6 +28,10 @@
 #
 # @param version The version of haproxy. Defaults to 'present'.
 #
+# @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
+#
+# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
+#
 # @param service_options Additional options for the haproxy service. Defaults to an empty hash.
 #
 # @param log_compressed Boolean to enable or disable compressed logs. Defaults to true.
@@ -42,7 +45,7 @@
 #
 # @param log_summary_recipients The recipients for log summaries. Defaults to ['info@enableit.dk'].
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version
 #
@@ -65,8 +68,13 @@ class role::web::haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
-  Hash[Eit_types::IP,Variant[    Array[Stdlib::Port],    Stdlib::Port  ]]                            $firewall               = {},
-  Eit_types::Package_version    $version                = 'present',
+  Hash[Eit_types::IP,Variant[
+      Array[Stdlib::Port],
+      Stdlib::Port
+  ]]                            $firewall               = {},
+  Eit_types::Version            $version                = 'latest',
+  Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
+  Enum['production','staging']  $ca_type                = 'production',
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
   Stdlib::Absolutepath          $log_dir                = '/var/log',
@@ -74,7 +82,6 @@ class role::web::haproxy (
   Boolean                       $send_log_summary       = false,
   Array[String]                 $log_summary_recipients = ['info@enableit.dk'],
 ) inherits role::web {
-
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
   confine($send_log_summary, $log_summary_recipients.size == 0, 'Log summary sender needs at least 1 recipient')
 
@@ -89,6 +96,8 @@ class role::web::haproxy (
     mode                   => $mode,
     manual_config          => $manual_config,
     version                => $version,
+    acme_contact           => $acme_contact,
+    ca_type                => $ca_type,
     configure              => $configure,
     listen_on              => $listen_on,
     encryption_ciphers     => $encryption_ciphers,

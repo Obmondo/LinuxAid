@@ -1,0 +1,10 @@
+<%- | Eit_types::Email $contact,
+      String $acme_ca
+| -%>
+
+acme LE
+  directory <%= $acme_ca %>
+  account-key /etc/ssl/private/letsencrypt.account.key
+  contact <%= $contact %>
+  challenge http-01
+  map virt@acme

@@ -1,14 +1,14 @@
 # Haproxy Config
 class eit_haproxy::auto_config (
-  Enum[ 'strict', 'strong' ]      $encryption_ciphers,
+  Enum['strict', 'strong']      $encryption_ciphers,
   Hash                            $letsencrypt_setup   = {},
   Eit_types::HaproxyAuth          $auth                = {},
   Eit_types::HaproxyProxies       $proxies             = {},
   Eit_types::HaproxyListens       $listens             = {},
   Optional[Eit_types::Http::Cors] $cors_font_domain    = undef,
   Optional[Boolean]               $redirect_http       = true,
+  Eit_types::Version              $version             = 'latest',
 ) {
-
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
   # Strict == Modern
@@ -38,6 +38,7 @@ class eit_haproxy::auto_config (
 
   # Default copied from haproxy::params
   class { 'haproxy':
+    package_ensure  => $version,
     global_options   => {
       'log'                       => '127.0.0.1 local0',
       'crt-base'                  => '/etc/ssl/private',
@@ -55,7 +56,7 @@ class eit_haproxy::auto_config (
     defaults_options => {
       'log'     => 'global',
       'stats'   => 'enable',
-      'option'  => [ 'redispatch' ],
+      'option'  => ['redispatch'],
       'retries' => '3',
       'timeout' => [
         'http-request 10s',
@@ -71,77 +72,75 @@ class eit_haproxy::auto_config (
 
   # Setup Frontend and Backend
   $proxies.each |
-    $proxy_name,
-    $proxy_value,
+  $proxy_name,
+  $proxy_value,
 
-    # Variables
-    $sites          = $proxy_value['sites'],
-    $binds          = $proxy_value['binds'],
-    $mode           = $proxy_value['mode'],
-    $extra_options  = $proxy_value['extra_options'],
-    $letsencrypt    = $proxy_value['letsencrypt'],
-    $redirect_rules = $proxy_value['redirect_rules'],
+  # Variables
+  $sites          = $proxy_value['sites'],
+  $binds          = $proxy_value['binds'],
+  $mode           = $proxy_value['mode'],
+  $extra_options  = $proxy_value['extra_options'],
+  $letsencrypt    = $proxy_value['letsencrypt'],
+  $redirect_rules = $proxy_value['redirect_rules'],
   | {
-
     # Merge the two hashes, if letsencrypt is true
     $_sites = if $letsencrypt { stdlib::merge($letsencrypt_setup,$sites) } else { $sites }
 
     # Haproxy Frontend
     # Acls
     $_nested_acls = flatten(delete_undef_values($_sites.map |$site, $opts| {
-      if ! empty($opts['domains','paths','urls']) {
-        # Set the header option
-        $_header = case true {
-          !empty($opts['header'])  : {$opts['header']}
-          !empty($opts['domains']) : {'hdr(host)'}
-          !empty($opts['paths'])   : {'path_beg'}
-          !empty($opts['urls'])    : {'url_beg'}
-          default                  : { fail('Something Wrong with headers') }
-        }
+          if ! empty($opts['domains','paths','urls']) {
+            # Set the header option
+            $_header = case true {
+              !empty($opts['header'])  : { $opts['header'] }
+              !empty($opts['domains']) : { 'hdr(host)' }
+              !empty($opts['paths'])   : { 'path_beg' }
+              !empty($opts['urls'])    : { 'url_beg' }
+              default                  : { fail('Something Wrong with headers') }
+            }
 
-        pick($opts['domains'],$opts['paths'],$opts['urls']).map |$endpoint| {
-          Hash([
-            "acl is_${site}", "${_header} ${endpoint}"
-          ])
-        }
-      }
+            pick($opts['domains'],$opts['paths'],$opts['urls']).map |$endpoint| {
+              Hash([
+                  "acl is_${site}", "${_header} ${endpoint}",
+              ])
+            }
+          }
     }))
-
 
     # use_backends
     $_nested_options = flatten(delete_undef_values($_sites.map |$site, $opts| {
-      # Set the header option
-      $_backend_options = $opts['use_backend_options']
+          # Set the header option
+          $_backend_options = $opts['use_backend_options']
 
-      # Set ssl_fc is true
-      $_ssl_fc = unless empty($opts['ssl_fc']) { $opts['ssl_fc'] }
+          # Set ssl_fc is true
+          $_ssl_fc = unless empty($opts['ssl_fc']) { $opts['ssl_fc'] }
 
-      if ! empty($opts['domains','paths','urls']) {
-        $opts['domains','paths','urls'].map |$endpoint| {
-          Hash([
-            "use_backend ${site}", "if ${_backend_options} is_${site} ${_ssl_fc}"
-          ])
-        }
-      }
+          if ! empty($opts['domains','paths','urls']) {
+            $opts['domains','paths','urls'].map |$endpoint| {
+              Hash([
+                  "use_backend ${site}", "if ${_backend_options} is_${site} ${_ssl_fc}",
+              ])
+            }
+          }
     }))
 
     # binds
-    $_binds = pick($binds, { '0.0.0.0' => { ports => [80], }})
+    $_binds = pick($binds, { '0.0.0.0' => { ports => [80], } })
     $_nested_binds = eit_haproxy::haproxy_binds($_binds)
 
     # Default Backend
     # default backend if nothing is set under hiera, we will simply pick the first key under $sites
     $_default_backend_false = [
       Hash([
-        'default_backend', Array($sites)[0][0]
+          'default_backend', Array($sites)[0][0]
       ])
     ]
 
     # return [] if default_backend is false
     $_default_backend_true = delete_undef_values($sites.map |$site, $opts| {
-      if $opts['default_backend'] {
-        { 'default_backend' => $site }
-      }
+        if $opts['default_backend'] {
+          { 'default_backend' => $site }
+        }
     })
 
     $default_backend = if empty($_default_backend_true) {
@@ -158,28 +157,28 @@ class eit_haproxy::auto_config (
     # handle all the extra options here
     # currently acl, http_request, redirect_request, no, timeout and log are supported
     $_extra_options = delete_undef_values(flatten([
-      if $cors_font_domain {
-        Hash([
-          'http-request set-var(txn.path)', 'path',
-        ])
-      },
-      $extra_options.map |$key, $opts| {
-        $opts.map |$x| {
-          { $key => $x }
-        }
-      }
+          if $cors_font_domain {
+            Hash([
+                'http-request set-var(txn.path)', 'path',
+            ])
+          },
+          $extra_options.map |$key, $opts| {
+            $opts.map |$x| {
+              { $key => $x }
+            }
+          }
     ]))
 
     if $redirect_http {
       # Setup the redirect https rule based on the cert presences.
       $_acl_letsencrypt_http_pending_domain = delete_undef_values(flatten($_sites.map |$site, $opts| {
-        if ! empty($opts['domains']) {
-          $opts['domains'].map |$domain| {
-            if ! $::facts['letsencrypt_directory'][$domain] or $opts['force_https'] == false {
-              { 'acl is_unencrypted hdr(host)' => $domain }
+            if ! empty($opts['domains']) {
+              $opts['domains'].map |$domain| {
+                if ! $::facts['letsencrypt_directory'][$domain] or $opts['force_https'] == false {
+                  { 'acl is_unencrypted hdr(host)' => $domain }
+                }
+              }
             }
-          }
-        }
       }))
 
       $_redir_http = [
@@ -196,31 +195,31 @@ class eit_haproxy::auto_config (
       'http' : {
         if $redirect_http {
           delete_undef_values(union(
-            [{'option' => 'httplog'}],
-            $_nested_acls,
-            $_acl_letsencrypt_http_pending_domain,
-            $_extra_settings,
-            $_redir_http,
-            $_extra_options,
-            $_nested_options,
-            $default_backend,
+              [{ 'option' => 'httplog' }],
+              $_nested_acls,
+              $_acl_letsencrypt_http_pending_domain,
+              $_extra_settings,
+              $_redir_http,
+              $_extra_options,
+              $_nested_options,
+              $default_backend,
           ))
         } else {
           delete_undef_values(union(
-            [{'option' => 'httplog'}],
-            $_nested_acls,
-            $_extra_settings,
-            $_extra_options,
-            $_nested_options,
-            $default_backend,
+              [{ 'option' => 'httplog' }],
+              $_nested_acls,
+              $_extra_settings,
+              $_extra_options,
+              $_nested_options,
+              $default_backend,
           ))
         }
       }
       'tcp' : {
         delete_undef_values(union(
-          [{'option' => 'tcplog'}],
-          $_extra_options,
-          $default_backend,
+            [{ 'option' => 'tcplog' }],
+            $_extra_options,
+            $default_backend,
         ))
       }
       default: {
@@ -239,34 +238,34 @@ class eit_haproxy::auto_config (
     # Haproxy Backend Setup
     $_sites.map |$site, $opts| {
       $_server_options = $opts.dig('backend_options', 'server_options')
-        .then |$x| { join($opts, ', ') }
-        .lest || { if $site != 'letsencrypt' { 'check' } }
+      .then |$x| { join($opts, ', ') }
+      .lest || { if $site != 'letsencrypt' { 'check' } }
 
       $_cors_font_domain = if $cors_font_domain {
         Hash([
-          'http-response set-header Access-Control-Allow-Origin',
-          "${cors_font_domain} if { var(txn.path) -m end -i .ttf .ttc .otf .eot .woff .woff2 } { status eq 200:299 }",
+            'http-response set-header Access-Control-Allow-Origin',
+            "${cors_font_domain} if { var(txn.path) -m end -i .ttf .ttc .otf .eot .woff .woff2 } { status eq 200:299 }",
         ])
       }
 
       $_extra_options = $opts.dig('backend_options', 'extra_options')
-        .then |$x| {
-          $x.map |$opts| {
-            { $opts => '' }
-          }
+      .then |$x| {
+        $x.map |$opts| {
+          { $opts => '' }
         }
-        .lest || { [] }
+      }
+      .lest || { [] }
 
       $_nested_backends = $opts['servers'].map |$index, $endpoint| {
         Hash([
-          "server ${site}_${index}", "${endpoint} ${_server_options}"
+            "server ${site}_${index}", "${endpoint} ${_server_options}",
         ])
       }
 
       $_options = delete_undef_values(union(
-        $_extra_options,
-        [$_cors_font_domain],
-        $_nested_backends,
+          $_extra_options,
+          [$_cors_font_domain],
+          $_nested_backends,
       ))
 
       haproxy::backend { $site :
@@ -279,7 +278,7 @@ class eit_haproxy::auto_config (
   unless empty($auth) {
     # Create users for HTTP Basic authentication in haproxy
     create_resources('eit_haproxy::users::userlist', {
-      auth => $auth,
+        auth => $auth,
     })
   }
 
@@ -293,9 +292,9 @@ class eit_haproxy::auto_config (
 
     # Servers
     $_server = flatten($listen_value['servers'].map |$index, $x| {
-      Hash([
-        "server ${_site}_${index}", "${x} check"
-      ])
+        Hash([
+            "server ${_site}_${index}", "${x} check",
+        ])
     })
 
     haproxy::listen { $listen_name :
@@ -303,7 +302,7 @@ class eit_haproxy::auto_config (
       mode    => $_mode,
       options => union(
         $_server,
-        [{'option' => "${_mode}log"}],
+        [{ 'option' => "${_mode}log" }],
         [$listen_value['extra_options']],
       ),
     }
