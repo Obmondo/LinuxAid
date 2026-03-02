@@ -22,6 +22,6 @@ class common::monitor::scom (
   Eit_types::Noop_Value         $noop_value         = undef,
 ) {
   if $enable {
-    include profile::monitoring::scom
+    include profile::monitor::scom
   }
 }

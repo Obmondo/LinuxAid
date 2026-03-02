@@ -30,7 +30,7 @@
 #
 # @groups logging log_keep_count, log_max_file_size_b
 #
-class common::monitoring::splunk::forwarder (
+class common::monitor::splunk::forwarder (
   String[1]             $password_hash,
   Eit_types::Version    $version             = '7.2.4',
   Optional[String]      $build               = '8a94541dcfac',
@@ -42,5 +42,5 @@ class common::monitoring::splunk::forwarder (
   Boolean               $enable              = false,
   Eit_types::Noop_Value $noop_value          = undef,
 ) {
-  contain profile::monitoring::splunk::forwarder
+  contain profile::collector::splunk::forwarder
 }

@@ -55,7 +55,7 @@ class role::monitoring::rsyslog (
   Boolean        $__blendable,
 ) {
 
-  class { 'profile::rsyslog':
+  class { 'profile::collector::rsyslog':
     global_config      => $global_config,
     legacy_config      => $legacy_config,
     templates          => $templates,

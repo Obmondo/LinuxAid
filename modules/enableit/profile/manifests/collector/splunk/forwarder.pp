@@ -1,15 +1,15 @@
 # Splunk Forwarder
-class profile::monitoring::splunk::forwarder (
-  Boolean                   $enable              = $common::monitoring::splunk::forwarder::enable,
-  Eit_types::Noop_Value     $noop_value          = $common::monitoring::splunk::forwarder::noop_value,
-  Eit_types::Version        $version             = $common::monitoring::splunk::forwarder::version,
-  Optional[String]          $build               = $common::monitoring::splunk::forwarder::build,
-  Optional[Stdlib::HTTPUrl] $deploymentserver    = $common::monitoring::splunk::forwarder::deploymentserver,
-  Boolean                   $seed_password       = $common::monitoring::splunk::forwarder::seed_password,
-  String[1]                 $password_hash       = $common::monitoring::splunk::forwarder::password_hash,
-  Optional[Hash]            $forwarder_output    = $common::monitoring::splunk::forwarder::forwarder_output,
-  Integer                   $log_keep_count      = $common::monitoring::splunk::forwarder::log_keep_count,
-  Eit_types::Bytes          $log_max_file_size_b = $common::monitoring::splunk::forwarder::log_max_file_size_b,
+class profile::collector::splunk::forwarder (
+  Boolean                   $enable              = $common::monitor::splunk::forwarder::enable,
+  Eit_types::Noop_Value     $noop_value          = $common::monitor::splunk::forwarder::noop_value,
+  Eit_types::Version        $version             = $common::monitor::splunk::forwarder::version,
+  Optional[String]          $build               = $common::monitor::splunk::forwarder::build,
+  Optional[Stdlib::HTTPUrl] $deploymentserver    = $common::monitor::splunk::forwarder::deploymentserver,
+  Boolean                   $seed_password       = $common::monitor::splunk::forwarder::seed_password,
+  String[1]                 $password_hash       = $common::monitor::splunk::forwarder::password_hash,
+  Optional[Hash]            $forwarder_output    = $common::monitor::splunk::forwarder::forwarder_output,
+  Integer                   $log_keep_count      = $common::monitor::splunk::forwarder::log_keep_count,
+  Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
 ) {
 
   user { 'splunk' :

@@ -18,7 +18,7 @@ class common::monitor (
     contain ::common::monitor::prometheus
 
     if lookup('common::monitor::splunk::forwarder::manage', Boolean, undef, false) {
-      include common::monitoring::splunk::forwarder
+      include common::monitor::splunk::forwarder
     }
     if lookup('common::monitor::scom::manage', Boolean, undef, false) {
       include common::monitoring::scom

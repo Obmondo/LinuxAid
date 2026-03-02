@@ -1,5 +1,5 @@
 # Rsyslog Server
-class profile::rsyslog (
+class profile::collector::rsyslog (
   Optional[Hash] $global_config      = {},
   Optional[Hash] $legacy_config      = {},
   Optional[Hash] $templates          = {},

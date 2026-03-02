@@ -16,5 +16,5 @@ class role::monitoring::journal_remote (
   Stdlib::Unixpath $output        = '/var/log/journal/remote',
 ) inherits ::role::monitoring {
 
-  include 'profile::monitoring::journal_remote'
+  include 'profile::collector::journal_remote'
 }

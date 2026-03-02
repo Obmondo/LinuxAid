@@ -1,10 +1,10 @@
 # Microsoft SCOM
 class profile::monitor::scom (
-  Optional[Array[Stdlib::Host]] $scom_masters       = $common::monitoring::scom::scom_masters,
-  Boolean                       $install_sudo_rules = $common::monitoring::scom::install_sudo_rules,
-  Eit_types::User               $scom_user          = $common::monitoring::scom::scom_user,
-  Eit_types::Noop_Value         $noop_value         = $common::monitoring::scom::noop_value,
-) inherits ::profile {
+  Optional[Array[Stdlib::Host]] $scom_masters       = $common::monitor::scom::scom_masters,
+  Boolean                       $install_sudo_rules = $common::monitor::scom::install_sudo_rules,
+  Eit_types::User               $scom_user          = $common::monitor::scom::scom_user,
+  Eit_types::Noop_Value         $noop_value         = $common::monitor::scom::noop_value,
+) {
 
   if !$scom_masters.empty {
     firewall { '100 allow microsoft scom agent':

@@ -31,19 +31,19 @@ class profile::software::miniforge (
 
   # Oneshot service for installing Miniforge.
   systemd::manage_unit { 'miniforge_install.service':
-    ensure            => ensure_present($enable),
-    enable            => false,
-    unit_entry        => {
+    ensure        => ensure_present($enable),
+    enable        => false,
+    unit_entry    => {
       'Description' => 'Miniforge Install Service',
     },
-    service_entry     => {
+    service_entry => {
       'Type'            => 'oneshot',
       'ExecStart'       => "${download_path} -b -p ${install_dir}",
       'RemainAfterExit' => true,
     },
-    install_entry     => {
+    install_entry => {
       'WantedBy' => 'multi-user.target',
     },
-    require           => Archive[$download_path],
+    require       => Archive[$download_path],
   }
 }
