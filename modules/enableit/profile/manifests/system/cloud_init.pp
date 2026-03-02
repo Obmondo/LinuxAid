@@ -8,7 +8,7 @@
 class profile::system::cloud_init (
   Boolean $enable   = $common::system::cloud_init::manage,
   Array   $services = $common::system::cloud_init::services,
-) inherits ::profile::system {
+) {
 
   # Lets disable network management via cloud-init and lets manage it via puppet
   file { '/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg' :

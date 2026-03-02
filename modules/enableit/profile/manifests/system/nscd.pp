@@ -8,7 +8,7 @@ class profile::system::nscd (
   Boolean      $cache_netgroup        = $common::system::nscd::cache_netgroup,
   Boolean      $cache_services        = $common::system::nscd::cache_services,
   Boolean      $use_socket_activation = $common::system::nscd::use_socket_activation,
-) inherits ::profile::system {
+) {
 
   package::install('nscd', {
     ensure => ensure_present($ensure),

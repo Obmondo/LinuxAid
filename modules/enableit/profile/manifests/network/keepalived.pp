@@ -1,5 +1,5 @@
 # KeepAlived
-class profile::keepalived (
+class profile::network::keepalived (
   Hash $global_defs = $::common::keepalived::global_defs,
   Hash $sync_groups = $::common::keepalived::sync_groups,
   Hash $instances   = $::common::keepalived::instances,

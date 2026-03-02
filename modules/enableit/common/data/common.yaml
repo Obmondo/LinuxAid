@@ -157,7 +157,6 @@ common::default::classes:
   - common::monitor
 
 common::system::classes:
-  - common::user_management::authentication
   - common::system::dns
   - common::system::kernel
   - common::system::grub
@@ -165,12 +164,10 @@ common::system::classes:
   - common::system::hardware
   - common::system::limits
   - common::system::package_management
-  - common::user_management::motd
   - common::system::nsswitch
-  - common::user_management::sshd
   - common::system::time
   - common::system::cloud_init
-  - common::user_management::security
+  - common::system::relocatetmp
 
 ## System Settings
 common::system::repo::manage: true

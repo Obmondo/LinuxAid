@@ -7,7 +7,7 @@ class profile::system::grub (
       value  => Optional[Variant[Array,String,Boolean]],
     }]
   ] $parameters = $::common::system::grub::parameters,
-) inherits ::profile::system {
+) {
 
   $parameters.each |$key, $value| {
     kernel_parameter { $key:
