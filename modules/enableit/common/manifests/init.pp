@@ -2,36 +2,18 @@
 #
 # @param full_host_management Boolean to enable or disable full host management functionalities. Defaults to true.
 #
-# @param devices Hash containing device configurations. Defaults to an empty hash.
-#
-# @param mounts Hash mapping absolute paths to mount points and their types. Defaults to an empty hash.
-#
-# @param filepermissions Hash specifying file permission settings.
+# @param noop_value Noop value for the common class. Defaults to undef.
 #
 # @groups management full_host_management
 #
-# @groups configuration devices, mounts, filepermissions
+# @groups configuration noop_value
 #
 class common (
-  Boolean $full_host_management,
-  Hash    $devices              = {},
-  Hash[Stdlib::Absolutepath,
-    Tuple[
-      Eit_types::Mount,
-      [
-        Variant[
-          Eit_types::MountLuks,
-          Eit_types::MountNfs,
-        ]
-      ],
-    ]
-  ] $mounts = {},
-  Hash[Stdlib::Absolutepath,
-    Struct[
-      {
-        mode => Stdlib::Filemode,
-        apply_recursively => Boolean,
-  }]] $filepermissions = {},
+  Boolean               $full_host_management,
+  Eit_types::Noop_Value $noop_value = undef,
+  Stdlib::Absolutepath  $__conf_dir = '/etc/obmondo',
+  Stdlib::Absolutepath  $__opt_dir  = '/opt/obmondo',
+  Stdlib::Absolutepath  $__bin_dir  = '/opt/obmondo/bin',
 ) {
   Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
   Stage['setup'] -> Stage['main']
@@ -44,6 +26,31 @@ class common (
       eit_repos::repo { 'enableit_client':
         noop_value => false,
       }
+    }
+
+    # Create Obmondo group for exporter to run under this group
+    group { 'obmondo':
+      ensure => present,
+      system => true,
+      noop   => $noop_value,
+    }
+
+    file {
+      default:
+        ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
+        noop   => $noop_value,
+        ;
+
+      [
+        $__conf_dir,
+        $__bin_dir,
+        $__opt_dir,
+        "${__opt_dir}/home",
+        "${__opt_dir}/share",
+        "${__opt_dir}/etc",
+        "${__conf_dir}/sudoers.d",
+      ]:
+        ;
     }
 
     # NOTE: Need these classes to be setup as a bare minimum on all roles
@@ -72,8 +79,6 @@ class common (
       contain common::system
       contain common::software
       contain common::devices
-      contain common::virtualization
-      contain common::monitoring
       contain common::hosts
       contain common::storage
       contain common::lvm
@@ -82,13 +87,13 @@ class common (
       # but keeping, so we can enable or improve it later
       # contain ::common::mount
       contain common::services
-      contain common::security
+      contain common::user_management::security
       contain common::extras
       # Only manage mail if not using a role that provides it
       if $::obmondo_classes.grep('::mailcow').empty {
         contain common::mail
       }
-      $filepermissions.each |$path, $params| {
+      $::filepermissions.each |$path, $params| {
         $recurse = if $params[apply_recursively] { '-r' } else { '' }
         $mode = $params[mode]
         exec { "chmod ${recurse} ${mode} ${path}":

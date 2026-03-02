@@ -16,13 +16,17 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups database_params backup_user_password, backup_user, encrypt_params
-#
-# @groups enable_params enable, backup_hour
-#
-# @groups storage_params dump_dir, backup_retention, ignore_tables
-#
 # @encrypt_params backup_user_password
+#
+# @groups general enable, encrypt_params
+#
+# @groups authentication backup_user, backup_user_password
+#
+# @groups schedule backup_hour
+#
+# @groups storage dump_dir
+#
+# @groups retention backup_retention, ignore_tables
 #
 class common::backup::db::mysql::xtrabackup (
   Eit_types::Password       $backup_user_password  = $::common::backup::db::backup_user_password,
@@ -82,7 +86,7 @@ class common::backup::db::mysql::xtrabackup (
     'MYSQL_IGNORE_TABLES' => $ignore_tables,
     'MYSQL_BACKUP_USER'   => $backup_user,
   }
-  $env_file = "${common::setup::__conf_dir}/mysql/backup.env"
+  $env_file = "${common::backup::__conf_dir}/mysql/backup.env"
   file { $env_file:
     ensure  => file,
     content => hash_to_ini($env, {

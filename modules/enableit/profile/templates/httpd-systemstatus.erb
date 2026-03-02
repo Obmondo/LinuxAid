@@ -44,7 +44,7 @@
   ProxyPassMatch ^/(fpm_status|ping) fcgi://127.0.0.1:9001/$1
   ProxyPassReverse ^/(fpm_status|ping) fcgi://127.0.0.1:9001/$1
 <% end -%>
-<% if classes.include? "profile::tomcat" or classes.include? "profile::wildfly" -%>
+<% if classes.include? "profile::appeng::tomcat" or classes.include? "profile::appeng::wildfly" -%>
     ## Proxy rules
     ProxyRequests Off
     ProxyPass /manager/html ajp://localhost:8009 retry=0 timeout=600

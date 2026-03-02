@@ -10,11 +10,11 @@
 #
 # @param domains Array of domain names to monitor. Defaults to ['nrk.no', 'vg.no', 'example.com'].
 #
-# @groups service enable, noop_value.
+# @groups settings enable, noop_value
 #
-# @groups connection listen_address, interval_seconds.
+# @groups network listen_address
 #
-# @groups domain domains.
+# @groups configuration interval_seconds, domains
 #
 class common::monitor::exporter::dns (
   Boolean                      $enable           = $common::monitor::exporter::enable,

@@ -18,6 +18,15 @@ class profile::package_management::packagesign (
   Optional[String]            $gitserver_token  = $role::package_management::repo::gitserver_token,
 ) {
 
+  $_token = $provider ? {
+    undef   => '',
+    default => $gitserver_token,
+  }
+  $_pass = $packagesign ? {
+    true    => $signing_password,
+    default => '',
+  }
+
   file {
     '/opt/obmondo/docker-compose/packagesign':
       ensure => ensure_dir($manage),
@@ -25,14 +34,8 @@ class profile::package_management::packagesign (
     '/opt/obmondo/docker-compose/packagesign/.env':
       ensure  => ensure_present($packagesign),
       content => anything_to_ini({
-        'TOKEN' => $provider ? {
-          undef   => '',
-          default => $gitserver_token,
-        },
-        'PASS'  => $packagesign ? {
-          true    => $signing_password,
-          default => '',
-        },
+        'TOKEN' => $_token,
+        'PASS'  => $_pass,
       }).node_encrypt::secret,
     ;
     '/opt/obmondo/docker-compose/packagesign/docker-compose.yaml':

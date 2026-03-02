@@ -8,7 +8,7 @@
 #
 # @param noop_value The noop flag for Puppet resources. Defaults to false.
 #
-# @groups general enable, noop_value
+# @groups settings enable, noop_value
 #
 # @groups network listen_port, host
 #

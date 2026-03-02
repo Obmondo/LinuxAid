@@ -4,7 +4,7 @@
 #
 # @param noop_value Optional Boolean for no-operation mode. Defaults to false.
 #
-# @groups operation_params enable, noop_value.
+# @groups settings enable, noop_value
 #
 class common::monitor::exporter::node::smartmon (
   Boolean               $enable     = $common::monitor::exporter::node::enable,

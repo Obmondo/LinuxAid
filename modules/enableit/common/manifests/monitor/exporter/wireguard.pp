@@ -6,7 +6,7 @@
 #
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
-# @groups enablement enable, noop_value
+# @groups settings enable, noop_value
 #
 # @groups network listen_address
 #

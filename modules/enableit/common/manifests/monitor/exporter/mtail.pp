@@ -10,11 +10,11 @@
 #
 # @param progs The path to the programs directory. Defaults to "${common::monitor::exporter::config_dir}/mtail".
 #
-# @groups control enable, noop_value
+# @groups settings enable, noop_value
 #
-# @groups connection listen_address
+# @groups network listen_address
 #
-# @groups filesystem logs, progs
+# @groups configuration logs, progs
 #
 class common::monitor::exporter::mtail (
   Boolean                     $enable         = $common::monitor::exporter::enable,

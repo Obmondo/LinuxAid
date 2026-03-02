@@ -1,7 +1,7 @@
 # EnableIT Client
 class eit_repos::yum::centos_base (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   package::install('centos-release')

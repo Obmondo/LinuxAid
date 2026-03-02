@@ -11,11 +11,11 @@
 #
 # @param targets An array of domain targets to monitor. Defaults to an empty array.
 #
-# @groups control enable, noop_value
+# @groups settings enable, noop_value
 #
-# @groups configuration config_file, listen_port
+# @groups network listen_port
 #
-# @groups monitoring targets
+# @groups configuration config_file, targets
 #
 class common::monitor::exporter::blackbox (
   Boolean                $enable,

@@ -30,21 +30,19 @@
 #
 # @param lvm_extents_min_required The minimum required LVM extents percentage. Defaults to 15.
 #
-# @param push A hash for push configurations. Defaults to empty hash.
+# @param conf_dir The configuration directory path. Defaults to $common::__conf_dir.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @param root_password The root password for secure operations. Defaults to undef.
 #
-# @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params
+# @groups management manage, install_client, enable, backup_user, backup_user_password, encrypt_params, conf_dir
 #
 # @groups storage dump_dir, keep_days, backup_window_starthour, backup_window_lasthour
 #
 # @groups encryption luks, lukspass, luks_service_name
 #
 # @groups lvm lvm, lvm_vg, lvm_extents_min_required
-#
-# @groups push_config push
 #
 # @groups security root_password
 #
@@ -66,31 +64,15 @@ class common::backup (
   Optional[Boolean]              $lvm                      = undef,
   Optional[String]               $lvm_vg                   = undef,
   Optional[Eit_types::Password]  $root_password            = undef,
+  Stdlib::Absolutepath           $conf_dir                 = $common::__conf_dir,
   Eit_types::Percentage          $lvm_extents_min_required = 15,
-  Hash[
-    String,
-    Struct[
-      {
-      target      => Eit_types::Host,
-      source      => Stdlib::Absolutepath,
-      destination => Stdlib::Absolutepath,
-      keep_time   => Pattern[/[0-9]+[DMWY]/],
-      hour        => Eit_types::TimeHour,
-      email       => Optional[Eit_types::Email],
-      exclude     => Array[Variant[Stdlib::Absolutepath,String]],
-  }]]                            $push                     = {},
   Eit_types::Encrypt::Params     $encrypt_params            = ['backup_user_password', 'root_password'],
-
 ) {
   confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')
   confine($luks, !($lukspass or $luks_service_name),
     'A LUKS passphrase or the name of the service that starts LUKS must be defined if `luks` is enabled')
   confine($luks, $lukspass, $luks_service_name, 'Only one of `lukspass` and `luks_service_name` may be set')
-  # TODO: this is not used anymore rdiff-backup.
-  # remove it later
-  unless empty($push) {
-    create_resources('common::backup::push', $push)
-  }
+
   if $manage {
     user { $backup_user:
       ensure         => present,

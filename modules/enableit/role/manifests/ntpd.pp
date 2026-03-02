@@ -23,7 +23,7 @@ class role::ntpd (
   Optional[Integer[0]]    $panic    = undef,
 ) {
 
-  class { '::profile::ntpd':
+  class { '::profile::system::ntpd':
     servers  => $servers,
     burst    => $burst,
     restrict => $restrict,

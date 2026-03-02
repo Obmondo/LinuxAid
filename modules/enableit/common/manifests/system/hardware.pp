@@ -17,6 +17,6 @@ class common::system::hardware (
     'multipathd.service',
     'multipathd.socket',
   ],
-) inherits common::system {
+) {
   contain profile::system::hardware
 }

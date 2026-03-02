@@ -1,7 +1,7 @@
 # Microsoft
 class eit_repos::apt::microsoft (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $_os_type = $facts['os']['name'].downcase

@@ -18,7 +18,7 @@ class common::system::kernel (
   }] $modules = {},
 
   Hash[Eit_types::SimpleString, Variant[Numeric,String]] $sysctl = {},
-) inherits ::common::system {
+) {
 
   $modules.each |$key, $value| {
     $value.each |$module| {

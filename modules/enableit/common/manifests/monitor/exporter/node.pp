@@ -64,17 +64,23 @@
 #
 # @param noop_value Boolean value for noop mode. Defaults to false.
 #
-# @groups filesystem buddyinfo, cgroups, ksmd, meminfo_numa, slabinfo, zoneinfo.
+# @param manage_lsof Whether to manage the lsof exporter. Defaults to $enable.
 #
-# @groups network drbd, ethtool, lnstat, network_route, qdisc, tcpstat, wifi.
+# @param manage_smartmon Whether to manage the smartmon exporter. Defaults to $enable.
 #
-# @groups system drm, interrupts, logind, mountstats, runit, supervisord, sysctl, systemd, thermal_zone, ntp.
+# @param manage_ssacli Whether to manage the ssacli exporter. Defaults to $enable.
 #
-# @groups processes perf, processes.
+# @param manage_topprocesses Whether to manage the topprocesses exporter. Defaults to $enable.
 #
-# @groups config textfile_directory, lib_directory, listen_address, enable, noop_value.
+# @groups settings enable, noop_value, version
 #
-# @groups extras host, version
+# @groups network listen_address, host
+#
+# @groups collectors buddyinfo, cgroups, drbd, drm, ethtool, interrupts, ksmd, lnstat, logind, meminfo_numa, mountstats, network_route, ntp, perf, processes, qdisc, runit, slabinfo, supervisord, sysctl, systemd, tcpstat, thermal_zone, wifi, zoneinfo
+#
+# @groups directories textfile_directory, lib_directory
+#
+# @groups sub_exporters manage_lsof, manage_smartmon, manage_ssacli, manage_topprocesses
 #
 class common::monitor::exporter::node (
   Boolean      $buddyinfo,
@@ -111,6 +117,11 @@ class common::monitor::exporter::node (
   Boolean               $enable     = true,
   Eit_types::Version    $version    = '1.10.2',
   Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
+
+  Boolean               $manage_lsof = $enable,
+  Boolean               $manage_smartmon = $enable,
+  Boolean               $manage_ssacli = $enable,
+  Boolean               $manage_topprocesses = $enable,
 ) {
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 
@@ -123,10 +134,21 @@ class common::monitor::exporter::node (
 
   # NOTE: The underlying packages only works with systemd
   if $facts['service_provider'] == 'systemd' {
-    include common::monitor::exporter::node::smartmon
-    include common::monitor::exporter::node::topprocesses
-    include common::monitor::exporter::node::lsof
-    include common::monitor::exporter::node::ssacli
+    if $manage_smartmon {
+      include common::monitor::exporter::node::smartmon
+    }
+
+    if $manage_topprocesses {
+      include common::monitor::exporter::node::topprocesses
+    }
+
+    if $manage_lsof {
+      include common::monitor::exporter::node::lsof
+    }
+
+    if $manage_ssacli {
+      include common::monitor::exporter::node::ssacli
+    }
   }
 
   file { $lib_directory:

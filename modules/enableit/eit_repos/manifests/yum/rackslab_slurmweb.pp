@@ -1,7 +1,7 @@
 # Rackslab slurm-web yum repos
 class eit_repos::yum::rackslab_slurmweb (
   Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean $noop_value = undef,
 ) {
 
   yumrepo { 'rackslab-slurmweb-5' :

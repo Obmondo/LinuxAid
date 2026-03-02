@@ -35,7 +35,7 @@ class role::web::reverse_cache (
 
   # vcl, secret and other options should be arguments to THIS class
   # should also setup nginx - if ssl is selected
-  class { '::profile::varnish':
+  class { '::profile::web::varnish':
     backendip    => $backendip,
     backendport  => $backendport,
     adminacl     => $adminacl,

@@ -1,5 +1,5 @@
 ---
-common::system::authentication::purge_ubuntu_user: true
+common::user_management::authentication::purge_ubuntu_user: true
 
 common::system::systemd::manage_resolved: true
 common::system::dns::resolver: 'systemd-resolved'

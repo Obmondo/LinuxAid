@@ -1,8 +1,8 @@
 # Sudoers
 class profile::system::sudoers (
-  Boolean              $purge         = $common::system::authentication::sudo::purge,
-  Eit_types::Sudoers   $sudoers       = $common::system::authentication::sudo::sudoers,
-  Stdlib::Absolutepath $sudoers_d_dir = $common::system::authentication::sudo::sudoers_d_dir,
+  Boolean              $purge         = $common::user_management::authentication::sudo::purge,
+  Eit_types::Sudoers   $sudoers       = $common::user_management::authentication::sudo::sudoers,
+  Stdlib::Absolutepath $sudoers_d_dir = $common::user_management::authentication::sudo::sudoers_d_dir,
 ) {
   contain sudo::params
 
@@ -51,13 +51,13 @@ class profile::system::sudoers (
   }
 
   sudo::conf { 'yubikey_sudo_enable':
-    ensure   => ensure_present($common::system::authentication::sudo::ssh_agent_auth),
+    ensure   => ensure_present($common::user_management::authentication::sudo::ssh_agent_auth),
     priority => 1,
     content  => 'Defaults env_keep += "SSH_AUTH_SOCK"',
     require  => File[$sudoers_d_dir],
   }
 
-  package::install('pam-ssh-agent-auth', ensure_present($common::system::authentication::sudo::ssh_agent_auth))
+  package::install('pam-ssh-agent-auth', ensure_present($common::user_management::authentication::sudo::ssh_agent_auth))
 
   $sudoers.each |$name, $v| {
     profile::system::sudoers::conf { $name:

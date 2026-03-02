@@ -1,8 +1,8 @@
 ---
-common::system::authentication::ignore_expired_root_password: true
+common::user_management::authentication::ignore_expired_root_password: true
 
 common::logging::rsyslog::log_local: true
-common::services::disabled_services:
+common::system::disabled_services:
   - 'abrtd'
   - 'abrt-oops'
   - 'kdump'

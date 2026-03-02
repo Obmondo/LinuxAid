@@ -1,3 +1,5 @@
+# @summary Class for managing OpenVAS scanner
+#
 class profile::scanner::openvas (
   Stdlib::Absolutepath   $install_dir                  = $role::scanner::openvas::install_dir,
   Boolean                $install                      = $role::scanner::openvas::install,

@@ -8,7 +8,9 @@
 #
 # @param host The hostname or certname to use. Defaults to $trusted['certname'].
 #
-# @groups configuration enable, noop_value, listen_port, host.
+# @groups settings enable, noop_value
+#
+# @groups network listen_port, host
 #
 class common::monitor::exporter::haproxy (
   Boolean               $enable      = $common::monitor::exporter::enable,

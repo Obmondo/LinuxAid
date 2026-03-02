@@ -4,7 +4,7 @@
 #source: https://fourkitchens.atlassian.net/wiki/display/TECH/Configure+Varnish+3+for+Drupal+7
 
 acl purgers {
-<% scope.lookupvar('::profile::varnish::quoted_purgers').each do |purger| -%>
+<% scope.lookupvar('::profile::web::varnish::quoted_purgers').each do |purger| -%>
   <%= purger %>;
 <% end %>
 }
@@ -13,8 +13,8 @@ acl purgers {
 # server.
 #
 backend default {
-  .host = "<%= scope.lookupvar('::profile::varnish::backendip') %>";
-  .port = "<%= scope.lookupvar('::profile::varnish::backendport') %>";
+  .host = "<%= scope.lookupvar('::profile::web::varnish::backendip') %>";
+  .port = "<%= scope.lookupvar('::profile::web::varnish::backendport') %>";
   .first_byte_timeout = 300s;
 }
 

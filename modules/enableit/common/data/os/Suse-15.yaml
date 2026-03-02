@@ -1,8 +1,8 @@
 ---
-common::system::authentication::ignore_expired_root_password: true
+common::user_management::authentication::ignore_expired_root_password: true
 
 common::logging::rsyslog::log_local: true
-common::services::disabled_services:
+common::system::disabled_services:
   - 'abrtd'
   - 'abrt-oops'
   - 'kdump'
@@ -48,10 +48,10 @@ common::system::nsswitch::aliases:
 
 common::system::dns::resolver: 'systemd-resolved'
 common::monitor::exporter::enable: true
-common::system::authentication::pam::password_session_lines:
+common::user_management::authentication::pam::password_session_lines:
   - - 40
     - 'optional      pam_oddjob_mkhomedir.so umask=0077'
 
-common::system::authentication::pam::session_lines:
+common::user_management::authentication::pam::session_lines:
   - - 40
     - 'optional      pam_oddjob_mkhomedir.so umask=0077'

@@ -12,7 +12,7 @@ class role::appeng::cgi (
   Enum['apache'] $http_server  = 'apache',
 ) inherits ::role::appeng {
 
-  class { '::profile::perl':
+  class { '::profile::web::perl':
     cgi         => true,
     url         => $url,
     http_server => $http_server,

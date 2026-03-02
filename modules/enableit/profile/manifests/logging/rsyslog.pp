@@ -1,4 +1,4 @@
-# rsyslog
+# Rsyslog client setup
 class profile::logging::rsyslog (
   Boolean                       $enable          = $::common::logging::rsyslog::enable,
   Boolean                       $purge_rsyslog_d = $::common::logging::rsyslog::purge_rsyslog_d,

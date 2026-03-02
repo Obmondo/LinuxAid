@@ -2,23 +2,23 @@
 # https://jhrozek.wordpress.com/2015/03/11/anatomy-of-sssd-user-lookup/
 # https://wiki.samba.org/index.php/Samba_Member_Server_Troubleshooting
 class profile::system::authentication::sssd (
-  Boolean                                     $enable                = $common::system::authentication::sssd::enable,
+  Boolean                                     $enable                = $common::user_management::authentication::sssd::enable,
   Optional[Array]                             $extra_packages,
-  Array[Eit_types::Sssd::Service]             $services              = $common::system::authentication::sssd::services,
+  Array[Eit_types::Sssd::Service]             $services              = $common::user_management::authentication::sssd::services,
   # variable in hiera as it may depend on distribution
-  Array[Eit_types::Sssd::Service]             $_available_services   = $common::system::authentication::sssd::_available_services,
-  Eit_types::Sssd::Domains                    $domains               = $common::system::authentication::sssd::domains,
-  Optional[Eit_types::Domain]                 $default_domain_suffix = $common::system::authentication::sssd::default_domain_suffix,
-  Optional[Eit_types::Sssd::Debug_Level]      $debug_level           = $common::system::authentication::sssd::debug_level,
-  Boolean                                     $manage_oddjobd        = $common::system::authentication::sssd::manage_oddjobd,
-  Eit_types::Sssd::Full_name_format           $full_name_format      = $common::system::authentication::sssd::full_name_format,
-  Optional[Eit_types::Sssd::Override_homedir] $override_homedir      = $common::system::authentication::sssd::override_homedir,
-  Hash                                        $override_config       = $common::system::authentication::sssd::override_config,
-  Eit_types::Noop_Value                       $noop_value            = $common::system::authentication::sssd::noop_value,
-  Array                                       $required_packages     = $common::system::authentication::sssd::required_packages,
+  Array[Eit_types::Sssd::Service]             $_available_services   = $common::user_management::authentication::sssd::_available_services,
+  Eit_types::Sssd::Domains                    $domains               = $common::user_management::authentication::sssd::domains,
+  Optional[Eit_types::Domain]                 $default_domain_suffix = $common::user_management::authentication::sssd::default_domain_suffix,
+  Optional[Eit_types::Sssd::Debug_Level]      $debug_level           = $common::user_management::authentication::sssd::debug_level,
+  Boolean                                     $manage_oddjobd        = $common::user_management::authentication::sssd::manage_oddjobd,
+  Eit_types::Sssd::Full_name_format           $full_name_format      = $common::user_management::authentication::sssd::full_name_format,
+  Optional[Eit_types::Sssd::Override_homedir] $override_homedir      = $common::user_management::authentication::sssd::override_homedir,
+  Hash                                        $override_config       = $common::user_management::authentication::sssd::override_config,
+  Eit_types::Noop_Value                       $noop_value            = $common::user_management::authentication::sssd::noop_value,
+  Array                                       $required_packages     = $common::user_management::authentication::sssd::required_packages,
 ) {
 
-  confine($enable, !lookup('common::system::authentication::manage_pam', Boolean),
+  confine($enable, !lookup('common::user_management::authentication::manage_pam', Boolean),
           'PAM must be managed for SSSD to work')
 
   $_enable = !empty($domains) and $enable

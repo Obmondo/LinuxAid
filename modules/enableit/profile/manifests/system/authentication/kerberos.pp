@@ -1,19 +1,19 @@
 # Kerberos integration
 class profile::system::authentication::kerberos (
-  Boolean                                  $enable         = $common::system::authentication::kerberos::enable,
-  Optional[String]                         $base_dn        = $common::system::authentication::kerberos::base_dn,
-  Optional[String]                         $ou             = $common::system::authentication::kerberos::ou,
-  Eit_types::Domain                        $default_realm  = $common::system::authentication::kerberos::default_realm,
-  Boolean                                  $join           = $common::system::authentication::kerberos::join,
-  Optional[Hash]                           $appdefaults    = $common::system::authentication::kerberos::appdefaults,
-  Optional[Eit_types::Password]            $join_password  = $common::system::authentication::kerberos::join_password,
-  Optional[Eit_types::User]                $join_user      = $common::system::authentication::kerberos::join_user,
-  Boolean                                  $install_client = $common::system::authentication::kerberos::install_client,
-  Boolean                                  $ldaps          = $common::system::authentication::kerberos::ldaps,
-  Eit_types::Noop_Value                    $noop_value     = $common::system::authentication::kerberos::noop_value,
-  Optional[Stdlib::Unixpath]               $cacert_path    = $common::system::authentication::kerberos::cacert_path,
+  Boolean                                  $enable         = $common::user_management::authentication::kerberos::enable,
+  Optional[String]                         $base_dn        = $common::user_management::authentication::kerberos::base_dn,
+  Optional[String]                         $ou             = $common::user_management::authentication::kerberos::ou,
+  Eit_types::Domain                        $default_realm  = $common::user_management::authentication::kerberos::default_realm,
+  Boolean                                  $join           = $common::user_management::authentication::kerberos::join,
+  Optional[Hash]                           $appdefaults    = $common::user_management::authentication::kerberos::appdefaults,
+  Optional[Eit_types::Password]            $join_password  = $common::user_management::authentication::kerberos::join_password,
+  Optional[Eit_types::User]                $join_user      = $common::user_management::authentication::kerberos::join_user,
+  Boolean                                  $install_client = $common::user_management::authentication::kerberos::install_client,
+  Boolean                                  $ldaps          = $common::user_management::authentication::kerberos::ldaps,
+  Eit_types::Noop_Value                    $noop_value     = $common::user_management::authentication::kerberos::noop_value,
+  Optional[Stdlib::Unixpath]               $cacert_path    = $common::user_management::authentication::kerberos::cacert_path,
 
-  Eit_types::Common::System::Authentication::Kerberos::Realms $realms = $common::system::authentication::kerberos::realms,
+  Eit_types::Common::System::Authentication::Kerberos::Realms $realms = $common::user_management::authentication::kerberos::realms,
 ) {
 
   Concat {

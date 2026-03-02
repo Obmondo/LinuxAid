@@ -1,7 +1,7 @@
 # CentOS Plus
 class eit_repos::yum::centos_plus (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   package::install('centos-release')

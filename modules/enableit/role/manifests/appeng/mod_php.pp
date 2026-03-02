@@ -28,7 +28,7 @@ class role::appeng::mod_php (
   Optional[Pattern[/[0-9]+[MG]/]] $memory_limit = undef,
 ) inherits ::role::appeng {
 
-  class { '::profile::php':
+  class { '::profile::appeng::php':
     url          => $url,
     ssl          => $ssl,
     mod_php      => true,

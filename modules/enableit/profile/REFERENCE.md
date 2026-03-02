@@ -28,14 +28,14 @@
 * [`profile::db::opensearch`](#profile--db--opensearch): Opensearch Profile
 * [`profile::db::opensearch::dashboard`](#profile--db--opensearch--dashboard): Opensearch Dashboard
 * [`profile::db::pgsql`](#profile--db--pgsql): Profile postgresql
-* [`profile::drupal`](#profile--drupal): Setup Drupal
+* [`profile::webframeworks::drupal`](#profile--drupal): Setup Drupal
 * [`profile::dummy`](#profile--dummy): Dummy class
-* [`profile::elastic::curator`](#profile--elastic--curator): Elastic Curator https://github.com/elastic/curator
-* [`profile::elastic::logstash`](#profile--elastic--logstash): Elastic Logstash https://github.com/elastic/logstash
+* [`profile::monitoring::elastic::curator`](#profile--elastic--curator): Elastic Curator https://github.com/elastic/curator
+* [`profile::monitoring::elastic::logstash`](#profile--elastic--logstash): Elastic Logstash https://github.com/elastic/logstash
 * [`profile::elk`](#profile--elk): ELK profile
-* [`profile::haproxy`](#profile--haproxy): Haproxy Profile
+* [`profile::web::haproxy`](#profile--haproxy): Haproxy Profile
 * [`profile::influxdb`](#profile--influxdb): InfluxDB
-* [`profile::java`](#profile--java): Java Profile
+* [`profile::web::java`](#profile--java): Java Profile
 * [`profile::keepalived`](#profile--keepalived): KeepAlived
 * [`profile::license::ansys`](#profile--license--ansys): ansys license manager
 * [`profile::logging`](#profile--logging): Logging
@@ -43,8 +43,8 @@
 * [`profile::logging::logrotate`](#profile--logging--logrotate): Manage logrotation
 * [`profile::logging::rsyslog`](#profile--logging--rsyslog): rsyslog
 * [`profile::mail::mailcow`](#profile--mail--mailcow): Mailcow Setup
-* [`profile::memcached`](#profile--memcached): memcached
-* [`profile::monitoring::atop`](#profile--monitoring--atop): atop
+* [`profile::db::memcached`](#profile--memcached): memcached
+* [`profile::utility::atop`](#profile--monitoring--atop): atop
 * [`profile::monitoring::journal_remote`](#profile--monitoring--journal_remote): Systemd_journal_remote https://dangibbs.uk/projects/puppet-systemd-journal-remote/
 * [`profile::monitoring::scom`](#profile--monitoring--scom): Microsoft SCOM
 * [`profile::monitoring::splunk::forwarder`](#profile--monitoring--splunk--forwarder): Splunk Forwarder
@@ -53,8 +53,8 @@
 * [`profile::network::netbird`](#profile--network--netbird): Class for managing Netbird Agent
 * [`profile::network::wireguard`](#profile--network--wireguard): Wireguard
 * [`profile::nivisa`](#profile--nivisa): NI-VISA Profile
-* [`profile::nodejs`](#profile--nodejs): NodeJs Profile
-* [`profile::ntpd`](#profile--ntpd): NTP
+* [`profile::appeng::nodejs`](#profile--nodejs): NodeJs Profile
+* [`profile::system::ntpd`](#profile--ntpd): NTP
 * [`profile::openvox`](#profile--openvox): Manage openvox-agent so we can setup openvox-agent package
 * [`profile::openvox::clientbucket`](#profile--openvox--clientbucket): profile::openvox::clientbucket for puppet clientbucket cache cleanup
 * [`profile::openvox::linuxaid_cli`](#profile--openvox--linuxaid_cli): Linuxaid-cli setup
@@ -63,10 +63,10 @@
 * [`profile::package_management::guix::client`](#profile--package_management--guix--client): Guix client
 * [`profile::package_management::packagesign`](#profile--package_management--packagesign): Freight package signing tool
 * [`profile::package_management::repo`](#profile--package_management--repo): repository mirror and snapshot
-* [`profile::passenger`](#profile--passenger): Passenger Profile
-* [`profile::perl`](#profile--perl): generic perl setup
-* [`profile::php`](#profile--php): generic php setup webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support) profiles MUST be feature b
-* [`profile::php::mssql`](#profile--php--mssql): Microsoft MS SQL
+* [`profile::appeng::passenger`](#profile--passenger): Passenger Profile
+* [`profile::web::perl`](#profile--perl): generic perl setup
+* [`profile::appeng::php`](#profile--php): generic php setup webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support) profiles MUST be feature b
+* [`profile::appeng::php::mssql`](#profile--php--mssql): Microsoft MS SQL
 * [`profile::projectmanagement::easyredmine`](#profile--projectmanagement--easyredmine): EasyRedmine profile Does not support SSL
 * [`profile::projectmanagement::foswiki`](#profile--projectmanagement--foswiki): Foswiki Profile
 * [`profile::projectmanagement::gitlab`](#profile--projectmanagement--gitlab): $redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen
@@ -78,12 +78,12 @@
 * [`profile::projectmanagement::subversion`](#profile--projectmanagement--subversion): Subversion enable
 * [`profile::provisioning::razor`](#profile--provisioning--razor): razor
 * [`profile::puppetdb`](#profile--puppetdb): PuppetDB
-* [`profile::python`](#profile--python): Python Profile
-* [`profile::redis`](#profile--redis): Redis Profile
+* [`profile::web::python`](#profile--python): Python Profile
+* [`profile::db::redis`](#profile--redis): Redis Profile
 * [`profile::redmine`](#profile--redmine): Redmine profile
 * [`profile::rsnapshot::config`](#profile--rsnapshot--config): RsnapShot config
 * [`profile::rsyslog`](#profile--rsyslog): Rsyslog Server
-* [`profile::ruby`](#profile--ruby): Ruby profile
+* [`profile::web::ruby`](#profile--ruby): Ruby profile
 * [`profile::scanner::openvas`](#profile--scanner--openvas)
 * [`profile::software::ansoftrsmservice`](#profile--software--ansoftrsmservice): Class for managing the Ansoft Remote Simulation Manager (RSM) Service
 * [`profile::software::cloudamize`](#profile--software--cloudamize): Cloudamize
@@ -131,9 +131,9 @@
 * [`profile::system::systemd`](#profile--system--systemd)
 * [`profile::system::time`](#profile--system--time): Time
 * [`profile::system::time::ntp`](#profile--system--time--ntp): NTP
-* [`profile::tomcat`](#profile--tomcat): Tomcat profile
+* [`profile::appeng::tomcat`](#profile--tomcat): Tomcat profile
 * [`profile::vagrant`](#profile--vagrant): Vagrant Profile
-* [`profile::varnish`](#profile--varnish): Varnish Profile
+* [`profile::web::varnish`](#profile--varnish): Varnish Profile
 * [`profile::virtualization::docker`](#profile--virtualization--docker): Docker profile
 * [`profile::virtualization::docker::cadvisor`](#profile--virtualization--docker--cadvisor): cadvisor docker container
 * [`profile::virtualization::kubernetes`](#profile--virtualization--kubernetes): Kubernetes NOTE: kubernetes apt repository only has packages for xenial Kubernetes only works with xenial, but those xenial packages works fi
@@ -143,9 +143,9 @@
 * [`profile::virtualization::vmware::openvmtools`](#profile--virtualization--vmware--openvmtools): Setup openvmtools on the guest.
 * [`profile::web::apache`](#profile--web--apache): generic apache setup
 * [`profile::web::nginx`](#profile--web--nginx): Nginx Profile
-* [`profile::wildfly`](#profile--wildfly): Wildfly class
+* [`profile::appeng::wildfly`](#profile--wildfly): Wildfly class
 * [`profile::wordpress`](#profile--wordpress): Wordpress profile
-* [`profile::wsgi`](#profile--wsgi): WSGI profile
+* [`profile::appeng::wsgi`](#profile--wsgi): WSGI profile
 
 ### Defined types
 
@@ -159,7 +159,7 @@
 * [`profile::system::service_oneshot`](#profile--system--service_oneshot): service_oneshot is a service, which runs only once and remainsexited
 * [`profile::system::sudoers::conf`](#profile--system--sudoers--conf): sudo conf wrapper
 * [`profile::system::time::ntp::rtc`](#profile--system--time--ntp--rtc): RTC in local TZ: no
-* [`profile::varnish::fwadmin`](#profile--varnish--fwadmin): Varnish Firewall
+* [`profile::web::varnish::fwadmin`](#profile--varnish--fwadmin): Varnish Firewall
 
 ## Classes
 
@@ -1836,13 +1836,13 @@ Data type: `Optional[Boolean]`
 
 Default value: `$role::db::pgsql::backup`
 
-### <a name="profile--drupal"></a>`profile::drupal`
+### <a name="profile--drupal"></a>`profile::webframeworks::drupal`
 
 Setup Drupal
 
 #### Parameters
 
-The following parameters are available in the `profile::drupal` class:
+The following parameters are available in the `profile::webframeworks::drupal` class:
 
 * [`ssl`](#-profile--drupal--ssl)
 * [`php`](#-profile--drupal--php)
@@ -1903,14 +1903,14 @@ Default value: `'drupal_xyz'`
 
 Dummy class
 
-### <a name="profile--elastic--curator"></a>`profile::elastic::curator`
+### <a name="profile--elastic--curator"></a>`profile::monitoring::elastic::curator`
 
 Elastic Curator
 https://github.com/elastic/curator
 
 #### Parameters
 
-The following parameters are available in the `profile::elastic::curator` class:
+The following parameters are available in the `profile::monitoring::elastic::curator` class:
 
 * [`version`](#-profile--elastic--curator--version)
 * [`ensure`](#-profile--elastic--curator--ensure)
@@ -1958,14 +1958,14 @@ Data type: `Stdlib::Unixpath`
 
 Default value: `'/etc/elasticsearch/curator/action.yml'`
 
-### <a name="profile--elastic--logstash"></a>`profile::elastic::logstash`
+### <a name="profile--elastic--logstash"></a>`profile::monitoring::elastic::logstash`
 
 Elastic Logstash
 https://github.com/elastic/logstash
 
 #### Parameters
 
-The following parameters are available in the `profile::elastic::logstash` class:
+The following parameters are available in the `profile::monitoring::elastic::logstash` class:
 
 * [`version`](#-profile--elastic--logstash--version)
 * [`ensure`](#-profile--elastic--logstash--ensure)
@@ -2211,13 +2211,13 @@ Data type: `Integer`
 
 Default value: `7`
 
-### <a name="profile--haproxy"></a>`profile::haproxy`
+### <a name="profile--haproxy"></a>`profile::web::haproxy`
 
 Haproxy Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::haproxy` class:
+The following parameters are available in the `profile::web::haproxy` class:
 
 * [`configure`](#-profile--haproxy--configure)
 * [`manual_config`](#-profile--haproxy--manual_config)
@@ -2421,13 +2421,13 @@ Data type: `Stdlib::Port`
 
 Default value: `4242`
 
-### <a name="profile--java"></a>`profile::java`
+### <a name="profile--java"></a>`profile::web::java`
 
 Java Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::java` class:
+The following parameters are available in the `profile::web::java` class:
 
 * [`version`](#-profile--java--version)
 * [`distribution`](#-profile--java--distribution)
@@ -2937,13 +2937,13 @@ Data type: `Optional[Boolean]`
 
 Default value: `$role::mail::mailcow::skip_unbound_healthcheck`
 
-### <a name="profile--memcached"></a>`profile::memcached`
+### <a name="profile--memcached"></a>`profile::db::memcached`
 
 memcached
 
 #### Parameters
 
-The following parameters are available in the `profile::memcached` class:
+The following parameters are available in the `profile::db::memcached` class:
 
 * [`memcached`](#-profile--memcached--memcached)
 * [`port`](#-profile--memcached--port)
@@ -2964,13 +2964,13 @@ Data type: `Stdlib::Port`
 
 Default value: `11211`
 
-### <a name="profile--monitoring--atop"></a>`profile::monitoring::atop`
+### <a name="profile--monitoring--atop"></a>`profile::utility::atop`
 
 atop
 
 #### Parameters
 
-The following parameters are available in the `profile::monitoring::atop` class:
+The following parameters are available in the `profile::utility::atop` class:
 
 * [`daemon`](#-profile--monitoring--atop--daemon)
 * [`install`](#-profile--monitoring--atop--install)
@@ -3604,13 +3604,13 @@ Data type: `Boolean`
 
 Default value: `$common::extras::computing::nivisa::enable`
 
-### <a name="profile--nodejs"></a>`profile::nodejs`
+### <a name="profile--nodejs"></a>`profile::appeng::nodejs`
 
 NodeJs Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::nodejs` class:
+The following parameters are available in the `profile::appeng::nodejs` class:
 
 * [`url`](#-profile--nodejs--url)
 * [`manage_repo`](#-profile--nodejs--manage_repo)
@@ -3671,13 +3671,13 @@ Data type: `Boolean`
 
 Default value: `true`
 
-### <a name="profile--ntpd"></a>`profile::ntpd`
+### <a name="profile--ntpd"></a>`profile::system::ntpd`
 
 NTP
 
 #### Parameters
 
-The following parameters are available in the `profile::ntpd` class:
+The following parameters are available in the `profile::system::ntpd` class:
 
 * [`servers`](#-profile--ntpd--servers)
 * [`burst`](#-profile--ntpd--burst)
@@ -4188,13 +4188,13 @@ Data type: `Repository::Mirrors::Configurations`
 
 Default value: `$role::package_management::repo::configurations`
 
-### <a name="profile--passenger"></a>`profile::passenger`
+### <a name="profile--passenger"></a>`profile::appeng::passenger`
 
 Passenger Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::passenger` class:
+The following parameters are available in the `profile::appeng::passenger` class:
 
 * [`url`](#-profile--passenger--url)
 * [`http_server`](#-profile--passenger--http_server)
@@ -4251,13 +4251,13 @@ Data type: `Any`
 
 Default value: `false`
 
-### <a name="profile--perl"></a>`profile::perl`
+### <a name="profile--perl"></a>`profile::web::perl`
 
 generic perl setup
 
 #### Parameters
 
-The following parameters are available in the `profile::perl` class:
+The following parameters are available in the `profile::web::perl` class:
 
 * [`url`](#-profile--perl--url)
 * [`cgi`](#-profile--perl--cgi)
@@ -4305,7 +4305,7 @@ Data type: `Any`
 
 Default value: `'apache'`
 
-### <a name="profile--php"></a>`profile::php`
+### <a name="profile--php"></a>`profile::appeng::php`
 
 generic php setup
 webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support)
@@ -4315,7 +4315,7 @@ we then use $opcodecache setting to conclude WHAT modules should be loaded.
 
 #### Parameters
 
-The following parameters are available in the `profile::php` class:
+The following parameters are available in the `profile::appeng::php` class:
 
 * [`ensure`](#-profile--php--ensure)
 * [`date_timezone`](#-profile--php--date_timezone)
@@ -4531,13 +4531,13 @@ Default value:
   }
 ```
 
-### <a name="profile--php--mssql"></a>`profile::php::mssql`
+### <a name="profile--php--mssql"></a>`profile::appeng::php::mssql`
 
 Microsoft MS SQL
 
 #### Parameters
 
-The following parameters are available in the `profile::php::mssql` class:
+The following parameters are available in the `profile::appeng::php::mssql` class:
 
 * [`ensure`](#-profile--php--mssql--ensure)
 
@@ -4547,7 +4547,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::profile::php::mssql`
+Default value: `$::profile::appeng::php::mssql`
 
 ### <a name="profile--projectmanagement--easyredmine"></a>`profile::projectmanagement::easyredmine`
 
@@ -5788,13 +5788,13 @@ Default value: `$role::provisioning::razor::manage_tftpd`
 
 PuppetDB
 
-### <a name="profile--python"></a>`profile::python`
+### <a name="profile--python"></a>`profile::web::python`
 
 Python Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::python` class:
+The following parameters are available in the `profile::web::python` class:
 
 * [`use_epel`](#-profile--python--use_epel)
 * [`virtualenv`](#-profile--python--virtualenv)
@@ -5824,13 +5824,13 @@ Data type: `Boolean`
 
 Default value: `false`
 
-### <a name="profile--redis"></a>`profile::redis`
+### <a name="profile--redis"></a>`profile::db::redis`
 
 Redis Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::redis` class:
+The following parameters are available in the `profile::db::redis` class:
 
 * [`bind`](#-profile--redis--bind)
 * [`datadir`](#-profile--redis--datadir)
@@ -6024,13 +6024,13 @@ Data type: `Hash`
 
 Default value: `{}`
 
-### <a name="profile--ruby"></a>`profile::ruby`
+### <a name="profile--ruby"></a>`profile::web::ruby`
 
 Ruby profile
 
 #### Parameters
 
-The following parameters are available in the `profile::ruby` class:
+The following parameters are available in the `profile::web::ruby` class:
 
 * [`url`](#-profile--ruby--url)
 * [`role`](#-profile--ruby--role)
@@ -7677,7 +7677,7 @@ Data type: `Eit_types::Common::Allowed_users`
 
 
 
-Default value: `$::common::system::authentication::allowed_users`
+Default value: `$::common::user_management::authentication::allowed_users`
 
 ##### <a name="-profile--system--authentication--allow_managed_users"></a>`allow_managed_users`
 
@@ -7685,7 +7685,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::allow_managed_users`
+Default value: `$::common::user_management::authentication::allow_managed_users`
 
 ##### <a name="-profile--system--authentication--manage_pam"></a>`manage_pam`
 
@@ -7693,7 +7693,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::manage_pam`
+Default value: `$::common::user_management::authentication::manage_pam`
 
 ##### <a name="-profile--system--authentication--ignore_expired_root_password"></a>`ignore_expired_root_password`
 
@@ -7701,7 +7701,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::ignore_expired_root_password`
+Default value: `$::common::user_management::authentication::ignore_expired_root_password`
 
 ##### <a name="-profile--system--authentication--purge_ubuntu_user"></a>`purge_ubuntu_user`
 
@@ -7709,7 +7709,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::purge_ubuntu_user`
+Default value: `$::common::user_management::authentication::purge_ubuntu_user`
 
 ##### <a name="-profile--system--authentication--purge_users"></a>`purge_users`
 
@@ -7717,7 +7717,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::system::authentication::purge_users`
+Default value: `$::common::user_management::authentication::purge_users`
 
 ##### <a name="-profile--system--authentication--protected_users"></a>`protected_users`
 
@@ -7725,7 +7725,7 @@ Data type: `Array[Eit_types::User]`
 
 
 
-Default value: `$::common::system::authentication::protected_users`
+Default value: `$::common::user_management::authentication::protected_users`
 
 ### <a name="profile--system--authentication--kerberos"></a>`profile::system::authentication::kerberos`
 
@@ -7755,7 +7755,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::enable`
+Default value: `$common::user_management::authentication::kerberos::enable`
 
 ##### <a name="-profile--system--authentication--kerberos--base_dn"></a>`base_dn`
 
@@ -7763,7 +7763,7 @@ Data type: `Optional[String]`
 
 
 
-Default value: `$common::system::authentication::kerberos::base_dn`
+Default value: `$common::user_management::authentication::kerberos::base_dn`
 
 ##### <a name="-profile--system--authentication--kerberos--ou"></a>`ou`
 
@@ -7771,7 +7771,7 @@ Data type: `Optional[String]`
 
 
 
-Default value: `$common::system::authentication::kerberos::ou`
+Default value: `$common::user_management::authentication::kerberos::ou`
 
 ##### <a name="-profile--system--authentication--kerberos--default_realm"></a>`default_realm`
 
@@ -7779,7 +7779,7 @@ Data type: `Eit_types::Domain`
 
 
 
-Default value: `$common::system::authentication::kerberos::default_realm`
+Default value: `$common::user_management::authentication::kerberos::default_realm`
 
 ##### <a name="-profile--system--authentication--kerberos--join"></a>`join`
 
@@ -7787,7 +7787,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::join`
+Default value: `$common::user_management::authentication::kerberos::join`
 
 ##### <a name="-profile--system--authentication--kerberos--appdefaults"></a>`appdefaults`
 
@@ -7795,7 +7795,7 @@ Data type: `Optional[Hash]`
 
 
 
-Default value: `$common::system::authentication::kerberos::appdefaults`
+Default value: `$common::user_management::authentication::kerberos::appdefaults`
 
 ##### <a name="-profile--system--authentication--kerberos--join_password"></a>`join_password`
 
@@ -7803,7 +7803,7 @@ Data type: `Optional[Eit_types::Password]`
 
 
 
-Default value: `$common::system::authentication::kerberos::join_password`
+Default value: `$common::user_management::authentication::kerberos::join_password`
 
 ##### <a name="-profile--system--authentication--kerberos--join_user"></a>`join_user`
 
@@ -7811,7 +7811,7 @@ Data type: `Optional[Eit_types::User]`
 
 
 
-Default value: `$common::system::authentication::kerberos::join_user`
+Default value: `$common::user_management::authentication::kerberos::join_user`
 
 ##### <a name="-profile--system--authentication--kerberos--install_client"></a>`install_client`
 
@@ -7819,7 +7819,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::install_client`
+Default value: `$common::user_management::authentication::kerberos::install_client`
 
 ##### <a name="-profile--system--authentication--kerberos--ldaps"></a>`ldaps`
 
@@ -7827,7 +7827,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::kerberos::ldaps`
+Default value: `$common::user_management::authentication::kerberos::ldaps`
 
 ##### <a name="-profile--system--authentication--kerberos--noop_value"></a>`noop_value`
 
@@ -7835,7 +7835,7 @@ Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::system::authentication::kerberos::noop_value`
+Default value: `$common::user_management::authentication::kerberos::noop_value`
 
 ##### <a name="-profile--system--authentication--kerberos--cacert_path"></a>`cacert_path`
 
@@ -7843,7 +7843,7 @@ Data type: `Optional[Stdlib::Unixpath]`
 
 
 
-Default value: `$common::system::authentication::kerberos::cacert_path`
+Default value: `$common::user_management::authentication::kerberos::cacert_path`
 
 ##### <a name="-profile--system--authentication--kerberos--realms"></a>`realms`
 
@@ -7851,7 +7851,7 @@ Data type: `Eit_types::Common::System::Authentication::Kerberos::Realms`
 
 
 
-Default value: `$common::system::authentication::kerberos::realms`
+Default value: `$common::user_management::authentication::kerberos::realms`
 
 ### <a name="profile--system--authentication--ldap_auth_daemon"></a>`profile::system::authentication::ldap_auth_daemon`
 
@@ -7907,7 +7907,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::nis::enable`
+Default value: `$common::user_management::authentication::nis::enable`
 
 ##### <a name="-profile--system--authentication--nis--domain"></a>`domain`
 
@@ -7915,7 +7915,7 @@ Data type: `Variant[Eit_types::SimpleString, Stdlib::Host]`
 
 
 
-Default value: `$common::system::authentication::nis::domain`
+Default value: `$common::user_management::authentication::nis::domain`
 
 ##### <a name="-profile--system--authentication--nis--servers"></a>`servers`
 
@@ -7923,7 +7923,7 @@ Data type: `Array[Stdlib::IP::Address]`
 
 
 
-Default value: `$common::system::authentication::nis::servers`
+Default value: `$common::user_management::authentication::nis::servers`
 
 ### <a name="profile--system--authentication--pam"></a>`profile::system::authentication::pam`
 
@@ -7957,7 +7957,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::manage`
+Default value: `$common::user_management::authentication::pam::manage`
 
 ##### <a name="-profile--system--authentication--pam--allowed_users"></a>`allowed_users`
 
@@ -7965,7 +7965,7 @@ Data type: `Eit_types::Common::Allowed_users`
 
 
 
-Default value: `$common::system::authentication::pam::allowed_users`
+Default value: `$common::user_management::authentication::pam::allowed_users`
 
 ##### <a name="-profile--system--authentication--pam--allow_managed_users"></a>`allow_managed_users`
 
@@ -7973,7 +7973,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::allow_managed_users`
+Default value: `$common::user_management::authentication::pam::allow_managed_users`
 
 ##### <a name="-profile--system--authentication--pam--manage_pwquality"></a>`manage_pwquality`
 
@@ -7981,7 +7981,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::pam::manage_pwquality`
+Default value: `$common::user_management::authentication::pam::manage_pwquality`
 
 ##### <a name="-profile--system--authentication--pam--nologin_allowed_group"></a>`nologin_allowed_group`
 
@@ -7989,7 +7989,7 @@ Data type: `Array[Eit_types::Group, 0, 1]`
 
 
 
-Default value: `$common::system::authentication::pam::nologin_allowed_group`
+Default value: `$common::user_management::authentication::pam::nologin_allowed_group`
 
 ##### <a name="-profile--system--authentication--pam--auth_lines"></a>`auth_lines`
 
@@ -7997,7 +7997,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::auth_lines`
+Default value: `$common::user_management::authentication::pam::auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--account_lines"></a>`account_lines`
 
@@ -8005,7 +8005,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::account_lines`
+Default value: `$common::user_management::authentication::pam::account_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_lines"></a>`password_lines`
 
@@ -8013,7 +8013,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_lines`
+Default value: `$common::user_management::authentication::pam::password_lines`
 
 ##### <a name="-profile--system--authentication--pam--session_lines"></a>`session_lines`
 
@@ -8021,7 +8021,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::session_lines`
+Default value: `$common::user_management::authentication::pam::session_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_auth_lines"></a>`password_auth_lines`
 
@@ -8029,7 +8029,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_auth_lines`
+Default value: `$common::user_management::authentication::pam::password_auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_account_lines"></a>`password_account_lines`
 
@@ -8037,7 +8037,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_account_lines`
+Default value: `$common::user_management::authentication::pam::password_account_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_password_lines"></a>`password_password_lines`
 
@@ -8045,7 +8045,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_password_lines`
+Default value: `$common::user_management::authentication::pam::password_password_lines`
 
 ##### <a name="-profile--system--authentication--pam--password_session_lines"></a>`password_session_lines`
 
@@ -8053,7 +8053,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::password_session_lines`
+Default value: `$common::user_management::authentication::pam::password_session_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_auth_lines"></a>`sshd_auth_lines`
 
@@ -8061,7 +8061,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_auth_lines`
+Default value: `$common::user_management::authentication::pam::sshd_auth_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_account_lines"></a>`sshd_account_lines`
 
@@ -8069,7 +8069,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_account_lines`
+Default value: `$common::user_management::authentication::pam::sshd_account_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_password_lines"></a>`sshd_password_lines`
 
@@ -8077,7 +8077,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_password_lines`
+Default value: `$common::user_management::authentication::pam::sshd_password_lines`
 
 ##### <a name="-profile--system--authentication--pam--sshd_session_lines"></a>`sshd_session_lines`
 
@@ -8085,7 +8085,7 @@ Data type: `Array[Tuple[Integer[0,99], String]]`
 
 
 
-Default value: `$common::system::authentication::pam::sshd_session_lines`
+Default value: `$common::user_management::authentication::pam::sshd_session_lines`
 
 ### <a name="profile--system--authentication--sssd"></a>`profile::system::authentication::sssd`
 
@@ -8117,7 +8117,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sssd::enable`
+Default value: `$common::user_management::authentication::sssd::enable`
 
 ##### <a name="-profile--system--authentication--sssd--extra_packages"></a>`extra_packages`
 
@@ -8131,7 +8131,7 @@ Data type: `Array[Eit_types::Sssd::Service]`
 
 
 
-Default value: `$common::system::authentication::sssd::services`
+Default value: `$common::user_management::authentication::sssd::services`
 
 ##### <a name="-profile--system--authentication--sssd--_available_services"></a>`_available_services`
 
@@ -8139,7 +8139,7 @@ Data type: `Array[Eit_types::Sssd::Service]`
 
 
 
-Default value: `$common::system::authentication::sssd::_available_services`
+Default value: `$common::user_management::authentication::sssd::_available_services`
 
 ##### <a name="-profile--system--authentication--sssd--domains"></a>`domains`
 
@@ -8147,7 +8147,7 @@ Data type: `Eit_types::Sssd::Domains`
 
 
 
-Default value: `$common::system::authentication::sssd::domains`
+Default value: `$common::user_management::authentication::sssd::domains`
 
 ##### <a name="-profile--system--authentication--sssd--default_domain_suffix"></a>`default_domain_suffix`
 
@@ -8155,7 +8155,7 @@ Data type: `Optional[Eit_types::Domain]`
 
 
 
-Default value: `$common::system::authentication::sssd::default_domain_suffix`
+Default value: `$common::user_management::authentication::sssd::default_domain_suffix`
 
 ##### <a name="-profile--system--authentication--sssd--debug_level"></a>`debug_level`
 
@@ -8163,7 +8163,7 @@ Data type: `Optional[Eit_types::Sssd::Debug_Level]`
 
 
 
-Default value: `$common::system::authentication::sssd::debug_level`
+Default value: `$common::user_management::authentication::sssd::debug_level`
 
 ##### <a name="-profile--system--authentication--sssd--manage_oddjobd"></a>`manage_oddjobd`
 
@@ -8171,7 +8171,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sssd::manage_oddjobd`
+Default value: `$common::user_management::authentication::sssd::manage_oddjobd`
 
 ##### <a name="-profile--system--authentication--sssd--full_name_format"></a>`full_name_format`
 
@@ -8179,7 +8179,7 @@ Data type: `Eit_types::Sssd::Full_name_format`
 
 
 
-Default value: `$common::system::authentication::sssd::full_name_format`
+Default value: `$common::user_management::authentication::sssd::full_name_format`
 
 ##### <a name="-profile--system--authentication--sssd--override_homedir"></a>`override_homedir`
 
@@ -8187,7 +8187,7 @@ Data type: `Optional[Eit_types::Sssd::Override_homedir]`
 
 
 
-Default value: `$common::system::authentication::sssd::override_homedir`
+Default value: `$common::user_management::authentication::sssd::override_homedir`
 
 ##### <a name="-profile--system--authentication--sssd--override_config"></a>`override_config`
 
@@ -8195,7 +8195,7 @@ Data type: `Hash`
 
 
 
-Default value: `$common::system::authentication::sssd::override_config`
+Default value: `$common::user_management::authentication::sssd::override_config`
 
 ##### <a name="-profile--system--authentication--sssd--noop_value"></a>`noop_value`
 
@@ -8203,7 +8203,7 @@ Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::system::authentication::sssd::noop_value`
+Default value: `$common::user_management::authentication::sssd::noop_value`
 
 ##### <a name="-profile--system--authentication--sssd--required_packages"></a>`required_packages`
 
@@ -8211,7 +8211,7 @@ Data type: `Array`
 
 
 
-Default value: `$common::system::authentication::sssd::required_packages`
+Default value: `$common::user_management::authentication::sssd::required_packages`
 
 ### <a name="profile--system--cloud_init"></a>`profile::system::cloud_init`
 
@@ -8607,7 +8607,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::manage`
+Default value: `$common::user_management::sshd::manage`
 
 ##### <a name="-profile--system--sshd--distribute_hostkeys"></a>`distribute_hostkeys`
 
@@ -8615,7 +8615,7 @@ Data type: `Variant[Boolean, Enum['no-noop']]`
 
 
 
-Default value: `$common::system::sshd::distribute_hostkeys`
+Default value: `$common::user_management::sshd::distribute_hostkeys`
 
 ##### <a name="-profile--system--sshd--version"></a>`version`
 
@@ -8623,7 +8623,7 @@ Data type: `Eit_types::Package::Version::Installed`
 
 
 
-Default value: `$common::system::sshd::version`
+Default value: `$common::user_management::sshd::version`
 
 ##### <a name="-profile--system--sshd--ports"></a>`ports`
 
@@ -8631,7 +8631,7 @@ Data type: `Array[Stdlib::Port]`
 
 
 
-Default value: `$common::system::sshd::ports`
+Default value: `$common::user_management::sshd::ports`
 
 ##### <a name="-profile--system--sshd--listenaddresses"></a>`listenaddresses`
 
@@ -8639,7 +8639,7 @@ Data type: `Array[Eit_types::IPPort]`
 
 
 
-Default value: `$common::system::sshd::listenaddresses`
+Default value: `$common::user_management::sshd::listenaddresses`
 
 ##### <a name="-profile--system--sshd--managed_users_only"></a>`managed_users_only`
 
@@ -8647,7 +8647,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::managed_users_only`
+Default value: `$common::user_management::sshd::managed_users_only`
 
 ##### <a name="-profile--system--sshd--compression"></a>`compression`
 
@@ -8655,7 +8655,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::compression`
+Default value: `$common::user_management::sshd::compression`
 
 ##### <a name="-profile--system--sshd--password_authentication"></a>`password_authentication`
 
@@ -8663,7 +8663,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::password_authentication`
+Default value: `$common::user_management::sshd::password_authentication`
 
 ##### <a name="-profile--system--sshd--tcp_forwarding"></a>`tcp_forwarding`
 
@@ -8671,7 +8671,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::tcp_forwarding`
+Default value: `$common::user_management::sshd::tcp_forwarding`
 
 ##### <a name="-profile--system--sshd--permit_user_rc"></a>`permit_user_rc`
 
@@ -8679,7 +8679,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::permit_user_rc`
+Default value: `$common::user_management::sshd::permit_user_rc`
 
 ##### <a name="-profile--system--sshd--max_auth_tries"></a>`max_auth_tries`
 
@@ -8687,7 +8687,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::max_auth_tries`
+Default value: `$common::user_management::sshd::max_auth_tries`
 
 ##### <a name="-profile--system--sshd--max_sessions"></a>`max_sessions`
 
@@ -8695,7 +8695,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::max_sessions`
+Default value: `$common::user_management::sshd::max_sessions`
 
 ##### <a name="-profile--system--sshd--login_grace_time"></a>`login_grace_time`
 
@@ -8703,7 +8703,7 @@ Data type: `Integer[0,default]`
 
 
 
-Default value: `$common::system::sshd::login_grace_time`
+Default value: `$common::user_management::sshd::login_grace_time`
 
 ##### <a name="-profile--system--sshd--hostkeys"></a>`hostkeys`
 
@@ -8711,7 +8711,7 @@ Data type: `Array[Stdlib::Absolutepath]`
 
 
 
-Default value: `$common::system::sshd::hostkeys`
+Default value: `$common::user_management::sshd::hostkeys`
 
 ##### <a name="-profile--system--sshd--log_level"></a>`log_level`
 
@@ -8733,7 +8733,7 @@ Enum[
 
 
 
-Default value: `$common::system::sshd::log_level`
+Default value: `$common::user_management::sshd::log_level`
 
 ##### <a name="-profile--system--sshd--kexalgorithms"></a>`kexalgorithms`
 
@@ -8741,7 +8741,7 @@ Data type: `Array[Eit_types::Ssh::Kexalgorithms]`
 
 
 
-Default value: `$common::system::sshd::kexalgorithms`
+Default value: `$common::user_management::sshd::kexalgorithms`
 
 ##### <a name="-profile--system--sshd--ciphers"></a>`ciphers`
 
@@ -8749,7 +8749,7 @@ Data type: `Array[Eit_types::Ssh::Ciphers]`
 
 
 
-Default value: `$common::system::sshd::ciphers`
+Default value: `$common::user_management::sshd::ciphers`
 
 ##### <a name="-profile--system--sshd--macs"></a>`macs`
 
@@ -8757,7 +8757,7 @@ Data type: `Array[Eit_types::Ssh::Macs]`
 
 
 
-Default value: `$common::system::sshd::macs`
+Default value: `$common::user_management::sshd::macs`
 
 ##### <a name="-profile--system--sshd--subsystems"></a>`subsystems`
 
@@ -8765,7 +8765,7 @@ Data type: `Hash[Eit_types::SimpleString, String]`
 
 
 
-Default value: `$common::system::sshd::subsystems`
+Default value: `$common::user_management::sshd::subsystems`
 
 ##### <a name="-profile--system--sshd--permit_root_login"></a>`permit_root_login`
 
@@ -8780,7 +8780,7 @@ Variant[
 
 
 
-Default value: `$common::system::sshd::permit_root_login`
+Default value: `$common::user_management::sshd::permit_root_login`
 
 ##### <a name="-profile--system--sshd--x11_forwarding"></a>`x11_forwarding`
 
@@ -8788,7 +8788,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::x11_forwarding`
+Default value: `$common::user_management::sshd::x11_forwarding`
 
 ##### <a name="-profile--system--sshd--x11_use_localhost"></a>`x11_use_localhost`
 
@@ -8796,7 +8796,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::sshd::x11_use_localhost`
+Default value: `$common::user_management::sshd::x11_use_localhost`
 
 ##### <a name="-profile--system--sshd--client_options"></a>`client_options`
 
@@ -8804,7 +8804,7 @@ Data type: `Hash`
 
 
 
-Default value: `$common::system::sshd::client_options`
+Default value: `$common::user_management::sshd::client_options`
 
 ##### <a name="-profile--system--sshd--accept_env"></a>`accept_env`
 
@@ -8812,7 +8812,7 @@ Data type: `Array[String]`
 
 
 
-Default value: `$common::system::sshd::accept_env`
+Default value: `$common::user_management::sshd::accept_env`
 
 ##### <a name="-profile--system--sshd--match"></a>`match`
 
@@ -8820,7 +8820,7 @@ Data type: `Hash[String, Hash[String, Any]]`
 
 
 
-Default value: `$common::system::sshd::match`
+Default value: `$common::user_management::sshd::match`
 
 ### <a name="profile--system--sudoers"></a>`profile::system::sudoers`
 
@@ -8840,7 +8840,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::authentication::sudo::purge`
+Default value: `$common::user_management::authentication::sudo::purge`
 
 ##### <a name="-profile--system--sudoers--sudoers"></a>`sudoers`
 
@@ -8848,7 +8848,7 @@ Data type: `Eit_types::Sudoers`
 
 
 
-Default value: `$common::system::authentication::sudo::sudoers`
+Default value: `$common::user_management::authentication::sudo::sudoers`
 
 ##### <a name="-profile--system--sudoers--sudoers_d_dir"></a>`sudoers_d_dir`
 
@@ -8856,7 +8856,7 @@ Data type: `Stdlib::Absolutepath`
 
 
 
-Default value: `$common::system::authentication::sudo::sudoers_d_dir`
+Default value: `$common::user_management::authentication::sudo::sudoers_d_dir`
 
 ### <a name="profile--system--systemd"></a>`profile::system::systemd`
 
@@ -8957,13 +8957,13 @@ Data type: `Eit_types::Noop_Value`
 
 Default value: `$common::system::time::ntp::noop_value`
 
-### <a name="profile--tomcat"></a>`profile::tomcat`
+### <a name="profile--tomcat"></a>`profile::appeng::tomcat`
 
 Tomcat profile
 
 #### Parameters
 
-The following parameters are available in the `profile::tomcat` class:
+The following parameters are available in the `profile::appeng::tomcat` class:
 
 * [`http_port`](#-profile--tomcat--http_port)
 * [`ajp_port`](#-profile--tomcat--ajp_port)
@@ -9056,13 +9056,13 @@ Data type: `Optional[Enum['virtualbox', 'kvm']]`
 
 Default value: `'virtualbox'`
 
-### <a name="profile--varnish"></a>`profile::varnish`
+### <a name="profile--varnish"></a>`profile::web::varnish`
 
 Varnish Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::varnish` class:
+The following parameters are available in the `profile::web::varnish` class:
 
 * [`backendip`](#-profile--varnish--backendip)
 * [`secret`](#-profile--varnish--secret)
@@ -9986,13 +9986,13 @@ Data type: `Enum['nginx', 'passenger']`
 
 Default value: `$role::web::nginx::package_source`
 
-### <a name="profile--wildfly"></a>`profile::wildfly`
+### <a name="profile--wildfly"></a>`profile::appeng::wildfly`
 
 Wildfly class
 
 #### Parameters
 
-The following parameters are available in the `profile::wildfly` class:
+The following parameters are available in the `profile::appeng::wildfly` class:
 
 * [`version`](#-profile--wildfly--version)
 * [`dirname`](#-profile--wildfly--dirname)
@@ -10202,13 +10202,13 @@ Data type: `Stdlib::Absolutepath`
 
 Default value: `'/var/www/wordpress'`
 
-### <a name="profile--wsgi"></a>`profile::wsgi`
+### <a name="profile--wsgi"></a>`profile::appeng::wsgi`
 
 WSGI profile
 
 #### Parameters
 
-The following parameters are available in the `profile::wsgi` class:
+The following parameters are available in the `profile::appeng::wsgi` class:
 
 * [`domains`](#-profile--wsgi--domains)
 * [`ssl`](#-profile--wsgi--ssl)
@@ -10886,7 +10886,7 @@ Data type: `String`
 
 
 
-### <a name="profile--varnish--fwadmin"></a>`profile::varnish::fwadmin`
+### <a name="profile--varnish--fwadmin"></a>`profile::web::varnish::fwadmin`
 
 Varnish Firewall
 

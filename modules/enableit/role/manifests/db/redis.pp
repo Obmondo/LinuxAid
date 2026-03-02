@@ -12,7 +12,7 @@ class role::db::redis (
   Stdlib::Port $default_port                                         = 6379,
 ) inherits ::role::db {
 
-  class { 'profile::redis':
+  class { 'profile::db::redis':
     bind         => $bind,
     default_port => $default_port,
   }

@@ -1,7 +1,7 @@
 # Zypper upstream repos
 class eit_repos::zypper::upstream (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) inherits eit_repos::zypper {
 
   case $facts['os']['name'] {

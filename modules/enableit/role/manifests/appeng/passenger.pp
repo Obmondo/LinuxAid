@@ -23,7 +23,7 @@ class role::appeng::passenger (
   Boolean $manage_web_server       = false,
 ) inherits ::role::appeng {
 
-  class { '::profile::passenger':
+  class { '::profile::appeng::passenger':
     url                => $url,
     http_server        => $http_server,
     passenger_version  => $version,

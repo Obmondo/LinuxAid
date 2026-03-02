@@ -1,7 +1,7 @@
 # Oracle Linux YUM upstream repositories
 class eit_repos::yum::oracle (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   $release = $facts['os']['release']['major']

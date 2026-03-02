@@ -16,13 +16,17 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups credentials backup_user, backup_user_password, encrypt_params
+# @encrypt_params backup_user_password
+#
+# @groups general enable, encrypt_params
+#
+# @groups authentication backup_user, backup_user_password
 #
 # @groups schedule backup_hour
 #
-# @groups configuration enable, backup_retention, ignore_tables, dump_dir
+# @groups storage dump_dir
 #
-# @encrypt_params backup_user_password
+# @groups retention backup_retention, ignore_tables
 #
 class common::backup::db::mysql::mysqlbackup (
   Boolean                   $enable                = $::common::backup::db::enable,

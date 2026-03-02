@@ -8,7 +8,7 @@ define profile::system::sudoers::conf (
   Optional[String]                  $template   = undef,
   Eit_types::Noop_Value             $noop_value = undef,
 ) {
-  $sudoers_d_dir = lookup('common::system::authentication::sudo::sudoers_d_dir', Stdlib::Absolutepath, 'first', '/etc/obmondo/sudoers.d')
+  $sudoers_d_dir = lookup('common::user_management::authentication::sudo::sudoers_d_dir', Stdlib::Absolutepath, 'first', '/etc/obmondo/sudoers.d')
 
   $_sudo_conf_name = safe_string($name)
 

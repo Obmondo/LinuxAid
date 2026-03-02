@@ -1,7 +1,49 @@
 ---
 common::openvox::linuxaid_cli::checksums:
+common::monitor::prometheus::install_method: "url"
+common::monitor::prometheus::env_file_path: "/etc/default"
+common::monitor::prometheus::server::checksums:
+  3.8.1: 70159946928dce8e11a5d38b6f478b5b6b65533e67c7909644cf613eb59cdf5c
+
+common::logging::manage: false
+
+common::default::classes:
+  - common::network
+
+common::role_basic::classes: []
+
+common::full_host_management: false
+
+common::system::repo::manage: false
+
+common::user_management::authentication::sudo::manage: false
+common::system::dns::resolver: "dnsmasq"
+common::user_management::motd::enable: false
+
+common::system::openvox::package_name: "openvox"
+common::system::openvox::version: "8.24.1"
+common::system::openvox::linuxaid_cli::install_method: archive
+common::system::openvox::linuxaid_cli::checksums:
   1.2.0: d0478e011fb94e31aebaa1e42b6ef601f65e4de29c8b98d30b6f3e20ff1e722f
   1.2.1: 2c1bb8242fe5c838ddddb4ae5d5da2d9d0d302da49b30171066fa1e555e20884
+
+common::system::obmondo_admin::manage: false
+common::system::updates::enable: false
+common::system::updates::manage: false
+
+common::system::nsswitch::ethers: []
+common::system::nsswitch::group: []
+common::system::nsswitch::hosts: []
+common::system::nsswitch::networks: []
+common::system::nsswitch::passwd: []
+common::system::nsswitch::protocols: []
+common::system::nsswitch::rpc: []
+common::system::nsswitch::services: []
+common::system::nsswitch::shadow: []
+
+common::network::service_name: "network"
+common::network::ipaddress_package: "rubygem-ipaddress"
+common::network::ipaddress_provider: "gem"
 
 common::network::netbird::checksums:
   0.64.5: 422cd803c52ebecc5fc3f1769c443d25b0efdf84e7796760cfa0b4295c55f1a5

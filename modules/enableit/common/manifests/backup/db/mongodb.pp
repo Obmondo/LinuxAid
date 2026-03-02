@@ -18,17 +18,19 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups access backup_user, backup_user_password, encrypt_params
+# @encrypt_params backup_user_password
+#
+# @groups general enable, encrypt_params
+#
+# @groups authentication backup_user, backup_user_password
 #
 # @groups schedule backup_hour
 #
-# @groups method backup_method
+# @groups storage dump_dir
 #
-# @groups storage dump_dir, backup_databases, backup_retention
+# @groups retention backup_retention, backup_databases
 #
-# @groups enable_config enable
-#
-# @encrypt_params backup_user_password
+# @groups backup_config backup_method
 #
 class common::backup::db::mongodb (
   Boolean                   $enable                = $::common::backup::db::enable,
@@ -43,7 +45,7 @@ class common::backup::db::mongodb (
   Optional[String]          $backup_databases      = $::common::backup::db::backup_databases,
   Eit_types::Duration::Days $backup_retention      = $::common::backup::db::backup_retention,
   Eit_types::Encrypt::Params $encrypt_params       = ['backup_user_password'],
-) inherits ::common::backup::db {
+) {
 
   package::install ( 'obmondo-scripts-backup-mongodb' )
 
@@ -60,7 +62,7 @@ class common::backup::db::mongodb (
     'PRUNE_BACKUPS'    => true,
   }
 
-  $env_dir  = "${common::setup::__conf_dir}/mongodb"
+  $env_dir  = "${common::backup::__conf_dir}/mongodb"
   $env_file = "${env_dir}/backup.env"
 
   file { $env_dir:

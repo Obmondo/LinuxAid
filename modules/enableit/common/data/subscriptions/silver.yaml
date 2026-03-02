@@ -3,14 +3,14 @@ common::system::classes:
   - common::system::updates
 
 common::default::classes:
-  - common::setup::obmondo_admin
+  - common::system::obmondo_admin
 
 common::system::updates::enable: true
 common::system::updates::manage: true
 common::system::updates::noop_value: false
 
-common::setup::obmondo_admin::manage: true
-common::setup::obmondo_admin::enable: true
-common::setup::obmondo_admin::noop_value: false
+common::system::obmondo_admin::manage: true
+common::system::obmondo_admin::enable: true
+common::system::obmondo_admin::noop_value: false
 common::monitor::noop_value: false
-common::openvox::noop_value: false
+common::system::openvox::noop_value: false

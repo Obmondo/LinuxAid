@@ -1,7 +1,7 @@
 # Rackslab Slurm-web APT repos
 class eit_repos::apt::rackslab_slurmweb (
   Boolean $ensure     = true,
-  Boolean $noop_value = $eit_repos::noop_value,
+  Boolean $noop_value = undef,
 ) {
 
   $distro = $facts['os']['distro']['release']

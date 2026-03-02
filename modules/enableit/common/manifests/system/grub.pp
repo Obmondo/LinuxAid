@@ -11,7 +11,7 @@ class common::system::grub (
       value   => Optional[Variant[Array, String, Boolean]],
     }
   ]] $parameters = {},
-) inherits ::common::system {
+) {
 
   contain ::profile::system::grub
 }

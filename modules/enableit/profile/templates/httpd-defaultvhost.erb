@@ -21,18 +21,18 @@
     </IfModule>
   </Location>
 
-  <% if scope['::profile::php::opcodecache'] =~ /apc/ -%>
+  <% if scope['::profile::appeng::php::opcodecache'] =~ /apc/ -%>
   # APC Control Panel
-  Alias /status/apcu <%= scope['::profile::php::apcu_web'] %>
+  Alias /status/apcu <%= scope['::profile::appeng::php::apcu_web'] %>
   <% if scope['::profile::appeng::phpfpm::opcodecache'] =~ /apc/ -%>
-  ProxyPassMatch ^/status/apcu/(.*\.php)$ fcgi://127.0.0.1:9001<%= scope['::profile::php::apcu_web'] %>/$1
+  ProxyPassMatch ^/status/apcu/(.*\.php)$ fcgi://127.0.0.1:9001<%= scope['::profile::appeng::php::apcu_web'] %>/$1
 
   <Location ^/status/apcu/(.*\.php)$>
-  ProxyPassReverse fcgi://127.0.0.1:9001<%= scope['::profile::php::apcu_web'] %>/$1
+  ProxyPassReverse fcgi://127.0.0.1:9001<%= scope['::profile::appeng::php::apcu_web'] %>/$1
   </Location>
   <% end -%>
 
-  <Directory <%= scope['::profile::php::apcu_web'] %>>
+  <Directory <%= scope['::profile::appeng::php::apcu_web'] %>>
     DirectoryIndex apc.php
     <IfModule mod_authz_core.c>
       # Apache 2.4
@@ -49,7 +49,7 @@
     </IfModule>
   </Directory>
   <% end -%>
-  <% if scope['profile::php::opcodecache'] =~ /xcache/ -%>
+  <% if scope['profile::appeng::php::opcodecache'] =~ /xcache/ -%>
   # Configure XCache Administration
   Alias /status/xcache /usr/share/xcache
   <% if scope['profile::appeng::phpfpm::opcodecache'] =~ /xcache/ -%>

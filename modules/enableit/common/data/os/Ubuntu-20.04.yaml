@@ -5,4 +5,4 @@ common::monitor::exporter::security::enable: true
 common::software::rustdesk::client_extra_dependencies:
   - libgtk-3-0
   - libasound2
-common::openvox::version: "8.19.2"
+common::system::openvox::version: "8.19.2"

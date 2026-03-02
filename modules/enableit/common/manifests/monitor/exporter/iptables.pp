@@ -6,7 +6,7 @@
 #
 # @param listen_address The IP and port the exporter listens on. Defaults to '127.254.254.254:63393'.
 #
-# @groups control enable, noop_value
+# @groups settings enable, noop_value
 #
 # @groups network listen_address
 #

@@ -13,7 +13,7 @@ class role::appeng::tomcat (
 ) inherits role::web::java {
 
   # Check combination of $java_version and $version (tomcat version is valid for this OS)
-  class { '::profile::tomcat':
+  class { '::profile::appeng::tomcat':
     version     => $version,
     http_server => $http_server,
   }

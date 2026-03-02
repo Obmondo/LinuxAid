@@ -23,7 +23,7 @@ class profile::computing::slurm::slurmd (
 
   logrotate::rule { 'slurmd':
     ensure        => 'present',
-    path          => "/var/log/slurm/*.log",
+    path          => '/var/log/slurm/*.log',
     rotate_every  => 'hour',
     rotate        => 5,
     compress      => true,

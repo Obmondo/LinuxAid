@@ -1,4 +1,3 @@
-
 # @summary Class for managing the Journal Remote role
 #
 # @param remote_enable Whether to enable the remote journal. Defaults to false.
@@ -17,5 +16,5 @@ class role::monitoring::journal_remote (
   Stdlib::Unixpath $output        = '/var/log/journal/remote',
 ) inherits ::role::monitoring {
 
-  include 'profile::monitoring::journal_remote'
+  include 'profile::collector::journal_remote'
 }

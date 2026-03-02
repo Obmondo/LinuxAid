@@ -22,15 +22,21 @@
 #
 # @param locations Hash mapping location names to arrays of IP addresses or IP ranges for location detection. Defaults to {}.
 #
+# @param cron_jobs Hash of cron job configurations. Keys are job names, values are arrays of strings.
+#
+# @param publicips Optional array of public IP addresses. Defaults to undef.
+#
+# @param disabled_services Array of service names to disable. Defaults to an empty array.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups service_config services, service_oneshot
 #
 # @groups user_management users, user_groups, ssh_authorized_keys, purge_root_ssh_keys
 #
-# @groups system_config remove_fstrim_cron, disable_ipv6
+# @groups system_config remove_fstrim_cron, disable_ipv6, cron_jobs, disabled_services
 #
-# @groups network_config locations
+# @groups network_config locations, publicips
 #
 # @groups file_management files
 #
@@ -41,29 +47,40 @@
 # @encrypt_params ssh_authorized_keys.*.key
 #
 class common::system (
-  Boolean $remove_fstrim_cron = false,
-  Boolean $purge_root_ssh_keys = true,
+  Hash[String,Array[String]]     $cron_jobs,
+  Boolean                        $remove_fstrim_cron  = false,
+  Boolean                        $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
   Eit_types::Users               $users               = {},
   Hash[String,Array[String]]     $user_groups         = {},
   Hash[String,Hash]              $groups              = {},
-  Hash[String, Hash]             $services            = {},
   Hash[String,Hash]              $files               = {},
+  Optional[Array[Eit_types::IP]] $publicips           = undef,
   Optional[Boolean]              $disable_ipv6        = undef,
   Optional[Hash[String, Struct[{
           content => Stdlib::Base64,
   }]]] $service_oneshot  = undef,
 
-  Hash[String, Array[Stdlib::IP::Address::V4]] $locations = {},
-  Eit_types::Encrypt::Params    $encrypt_params           = ['ssh_authorized_keys.*.key'],
+  Hash[String, Array[Stdlib::IP::Address::V4]] $locations         = {},
+  Eit_types::Encrypt::Params                   $encrypt_params    = ['ssh_authorized_keys.*.key'],
+  Optional[Hash[String, Hash]]                 $services          = {},
+  Array[Eit_types::SimpleString]               $disabled_services = []
 ) {
   ############
   # Services #
   ############
 
   $services.each |$_service_name, $_config| {
-    service { $_service_name:
+    systemd::manage_unit { $_service_name:
       * => $_config,
+    }
+  }
+
+  $disabled_services.each |$_service_name| {
+    service { $_service_name:
+      ensure => false,
+      enable => false,
+      mask   => true,
     }
   }
 
@@ -254,7 +271,7 @@ class common::system (
     include $subclass
   }
 
-  unless lookup('common::system::jumphost::configs', Hash, undef, {}).empty {
-    include common::system::jumphost
+  unless lookup('common::user_management::jumphost::configs', Hash, undef, {}).empty {
+    include common::user_management::jumphost
   }
 }

@@ -77,7 +77,7 @@ define repository::mirror::repo (
     }
   }
 
-  common::systemd::timer { "repository_mirror_sync_${name}":
+  functions::systemd_timer { "repository_mirror_sync_${name}":
     ensure  => ensure_present($enable),
     enable  => $enable,
     user    => $user,

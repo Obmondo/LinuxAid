@@ -1,7 +1,7 @@
 # Docker sles repos
 class eit_repos::zypper::docker (
   Boolean               $ensure     = true,
-  Eit_types::Noop_Value $noop_value = $eit_repos::noop_value,
+  Eit_types::Noop_Value $noop_value = undef,
 ) {
 
   if $facts['os']['release']['major'] == 15 {

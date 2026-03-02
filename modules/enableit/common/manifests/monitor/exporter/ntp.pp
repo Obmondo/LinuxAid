@@ -8,9 +8,11 @@
 #
 # @param telemetry_path The telemetry endpoint path. Defaults to '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s'.
 #
-# @groups configuration enable, noop_value.
+# @groups settings enable, noop_value
 #
-# @groups networking listen_address, telemetry_path.
+# @groups network listen_address
+#
+# @groups configuration telemetry_path
 #
 class common::monitor::exporter::ntp (
   Boolean               $enable         = $common::monitor::exporter::enable,
