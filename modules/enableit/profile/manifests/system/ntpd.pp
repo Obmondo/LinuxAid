@@ -1,5 +1,5 @@
 # NTP
-class profile::ntpd (
+class profile::system::ntpd (
   Array[Stdlib::Host]     $servers,
   Optional[Boolean]       $burst    = false,
   Optional[Array[String]] $restrict = [],

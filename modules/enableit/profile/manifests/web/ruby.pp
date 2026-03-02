@@ -1,5 +1,5 @@
 # Ruby profile
-class profile::ruby (
+class profile::web::ruby (
   $url                  = 'none',
   $role                 = 'passenger',
   $compile              = 'apache',
@@ -13,7 +13,7 @@ class profile::ruby (
 
   case $role {
     'passenger' : {
-      class { 'profile::passenger' :
+      class { 'profile::appeng::passenger' :
         compile            => $compile,
         passenger_name     => $passenger_name,
         passenger_version  => $passenger_version,

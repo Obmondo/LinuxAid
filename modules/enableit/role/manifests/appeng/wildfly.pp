@@ -12,7 +12,7 @@ class role::appeng::wildfly (
   Enum['apache'] $http_server         = 'apache',
 ) inherits role::web::java {
 
-  class { '::profile::wildfly':
+  class { '::profile::appeng::wildfly':
     version     => $version,
     http_server => $http_server,
   }

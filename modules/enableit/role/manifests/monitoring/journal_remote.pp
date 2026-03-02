@@ -10,11 +10,11 @@
 #
 # @groups paths output
 #
-class role::monitor::journal_remote (
+class role::monitoring::journal_remote (
   Boolean          $remote_enable = false,
   Boolean          $manage_output = true,
   Stdlib::Unixpath $output        = '/var/log/journal/remote',
 ) inherits ::role::monitoring {
 
-  include 'profile::monitor::journal_remote'
+  include 'profile::monitoring::journal_remote'
 }

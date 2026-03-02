@@ -1,10 +1,10 @@
 ---
 # Java
-profile::java::version: 7
-profile::java::edition: 'openjdk'
-profile::java::package_name: "java-1.7.0-openjdk"
+profile::web::java::version: 7
+profile::web::java::edition: 'openjdk'
+profile::web::java::package_name: "java-1.7.0-openjdk"
 
-profile::php::default_modules:
+profile::appeng::php::default_modules:
   mbstring: {}
   soap: {}
   xml: {}

@@ -1,5 +1,5 @@
 # Varnish Profile
-class profile::varnish (
+class profile::web::varnish (
   String $backendip,
   Eit_types::UUID $secret,
   String $variant                   = 'default',
@@ -18,7 +18,7 @@ class profile::varnish (
     }
   }
   if ( $adminacl ) {
-    profile::varnish::fwadmin { $adminacl: }
+    profile::web::varnish::fwadmin { $adminacl: }
   }
 
   $_adminlistens = $adminacl ? {

@@ -14,5 +14,5 @@ class common::system::utility::atop (
   confine(!$install, $daemon,
           'atop must be installed for daemon to be enabled')
 
-  include ::profile::monitoring::atop
+  include ::profile::utility::atop
 }

@@ -1,6 +1,6 @@
 # Microsoft MS SQL
-class profile::php::mssql (
-  Boolean $ensure = $::profile::php::mssql,
+class profile::appeng::php::mssql (
+  Boolean $ensure = $::profile::appeng::php::mssql,
 ) {
 
   # Setup the repo

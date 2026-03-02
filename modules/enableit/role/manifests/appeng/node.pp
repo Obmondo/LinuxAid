@@ -20,7 +20,7 @@ class role::appeng::node (
   Variant[Eit_types::Package_Ensure, Eit_types::Version] $version = 'present',
 ) inherits ::role::appeng {
 
-  class { '::profile::nodejs':
+  class { '::profile::appeng::nodejs':
     url         => $url,
     repo        => $repo,
     version     => $version,

@@ -28,14 +28,14 @@
 * [`profile::db::opensearch`](#profile--db--opensearch): Opensearch Profile
 * [`profile::db::opensearch::dashboard`](#profile--db--opensearch--dashboard): Opensearch Dashboard
 * [`profile::db::pgsql`](#profile--db--pgsql): Profile postgresql
-* [`profile::drupal`](#profile--drupal): Setup Drupal
+* [`profile::webframeworks::drupal`](#profile--drupal): Setup Drupal
 * [`profile::dummy`](#profile--dummy): Dummy class
-* [`profile::elastic::curator`](#profile--elastic--curator): Elastic Curator https://github.com/elastic/curator
-* [`profile::elastic::logstash`](#profile--elastic--logstash): Elastic Logstash https://github.com/elastic/logstash
+* [`profile::monitoring::elastic::curator`](#profile--elastic--curator): Elastic Curator https://github.com/elastic/curator
+* [`profile::monitoring::elastic::logstash`](#profile--elastic--logstash): Elastic Logstash https://github.com/elastic/logstash
 * [`profile::elk`](#profile--elk): ELK profile
-* [`profile::haproxy`](#profile--haproxy): Haproxy Profile
+* [`profile::web::haproxy`](#profile--haproxy): Haproxy Profile
 * [`profile::influxdb`](#profile--influxdb): InfluxDB
-* [`profile::java`](#profile--java): Java Profile
+* [`profile::web::java`](#profile--java): Java Profile
 * [`profile::keepalived`](#profile--keepalived): KeepAlived
 * [`profile::license::ansys`](#profile--license--ansys): ansys license manager
 * [`profile::logging`](#profile--logging): Logging
@@ -43,8 +43,8 @@
 * [`profile::logging::logrotate`](#profile--logging--logrotate): Manage logrotation
 * [`profile::logging::rsyslog`](#profile--logging--rsyslog): rsyslog
 * [`profile::mail::mailcow`](#profile--mail--mailcow): Mailcow Setup
-* [`profile::memcached`](#profile--memcached): memcached
-* [`profile::monitoring::atop`](#profile--monitoring--atop): atop
+* [`profile::db::memcached`](#profile--memcached): memcached
+* [`profile::utility::atop`](#profile--monitoring--atop): atop
 * [`profile::monitoring::journal_remote`](#profile--monitoring--journal_remote): Systemd_journal_remote https://dangibbs.uk/projects/puppet-systemd-journal-remote/
 * [`profile::monitoring::scom`](#profile--monitoring--scom): Microsoft SCOM
 * [`profile::monitoring::splunk::forwarder`](#profile--monitoring--splunk--forwarder): Splunk Forwarder
@@ -53,8 +53,8 @@
 * [`profile::network::netbird`](#profile--network--netbird): Class for managing Netbird Agent
 * [`profile::network::wireguard`](#profile--network--wireguard): Wireguard
 * [`profile::nivisa`](#profile--nivisa): NI-VISA Profile
-* [`profile::nodejs`](#profile--nodejs): NodeJs Profile
-* [`profile::ntpd`](#profile--ntpd): NTP
+* [`profile::appeng::nodejs`](#profile--nodejs): NodeJs Profile
+* [`profile::system::ntpd`](#profile--ntpd): NTP
 * [`profile::openvox`](#profile--openvox): Manage openvox-agent so we can setup openvox-agent package
 * [`profile::openvox::clientbucket`](#profile--openvox--clientbucket): profile::openvox::clientbucket for puppet clientbucket cache cleanup
 * [`profile::openvox::linuxaid_cli`](#profile--openvox--linuxaid_cli): Linuxaid-cli setup
@@ -63,10 +63,10 @@
 * [`profile::package_management::guix::client`](#profile--package_management--guix--client): Guix client
 * [`profile::package_management::packagesign`](#profile--package_management--packagesign): Freight package signing tool
 * [`profile::package_management::repo`](#profile--package_management--repo): repository mirror and snapshot
-* [`profile::passenger`](#profile--passenger): Passenger Profile
-* [`profile::perl`](#profile--perl): generic perl setup
-* [`profile::php`](#profile--php): generic php setup webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support) profiles MUST be feature b
-* [`profile::php::mssql`](#profile--php--mssql): Microsoft MS SQL
+* [`profile::appeng::passenger`](#profile--passenger): Passenger Profile
+* [`profile::web::perl`](#profile--perl): generic perl setup
+* [`profile::appeng::php`](#profile--php): generic php setup webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support) profiles MUST be feature b
+* [`profile::appeng::php::mssql`](#profile--php--mssql): Microsoft MS SQL
 * [`profile::projectmanagement::easyredmine`](#profile--projectmanagement--easyredmine): EasyRedmine profile Does not support SSL
 * [`profile::projectmanagement::foswiki`](#profile--projectmanagement--foswiki): Foswiki Profile
 * [`profile::projectmanagement::gitlab`](#profile--projectmanagement--gitlab): $redirect_http_to_https : only makes gitlab listen on port 80 (only relevant if $external_url start with https:// - which makes it not listen
@@ -78,12 +78,12 @@
 * [`profile::projectmanagement::subversion`](#profile--projectmanagement--subversion): Subversion enable
 * [`profile::provisioning::razor`](#profile--provisioning--razor): razor
 * [`profile::puppetdb`](#profile--puppetdb): PuppetDB
-* [`profile::python`](#profile--python): Python Profile
-* [`profile::redis`](#profile--redis): Redis Profile
+* [`profile::web::python`](#profile--python): Python Profile
+* [`profile::db::redis`](#profile--redis): Redis Profile
 * [`profile::redmine`](#profile--redmine): Redmine profile
 * [`profile::rsnapshot::config`](#profile--rsnapshot--config): RsnapShot config
 * [`profile::rsyslog`](#profile--rsyslog): Rsyslog Server
-* [`profile::ruby`](#profile--ruby): Ruby profile
+* [`profile::web::ruby`](#profile--ruby): Ruby profile
 * [`profile::scanner::openvas`](#profile--scanner--openvas)
 * [`profile::software::ansoftrsmservice`](#profile--software--ansoftrsmservice): Class for managing the Ansoft Remote Simulation Manager (RSM) Service
 * [`profile::software::cloudamize`](#profile--software--cloudamize): Cloudamize
@@ -131,9 +131,9 @@
 * [`profile::system::systemd`](#profile--system--systemd)
 * [`profile::system::time`](#profile--system--time): Time
 * [`profile::system::time::ntp`](#profile--system--time--ntp): NTP
-* [`profile::tomcat`](#profile--tomcat): Tomcat profile
+* [`profile::appeng::tomcat`](#profile--tomcat): Tomcat profile
 * [`profile::vagrant`](#profile--vagrant): Vagrant Profile
-* [`profile::varnish`](#profile--varnish): Varnish Profile
+* [`profile::web::varnish`](#profile--varnish): Varnish Profile
 * [`profile::virtualization::docker`](#profile--virtualization--docker): Docker profile
 * [`profile::virtualization::docker::cadvisor`](#profile--virtualization--docker--cadvisor): cadvisor docker container
 * [`profile::virtualization::kubernetes`](#profile--virtualization--kubernetes): Kubernetes NOTE: kubernetes apt repository only has packages for xenial Kubernetes only works with xenial, but those xenial packages works fi
@@ -143,9 +143,9 @@
 * [`profile::virtualization::vmware::openvmtools`](#profile--virtualization--vmware--openvmtools): Setup openvmtools on the guest.
 * [`profile::web::apache`](#profile--web--apache): generic apache setup
 * [`profile::web::nginx`](#profile--web--nginx): Nginx Profile
-* [`profile::wildfly`](#profile--wildfly): Wildfly class
+* [`profile::appeng::wildfly`](#profile--wildfly): Wildfly class
 * [`profile::wordpress`](#profile--wordpress): Wordpress profile
-* [`profile::wsgi`](#profile--wsgi): WSGI profile
+* [`profile::appeng::wsgi`](#profile--wsgi): WSGI profile
 
 ### Defined types
 
@@ -159,7 +159,7 @@
 * [`profile::system::service_oneshot`](#profile--system--service_oneshot): service_oneshot is a service, which runs only once and remainsexited
 * [`profile::system::sudoers::conf`](#profile--system--sudoers--conf): sudo conf wrapper
 * [`profile::system::time::ntp::rtc`](#profile--system--time--ntp--rtc): RTC in local TZ: no
-* [`profile::varnish::fwadmin`](#profile--varnish--fwadmin): Varnish Firewall
+* [`profile::web::varnish::fwadmin`](#profile--varnish--fwadmin): Varnish Firewall
 
 ## Classes
 
@@ -1836,13 +1836,13 @@ Data type: `Optional[Boolean]`
 
 Default value: `$role::db::pgsql::backup`
 
-### <a name="profile--drupal"></a>`profile::drupal`
+### <a name="profile--drupal"></a>`profile::webframeworks::drupal`
 
 Setup Drupal
 
 #### Parameters
 
-The following parameters are available in the `profile::drupal` class:
+The following parameters are available in the `profile::webframeworks::drupal` class:
 
 * [`ssl`](#-profile--drupal--ssl)
 * [`php`](#-profile--drupal--php)
@@ -1903,14 +1903,14 @@ Default value: `'drupal_xyz'`
 
 Dummy class
 
-### <a name="profile--elastic--curator"></a>`profile::elastic::curator`
+### <a name="profile--elastic--curator"></a>`profile::monitoring::elastic::curator`
 
 Elastic Curator
 https://github.com/elastic/curator
 
 #### Parameters
 
-The following parameters are available in the `profile::elastic::curator` class:
+The following parameters are available in the `profile::monitoring::elastic::curator` class:
 
 * [`version`](#-profile--elastic--curator--version)
 * [`ensure`](#-profile--elastic--curator--ensure)
@@ -1958,14 +1958,14 @@ Data type: `Stdlib::Unixpath`
 
 Default value: `'/etc/elasticsearch/curator/action.yml'`
 
-### <a name="profile--elastic--logstash"></a>`profile::elastic::logstash`
+### <a name="profile--elastic--logstash"></a>`profile::monitoring::elastic::logstash`
 
 Elastic Logstash
 https://github.com/elastic/logstash
 
 #### Parameters
 
-The following parameters are available in the `profile::elastic::logstash` class:
+The following parameters are available in the `profile::monitoring::elastic::logstash` class:
 
 * [`version`](#-profile--elastic--logstash--version)
 * [`ensure`](#-profile--elastic--logstash--ensure)
@@ -2211,13 +2211,13 @@ Data type: `Integer`
 
 Default value: `7`
 
-### <a name="profile--haproxy"></a>`profile::haproxy`
+### <a name="profile--haproxy"></a>`profile::web::haproxy`
 
 Haproxy Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::haproxy` class:
+The following parameters are available in the `profile::web::haproxy` class:
 
 * [`configure`](#-profile--haproxy--configure)
 * [`manual_config`](#-profile--haproxy--manual_config)
@@ -2421,13 +2421,13 @@ Data type: `Stdlib::Port`
 
 Default value: `4242`
 
-### <a name="profile--java"></a>`profile::java`
+### <a name="profile--java"></a>`profile::web::java`
 
 Java Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::java` class:
+The following parameters are available in the `profile::web::java` class:
 
 * [`version`](#-profile--java--version)
 * [`distribution`](#-profile--java--distribution)
@@ -2937,13 +2937,13 @@ Data type: `Optional[Boolean]`
 
 Default value: `$role::mail::mailcow::skip_unbound_healthcheck`
 
-### <a name="profile--memcached"></a>`profile::memcached`
+### <a name="profile--memcached"></a>`profile::db::memcached`
 
 memcached
 
 #### Parameters
 
-The following parameters are available in the `profile::memcached` class:
+The following parameters are available in the `profile::db::memcached` class:
 
 * [`memcached`](#-profile--memcached--memcached)
 * [`port`](#-profile--memcached--port)
@@ -2964,13 +2964,13 @@ Data type: `Stdlib::Port`
 
 Default value: `11211`
 
-### <a name="profile--monitoring--atop"></a>`profile::monitoring::atop`
+### <a name="profile--monitoring--atop"></a>`profile::utility::atop`
 
 atop
 
 #### Parameters
 
-The following parameters are available in the `profile::monitoring::atop` class:
+The following parameters are available in the `profile::utility::atop` class:
 
 * [`daemon`](#-profile--monitoring--atop--daemon)
 * [`install`](#-profile--monitoring--atop--install)
@@ -3604,13 +3604,13 @@ Data type: `Boolean`
 
 Default value: `$common::extras::computing::nivisa::enable`
 
-### <a name="profile--nodejs"></a>`profile::nodejs`
+### <a name="profile--nodejs"></a>`profile::appeng::nodejs`
 
 NodeJs Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::nodejs` class:
+The following parameters are available in the `profile::appeng::nodejs` class:
 
 * [`url`](#-profile--nodejs--url)
 * [`manage_repo`](#-profile--nodejs--manage_repo)
@@ -3671,13 +3671,13 @@ Data type: `Boolean`
 
 Default value: `true`
 
-### <a name="profile--ntpd"></a>`profile::ntpd`
+### <a name="profile--ntpd"></a>`profile::system::ntpd`
 
 NTP
 
 #### Parameters
 
-The following parameters are available in the `profile::ntpd` class:
+The following parameters are available in the `profile::system::ntpd` class:
 
 * [`servers`](#-profile--ntpd--servers)
 * [`burst`](#-profile--ntpd--burst)
@@ -4188,13 +4188,13 @@ Data type: `Repository::Mirrors::Configurations`
 
 Default value: `$role::package_management::repo::configurations`
 
-### <a name="profile--passenger"></a>`profile::passenger`
+### <a name="profile--passenger"></a>`profile::appeng::passenger`
 
 Passenger Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::passenger` class:
+The following parameters are available in the `profile::appeng::passenger` class:
 
 * [`url`](#-profile--passenger--url)
 * [`http_server`](#-profile--passenger--http_server)
@@ -4251,13 +4251,13 @@ Data type: `Any`
 
 Default value: `false`
 
-### <a name="profile--perl"></a>`profile::perl`
+### <a name="profile--perl"></a>`profile::web::perl`
 
 generic perl setup
 
 #### Parameters
 
-The following parameters are available in the `profile::perl` class:
+The following parameters are available in the `profile::web::perl` class:
 
 * [`url`](#-profile--perl--url)
 * [`cgi`](#-profile--perl--cgi)
@@ -4305,7 +4305,7 @@ Data type: `Any`
 
 Default value: `'apache'`
 
-### <a name="profile--php"></a>`profile::php`
+### <a name="profile--php"></a>`profile::appeng::php`
 
 generic php setup
 webserver part (in mod_php case) is done by profile::web::apache (only one with mod_php support)
@@ -4315,7 +4315,7 @@ we then use $opcodecache setting to conclude WHAT modules should be loaded.
 
 #### Parameters
 
-The following parameters are available in the `profile::php` class:
+The following parameters are available in the `profile::appeng::php` class:
 
 * [`ensure`](#-profile--php--ensure)
 * [`date_timezone`](#-profile--php--date_timezone)
@@ -4531,13 +4531,13 @@ Default value:
   }
 ```
 
-### <a name="profile--php--mssql"></a>`profile::php::mssql`
+### <a name="profile--php--mssql"></a>`profile::appeng::php::mssql`
 
 Microsoft MS SQL
 
 #### Parameters
 
-The following parameters are available in the `profile::php::mssql` class:
+The following parameters are available in the `profile::appeng::php::mssql` class:
 
 * [`ensure`](#-profile--php--mssql--ensure)
 
@@ -4547,7 +4547,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::profile::php::mssql`
+Default value: `$::profile::appeng::php::mssql`
 
 ### <a name="profile--projectmanagement--easyredmine"></a>`profile::projectmanagement::easyredmine`
 
@@ -5788,13 +5788,13 @@ Default value: `$role::provisioning::razor::manage_tftpd`
 
 PuppetDB
 
-### <a name="profile--python"></a>`profile::python`
+### <a name="profile--python"></a>`profile::web::python`
 
 Python Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::python` class:
+The following parameters are available in the `profile::web::python` class:
 
 * [`use_epel`](#-profile--python--use_epel)
 * [`virtualenv`](#-profile--python--virtualenv)
@@ -5824,13 +5824,13 @@ Data type: `Boolean`
 
 Default value: `false`
 
-### <a name="profile--redis"></a>`profile::redis`
+### <a name="profile--redis"></a>`profile::db::redis`
 
 Redis Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::redis` class:
+The following parameters are available in the `profile::db::redis` class:
 
 * [`bind`](#-profile--redis--bind)
 * [`datadir`](#-profile--redis--datadir)
@@ -6024,13 +6024,13 @@ Data type: `Hash`
 
 Default value: `{}`
 
-### <a name="profile--ruby"></a>`profile::ruby`
+### <a name="profile--ruby"></a>`profile::web::ruby`
 
 Ruby profile
 
 #### Parameters
 
-The following parameters are available in the `profile::ruby` class:
+The following parameters are available in the `profile::web::ruby` class:
 
 * [`url`](#-profile--ruby--url)
 * [`role`](#-profile--ruby--role)
@@ -8957,13 +8957,13 @@ Data type: `Eit_types::Noop_Value`
 
 Default value: `$common::system::time::ntp::noop_value`
 
-### <a name="profile--tomcat"></a>`profile::tomcat`
+### <a name="profile--tomcat"></a>`profile::appeng::tomcat`
 
 Tomcat profile
 
 #### Parameters
 
-The following parameters are available in the `profile::tomcat` class:
+The following parameters are available in the `profile::appeng::tomcat` class:
 
 * [`http_port`](#-profile--tomcat--http_port)
 * [`ajp_port`](#-profile--tomcat--ajp_port)
@@ -9056,13 +9056,13 @@ Data type: `Optional[Enum['virtualbox', 'kvm']]`
 
 Default value: `'virtualbox'`
 
-### <a name="profile--varnish"></a>`profile::varnish`
+### <a name="profile--varnish"></a>`profile::web::varnish`
 
 Varnish Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::varnish` class:
+The following parameters are available in the `profile::web::varnish` class:
 
 * [`backendip`](#-profile--varnish--backendip)
 * [`secret`](#-profile--varnish--secret)
@@ -9986,13 +9986,13 @@ Data type: `Enum['nginx', 'passenger']`
 
 Default value: `$role::web::nginx::package_source`
 
-### <a name="profile--wildfly"></a>`profile::wildfly`
+### <a name="profile--wildfly"></a>`profile::appeng::wildfly`
 
 Wildfly class
 
 #### Parameters
 
-The following parameters are available in the `profile::wildfly` class:
+The following parameters are available in the `profile::appeng::wildfly` class:
 
 * [`version`](#-profile--wildfly--version)
 * [`dirname`](#-profile--wildfly--dirname)
@@ -10202,13 +10202,13 @@ Data type: `Stdlib::Absolutepath`
 
 Default value: `'/var/www/wordpress'`
 
-### <a name="profile--wsgi"></a>`profile::wsgi`
+### <a name="profile--wsgi"></a>`profile::appeng::wsgi`
 
 WSGI profile
 
 #### Parameters
 
-The following parameters are available in the `profile::wsgi` class:
+The following parameters are available in the `profile::appeng::wsgi` class:
 
 * [`domains`](#-profile--wsgi--domains)
 * [`ssl`](#-profile--wsgi--ssl)
@@ -10886,7 +10886,7 @@ Data type: `String`
 
 
 
-### <a name="profile--varnish--fwadmin"></a>`profile::varnish::fwadmin`
+### <a name="profile--varnish--fwadmin"></a>`profile::web::varnish::fwadmin`
 
 Varnish Firewall
 

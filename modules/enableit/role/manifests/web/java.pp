@@ -20,7 +20,7 @@ class role::web::java (
   Enum['apache', 'nginx'] $http_server  = 'apache',
 ) inherits role::web {
 
-  class { '::profile::java':
+  class { '::profile::web::java':
     version => $version,
     edition => $edition,
   }

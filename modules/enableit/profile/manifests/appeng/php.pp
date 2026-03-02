@@ -3,7 +3,7 @@
 # profiles MUST be feature based. ie. $opcodecache option (apc,xcache,none)
 #- and NOT just a list of config settings, such as $modules..
 #we then use $opcodecache setting to conclude WHAT modules should be loaded.
-class profile::php (
+class profile::appeng::php (
   Boolean                             $ensure               = true,
   Eit_types::Timezone                 $date_timezone        = $::common::system::time::timezone,
   Boolean                             $ssl                  = false,
@@ -82,13 +82,13 @@ class profile::php (
   }
 
   # Modules
-  deep_merge(lookup('profile::php::default_modules'), $modules).each |$module_name, $module_settings| {
+  deep_merge(lookup('profile::appeng::php::default_modules'), $modules).each |$module_name, $module_settings| {
     php::extension { $module_name:
       * => $module_settings
     }
   }
 
   if $mssql {
-    contain ::profile::php::mssql
+    contain ::profile::appeng::php::mssql
   }
 }

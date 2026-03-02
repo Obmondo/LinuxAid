@@ -1,5 +1,5 @@
 # Wildfly class
-class profile::wildfly (
+class profile::appeng::wildfly (
   $version            = '8.2.0',
   $dirname            = '/opt/wildfly',
   $mode               = 'standalone',

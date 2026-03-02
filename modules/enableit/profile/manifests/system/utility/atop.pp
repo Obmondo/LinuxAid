@@ -1,7 +1,7 @@
 # atop
-class profile::monitoring::atop (
-  Boolean $daemon  = $common::monitoring::atop::daemon,
-  Boolean $install = $common::monitoring::atop::install,
+class profile::system::utility::atop (
+  Boolean $daemon  = $common::system::utility::atop::daemon,
+  Boolean $install = $common::system::utility::atop::install,
 ) {
 
   package::install('atop', {

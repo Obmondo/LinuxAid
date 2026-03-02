@@ -1,5 +1,5 @@
 # WSGI profile
-class profile::wsgi (
+class profile::appeng::wsgi (
   Array[Stdlib::Fqdn]     $domains,
   Boolean                 $ssl         = false,
   Boolean                 $uwsgi       = false,

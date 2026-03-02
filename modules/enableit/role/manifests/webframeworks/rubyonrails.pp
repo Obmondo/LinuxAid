@@ -41,7 +41,7 @@ class role::webframeworks::rubyonrails (
 
   case $ruby {
     '::role::appeng::passenger' : {
-      class { '::profile::passenger':
+      class { '::profile::appeng::passenger':
         http_server        => $_http_server,
         passenger_version  => $version,
         passenger_provider => $provider,

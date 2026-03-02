@@ -1,5 +1,5 @@
 # Passenger Profile
-class profile::passenger (
+class profile::appeng::passenger (
   $url                  = undef,
   $http_server          = 'apache',
   $passenger_name       = 'passenger',

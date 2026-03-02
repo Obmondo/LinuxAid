@@ -25,7 +25,7 @@ class profile::appeng::phpfpm (
 ) {
 
   # Setup FPM
-  class { '::profile::php' :
+  class { '::profile::appeng::php' :
     ssl             => $ssl,
     phpfpm          => true,
     version         => $version,

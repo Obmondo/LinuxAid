@@ -1,5 +1,5 @@
 #generic perl setup
-class profile::perl (
+class profile::web::perl (
   $url          = 'none',
   $cgi          = false,
   $fastcgi      = false,

@@ -1,10 +1,10 @@
 ---
 lookup_options:
-  profile::php::default_modules:
+  profile::appeng::php::default_modules:
     merge:
       strategy: 'deep'
       knockout_prefix: '!'
-  profile::haproxy::manual:
+  profile::web::haproxy::manual:
     merge: 'deep'
 
 # Apache
@@ -32,7 +32,7 @@ profile::virtualization::lxc::network: 10.0.3.0
 profile::virtualization::lxc::bridge: lxcbr0
 
 # PHP
-profile::php::default_modules:
+profile::appeng::php::default_modules:
   json: {}
   curl: {}
   xmlrpc: {}
@@ -46,7 +46,7 @@ profile::php::default_modules:
   soap: {}
 
 # Config
-profile::haproxy::manual:
+profile::web::haproxy::manual:
   config_path: "/etc/haproxy/haproxy.cfg"
   config_ensure: 'present'
   binary_path: "/usr/sbin/haproxy"

@@ -1,11 +1,11 @@
 ---
 # Java
-profile::java::version: 7
-profile::java::edition: 'openjdk'
-profile::java::package_name: "openjdk-7-jre-headless"
+profile::web::java::version: 7
+profile::web::java::edition: 'openjdk'
+profile::web::java::package_name: "openjdk-7-jre-headless"
 
 # PHP
-profile::php::default_modules:
+profile::appeng::php::default_modules:
   !xhprof: {}
 
 # SSSD
@@ -24,7 +24,7 @@ profile::system::authentication::sssd::extra_packages:
 
 profile::system::nscd::use_socket_activation: false
 
-profile::nodejs::__package_allow_virtual: false
+profile::appeng::nodejs::__package_allow_virtual: false
 profile::software::cloudamize::__packages:
   - 'cloudamize-agent'
 

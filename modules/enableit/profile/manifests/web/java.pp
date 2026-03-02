@@ -1,5 +1,5 @@
 # Java Profile
-class profile::java (
+class profile::web::java (
   $version,
   Enum['jre', 'jdk', 'oracle-jre', 'oracle-jdk'] $distribution,
   Optional $use_java_alternative      = undef,

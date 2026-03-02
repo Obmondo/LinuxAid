@@ -85,7 +85,7 @@ class role::web::haproxy (
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
   confine($send_log_summary, $log_summary_recipients.size == 0, 'Log summary sender needs at least 1 recipient')
 
-  class { 'profile::haproxy':
+  class { 'profile::web::haproxy':
     domains                => $domains,
     listens                => $listens,
     ddos_protection        => $ddos_protection,

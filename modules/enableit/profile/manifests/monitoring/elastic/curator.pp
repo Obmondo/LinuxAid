@@ -1,6 +1,6 @@
 # Elastic Curator
 # https://github.com/elastic/curator
-class profile::elastic::curator (
+class profile::monitoring::elastic::curator (
   Integer[5]                          $version      = 5,
   Boolean                             $ensure       = true,
   Hash[Eit_types::SimpleString, Hash] $filters      = {},

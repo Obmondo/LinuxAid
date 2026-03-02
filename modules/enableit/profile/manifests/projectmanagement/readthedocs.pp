@@ -24,7 +24,7 @@ class profile::projectmanagement::readthedocs (
 
   package::install($_os_packages)
 
-  contain profile::redis
+  contain profile::db::redis
 
   user { $_user:
     ensure => present,

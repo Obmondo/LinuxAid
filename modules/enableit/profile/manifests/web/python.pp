@@ -1,5 +1,5 @@
 # Python Profile
-class profile::python (
+class profile::web::python (
   Boolean                            $use_epel           = false,
   Variant[Eit_types::Package_Ensure] $virtualenv         = 'absent',
   Boolean                            $devel              = false,

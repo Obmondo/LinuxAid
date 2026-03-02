@@ -1,5 +1,5 @@
 # NodeJs Profile
-class profile::nodejs (
+class profile::appeng::nodejs (
   Stdlib::Httpurl $url,
   Boolean         $manage_repo             = false,
   Enum[

@@ -53,7 +53,7 @@ class role::webframeworks::drupal (
     ensure => $memcached,
   }
 
-  class { '::profile::drupal':
+  class { '::profile::webframeworks::drupal':
     url         => $url,
     php         => $php,
     dbdriver    => $dbdriver,

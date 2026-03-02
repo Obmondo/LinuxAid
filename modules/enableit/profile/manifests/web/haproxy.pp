@@ -30,7 +30,7 @@
 #
 # @groups mode mode, http
 #
-class profile::haproxy (
+class profile::web::haproxy (
   Enum['auto', 'manual']        $configure,
   Optional[String]              $manual_config,
   Eit_haproxy::Domains          $domains                = {},

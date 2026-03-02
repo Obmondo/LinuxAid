@@ -8,7 +8,7 @@ vcl 4.0;
 import std;
 
 acl purgers {
-<% scope.lookupvar('::profile::varnish::purgers').each do |purger| -%>
+<% scope.lookupvar('::profile::web::varnish::purgers').each do |purger| -%>
   <%= purger %>;
 <% end %>
 }
@@ -17,8 +17,8 @@ acl purgers {
 # server.
 #
 backend default {
-  .host = "<%= scope.lookupvar('::profile::varnish::backendip') %>";
-  .port = "<%= scope.lookupvar('::profile::varnish::backendport') %>";
+  .host = "<%= scope.lookupvar('::profile::web::varnish::backendip') %>";
+  .port = "<%= scope.lookupvar('::profile::web::varnish::backendport') %>";
   .first_byte_timeout = 300s;
 }
 

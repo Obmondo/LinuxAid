@@ -18,10 +18,10 @@ class role::appeng::mod_wsgi (
 ) inherits ::role::appeng {
 
   if $enable_python {
-    contain ::profile::python
+    contain ::profile::web::python
   }
 
-  class { 'profile::wsgi':
+  class { 'profile::appeng::wsgi':
     domains     => $domains,
     ssl         => $ssl,
     mod_wsgi    => true,

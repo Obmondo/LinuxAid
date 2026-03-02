@@ -1,5 +1,5 @@
 # Varnish Firewall
-define profile::varnish::fwadmin {
+define profile::web::varnish::fwadmin {
   if ( ! defined (Firewall["001 varnish adminacl ${name}"] )) {
     firewall { "001 varnish adminacl ${name}":
       proto  => 'tcp',

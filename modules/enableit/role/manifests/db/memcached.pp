@@ -9,7 +9,7 @@ class role::db::memcached (
   Boolean $ensure = true,
 ) inherits ::role::db {
 
-  class { '::profile::memcached':
+  class { '::profile::db::memcached':
     memcached => $ensure,
   }
 }

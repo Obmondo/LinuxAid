@@ -1,5 +1,5 @@
 # Tomcat profile
-class profile::tomcat (
+class profile::appeng::tomcat (
   $http_port                = '8080',
   $ajp_port                 = '8009',
   $ajp_host                 = 'localhost',
@@ -92,7 +92,7 @@ class profile::tomcat (
     catalina_home       => "/etc/${catalina_base}",
     install_from_source => $install_from_source,
     package_name        => $package_name,
-    require             => Class[::profile::java],
+    require             => Class[::profile::web::java],
   }
   -> tomcat::config::server { 'default' :
     catalina_base => "/etc/${catalina_base}",

@@ -1,5 +1,5 @@
 # Setup Drupal
-class profile::drupal (
+class profile::webframeworks::drupal (
   Boolean
     $ssl         = false,
   Enum['::role::appeng::phpfpm', '::role::appeng::mod_php']

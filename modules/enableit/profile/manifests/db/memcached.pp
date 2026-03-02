@@ -1,5 +1,5 @@
 # memcached
-class profile::memcached (
+class profile::db::memcached (
   Boolean      $memcached = true,
   Stdlib::Port $port      = 11211,
 ) {

@@ -167,7 +167,7 @@ class profile::db::elasticsearch (
   $_es_heap_size_g = clamp(1, $_naive_heap_gb, $es_heap_size_max_gb)
 
   # Setup Java
-  class { '::profile::java' :
+  class { '::profile::web::java' :
     distribution => 'jre',
   }
 
@@ -191,7 +191,7 @@ class profile::db::elasticsearch (
       "-Xmx${_es_heap_size_g}g",
     ],
     restart_on_change => false,
-    require           => Class['profile::java'],
+    require           => Class['profile::web::java'],
     version           => $version,
     datadir           => $datadir,
   }
