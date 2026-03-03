@@ -22,8 +22,6 @@
 #
 # @param locations Hash mapping location names to arrays of IP addresses or IP ranges for location detection. Defaults to {}.
 #
-# @param cron_jobs Hash of cron job configurations. Keys are job names, values are arrays of strings.
-#
 # @param publicips Optional array of public IP addresses. Defaults to undef.
 #
 # @param disabled_services Array of service names to disable. Defaults to an empty array.
@@ -34,7 +32,7 @@
 #
 # @groups user_management users, user_groups, ssh_authorized_keys, purge_root_ssh_keys
 #
-# @groups system_config remove_fstrim_cron, disable_ipv6, cron_jobs, disabled_services
+# @groups system_config remove_fstrim_cron, disable_ipv6, disabled_services
 #
 # @groups network_config locations, publicips
 #
@@ -47,7 +45,6 @@
 # @encrypt_params ssh_authorized_keys.*.key
 #
 class common::system (
-  Hash[String,Array[String]]     $cron_jobs           = {},
   Boolean                        $remove_fstrim_cron  = false,
   Boolean                        $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
@@ -243,7 +240,7 @@ class common::system (
   }
 
   file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
-    ensure  => present,
+    ensure  => file,
     content => stdlib::to_yaml($_obmondo_system_facts),
     owner   => 'root',
     group   => 'root',
