@@ -193,7 +193,7 @@ class profile::mail::mailcow (
 
   # NOTE: multi domain support can be added later, letsencrypt support 100 SANs
   if ! $letsencrypt {
-    $_base_dir = lookup('common::certs::__base_dir')
+    $_base_dir = lookup('common::system::certs::__base_dir')
     $x_name = regsubst($domain, '^(\w+)(.*)$', '\1')
 
     $_cert_file = "${_base_dir}/parts/${x_name}/cert.pem"

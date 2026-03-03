@@ -98,7 +98,7 @@ class role::mail::mailcow (
     backup_dir               => $backup_dir,
     timezone                 => $timezone,
     domain                   => $domain,
-    acme_contact             => lookup('common::certs::letsencrypt::email', Optional[Eit_types::Email], undef, $acme_contact),
+    acme_contact             => lookup('common::system::certs::letsencrypt::email', Optional[Eit_types::Email], undef, $acme_contact),
     backup_retention         => $backup_retention,
     skip_unbound_healthcheck => $skip_unbound_healthcheck,
   }

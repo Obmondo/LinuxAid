@@ -2,20 +2,20 @@
 # NOTE: only haproxy role support letsencrypt for now
 # blackbox will scrape the domains if its given in the role::web::haproxy
 define profile::certs::letsencrypt::domain (
-  Eit_types::Email                                               $email               = $::common::certs::letsencrypt::email,
+  Eit_types::Email                                               $email               = $::common::system::certs::letsencrypt::email,
   Enum[
     'production',
     'staging'
-  ]                                                              $ca                  = $::common::certs::letsencrypt::ca,
-  Boolean                                                        $renew               = $::common::certs::letsencrypt::renew,
-  Array[Stdlib::Fqdn]                                            $domains             = $::common::certs::letsencrypt::domains,
-  Stdlib::Port                                                   $http_01_port        = $::common::certs::letsencrypt::http_01_port, # lint:ignore:140chars
-  Eit_types::Cert::Letsencrypt::Challenge                        $challenges          = $::common::certs::letsencrypt::challenges,
-  Optional[Integer]                                              $warning             = $::common::certs::letsencrypt::warning,
-  Optional[Integer]                                              $critical            = $::common::certs::letsencrypt::critical,
-  Optional[Variant[Eit_types::Certname, Eit_types::Host]]        $cert_host           = $::common::certs::letsencrypt::cert_host,
-  Optional[Variant[Stdlib::Absolutepath, String]]                $deploy_hook_command = $::common::certs::letsencrypt::deploy_hook_command, # lint:ignore:140chars
-  Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]] $distribute_to       = $::common::certs::letsencrypt::distribute_to, # lint:ignore:140chars
+  ]                                                              $ca                  = $::common::system::certs::letsencrypt::ca,
+  Boolean                                                        $renew               = $::common::system::certs::letsencrypt::renew,
+  Array[Stdlib::Fqdn]                                            $domains             = $::common::system::certs::letsencrypt::domains,
+  Stdlib::Port                                                   $http_01_port        = $::common::system::certs::letsencrypt::http_01_port, # lint:ignore:140chars
+  Eit_types::Cert::Letsencrypt::Challenge                        $challenges          = $::common::system::certs::letsencrypt::challenges,
+  Optional[Integer]                                              $warning             = $::common::system::certs::letsencrypt::warning,
+  Optional[Integer]                                              $critical            = $::common::system::certs::letsencrypt::critical,
+  Optional[Variant[Eit_types::Certname, Eit_types::Host]]        $cert_host           = $::common::system::certs::letsencrypt::cert_host,
+  Optional[Variant[Stdlib::Absolutepath, String]]                $deploy_hook_command = $::common::system::certs::letsencrypt::deploy_hook_command, # lint:ignore:140chars
+  Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]] $distribute_to       = $::common::system::certs::letsencrypt::distribute_to, # lint:ignore:140chars
 ) {
 
   include ::profile::certs::letsencrypt

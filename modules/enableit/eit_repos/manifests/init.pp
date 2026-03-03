@@ -69,7 +69,7 @@ class eit_repos (
       }
 
       if $purge {
-        # Skip the Redhat and Oracle repos, it's managed via rh_repo in common::repo::rhrepos
+        # Skip the Redhat and Oracle repos, it's managed via rh_repo in common::system::repo::rhrepos
 
         purge { 'yumrepo':
           unless => [
@@ -141,7 +141,7 @@ class eit_repos (
         noop   => $noop_value,
       }
 
-      # Skip the Redhat repos, it's managed via rh_repo in common::repo::rhrepos
+      # Skip the Redhat repos, it's managed via rh_repo in common::system::repo::rhrepos
       if $purge {
         purge { 'zypprepo':
           unless => [

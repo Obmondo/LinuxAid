@@ -1,11 +1,11 @@
 # LetsEncrupt CA Signing
 class profile::certs::letsencrypt (
-  Eit_types::Email $email          = $::common::certs::letsencrypt::email,
+  Eit_types::Email $email          = $::common::system::certs::letsencrypt::email,
   Boolean          $epel           = false,
   Enum[
     'production',
     'staging'
-  ]                $ca             = $::common::certs::letsencrypt::ca,
+  ]                $ca             = $::common::system::certs::letsencrypt::ca,
   Integer          $keep_log_files = 30,
 ) {
 

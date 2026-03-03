@@ -38,9 +38,9 @@ class common::system::updates (
   if $manage {
     # NOTE: We will only install updates when purge is true, so that gives us some
     # confidence that we will not install updates from unwanted sources.
-    $purge_settings = lookup('common::repo::purge', Boolean, undef, false)
+    $purge_settings = lookup('common::system::repo::purge', Boolean, undef, false)
 
-    confine($enable, !$purge_settings, 'Automatic update is disabled, since all the repos are not managed by puppet, you can enable it via common::repo::purge: true') #lint:ignore:140chars
+    confine($enable, !$purge_settings, 'Automatic update is disabled, since all the repos are not managed by puppet, you can enable it via common::system::repo::purge: true') #lint:ignore:140chars
 
     $_os_family = $facts['os']['family']
 
