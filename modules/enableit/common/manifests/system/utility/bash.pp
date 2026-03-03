@@ -1,4 +1,4 @@
-# @summary Class for managing common::convenience::bash
+# @summary Class for managing common::system::utility::bash
 #
 # @param manage Whether to manage the files. Defaults to true.
 #
@@ -19,11 +19,11 @@ class common::system::utility::bash (
       ensure => ensure_dir($manage),
       ;
     '/opt/obmondo/share/bash/bashrc':
-      source  => 'puppet:///modules/common/convenience/bash/bashrc',
+      source  => 'puppet:///modules/common/system/utility/bash/bashrc',
       require => File['/opt/obmondo/share/bash'],
       ;
     '/etc/profile.d/obmondo.sh':
-      source  => 'puppet:///modules/common/convenience/bash/obmondo_profile',
+      source  => 'puppet:///modules/common/system/utility/bash/obmondo_profile',
       ;
     # the default root bashrc on many systems set PS1; we'd rather have our own
     # so let's just delete it
