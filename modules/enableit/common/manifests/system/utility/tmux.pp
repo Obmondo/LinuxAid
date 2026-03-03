@@ -1,4 +1,4 @@
-# @summary Class for managing common::convenience::tmux
+# @summary Class for managing common::system::utility::tmux
 #
 # @param manage Boolean indicating whether to manage tmux package and files. Defaults to true.
 #
@@ -21,7 +21,7 @@ class common::system::utility::tmux (
 
     '/etc/tmux.conf':
       ensure => ensure_file($manage),
-      source => 'puppet:///modules/common/convenience/tmux/tmux.conf',
+      source => 'puppet:///modules/common/system/utility/tmux/tmux.conf',
       ;
 
     '/opt/obmondo/share/tmux':
@@ -29,13 +29,13 @@ class common::system::utility::tmux (
       ;
 
     '/opt/obmondo/share/tmux/badges.sh':
-      source  => 'puppet:///modules/common/convenience/tmux/badges.sh',
+      source  => 'puppet:///modules/common/system/utility/tmux/badges.sh',
       mode    => 'a+x',
       require => File['/opt/obmondo/share/tmux'],
       ;
 
     '/opt/obmondo/share/tmux/tmux-env.sh':
-    content => epp('common/convenience/tmux/tmux-env.sh.epp'),
+    content => epp('common/system/utility/tmux/tmux-env.sh.epp'),
     mode    => 'a+x',
     require => File['/opt/obmondo/share/tmux'],
       ;

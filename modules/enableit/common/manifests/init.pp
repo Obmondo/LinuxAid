@@ -71,7 +71,6 @@ class common (
     if $full_host_management {
       contain common::logging
       contain common::backup
-      contain common::convenience
       contain common::repo
       contain common::certs
       contain common::package
