@@ -28,7 +28,7 @@ lookup_options:
     merge: "hash"
   common::network::interfaces:
     merge: "hash"
-  common::package::default_packages:
+  common::system::package::default_packages:
     merge: "unique"
 
   common::user_management::authentication::sudo::sudoers:

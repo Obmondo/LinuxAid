@@ -433,7 +433,7 @@ Data type: `Eit_types::Email`
 
 
 
-Default value: `$::common::certs::letsencrypt::email`
+Default value: `$::common::system::certs::letsencrypt::email`
 
 ##### <a name="-profile--certs--letsencrypt--epel"></a>`epel`
 
@@ -456,7 +456,7 @@ Enum[
 
 
 
-Default value: `$::common::certs::letsencrypt::ca`
+Default value: `$::common::system::certs::letsencrypt::ca`
 
 ##### <a name="-profile--certs--letsencrypt--keep_log_files"></a>`keep_log_files`
 
@@ -10320,7 +10320,7 @@ Data type: `Eit_types::Email`
 
 
 
-Default value: `$::common::certs::letsencrypt::email`
+Default value: `$::common::system::certs::letsencrypt::email`
 
 ##### <a name="-profile--certs--letsencrypt--domain--ca"></a>`ca`
 
@@ -10335,7 +10335,7 @@ Enum[
 
 
 
-Default value: `$::common::certs::letsencrypt::ca`
+Default value: `$::common::system::certs::letsencrypt::ca`
 
 ##### <a name="-profile--certs--letsencrypt--domain--renew"></a>`renew`
 
@@ -10343,7 +10343,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$::common::certs::letsencrypt::renew`
+Default value: `$::common::system::certs::letsencrypt::renew`
 
 ##### <a name="-profile--certs--letsencrypt--domain--domains"></a>`domains`
 
@@ -10351,7 +10351,7 @@ Data type: `Array[Stdlib::Fqdn]`
 
 
 
-Default value: `$::common::certs::letsencrypt::domains`
+Default value: `$::common::system::certs::letsencrypt::domains`
 
 ##### <a name="-profile--certs--letsencrypt--domain--http_01_port"></a>`http_01_port`
 
@@ -10359,7 +10359,7 @@ Data type: `Stdlib::Port`
 
 
 
-Default value: `$::common::certs::letsencrypt::http_01_port`
+Default value: `$::common::system::certs::letsencrypt::http_01_port`
 
 ##### <a name="-profile--certs--letsencrypt--domain--challenges"></a>`challenges`
 
@@ -10367,7 +10367,7 @@ Data type: `Eit_types::Cert::Letsencrypt::Challenge`
 
 
 
-Default value: `$::common::certs::letsencrypt::challenges`
+Default value: `$::common::system::certs::letsencrypt::challenges`
 
 ##### <a name="-profile--certs--letsencrypt--domain--warning"></a>`warning`
 
@@ -10375,7 +10375,7 @@ Data type: `Optional[Integer]`
 
 
 
-Default value: `$::common::certs::letsencrypt::warning`
+Default value: `$::common::system::certs::letsencrypt::warning`
 
 ##### <a name="-profile--certs--letsencrypt--domain--critical"></a>`critical`
 
@@ -10383,7 +10383,7 @@ Data type: `Optional[Integer]`
 
 
 
-Default value: `$::common::certs::letsencrypt::critical`
+Default value: `$::common::system::certs::letsencrypt::critical`
 
 ##### <a name="-profile--certs--letsencrypt--domain--cert_host"></a>`cert_host`
 
@@ -10391,7 +10391,7 @@ Data type: `Optional[Variant[Eit_types::Certname, Eit_types::Host]]`
 
 
 
-Default value: `$::common::certs::letsencrypt::cert_host`
+Default value: `$::common::system::certs::letsencrypt::cert_host`
 
 ##### <a name="-profile--certs--letsencrypt--domain--deploy_hook_command"></a>`deploy_hook_command`
 
@@ -10399,7 +10399,7 @@ Data type: `Optional[Variant[Stdlib::Absolutepath, String]]`
 
 
 
-Default value: `$::common::certs::letsencrypt::deploy_hook_command`
+Default value: `$::common::system::certs::letsencrypt::deploy_hook_command`
 
 ##### <a name="-profile--certs--letsencrypt--domain--distribute_to"></a>`distribute_to`
 
@@ -10407,7 +10407,7 @@ Data type: `Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]]`
 
 
 
-Default value: `$::common::certs::letsencrypt::distribute_to`
+Default value: `$::common::system::certs::letsencrypt::distribute_to`
 
 ### <a name="profile--certs--manual"></a>`profile::certs::manual`
 

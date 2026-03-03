@@ -19,8 +19,8 @@
 * [`common::backup::db::pgsql`](#common--backup--db--pgsql): Class for managing PostgreSQL backup configuration and overrides
 * [`common::backup::gitea`](#common--backup--gitea): Class for managing Gitea backups
 * [`common::backup::netbackup`](#common--backup--netbackup): Class for managing NetBackup common backup configuration
-* [`common::certs`](#common--certs): Class for managing common certificates and CA certificates
-* [`common::certs::letsencrypt`](#common--certs--letsencrypt): Class for managing Let's Encrypt certificates
+* [`common::system::certs`](#common--certs): Class for managing common certificates and CA certificates
+* [`common::system::certs::letsencrypt`](#common--certs--letsencrypt): Class for managing Let's Encrypt certificates
 * [`common::convenience`](#common--convenience): Class for common convenience utilities
 * [`common::convenience::bash`](#common--convenience--bash): Class for managing common::convenience::bash
 * [`common::convenience::tmux`](#common--convenience--tmux): Class for managing common::convenience::tmux
@@ -29,12 +29,12 @@
 * [`common::extras`](#common--extras): Class for things that does not classify into anything
 * [`common::extras::computing`](#common--extras--computing): Class for extra computing-related functionalities that do not fall into other categories
 * [`common::extras::computing::nivisa`](#common--extras--computing--nivisa): Class for managing NI-VISA 2019 configuration
-* [`common::hosts`](#common--hosts): Class for managing host entries
+* [`common::system::hosts`](#common--hosts): Class for managing host entries
 * [`common::logging`](#common--logging): Class for managing common logging configuration
 * [`common::logging::journal`](#common--logging--journal): Class for managing the journal configuration
 * [`common::logging::logrotate`](#common--logging--logrotate): Class for managing logrotate rules
 * [`common::logging::rsyslog`](#common--logging--rsyslog): Class for managing rsyslog configuration
-* [`common::lvm`](#common--lvm): Class for managing LVM setup with LV creation
+* [`common::storage::lvm`](#common--lvm): Class for managing LVM setup with LV creation
 * [`common::mail`](#common--mail): Class for managing common postfix mail setup
 * [`common::monitor`](#common--monitor): Class for managing monitoring defaults
 * [`common::monitor::exporter`](#common--monitor--exporter): Class for managing the common::monitor::exporter
@@ -74,8 +74,8 @@
 * [`common::network::vrrp`](#common--network--vrrp): Class for managing VRRP configuration
 * [`common::network::wireguard`](#common--network--wireguard): Class for managing Wireguard network configuration
 * [`common::openvox`](#common--openvox): Class for managing openvox installation and configuration
-* [`common::package`](#common--package): Class for managing the installation and removal of packages
-* [`common::repo`](#common--repo): Class for managing software repositories
+* [`common::system::package`](#common--package): Class for managing the installation and removal of packages
+* [`common::system::repo`](#common--repo): Class for managing software repositories
 * [`common::user_management::security`](#common--security): Class for managing security settings including certs and auditd
 * [`common::user_management::security::auditd`](#common--security--auditd): Class for managing auditd configuration
 * [`common::user_management::security::effective_group`](#common--security--effective_group): Class for managing the effective group ID setting
@@ -1463,13 +1463,13 @@ List of paths to exclude from backup. Defaults to empty array.
 
 Default value: `[]`
 
-### <a name="common--certs"></a>`common::certs`
+### <a name="common--certs"></a>`common::system::certs`
 
 Class for managing common certificates and CA certificates
 
 #### Parameters
 
-The following parameters are available in the `common::certs` class:
+The following parameters are available in the `common::system::certs` class:
 
 * [`__base_dir`](#-common--certs--__base_dir)
 * [`manual`](#-common--certs--manual)
@@ -1530,13 +1530,13 @@ Default value:
   ]
 ```
 
-### <a name="common--certs--letsencrypt"></a>`common::certs::letsencrypt`
+### <a name="common--certs--letsencrypt"></a>`common::system::certs::letsencrypt`
 
 Class for managing Let's Encrypt certificates
 
 #### Parameters
 
-The following parameters are available in the `common::certs::letsencrypt` class:
+The following parameters are available in the `common::system::certs::letsencrypt` class:
 
 * [`email`](#-common--certs--letsencrypt--email)
 * [`ca`](#-common--certs--letsencrypt--ca)
@@ -1820,13 +1820,13 @@ Boolean flag to enable or disable NI-VISA. Defaults to false.
 
 Default value: `false`
 
-### <a name="common--hosts"></a>`common::hosts`
+### <a name="common--hosts"></a>`common::system::hosts`
 
 Class for managing host entries
 
 #### Parameters
 
-The following parameters are available in the `common::hosts` class:
+The following parameters are available in the `common::system::hosts` class:
 
 * [`entries`](#-common--hosts--entries)
 
@@ -2112,7 +2112,7 @@ Hash of remote server IPs for remote logging. Defaults to an empty hash.
 
 Default value: `{}`
 
-### <a name="common--lvm"></a>`common::lvm`
+### <a name="common--lvm"></a>`common::storage::lvm`
 
 The hash keys are the LV names, and the values are hashes with the following keys:
   - ensure: Ensure state for the LV, such as present or absent.
@@ -2123,7 +2123,7 @@ The hash keys are the LV names, and the values are hashes with the following key
 
 #### Parameters
 
-The following parameters are available in the `common::lvm` class:
+The following parameters are available in the `common::storage::lvm` class:
 
 * [`lvs`](#-common--lvm--lvs)
 
@@ -4566,13 +4566,13 @@ Data type: `Eit_types::Noop_Value`
 
 Default value: `undef`
 
-### <a name="common--package"></a>`common::package`
+### <a name="common--package"></a>`common::system::package`
 
 Class for managing the installation and removal of packages
 
 #### Parameters
 
-The following parameters are available in the `common::package` class:
+The following parameters are available in the `common::system::package` class:
 
 * [`install_default_packages`](#-common--package--install_default_packages)
 * [`manage`](#-common--package--manage)
@@ -4631,7 +4631,7 @@ Array of package names that are required to be installed.
 
 Default value: `[]`
 
-### <a name="common--repo"></a>`common::repo`
+### <a name="common--repo"></a>`common::system::repo`
 
 ]] - Specific zypper repository configurations. Defaults to empty hash.
 
@@ -4639,7 +4639,7 @@ The protocol to use for sources. Defaults to 'https'.
 
 #### Parameters
 
-The following parameters are available in the `common::repo` class:
+The following parameters are available in the `common::system::repo` class:
 
 * [`manage`](#-common--repo--manage)
 * [`noop_value`](#-common--repo--noop_value)

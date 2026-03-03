@@ -71,15 +71,10 @@ class common (
     if $full_host_management {
       contain common::logging
       contain common::backup
-      contain common::repo
-      contain common::certs
-      contain common::package
       contain common::system
       contain common::software
       contain common::devices
-      contain common::hosts
       contain common::storage
-      contain common::lvm
       contain common::network
       # TODO: common::mount is not used anywhere
       # but keeping, so we can enable or improve it later
