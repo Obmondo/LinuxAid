@@ -24,7 +24,7 @@
 * [`common::convenience`](#common--convenience): Class for common convenience utilities
 * [`common::convenience::bash`](#common--convenience--bash): Class for managing common::convenience::bash
 * [`common::convenience::tmux`](#common--convenience--tmux): Class for managing common::convenience::tmux
-* [`common::cron`](#common--cron): Class for managing cron jobs
+* [`common::system::cron`](#common--cron): Class for managing cron jobs
 * [`common::devices`](#common--devices): Class for managing common::devices
 * [`common::extras`](#common--extras): Class for things that does not classify into anything
 * [`common::extras::computing`](#common--extras--computing): Class for extra computing-related functionalities that do not fall into other categories
@@ -1703,13 +1703,13 @@ Optional Boolean for noop operations. Defaults to false.
 
 Default value: `undef`
 
-### <a name="common--cron"></a>`common::cron`
+### <a name="common--cron"></a>`common::system::cron`
 
 Class for managing cron jobs
 
 #### Parameters
 
-The following parameters are available in the `common::cron` class:
+The following parameters are available in the `common::system::cron` class:
 
 * [`purge_unmanaged`](#-common--cron--purge_unmanaged)
 * [`jobs`](#-common--cron--jobs)
