@@ -216,7 +216,7 @@ When enabled, LinuxAid manages all aspects of the system:
 |-----------|------------------|---------|
 | Logging | `common::logging` | Rsyslog and logrotate configuration |
 | Backup | `common::backup` | Backup strategies for services |
-| Cron | `common::cron` | Cron job management |
+| Cron | `common::system::cron` | Cron job management |
 | Repository | `common::repo` | Package repository configuration |
 | Certificates | `common::certs` | SSL/TLS certificate management |
 | Packages | `common::package` | System package installation |

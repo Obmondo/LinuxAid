@@ -21,7 +21,7 @@
 * [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
 * [`profile::cron`](#profile--cron): cron
 * [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
-* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when 
+* [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when
 * [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
 * [`profile::db::elasticsearch::kibana`](#profile--db--elasticsearch--kibana): Elasticsearch Kibana dashboard  Generate the pem cert from the cert created by elasticsearch Get the password /usr/share/elasticsearch/bin/el
 * [`profile::db::mongodb`](#profile--db--mongodb): MongoDB class
@@ -1101,7 +1101,7 @@ Data type: `Variant[Boolean, Enum['root-only']]`
 
 
 
-Default value: `$common::cron::purge_unmanaged`
+Default value: `$common::system::cron::purge_unmanaged`
 
 ##### <a name="-profile--cron--jobs"></a>`jobs`
 
@@ -1109,7 +1109,7 @@ Data type: `Hash`
 
 
 
-Default value: `$common::cron::jobs`
+Default value: `$common::system::cron::jobs`
 
 ### <a name="profile--db--cassandra"></a>`profile::db::cassandra`
 

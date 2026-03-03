@@ -13,7 +13,7 @@ Full host management in LinuxAid provides comprehensive control over Linux serve
 | **Repository Management** | `common::repo::manage` | ✅ Yes | No-noop | YUM/DNF/APT repositories, GPG keys, package sources, repository priorities |
 | **Logging** | `common::logging::manage` | ✅ Yes | No-noop | Rsyslog/syslog forwarding, log rotation, journald settings, centralized logging |
 | **Backup** | `common::backup::manage` | ✅ Yes | No-noop | Backup schedules, retention policies, backup scripts, storage locations |
-| **Cron Jobs** | `common::cron::purge_unmanaged` | ⚙️ root-only | No-noop | Root user cron jobs (unmanaged jobs will be purged) |
+| **Cron Jobs** | `common::system::cron::purge_unmanaged` | ⚙️ root-only | No-noop | Root user cron jobs (unmanaged jobs will be purged) |
 | **Virtualization** | `common::virtualization::manage` | ✅ Yes | No-noop | KVM/QEMU settings, VMware Tools, VirtIO drivers, guest tools |
 | **Network** | `common::network::manage` | ✅ Yes | No-noop | Network interfaces, routing tables, firewall rules, DNS settings |
 | **Services** | `common::services::manage` | ✅ Yes | No-noop | System services (start/stop/enable), service dependencies, init scripts |
@@ -343,7 +343,7 @@ Component is not managed by Puppet at all. Manual configuration or other tools m
 common::repo::manage: true
 common::logging::manage: true
 common::backup::manage: true
-common::cron::purge_unmanaged: 'root-only'
+common::system::cron::purge_unmanaged: 'root-only'
 common::virtualization::manage: true
 common::network::manage: true                # ⚠️ TEST CAREFULLY
 common::services::manage: true
