@@ -73,28 +73,8 @@ class common (
       contain common::backup
       contain common::system
       contain common::software
-      contain common::devices
       contain common::storage
       contain common::network
-      # TODO: common::mount is not used anywhere
-      # but keeping, so we can enable or improve it later
-      # contain ::common::mount
-      contain common::services
-      contain common::user_management::security
-      contain common::extras
-      # Only manage mail if not using a role that provides it
-      if $::obmondo_classes.grep('::mailcow').empty {
-        contain common::mail
-      }
-      $::filepermissions.each |$path, $params| {
-        $recurse = if $params[apply_recursively] { '-r' } else { '' }
-        $mode = $params[mode]
-        exec { "chmod ${recurse} ${mode} ${path}":
-          onlyif => "stat ${path}",
-          unless => "stat /tmp --format=%a | grep -E ${mode}",
-          noop   => false,
-        }
-      }
     }
   }
 }

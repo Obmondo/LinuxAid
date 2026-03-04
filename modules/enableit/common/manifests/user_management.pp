@@ -28,4 +28,8 @@ class common::user_management (
   if $sshd {
     contain common::user_management::sshd
   }
+
+  unless lookup('common::user_management::jumphost::configs', Hash, undef, {}).empty {
+    contain common::user_management::jumphosts
+  }
 }

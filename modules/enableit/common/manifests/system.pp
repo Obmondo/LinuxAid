@@ -209,30 +209,21 @@ class common::system (
     }
   }
 
-  ##################
-  #  Service_Oneshot
-  #################
-
+  # OneShot System Service
   $service_oneshot.lest || {{} }.each |$name, $value| {
     profile::system::service_oneshot { $name:
       content => $value['content'],
     }
   }
 
-  #############
-  # NETWORK
-  #############
-
+  # Disable IPv6
   if $disable_ipv6 =~ Boolean {
     sysctl::configuration { 'net.ipv6.conf.all.disable_ipv6':
       value => $disable_ipv6,
     }
   }
 
-  ############
-  # LOCATION #
-  ############
-
+  # Location Facter Setup
   $_location = $locations.map |$location, $ip_address| {
     $ip_address.map |$ip_addr| {
       if $ip_addr == $facts['networking']['ip'] {
@@ -261,9 +252,7 @@ class common::system (
     noop    => false,
   }
 
-  #############
-  # INCLUDES
-  #############
+  # load subclasses
 
   # NOTE: includes all these system profile, but some are set to enable
   # and some set to disable, depending on the requirement.
@@ -271,7 +260,8 @@ class common::system (
     include $subclass
   }
 
-  unless lookup('common::user_management::jumphost::configs', Hash, undef, {}).empty {
-    include common::user_management::jumphost
+  # Only manage mail if not using a role that provides it
+  if $::obmondo_classes.grep('::mailcow').empty {
+    contain common::system::mail
   }
 }
