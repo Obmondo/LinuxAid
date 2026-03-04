@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+gem 'puppet', '8.10.0'
+gem 'octocatalog-diff'
+gem 'rspec'
+gem 'json'

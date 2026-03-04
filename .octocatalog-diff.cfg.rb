@@ -1,27 +1,28 @@
 class OctocatalogDiff::Config
   def self.config
     settings = {}
-    settings[:basedir] = Dir.pwd
-    #settings[:environment] = 'master'
-    #settings[:preserve_environments] = true
-    #settings[:from_environment] = 'pro'
-    #settings[:to_environment] = 'master'
-    #settings[:create_symlinks] = %w(modules manifests)
 
-    # Puppet
-    settings[:puppet_binary] = '/opt/puppetlabs/puppet/bin/puppet'
+    settings[:puppet_binary] = '/usr/local/bundle/gems/puppet-8.10.0/bin/puppet'
+    settings[:puppet_version] = '8.10.0'
 
     # Hiera
-    # To talk to api.obmondo.com
     settings[:hiera_config] = 'hiera.yaml'
-    #settings[:hiera_path_strip] = '/path/to/strip'  # Add this if needed
+    settings[:hiera_path] = '/../hiera-data/main'
 
     # ENC
     settings[:enc] = 'puppet_enc.rb'
-    settings[:puppet_binary] = '/usr/local/bundle/bin/puppet'
-    settings[:puppetdb_url] = "https://puppetdb.enableit.obmondo.com"
-    settings[:puppetdb_ssl_client_cert] = ".certs/dev-ashish21.niwyocdmk2.pem"
-    settings[:puppetdb_ssl_client_key] = ".certs/dev-ashish21.niwyocdmk2.key"
+
+    # Pass SSL env vars into catalog compilation
+    settings[:pass_env_vars] = ['AUTOSIGN_CLIENT_CERT', 'AUTOSIGN_CLIENT_KEY']
+
+    # PuppetDB
+    settings[:puppetdb_url] = 'https://enableit.puppetdb.obmondo.com:443'
+    settings[:puppetdb_ssl_ca] = '/tmp/.certs/ca.pem'
+    cert_path = ENV['AUTOSIGN_CLIENT_CERT']
+    key_path  = ENV['AUTOSIGN_CLIENT_KEY']
+    settings[:puppetdb_ssl_client_cert] = File.read(cert_path) if cert_path && File.exist?(cert_path)
+    settings[:puppetdb_ssl_client_key]  = File.read(key_path)  if key_path  && File.exist?(key_path)
+
     settings
   end
 end

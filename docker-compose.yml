@@ -1,0 +1,13 @@
+services:
+  catalog-diff:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    volumes:
+      - .:/workspace
+      - /tmp/.certs:/tmp/.certs:ro
+    environment:
+      - AUTOSIGN_CLIENT_CERT=/tmp/.certs/dev-ashish21.niwyocdmk2.pem
+      - AUTOSIGN_CLIENT_KEY=/tmp/.certs/dev-ashish21.niwyocdmk2.key
+      - AUTOSIGN_CA_CERT=/tmp/.certs/ca.pem
+    working_dir: /workspace

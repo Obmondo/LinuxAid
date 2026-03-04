@@ -57,6 +57,7 @@ end
 
 hosts.each do |hostname|
   puts "### Catalog-Diff #{hostname} ###"
-  exit_code, result = run_octocatalog_diff(hostname)
-  puts exit_code, result
+  output, status = run_octocatalog_diff(hostname)
+  puts output
+  puts "Exit: #{status.exitstatus}"
 end
