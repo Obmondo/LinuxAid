@@ -115,6 +115,25 @@ class profile::projectmanagement::gitlab_ci_runner (
         ensure => running,
         enable => true,
       }
+
+      # Adding cron for cleaning gitlab_shell_runner build directory
+      file { "/usr/local/bin/gitlab_runner_cleanup_${run_as_user}.sh":
+        ensure  => file,
+        mode    => '0755',
+        owner   => 'root',
+        group   => 'root',
+        content => epp('profile/projectmanagement/gitlab_shell_runner_cleanup.sh.epp', {
+          'service_name' => $service_name,
+          'builds_dir'   => "${working_directory}/${run_as_user}/builds",
+        }),
+      }
+
+      cron { "gitlab_runner_cleanup_${run_as_user}":
+        command => "/usr/local/bin/gitlab_runner_cleanup_${run_as_user}.sh",
+        user    => 'root',
+        minute  => 0,
+        hour    => '*/3',
+      }
     }
 
     if !$docker_executor {

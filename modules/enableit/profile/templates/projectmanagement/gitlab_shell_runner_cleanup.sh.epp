@@ -1,0 +1,41 @@
+<%- | String $service_name,
+      String $builds_dir | -%>
+#!/bin/bash
+
+SERVICE_NAME="<%= $service_name %>"
+BUILDS_DIR="<%= $builds_dir %>"
+LOG_FILE="/var/log/gitlab-runner-cleanup.log"
+
+DATE=$(date '+%Y-%m-%d %H:%M:%S')
+
+METRICS=$(curl -s --max-time 5 http://127.254.254.254:63384/metrics)
+
+if [ -z "$METRICS" ]; then
+  echo "$DATE - ERROR: Unable to fetch metrics" >> "$LOG_FILE"
+  exit 1
+fi
+
+RUNNING_JOBS=$(echo "$METRICS" | grep 'gitlab_runner_jobs{.*state="running".*}' | awk '{sum += $2} END {print sum+0}')
+
+echo "$DATE - Running jobs: $RUNNING_JOBS" >> "$LOG_FILE"
+
+if [ "$RUNNING_JOBS" -eq 0 ]; then
+  echo "$DATE - Stopping $SERVICE_NAME" >> "$LOG_FILE"
+
+  /bin/systemctl stop "$SERVICE_NAME"
+
+  if [ -d "$BUILDS_DIR" ] && [ "$BUILDS_DIR" != "/" ]; then
+    rm -rf "${BUILDS_DIR:?}"/*
+    echo "$DATE - Builds directory cleaned" >> "$LOG_FILE"
+  else
+    echo "$DATE - ERROR: Invalid builds directory" >> "$LOG_FILE"
+    exit 1
+  fi
+
+  /bin/systemctl start "$SERVICE_NAME"
+
+  echo "$DATE - Service restarted successfully" >> "$LOG_FILE"
+else
+  echo "$DATE - Jobs are running. Skipping cleanup." >> "$LOG_FILE"
+  exit 0
+fi
