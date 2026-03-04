@@ -1,4 +1,3 @@
-# Disable alert during cron timespan
 type Monitor::Disable = Variant[
   Undef,
   Struct[{

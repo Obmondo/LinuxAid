@@ -1,4 +1,3 @@
-# Override threshold or disable alert
 type Monitor::Override = Variant[
   Undef,
   Struct[{
