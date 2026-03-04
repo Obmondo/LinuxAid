@@ -51,6 +51,8 @@ class profile::software::vncserver (
     systemd_template_startswith => $systemd_service,
   }
 
+
+  notify { "The Vnc server class is getting loaded":}
   # Manage firewall rules for each VNC session
   $vnc_users.each |$name, $port| {
     $_port = $port + 5900
