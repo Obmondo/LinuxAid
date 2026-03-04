@@ -62,6 +62,7 @@ server_data = if TESTING
 subscription_product_id = server_data&.dig('product_id')
 tag_keys = server_data&.dig('tags') || []
 linuxaid_tag = server_data&.dig('linuxaid_tag')
+linuxaid_tag = linuxaid_tag.gsub('.', '_')
 
 # ensure that we don't have too many tags -- if we allow for more tags, we also
 # need to update hiera.yaml!
