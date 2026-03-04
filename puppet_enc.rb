@@ -42,27 +42,24 @@ server_data = if TESTING
                 {
                   'tags' => ['tag1'],
                   'product_id' => 'silver',
-                  'linuxaid_tag' => nil,
+                  'linuxaid_tag' => 'master',
                 }
               else
                 begin
                   response = obmondo_api("/servers/customer/#{customer_id}?certname=#{CERTNAME}")
                   if response['data'] && !response['data'].empty?
                     response['data'].first
-                  else
-                    nil
                   end
                 rescue => e
                   warn 'API is down; no server data available!'
                   warn "#{e.class}: #{e}"
-                  nil
+                  exit(1)
                 end
               end
 
 subscription_product_id = server_data&.dig('product_id')
 tag_keys = server_data&.dig('tags') || []
-linuxaid_tag = server_data&.dig('linuxaid_tag')
-linuxaid_tag = linuxaid_tag.gsub('.', '_')
+linuxaid_tag = server_data&.dig('linuxaid_tag').gsub('.', '_')
 
 # ensure that we don't have too many tags -- if we allow for more tags, we also
 # need to update hiera.yaml!
@@ -99,6 +96,6 @@ output = {
   'parameters' => parameters
 }
 
-output['environment'] = linuxaid_tag if linuxaid_tag
+output['environment'] = linuxaid_tag
 
 puts YAML.dump(output)
