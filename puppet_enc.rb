@@ -81,6 +81,7 @@ parameters = {
   'customer' => customer_id,
   'obmondo' => {
     'customer_id'  => customer_id,
+    'certname'     => CERTNAME,
     'node_name'    => node_name,
     'tags'         => tag_keys,
     'monitor'      => !subscription_product_id.nil?,
