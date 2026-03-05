@@ -25,12 +25,12 @@ class profile::computing::slurm::slurmd (
     ensure        => 'present',
     path          => '/var/log/slurm/*.log',
     rotate_every  => 'hour',
-    rotate        => 5,
+    rotate        => 7,
     compress      => true,
     delaycompress => false,
     ifempty       => false,
     copytruncate  => true,
-    size          => '1G',
+    maxsize       => '1G',
   }
 
   include ::slurm::slurmd
