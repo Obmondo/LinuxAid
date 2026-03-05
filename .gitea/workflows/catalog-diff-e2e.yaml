@@ -8,8 +8,8 @@ name: Catalog Diff e2e
       - synchronize
 
 jobs:
-  catalog-diff-e2e:
-    name: "catalog-diff ${{ matrix.hostname }}"
+  catalog-diff-role-basic:
+    name: "basic / ${{ matrix.hostname }}"
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/obmondo/linuxaid-octocatalog-diff:2.3.1
@@ -22,6 +22,34 @@ jobs:
           - role-basic-suse15.e2etest
           - role-basic-ubuntu2204.e2etest
           - role-basic-ubuntu2404.e2etest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch base branch
+        run: git fetch origin master:master
+
+      - name: Run catalog-diff e2e
+        env:
+          OCTOCATALOG_DIFF_CONFIG_FILE: ${{ gitea.workspace }}/.octocatalog-diff.cfg.rb
+          PUPPET_FACT_DIR: ${{ gitea.workspace }}/e2e/facts
+        run: |
+          bundle exec octocatalog-diff \
+            --basedir ${{ gitea.workspace }} \
+            --enc ${{ gitea.workspace }}/e2e/enc.rb \
+            --hiera-config ${{ gitea.workspace }}/e2e/hiera.yaml \
+            --hostname ${{ matrix.hostname }}
+
+  catalog-diff-role-monitoring:
+    name: "monitoring / ${{ matrix.hostname }}"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/obmondo/linuxaid-octocatalog-diff:2.3.1
+    strategy:
+      fail-fast: false
+      matrix:
+        hostname:
           - role-monitoring-rhel8.e2etest
           - role-monitoring-rhel9.e2etest
           - role-monitoring-suse15.e2etest
