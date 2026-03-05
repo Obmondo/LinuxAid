@@ -1,0 +1,188 @@
+---
+name: role-monitoring-rhel9.e2etest
+values:
+  os:
+    name: RedHat
+    distro:
+      id: RedHat
+      release:
+        full: '9.3'
+        major: '9'
+        minor: '3'
+      description: Red Hat Enterprise Linux 9.3 (Plow)
+    family: RedHat
+    release:
+      full: '9.3'
+      major: '9'
+      minor: '3'
+    selinux:
+      enabled: true
+      enforced: true
+      current_mode: enforcing
+      config_mode: enforcing
+      config_policy: targeted
+    hardware: x86_64
+    architecture: x86_64
+  cis:
+    local_users:
+      root:
+        id: '0'
+        shell: "/bin/bash"
+      testuser:
+        id: '1000'
+        shell: "/bin/bash"
+      obmondo-admin:
+        id: '999'
+        shell: "/bin/bash"
+    rlogin_exists: false
+    telnet_exists: false
+  dmi:
+    bios:
+      vendor: ACME Corp
+      version: 1.0.0
+      release_date: 01/01/2024
+    board:
+      product: E2E-BOARD
+      manufacturer: ACME Corp
+    chassis:
+      type: Other
+    product:
+      name: E2E Test Node
+    manufacturer: ACME Corp
+  ssh:
+    rsa:
+      key: AAAAB3NzaC1yc2EAAAADAQABAAABgQC0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000=
+      type: ssh-rsa
+      fingerprints:
+        sha1: SSHFP 1 1 0000000000000000000000000000000000000000
+        sha256: SSHFP 1 2 0000000000000000000000000000000000000000000000000000000000000000
+    ecdsa:
+      key: AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      type: ecdsa-sha2-nistp256
+      fingerprints:
+        sha1: SSHFP 3 1 0000000000000000000000000000000000000000
+        sha256: SSHFP 3 2 0000000000000000000000000000000000000000000000000000000000000000
+    ed25519:
+      key: AAAAC3NzaC1lZDI1NTE5AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      type: ssh-ed25519
+      fingerprints:
+        sha1: SSHFP 4 1 0000000000000000000000000000000000000000
+        sha256: SSHFP 4 2 0000000000000000000000000000000000000000000000000000000000000000
+  ruby:
+    sitedir: "/opt/puppetlabs/puppet/lib/ruby/site_ruby/3.2.0"
+    version: 3.2.9
+    platform: x86_64-linux
+  disks:
+    sda:
+      size: 100.00 GiB
+      type: ssd
+      model: E2E Test Disk
+      vendor: ACME Corp
+      size_bytes: 107374182400
+  is_pe: false
+  augeas:
+    version: 1.14.1
+  is_efi: true
+  kernel: Linux
+  shmall: '18446744073692774399'
+  cmdline:
+    ro: ''
+    root: "/dev/mapper/rhel-root"
+    quiet: ''
+    BOOT_IMAGE: "/vmlinuz-5.14.0-generic"
+    crashkernel: auto
+    rd.lvm.lv: rhel/root
+  fullrun: 'false'
+  gemhome: "/opt/puppetlabs/puppet/lib/ruby/gems/3.2.0"
+  lvm_pvs: 1
+  lvm_vgs: 1
+  systemd: true
+  trusted:
+    domain: e2etest
+    certname: role-monitoring-rhel9.e2etest
+    external: {}
+    hostname: role-monitoring-rhel9
+    extensions: {}
+    authenticated: remote
+  uid_min: '1000'
+  virtual: physical
+  hostcert: "/etc/puppetlabs/puppet/ssl/certs/role-monitoring-rhel9.e2etest.pem"
+  identity:
+    gid: 0
+    uid: 0
+    user: root
+    group: root
+    privileged: true
+  runlevel: '3'
+  snapshot: ''
+  timezone: UTC
+  root_home: "/root"
+  clientcert: role-monitoring-rhel9.e2etest
+  clientnoop: true
+  is_vagrant: false
+  is_virtual: false
+  filesystems: xfs,ext4
+  hostprivkey: "/etc/puppetlabs/puppet/ssl/private_keys/role-monitoring-rhel9.e2etest.pem"
+  hypervisors: {}
+  init_system: systemd
+  is_lxdguest: false
+  localcacert: "/etc/puppetlabs/puppet/ssl/certs/ca.pem"
+  lvm_support: true
+  lxd_dnsmasq: false
+  sudoversion: 1.9.5p2
+  zfs_present: false
+  fips_enabled: false
+  init_systems:
+    - rc
+    - systemd
+    - sysv
+  install_date: 20240101
+  ipv6_enabled: true
+  swap_present: true
+  users_logged: reboot
+  acpid_enabled: false
+  clientversion: 8.23.0
+  facterversion: 5.1.0
+  kernelversion: 5.14.0
+  puppet_config: "/etc/puppetlabs/puppet/puppet.conf"
+  puppet_server: puppet.e2etest.example.com
+  puppet_ssldir: "/etc/puppetlabs/puppet/ssl"
+  puppet_vardir: "/opt/puppetlabs/puppet/cache"
+  puppetversion: 8.23.0
+  volume_groups:
+    rhel:
+      free_bytes: 0
+      size_bytes: 107374182400
+  defaultgateway: 10.0.0.1
+  implementation: openvox
+  mdraid_present: false
+  puppet_confdir: "/etc/puppetlabs/puppet"
+  puppet_runmode: agent
+  jenkins_plugins: ''
+  logical_volumes:
+    root:
+      vg: rhel
+      size_bytes: 107374182400
+  mysql_server_id: 1000000022
+  openssl_version: 3.0.7
+  php_mod_fpm_ini: ''
+  puppet_sslpaths:
+    certdir:
+      path: "/etc/puppetlabs/puppet/ssl/certs"
+      path_exists: true
+    hostcrl:
+      path: "/etc/puppetlabs/puppet/ssl/crl.pem"
+      path_exists: true
+    privatedir:
+      path: "/etc/puppetlabs/puppet/ssl/private"
+      path_exists: true
+    requestdir:
+      path: "/etc/puppetlabs/puppet/ssl/certificate_requests"
+      path_exists: true
+    publickeydir:
+      path: "/etc/puppetlabs/puppet/ssl/public_keys"
+      path_exists: true
+    privatekeydir:
+      path: "/etc/puppetlabs/puppet/ssl/private_keys"
+      path_exists: true
+  python3_release: '3.9'

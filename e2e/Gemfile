@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'puppet', '8.10.0'
+gem 'octocatalog-diff'
+gem 'hiera-eyaml'
+gem 'rspec'
+gem 'json', '~> 2.6.0'

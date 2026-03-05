@@ -1,19 +1,68 @@
 #!/usr/bin/env bash
 
-# This script exists to make it easier to test alternate branches of octocatalog-diff.
-# It is intended as a one-for-one replacement of `octocatalog-diff` as installed by the gem.
+IMAGE=ghcr.io/obmondo/linuxaid-octocatalog-diff:2.3.1
 
-PATH=/opt/puppetlabs/puppet/bin:$PATH
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [--e2e] [OPTIONS]
 
-CURRENT_PWD="$(pwd)"
-CHECKOUT_BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+Run octocatalog-diff inside Docker.
 
-if [ -z "$OCTOCATALOG_DIFF_CONFIG_FILE" ]; then
-  if [ -f "${CURRENT_PWD}/.octocatalog-diff.cfg.rb" ]; then
-    export OCTOCATALOG_DIFF_CONFIG_FILE="${CURRENT_PWD}/.octocatalog-diff.cfg.rb"
-  fi
+Subcommands:
+  --e2e         Run in e2e mode: uses local facts (e2e/facts/), enc (e2e/enc.rb)
+                and hiera config (e2e/hiera.yaml). No PuppetDB required.
+
+Options:
+  -h, --help    Show this help message
+  --debug       Mount .catalog-diff-debug/ as /tmp inside the container.
+                Keeps all working files (catalogs, facts) for inspection after the run.
+  Any additional options are passed directly to octocatalog-diff.
+
+Examples:
+  $(basename "$0") --e2e --hostname role-basic.e2etest
+  $(basename "$0") --e2e --hostname role-basic.e2etest --from master --to HEAD
+EOF
+}
+
+DEBUG=0
+
+if [ "$1" = "--debug" ]; then
+  DEBUG=1
+  shift
 fi
 
-cd "$CHECKOUT_BASE"
-export OCTOCATALOG_DIFF_CUSTOM_VERSION="@$(git rev-parse HEAD)"
-bundle exec octocatalog-diff --basedir "$CURRENT_PWD" $*
+DOCKER_ARGS=(
+  --rm
+  -u "$(id -u):$(id -g)"
+  -v "$(pwd):/repo"
+  -e OCTOCATALOG_DIFF_CONFIG_FILE=/repo/.octocatalog-diff.cfg.rb
+  -e HOME=/tmp
+)
+
+if [ "$DEBUG" = "1" ]; then
+  mkdir -p "$(pwd)/.catalog-diff-debug"
+  DOCKER_ARGS+=(-v "$(pwd)/.catalog-diff-debug:/tmp")
+  echo "Debug mode: working files will be in $(pwd)/.catalog-diff-debug"
+fi
+
+case "$1" in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  --e2e)
+    shift
+    docker run "${DOCKER_ARGS[@]}" \
+      -e PUPPET_FACT_DIR=/repo/e2e/facts \
+      "$IMAGE" \
+      bundle exec octocatalog-diff --basedir /repo \
+      --enc /repo/e2e/enc.rb \
+      --hiera-config /repo/e2e/hiera.yaml \
+      "$@"
+    ;;
+  *)
+    docker run "${DOCKER_ARGS[@]}" \
+      "$IMAGE" \
+      bundle exec octocatalog-diff --basedir /repo "$@"
+    ;;
+esac

@@ -69,12 +69,13 @@ class common (
     # NOTE: full_host_management defaults to true, except for role::monitoring
     # If you need these classes, then one has to enable full_host_management
     if $full_host_management {
-      contain common::logging
       contain common::backup
-      contain common::system
+      contain common::logging
+      contain common::network
       contain common::software
       contain common::storage
-      contain common::network
+      contain common::system
+      contain common::user_management
     }
   }
 }
