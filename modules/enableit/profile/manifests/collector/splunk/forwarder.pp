@@ -12,7 +12,7 @@ class profile::collector::splunk::forwarder (
   Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
 ) {
 
-  user { 'splunk' :
+  user { 'splunkfwd' :
     ensure  => ensure_present($enable),
     name    => 'splunk',
     system  => yes,
@@ -30,7 +30,7 @@ class profile::collector::splunk::forwarder (
 
     class { 'splunk::forwarder':
       seed_password    => $seed_password,
-      splunk_user      => 'splunk',
+      splunk_user      => 'splunkfwd',
       password_hash    => $password_hash,
       purge_outputs    => false,
       forwarder_output => $forwarder_output,
@@ -53,7 +53,7 @@ class profile::collector::splunk::forwarder (
     posix_acl { '/var/log':
       action     => set,
       permission => [
-        'group:splunk:rX',
+        'group:splunkfwd:rX',
       ],
       recursive  => true,
     }
