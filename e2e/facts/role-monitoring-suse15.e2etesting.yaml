@@ -1,26 +1,22 @@
 ---
-name: role-monitoring-rhel9.e2etest
+name: role-monitoring-suse15.e2etesting
 values:
   os:
-    name: RedHat
+    name: SLES
     distro:
-      id: RedHat
+      id: SLES
       release:
-        full: '9.3'
-        major: '9'
-        minor: '3'
-      description: Red Hat Enterprise Linux 9.3 (Plow)
-    family: RedHat
+        full: '15.5'
+        major: '15'
+        minor: '5'
+      description: SUSE Linux Enterprise Server 15 SP5
+    family: Suse
     release:
-      full: '9.3'
-      major: '9'
-      minor: '3'
+      full: '15.5'
+      major: '15'
+      minor: '5'
     selinux:
-      enabled: true
-      enforced: true
-      current_mode: enforcing
-      config_mode: enforcing
-      config_policy: targeted
+      enabled: false
     hardware: x86_64
     architecture: x86_64
   cis:
@@ -87,26 +83,32 @@ values:
   shmall: '18446744073692774399'
   cmdline:
     ro: ''
-    root: "/dev/mapper/rhel-root"
+    root: "/dev/mapper/system-root"
     quiet: ''
-    BOOT_IMAGE: "/vmlinuz-5.14.0-generic"
-    crashkernel: auto
-    rd.lvm.lv: rhel/root
+    BOOT_IMAGE: "/vmlinuz-5.14.21-generic"
+    resume: "/dev/disk/by-uuid/00000000-0000-0000-0000-000000000000"
+    mitigations: auto
   fullrun: 'false'
   gemhome: "/opt/puppetlabs/puppet/lib/ruby/gems/3.2.0"
   lvm_pvs: 1
   lvm_vgs: 1
   systemd: true
+  systemd_version: '234'
+  package_provider: 'zypper'
+  service_provider: 'systemd'
+  ssh_server_version_full: '7.6p1'
+  treat_as_physical: true
+  iptable_rules_exist: false
   trusted:
-    domain: e2etest
-    certname: role-monitoring-rhel9.e2etest
+    domain: e2etesting
+    certname: role-monitoring-suse15.e2etesting
     external: {}
-    hostname: role-monitoring-rhel9
+    hostname: role-monitoring-suse15
     extensions: {}
     authenticated: remote
   uid_min: '1000'
   virtual: physical
-  hostcert: "/etc/puppetlabs/puppet/ssl/certs/role-monitoring-rhel9.e2etest.pem"
+  hostcert: "/etc/puppetlabs/puppet/ssl/certs/role-monitoring-suse15.e2etesting.pem"
   identity:
     gid: 0
     uid: 0
@@ -117,19 +119,19 @@ values:
   snapshot: ''
   timezone: UTC
   root_home: "/root"
-  clientcert: role-monitoring-rhel9.e2etest
+  clientcert: role-monitoring-suse15.e2etesting
   clientnoop: true
   is_vagrant: false
   is_virtual: false
-  filesystems: xfs,ext4
-  hostprivkey: "/etc/puppetlabs/puppet/ssl/private_keys/role-monitoring-rhel9.e2etest.pem"
+  filesystems: btrfs,xfs,ext4
+  hostprivkey: "/etc/puppetlabs/puppet/ssl/private_keys/role-monitoring-suse15.e2etesting.pem"
   hypervisors: {}
   init_system: systemd
   is_lxdguest: false
   localcacert: "/etc/puppetlabs/puppet/ssl/certs/ca.pem"
   lvm_support: true
   lxd_dnsmasq: false
-  sudoversion: 1.9.5p2
+  sudoversion: 1.9.12p1
   zfs_present: false
   fips_enabled: false
   init_systems:
@@ -143,16 +145,27 @@ values:
   acpid_enabled: false
   clientversion: 8.23.0
   facterversion: 5.1.0
-  kernelversion: 5.14.0
+  kernelversion: 5.14.21
   puppet_config: "/etc/puppetlabs/puppet/puppet.conf"
-  puppet_server: puppet.e2etest.example.com
+  puppet_server: puppet.e2etesting.example.com
   puppet_ssldir: "/etc/puppetlabs/puppet/ssl"
   puppet_vardir: "/opt/puppetlabs/puppet/cache"
   puppetversion: 8.23.0
   volume_groups:
-    rhel:
+    system:
       free_bytes: 0
       size_bytes: 107374182400
+  networking:
+    hostname: role-monitoring-suse15
+    domain: e2etesting
+    fqdn: role-monitoring-suse15.e2etesting
+    ip: 10.0.0.46
+    ip6: "fd00::46"
+    mac: "00:16:3e:aa:bb:0b"
+    netmask: "255.255.255.0"
+    network: 10.0.0.0
+    mtu: 1500
+    primary: eth0
   defaultgateway: 10.0.0.1
   implementation: openvox
   mdraid_present: false
@@ -161,10 +174,10 @@ values:
   jenkins_plugins: ''
   logical_volumes:
     root:
-      vg: rhel
+      vg: system
       size_bytes: 107374182400
-  mysql_server_id: 1000000022
-  openssl_version: 3.0.7
+  mysql_server_id: 1000000031
+  openssl_version: 1.1.1l
   php_mod_fpm_ini: ''
   puppet_sslpaths:
     certdir:
@@ -185,4 +198,4 @@ values:
     privatekeydir:
       path: "/etc/puppetlabs/puppet/ssl/private_keys"
       path_exists: true
-  python3_release: '3.9'
+  python3_release: '3.6'

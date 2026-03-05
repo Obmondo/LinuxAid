@@ -17,11 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         hostname:
-          - role-basic-rhel8.e2etest
-          - role-basic-rhel9.e2etest
-          - role-basic-suse15.e2etest
-          - role-basic-ubuntu2204.e2etest
-          - role-basic-ubuntu2404.e2etest
+          - role-basic-rhel8.e2etesting
+          - role-basic-rhel9.e2etesting
+          - role-basic-suse15.e2etesting
+          - role-basic-ubuntu2204.e2etesting
+          - role-basic-ubuntu2404.e2etesting
     steps:
       - uses: actions/checkout@v3
         with:
@@ -50,11 +50,11 @@ jobs:
       fail-fast: false
       matrix:
         hostname:
-          - role-monitoring-rhel8.e2etest
-          - role-monitoring-rhel9.e2etest
-          - role-monitoring-suse15.e2etest
-          - role-monitoring-ubuntu2204.e2etest
-          - role-monitoring-ubuntu2404.e2etest
+          - role-monitoring-rhel8.e2etesting
+          - role-monitoring-rhel9.e2etesting
+          - role-monitoring-suse15.e2etesting
+          - role-monitoring-ubuntu2204.e2etesting
+          - role-monitoring-ubuntu2404.e2etesting
     steps:
       - uses: actions/checkout@v3
         with:

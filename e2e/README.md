@@ -12,18 +12,18 @@ e2e/
 ├── hiera.yaml                       # Hiera config pointing at e2e/ data
 ├── global.yaml                      # Defaults (monitoring off, no full mgmt)
 └── agents/
-    ├── role-basic.e2etest.yaml      # Assigns role::basic
-    └── role-monitoring.e2etest.yaml # Assigns role::monitoring
+    ├── role-basic.e2etesting.yaml      # Assigns role::basic
+    └── role-monitoring.e2etesting.yaml # Assigns role::monitoring
 ```
 
 ## Certname convention
 
-e2e certnames follow the pattern `<scenario>.<customerid>`, using `.e2etest` as the customer suffix:
+e2e certnames follow the pattern `<scenario>.<customerid>`, using `.e2etesting` as the customer suffix:
 
 ```
-role-basic.e2etest
-role-monitoring.e2etest
-myfeature.e2etest
+role-basic.e2etesting
+role-monitoring.e2etesting
+myfeature.e2etesting
 ```
 
 ## Adding a new test agent
@@ -31,7 +31,7 @@ myfeature.e2etest
 Create `e2e/agents/<certname>.yaml` with the desired classes:
 
 ```yaml
-# e2e/agents/myfeature.e2etest.yaml
+# e2e/agents/myfeature.e2etesting.yaml
 classes:
   - role::basic
   - mymodule::myclass
@@ -40,8 +40,8 @@ classes:
 ## Running catalog-diff in e2e mode
 
 ```bash
-./bin/catalog-diff.sh --e2e --hostname role-basic.e2etest
-./bin/catalog-diff.sh --e2e --hostname role-basic.e2etest --from HEAD --to <branch>
+./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting
+./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting --from HEAD --to <branch>
 ```
 
 ## Node facts for catalog-diff
@@ -54,8 +54,8 @@ querying PuppetDB (controlled by the `PUPPET_FACT_DIR` env var set in `bin/catal
 Run `bin/fetch-node-facts` on a machine with PuppetDB access (requires the e2e certs):
 
 ```bash
-AUTOSIGN_CLIENT_CERT=e2e/.certs/role-basic.e2etest.pem \
-AUTOSIGN_CLIENT_KEY=e2e/.certs/role-basic.e2etest.key \
+AUTOSIGN_CLIENT_CERT=e2e/.certs/role-basic.e2etesting.pem \
+AUTOSIGN_CLIENT_KEY=e2e/.certs/role-basic.e2etesting.key \
 AUTOSIGN_CA_CERT=e2e/.certs/ca.pem \
 bin/fetch-node-facts <certname>
 ```
