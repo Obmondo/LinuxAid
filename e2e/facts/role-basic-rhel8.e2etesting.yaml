@@ -1,23 +1,28 @@
 ---
-name: role-monitoring.e2etest
+name: role-basic-rhel8.e2etesting
 values:
   os:
-    name: Ubuntu
+    name: RedHat
     distro:
-      id: Ubuntu
+      id: RedHat
       release:
-        full: '24.04'
-        major: '24.04'
-      codename: noble
-      description: Ubuntu 24.04 LTS
-    family: Debian
+        full: '8.9'
+        major: '8'
+        minor: '9'
+      description: Red Hat Enterprise Linux 8.9 (Ootpa)
+    family: RedHat
     release:
-      full: '24.04'
-      major: '24.04'
+      full: '8.9'
+      major: '8'
+      minor: '9'
     selinux:
-      enabled: false
+      enabled: true
+      enforced: true
+      current_mode: enforcing
+      config_mode: enforcing
+      config_policy: targeted
     hardware: x86_64
-    architecture: amd64
+    architecture: x86_64
   cis:
     local_users:
       root:
@@ -82,54 +87,55 @@ values:
   shmall: '18446744073692774399'
   cmdline:
     ro: ''
-    root: "/dev/mapper/vgubuntu-root"
+    root: "/dev/mapper/rhel-root"
     quiet: ''
-    splash: ''
-    BOOT_IMAGE: "/vmlinuz-6.8.0-generic"
-    vt.handoff: '7'
+    BOOT_IMAGE: "/vmlinuz-4.18.0-generic"
+    crashkernel: auto
+    rd.lvm.lv: rhel/root
   fullrun: 'false'
   gemhome: "/opt/puppetlabs/puppet/lib/ruby/gems/3.2.0"
-  lvm_pvs: 0
-  lvm_vgs: 0
+  lvm_pvs: 1
+  lvm_vgs: 1
   systemd: true
+  systemd_version: '239'
+  package_provider: 'dnf'
+  service_provider: 'systemd'
+  ssh_server_version_full: '8.0p1'
+  treat_as_physical: true
+  iptable_rules_exist: false
   trusted:
-    domain: e2etest
-    certname: role-monitoring.e2etest
+    domain: e2etesting
+    certname: role-basic-rhel8.e2etesting
     external: {}
-    hostname: role-monitoring
+    hostname: role-basic-rhel8
     extensions: {}
     authenticated: remote
   uid_min: '1000'
-  virtual: lxc
-  hostcert: "/etc/puppetlabs/puppet/ssl/certs/role-monitoring.e2etest.pem"
+  virtual: physical
+  hostcert: "/etc/puppetlabs/puppet/ssl/certs/role-basic-rhel8.e2etesting.pem"
   identity:
     gid: 0
     uid: 0
     user: root
     group: root
     privileged: true
-  runlevel: '5'
+  runlevel: '3'
   snapshot: ''
   timezone: UTC
   root_home: "/root"
-  clientcert: role-monitoring.e2etest
+  clientcert: role-basic-rhel8.e2etesting
   clientnoop: true
   is_vagrant: false
-  is_virtual: true
-  apt_sources:
-    - sources.list
-    - ubuntu.sources
-  apt_updates: 0
-  filesystems: ext2,ext3,ext4,iso9660,squashfs,vfat
-  hostprivkey: "/etc/puppetlabs/puppet/ssl/private_keys/role-monitoring.e2etest.pem"
-  hypervisors:
-    lxc: {}
+  is_virtual: false
+  filesystems: xfs,ext4
+  hostprivkey: "/etc/puppetlabs/puppet/ssl/private_keys/role-basic-rhel8.e2etesting.pem"
+  hypervisors: {}
   init_system: systemd
   is_lxdguest: false
   localcacert: "/etc/puppetlabs/puppet/ssl/certs/ca.pem"
   lvm_support: true
   lxd_dnsmasq: false
-  sudoversion: 1.9.15p5
+  sudoversion: 1.8.29
   zfs_present: false
   fips_enabled: false
   init_systems:
@@ -143,23 +149,39 @@ values:
   acpid_enabled: false
   clientversion: 8.23.0
   facterversion: 5.1.0
-  kernelversion: 6.8.0
+  kernelversion: 4.18.0
   puppet_config: "/etc/puppetlabs/puppet/puppet.conf"
-  puppet_server: puppet.e2etest.example.com
+  puppet_server: puppet.e2etesting.example.com
   puppet_ssldir: "/etc/puppetlabs/puppet/ssl"
   puppet_vardir: "/opt/puppetlabs/puppet/cache"
   puppetversion: 8.23.0
-  volume_groups: {}
+  volume_groups:
+    rhel:
+      free_bytes: 0
+      size_bytes: 107374182400
+  networking:
+    hostname: role-basic-rhel8
+    domain: e2etesting
+    fqdn: role-basic-rhel8.e2etesting
+    ip: 10.0.0.22
+    ip6: "fd00::22"
+    mac: "00:16:3e:aa:bb:04"
+    netmask: "255.255.255.0"
+    network: 10.0.0.0
+    mtu: 1500
+    primary: eth0
   defaultgateway: 10.0.0.1
   implementation: openvox
   mdraid_present: false
   puppet_confdir: "/etc/puppetlabs/puppet"
   puppet_runmode: agent
-  apt_has_updates: false
   jenkins_plugins: ''
-  logical_volumes: {}
-  mysql_server_id: 1000000001
-  openssl_version: 3.0.13
+  logical_volumes:
+    root:
+      vg: rhel
+      size_bytes: 107374182400
+  mysql_server_id: 1000000021
+  openssl_version: 1.1.1k
   php_mod_fpm_ini: ''
   puppet_sslpaths:
     certdir:
@@ -180,4 +202,4 @@ values:
     privatekeydir:
       path: "/etc/puppetlabs/puppet/ssl/private_keys"
       path_exists: true
-  python3_release: '3.12'
+  python3_release: '3.6'

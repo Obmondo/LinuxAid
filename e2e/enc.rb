@@ -3,7 +3,7 @@ require 'yaml'
 
 certname = ARGV[0]
 node_name, customer_id = certname.split('.', 2)
-customer_id ||= 'e2etest'
+customer_id ||= 'e2etesting'
 
 puts YAML.dump({
   'parameters' => {
