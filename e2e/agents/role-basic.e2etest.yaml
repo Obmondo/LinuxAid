@@ -1,3 +1,7 @@
 ---
 classes:
   - role::basic
+
+monitor::enable: true
+common::full_host_management: true
+common::user_management::motd::enable: true

@@ -5,6 +5,10 @@ defaults:
   data_hash: yaml_data
 hierarchy:
   - name: 'e2e certname'
-    path: agents/"%{trusted.certname}.yaml"
+    path: "agents/%{trusted.certname}.yaml"
   - name: 'e2e defaults'
     path: global.yaml
+    lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem
+      pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem

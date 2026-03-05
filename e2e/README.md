@@ -11,7 +11,6 @@ e2e/
 ├── enc.rb                           # Stub ENC — returns fixed params, no API
 ├── hiera.yaml                       # Hiera config pointing at e2e/ data
 ├── global.yaml                      # Defaults (monitoring off, no full mgmt)
-├── .certs/                          # Generated test certs (gitignored)
 └── agents/
     ├── role-basic.e2etest.yaml      # Assigns role::basic
     └── role-monitoring.e2etest.yaml # Assigns role::monitoring
@@ -36,51 +35,6 @@ Create `e2e/agents/<certname>.yaml` with the desired classes:
 classes:
   - role::basic
   - mymodule::myclass
-```
-
-Then generate a cert for the certname (see below).
-
-## Generate a puppet agent cert for testing
-
-Run on the puppetserver:
-
-```bash
-puppetserver ca generate --certname role-basic.e2etest
-```
-
-This creates the following files on the puppetserver, which should then be copied into `e2e/.certs/`:
-
-```
-e2e/.certs/<certname>.pem          # Client cert
-e2e/.certs/<certname>.key          # Private key
-e2e/.certs/ca.pem                  # CA cert
-```
-
-Copy from the puppetserver:
-
-```bash
-CERTNAME=role-basic.e2etest
-SSL=/etc/puppetlabs/puppet/ssl
-CERTS=e2e/.certs
-
-mkdir -p $CERTS
-scp <puppetserver>:$SSL/certs/$CERTNAME.pem        $CERTS/$CERTNAME.pem
-scp <puppetserver>:$SSL/private_keys/$CERTNAME.pem $CERTS/$CERTNAME.key
-scp <puppetserver>:$SSL/certs/ca.pem               $CERTS/ca.pem
-```
-
-## General puppetserver ca generate (production)
-
-Use the same command with a real certname (`hostname.customerid`):
-
-```bash
-puppetserver ca generate --certname webserver01.abcd1234
-```
-
-Then on the agent node, set `certname` in `/etc/puppetlabs/puppet/puppet.conf` and run:
-
-```bash
-puppet agent -t
 ```
 
 ## Running catalog-diff in e2e mode
@@ -117,17 +71,4 @@ Edit a value in `e2e/facts/agents/<certname>.yaml`, then re-run catalog-diff:
 # e.g. change the osfamily fact and see catalog impact
 $EDITOR e2e/facts/agents/<certname>.yaml
 ./bin/catalog-diff.sh --e2e --hostname <certname>
-```
-
-## Verification
-
-```bash
-# Confirm cert is signed
-puppetserver ca list --all
-
-# Verify cert chain on the agent
-puppet ssl verify
-
-# Dry-run catalog apply on the agent
-puppet agent -t --noop
 ```

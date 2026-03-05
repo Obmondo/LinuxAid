@@ -3,6 +3,5 @@
 # This class includes the profile class.
 #
 class role {
-
-  include profile
+  include ::profile
 }
