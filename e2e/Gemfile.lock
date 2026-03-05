@@ -21,7 +21,7 @@ GEM
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    json (2.18.1)
+    json (2.6.3)
     locale (2.1.5)
       fiddle
     mini_mime (1.1.5)
@@ -75,7 +75,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  json
+  json (~> 2.6.0)
   octocatalog-diff
   puppet (= 8.10.0)
   rspec

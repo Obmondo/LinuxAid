@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+require 'json'
+require 'net/http'
+require 'openssl'
+require 'uri'
+require 'yaml'
+
+certname = ARGV[0] or abort "Usage: #{$0} <certname>  e.g. #{$0} dev-ashish21.niwyocdmk2"
+
+puppetdb_url = ENV.fetch('PUPPETDB_URL', 'https://enableit.puppetdb.obmondo.com:443')
+ca_cert      = ENV.fetch('AUTOSIGN_CA_CERT',     File.expand_path('../e2e/.certs/ca.pem', __dir__))
+client_cert  = ENV.fetch('AUTOSIGN_CLIENT_CERT') { abort 'AUTOSIGN_CLIENT_CERT not set' }
+client_key   = ENV.fetch('AUTOSIGN_CLIENT_KEY')  { abort 'AUTOSIGN_CLIENT_KEY not set' }
+
+uri = URI("#{puppetdb_url}/pdb/query/v4/nodes/#{certname}/facts")
+
+response = Net::HTTP.start(uri.host, uri.port,
+  use_ssl:     true,
+  ca_file:     ca_cert,
+  cert:        OpenSSL::X509::Certificate.new(File.read(client_cert)),
+  key:         OpenSSL::PKey::RSA.new(File.read(client_key)),
+  verify_mode: OpenSSL::SSL::VERIFY_PEER
+) do |http|
+  http.get(uri.request_uri)
+end
+
+abort "PuppetDB error #{response.code}: #{response.body}" unless response.is_a?(Net::HTTPSuccess)
+
+facts  = JSON.parse(response.body)
+values = facts.each_with_object({}) { |f, h| h[f['name']] = f['value'] }
+doc    = { 'name' => certname, 'values' => values }
+
+out_dir  = File.expand_path('../e2e/facts/agents', __dir__)
+out_file = File.join(out_dir, "#{certname}.yaml")
+FileUtils.mkdir_p(out_dir)
+File.write(out_file, doc.to_yaml)
+puts "Wrote #{out_file}"

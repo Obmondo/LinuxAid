@@ -15,7 +15,7 @@
 #   The Netbird version to install. The default is the type Eit_types::Version.
 #   Link to netbird client releases page: https://github.com/netbirdio/netbird/releases
 #
-# @example Valid Netbird client version  
+# @example Valid Netbird client version
 #   version = "0.59.3"
 #
 # @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
@@ -34,7 +34,7 @@ class profile::network::netbird (
   $_installed_netbird_version = $facts['netbird_client_version']
   $_os_name                   = $facts['os']['name']
   $_kernel                    = $facts['kernel'].downcase
-  $_node_name                 = functions::split_certname($facts['obmondo']['certname'])['node_name']
+  $_node_name                 = functions::split_certname($::obmondo['certname'])['node_name']
 
   # Install NetBird service
   if $enable {

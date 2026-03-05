@@ -1,0 +1,10 @@
+---
+version: 5
+defaults:
+  datadir: e2e
+  data_hash: yaml_data
+hierarchy:
+  - name: 'e2e certname'
+    path: agents/"%{trusted.certname}.yaml"
+  - name: 'e2e defaults'
+    path: global.yaml
