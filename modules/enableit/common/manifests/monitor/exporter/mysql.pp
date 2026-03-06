@@ -35,6 +35,8 @@ class common::monitor::exporter::mysql (
   Eit_types::Noop_Value      $noop_value     = $common::monitor::exporter::noop_value,
   Eit_types::Encrypt::Params $encrypt_params = ['password'],
 ) {
+  unless $enable { return() }
+
   class { 'prometheus::mysqld_exporter':
     package_name      => 'obmondo-mysqld-exporter',
     tag               => $::trusted['certname'],

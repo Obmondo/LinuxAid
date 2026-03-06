@@ -24,6 +24,8 @@ class common::monitor::exporter::mtail (
   Stdlib::Absolutepath        $progs          = "${common::monitor::exporter::config_dir}/mtail",
 ) {
 
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }

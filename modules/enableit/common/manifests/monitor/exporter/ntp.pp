@@ -20,6 +20,8 @@ class common::monitor::exporter::ntp (
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
   String                $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
 ) {
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }

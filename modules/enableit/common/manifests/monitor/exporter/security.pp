@@ -27,6 +27,8 @@ class common::monitor::exporter::security (
   Stdlib::Absolutepath  $config_file = "${common::monitor::exporter::config_dir}/security_exporter.yaml"
 ) {
 
+  unless $enable { return() }
+
   $service_name = 'obmondo-security-exporter'
 
   Package {

@@ -25,6 +25,8 @@ class common::monitor::exporter::blackbox (
   Array[Stdlib::HttpUrl] $targets     = [],
 ) {
 
+  unless $enable { return() }
+
   $blackbox_node = if $enable {lookup('common::monitor::exporter::blackbox::node') }
   $customer_id = $::obmondo['customer_id'] #lint:ignore:top_scope_facts
 

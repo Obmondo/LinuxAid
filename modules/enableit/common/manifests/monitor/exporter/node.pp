@@ -123,6 +123,8 @@ class common::monitor::exporter::node (
   Boolean               $manage_ssacli = $enable,
   Boolean               $manage_topprocesses = $enable,
 ) {
+  unless $enable { return() }
+
   confine($perf, 'perf needs a profiler to work. remove this confine when fixed')
 
   $_checksum = lookup('common::monitor::exporter::node::checksums')

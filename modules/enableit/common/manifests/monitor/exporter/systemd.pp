@@ -16,6 +16,8 @@ class common::monitor::exporter::systemd (
   Eit_types::IPPort     $listen_address = '127.254.254.254:63391',
 ) {
 
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }

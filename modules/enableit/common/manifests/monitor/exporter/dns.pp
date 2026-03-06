@@ -27,6 +27,8 @@ class common::monitor::exporter::dns (
     'example.com',
   ],
 ) {
+  unless $enable { return() }
+
   File {
     noop => $noop_value,
   }
