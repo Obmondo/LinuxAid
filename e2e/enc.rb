@@ -10,13 +10,14 @@ puts YAML.dump({
     'customer'        => customer_id,
     'obmondo'         => {
       'customer_id'  => customer_id,
+      'certname'     => certname,
       'node_name'    => node_name,
       'tags'         => [],
-      'monitor'      => false,
+      'monitor'      => true,
       'subscription' => nil,
     },
     'subscription'    => nil,
-    'obmondo_monitor' => false,
+    'obmondo_monitor' => true,
     'hiera_datapath'  => 'e2e',
     'obmondo_tags'    => [],
   }

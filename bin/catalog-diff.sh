@@ -72,16 +72,50 @@ if [ "$DEBUG" = "1" ]; then
   echo "Debug mode: working files will be in $(pwd)/.catalog-diff-debug"
 fi
 
-run_e2e() {
-  # Extract --hostname value from remaining args to validate fact file exists
-  local hostname="" next_is_hostname=""
-  for arg in "$@"; do
-    if [ -n "$next_is_hostname" ]; then
-      hostname="$arg"
-      break
+filter_stderr() {
+  local from_branch="${1:-master}" to_branch="${2:-HEAD}"
+  if [ "$DEBUG" = "1" ]; then
+    cat
+    return
+  fi
+
+  local block=0 from_header=0 to_header=0
+  while IFS= read -r line; do
+    # only care about error lines
+    [[ "$line" != Error:* ]] && continue
+    # "Try 'puppet help'" marks the boundary between from/to compilations
+    [[ "$line" == *"Try 'puppet help'"* ]] && (( block++ )) && continue
+
+    if (( block == 0 && from_header == 0 )); then
+      echo "=== Errors compiling $from_branch ==="
+      from_header=1
+    elif (( block >= 1 && to_header == 0 )); then
+      echo ""
+      echo "=== Errors compiling $to_branch ==="
+      to_header=1
     fi
-    [ "$arg" = "--hostname" ] && next_is_hostname=1
+    echo "$line"
   done
+}
+
+run_e2e() {
+  # Extract values from remaining args (all args still pass through to octocatalog-diff via "$@")
+  local hostname="" from_branch="master" to_branch="" next_val=""
+  for arg in "$@"; do
+    if [ -n "$next_val" ]; then
+      printf -v "$next_val" '%s' "$arg"
+      next_val=""
+      continue
+    fi
+    case "$arg" in
+      --hostname) next_val=hostname ;;
+      --from)     next_val=from_branch ;;
+      --to)       next_val=to_branch ;;
+    esac
+  done
+  if [ -z "$to_branch" ]; then
+    to_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo HEAD)"
+  fi
 
   if [ -n "$hostname" ] && [ ! -f "e2e/facts/${hostname}.yaml" ]; then
     echo "Error: no fact file found for '${hostname}'"
@@ -107,9 +141,10 @@ run_e2e() {
     --hiera-config /repo/e2e/hiera.yaml \
     --output-format json \
     "$@" \
-    | ruby e2e/bin/format_catalog_diff.rb "${fmt_args[@]}"
-  local rc="${PIPESTATUS[0]}"
+    2> >(filter_stderr "$from_branch" "$to_branch" >&2) \
+    | ruby e2e/bin/format_catalog_diff.rb "${fmt_args[@]}" 2>/dev/null
   # exit 2 = diffs found (expected), only fail on real errors
+  local rc="${PIPESTATUS[0]}"
   if [ "$rc" -eq 2 ]; then rc=0; fi
   return "$rc"
 }

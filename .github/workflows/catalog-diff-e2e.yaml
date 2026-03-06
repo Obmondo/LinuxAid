@@ -40,7 +40,7 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ github.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ github.workspace }}/e2e/facts
         run: |
-          set -o pipefail
+          # exit 2 = diffs found (expected), only fail on exit 1 (compilation error)
           rc=0
           bundle exec octocatalog-diff \
             --basedir ${{ github.workspace }} \
@@ -48,7 +48,6 @@ jobs:
             --hiera-config ${{ github.workspace }}/e2e/hiera.yaml \
             --output-format json \
             --hostname ${{ matrix.hostname }} \
-            | ruby e2e/bin/format_catalog_diff.rb --ci \
-            || rc=$?
-          # exit 2 = diffs found (expected), only fail on exit 1 (compilation error)
+            > /tmp/catalog-diff.json || rc=$?
           if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+          ruby e2e/bin/format_catalog_diff.rb --ci < /tmp/catalog-diff.json
