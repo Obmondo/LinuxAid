@@ -157,17 +157,29 @@ common::default::classes:
   - common::monitor
 
 common::system::classes:
-  - common::system::dns
-  - common::system::kernel
-  - common::system::grub
-  - common::system::failover
-  - common::system::hardware
-  - common::system::limits
-  - common::system::package_management
-  - common::system::nsswitch
-  - common::system::time
+  - common::system::certs
   - common::system::cloud_init
+  - common::system::cron
+  - common::system::dns
+  - common::system::failover
+  - common::system::grub
+  - common::system::guix
+  - common::system::hardware
+  - common::system::hosts
+  - common::system::kernel
+  - common::system::limits
+  - common::system::mail
+  - common::system::nscd
+  - common::system::nsswitch
+  - common::system::obmondo_admin
+  - common::system::openvox
+  - common::system::package
   - common::system::relocatetmp
+  - common::system::repo
+  - common::system::systemd
+  - common::system::time
+  - common::system::updates
+  - common::system::utility
 
 ## System Settings
 common::system::repo::manage: true
@@ -297,12 +309,6 @@ common::system::services::disabled_services:
   - "smartd"
   - "rpc-svcgssd"
   - "sssd-pac"
-
-common::system::services:
-  "rpc-svcgssd":
-    enable: "mask"
-  "sssd-pac":
-    enable: "mask"
 
 # Puppet/Openvox
 common::system::openvox::version: "8.24.2"
