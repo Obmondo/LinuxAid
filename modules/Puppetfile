@@ -481,3 +481,7 @@ mod 'obmondo/rustdesk',
 mod 'obmondo/subversion',
     :git => 'https://github.com/Obmondo/puppet-subversion',
     :ref => '3ca37fcfd3257d84de5cd27af76399339816ddd4'
+
+mod 'obmondo/puppetlabs-yumrepo_core',
+    :git => 'https://github.com/puppetlabs/puppetlabs-yumrepo_core.git',
+    :ref => 'v3.0.1'

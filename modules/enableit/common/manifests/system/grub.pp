@@ -5,12 +5,7 @@
 # @groups parameters parameters
 #
 class common::system::grub (
-  Hash[String, Struct[
-    {
-      ensure  => Optional[Boolean],
-      value   => Optional[Variant[Array, String, Boolean]],
-    }
-  ]] $parameters = {},
+  Eit_types::Grub::Parameters $parameters = {},
 ) {
 
   contain ::profile::system::grub

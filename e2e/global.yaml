@@ -1,3 +1,14 @@
 ---
 monitor::enable: false
-common::full_host_management: false
+common::full_host_management: true
+
+# No package updates / mail / cron-purge in e2e
+common::system::updates::enable: false
+common::system::mail::manage: false
+common::system::cron::purge_unmanaged: false
+
+# Blackbox exporter node for domain monitoring
+common::monitor::exporter::blackbox::node: 'role-monitoring-ubuntu2404.e2etesting'
+
+# Pin exporter version for reproducibility
+common::monitor::exporter::node::version: '1.10.2'

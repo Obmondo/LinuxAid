@@ -15,6 +15,8 @@ class common::monitor::exporter::elasticsearch (
   Eit_types::IPPort     $listen_address = '127.254.254.254:9105',
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
 ) {
+  unless $enable { return() }
+
   class { 'prometheus::elasticsearch_exporter':
     package_name      => 'obmondo-elasticsearch-exporter',
     service_name      => 'elasticsearch_exporter',
@@ -22,7 +24,7 @@ class common::monitor::exporter::elasticsearch (
     service_enable    => $enable,
     manage_service    => $enable,
     service_ensure    => ensure_service($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     restart_on_change => $enable,
     user              => 'elasticsearch_exporter',
     group             => 'elasticsearch_exporter',

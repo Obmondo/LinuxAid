@@ -24,6 +24,8 @@ class common::monitor::exporter::mtail (
   Stdlib::Absolutepath        $progs          = "${common::monitor::exporter::config_dir}/mtail",
 ) {
 
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }
@@ -72,7 +74,7 @@ class common::monitor::exporter::mtail (
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
     user              => $user,

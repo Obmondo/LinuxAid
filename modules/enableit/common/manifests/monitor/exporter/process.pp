@@ -15,13 +15,15 @@ class common::monitor::exporter::process (
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
   Eit_types::IPPort     $listen_address = '127.254.254.254:63388',
 ) {
+  unless $enable { return() }
+
   class { 'prometheus::process_exporter':
     package_name      => 'obmondo-process-exporter',
     package_ensure    => ensure_latest($enable),
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     manage_service    => $enable,
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     restart_on_change => $enable,
     tag               => $::trusted['certname'],
     user              => process_exporter,

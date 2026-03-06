@@ -42,7 +42,12 @@ classes:
 ```bash
 ./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting
 ./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting --from HEAD --to <branch>
+./bin/catalog-diff.sh --e2e --ci --hostname role-basic.e2etesting
 ```
+
+Add `--ci` to produce a Markdown summary alongside the plain-text output.
+In GitHub Actions the summary is written to `$GITHUB_STEP_SUMMARY`;
+locally it prints to stdout.
 
 ## Node facts for catalog-diff
 

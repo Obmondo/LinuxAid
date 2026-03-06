@@ -16,6 +16,8 @@ class common::monitor::exporter::wireguard (
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
 ) {
 
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }
@@ -49,7 +51,7 @@ class common::monitor::exporter::wireguard (
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
     user              => 'wireguard_exporter',

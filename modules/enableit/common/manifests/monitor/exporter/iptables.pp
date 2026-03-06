@@ -15,6 +15,8 @@ class common::monitor::exporter::iptables (
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
   Eit_types::IPPort     $listen_address = '127.254.254.254:63393',
 ) {
+  unless $enable { return() }
+
   $_enable = $enable and $facts['iptable_rules_exist']
 
   File {
@@ -53,7 +55,7 @@ class common::monitor::exporter::iptables (
     version           => '0.9.3',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     manage_user       => $_systemd_version_232_newer,
     manage_group      => $_systemd_version_232_newer,
     install_method    => 'package',

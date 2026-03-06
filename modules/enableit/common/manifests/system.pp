@@ -47,7 +47,7 @@
 # @encrypt_params ssh_authorized_keys.*.key
 #
 class common::system (
-  Hash[String,Array[String]]     $cron_jobs,
+  Hash[String,Array[String]]     $cron_jobs           = {},
   Boolean                        $remove_fstrim_cron  = false,
   Boolean                        $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
@@ -63,7 +63,7 @@ class common::system (
 
   Hash[String, Array[Stdlib::IP::Address::V4]] $locations         = {},
   Eit_types::Encrypt::Params                   $encrypt_params    = ['ssh_authorized_keys.*.key'],
-  Optional[Hash[String, Hash]]                 $services          = {},
+  Optional[Hash[Systemd::Unit, Hash]]          $services          = {},
   Array[Eit_types::SimpleString]               $disabled_services = []
 ) {
   ############
@@ -79,8 +79,7 @@ class common::system (
   $disabled_services.each |$_service_name| {
     service { $_service_name:
       ensure => false,
-      enable => false,
-      mask   => true,
+      enable => 'mask',
     }
   }
 

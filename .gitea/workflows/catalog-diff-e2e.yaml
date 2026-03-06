@@ -35,11 +35,17 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ gitea.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ gitea.workspace }}/e2e/facts
         run: |
+          # exit 2 = diffs found (expected), only fail on exit 1 (compilation error)
+          rc=0
           bundle exec octocatalog-diff \
             --basedir ${{ gitea.workspace }} \
             --enc ${{ gitea.workspace }}/e2e/enc.rb \
             --hiera-config ${{ gitea.workspace }}/e2e/hiera.yaml \
-            --hostname ${{ matrix.hostname }}
+            --output-format json \
+            --hostname ${{ matrix.hostname }} \
+            > /tmp/catalog-diff.json || rc=$?
+          if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+          ruby e2e/bin/format_catalog_diff.rb --ci < /tmp/catalog-diff.json
 
   catalog-diff-role-monitoring:
     name: "monitoring / ${{ matrix.hostname }}"
@@ -68,8 +74,14 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ gitea.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ gitea.workspace }}/e2e/facts
         run: |
+          # exit 2 = diffs found (expected), only fail on exit 1 (compilation error)
+          rc=0
           bundle exec octocatalog-diff \
             --basedir ${{ gitea.workspace }} \
             --enc ${{ gitea.workspace }}/e2e/enc.rb \
             --hiera-config ${{ gitea.workspace }}/e2e/hiera.yaml \
-            --hostname ${{ matrix.hostname }}
+            --output-format json \
+            --hostname ${{ matrix.hostname }} \
+            > /tmp/catalog-diff.json || rc=$?
+          if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then exit "$rc"; fi
+          ruby e2e/bin/format_catalog_diff.rb --ci < /tmp/catalog-diff.json

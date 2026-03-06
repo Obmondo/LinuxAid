@@ -16,7 +16,7 @@ class common::system::limits (
   Eit_types::System::Ulimits $ulimits = {},
 ) {
   confine($manage,
-    !$common::user_management::authentication::manage_pam,
+    !lookup('common::user_management::authentication::manage_pam', Boolean, undef, false),
     'limits currently has a dependency on the PAM module'
   )
   include profile::system::limits
