@@ -21,6 +21,8 @@ class common::monitor::exporter::dellhw (
   Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
 ) {
 
+  unless $enable { return() }
+
   File {
     noop => $noop_value
   }
