@@ -1,3 +1,6 @@
 ---
 classes:
   - role::monitoring
+
+common::monitor::exporter::iptables::enable: false
+common::monitor::exporter::blackbox::enable: false

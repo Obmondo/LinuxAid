@@ -1,3 +1,8 @@
 ---
 classes:
   - role::basic
+
+common::user_management::security::auditd::enable: false
+common::user_management::security::selinux::manage: false
+common::system::grub::parameters:
+  quiet: ''

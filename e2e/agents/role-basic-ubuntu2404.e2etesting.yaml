@@ -2,4 +2,9 @@
 classes:
   - role::basic
 
-monitor::enable: true
+common::user_management::security::auditd::enable: false
+common::user_management::security::selinux::manage: false
+common::system::grub::parameters:
+  quiet: ''
+  splash: ''
+  mitigations: 'off'

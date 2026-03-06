@@ -1,3 +1,9 @@
 ---
 classes:
   - role::basic
+
+common::user_management::security::auditd::enable: true
+common::user_management::security::selinux::manage: false
+common::system::grub::parameters:
+  quiet: ''
+  crashkernel: '1G-4G:192M,4G-64G:256M,64G+:512M'

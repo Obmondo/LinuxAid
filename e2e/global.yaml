@@ -1,3 +1,11 @@
 ---
 monitor::enable: false
 common::full_host_management: false
+
+# No package updates / mail / cron-purge in e2e
+common::system::updates::enable: false
+common::system::mail::manage: false
+common::system::cron::purge_unmanaged: false
+
+# Pin exporter version for reproducibility
+common::monitor::exporter::node::version: '1.10.2'

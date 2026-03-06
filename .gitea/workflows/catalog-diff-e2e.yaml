@@ -35,11 +35,14 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ gitea.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ gitea.workspace }}/e2e/facts
         run: |
+          set -o pipefail
           bundle exec octocatalog-diff \
             --basedir ${{ gitea.workspace }} \
             --enc ${{ gitea.workspace }}/e2e/enc.rb \
             --hiera-config ${{ gitea.workspace }}/e2e/hiera.yaml \
-            --hostname ${{ matrix.hostname }}
+            --output-format json \
+            --hostname ${{ matrix.hostname }} \
+            | ruby e2e/bin/format_catalog_diff.rb --ci
 
   catalog-diff-role-monitoring:
     name: "monitoring / ${{ matrix.hostname }}"
@@ -68,8 +71,11 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ gitea.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ gitea.workspace }}/e2e/facts
         run: |
+          set -o pipefail
           bundle exec octocatalog-diff \
             --basedir ${{ gitea.workspace }} \
             --enc ${{ gitea.workspace }}/e2e/enc.rb \
             --hiera-config ${{ gitea.workspace }}/e2e/hiera.yaml \
-            --hostname ${{ matrix.hostname }}
+            --output-format json \
+            --hostname ${{ matrix.hostname }} \
+            | ruby e2e/bin/format_catalog_diff.rb --ci

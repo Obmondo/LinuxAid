@@ -40,8 +40,11 @@ jobs:
           OCTOCATALOG_DIFF_CONFIG_FILE: ${{ github.workspace }}/.octocatalog-diff.cfg.rb
           PUPPET_FACT_DIR: ${{ github.workspace }}/e2e/facts
         run: |
+          set -o pipefail
           bundle exec octocatalog-diff \
             --basedir ${{ github.workspace }} \
             --enc ${{ github.workspace }}/e2e/enc.rb \
             --hiera-config ${{ github.workspace }}/e2e/hiera.yaml \
-            --hostname ${{ matrix.hostname }}
+            --output-format json \
+            --hostname ${{ matrix.hostname }} \
+            | ruby e2e/bin/format_catalog_diff.rb --ci

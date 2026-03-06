@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN git config --global --add safe.directory /workspace
 
 WORKDIR /workspace
-COPY e2e/Gemfile e2e/Gemfile.lock* e2e/bin/patch_multi_json.rb ./
+COPY e2e/Gemfile e2e/Gemfile.lock* e2e/bin/patch_multi_json.rb e2e/bin/format_catalog_diff.rb ./
 
 RUN bundle install
 RUN ruby patch_multi_json.rb
