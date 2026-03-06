@@ -5,5 +5,8 @@ classes:
 common::user_management::security::auditd::enable: true
 common::user_management::security::selinux::manage: true
 common::system::grub::parameters:
-  quiet: ''
-  crashkernel: 'auto'
+  quiet:
+    ensure: true
+  crashkernel:
+    ensure: true
+    value: 'auto'

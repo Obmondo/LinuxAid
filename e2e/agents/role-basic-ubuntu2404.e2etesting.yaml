@@ -2,9 +2,15 @@
 classes:
   - role::basic
 
+monitor::enable: true
+common::full_host_management: true
 common::user_management::security::auditd::enable: false
 common::user_management::security::selinux::manage: false
 common::system::grub::parameters:
-  quiet: ''
-  splash: ''
-  mitigations: 'off'
+  quiet:
+    ensure: true
+  splash:
+    ensure: true
+  mitigations:
+    ensure: true
+    value: 'off'
