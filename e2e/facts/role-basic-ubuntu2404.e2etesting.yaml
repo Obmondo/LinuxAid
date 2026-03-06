@@ -198,3 +198,30 @@ values:
       path: "/etc/puppetlabs/puppet/ssl/private_keys"
       path_exists: true
   python3_release: '3.12'
+  memory:
+    system:
+      total: 3.85 GiB
+      total_bytes: 4132765696
+      used: 1.20 GiB
+      used_bytes: 1288490496
+      available: 2.65 GiB
+      available_bytes: 2844275200
+      capacity: "31.17%"
+    swap:
+      total: 2.00 GiB
+      total_bytes: 2147483648
+      used: 0 bytes
+      used_bytes: 0
+      available: 2.00 GiB
+      available_bytes: 2147483648
+      capacity: "0%"
+  processors:
+    models:
+      - Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz
+    count: 2
+    physicalcount: 1
+    cores: 2
+    threads: 2
+    isa: x86_64
+  physicalprocessorcount: 1
+  network_primary_ip: 10.0.0.11
