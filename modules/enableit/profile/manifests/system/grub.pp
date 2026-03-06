@@ -1,12 +1,6 @@
 # manage grub
 class profile::system::grub (
-  Hash[
-    String,
-    Struct[{
-      ensure => Boolean,
-      value  => Optional[Variant[Array,String,Boolean]],
-    }]
-  ] $parameters = $::common::system::grub::parameters,
+  Eit_types::Grub::Parameters $parameters = $::common::system::grub::parameters,
 ) {
 
   $parameters.each |$key, $value| {
