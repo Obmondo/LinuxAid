@@ -108,7 +108,10 @@ run_e2e() {
     --output-format json \
     "$@" \
     | ruby e2e/bin/format_catalog_diff.rb "${fmt_args[@]}"
-  return "${PIPESTATUS[0]}"
+  local rc="${PIPESTATUS[0]}"
+  # exit 2 = diffs found (expected), only fail on real errors
+  if [ "$rc" -eq 2 ]; then rc=0; fi
+  return "$rc"
 }
 
 if [ "$E2E" = "1" ]; then
