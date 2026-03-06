@@ -22,7 +22,7 @@ class common::monitor::exporter::elasticsearch (
     service_enable    => $enable,
     manage_service    => $enable,
     service_ensure    => ensure_service($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     restart_on_change => $enable,
     user              => 'elasticsearch_exporter',
     group             => 'elasticsearch_exporter',

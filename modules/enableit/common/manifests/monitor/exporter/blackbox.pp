@@ -38,7 +38,7 @@ class common::monitor::exporter::blackbox (
   class { 'prometheus::blackbox_exporter':
     package_name      => 'obmondo-blackbox-exporter',
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable {'none'},
+    init_style        => $facts['service_provider'],
     user              => 'blackbox_exporter',
     group             => 'blackbox_exporter',
     service_enable    => $enable,

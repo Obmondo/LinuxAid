@@ -54,7 +54,7 @@ class common::monitor::exporter::dns (
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
     user              => 'dns_exporter',

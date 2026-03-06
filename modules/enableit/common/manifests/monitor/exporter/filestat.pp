@@ -74,7 +74,7 @@ class common::monitor::exporter::filestat (
     service_ensure    => ensure_service($enable),
     manage_user       => false,
     manage_group      => false,
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
     user              => $user,

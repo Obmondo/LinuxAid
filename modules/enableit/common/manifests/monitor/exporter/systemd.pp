@@ -42,7 +42,7 @@ class common::monitor::exporter::systemd (
     real_download_url => 'https://github.com/povilasv/systemd_exporter',
     user              => 'systemd_exporter',
     group             => 'systemd_exporter',
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     export_scrape_job => $enable,
     options           => "--web.listen-address=${listen_address} --web.max-requests=20",
     tag               => $::trusted['certname'],

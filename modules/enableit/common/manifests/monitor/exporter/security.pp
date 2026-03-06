@@ -68,7 +68,7 @@ class common::monitor::exporter::security (
     real_download_url => 'https://gitea.obmondo.com/EnableIT/security-exporter',
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
     notify_service    => Service[$service_name],

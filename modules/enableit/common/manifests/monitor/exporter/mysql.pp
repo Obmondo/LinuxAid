@@ -39,7 +39,7 @@ class common::monitor::exporter::mysql (
     package_name      => 'obmondo-mysqld-exporter',
     tag               => $::trusted['certname'],
     package_ensure    => ensure_latest($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     user              => 'mysqld_exporter',

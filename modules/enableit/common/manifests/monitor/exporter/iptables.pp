@@ -53,7 +53,7 @@ class common::monitor::exporter::iptables (
     version           => '0.9.3',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     manage_user       => $_systemd_version_232_newer,
     manage_group      => $_systemd_version_232_newer,
     install_method    => 'package',

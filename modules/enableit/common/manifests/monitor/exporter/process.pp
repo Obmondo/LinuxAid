@@ -21,7 +21,7 @@ class common::monitor::exporter::process (
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     manage_service    => $enable,
-    init_style        => if !$enable { 'none' },
+    init_style        => $facts['service_provider'],
     restart_on_change => $enable,
     tag               => $::trusted['certname'],
     user              => process_exporter,
