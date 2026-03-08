@@ -183,7 +183,7 @@ These options can be applied in different scopes:
   - Location
   - Specific hardware configurations (RAID controller, memory, etc.)
 - Filter is adjustable if you want to use facts not enabled by default
-- See [Facts documentation](./facts) for details
+- See [Facts documentation](./facts/fact-location.md) for details
 
 ### Hierarchical Data Management with Hiera
 
