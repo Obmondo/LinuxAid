@@ -1,4 +1,8 @@
----\nslug: /\nsidebar_position: 1\n---\n
+---
+slug: /
+sidebar_position: 1
+---
+
 # LinuxAid
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Obmondo/LinuxAid)
