@@ -2,9 +2,9 @@
 
 # Encrypting/Decrypting Secrets
 
-* We using [eyaml.sh](../bin/eyaml.sh) which is a wrapper of heira-eyaml to encrypt/decrypt secrets. You can check their [GitHub repo](https://github.com/voxpupuli/hiera-eyaml)
+* We using [eyaml.sh](https://github.com/Obmondo/LinuxAid/blob/main/bin/eyaml.sh) which is a wrapper of heira-eyaml to encrypt/decrypt secrets. You can check their [GitHub repo](https://github.com/voxpupuli/hiera-eyaml)
 
-* Make sure that you've the public key present in `var/public_key.pkcs7.pem` in this respository. We already ignoring it in [.gitignore](../.gitignore).
+* Make sure that you've the public key present in `var/public_key.pkcs7.pem` in this respository. We already ignoring it in [.gitignore](https://github.com/Obmondo/LinuxAid/blob/main/.gitignore).
 
 ### Examples
 

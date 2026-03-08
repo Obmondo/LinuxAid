@@ -283,7 +283,7 @@ LinuxAid provides an open source repository server for supply chain security.
 
 #### Protection Against Single-Point-of-Compromise
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](https://github.com/Obmondo/LinuxAid/blob/main/CONTRIBUTING.md) for details.
 
 #### Staged Rollouts
 
