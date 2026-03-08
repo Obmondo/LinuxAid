@@ -288,5 +288,5 @@ To add a new node to LinuxAid:
 - [Monitoring](./docs/monitoring)
 - [Roles](./docs/roles)
 - [Setup](./docs/setup)
-- [Comparison with other IaC tools](./docs/comparisons.md)
-- [Contributing](./CONTRIBUTING.md)
+- [Comparison with other IaC tools](./comparisonMetrics.md)
+- [Contributing](https://github.com/Obmondo/LinuxAid/blob/main/CONTRIBUTING.md)
