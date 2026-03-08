@@ -125,11 +125,11 @@ graph TB
 
 ## Key Features & Managed Responsibilities
 
-The detailed feature breakdown and the managed responsibilities checklist now live in `./docs/features-and-responsibilities.md`. See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
+The detailed feature breakdown and the managed responsibilities checklist now live in `./features-and-responsibilities.md`. See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
 
 ## Managed Responsibilities Checklist
 
-The full checklist and guidance are available at [https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist](https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist).
+The full checklist and guidance are available at [https://github.com/Obmondo/LinuxAid/blob/maste./features-and-responsibilities.md#managed-responsibilities-checklist](https://github.com/Obmondo/LinuxAid/blob/maste./features-and-responsibilities.md#managed-responsibilities-checklist).
 
 ### 10. Data Ownership and Licensing
 
@@ -183,7 +183,7 @@ These options can be applied in different scopes:
   - Location
   - Specific hardware configurations (RAID controller, memory, etc.)
 - Filter is adjustable if you want to use facts not enabled by default
-- See [Facts documentation](./docs/facts) for details
+- See [Facts documentation](./facts) for details
 
 ### Hierarchical Data Management with Hiera
 
@@ -283,10 +283,10 @@ To add a new node to LinuxAid:
 
 ## Documentation
 
-- [Guides](./docs/guides)
-- [Facts](./docs/facts)
-- [Monitoring](./docs/monitoring)
-- [Roles](./docs/roles)
-- [Setup](./docs/setup)
+- [Guides](./guides)
+- [Facts](./facts)
+- [Monitoring](./monitoring)
+- [Roles](./roles)
+- [Setup](./setup)
 - [Comparison with other IaC tools](./comparisonMetrics.md)
 - [Contributing](https://github.com/Obmondo/LinuxAid/blob/main/CONTRIBUTING.md)
