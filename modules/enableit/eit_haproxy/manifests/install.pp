@@ -12,7 +12,9 @@ class eit_haproxy::install (
     ensure => 'present',
   }
 
-  package { 'socat':
-    ensure => 'present',
+  if !defined(Package['socat']) {
+    package { 'socat':
+      ensure => 'present',
+    }
   }
 }
