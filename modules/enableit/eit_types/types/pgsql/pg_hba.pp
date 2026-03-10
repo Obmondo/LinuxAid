@@ -19,7 +19,8 @@ type Eit_types::Pgsql::Pg_hba = Hash[
       'ldap',
       'radius',
       'cert',
-      'pam'
+      'pam',
+      'scram-sha-256'
     ]],
     type        => Optional[Enum['local', 'host', 'hostssl', 'hostnossl']],
   }]
