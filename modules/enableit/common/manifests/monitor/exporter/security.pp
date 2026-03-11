@@ -1,14 +1,19 @@
 # @summary Prometheus Security Exporter
 #
+# Collects installed packages and sends them to a Vuls server for
+# vulnerability scanning. Exposes CVE metrics via Prometheus.
+#
 # @param enable Boolean flag to enable or disable the exporter. Defaults to false.
 #
 # @param noop_value Eit_types::Noop_Value flag to run in noop mode. Defaults to $common::monitor::exporter::noop_value.
 #
-# @param host The host certificate name. Defaults to $trusted['certname'].
+# @param host The host certificate name, used for mTLS and scrape target. Defaults to $trusted['certname'].
 #
 # @param listen_host The host to listen on. Defaults to '127.254.254.254'.
 #
 # @param listen_port The port to listen on. Defaults to 63396.
+#
+# @param vuls_server_url The URL of the Vuls server to send package lists to. Defaults to 'https://vuls.obmondo.com'.
 #
 # @param config_file Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
 #
@@ -16,15 +21,16 @@
 #
 # @groups network host, listen_host, listen_port
 #
-# @groups configuration config_file
+# @groups configuration vuls_server_url, config_file
 #
 class common::monitor::exporter::security (
-  Boolean               $enable      = false,
-  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
-  Eit_types::Certname   $host        = $trusted['certname'],
-  Stdlib::Host          $listen_host = '127.254.254.254',
-  Stdlib::Port          $listen_port = 63396,
-  Stdlib::Absolutepath  $config_file = "${common::monitor::exporter::config_dir}/security_exporter.yaml"
+  Boolean               $enable          = false,
+  Eit_types::Noop_Value $noop_value      = $common::monitor::exporter::noop_value,
+  Eit_types::Certname   $host            = $trusted['certname'],
+  Stdlib::Host          $listen_host     = '127.254.254.254',
+  Stdlib::Port          $listen_port     = 63396,
+  Stdlib::HTTPUrl       $vuls_server_url = 'https://vuls.obmondo.com',
+  Stdlib::Absolutepath  $config_file     = "${common::monitor::exporter::config_dir}/security_exporter.yaml",
 ) {
 
   unless $enable { return() }
@@ -47,16 +53,6 @@ class common::monitor::exporter::security (
     noop => $noop_value,
   }
 
-  if (($facts['os']['name'] == 'RedHat' or $facts['os']['name'] == 'CentOS') and (Integer($facts['os']['release']['major']) < 7)){
-    package { 'yum-plugin-changelog':
-      ensure => ensure_latest($enable),
-    }
-
-    package { 'yum-plugin-security':
-      ensure => ensure_latest($enable),
-    }
-  }
-
   service { "${service_name}.service":
     ensure  => ensure_service($enable),
     enable  => $enable,
@@ -72,6 +68,7 @@ class common::monitor::exporter::security (
     package_ensure    => ensure_latest($enable),
     init_style        => $facts['service_provider'],
     install_method    => 'package',
+    options           => "-config=${config_file}",
     tag               => $::trusted['certname'],
     notify_service    => Service[$service_name],
     group             => 'root',
@@ -85,34 +82,22 @@ class common::monitor::exporter::security (
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
 
-  $_service = @("EOT"/$n)
-    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-    [Service]
-    ExecStart=
-    ExecStart=/opt/obmondo/bin/obmondo-security-exporter -config=${config_file}
-    | EOT
-
-  systemd::dropin_file { "${service_name}_dropin":
-    ensure   => ensure_file($enable),
-    filename => "${service_name}-override.conf",
-    unit     => "${service_name}.service",
-    content  => $_service,
-    notify   => Service["${service_name}.service"],
-  }
-
   file { $config_file:
     ensure  => ensure_file($enable),
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => epp(
-      'common/monitor/exporter/security_exporter.yaml.epp', {
-        cve_api_url => 'https://services.nvd.nist.gov',
-        server_host => $listen_host,
-        server_port => $listen_port,
-        cron_expr   => '00 23 * * *',
+    content => stdlib::to_yaml({
+      'vuls_server'     => {
+        'url'       => $vuls_server_url,
+        'timeout'   => '30s',
+        'cert_file' => "/etc/puppetlabs/puppet/ssl/certs/${host}.pem",
+        'key_file'  => "/etc/puppetlabs/puppet/ssl/private_keys/${host}.pem",
+        'ca_file'   => '/etc/puppetlabs/puppet/ssl/certs/ca.pem',
       },
-    ),
+      'listen_address'  => "${listen_host}:${listen_port}",
+      'push_interval'   => '12h',
+    }),
     notify  => Service["${service_name}.service"],
   }
 
