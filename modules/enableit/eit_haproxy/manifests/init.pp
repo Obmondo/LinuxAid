@@ -101,11 +101,17 @@ class eit_haproxy (
 
   if $configure == 'auto' {
     $_is_ubuntu = $facts['os']['name'] == 'Ubuntu'
-    $_wants_haproxy3 = if String($version) =~ Pattern[/^3(\.|$)/] {
-      versioncmp(String($version), '3.2.0') >= 0
-    } else {
-      false
+
+    $_wants_haproxy3 = String($version) =~ /^\d+(\.\d+)*$/ and versioncmp(String($version), '3.0.0') >= 0
+
+    if $_wants_haproxy3 and !$_is_ubuntu {
+      fail("HAProxy 3.x is only supported on Ubuntu, not ${facts['os']['name']}")
     }
+
+    if $_wants_haproxy3 and $_is_ubuntu and versioncmp($facts['os']['release']['major'], '24') < 0 {
+      fail("HAProxy 3.x requires Ubuntu 24.04 or later, got ${facts['os']['release']['full']}")
+    }
+
     $_use_native_acme = $_is_ubuntu and $_wants_haproxy3
 
     $_acme_ca = $ca_type ? {
