@@ -6,6 +6,10 @@
 
 set -e
 
+# Prefer bundled binaries from Puppet/OpenVox if available
+OPENSSL_BIN=$(command -v /opt/puppetlabs/puppet/bin/openssl || command -v openssl)
+SOCAT_BIN=$(command -v /usr/bin/socat || command -v socat)
+
 export BASEPATH=${BASEPATH:-/etc/haproxy}/
 export SOCKET=${SOCKET:-/var/run/haproxy-master.sock}
 export DRY_RUN=0
@@ -38,7 +42,7 @@ read_certificate() {
 				key_filename="${value# }"
 			;;
 		esac
-	done < <(echo "${M}show ssl cert ${name}" | socat "${SOCKET}" -)
+	done < <(echo "${M}show ssl cert ${name}" | "${SOCAT_BIN}" "${SOCKET}" -)
 	IFS=$OFS
 
 	if [ -z "$crt_filename" ] || [ -z "$key_filename" ]; then
@@ -68,7 +72,7 @@ cmp_certkey() {
 		return 1;
 	fi
 
-	if ! cmp -s <(openssl x509 -in "$prev" -noout -fingerprint -sha256) <(openssl x509 -in "$new" -noout -fingerprint -sha256); then
+	if ! cmp -s <("${OPENSSL_BIN}" x509 -in "$prev" -noout -fingerprint -sha256) <("${OPENSSL_BIN}" x509 -in "$new" -noout -fingerprint -sha256); then
 		return 1
 	fi
 
@@ -89,11 +93,11 @@ dump_certificate() {
 		return 1
 	fi
 
-	echo "${M}dump ssl cert ${name}" | socat "${SOCKET}" - | openssl pkey >> "${new_key}"
+	echo "${M}dump ssl cert ${name}" | "${SOCAT_BIN}" "${SOCKET}" - | "${OPENSSL_BIN}" pkey >> "${new_key}"
 	# use crl2pkcs7 as a way to dump multiple x509, storeutl could be used in modern versions of openssl
-	echo "${M}dump ssl cert ${name}" | socat "${SOCKET}" - | openssl crl2pkcs7 -nocrl -certfile /dev/stdin | openssl pkcs7 -print_certs  >> "${new_crt}"
+	echo "${M}dump ssl cert ${name}" | "${SOCAT_BIN}" "${SOCKET}" - | "${OPENSSL_BIN}" crl2pkcs7 -nocrl -certfile /dev/stdin | "${OPENSSL_BIN}" pkcs7 -print_certs  >> "${new_crt}"
 
-	if ! cmp -s <(openssl x509 -in "${new_crt}" -pubkey -noout) <(openssl pkey -in "${new_key}" -pubout); then
+	if ! cmp -s <("${OPENSSL_BIN}" x509 -in "${new_crt}" -pubkey -noout) <("${OPENSSL_BIN}" pkey -in "${new_key}" -pubout); then
 		echo "[ALERT] ($$) : Private key \"${new_key}\"  and public key \"${new_crt}\" don't match" >&2
 		return 1
 	fi
@@ -122,7 +126,7 @@ dump_certificate() {
 }
 
 dump_all_certificates() {
-	echo "${M}show ssl cert" | socat "${SOCKET}" - | grep -v '^#' | grep -v '^$' | while read -r line; do
+	echo "${M}show ssl cert" | "${SOCAT_BIN}" "${SOCKET}" - | grep -v '^#' | grep -v '^$' | while read -r line; do
 		export NAME
 		export CRT_FILENAME
 		export KEY_FILENAME

@@ -53,6 +53,7 @@ class eit_haproxy::basic_config (
   String                        $acme_ca            = 'https://acme-v02.api.letsencrypt.org/directory',
 ) {
   $_use_native_acme = $native_acme
+  $_bootstrap_dir = '/etc/ssl/private/haproxy-bootstrap'
 
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
@@ -151,7 +152,7 @@ class eit_haproxy::basic_config (
   $binds = functions::array_to_hash($web_bind_ports.map |$port| {
       $_ssl = if $port == 443 and $mode == 'http' {
         if $_use_native_acme {
-          'ssl crt /etc/ssl/private/haproxy-dummy.pem alpn h2,http/1.1 strict-sni'
+          "ssl crt ${_bootstrap_dir}/haproxy-dummy.pem alpn h2,http/1.1 strict-sni"
         } else {
           [
             'ssl',
@@ -301,9 +302,17 @@ class eit_haproxy::basic_config (
         $domains.filter |$group_name, $opts| {
           if $opts['force_https'] { true } else { false }
         }.map |$group_name, $opts| {
-          $_all_domains_in_group = $opts['domains'].join(',')
+          $_sorted_domains_map = sort_domains_on_tld($opts['domains'], $public_ips)
+          $_sorted_domains = $_sorted_domains_map.map |$cn, $san| {
+            if $cn != 'rejected_domains' { $san }
+          }.flatten.delete_undef_values.uniq
+          $_all_domains_in_group = if $_sorted_domains.empty {
+            $opts['domains'].sort.uniq.join(',')
+          } else {
+            $_sorted_domains.join(',')
+          }
           $_cert_filename = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
-          Hash(['ssl-f-use', "crt /etc/ssl/private/${_cert_filename}.pem acme LE domains ${_all_domains_in_group}"])
+          Hash(['ssl-f-use', "crt ${_bootstrap_dir}/${_cert_filename}.pem acme LE domains ${_all_domains_in_group}"])
         }
       } else {
         []
