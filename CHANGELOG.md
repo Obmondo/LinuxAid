@@ -2,6 +2,79 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.2
+
+### Features
+- 52de8329 feat(pgsql): add support for scram-sha-256 in pg_hba type
+- 5b82a076 feat: add memory, processors, and network_primary_ip facts to e2e agents
+- 9747bc3a feat: enable full_host_management globally, monitor per-agent, and simplify catalog-diff
+- b13b1fed feat: improve e2e catalog-diff with JSON output formatting
+
+### Bug Fixes
+- bc855963 fix: add early return to all exporter classes when disabled
+- 44cb6a4b fix: skip dellhw exporter class when disabled to avoid missing service reference
+- dbca9b35 fix: use correct timer unit names for dnf service masking on RedHat
+- ba9f032d fix: use facts-based init_style in all prometheus exporters
+- d58927ba fix: treat octocatalog-diff exit code 2 as success in CI
+- ede10753 fix: add grub parameter types for type safety
+- cd981e21 fix: add missing e2e facts for ubuntu2404 motd template
+- 846c3399 fix: resolve puppet catalog compilation errors
+- 165d4e85 fix: update common::system class list and remove duplicate services block
+- 8ebe709c fix: move tmux and bash files from convenience/ to system/utility/
+- 1e7ebc87 fix: e2e agent grub parameters use hash format with ensure/value keys
+- d19907e7 fix: e2e catalog-diff - rename certnames to .e2etesting and add missing facts
+- e2ed82cd fix: added the certname key at the ENC level, so we dont have to read from the fact
+- a35a0aec fix: removed the extra test certname
+- ec809ab1 fix: handle linuxaid tag nil check in puppet enc
+- 6e4e6d5b fix: profile::system is not anymore, the underlying class is handled in the common module
+- 2c8ebbff fix(lint): resolve autoloader_layout errors and introduce profile::collector namespace
+- 21b35d6d fix: we dont need to notify, cause update and run-openvox are cron, which does not need to be notified again and again
+- 389a1d9b fix: lets all the subclass noop value set to undef as a default, and let it overwritten by the resource/upstream class calling it
+- 3fff899e fix: moved profile openvox to profile system openvox
+- e02f81a9 fix: changed the hiera key in the release script, so it udpates the hiera with the new tag
+- 9c9522fe fix: removed groups from 3rd layer in common module
+- e2a46a74 fix: removed the services, and migrated to upstream systemd module and removed deprecated initstyle
+- 41b91c95 fix: moved the mysql code from db class to db::mysql
+- 5a1208a0 fix: removed the obsolete elk role, since we already have elasticsearch db role, and moved the logging role for journald remote under monitor group
+- d455d37d fix: moved to monitor from monitoring in common class
+- 3f72352b fix: removed virtualization class and moved the openvmtools into software and the required changes as per the structure
+- 8a9a6c92 fix: moved the common::systemd::timer to functions::systemd_timer
+
+### Configuration Changes
+- 959dc786 chore: added puppet-puppetlabs-yumrepo_core module v3.0.1
+- 15db223c chore: remove unused empty upstream modules
+- d1676e70 chore(fix): moved from user_security to user_management
+- 17248f24 chore(doc): puppet string doc fixes
+- c1071251 chore(lint): fix
+- 507ec046 chore(fix): changed the class name as per new structure for openvox and obmondo_admin
+- eaec0a3b chore: removed **extras** layer in common and moved it into software chore: moved the security into system layer in common
+- 69988a48 chore: removed the common::devices, since its obsolete
+- f4960f61 chore: removed unused mkdir_pp function
+- 51b343db chore(doc): Update changelog
+
+### Other Changes
+- a10de4fd docs: add OpenVAS (Greenbone) setup and usage guide
+- 1d35b34c Split e2e catalog-diff CI jobs by role for visual grouping
+- 45d5683d Add eyaml support to e2e catalog-diff
+- 9e137f7e Add e2e catalog-diff CI with Docker container jobs
+- 0e7be4be Add Docker-based octocatalog-diff setup for CI catalog diffing
+- d19c7195 Fix: use splunkfwd user for SplunkForwarder service management because /opt/splunkforwarder is owned by splunkfwd
+- 65e5cecd rotate slurmd logs only hourly base and maxsize to 1G
+- 4c3669a7 remove comment from monitor/types/*
+- 1a9c0873 Replace . with _ in environment
+- 48ded0fe Refactor common class: move mail, jumphost, and service management
+- 17d035fd Fixed the class names
+- e14124a7 common::convenience was changed to common::system::utilities
+- 4a00ee8c common::cron is now common::system::cron
+- 39ee8f3d refactor: remove profile::system inheritance and reorganize defaults
+- 59283a08 refactor: reorganize manifest namespacing to reflect module groupings
+- 7ae19336 breaking changes: moved all the hiera key as per current structure and changed the structure as well in the common module
+- 2f135345 breaking fix: moved the selinux into system::security
+- a8722307 breaking: moved the whole common module structure into layered structure based on UX we decided internally by Obmondo
+- c590084e moved the profile mysql to profile::db::mysql
+- 7c18fd3c Rotate slurm hours every hour and when it reaches 1GB
+- beadce6c Set Puppet ENC environment from linuxaid_tag
+
 ## LinuxAid Release Version v1.5.1
 
 No changes in this release.
