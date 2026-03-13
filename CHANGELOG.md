@@ -2,6 +2,14 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.3
+
+### Bug Fixes
+- 9747c6f1 fix: remove cron_jobs param since it's not being referenced anywhere
+- 39622c49 fix: skip rsyslog if facter is unset
+- 2e7974dc fix(haproxy): gate HAProxy 3.x to Ubuntu 24.04+ only
+- edb97336 fix: replace dummy cert creation with snake oil
+
 ## LinuxAid Release Version v1.5.2
 
 ### Features
