@@ -15,7 +15,7 @@ class profile::system::cron (
   }
 
   $jobs.each |$name, $job| {
-    profile::cron::job { $name:
+    profile::system::cron::job { $name:
       * => $job,
     }
   }

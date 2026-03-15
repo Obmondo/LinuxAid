@@ -1,4 +1,4 @@
-type Profile::Cron::Hour = Variant[
+type Profile::System::Cron::Hour = Variant[
   Enum['*'],
   Integer[0,24],
   Array[Integer[0,24]],

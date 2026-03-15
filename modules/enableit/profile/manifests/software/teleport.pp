@@ -21,13 +21,18 @@ class profile::software::teleport (
     subscribe => Package['ca-certificates'],
   }
 
-  common::services::systemd { 'teleport.service' :
-    ensure     => $enable,
-    override   => $enable,
-    noop_value => $noop_value,
-    service    => {
-      'RuntimeDirectory' => 'teleport',
-    },
+  # Define the override content
+  $_teleport_override = @("EOT"/)
+    [Service]
+    RuntimeDirectory=teleport
+    | EOT
+
+  # Create the drop-in override file
+  systemd::unit_file { 'teleport.service':
+    ensure  => ensure_present($enable),
+    path    => '/etc/systemd/system/teleport.service.d/override.conf',
+    content => $_teleport_override,
+    notify  => Service['teleport'],
   }
 
   file { '/etc/teleport.yaml':

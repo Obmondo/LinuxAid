@@ -106,7 +106,7 @@ class profile::projectmanagement::perforce (
     group  => 'root'
   }
 
-  profile::cron::job { 'p4d checkpoint and snapshot':
+  profile::system::cron::job { 'p4d checkpoint and snapshot':
     command => "chronic /opt/obmondo/bin/perforce-p4d-backup --log-dir '${log_dir}' --backup-target-dir '${backup_dir}' --all --keep-days ${backup_retention} --delete", # lint:ignore:140chars
     hour    => 3,
     minute  => 0,

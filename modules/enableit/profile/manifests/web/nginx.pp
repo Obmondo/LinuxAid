@@ -31,12 +31,24 @@ class profile::web::nginx (
     }
   }])
 
-  common::services::systemd { 'nginx.service' :
-    ensure   => true,
-    override => true,
-    service  => {
-      'RuntimeDirectory' => 'nginx',
-    },
+  # Define the Nginx override content
+  $_nginx_override_content = @("EOT"/)
+    [Service]
+    RuntimeDirectory=nginx
+    | EOT
+
+  # Create the drop-in override for the Nginx service
+  systemd::unit_file { 'nginx.service':
+    ensure  => 'present',
+    path    => '/etc/systemd/system/nginx.service.d/override.conf',
+    content => $_nginx_override_content,
+    notify  => Service['nginx'],
+  }
+
+  # Ensure the Nginx service is managed and refreshed
+  service { 'nginx':
+    ensure  => 'running',
+    enable  => true,
   }
 
   class { '::nginx':
@@ -48,7 +60,7 @@ class profile::web::nginx (
     },
     http_format_log      => 'custom_access_log',
     *                    => $extra_cfg_option,
-    notify               => Common::Services::Systemd['nginx.service'],
+    notify               => Service['nginx'],
     purge_passenger_repo => false,
     package_source       => $package_source,
   }

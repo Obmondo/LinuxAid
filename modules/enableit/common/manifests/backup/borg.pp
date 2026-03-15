@@ -99,22 +99,26 @@ class common::backup::borg (
       authorized_keys => $authorized_keys,
     }
   } else {
-    ## services
-    common::services::systemd { 'obmondo-backup-borg@.service':
-      ensure  => false,
+    ## Define the Templated Borg Backup Service
+    $_borg_backup_content = @("EOT"/)
+      [Unit]
+      Description=Obmondo borg backup
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/bash ${__dir}/repo_%i.sh run
+      ExecStartPost=/bin/bash ${__dir}/repo_%i.sh check_icinga
+      TimeoutSec=3600
+
+      [Install]
+      WantedBy=default.target
+      | EOT
+
+    systemd::unit_file { 'obmondo-backup-borg@.service':
+      ensure  => 'absent',
       enable  => false,
-      unit    => {
-        'Description' => 'Obmondo borg backup',
-      },
-      service => {
-        'Type'          => 'oneshot',
-        'ExecStart'     => "/bin/bash ${__dir}/repo_%i.sh run",
-        'ExecStartPost' => "/bin/bash ${__dir}/repo_%i.sh check_icinga",
-        'TimeoutSec'    => 3600,
-      },
-      install => {
-        'WantedBy' => 'default.target',
-      },
+      active  => false,
+      content => $_borg_backup_content,
     }
     $repos.each |$k, $v| {
       common::backup::borg::push { $k:

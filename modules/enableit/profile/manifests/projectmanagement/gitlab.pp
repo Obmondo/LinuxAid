@@ -107,88 +107,81 @@ class profile::projectmanagement::gitlab (
     require => Package['obmondo-gitlab-update-check-collector'],
   }
 
-  common::services::systemd { 'gitlab-update-check.timer':
-    ensure  => true,
-    enable  => true,
-    timer   => {
-      'OnCalendar' => systemd_make_timespec({
-        'year'   => '*',
-        'month'  => '*',
-        'day'    => '*',
-        'hour'   => 0,
-        'minute' => 0,
-        'second' => 0,
-      }),
-      'Unit'       => 'gitlab-update-check.service',
-    },
-    unit    => {
-      'Requires'  => 'gitlab-update-check.service',
-    },
-    install => {
-      'WantedBy' => 'timers.target',
-    },
-    require => [
-      Package['obmondo-gitlab-update-check-collector'],
-      File["${textfile_directory}/gitlab.prom"],
-    ],
-  }
+  $_gitlab_update_timer = @("EOT"/)
+    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Check for GitLab updates daily
+    Requires=gitlab-update-check.service
 
-  common::services::systemd { 'gitlab-update-check.service':
-    ensure  => 'present',
-    unit    => {
-      'Wants' => 'gitlab-update-check.timer',
-    },
-    service => {
-      'Type'      => 'oneshot',
-      'ExecStart' => "sh -c '/opt/obmondo/bin/check_gitlab_update > ${textfile_directory}/gitlab.prom'",
-    },
-    install => {
-      'WantedBy' => 'multi-user.target',
-    },
-    require => [
+    [Timer]
+    OnCalendar=*-*-* 00:00:00
+    Unit=gitlab-update-check.service
+
+    [Install]
+    WantedBy=timers.target
+    | EOT
+
+  $_gitlab_update_service = @("EOT"/)
+    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Check for GitLab updates
+    Wants=gitlab-update-check.timer
+
+    [Service]
+    Type=oneshot
+    ExecStart=sh -c '/opt/obmondo/bin/check_gitlab_update > ${textfile_directory}/gitlab.prom'
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  systemd::timer { 'gitlab-update-check.timer':
+    ensure          => present,
+    active          => true,
+    enable          => true,
+    timer_content   => $_gitlab_update_timer,
+    service_content => $_gitlab_update_service,
+    require         => [
       Package['obmondo-gitlab-update-check-collector'],
       File["${textfile_directory}/gitlab.prom"],
     ],
   }
 
   ## The puma_worker is using high cpu to to restart th puma_worker need to restart the gitlab service
-  common::services::systemd { 'gitlab-puma-bug.timer':
-    ensure  => $puma_bug,
-    enable  => $puma_bug,
-    timer   => {
-      'OnCalendar' => systemd_make_timespec({
-        'year'    => '*',
-        'month'   => '*',
-        'weekday' => 'Tue',
-        'day'     => '*',
-        'hour'    => 5,
-        'minute'  => 0,
-        'second'  => 0,
-      }),
-      'Unit'       => 'gitlab-puma-bug.service',
-    },
-    unit    => {
-      'Requires' => 'gitlab-puma-bug.service',
-    },
-    install => {
-      'WantedBy' => 'timers.target',
-    },
-  }
+  $_puma_bug_timer = @("EOT"/)
+    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Puma worker using high cpu so restarting the gitlab service
+    Requires=gitlab-puma-bug.service
 
-  common::services::systemd { 'gitlab-puma-bug.service':
-    ensure  => 'present',
-    enable  => false,
-    unit    => {
-      'Description' => 'Puma worker using high cpu so restarting the gitlab service',
-      'Wants'       => 'gitlab-puma-bug.timer',
-    },
-    service => {
-      'Type'      => 'oneshot',
-      'ExecStart' => '/usr/bin/gitlab-ctl restart',
-    },
-    install => {
-      'WantedBy' => 'multi-user.target',
-    },
+    [Timer]
+    OnCalendar=Tue *-*-* 05:00:00
+    Unit=gitlab-puma-bug.service
+
+    [Install]
+    WantedBy=timers.target
+    | EOT
+
+  $_puma_bug_service = @("EOT"/)
+    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+    [Unit]
+    Description=Puma worker using high cpu so restarting the gitlab service
+    Wants=gitlab-puma-bug.timer
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/gitlab-ctl restart
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  systemd::timer { 'gitlab-puma-bug.timer':
+    ensure          => present,
+    active          => true,
+    enable          => true,
+    timer_content   => $_puma_bug_timer,
+    service_content => $_puma_bug_service,
   }
 
   $bind_ports = [
@@ -588,83 +581,88 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
       group  => $gitlab_psql_user,
     }
 
-    common::services::systemd { 'mattermost-db-backup.timer':
-      ensure  => ensure_present($mattermost),
-      enable  => $mattermost,
-      timer   => {
-        'OnCalendar' => systemd_make_timespec({
-          'year'   => '*',
-          'month'  => '*',
-          'day'    => '*',
-          'hour'   => ( 1 + lookup('gitlab::backup_cron_hour', Eit_types::TimeHour, undef, 3)),
-          'minute' => ( 1 + lookup('gitlab::backup_cron_minute', Eit_types::TimeMinute, undef, 0)),
-          'second' => 0,
-        }),
-        'Unit'       => 'mattermost-db-backup.service',
-      },
-      unit    => {
-        'Requires'  => 'mattermost-db-backup.service',
-      },
-      install => {
-        'WantedBy' => 'timers.target',
-      },
+    # Calculate DB backup time based on GitLab offsets
+    $_db_hour   = 1 + lookup('gitlab::backup_cron_hour', Eit_types::TimeHour, undef, 3)
+    $_db_minute = 1 + lookup('gitlab::backup_cron_minute', Eit_types::TimeMinute, undef, 0)
+
+    $_mm_db_timer = @("EOT"/)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Mattermost DB backup timer
+      Requires=mattermost-db-backup.service
+
+      [Timer]
+      OnCalendar=*-*-* ${_db_hour}:${_db_minute}:00
+      Unit=mattermost-db-backup.service
+
+      [Install]
+      WantedBy=timers.target
+      | EOT
+
+    $_mm_db_service = @("EOT"/)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Mattermost DB backup service
+      Wants=mattermost-db-backup.timer
+
+      [Service]
+      Type=simple
+      User=${gitlab_psql_user}
+      Group=${gitlab_psql_user}
+      ExecStart=sh -c '/opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > ${_backup_path}/mattermost/mattermost_dbdump_$(date --rfc-3339=date).sql.gz'
+
+      [Install]
+      WantedBy=multi-user.target
+      | EOT
+
+    systemd::timer { 'mattermost-db-backup.timer':
+      ensure          => ensure_present($mattermost),
+      active          => $mattermost,
+      enable          => $mattermost,
+      timer_content   => $_mm_db_timer,
+      service_content => $_mm_db_service,
     }
 
-    common::services::systemd { 'mattermost-db-backup.service':
-      ensure  => ensure_present($mattermost),
-      enable  => $mattermost,
-      unit    => {
-        'Wants'    => 'mattermost-db-backup.timer',
-      },
-      service => {
-        'Type'      => 'simple',
-        'ExecStart' => "sh -c '/opt/gitlab/embedded/bin/pg_dump -h /var/opt/gitlab/postgresql mattermost_production | gzip > ${_backup_path}/mattermost/mattermost_dbdump_\$(date --rfc-3339=date).sql.gz'", #lint:ignore:140chars
-        'User'      => $gitlab_psql_user,
-        'Group'     => $gitlab_psql_user,
-      },
-      install => {
-        'WantedBy' => 'multi-user.target',
-      },
-    }
+    # Calculate Data backup time based on GitLab offsets
+    $_data_hour   = 2 + lookup('gitlab::backup_cron_hour', Eit_types::TimeHour, undef, 3)
+    $_data_minute = 2 + lookup('gitlab::backup_cron_minute', Eit_types::TimeMinute, undef, 0)
 
-    common::services::systemd { 'mattermost-data-backup.timer':
-      ensure  => ensure_present($mattermost),
-      enable  => $mattermost,
-      timer   => {
-        'OnCalendar' => systemd_make_timespec({
-          'year'   => '*',
-          'month'  => '*',
-          'day'    => '*',
-          'hour'   => ( 2 + lookup('gitlab::backup_cron_hour', Eit_types::TimeHour, undef, 3)),
-          'minute' => ( 2 + lookup('gitlab::backup_cron_minute', Eit_types::TimeMinute, undef, 0)),
-          'second' => 0,
-        }),
-        'Unit'       => 'mattermost-data-backup.service',
-      },
-      unit    => {
-        'Requires'  => 'mattermost-data-backup.service',
-      },
-      install => {
-        'WantedBy' => 'timers.target',
-      },
-    }
+    $_mm_data_timer = @("EOT"/)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Mattermost data backup timer
+      Requires=mattermost-data-backup.service
 
-    common::services::systemd { 'mattermost-data-backup.service':
-      ensure  => ensure_present($mattermost),
-      enable  => $mattermost,
-      unit    => {
-        'Wants'    => 'mattermost-data-backup.timer',
-      },
-      service => {
-        'Type'      => 'simple',
-        'ExecStart' => "sh -c '/usr/bin/tar -zcvf ${_backup_path}/mattermost_data_\$(date --rfc-3339=date).gz -C /var/opt/gitlab/mattermost data config.json'", #lint:ignore:140chars
-        'User'      => $backupcron_user,
-        'Group'     => $backupcron_user,
-      },
-      install => {
-        'WantedBy' => 'multi-user.target',
-      },
+      [Timer]
+      OnCalendar=*-*-* ${_data_hour}:${_data_minute}:00
+      Unit=mattermost-data-backup.service
+
+      [Install]
+      WantedBy=timers.target
+      | EOT
+
+    $_mm_data_service = @("EOT"/)
+      # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Mattermost data backup service
+      Wants=mattermost-data-backup.timer
+
+      [Service]
+      Type=simple
+      User=${backupcron_user}
+      Group=${backupcron_user}
+      ExecStart=sh -c '/usr/bin/tar -zcvf ${_backup_path}/mattermost_data_$(date --rfc-3339=date).gz -C /var/opt/gitlab/mattermost data config.json'
+
+      [Install]
+      WantedBy=multi-user.target
+      | EOT
+
+    systemd::timer { 'mattermost-data-backup.timer':
+      ensure          => ensure_present($mattermost),
+      active          => $mattermost,
+      enable          => $mattermost,
+      timer_content   => $_mm_data_timer,
+      service_content => $_mm_data_service,
     }
   }
-
 }
