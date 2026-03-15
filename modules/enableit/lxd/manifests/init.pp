@@ -135,25 +135,40 @@ class lxd (
   # Make lxd-containers depend on the required filesystems, if any. Filesystems
   # refer to devices instantiated with our own services. These are named
   # `disk@%i.service`.
-  $_service_units = $requires_filesystems.reduce([]) |$acc, $name| {
+  # Generate the list of systemd service names for the dependencies
+  $_dep_list = $requires_filesystems.map |$name| {
     $filesystem = $_filesystems[$name]
-
-    unless $filesystem {
-      fail("Required filesystem '${name}' is not defined.")
-    }
-
-    $_service = "${filesystem['type']}-mount-${name}.service"
-
-    $acc + [
-      {'After' => $_service},
-      {'BindsTo' => $_service},
-    ]
+    if !$filesystem { fail("Required filesystem '${name}' is not defined.") }
+    "${filesystem['type']}-mount-${name}.service"
   }
 
-  common::services::systemd { 'lxd-containers.service':
-    override => true,
-    unit     => flatten($_service_units),
+  # Join them into space-separated strings for the systemd unit file
+  $_after_deps    = join($_dep_list, ' ')
+  $_bindsto_deps  = join($_dep_list, ' ')
+
+  # Define the full service content
+  $_service_content = @("EOT"/)
+    # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+    [Unit]
+    Description=LXD - Container Management Service
+    After=network.target syslog.target ${_after_deps}
+    BindsTo=${_bindsto_deps}
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/lxd --group lxd --debug
+    Restart=on-failure
+    KillMode=process
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  # Use systemd::unit_file to manage the service
+  systemd::unit_file { 'lxd-containers.service':
+    ensure  => 'present',
+    enable  => true,
+    active  => true,
+    content => $_service_content,
   }
-
-
 }

@@ -131,46 +131,42 @@ class profile::system::authentication::sssd (
         require => Package['obmondo-sssd-status-check'],
       }
 
-      common::services::systemd { 'sssd-status-check.timer':
-        ensure     => $enable,
-        enable     => $enable,
-        noop_value => $noop_value,
-        timer      => {
-          'OnBootSec'  => '5min',
-          'OnCalendar' => systemd_make_timespec({
-            'year'   => '*',
-            'month'  => '*',
-            'day'    => '*',
-            'hour'   => 0,
-            'minute' => 0,
-            'second' => 0,
-          }),
-          'Unit'       => 'sssd-status-check.service',
-        },
-        install    => {
-          'WantedBy' => 'timers.target',
-        },
-        require    => [
-          Package['obmondo-sssd-status-check'],
-          File["${textfile_directory}/sssd.prom"],
-        ],
-      }
+      $_sssd_timer_content = @("EOT"/)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Unit]
+        Description=SSSD status check timer
 
-      common::services::systemd { 'sssd-status-check.service':
-        ensure     => 'stopped',
-        enable     => false,
-        noop_value => $noop_value,
-        unit       => {
-          'Wants'    => 'sssd-status-check.timer',
-        },
-        service    => {
-          'Type'      => 'oneshot',
-          'ExecStart' => "/bin/sh -c '/opt/obmondo/bin/sssd_status_check > ${textfile_directory}/sssd.prom'",
-        },
-        install    => {
-          'WantedBy' => 'multi-user.target',
-        },
-        require    => [
+        [Timer]
+        OnBootSec=5min
+        OnCalendar=*-*-* 00:00:00
+        Unit=sssd-status-check.service
+
+        [Install]
+        WantedBy=timers.target
+        | EOT
+
+      $_sssd_service_content = @("EOT"/)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Unit]
+        Description=SSSD status check service
+        Wants=sssd-status-check.timer
+
+        [Service]
+        Type=oneshot
+        ExecStart=/bin/sh -c '/opt/obmondo/bin/sssd_status_check > ${textfile_directory}/sssd.prom'
+
+        [Install]
+        WantedBy=multi-user.target
+        | EOT
+
+      systemd::timer { 'sssd-status-check.timer':
+        ensure          => ensure_present($enable),
+        active          => $enable,
+        enable          => $enable,
+        noop            => $noop_value,
+        timer_content   => $_sssd_timer_content,
+        service_content => $_sssd_service_content,
+        require         => [
           Package['obmondo-sssd-status-check'],
           File["${textfile_directory}/sssd.prom"],
         ],
@@ -193,13 +189,26 @@ class profile::system::authentication::sssd (
 
     if $_is_systemd {
 
-      common::services::systemd { 'sssd.service':
-        ensure     => true,
-        override   => true,
-        unit       => {
-          'ConditionPathExists' => '/etc/krb5.keytab',
-        },
-        noop_value => $noop_value,
+      $_sssd_override_content = @("EOT"/)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Unit]
+        ConditionPathExists=/etc/krb5.keytab
+        | EOT
+
+      # Create the drop-in override for sssd
+      systemd::unit_file { 'sssd.service':
+        ensure  => 'present',
+        content => $_sssd_override_content,
+        path    => '/etc/systemd/system/sssd.service.d/override.conf',
+        noop    => $noop_value,
+        notify  => Service['sssd'],
+      }
+
+      # Manage the service state
+      service { 'sssd':
+        ensure => 'running',
+        enable => true,
+        noop   => $noop_value,
       }
 
       if $_sssd_sockets_supported {
@@ -226,17 +235,30 @@ class profile::system::authentication::sssd (
         # Necessary to set other user as the unit defaults to using sssd:sssd, but
         # files are owned by root:
         # https://bugzilla.redhat.com/show_bug.cgi?id=1636002
-        common::services::systemd { $_service_unit_names:
-          ensure     => false,
-          enable     => false,
-          override   => true,
-          service    => {
-            'User'  => 'root',
-            'Group' => 'root',
-          },
-          noop_value => $noop_value,
-        }
+        $_service_unit_names.each |$unit_name| {
+          $_root_override_content = @("EOT"/)
+            # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+            [Service]
+            User=root
+            Group=root
+            | EOT
 
+          # Create the drop-in override for each service in the list
+          systemd::unit_file { "${unit_name}":
+            ensure  => 'absent', # ensure => false in original maps to absent
+            path    => "/etc/systemd/system/${unit_name}.service.d/override.conf",
+            content => $_root_override_content,
+            noop    => $noop_value,
+            notify  => Service[$unit_name],
+          }
+
+          # Ensure the service state is managed accordingly
+          service { $unit_name:
+            ensure => 'stopped',
+            enable => false,
+            noop   => $noop_value,
+          }
+        }
       }
     }
 

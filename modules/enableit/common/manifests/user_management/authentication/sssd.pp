@@ -31,6 +31,7 @@ class common::user_management::authentication::sssd (
     'pam',
     'ssh',
     'sudo',
+    'pac',
   ],
   Array[Eit_types::Sssd::Service]             $_available_services   = undef,
   Boolean                                     $enable                = false,

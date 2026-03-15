@@ -137,22 +137,30 @@ class profile::projectmanagement::readthedocs (
     before  => Service['readthedocs.service'],
   }
 
-  common::services::systemd { 'readthedocs.service':
-    unit    => {
-      'Description' => 'Read The Docs server',
-      'Requires'    => 'network.target',
-      'After'       => 'network.target',
-    },
-    service => {
-      'EnvironmentFile'  => '-/etc/default/readthedocs',
-      'WorkingDirectory' => $_repo_dir,
-      'ExecStart'        => "/usr/local/bin/with_virtualenv.sh ${_virtualenv_dir} 'python manage.py runserver ${bind}:${port}'",
-      'Restart'          => 'always',
-      'RestartSec'       => '30s',
-    },
-    install => {
-      'WantedBy' => 'multi-user.target',
-    },
+  # Define the Read The Docs server service content
+  $_readthedocs_content = @("EOT"/)
+    [Unit]
+    Description=Read The Docs server
+    Requires=network.target
+    After=network.target
+
+    [Service]
+    EnvironmentFile=-/etc/default/readthedocs
+    WorkingDirectory=${_repo_dir}
+    ExecStart=/usr/local/bin/with_virtualenv.sh ${_virtualenv_dir} 'python manage.py runserver ${bind}:${port}'
+    Restart=always
+    RestartSec=30s
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  # Deploy the systemd unit file
+  systemd::unit_file { 'readthedocs.service':
+    ensure  => 'present',
+    enable  => true,
+    active  => true,
+    content => $_readthedocs_content,
   }
 
   file {

@@ -6,8 +6,8 @@ define profile::system::cron::job (
   Variant[Enum['*'], Eit_types::Time::Weekdays] $weekday     = '*',
   Cron::Month                                   $month       = '*',
   Variant[Enum['*'], Eit_types::Time::Monthday] $monthday    = '*',
-  Profile::Cron::Hour                           $hour        = '*',
-  Profile::Cron::Minute                         $minute      = '*',
+  Profile::System::Cron::Hour                           $hour        = '*',
+  Profile::System::Cron::Minute                         $minute      = '*',
   Hash[String, String]                          $environment = {},
   Eit_types::Noop_Value                         $noop_value  = undef,
 ) {

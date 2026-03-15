@@ -61,8 +61,10 @@ class common::system::updates (
       },
     ]): ensure => 'absent', }
 
-    common::services::systemd { 'yum-system-upgrade.service':
-      ensure => 'absent',
+    # Ensure the service is stopped and disabled
+    service { 'yum-system-upgrade.service':
+      ensure => 'stopped',
+      enable => false,
     }
 
     package { 'obmondo-system-update':

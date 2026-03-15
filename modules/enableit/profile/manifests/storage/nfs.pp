@@ -20,7 +20,7 @@ class profile::storage::nfs (
   }
 
   # Automatically lazy unmount mounted snapshots from NetApp
-  profile::cron::job { 'umount netapp snapshots':
+  profile::system::cron::job { 'umount netapp snapshots':
     enable      => $_has_nfs_mounts,
     command     => 'findmnt -t nfs,nfs4 -o TARGET --raw | grep /.snapshot/ | xargs --no-run-if-empty umount -l',
     hour        => 2,

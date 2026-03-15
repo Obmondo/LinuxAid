@@ -105,29 +105,34 @@ class profile::package_management::guix (
     require => File['/var/guix'],
   }
 
-  common::services::systemd { 'guix-daemon.service':
-    unit    => {
-      'Description' => 'Build daemon for GNU Guix',
-    },
-    service => {
-      'EnvironmentFile' => '-/etc/default/guix-daemon',
-      'Environment'     => 'GUIX_LOCPATH=/root/.guix-profile/lib/locale',
-      'ExecStart'       => '/var/guix/profiles/per-user/root/guix-profile/bin/guix-daemon --build-users-group=guixbuild --listen=0.0.0.0 --listen=/var/guix/daemon-socket/socket', #lint:ignore:140chars
-      'RemainAfterExit' => 'yes',
-      'StandardOutput'  => 'syslog',
-      'StandardError'   => 'syslog',
-      'Restart'         => 'always',
-      'RestartSec'      => '2m',
-      # See
-      # <https://lists.gnu.org/archive/html/guix-devel/2016-04/msg00608.html>.
-      # Some package builds (for example, go@1.8.1) may require even more than
-      # 1024 tasks.
-      'TasksMax'        => '8192',
-    },
-    install => {
-      'WantedBy' => 'multi-user.target',
-    },
+  # Define the GNU Guix Build Daemon content
+  $_guix_daemon_content = @("EOT"/)
+    [Unit]
+    Description=Build daemon for GNU Guix
+
+    [Service]
+    EnvironmentFile=-/etc/default/guix-daemon
+    Environment=GUIX_LOCPATH=/root/.guix-profile/lib/locale
+    ExecStart=/var/guix/profiles/per-user/root/guix-profile/bin/guix-daemon --build-users-group=guixbuild --listen=0.0.0.0 --listen=/var/guix/daemon-socket/socket
+    RemainAfterExit=yes
+    StandardOutput=syslog
+    StandardError=syslog
+    Restart=always
+    RestartSec=2m
+    # See <https://lists.gnu.org/archive/html/guix-devel/2016-04/msg00608.html>.
+    # Some package builds may require more than 1024 tasks.
+    TasksMax=8192
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  # Deploy the unit file and manage the service
+  systemd::unit_file { 'guix-daemon.service':
+    ensure  => 'present',
+    enable  => true,
+    active  => true,
+    content => $_guix_daemon_content,
     require => User[$_guix_builder_users],
   }
-
 }

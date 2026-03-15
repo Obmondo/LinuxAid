@@ -82,37 +82,40 @@ class profile::system::dns (
         ]
       }
 
-      common::services::systemd { 'dnsmasq.service':
-        ensure     => true,
-        enable     => true,
-        override   => true,
-        noop_value => $noop_value,
-        service    => [
-          {
-            'Type'          => 'simple',
-            'ExecStartPre'  => '/usr/sbin/dnsmasq --test',
-            'ExecStartPost' => '',
-            'ExecStop'      => '',
-          },
-          # This is required to override `ExecStart`. Debian-based distros have
-          # dnsmasq running as a forking server, while RHEL-based have it
-          # running as a foreground service -- we prefer the latter.
-          {
-            'ExecStart' => '',
-          },
-          {
-            'ExecStart' => '/usr/sbin/dnsmasq -k',
-          },
+      $_dnsmasq_override_content = @("EOT"/)
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        [Service]
+        Type=simple
+        # Reset and override ExecStart for foreground mode
+        ExecStart=
+        ExecStart=/usr/sbin/dnsmasq -k
+        ExecStartPre=/usr/sbin/dnsmasq --test
+        # Clear existing Post/Stop commands
+        ExecStartPost=
+        ExecStop=
+        | EOT
 
-        ],
-        require    => [
+      # Create the drop-in override for dnsmasq
+      systemd::unit_file { 'dnsmasq.service':
+        ensure  => 'present',
+        path    => '/etc/systemd/system/dnsmasq.service.d/override.conf',
+        content => $_dnsmasq_override_content,
+        noop    => $noop_value,
+        notify  => Service['dnsmasq.service'],
+      }
+
+      # Manage the service state
+      service { 'dnsmasq.service':
+        ensure  => 'running',
+        enable  => true,
+        noop    => $noop_value,
+        require => [
           File['/etc/resolv.dnsmasq'],
           File['/etc/dnsmasq.conf'],
           Package['dnsmasq'],
           Service[$_other_resolver_services],
-        ]
+        ],
       }
-
     }
     'systemd-resolved': {
       # NOTE: migrated to profile::system::systemd
