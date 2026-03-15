@@ -27,7 +27,7 @@ class monitor::system::service::sssd::auth (
 TEST_USERS=(${test_users.join(' ')})\n",
     noop    => $noop_value,
   }
-  profile::cron::job { 'test sssd user lookup':
+  profile::system::cron::job { 'test sssd user lookup':
     enable     => $_enable,
     minute     => '*/10',
     user       => 'obmondo-admin',

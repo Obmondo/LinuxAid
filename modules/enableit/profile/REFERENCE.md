@@ -19,7 +19,7 @@
 * [`profile::computing::slurm::slurmctld`](#profile--computing--slurm--slurmctld): Slurm slurm::slurmctld
 * [`profile::computing::slurm::slurmd`](#profile--computing--slurm--slurmd): Slurm slurm::slurmd
 * [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
-* [`profile::cron`](#profile--cron): cron
+* [`profile::system::cron`](#profile--cron): cron
 * [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
 * [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when
 * [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
@@ -152,7 +152,7 @@
 * [`profile::certs::ca_cert`](#profile--certs--ca_cert): CA Cert
 * [`profile::certs::letsencrypt::domain`](#profile--certs--letsencrypt--domain): Certificates NOTE: only haproxy role support letsencrypt for now blackbox will scrape the domains if its given in the role::web::haproxy
 * [`profile::certs::manual`](#profile--certs--manual): Manual certificate TODO: lets not accept expired cert from users. need to update the underlying module openssl::cert_date_valid($_cert_file)
-* [`profile::cron::job`](#profile--cron--job): Wrapper that escapes cron command for easy use
+* [`profile::system::cron::job`](#profile--cron--job): Wrapper that escapes cron command for easy use
 * [`profile::storage::mount`](#profile--storage--mount): regular mount
 * [`profile::storage::nfs::server::export`](#profile--storage--nfs--server--export): nfs export
 * [`profile::system::selinux::fcontext`](#profile--system--selinux--fcontext)
@@ -1084,13 +1084,13 @@ Data type: `String`
 
 Default value: `'127.0.0.1'`
 
-### <a name="profile--cron"></a>`profile::cron`
+### <a name="profile--cron"></a>`profile::system::cron`
 
 cron
 
 #### Parameters
 
-The following parameters are available in the `profile::cron` class:
+The following parameters are available in the `profile::system::cron` class:
 
 * [`purge_unmanaged`](#-profile--cron--purge_unmanaged)
 * [`jobs`](#-profile--cron--jobs)
@@ -10476,13 +10476,13 @@ Data type: `Optional[Array[Stdlib::Port]]`
 
 Default value: `undef`
 
-### <a name="profile--cron--job"></a>`profile::cron::job`
+### <a name="profile--cron--job"></a>`profile::system::cron::job`
 
 Wrapper that escapes cron command for easy use
 
 #### Parameters
 
-The following parameters are available in the `profile::cron::job` defined type:
+The following parameters are available in the `profile::system::cron::job` defined type:
 
 * [`command`](#-profile--cron--job--command)
 * [`enable`](#-profile--cron--job--enable)
@@ -10543,7 +10543,7 @@ Default value: `'*'`
 
 ##### <a name="-profile--cron--job--hour"></a>`hour`
 
-Data type: `Profile::Cron::Hour`
+Data type: `Profile::System::Cron::Hour`
 
 
 
@@ -10551,7 +10551,7 @@ Default value: `'*'`
 
 ##### <a name="-profile--cron--job--minute"></a>`minute`
 
-Data type: `Profile::Cron::Minute`
+Data type: `Profile::System::Cron::Minute`
 
 
 
