@@ -74,38 +74,49 @@ class common::backup::db::mysql (
         dump_dir             => $dump_dir,
       }),
     }
-    common::services::systemd { 'mysql-backup.timer':
-      ensure  => true,
-      enable  => true,
-      timer   => {
-        'OnCalendar' => systemd_make_timespec({
-          'year'   => '*',
-          'month'  => '*',
-          'day'    => '*',
-          'hour'   => $backup_hour,
-          'minute' => 0,
-          'second' => 0,
-        }),
-        'Unit'       => 'mysql-backup.service',
-      },
-      unit    => {
-        'Requires'  => 'mysql-backup.service',
-      },
-      install => {
-        'WantedBy' => 'timers.target',
-      },
+    # Define the MySQL Backup Service
+    $_mysql_service_content = @("EOT"/)
+      [Unit]
+      Description=MySQL Backup Service
+      Wants=mysql-backup.timer
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/sh -c '/opt/obmondo/bin/mysqlbackup.sh'
+
+      [Install]
+      WantedBy=multi-user.target
+      | EOT
+
+    systemd::unit_file { 'mysql-backup.service':
+      ensure  => 'present',
+      content => $_mysql_service_content,
       require => File['/opt/obmondo/bin/mysqlbackup.sh'],
     }
-    common::services::systemd { 'mysql-backup.service':
+
+    # Define the MySQL Backup Timer
+    $_mysql_timer_content = @("EOT"/)
+      [Unit]
+      Description=Run MySQL Backup daily at ${backup_hour}:00
+      Requires=mysql-backup.service
+
+      [Timer]
+      OnCalendar=*-*-* ${backup_hour}:00:00
+      Unit=mysql-backup.service
+
+      [Install]
+      WantedBy=timers.target
+      | EOT
+
+    systemd::unit_file { 'mysql-backup.timer':
       ensure  => 'present',
-      unit    => {
-        'Wants'    => 'mysql-backup.timer',
-      },
-      service => {
-        'Type'      => 'oneshot',
-        'ExecStart' => "/bin/sh -c '/opt/obmondo/bin/mysqlbackup.sh'",
-      },
-      require => File['/opt/obmondo/bin/mysqlbackup.sh'],
+      enable  => true,
+      active  => true,
+      content => $_mysql_timer_content,
+      require => [
+        File['/opt/obmondo/bin/mysqlbackup.sh'],
+        Systemd::Unit_file['mysql-backup.service'],
+      ],
     }
   }
 }

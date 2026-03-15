@@ -71,10 +71,10 @@ class common::software {
   }
 
   if lookup('common::software::openvmtools::manage', Boolean, undef, false) {
-    include common::software::opemvmtools
+    include common::software::openvmtools
   }
 
   if lookup('common::software::nivisa::manage', Boolean, undef, false) {
-    include common::software::opemvmtools
+    include common::software::openvmtools
   }
 }

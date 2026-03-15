@@ -26,17 +26,22 @@ class profile::software::walinuxagent (
   }
 
   if $waagent_memory_limit {
-    common::services::systemd { 'azure-walinuxagent-logcollector.slice':
-      ensure => ensure_present($enable),
-      unit   => {
-        'Description'         => 'Slice for Azure VM Agent Periodic Log Collector',
-        'DefaultDependencies' => 'no',
-        'Before'              => 'slices.target',
-      },
-      slice  => {
-        'MemoryAccounting' => 'yes',
-        'MemoryLimit'      => $waagent_memory_limit,
-      },
+    # Define the Azure Log Collector Slice content
+    $_waagent_slice_content = @("EOT"/)
+      [Unit]
+      Description=Slice for Azure VM Agent Periodic Log Collector
+      DefaultDependencies=no
+      Before=slices.target
+
+      [Slice]
+      MemoryAccounting=yes
+      MemoryLimit=${waagent_memory_limit}
+      | EOT
+
+    # Deploy the systemd slice unit file
+    systemd::unit_file { 'azure-walinuxagent-logcollector.slice':
+      ensure  => ensure_present($enable),
+      content => $_waagent_slice_content,
     }
   }
 
