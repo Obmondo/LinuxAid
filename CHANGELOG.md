@@ -2,6 +2,18 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.4
+
+### Bug Fixes
+- 9361696f fix: nil safety for linuxaid_tag in ENC and add ENC documentation
+- 53fb30a7 fix: handle linuxaid-tag for branch and tags
+
+### Other Changes
+- 349fb9f8 ci: update docstring ci to v0.1.0
+- 0d4cc16e refactor: replace common::services::systemd with systemd::unit_file
+- c9babc2f Fix typo in openvmtools class name
+- 5a819ebf update security exporter to use Vuls server config
+
 ## LinuxAid Release Version v1.5.3
 
 ### Bug Fixes
