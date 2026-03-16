@@ -210,7 +210,7 @@ class eit_haproxy::basic_config (
 
     if $use_lets_encrypt and !$_use_native_acme {
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
-        profile::certs::letsencrypt::domain { $cn:
+        profile::system::certs::letsencrypt::domain { $cn:
           domains             => $san,
           deploy_hook_command => '/opt/obmondo/bin/letsencrypt_deploy_hook.sh',
           cert_host           => '0.0.0.0',

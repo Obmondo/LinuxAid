@@ -14,6 +14,6 @@ class common::software::nivisa (
           $facts['os']['release']['major'] != 7,
           'Only el7 supported')
   if $enable {
-    profile::nivisa.include
+    profile::software::nivisa.include
   }
 }

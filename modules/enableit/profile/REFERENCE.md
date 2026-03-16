@@ -10,7 +10,7 @@
 * [`profile::appeng::phpfpm`](#profile--appeng--phpfpm): PHPFPm profile
 * [`profile::backup::netbackup`](#profile--backup--netbackup): NetBackup
 * [`profile::bind`](#profile--bind): Bind Profile
-* [`profile::certs::letsencrypt`](#profile--certs--letsencrypt): LetsEncrupt CA Signing
+* [`profile::system::certs::letsencrypt`](#profile--certs--letsencrypt): LetsEncrupt CA Signing
 * [`profile::ci::jenkins`](#profile--ci--jenkins): jenkins profile
 * [`profile::communication::murmur`](#profile--communication--murmur): Mumble fails on lxc because of avahi-daemon which fails getting installed under lxc. Here is the work around. https://lists.linuxcontainers.o
 * [`profile::communication::thinlinc`](#profile--communication--thinlinc): thinlinc  https://www.cendio.com/resources/docs/tag/ch06s02.html
@@ -52,7 +52,7 @@
 * [`profile::network::firewall`](#profile--network--firewall): Firewall
 * [`profile::network::netbird`](#profile--network--netbird): Class for managing Netbird Agent
 * [`profile::network::wireguard`](#profile--network--wireguard): Wireguard
-* [`profile::nivisa`](#profile--nivisa): NI-VISA Profile
+* [`profile::software::nivisa`](#profile--nivisa): NI-VISA Profile
 * [`profile::appeng::nodejs`](#profile--nodejs): NodeJs Profile
 * [`profile::system::ntpd`](#profile--ntpd): NTP
 * [`profile::openvox`](#profile--openvox): Manage openvox-agent so we can setup openvox-agent package
@@ -149,9 +149,9 @@
 
 ### Defined types
 
-* [`profile::certs::ca_cert`](#profile--certs--ca_cert): CA Cert
-* [`profile::certs::letsencrypt::domain`](#profile--certs--letsencrypt--domain): Certificates NOTE: only haproxy role support letsencrypt for now blackbox will scrape the domains if its given in the role::web::haproxy
-* [`profile::certs::manual`](#profile--certs--manual): Manual certificate TODO: lets not accept expired cert from users. need to update the underlying module openssl::cert_date_valid($_cert_file)
+* [`profile::system::certs::ca_cert`](#profile--certs--ca_cert): CA Cert
+* [`profile::system::certs::letsencrypt::domain`](#profile--certs--letsencrypt--domain): Certificates NOTE: only haproxy role support letsencrypt for now blackbox will scrape the domains if its given in the role::web::haproxy
+* [`profile::system::certs::manual`](#profile--certs--manual): Manual certificate TODO: lets not accept expired cert from users. need to update the underlying module openssl::cert_date_valid($_cert_file)
 * [`profile::system::cron::job`](#profile--cron--job): Wrapper that escapes cron command for easy use
 * [`profile::storage::mount`](#profile--storage--mount): regular mount
 * [`profile::storage::nfs::server::export`](#profile--storage--nfs--server--export): nfs export
@@ -414,13 +414,13 @@ Default value: `$::common::backup::netbackup::ca_cert`
 
 Bind Profile
 
-### <a name="profile--certs--letsencrypt"></a>`profile::certs::letsencrypt`
+### <a name="profile--certs--letsencrypt"></a>`profile::system::certs::letsencrypt`
 
 LetsEncrupt CA Signing
 
 #### Parameters
 
-The following parameters are available in the `profile::certs::letsencrypt` class:
+The following parameters are available in the `profile::system::certs::letsencrypt` class:
 
 * [`email`](#-profile--certs--letsencrypt--email)
 * [`epel`](#-profile--certs--letsencrypt--epel)
@@ -3586,13 +3586,13 @@ Data type: `Hash`
 
 Default value: `$common::network::wireguard::tunnels`
 
-### <a name="profile--nivisa"></a>`profile::nivisa`
+### <a name="profile--nivisa"></a>`profile::software::nivisa`
 
 NI-VISA Profile
 
 #### Parameters
 
-The following parameters are available in the `profile::nivisa` class:
+The following parameters are available in the `profile::software::nivisa` class:
 
 * [`enable`](#-profile--nivisa--enable)
 
@@ -3602,7 +3602,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::extras::computing::nivisa::enable`
+Default value: `$common::software::nivisa::enable`
 
 ### <a name="profile--nodejs"></a>`profile::appeng::nodejs`
 
@@ -10256,13 +10256,13 @@ Default value: `'nginx'`
 
 ## Defined types
 
-### <a name="profile--certs--ca_cert"></a>`profile::certs::ca_cert`
+### <a name="profile--certs--ca_cert"></a>`profile::system::certs::ca_cert`
 
 CA Cert
 
 #### Parameters
 
-The following parameters are available in the `profile::certs::ca_cert` defined type:
+The following parameters are available in the `profile::system::certs::ca_cert` defined type:
 
 * [`source`](#-profile--certs--ca_cert--source)
 * [`content`](#-profile--certs--ca_cert--content)
@@ -10292,7 +10292,7 @@ Data type: `Optional[Eit_types::Cert::Update]`
 
 Default value: `undef`
 
-### <a name="profile--certs--letsencrypt--domain"></a>`profile::certs::letsencrypt::domain`
+### <a name="profile--certs--letsencrypt--domain"></a>`profile::system::certs::letsencrypt::domain`
 
 Certificates
 NOTE: only haproxy role support letsencrypt for now
@@ -10300,7 +10300,7 @@ blackbox will scrape the domains if its given in the role::web::haproxy
 
 #### Parameters
 
-The following parameters are available in the `profile::certs::letsencrypt::domain` defined type:
+The following parameters are available in the `profile::system::certs::letsencrypt::domain` defined type:
 
 * [`email`](#-profile--certs--letsencrypt--domain--email)
 * [`ca`](#-profile--certs--letsencrypt--domain--ca)
@@ -10409,7 +10409,7 @@ Data type: `Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]]`
 
 Default value: `$::common::system::certs::letsencrypt::distribute_to`
 
-### <a name="profile--certs--manual"></a>`profile::certs::manual`
+### <a name="profile--certs--manual"></a>`profile::system::certs::manual`
 
 Manual certificate
 TODO: lets not accept expired cert from users.
@@ -10418,7 +10418,7 @@ openssl::cert_date_valid($_cert_file)
 
 #### Parameters
 
-The following parameters are available in the `profile::certs::manual` defined type:
+The following parameters are available in the `profile::system::certs::manual` defined type:
 
 * [`key`](#-profile--certs--manual--key)
 * [`cert`](#-profile--certs--manual--cert)
