@@ -1,6 +1,6 @@
 {
   "name": "enableit-profile",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "EnableIT ApS",
   "summary": "Obmondo profiles",
   "license": "Proprietary",
@@ -16,7 +16,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0"
+      "version_requirement": ">= 9.x.x"
     },
     {
       "name": "enableit/eit_types"
