@@ -13,7 +13,7 @@ jobs:
     name: Puppet docstring ci
     runs-on: ubuntu-latest
     container:
-      image: harbor.obmondo.com/obmondo/linuxaid-ci:v0.0.2
+      image: harbor.obmondo.com/obmondo/linuxaid-ci:v0.1.0
       credentials:
         username: ${{ secrets.HARBOR_USERNAME }}
         password: ${{ secrets.HARBOR_PASSWORD }}
