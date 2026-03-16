@@ -161,8 +161,8 @@ common::user_management::authentication::pam::password_session_lines:
     - 'optional      pam_sss.so'
 
 common::system::disabled_services:
-  'dnf-makecache.timer':
-  'dnf-automatic.timer':
+  - 'dnf-makecache.timer'
+  - 'dnf-automatic.timer'
 
 common::monitor::prometheus::env_file_path: '/etc/sysconfig'
 common::monitor::exporter::security::enable: true
