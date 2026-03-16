@@ -9,7 +9,7 @@
   "issues_url": "https://github.com/andskli/puppet-netbackup/issues",
   "tags": ["netbackup", "backup"],
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 4.7.0 < 6.0.0"},
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.7.0 < 10.0.0"},
     {"name":"saz/limits","version_requirement":">= 2.1.0 < 4.0.0"},
     {"name":"thias/sysctl","version_requirement":">= 1.0.0 < 3.0.0"},
     {"name":"spiette/selinux","version_requirement":">= 0.5.4 < 2.0.0"}
