@@ -83,10 +83,11 @@ class profile::collector::splunk::forwarder (
   } else {
 
     if $facts['init_system'] == 'systemd' {
-      common::services::systemd { 'SplunkForwarder.service':
-        ensure     => 'absent',
-        enable     => false,
-        noop_value => $noop_value,
+      # Ensure the SplunkForwarder service is stopped and disabled
+      service { 'SplunkForwarder.service':
+        ensure => 'stopped',
+        enable => false,
+        noop   => $noop_value,
       }
     }
 

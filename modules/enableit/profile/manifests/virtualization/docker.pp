@@ -208,7 +208,7 @@ class profile::virtualization::docker (
     }
   }
 
-  profile::cron::job { 'regularly prune docker system':
+  profile::system::cron::job { 'regularly prune docker system':
     enable  => $prune_system,
     command => "chronic docker system prune --all --force --filter until=$(( ${prune_duration} * 24 ))h",
     user    => 'root',

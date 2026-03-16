@@ -48,18 +48,27 @@ class common::network::tcpshaker (
     noop   => $noop_value,
   }
 
-  common::services::systemd { 'tcpshaker.service':
-    ensure     => $enable,
-    enable     => $enable,
-    noop_value => $noop_value,
-    unit       => {
-      'Description' => 'TCP Shaker Daemon Mode',
-    },
-    service    => {
-      'Type'      => 'simple',
-      'ExecStart' => "/opt/obmondo/bin/tcp_shaker -d -f ${config_location} -n ${requests_per_check} -c ${concurrency}",
-    },
-    require    => [
+  # Define the TCP Shaker Service content
+  $_tcpshaker_content = @("EOT"/)
+    [Unit]
+    Description=TCP Shaker Daemon Mode
+
+    [Service]
+    Type=simple
+    ExecStart=/opt/obmondo/bin/tcp_shaker -d -f ${config_location} -n ${requests_per_check} -c ${concurrency}
+
+    [Install]
+    WantedBy=multi-user.target
+    | EOT
+
+  # Deploy the systemd unit file
+  systemd::unit_file { 'tcpshaker.service':
+    ensure  => $enable ? { true => 'present', default => 'absent' },
+    enable  => $enable,
+    active  => $enable,
+    content => $_tcpshaker_content,
+    noop    => $noop_value,
+    require => [
       Package[$package_name],
       File[$config_location],
     ],

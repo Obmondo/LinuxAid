@@ -40,7 +40,7 @@ define common::backup::borg::push (
     env_vars       => {
       'BORG_RSH' => "ssh -i ${_ssh_key_file} -o BatchMode=yes",
     },
-    crontab_define => 'common::services::systemd',
+    crontab_define => 'systemd::unit_file',
     crontabs       => {
       "obmondo-backup-borg@${_reponame}.timer" => {
         ensure  => true, #lint:ignore:ensure_first_param
