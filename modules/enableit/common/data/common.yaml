@@ -311,7 +311,7 @@ common::system::disabled_services:
 
 # Puppet/Openvox
 common::system::openvox::version: "8.24.2"
-common::system::openvox::environment: "v1.5.4"
+common::system::openvox::environment: "v1.5.5"
 common::system::openvox::server: enableit.puppet.obmondo.com
 common::system::openvox::package_name: "openvox-agent"
 common::system::openvox::configure_agent: true

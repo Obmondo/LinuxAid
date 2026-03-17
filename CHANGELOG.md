@@ -2,6 +2,21 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.5
+
+### Bug Fixes
+- 22bb13b7 fix(security): correct exporter config — timeout, field name, CA
+
+### Configuration Changes
+- d4c105d0 chore(fix): changed the response key name, based on latest changes in api
+
+### Other Changes
+- ce05f82f Refactor Hiera namespaces to standardize system lookups
+- c236ae6b refactor: move profile::certs to profile::system::certs namespace
+- ffbe858a Update enableit modules dependencies and metadata
+- d3f7bb54 Change disabled_services data values from Hash to Array in hiera file to fix CI
+- 3ffa7e9c Remove Redmine module
+
 ## LinuxAid Release Version v1.5.4
 
 ### Bug Fixes
