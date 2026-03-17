@@ -32,7 +32,7 @@ class profile::system::sudoers (
 
   class { 'sudo':
     # This needs to end in a trailing slash because of the upstream module
-    # config_dir          => "${sudoers_d_dir}/",
+    extra_include_dirs  => [ "${sudoers_d_dir}" ],
     config_file_replace => true,
     purge               => $purge,
     require             => File[$sudoers_d_dir],

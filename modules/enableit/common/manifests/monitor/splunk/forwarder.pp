@@ -18,6 +18,8 @@
 #
 # @param enable Enable or disable the forwarder. Defaults to false.
 #
+# @param manage Whether to include the underlying profile to manage the forwarder.
+#
 # @param noop_value No-operation mode value. Defaults to undef.
 #
 # @groups settings enable, noop_value
@@ -43,6 +45,7 @@ class common::monitor::splunk::forwarder (
   Boolean               $manage              = false,
   Eit_types::Noop_Value $noop_value          = undef,
 ) {
+
 
   if $manage {
     contain profile::collector::splunk::forwarder

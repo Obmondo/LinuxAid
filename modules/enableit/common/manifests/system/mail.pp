@@ -149,7 +149,7 @@ class common::system::mail (
 
       '/var/spool/postfix/maildrop':
         group => 'postdrop',
-        mode  => lookup('common::mail::maildrop_perms'),
+        mode  => lookup('common::system::mail::maildrop_perms'),
     }
     $aliases.map |$target, $recipient| {
       mailalias { $target:
