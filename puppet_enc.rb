@@ -42,7 +42,7 @@ server_data = if TESTING
                 {
                   'tags' => ['tag1'],
                   'product_id' => 'silver',
-                  'linuxaid_tag' => 'master',
+                  'environment' => 'master',
                 }
               else
                 begin
@@ -59,7 +59,7 @@ server_data = if TESTING
 
 subscription_product_id = server_data&.dig('product_id')
 tag_keys = server_data&.dig('tags') || []
-linuxaid_tag = server_data&.dig('linuxaid_tag')&.gsub(/[^a-zA-Z0-9]/, '_')
+environment = server_data&.dig('environment')&.gsub(/[^a-zA-Z0-9]/, '_')
 
 # ensure that we don't have too many tags -- if we allow for more tags, we also
 # need to update hiera.yaml!
@@ -97,6 +97,6 @@ output = {
   'parameters' => parameters
 }
 
-output['environment'] = linuxaid_tag
+output['environment'] = environment
 
 puts YAML.dump(output)
