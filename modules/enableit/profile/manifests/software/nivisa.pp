@@ -1,6 +1,6 @@
 # NI-VISA Profile
 class profile::software::nivisa (
-  Boolean $enable = $common::extras::computing::nivisa::enable,
+  Boolean $enable = $common::software::nivisa::enable,
 ) {
 
   eit_repos::yum::ni_visa.include

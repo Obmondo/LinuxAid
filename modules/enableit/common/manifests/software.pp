@@ -75,6 +75,6 @@ class common::software {
   }
 
   if lookup('common::software::nivisa::manage', Boolean, undef, false) {
-    include common::software::openvmtools
+    include common::software::nivisa
   }
 }

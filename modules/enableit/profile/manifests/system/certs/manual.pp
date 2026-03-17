@@ -2,7 +2,7 @@
 # TODO: lets not accept expired cert from users.
 # need to update the underlying module
 # openssl::cert_date_valid($_cert_file)
-define profile::certs::manual (
+define profile::system::certs::manual (
   String               $key,
   String               $cert,
   Stdlib::Absolutepath $base_dir_parts,

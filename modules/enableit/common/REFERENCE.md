@@ -28,7 +28,7 @@
 * [`common::devices`](#common--devices): Class for managing common::devices
 * [`common::extras`](#common--extras): Class for things that does not classify into anything
 * [`common::extras::computing`](#common--extras--computing): Class for extra computing-related functionalities that do not fall into other categories
-* [`common::extras::computing::nivisa`](#common--extras--computing--nivisa): Class for managing NI-VISA 2019 configuration
+* [`common::software::nivisa`](#common--extras--computing--nivisa): Class for managing NI-VISA 2019 configuration
 * [`common::system::hosts`](#common--hosts): Class for managing host entries
 * [`common::logging`](#common--logging): Class for managing common logging configuration
 * [`common::logging::journal`](#common--logging--journal): Class for managing the journal configuration
@@ -1802,13 +1802,13 @@ Boolean to enable computing extras. Defaults to false.
 
 Default value: `false`
 
-### <a name="common--extras--computing--nivisa"></a>`common::extras::computing::nivisa`
+### <a name="common--extras--computing--nivisa"></a>`common::software::nivisa`
 
 Class for managing NI-VISA 2019 configuration
 
 #### Parameters
 
-The following parameters are available in the `common::extras::computing::nivisa` class:
+The following parameters are available in the `common::software::nivisa` class:
 
 * [`enable`](#-common--extras--computing--nivisa--enable)
 
