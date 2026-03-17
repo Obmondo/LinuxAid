@@ -1,0 +1,7 @@
+---
+openvas::install: true
+openvas::expose: true
+openvas::compose_dir: /opt/openvas
+openvas::feed_release: '24.10'
+openvas::web_port: 9392
+openvas::manage_docker: true
