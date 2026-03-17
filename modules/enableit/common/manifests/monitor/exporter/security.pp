@@ -32,7 +32,6 @@ class common::monitor::exporter::security (
   Stdlib::HTTPUrl       $vuls_server_url = 'https://vuls.obmondo.com',
   Stdlib::Absolutepath  $config_file     = "${common::monitor::exporter::config_dir}/security_exporter.yaml",
 ) {
-
   unless $enable { return() }
 
   $service_name = 'obmondo-security-exporter'
@@ -68,7 +67,7 @@ class common::monitor::exporter::security (
     package_ensure    => ensure_latest($enable),
     init_style        => $facts['service_provider'],
     install_method    => 'package',
-    options           => "-config=${config_file}",
+    options           => "serve --config=${config_file}",
     tag               => $::trusted['certname'],
     notify_service    => Service[$service_name],
     group             => 'root',
@@ -88,16 +87,23 @@ class common::monitor::exporter::security (
     group   => 'root',
     mode    => '0640',
     content => stdlib::to_yaml({
-      'vuls_server'     => {
-        'url'       => $vuls_server_url,
-        'timeout'   => '5m',
-        'cert_file' => "/etc/puppetlabs/puppet/ssl/certs/${host}.pem",
-        'key_file'  => "/etc/puppetlabs/puppet/ssl/private_keys/${host}.pem",
-      },
-      'listen_address'  => "${listen_host}:${listen_port}",
-      'scan_interval'   => '12h',
+        'vuls_server'    => {
+          'url'       => $vuls_server_url,
+          'timeout'   => '5m',
+          'cert_file' => "/etc/puppetlabs/puppet/ssl/certs/${host}.pem",
+          'key_file'  => "/etc/puppetlabs/puppet/ssl/private_keys/${host}.pem",
+        },
+        'listen_address' => "${listen_host}:${listen_port}",
+        'scan_interval'  => '12h',
     }),
     notify  => Service["${service_name}.service"],
+  }
+
+  systemd::dropin_file { "${service_name}_dropin":
+    ensure         => 'absent',
+    filename       => "${service_name}-override.conf",
+    unit           => "${service_name}.service",
+    notify_service => false,
   }
 
   # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
