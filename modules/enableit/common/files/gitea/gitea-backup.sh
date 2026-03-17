@@ -87,7 +87,7 @@ perform_s3_backup_rotation() {
 
 # Function to perform local backup rotation
 perform_local_backup_rotation() {
-    backups=("$BACKUP_DIR"/*)
+    backups=("$BACKUP_DIR"/${GITEA_DUMP_FILENAME}-*.zip)
     num_backups=${#backups[@]}
 
     if [ "$num_backups" -gt "$MAX_LOCAL_BACKUPS" ]; then
