@@ -1,4 +1,4 @@
-# profile::openvox::clientbucket for puppet clientbucket cache cleanup
+# profile::system::openvox::clientbucket for puppet clientbucket cache cleanup
 class profile::system::openvox::clientbucket (
   Eit_types::Noop_Value $noop_value = $common::system::openvox::noop_value,
 ) {

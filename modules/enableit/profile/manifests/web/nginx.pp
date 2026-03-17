@@ -40,7 +40,7 @@ class profile::web::nginx (
   # Create the drop-in override for the Nginx service
   systemd::unit_file { 'nginx.service':
     ensure  => 'present',
-    path    => '/etc/systemd/system/nginx.service.d/override.conf',
+    path    => '/etc/systemd/system/nginx.service.d',
     content => $_nginx_override_content,
     notify  => Service['nginx'],
   }

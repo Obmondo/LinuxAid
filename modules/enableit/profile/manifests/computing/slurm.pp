@@ -36,7 +36,7 @@ class profile::computing::slurm (
   Boolean                        $hwloc_enabled           = $::role::computing::slurm::hwloc_enabled,
   String                         $db_buffer_pool_size     = $::role::computing::slurm::db_buffer_pool_size,
   String                         $db_log_file_size        = $::role::computing::slurm::db_log_file_size,
-) inherits ::profile::computing {
+) {
 
   # We manually install SLURM and munge packages because we're using packages
   # that we've compiled ourselves. This gets a bit ugly, but it mostly works...

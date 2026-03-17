@@ -104,7 +104,7 @@ class role::mail::postfix (
   Variant[Stdlib::Filemode,String] $maildrop_perms           = 'u+rwX,g-r,g+wX',
   Eit_types::Noop_Value $noop_value                          = undef,
 ) {
-  class { 'common::mail':
+  class { 'common::system::mail':
     manage                                => $manage,
     inet_interfaces                       => $inet_interfaces,
     myhostname                            => $myhostname,

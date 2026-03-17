@@ -19,7 +19,7 @@
 * [`profile::computing::slurm::slurmctld`](#profile--computing--slurm--slurmctld): Slurm slurm::slurmctld
 * [`profile::computing::slurm::slurmd`](#profile--computing--slurm--slurmd): Slurm slurm::slurmd
 * [`profile::computing::slurm::slurmdbd`](#profile--computing--slurm--slurmdbd): Slurm slurm::slurmctld
-* [`profile::system::cron`](#profile--cron): cron
+* [`profile::system::cron`](#profile--system--cron): cron
 * [`profile::db::cassandra`](#profile--db--cassandra): Profile for managing Cassandra database
 * [`profile::db::elasticsearch`](#profile--db--elasticsearch): Elasticsearch profile  Puppet module does not support 8.x and Zscaler needs 8.x only  Cert Setup NOTE: The cert are automatically setup when
 * [`profile::db::elasticsearch::cerebro`](#profile--db--elasticsearch--cerebro): Cerebro
@@ -54,11 +54,11 @@
 * [`profile::network::wireguard`](#profile--network--wireguard): Wireguard
 * [`profile::software::nivisa`](#profile--nivisa): NI-VISA Profile
 * [`profile::appeng::nodejs`](#profile--nodejs): NodeJs Profile
-* [`profile::system::ntpd`](#profile--ntpd): NTP
-* [`profile::openvox`](#profile--openvox): Manage openvox-agent so we can setup openvox-agent package
-* [`profile::openvox::clientbucket`](#profile--openvox--clientbucket): profile::openvox::clientbucket for puppet clientbucket cache cleanup
-* [`profile::openvox::linuxaid_cli`](#profile--openvox--linuxaid_cli): Linuxaid-cli setup
-* [`profile::openvox::run_openvox`](#profile--openvox--run_openvox): Run openvox-agent on client nodes
+* [`profile::system::ntpd`](#profile--system--ntpd): NTP
+* [`profile::system::openvox`](#profile--system--openvox): Manage openvox-agent so we can setup openvox-agent package
+* [`profile::system::openvox::clientbucket`](#profile--system--openvox--clientbucket): profile::system::openvox::clientbucket for puppet clientbucket cache cleanup
+* [`profile::system::openvox::linuxaid_cli`](#profile--system--openvox--linuxaid_cli): Linuxaid-cli setup
+* [`profile::system::openvox::run_openvox`](#profile--system--openvox--run_openvox): Run openvox-agent on client nodes
 * [`profile::package_management::guix`](#profile--package_management--guix): Guix server
 * [`profile::package_management::guix::client`](#profile--package_management--guix--client): Guix client
 * [`profile::package_management::packagesign`](#profile--package_management--packagesign): Freight package signing tool
@@ -152,7 +152,7 @@
 * [`profile::system::certs::ca_cert`](#profile--certs--ca_cert): CA Cert
 * [`profile::system::certs::letsencrypt::domain`](#profile--certs--letsencrypt--domain): Certificates NOTE: only haproxy role support letsencrypt for now blackbox will scrape the domains if its given in the role::web::haproxy
 * [`profile::system::certs::manual`](#profile--certs--manual): Manual certificate TODO: lets not accept expired cert from users. need to update the underlying module openssl::cert_date_valid($_cert_file)
-* [`profile::system::cron::job`](#profile--cron--job): Wrapper that escapes cron command for easy use
+* [`profile::system::cron::job`](#profile--system--cron--job): Wrapper that escapes cron command for easy use
 * [`profile::storage::mount`](#profile--storage--mount): regular mount
 * [`profile::storage::nfs::server::export`](#profile--storage--nfs--server--export): nfs export
 * [`profile::system::selinux::fcontext`](#profile--system--selinux--fcontext)
@@ -1084,7 +1084,7 @@ Data type: `String`
 
 Default value: `'127.0.0.1'`
 
-### <a name="profile--cron"></a>`profile::system::cron`
+### <a name="profile--system--cron"></a>`profile::system::cron`
 
 cron
 
@@ -1092,10 +1092,10 @@ cron
 
 The following parameters are available in the `profile::system::cron` class:
 
-* [`purge_unmanaged`](#-profile--cron--purge_unmanaged)
-* [`jobs`](#-profile--cron--jobs)
+* [`purge_unmanaged`](#-profile--system--cron--purge_unmanaged)
+* [`jobs`](#-profile--system--cron--jobs)
 
-##### <a name="-profile--cron--purge_unmanaged"></a>`purge_unmanaged`
+##### <a name="-profile--system--cron--purge_unmanaged"></a>`purge_unmanaged`
 
 Data type: `Variant[Boolean, Enum['root-only']]`
 
@@ -1103,7 +1103,7 @@ Data type: `Variant[Boolean, Enum['root-only']]`
 
 Default value: `$common::system::cron::purge_unmanaged`
 
-##### <a name="-profile--cron--jobs"></a>`jobs`
+##### <a name="-profile--system--cron--jobs"></a>`jobs`
 
 Data type: `Hash`
 
@@ -3671,7 +3671,7 @@ Data type: `Boolean`
 
 Default value: `true`
 
-### <a name="profile--ntpd"></a>`profile::system::ntpd`
+### <a name="profile--system--ntpd"></a>`profile::system::ntpd`
 
 NTP
 
@@ -3679,19 +3679,19 @@ NTP
 
 The following parameters are available in the `profile::system::ntpd` class:
 
-* [`servers`](#-profile--ntpd--servers)
-* [`burst`](#-profile--ntpd--burst)
-* [`restrict`](#-profile--ntpd--restrict)
-* [`tinker`](#-profile--ntpd--tinker)
-* [`panic`](#-profile--ntpd--panic)
+* [`servers`](#-profile--system--ntpd--servers)
+* [`burst`](#-profile--system--ntpd--burst)
+* [`restrict`](#-profile--system--ntpd--restrict)
+* [`tinker`](#-profile--system--ntpd--tinker)
+* [`panic`](#-profile--system--ntpd--panic)
 
-##### <a name="-profile--ntpd--servers"></a>`servers`
+##### <a name="-profile--system--ntpd--servers"></a>`servers`
 
 Data type: `Array[Stdlib::Host]`
 
 
 
-##### <a name="-profile--ntpd--burst"></a>`burst`
+##### <a name="-profile--system--ntpd--burst"></a>`burst`
 
 Data type: `Optional[Boolean]`
 
@@ -3699,7 +3699,7 @@ Data type: `Optional[Boolean]`
 
 Default value: `false`
 
-##### <a name="-profile--ntpd--restrict"></a>`restrict`
+##### <a name="-profile--system--ntpd--restrict"></a>`restrict`
 
 Data type: `Optional[Array[String]]`
 
@@ -3707,7 +3707,7 @@ Data type: `Optional[Array[String]]`
 
 Default value: `[]`
 
-##### <a name="-profile--ntpd--tinker"></a>`tinker`
+##### <a name="-profile--system--ntpd--tinker"></a>`tinker`
 
 Data type: `Optional[Boolean]`
 
@@ -3715,7 +3715,7 @@ Data type: `Optional[Boolean]`
 
 Default value: `false`
 
-##### <a name="-profile--ntpd--panic"></a>`panic`
+##### <a name="-profile--system--ntpd--panic"></a>`panic`
 
 Data type: `Optional[Integer[0]]`
 
@@ -3723,108 +3723,100 @@ Data type: `Optional[Integer[0]]`
 
 Default value: `undef`
 
-### <a name="profile--openvox"></a>`profile::openvox`
+### <a name="profile--system--openvox"></a>`profile::system::openvox`
 
 Manage openvox-agent
 so we can setup openvox-agent package
 
 #### Parameters
 
-The following parameters are available in the `profile::openvox` class:
+The following parameters are available in the `profile::system::openvox` class:
 
-* [`server`](#-profile--openvox--server)
-* [`server_port`](#-profile--openvox--server_port)
-* [`version`](#-profile--openvox--version)
-* [`config_file`](#-profile--openvox--config_file)
-* [`run_agent_as_noop`](#-profile--openvox--run_agent_as_noop)
-* [`extra_main_settings`](#-profile--openvox--extra_main_settings)
-* [`aio_package_name`](#-profile--openvox--aio_package_name)
-* [`environment`](#-profile--openvox--environment)
-* [`noop_value`](#-profile--openvox--noop_value)
-* [`package_version_suffix`](#-profile--openvox--package_version_suffix)
-* [`package_version_prefix`](#-profile--openvox--package_version_prefix)
+* [`server`](#-profile--system--openvox--server)
+* [`server_port`](#-profile--system--openvox--server_port)
+* [`version`](#-profile--system--openvox--version)
+* [`config_file`](#-profile--system--openvox--config_file)
+* [`run_agent_as_noop`](#-profile--system--openvox--run_agent_as_noop)
+* [`extra_main_settings`](#-profile--system--openvox--extra_main_settings)
+* [`aio_package_name`](#-profile--system--openvox--aio_package_name)
+* [`environment`](#-profile--system--openvox--environment)
+* [`noop_value`](#-profile--system--openvox--noop_value)
+* [`package_version_suffix`](#-profile--system--openvox--package_version_suffix)
+* [`package_version_prefix`](#-profile--system--openvox--package_version_prefix)
 
-##### <a name="-profile--openvox--server"></a>`server`
+##### <a name="-profile--system--openvox--server"></a>`server`
 
 Data type: `Stdlib::Host`
 
 
 
-Default value: `$common::openvox::server`
+Default value: `$common::system::openvox::server`
 
-##### <a name="-profile--openvox--server_port"></a>`server_port`
+##### <a name="-profile--system--openvox--server_port"></a>`server_port`
 
 Data type: `Stdlib::Port`
 
 
 
-Default value: `$common::openvox::server_port`
+Default value: `$common::system::openvox::server_port`
 
-##### <a name="-profile--openvox--version"></a>`version`
+##### <a name="-profile--system--openvox--version"></a>`version`
 
 Data type: `Eit_types::Version`
 
 
 
-Default value: `$common::openvox::version`
+Default value: `$common::system::openvox::version`
 
-##### <a name="-profile--openvox--config_file"></a>`config_file`
+##### <a name="-profile--system--openvox--config_file"></a>`config_file`
 
 Data type: `Stdlib::Absolutepath`
 
 
 
-Default value: `$common::openvox::config_file`
+Default value: `$common::system::openvox::config_file`
 
-##### <a name="-profile--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
+##### <a name="-profile--system--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
 
 Data type: `Boolean`
 
 
 
-Default value: `$common::openvox::run_agent_as_noop`
+Default value: `$common::system::openvox::run_agent_as_noop`
 
-##### <a name="-profile--openvox--extra_main_settings"></a>`extra_main_settings`
+##### <a name="-profile--system--openvox--extra_main_settings"></a>`extra_main_settings`
 
 Data type: `Optional[Hash]`
 
 
 
-Default value: `$common::openvox::extra_main_settings`
+Default value: `$common::system::openvox::extra_main_settings`
 
-##### <a name="-profile--openvox--aio_package_name"></a>`aio_package_name`
-
-Data type: `String`
-
-
-
-Default value: `$common::openvox::package_name`
-
-##### <a name="-profile--openvox--environment"></a>`environment`
+##### <a name="-profile--system--openvox--aio_package_name"></a>`aio_package_name`
 
 Data type: `String`
 
 
 
-Default value: `$common::openvox::environment`
+Default value: `$common::system::openvox::package_name`
 
-##### <a name="-profile--openvox--noop_value"></a>`noop_value`
+##### <a name="-profile--system--openvox--environment"></a>`environment`
+
+Data type: `String`
+
+
+
+Default value: `$common::system::openvox::environment`
+
+##### <a name="-profile--system--openvox--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::openvox::noop_value`
+Default value: `$common::system::openvox::noop_value`
 
-##### <a name="-profile--openvox--package_version_suffix"></a>`package_version_suffix`
-
-Data type: `Optional[String]`
-
-
-
-Default value: `undef`
-
-##### <a name="-profile--openvox--package_version_prefix"></a>`package_version_prefix`
+##### <a name="-profile--system--openvox--package_version_suffix"></a>`package_version_suffix`
 
 Data type: `Optional[String]`
 
@@ -3832,59 +3824,67 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
-### <a name="profile--openvox--clientbucket"></a>`profile::openvox::clientbucket`
+##### <a name="-profile--system--openvox--package_version_prefix"></a>`package_version_prefix`
 
-profile::openvox::clientbucket for puppet clientbucket cache cleanup
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+### <a name="profile--system--openvox--clientbucket"></a>`profile::system::openvox::clientbucket`
+
+profile::system::openvox::clientbucket for puppet clientbucket cache cleanup
 
 #### Parameters
 
-The following parameters are available in the `profile::openvox::clientbucket` class:
+The following parameters are available in the `profile::system::openvox::clientbucket` class:
 
-* [`noop_value`](#-profile--openvox--clientbucket--noop_value)
+* [`noop_value`](#-profile--system--openvox--clientbucket--noop_value)
 
-##### <a name="-profile--openvox--clientbucket--noop_value"></a>`noop_value`
+##### <a name="-profile--system--openvox--clientbucket--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::openvox::noop_value`
+Default value: `$common::system::openvox::noop_value`
 
-### <a name="profile--openvox--linuxaid_cli"></a>`profile::openvox::linuxaid_cli`
+### <a name="profile--system--openvox--linuxaid_cli"></a>`profile::system::openvox::linuxaid_cli`
 
 Linuxaid-cli setup
 
 #### Parameters
 
-The following parameters are available in the `profile::openvox::linuxaid_cli` class:
+The following parameters are available in the `profile::system::openvox::linuxaid_cli` class:
 
-* [`noop_value`](#-profile--openvox--linuxaid_cli--noop_value)
+* [`noop_value`](#-profile--system--openvox--linuxaid_cli--noop_value)
 
-##### <a name="-profile--openvox--linuxaid_cli--noop_value"></a>`noop_value`
+##### <a name="-profile--system--openvox--linuxaid_cli--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::openvox::noop_value`
+Default value: `$common::system::openvox::noop_value`
 
-### <a name="profile--openvox--run_openvox"></a>`profile::openvox::run_openvox`
+### <a name="profile--system--openvox--run_openvox"></a>`profile::system::openvox::run_openvox`
 
 Run openvox-agent on client nodes
 
 #### Parameters
 
-The following parameters are available in the `profile::openvox::run_openvox` class:
+The following parameters are available in the `profile::system::openvox::run_openvox` class:
 
-* [`noop_value`](#-profile--openvox--run_openvox--noop_value)
+* [`noop_value`](#-profile--system--openvox--run_openvox--noop_value)
 
-##### <a name="-profile--openvox--run_openvox--noop_value"></a>`noop_value`
+##### <a name="-profile--system--openvox--run_openvox--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
 
 
-Default value: `$common::openvox::noop_value`
+Default value: `$common::system::openvox::noop_value`
 
 ### <a name="profile--package_management--guix"></a>`profile::package_management::guix`
 
@@ -10476,7 +10476,7 @@ Data type: `Optional[Array[Stdlib::Port]]`
 
 Default value: `undef`
 
-### <a name="profile--cron--job"></a>`profile::system::cron::job`
+### <a name="profile--system--cron--job"></a>`profile::system::cron::job`
 
 Wrapper that escapes cron command for easy use
 
@@ -10484,24 +10484,24 @@ Wrapper that escapes cron command for easy use
 
 The following parameters are available in the `profile::system::cron::job` defined type:
 
-* [`command`](#-profile--cron--job--command)
-* [`enable`](#-profile--cron--job--enable)
-* [`user`](#-profile--cron--job--user)
-* [`weekday`](#-profile--cron--job--weekday)
-* [`month`](#-profile--cron--job--month)
-* [`monthday`](#-profile--cron--job--monthday)
-* [`hour`](#-profile--cron--job--hour)
-* [`minute`](#-profile--cron--job--minute)
-* [`environment`](#-profile--cron--job--environment)
-* [`noop_value`](#-profile--cron--job--noop_value)
+* [`command`](#-profile--system--cron--job--command)
+* [`enable`](#-profile--system--cron--job--enable)
+* [`user`](#-profile--system--cron--job--user)
+* [`weekday`](#-profile--system--cron--job--weekday)
+* [`month`](#-profile--system--cron--job--month)
+* [`monthday`](#-profile--system--cron--job--monthday)
+* [`hour`](#-profile--system--cron--job--hour)
+* [`minute`](#-profile--system--cron--job--minute)
+* [`environment`](#-profile--system--cron--job--environment)
+* [`noop_value`](#-profile--system--cron--job--noop_value)
 
-##### <a name="-profile--cron--job--command"></a>`command`
+##### <a name="-profile--system--cron--job--command"></a>`command`
 
 Data type: `String`
 
 
 
-##### <a name="-profile--cron--job--enable"></a>`enable`
+##### <a name="-profile--system--cron--job--enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -10509,7 +10509,7 @@ Data type: `Boolean`
 
 Default value: `true`
 
-##### <a name="-profile--cron--job--user"></a>`user`
+##### <a name="-profile--system--cron--job--user"></a>`user`
 
 Data type: `Eit_types::User`
 
@@ -10517,7 +10517,7 @@ Data type: `Eit_types::User`
 
 Default value: `'root'`
 
-##### <a name="-profile--cron--job--weekday"></a>`weekday`
+##### <a name="-profile--system--cron--job--weekday"></a>`weekday`
 
 Data type: `Variant[Enum['*'], Eit_types::Time::Weekdays]`
 
@@ -10525,7 +10525,7 @@ Data type: `Variant[Enum['*'], Eit_types::Time::Weekdays]`
 
 Default value: `'*'`
 
-##### <a name="-profile--cron--job--month"></a>`month`
+##### <a name="-profile--system--cron--job--month"></a>`month`
 
 Data type: `Cron::Month`
 
@@ -10533,7 +10533,7 @@ Data type: `Cron::Month`
 
 Default value: `'*'`
 
-##### <a name="-profile--cron--job--monthday"></a>`monthday`
+##### <a name="-profile--system--cron--job--monthday"></a>`monthday`
 
 Data type: `Variant[Enum['*'], Eit_types::Time::Monthday]`
 
@@ -10541,7 +10541,7 @@ Data type: `Variant[Enum['*'], Eit_types::Time::Monthday]`
 
 Default value: `'*'`
 
-##### <a name="-profile--cron--job--hour"></a>`hour`
+##### <a name="-profile--system--cron--job--hour"></a>`hour`
 
 Data type: `Profile::System::Cron::Hour`
 
@@ -10549,7 +10549,7 @@ Data type: `Profile::System::Cron::Hour`
 
 Default value: `'*'`
 
-##### <a name="-profile--cron--job--minute"></a>`minute`
+##### <a name="-profile--system--cron--job--minute"></a>`minute`
 
 Data type: `Profile::System::Cron::Minute`
 
@@ -10557,7 +10557,7 @@ Data type: `Profile::System::Cron::Minute`
 
 Default value: `'*'`
 
-##### <a name="-profile--cron--job--environment"></a>`environment`
+##### <a name="-profile--system--cron--job--environment"></a>`environment`
 
 Data type: `Hash[String, String]`
 
@@ -10565,7 +10565,7 @@ Data type: `Hash[String, String]`
 
 Default value: `{}`
 
-##### <a name="-profile--cron--job--noop_value"></a>`noop_value`
+##### <a name="-profile--system--cron--job--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 

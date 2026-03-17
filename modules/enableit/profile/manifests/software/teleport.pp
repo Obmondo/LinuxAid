@@ -30,7 +30,7 @@ class profile::software::teleport (
   # Create the drop-in override file
   systemd::unit_file { 'teleport.service':
     ensure  => ensure_present($enable),
-    path    => '/etc/systemd/system/teleport.service.d/override.conf',
+    path    => '/etc/systemd/system/teleport.service.d',
     content => $_teleport_override,
     notify  => Service['teleport'],
   }

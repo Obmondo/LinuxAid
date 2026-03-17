@@ -1,5 +1,4 @@
 ---
-common::openvox::linuxaid_cli::checksums:
 common::monitor::prometheus::install_method: "url"
 common::monitor::prometheus::env_file_path: "/etc/default"
 common::monitor::prometheus::server::checksums:
