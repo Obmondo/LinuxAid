@@ -90,13 +90,12 @@ class common::monitor::exporter::security (
     content => stdlib::to_yaml({
       'vuls_server'     => {
         'url'       => $vuls_server_url,
-        'timeout'   => '30s',
+        'timeout'   => '5m',
         'cert_file' => "/etc/puppetlabs/puppet/ssl/certs/${host}.pem",
         'key_file'  => "/etc/puppetlabs/puppet/ssl/private_keys/${host}.pem",
-        'ca_file'   => '/etc/puppetlabs/puppet/ssl/certs/ca.pem',
       },
       'listen_address'  => "${listen_host}:${listen_port}",
-      'push_interval'   => '12h',
+      'scan_interval'   => '12h',
     }),
     notify  => Service["${service_name}.service"],
   }
