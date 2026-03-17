@@ -44,8 +44,7 @@ class common::system::certs::letsencrypt (
   Optional[Variant[Stdlib::Absolutepath, String]]         $deploy_hook_command = undef,
   Array[Variant[Eit_types::Certname, Eit_types::Host]]    $distribute_to       = [],
 ) {
-
-  $public_ips = lookup('common::settings::publicips', Array, undef, [])
+  $public_ips = lookup('common::system::publicips', Array, undef, [])
 
   if $domains.size > 0 {
     sort_domains_on_tld($domains, $public_ips).each |$cn, $san| {
@@ -54,5 +53,4 @@ class common::system::certs::letsencrypt (
       }
     }
   }
-
 }

@@ -125,8 +125,8 @@ class eit_haproxy::basic_config (
       target  => $haproxy::config_file,
       order   => '12-acme',
       content => epp('eit_haproxy/acme_section.epp', {
-        'contact' => $acme_contact,
-        'acme_ca' => $acme_ca,
+          'contact' => $acme_contact,
+          'acme_ca' => $acme_ca,
       }),
     }
   }
@@ -206,7 +206,7 @@ class eit_haproxy::basic_config (
         $opts['domains']
     })
 
-    $public_ips = lookup('common::settings::publicips', Array, undef, [])
+    $public_ips = lookup('common::system::publicips', Array, undef, [])
 
     if $use_lets_encrypt and !$_use_native_acme {
       sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
