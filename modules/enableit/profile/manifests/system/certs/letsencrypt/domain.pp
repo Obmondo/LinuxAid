@@ -1,7 +1,7 @@
 # Certificates
 # NOTE: only haproxy role support letsencrypt for now
 # blackbox will scrape the domains if its given in the role::web::haproxy
-define profile::certs::letsencrypt::domain (
+define profile::system::certs::letsencrypt::domain (
   Eit_types::Email                                               $email               = $::common::system::certs::letsencrypt::email,
   Enum[
     'production',
@@ -18,7 +18,7 @@ define profile::certs::letsencrypt::domain (
   Optional[Array[Variant[Eit_types::Certname, Eit_types::Host]]] $distribute_to       = $::common::system::certs::letsencrypt::distribute_to, # lint:ignore:140chars
 ) {
 
-  include ::profile::certs::letsencrypt
+  include ::profile::system::certs::letsencrypt
 
   # The rejected_domains comes from the function sort_domains_on_tld
   if $name == 'rejected_domains' {

@@ -1,5 +1,5 @@
 # LetsEncrupt CA Signing
-class profile::certs::letsencrypt (
+class profile::system::certs::letsencrypt (
   Eit_types::Email $email          = $::common::system::certs::letsencrypt::email,
   Boolean          $epel           = false,
   Enum[

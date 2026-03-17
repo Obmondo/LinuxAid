@@ -204,13 +204,6 @@ class profile::system::authentication::sssd (
         notify  => Service['sssd'],
       }
 
-      # Manage the service state
-      service { 'sssd':
-        ensure => 'running',
-        enable => true,
-        noop   => $noop_value,
-      }
-
       if $_sssd_sockets_supported {
         $_enable_socket_services = ensure_service($enable)
 

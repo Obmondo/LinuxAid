@@ -40,7 +40,11 @@ class common::monitor::splunk::forwarder (
   Integer               $log_keep_count      = 5,
   Eit_types::Bytes      $log_max_file_size_b = 25000000,
   Boolean               $enable              = false,
+  Boolean               $manage              = false,
   Eit_types::Noop_Value $noop_value          = undef,
 ) {
-  contain profile::collector::splunk::forwarder
+ 
+  if $manage {
+    contain profile::collector::splunk::forwarder
+  }
 }
