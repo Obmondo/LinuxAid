@@ -1,10 +1,7 @@
 ---
-common::mail::maildrop_perms: 'o=rwx,g=wx'
-
+common::system::mail::maildrop_perms: 'o=rwx,g=wx'
 common::logging::log_dir_group: 'root'
-
 common::user_management::security::selinux::enable: true
-
 common::user_management::sshd::subsystems:
   sftp:
     '/usr/libexec/openssh/sftp-server -f AUTHPRIV -l INFO'

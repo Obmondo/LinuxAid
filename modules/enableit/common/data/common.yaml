@@ -20,7 +20,7 @@ lookup_options:
     merge: "unique"
   common::system::ssh_authorized_keys:
     merge: "deep"
-  common::services::disabled_services:
+  common::system::disabled_services:
     merge: "unique"
   common::system::package::manage:
     merge: "deep"
@@ -184,7 +184,6 @@ common::system::classes:
 ## System Settings
 common::system::repo::manage: true
 common::system::cron::purge_unmanaged: false
-common::system::services::manage: true
 common::user_management::security::manage: true
 common::system::mail::manage: false
 
@@ -305,7 +304,7 @@ common::system::package::default_packages:
   - "tmux"
   - "net-tools"
 
-common::system::services::disabled_services:
+common::system::disabled_services:
   - "smartd"
   - "rpc-svcgssd"
   - "sssd-pac"
@@ -327,7 +326,7 @@ common::system::openvox::configure_agent: true
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
 common::system::openvox::linuxaid_cli::install_method: package
-common::system::openvox::linuxaid_cli::version: 1.2.0
+common::system::openvox::linuxaid_cli::version: 1.2.1
 common::system::openvox::linuxaid_cli::checksums:
   1.2.0: 53d285fb6a8fca93609fe0ce71fc31ea0158aafefb3e7890b82b09a6d18134e4
   1.2.1: 4b3f7e4acc244a17e8c1294ce2029107b542cec9b6627f39387397a6406bd0af

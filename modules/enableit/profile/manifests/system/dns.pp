@@ -98,7 +98,7 @@ class profile::system::dns (
       # Create the drop-in override for dnsmasq
       systemd::unit_file { 'dnsmasq.service':
         ensure  => 'present',
-        path    => '/etc/systemd/system/dnsmasq.service.d/override.conf',
+        path    => '/etc/systemd/system/dnsmasq.service.d',
         content => $_dnsmasq_override_content,
         noop    => $noop_value,
         notify  => Service['dnsmasq.service'],

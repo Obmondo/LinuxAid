@@ -19,23 +19,23 @@
 * [`common::backup::db::pgsql`](#common--backup--db--pgsql): Class for managing PostgreSQL backup configuration and overrides
 * [`common::backup::gitea`](#common--backup--gitea): Class for managing Gitea backups
 * [`common::backup::netbackup`](#common--backup--netbackup): Class for managing NetBackup common backup configuration
-* [`common::system::certs`](#common--certs): Class for managing common certificates and CA certificates
-* [`common::system::certs::letsencrypt`](#common--certs--letsencrypt): Class for managing Let's Encrypt certificates
+* [`common::system::certs`](#common--system--certs): Class for managing common certificates and CA certificates
+* [`common::system::certs::letsencrypt`](#common--system--certs--letsencrypt): Class for managing Let's Encrypt certificates
 * [`common::convenience`](#common--convenience): Class for common convenience utilities
 * [`common::convenience::bash`](#common--convenience--bash): Class for managing common::convenience::bash
 * [`common::convenience::tmux`](#common--convenience--tmux): Class for managing common::convenience::tmux
-* [`common::system::cron`](#common--cron): Class for managing cron jobs
+* [`common::system::cron`](#common--system--cron): Class for managing cron jobs
 * [`common::devices`](#common--devices): Class for managing common::devices
 * [`common::extras`](#common--extras): Class for things that does not classify into anything
 * [`common::extras::computing`](#common--extras--computing): Class for extra computing-related functionalities that do not fall into other categories
 * [`common::software::nivisa`](#common--extras--computing--nivisa): Class for managing NI-VISA 2019 configuration
-* [`common::system::hosts`](#common--hosts): Class for managing host entries
+* [`common::system::hosts`](#common--system--hosts): Class for managing host entries
 * [`common::logging`](#common--logging): Class for managing common logging configuration
 * [`common::logging::journal`](#common--logging--journal): Class for managing the journal configuration
 * [`common::logging::logrotate`](#common--logging--logrotate): Class for managing logrotate rules
 * [`common::logging::rsyslog`](#common--logging--rsyslog): Class for managing rsyslog configuration
 * [`common::storage::lvm`](#common--lvm): Class for managing LVM setup with LV creation
-* [`common::mail`](#common--mail): Class for managing common postfix mail setup
+* [`common::system::mail`](#common--system--mail): Class for managing common postfix mail setup
 * [`common::monitor`](#common--monitor): Class for managing monitoring defaults
 * [`common::monitor::exporter`](#common--monitor--exporter): Class for managing the common::monitor::exporter
 * [`common::monitor::exporter::blackbox`](#common--monitor--exporter--blackbox): Class for managing the Prometheus Blackbox Exporter
@@ -73,9 +73,9 @@
 * [`common::network::tcpshaker`](#common--network--tcpshaker): Class for installing and setting up tcp shaker in daemon mode
 * [`common::network::vrrp`](#common--network--vrrp): Class for managing VRRP configuration
 * [`common::network::wireguard`](#common--network--wireguard): Class for managing Wireguard network configuration
-* [`common::openvox`](#common--openvox): Class for managing openvox installation and configuration
-* [`common::system::package`](#common--package): Class for managing the installation and removal of packages
-* [`common::system::repo`](#common--repo): Class for managing software repositories
+* [`common::system::openvox`](#common--system--openvox): Class for managing openvox installation and configuration
+* [`common::system::package`](#common--system--package): Class for managing the installation and removal of packages
+* [`common::system::repo`](#common--system--repo): Class for managing software repositories
 * [`common::user_management::security`](#common--security): Class for managing security settings including certs and auditd
 * [`common::user_management::security::auditd`](#common--security--auditd): Class for managing auditd configuration
 * [`common::user_management::security::effective_group`](#common--security--effective_group): Class for managing the effective group ID setting
@@ -152,7 +152,7 @@
 * [`common::services::initscript`](#common--services--initscript): Class for managing common services initscript
 * [`common::services::systemd`](#common--services--systemd): Class for managing common systemd services
 * [`common::system::selinux::module`](#common--system--selinux--module): Class for managing SELinux modules
-* [`common::systemd::timer`](#common--systemd--timer): Puppet class for systemd timer drop-in replacement for cron
+* [`common::system::systemd::timer`](#common--system--systemd--timer): Puppet class for systemd timer drop-in replacement for cron
 
 ## Classes
 
@@ -1463,7 +1463,7 @@ List of paths to exclude from backup. Defaults to empty array.
 
 Default value: `[]`
 
-### <a name="common--certs"></a>`common::system::certs`
+### <a name="common--system--certs"></a>`common::system::certs`
 
 Class for managing common certificates and CA certificates
 
@@ -1471,18 +1471,18 @@ Class for managing common certificates and CA certificates
 
 The following parameters are available in the `common::system::certs` class:
 
-* [`__base_dir`](#-common--certs--__base_dir)
-* [`manual`](#-common--certs--manual)
-* [`ca_certs`](#-common--certs--ca_certs)
-* [`encrypt_params`](#-common--certs--encrypt_params)
+* [`__base_dir`](#-common--system--certs--__base_dir)
+* [`manual`](#-common--system--certs--manual)
+* [`ca_certs`](#-common--system--certs--ca_certs)
+* [`encrypt_params`](#-common--system--certs--encrypt_params)
 
-##### <a name="-common--certs--__base_dir"></a>`__base_dir`
+##### <a name="-common--system--certs--__base_dir"></a>`__base_dir`
 
 Data type: `Stdlib::Absolutepath`
 
 The absolute path to the base directory. This parameter is mandatory.
 
-##### <a name="-common--certs--manual"></a>`manual`
+##### <a name="-common--system--certs--manual"></a>`manual`
 
 Data type:
 
@@ -1499,7 +1499,7 @@ A hash of manual certificates with domain names as keys and corresponding certif
 
 Default value: `{}`
 
-##### <a name="-common--certs--ca_certs"></a>`ca_certs`
+##### <a name="-common--system--certs--ca_certs"></a>`ca_certs`
 
 Data type:
 
@@ -1514,7 +1514,7 @@ A hash of CA certificates with names as keys and their parameters as values. Def
 
 Default value: `{}`
 
-##### <a name="-common--certs--encrypt_params"></a>`encrypt_params`
+##### <a name="-common--system--certs--encrypt_params"></a>`encrypt_params`
 
 Data type: `Eit_types::Encrypt::Params`
 
@@ -1530,7 +1530,7 @@ Default value:
   ]
 ```
 
-### <a name="common--certs--letsencrypt"></a>`common::system::certs::letsencrypt`
+### <a name="common--system--certs--letsencrypt"></a>`common::system::certs::letsencrypt`
 
 Class for managing Let's Encrypt certificates
 
@@ -1538,19 +1538,19 @@ Class for managing Let's Encrypt certificates
 
 The following parameters are available in the `common::system::certs::letsencrypt` class:
 
-* [`email`](#-common--certs--letsencrypt--email)
-* [`ca`](#-common--certs--letsencrypt--ca)
-* [`renew`](#-common--certs--letsencrypt--renew)
-* [`http_01_port`](#-common--certs--letsencrypt--http_01_port)
-* [`challenges`](#-common--certs--letsencrypt--challenges)
-* [`domains`](#-common--certs--letsencrypt--domains)
-* [`warning`](#-common--certs--letsencrypt--warning)
-* [`critical`](#-common--certs--letsencrypt--critical)
-* [`cert_host`](#-common--certs--letsencrypt--cert_host)
-* [`deploy_hook_command`](#-common--certs--letsencrypt--deploy_hook_command)
-* [`distribute_to`](#-common--certs--letsencrypt--distribute_to)
+* [`email`](#-common--system--certs--letsencrypt--email)
+* [`ca`](#-common--system--certs--letsencrypt--ca)
+* [`renew`](#-common--system--certs--letsencrypt--renew)
+* [`http_01_port`](#-common--system--certs--letsencrypt--http_01_port)
+* [`challenges`](#-common--system--certs--letsencrypt--challenges)
+* [`domains`](#-common--system--certs--letsencrypt--domains)
+* [`warning`](#-common--system--certs--letsencrypt--warning)
+* [`critical`](#-common--system--certs--letsencrypt--critical)
+* [`cert_host`](#-common--system--certs--letsencrypt--cert_host)
+* [`deploy_hook_command`](#-common--system--certs--letsencrypt--deploy_hook_command)
+* [`distribute_to`](#-common--system--certs--letsencrypt--distribute_to)
 
-##### <a name="-common--certs--letsencrypt--email"></a>`email`
+##### <a name="-common--system--certs--letsencrypt--email"></a>`email`
 
 Data type: `Eit_types::Email`
 
@@ -1558,7 +1558,7 @@ The email address associated with the certificates. Defaults to 'ops@obmondo.com
 
 Default value: `'ops@obmondo.com'`
 
-##### <a name="-common--certs--letsencrypt--ca"></a>`ca`
+##### <a name="-common--system--certs--letsencrypt--ca"></a>`ca`
 
 Data type:
 
@@ -1573,7 +1573,7 @@ The Certificate Authority environment. Defaults to 'production'. Allowed values 
 
 Default value: `'production'`
 
-##### <a name="-common--certs--letsencrypt--renew"></a>`renew`
+##### <a name="-common--system--certs--letsencrypt--renew"></a>`renew`
 
 Data type: `Boolean`
 
@@ -1581,7 +1581,7 @@ Whether to automatically renew certificates. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--certs--letsencrypt--http_01_port"></a>`http_01_port`
+##### <a name="-common--system--certs--letsencrypt--http_01_port"></a>`http_01_port`
 
 Data type: `Stdlib::Port`
 
@@ -1589,7 +1589,7 @@ The port used for HTTP-01 challenge. Defaults to 63480.
 
 Default value: `63480`
 
-##### <a name="-common--certs--letsencrypt--challenges"></a>`challenges`
+##### <a name="-common--system--certs--letsencrypt--challenges"></a>`challenges`
 
 Data type: `Eit_types::Cert::Letsencrypt::Challenge`
 
@@ -1597,7 +1597,7 @@ The challenge type for certificate issuance. Defaults to 'http'. Allowed values 
 
 Default value: `'http'`
 
-##### <a name="-common--certs--letsencrypt--domains"></a>`domains`
+##### <a name="-common--system--certs--letsencrypt--domains"></a>`domains`
 
 Data type: `Array[Stdlib::Fqdn]`
 
@@ -1605,7 +1605,7 @@ List of domain names for the certificates.
 
 Default value: `[]`
 
-##### <a name="-common--certs--letsencrypt--warning"></a>`warning`
+##### <a name="-common--system--certs--letsencrypt--warning"></a>`warning`
 
 Data type: `Optional[Integer]`
 
@@ -1613,7 +1613,7 @@ Warning threshold for renewal. Defaults to 7 days.
 
 Default value: `7`
 
-##### <a name="-common--certs--letsencrypt--critical"></a>`critical`
+##### <a name="-common--system--certs--letsencrypt--critical"></a>`critical`
 
 Data type: `Optional[Integer]`
 
@@ -1621,7 +1621,7 @@ Critical threshold for renewal. Defaults to 4 days.
 
 Default value: `4`
 
-##### <a name="-common--certs--letsencrypt--cert_host"></a>`cert_host`
+##### <a name="-common--system--certs--letsencrypt--cert_host"></a>`cert_host`
 
 Data type: `Optional[Variant[Eit_types::Certname, Eit_types::Host]]`
 
@@ -1629,7 +1629,7 @@ Optional certificate host override.
 
 Default value: `undef`
 
-##### <a name="-common--certs--letsencrypt--deploy_hook_command"></a>`deploy_hook_command`
+##### <a name="-common--system--certs--letsencrypt--deploy_hook_command"></a>`deploy_hook_command`
 
 Data type: `Optional[Variant[Stdlib::Absolutepath, String]]`
 
@@ -1637,7 +1637,7 @@ Optional command to run after deployment.
 
 Default value: `undef`
 
-##### <a name="-common--certs--letsencrypt--distribute_to"></a>`distribute_to`
+##### <a name="-common--system--certs--letsencrypt--distribute_to"></a>`distribute_to`
 
 Data type: `Array[Variant[Eit_types::Certname, Eit_types::Host]]`
 
@@ -1703,7 +1703,7 @@ Optional Boolean for noop operations. Defaults to false.
 
 Default value: `undef`
 
-### <a name="common--cron"></a>`common::system::cron`
+### <a name="common--system--cron"></a>`common::system::cron`
 
 Class for managing cron jobs
 
@@ -1711,10 +1711,10 @@ Class for managing cron jobs
 
 The following parameters are available in the `common::system::cron` class:
 
-* [`purge_unmanaged`](#-common--cron--purge_unmanaged)
-* [`jobs`](#-common--cron--jobs)
+* [`purge_unmanaged`](#-common--system--cron--purge_unmanaged)
+* [`jobs`](#-common--system--cron--jobs)
 
-##### <a name="-common--cron--purge_unmanaged"></a>`purge_unmanaged`
+##### <a name="-common--system--cron--purge_unmanaged"></a>`purge_unmanaged`
 
 Data type: `Variant[Boolean, Enum['root-only']]`
 
@@ -1722,7 +1722,7 @@ Whether to purge unmanaged jobs. Can be a boolean or 'root-only'. Defaults to fa
 
 Default value: `false`
 
-##### <a name="-common--cron--jobs"></a>`jobs`
+##### <a name="-common--system--cron--jobs"></a>`jobs`
 
 Data type: `Hash`
 
@@ -1820,7 +1820,7 @@ Boolean flag to enable or disable NI-VISA. Defaults to false.
 
 Default value: `false`
 
-### <a name="common--hosts"></a>`common::system::hosts`
+### <a name="common--system--hosts"></a>`common::system::hosts`
 
 Class for managing host entries
 
@@ -1828,9 +1828,9 @@ Class for managing host entries
 
 The following parameters are available in the `common::system::hosts` class:
 
-* [`entries`](#-common--hosts--entries)
+* [`entries`](#-common--system--hosts--entries)
 
-##### <a name="-common--hosts--entries"></a>`entries`
+##### <a name="-common--system--hosts--entries"></a>`entries`
 
 Data type:
 
@@ -2146,43 +2146,43 @@ Hash of Logical Volumes to manage.
 
 Default value: `{}`
 
-### <a name="common--mail"></a>`common::mail`
+### <a name="common--system--mail"></a>`common::system::mail`
 
 Class for managing common postfix mail setup
 
 #### Parameters
 
-The following parameters are available in the `common::mail` class:
+The following parameters are available in the `common::system::mail` class:
 
-* [`manage`](#-common--mail--manage)
-* [`inet_interfaces`](#-common--mail--inet_interfaces)
-* [`myhostname`](#-common--mail--myhostname)
-* [`mydomain`](#-common--mail--mydomain)
-* [`relayhost`](#-common--mail--relayhost)
-* [`smtp_sasl_auth`](#-common--mail--smtp_sasl_auth)
-* [`smtp_sasl_password_maps`](#-common--mail--smtp_sasl_password_maps)
-* [`smtp_sasl_security_options`](#-common--mail--smtp_sasl_security_options)
-* [`default_destination_concurrency_limit`](#-common--mail--default_destination_concurrency_limit)
-* [`soft_bounce`](#-common--mail--soft_bounce)
-* [`smtp_connection_cache_destinations`](#-common--mail--smtp_connection_cache_destinations)
-* [`smtp_tls_security_level`](#-common--mail--smtp_tls_security_level)
-* [`smtp_tls_loglevel`](#-common--mail--smtp_tls_loglevel)
-* [`smtpd_tls_auth_only`](#-common--mail--smtpd_tls_auth_only)
-* [`tls_ssl_options`](#-common--mail--tls_ssl_options)
-* [`smtpd_tls_protocols`](#-common--mail--smtpd_tls_protocols)
-* [`smtpd_tls_mandatory_protocols`](#-common--mail--smtpd_tls_mandatory_protocols)
-* [`smtpd_tls_mandatory_ciphers`](#-common--mail--smtpd_tls_mandatory_ciphers)
-* [`smtpd_tls_eecdh_grade`](#-common--mail--smtpd_tls_eecdh_grade)
-* [`tls_preempt_cipherlist`](#-common--mail--tls_preempt_cipherlist)
-* [`tls_high_cipherlist`](#-common--mail--tls_high_cipherlist)
-* [`stats_daemon_port`](#-common--mail--stats_daemon_port)
-* [`run_newaliases`](#-common--mail--run_newaliases)
-* [`aliases`](#-common--mail--aliases)
-* [`_extra_main_parameters`](#-common--mail--_extra_main_parameters)
-* [`maildrop_perms`](#-common--mail--maildrop_perms)
-* [`noop_value`](#-common--mail--noop_value)
+* [`manage`](#-common--system--mail--manage)
+* [`inet_interfaces`](#-common--system--mail--inet_interfaces)
+* [`myhostname`](#-common--system--mail--myhostname)
+* [`mydomain`](#-common--system--mail--mydomain)
+* [`relayhost`](#-common--system--mail--relayhost)
+* [`smtp_sasl_auth`](#-common--system--mail--smtp_sasl_auth)
+* [`smtp_sasl_password_maps`](#-common--system--mail--smtp_sasl_password_maps)
+* [`smtp_sasl_security_options`](#-common--system--mail--smtp_sasl_security_options)
+* [`default_destination_concurrency_limit`](#-common--system--mail--default_destination_concurrency_limit)
+* [`soft_bounce`](#-common--system--mail--soft_bounce)
+* [`smtp_connection_cache_destinations`](#-common--system--mail--smtp_connection_cache_destinations)
+* [`smtp_tls_security_level`](#-common--system--mail--smtp_tls_security_level)
+* [`smtp_tls_loglevel`](#-common--system--mail--smtp_tls_loglevel)
+* [`smtpd_tls_auth_only`](#-common--system--mail--smtpd_tls_auth_only)
+* [`tls_ssl_options`](#-common--system--mail--tls_ssl_options)
+* [`smtpd_tls_protocols`](#-common--system--mail--smtpd_tls_protocols)
+* [`smtpd_tls_mandatory_protocols`](#-common--system--mail--smtpd_tls_mandatory_protocols)
+* [`smtpd_tls_mandatory_ciphers`](#-common--system--mail--smtpd_tls_mandatory_ciphers)
+* [`smtpd_tls_eecdh_grade`](#-common--system--mail--smtpd_tls_eecdh_grade)
+* [`tls_preempt_cipherlist`](#-common--system--mail--tls_preempt_cipherlist)
+* [`tls_high_cipherlist`](#-common--system--mail--tls_high_cipherlist)
+* [`stats_daemon_port`](#-common--system--mail--stats_daemon_port)
+* [`run_newaliases`](#-common--system--mail--run_newaliases)
+* [`aliases`](#-common--system--mail--aliases)
+* [`_extra_main_parameters`](#-common--system--mail--_extra_main_parameters)
+* [`maildrop_perms`](#-common--system--mail--maildrop_perms)
+* [`noop_value`](#-common--system--mail--noop_value)
 
-##### <a name="-common--mail--manage"></a>`manage`
+##### <a name="-common--system--mail--manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -2190,7 +2190,7 @@ Boolean flag to manage the mail configuration. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--mail--inet_interfaces"></a>`inet_interfaces`
+##### <a name="-common--system--mail--inet_interfaces"></a>`inet_interfaces`
 
 Data type:
 
@@ -2205,19 +2205,19 @@ The network interfaces. Defaults to 'localhost'.
 
 Default value: `'localhost'`
 
-##### <a name="-common--mail--myhostname"></a>`myhostname`
+##### <a name="-common--system--mail--myhostname"></a>`myhostname`
 
 Data type: `Eit_types::Hostname`
 
 The server's hostname.
 
-##### <a name="-common--mail--mydomain"></a>`mydomain`
+##### <a name="-common--system--mail--mydomain"></a>`mydomain`
 
 Data type: `Optional[Eit_types::Domain]`
 
 Optional domain name.
 
-##### <a name="-common--mail--relayhost"></a>`relayhost`
+##### <a name="-common--system--mail--relayhost"></a>`relayhost`
 
 Data type: `Optional[Eit_types::Host]`
 
@@ -2225,7 +2225,7 @@ Optional relay host. Defaults to undef.
 
 Default value: `undef`
 
-##### <a name="-common--mail--smtp_sasl_auth"></a>`smtp_sasl_auth`
+##### <a name="-common--system--mail--smtp_sasl_auth"></a>`smtp_sasl_auth`
 
 Data type: `Boolean`
 
@@ -2233,7 +2233,7 @@ Boolean to enable SMTP SASL authentication. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--mail--smtp_sasl_password_maps"></a>`smtp_sasl_password_maps`
+##### <a name="-common--system--mail--smtp_sasl_password_maps"></a>`smtp_sasl_password_maps`
 
 Data type: `Optional[String]`
 
@@ -2241,7 +2241,7 @@ Optional SMTP SASL password maps. Defaults to undef.
 
 Default value: `undef`
 
-##### <a name="-common--mail--smtp_sasl_security_options"></a>`smtp_sasl_security_options`
+##### <a name="-common--system--mail--smtp_sasl_security_options"></a>`smtp_sasl_security_options`
 
 Data type: `Optional[String]`
 
@@ -2249,7 +2249,7 @@ Optional SMTP SASL security options. Defaults to undef.
 
 Default value: `undef`
 
-##### <a name="-common--mail--default_destination_concurrency_limit"></a>`default_destination_concurrency_limit`
+##### <a name="-common--system--mail--default_destination_concurrency_limit"></a>`default_destination_concurrency_limit`
 
 Data type: `Integer[0, default]`
 
@@ -2257,7 +2257,7 @@ Maximum number of concurrent delivery attempts. Defaults to 20.
 
 Default value: `20`
 
-##### <a name="-common--mail--soft_bounce"></a>`soft_bounce`
+##### <a name="-common--system--mail--soft_bounce"></a>`soft_bounce`
 
 Data type: `Boolean`
 
@@ -2265,7 +2265,7 @@ Boolean to enable soft bounce. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--mail--smtp_connection_cache_destinations"></a>`smtp_connection_cache_destinations`
+##### <a name="-common--system--mail--smtp_connection_cache_destinations"></a>`smtp_connection_cache_destinations`
 
 Data type: `Array[String]`
 
@@ -2273,7 +2273,7 @@ Array of destinations for SMTP connection caching. Defaults to empty array.
 
 Default value: `[]`
 
-##### <a name="-common--mail--smtp_tls_security_level"></a>`smtp_tls_security_level`
+##### <a name="-common--system--mail--smtp_tls_security_level"></a>`smtp_tls_security_level`
 
 Data type: `Eit_types::Postfix_Security_Level`
 
@@ -2281,7 +2281,7 @@ TLS security level. Defaults to 'encrypt'.
 
 Default value: `'encrypt'`
 
-##### <a name="-common--mail--smtp_tls_loglevel"></a>`smtp_tls_loglevel`
+##### <a name="-common--system--mail--smtp_tls_loglevel"></a>`smtp_tls_loglevel`
 
 Data type: `Integer[0]`
 
@@ -2289,7 +2289,7 @@ TLS log level. Defaults to 1.
 
 Default value: `1`
 
-##### <a name="-common--mail--smtpd_tls_auth_only"></a>`smtpd_tls_auth_only`
+##### <a name="-common--system--mail--smtpd_tls_auth_only"></a>`smtpd_tls_auth_only`
 
 Data type: `Enum['yes', 'no']`
 
@@ -2297,7 +2297,7 @@ Whether TLS authentication is required. Defaults to 'yes'.
 
 Default value: `'yes'`
 
-##### <a name="-common--mail--tls_ssl_options"></a>`tls_ssl_options`
+##### <a name="-common--system--mail--tls_ssl_options"></a>`tls_ssl_options`
 
 Data type: `String`
 
@@ -2305,7 +2305,7 @@ SSL options for TLS. Defaults to 'NO_COMPRESSION'.
 
 Default value: `'NO_COMPRESSION'`
 
-##### <a name="-common--mail--smtpd_tls_protocols"></a>`smtpd_tls_protocols`
+##### <a name="-common--system--mail--smtpd_tls_protocols"></a>`smtpd_tls_protocols`
 
 Data type: `String`
 
@@ -2313,7 +2313,7 @@ TLS protocols for SMTP daemon. Defaults to '!SSLv2,!SSLv3'.
 
 Default value: `'!SSLv2,!SSLv3'`
 
-##### <a name="-common--mail--smtpd_tls_mandatory_protocols"></a>`smtpd_tls_mandatory_protocols`
+##### <a name="-common--system--mail--smtpd_tls_mandatory_protocols"></a>`smtpd_tls_mandatory_protocols`
 
 Data type: `String`
 
@@ -2321,7 +2321,7 @@ Mandatory TLS protocols. Defaults to '!SSLv2,!SSLv3'.
 
 Default value: `'!SSLv2,!SSLv3'`
 
-##### <a name="-common--mail--smtpd_tls_mandatory_ciphers"></a>`smtpd_tls_mandatory_ciphers`
+##### <a name="-common--system--mail--smtpd_tls_mandatory_ciphers"></a>`smtpd_tls_mandatory_ciphers`
 
 Data type: `String`
 
@@ -2329,7 +2329,7 @@ Ciphers for mandatory TLS. Defaults to 'high'.
 
 Default value: `'high'`
 
-##### <a name="-common--mail--smtpd_tls_eecdh_grade"></a>`smtpd_tls_eecdh_grade`
+##### <a name="-common--system--mail--smtpd_tls_eecdh_grade"></a>`smtpd_tls_eecdh_grade`
 
 Data type: `String`
 
@@ -2337,7 +2337,7 @@ ECDH grade for TLS. Defaults to 'ultra'.
 
 Default value: `'ultra'`
 
-##### <a name="-common--mail--tls_preempt_cipherlist"></a>`tls_preempt_cipherlist`
+##### <a name="-common--system--mail--tls_preempt_cipherlist"></a>`tls_preempt_cipherlist`
 
 Data type: `String`
 
@@ -2345,7 +2345,7 @@ Whether to preempt cipher list. Defaults to 'yes'.
 
 Default value: `'yes'`
 
-##### <a name="-common--mail--tls_high_cipherlist"></a>`tls_high_cipherlist`
+##### <a name="-common--system--mail--tls_high_cipherlist"></a>`tls_high_cipherlist`
 
 Data type: `String`
 
@@ -2353,7 +2353,7 @@ Cipher list for high security cipher suites. Defaults to a long cipher string.
 
 Default value: `'EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA'`
 
-##### <a name="-common--mail--stats_daemon_port"></a>`stats_daemon_port`
+##### <a name="-common--system--mail--stats_daemon_port"></a>`stats_daemon_port`
 
 Data type: `Stdlib::Port`
 
@@ -2361,7 +2361,7 @@ Port for stats daemon. Defaults to 63777.
 
 Default value: `63777`
 
-##### <a name="-common--mail--run_newaliases"></a>`run_newaliases`
+##### <a name="-common--system--mail--run_newaliases"></a>`run_newaliases`
 
 Data type: `Boolean`
 
@@ -2369,7 +2369,7 @@ Boolean to run `newaliases`. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--mail--aliases"></a>`aliases`
+##### <a name="-common--system--mail--aliases"></a>`aliases`
 
 Data type: `Hash[String, String]`
 
@@ -2377,7 +2377,7 @@ Hash of mail aliases. Defaults to empty hash.
 
 Default value: `{}`
 
-##### <a name="-common--mail--_extra_main_parameters"></a>`_extra_main_parameters`
+##### <a name="-common--system--mail--_extra_main_parameters"></a>`_extra_main_parameters`
 
 Data type: `Hash[String, String]`
 
@@ -2385,7 +2385,7 @@ Additional parameters for main config. Defaults to empty hash.
 
 Default value: `{}`
 
-##### <a name="-common--mail--maildrop_perms"></a>`maildrop_perms`
+##### <a name="-common--system--mail--maildrop_perms"></a>`maildrop_perms`
 
 Data type: `Variant[Stdlib::Filemode,String]`
 
@@ -2393,7 +2393,7 @@ Permissions for maildrop directory. Defaults to 'u+rwX,g-r,g+wX'.
 
 Default value: `'u+rwX,g-r,g+wX'`
 
-##### <a name="-common--mail--noop_value"></a>`noop_value`
+##### <a name="-common--system--mail--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
@@ -4473,38 +4473,38 @@ The list of params, which needs to be encrypted
 
 Default value: `['tunnels.*.private_key']`
 
-### <a name="common--openvox"></a>`common::openvox`
+### <a name="common--system--openvox"></a>`common::system::openvox`
 
 Class for managing openvox installation and configuration
 
 #### Parameters
 
-The following parameters are available in the `common::openvox` class:
+The following parameters are available in the `common::system::openvox` class:
 
-* [`version`](#-common--openvox--version)
-* [`server`](#-common--openvox--server)
-* [`server_port`](#-common--openvox--server_port)
-* [`config_file`](#-common--openvox--config_file)
-* [`run_agent_as_noop`](#-common--openvox--run_agent_as_noop)
-* [`extra_main_settings`](#-common--openvox--extra_main_settings)
-* [`environment`](#-common--openvox--environment)
-* [`package_name`](#-common--openvox--package_name)
-* [`manage`](#-common--openvox--manage)
-* [`noop_value`](#-common--openvox--noop_value)
+* [`version`](#-common--system--openvox--version)
+* [`server`](#-common--system--openvox--server)
+* [`server_port`](#-common--system--openvox--server_port)
+* [`config_file`](#-common--system--openvox--config_file)
+* [`run_agent_as_noop`](#-common--system--openvox--run_agent_as_noop)
+* [`extra_main_settings`](#-common--system--openvox--extra_main_settings)
+* [`environment`](#-common--system--openvox--environment)
+* [`package_name`](#-common--system--openvox--package_name)
+* [`manage`](#-common--system--openvox--manage)
+* [`noop_value`](#-common--system--openvox--noop_value)
 
-##### <a name="-common--openvox--version"></a>`version`
+##### <a name="-common--system--openvox--version"></a>`version`
 
 Data type: `Eit_types::Version`
 
 The openvox version to install. The default is the type Eit_types::Version.
 
-##### <a name="-common--openvox--server"></a>`server`
+##### <a name="-common--system--openvox--server"></a>`server`
 
 Data type: `Stdlib::Host`
 
 The hostname or IP address of the openvox server.
 
-##### <a name="-common--openvox--server_port"></a>`server_port`
+##### <a name="-common--system--openvox--server_port"></a>`server_port`
 
 Data type: `Stdlib::Port`
 
@@ -4512,7 +4512,7 @@ The port number for the openvox server. Defaults to 443.
 
 Default value: `443`
 
-##### <a name="-common--openvox--config_file"></a>`config_file`
+##### <a name="-common--system--openvox--config_file"></a>`config_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -4520,7 +4520,7 @@ The path to the openvox configuration file. Defaults to `$facts['openvox_config'
 
 Default value: `$facts['puppet_config']`
 
-##### <a name="-common--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
+##### <a name="-common--system--openvox--run_agent_as_noop"></a>`run_agent_as_noop`
 
 Data type: `Boolean`
 
@@ -4528,7 +4528,7 @@ Whether to run the openvox agent in noop mode. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--openvox--extra_main_settings"></a>`extra_main_settings`
+##### <a name="-common--system--openvox--extra_main_settings"></a>`extra_main_settings`
 
 Data type: `Optional[Hash]`
 
@@ -4536,7 +4536,7 @@ Optional hash of extra settings for the main openvox configuration. Defaults to 
 
 Default value: `undef`
 
-##### <a name="-common--openvox--environment"></a>`environment`
+##### <a name="-common--system--openvox--environment"></a>`environment`
 
 Data type: `String`
 
@@ -4544,13 +4544,13 @@ The openvox environment to use. Defaults to 'master'.
 
 Default value: `'v1.1.0'`
 
-##### <a name="-common--openvox--package_name"></a>`package_name`
+##### <a name="-common--system--openvox--package_name"></a>`package_name`
 
 Data type: `String`
 
 
 
-##### <a name="-common--openvox--manage"></a>`manage`
+##### <a name="-common--system--openvox--manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -4558,7 +4558,7 @@ Data type: `Boolean`
 
 Default value: `true`
 
-##### <a name="-common--openvox--noop_value"></a>`noop_value`
+##### <a name="-common--system--openvox--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
@@ -4566,7 +4566,7 @@ Data type: `Eit_types::Noop_Value`
 
 Default value: `undef`
 
-### <a name="common--package"></a>`common::system::package`
+### <a name="common--system--package"></a>`common::system::package`
 
 Class for managing the installation and removal of packages
 
@@ -4574,13 +4574,13 @@ Class for managing the installation and removal of packages
 
 The following parameters are available in the `common::system::package` class:
 
-* [`install_default_packages`](#-common--package--install_default_packages)
-* [`manage`](#-common--package--manage)
-* [`default_packages`](#-common--package--default_packages)
-* [`removed_packages`](#-common--package--removed_packages)
-* [`required_packages`](#-common--package--required_packages)
+* [`install_default_packages`](#-common--system--package--install_default_packages)
+* [`manage`](#-common--system--package--manage)
+* [`default_packages`](#-common--system--package--default_packages)
+* [`removed_packages`](#-common--system--package--removed_packages)
+* [`required_packages`](#-common--system--package--required_packages)
 
-##### <a name="-common--package--install_default_packages"></a>`install_default_packages`
+##### <a name="-common--system--package--install_default_packages"></a>`install_default_packages`
 
 Data type: `Boolean`
 
@@ -4588,7 +4588,7 @@ Boolean to determine whether to install default packages. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--package--manage"></a>`manage`
+##### <a name="-common--system--package--manage"></a>`manage`
 
 Data type:
 
@@ -4607,7 +4607,7 @@ Hash mapping package names to options for managing them.
 
 Default value: `{}`
 
-##### <a name="-common--package--default_packages"></a>`default_packages`
+##### <a name="-common--system--package--default_packages"></a>`default_packages`
 
 Data type: `Array[String]`
 
@@ -4615,7 +4615,7 @@ Array of package names to install by default.
 
 Default value: `[]`
 
-##### <a name="-common--package--removed_packages"></a>`removed_packages`
+##### <a name="-common--system--package--removed_packages"></a>`removed_packages`
 
 Data type: `Array[String]`
 
@@ -4623,7 +4623,7 @@ Array of package names to remove.
 
 Default value: `[]`
 
-##### <a name="-common--package--required_packages"></a>`required_packages`
+##### <a name="-common--system--package--required_packages"></a>`required_packages`
 
 Data type: `Array[String]`
 
@@ -4631,7 +4631,7 @@ Array of package names that are required to be installed.
 
 Default value: `[]`
 
-### <a name="common--repo"></a>`common::system::repo`
+### <a name="common--system--repo"></a>`common::system::repo`
 
 ]] - Specific zypper repository configurations. Defaults to empty hash.
 
@@ -4641,21 +4641,21 @@ The protocol to use for sources. Defaults to 'https'.
 
 The following parameters are available in the `common::system::repo` class:
 
-* [`manage`](#-common--repo--manage)
-* [`noop_value`](#-common--repo--noop_value)
-* [`repos`](#-common--repo--repos)
-* [`rhrepos`](#-common--repo--rhrepos)
-* [`yumrepos`](#-common--repo--yumrepos)
-* [`zypprepos`](#-common--repo--zypprepos)
-* [`aptrepos`](#-common--repo--aptrepos)
-* [`purge`](#-common--repo--purge)
-* [`upstream`](#-common--repo--upstream)
-* [`source_protocol`](#-common--repo--source_protocol)
-* [`local`](#-common--repo--local)
-* [`domain`](#-common--repo--domain)
-* [`snapshot`](#-common--repo--snapshot)
+* [`manage`](#-common--system--repo--manage)
+* [`noop_value`](#-common--system--repo--noop_value)
+* [`repos`](#-common--system--repo--repos)
+* [`rhrepos`](#-common--system--repo--rhrepos)
+* [`yumrepos`](#-common--system--repo--yumrepos)
+* [`zypprepos`](#-common--system--repo--zypprepos)
+* [`aptrepos`](#-common--system--repo--aptrepos)
+* [`purge`](#-common--system--repo--purge)
+* [`upstream`](#-common--system--repo--upstream)
+* [`source_protocol`](#-common--system--repo--source_protocol)
+* [`local`](#-common--system--repo--local)
+* [`domain`](#-common--system--repo--domain)
+* [`snapshot`](#-common--system--repo--snapshot)
 
-##### <a name="-common--repo--manage"></a>`manage`
+##### <a name="-common--system--repo--manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -4663,7 +4663,7 @@ Boolean - If true, will manage the apt.conf/yum.conf file and set up default con
 
 Default value: `true`
 
-##### <a name="-common--repo--noop_value"></a>`noop_value`
+##### <a name="-common--system--repo--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
@@ -4671,7 +4671,7 @@ Optional[Boolean] - Specify whether to perform actions in noop mode. Defaults to
 
 Default value: `undef`
 
-##### <a name="-common--repo--repos"></a>`repos`
+##### <a name="-common--system--repo--repos"></a>`repos`
 
 Data type:
 
@@ -4688,7 +4688,7 @@ Array[Variant[String, Hash]] - List of repositories to manage. Defaults to empty
 
 Default value: `[]`
 
-##### <a name="-common--repo--rhrepos"></a>`rhrepos`
+##### <a name="-common--system--repo--rhrepos"></a>`rhrepos`
 
 Data type: `Array`
 
@@ -4696,7 +4696,7 @@ Array[String] - List of RedHat repositories to manage. Defaults to empty array.
 
 Default value: `[]`
 
-##### <a name="-common--repo--yumrepos"></a>`yumrepos`
+##### <a name="-common--system--repo--yumrepos"></a>`yumrepos`
 
 Data type: `Hash[String, Hash]`
 
@@ -4704,7 +4704,7 @@ Hash[String, Hash] - Specific yum repository configurations. Defaults to empty h
 
 Default value: `{}`
 
-##### <a name="-common--repo--zypprepos"></a>`zypprepos`
+##### <a name="-common--system--repo--zypprepos"></a>`zypprepos`
 
 Data type: `Hash[String, Hash]`
 
@@ -4722,7 +4722,7 @@ Hash[String, Struct[
 
 Default value: `{}`
 
-##### <a name="-common--repo--aptrepos"></a>`aptrepos`
+##### <a name="-common--system--repo--aptrepos"></a>`aptrepos`
 
 Data type:
 
@@ -4740,7 +4740,7 @@ Hash[String, Hash] - Specific apt repository configurations. Defaults to empty h
 
 Default value: `{}`
 
-##### <a name="-common--repo--purge"></a>`purge`
+##### <a name="-common--system--repo--purge"></a>`purge`
 
 Data type: `Boolean`
 
@@ -4748,7 +4748,7 @@ Boolean - If true, will purge existing repositories. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--repo--upstream"></a>`upstream`
+##### <a name="-common--system--repo--upstream"></a>`upstream`
 
 Data type: `Boolean`
 
@@ -4756,7 +4756,7 @@ Boolean - If true, will set up upstream repositories. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--repo--source_protocol"></a>`source_protocol`
+##### <a name="-common--system--repo--source_protocol"></a>`source_protocol`
 
 Data type: `Enum['http', 'https']`
 
@@ -4764,7 +4764,7 @@ Enum['http', 'https']
 
 Default value: `'https'`
 
-##### <a name="-common--repo--local"></a>`local`
+##### <a name="-common--system--repo--local"></a>`local`
 
 Data type: `Boolean`
 
@@ -4772,7 +4772,7 @@ Boolean - If true, sets up local repositories. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--repo--domain"></a>`domain`
+##### <a name="-common--system--repo--domain"></a>`domain`
 
 Data type: `Optional[Stdlib::Fqdn]`
 
@@ -4780,7 +4780,7 @@ Optional[Stdlib::Fqdn] - The domain for local or remote repositories. Defaults t
 
 Default value: `undef`
 
-##### <a name="-common--repo--snapshot"></a>`snapshot`
+##### <a name="-common--system--repo--snapshot"></a>`snapshot`
 
 Data type: `Optional[Eit_types::Date]`
 
@@ -8804,30 +8804,30 @@ Optional boolean to control noop behavior, defaults to undef.
 
 Default value: `undef`
 
-### <a name="common--systemd--timer"></a>`common::systemd::timer`
+### <a name="common--system--systemd--timer"></a>`common::system::systemd::timer`
 
 Puppet class for systemd timer drop-in replacement for cron
 
 #### Parameters
 
-The following parameters are available in the `common::systemd::timer` defined type:
+The following parameters are available in the `common::system::systemd::timer` defined type:
 
-* [`enable`](#-common--systemd--timer--enable)
-* [`command`](#-common--systemd--timer--command)
-* [`ensure`](#-common--systemd--timer--ensure)
-* [`weekday`](#-common--systemd--timer--weekday)
-* [`day`](#-common--systemd--timer--day)
-* [`month`](#-common--systemd--timer--month)
-* [`year`](#-common--systemd--timer--year)
-* [`hour`](#-common--systemd--timer--hour)
-* [`minute`](#-common--systemd--timer--minute)
-* [`environment`](#-common--systemd--timer--environment)
-* [`user`](#-common--systemd--timer--user)
-* [`mode`](#-common--systemd--timer--mode)
-* [`description`](#-common--systemd--timer--description)
-* [`noop_value`](#-common--systemd--timer--noop_value)
+* [`enable`](#-common--system--systemd--timer--enable)
+* [`command`](#-common--system--systemd--timer--command)
+* [`ensure`](#-common--system--systemd--timer--ensure)
+* [`weekday`](#-common--system--systemd--timer--weekday)
+* [`day`](#-common--system--systemd--timer--day)
+* [`month`](#-common--system--systemd--timer--month)
+* [`year`](#-common--system--systemd--timer--year)
+* [`hour`](#-common--system--systemd--timer--hour)
+* [`minute`](#-common--system--systemd--timer--minute)
+* [`environment`](#-common--system--systemd--timer--environment)
+* [`user`](#-common--system--systemd--timer--user)
+* [`mode`](#-common--system--systemd--timer--mode)
+* [`description`](#-common--system--systemd--timer--description)
+* [`noop_value`](#-common--system--systemd--timer--noop_value)
 
-##### <a name="-common--systemd--timer--enable"></a>`enable`
+##### <a name="-common--system--systemd--timer--enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -8835,7 +8835,7 @@ Whether to enable the timer. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--systemd--timer--command"></a>`command`
+##### <a name="-common--system--systemd--timer--command"></a>`command`
 
 Data type: `Optional[String[1]]`
 
@@ -8843,7 +8843,7 @@ The command to run. Defaults to undef.
 
 Default value: `undef`
 
-##### <a name="-common--systemd--timer--ensure"></a>`ensure`
+##### <a name="-common--system--systemd--timer--ensure"></a>`ensure`
 
 Data type: `Cron::Job_ensure`
 
@@ -8851,7 +8851,7 @@ Ensure state of the cron job. Defaults to 'present'.
 
 Default value: `'present'`
 
-##### <a name="-common--systemd--timer--weekday"></a>`weekday`
+##### <a name="-common--system--systemd--timer--weekday"></a>`weekday`
 
 Data type: `Eit_types::SystemdTimer::Weekday`
 
@@ -8859,7 +8859,7 @@ Day of the week for the timer, e.g., '*'. Defaults to '*'.
 
 Default value: `'*'`
 
-##### <a name="-common--systemd--timer--day"></a>`day`
+##### <a name="-common--system--systemd--timer--day"></a>`day`
 
 Data type: `Eit_types::SystemdTimer::Day`
 
@@ -8867,7 +8867,7 @@ Day of the month for the timer, e.g., '*'. Defaults to '*'.
 
 Default value: `'*'`
 
-##### <a name="-common--systemd--timer--month"></a>`month`
+##### <a name="-common--system--systemd--timer--month"></a>`month`
 
 Data type: `Eit_types::SystemdTimer::Month`
 
@@ -8875,7 +8875,7 @@ Month of the year for the timer, e.g., '*'. Defaults to '*'.
 
 Default value: `'*'`
 
-##### <a name="-common--systemd--timer--year"></a>`year`
+##### <a name="-common--system--systemd--timer--year"></a>`year`
 
 Data type: `Eit_types::SystemdTimer::Year`
 
@@ -8883,7 +8883,7 @@ Year for the timer, e.g., '*'. Defaults to '*'.
 
 Default value: `'*'`
 
-##### <a name="-common--systemd--timer--hour"></a>`hour`
+##### <a name="-common--system--systemd--timer--hour"></a>`hour`
 
 Data type: `Eit_types::SystemdTimer::Hour`
 
@@ -8891,7 +8891,7 @@ Hour of the day for the timer, e.g., '00'. Defaults to '00'.
 
 Default value: `'00'`
 
-##### <a name="-common--systemd--timer--minute"></a>`minute`
+##### <a name="-common--system--systemd--timer--minute"></a>`minute`
 
 Data type: `Eit_types::SystemdTimer::Minute`
 
@@ -8899,7 +8899,7 @@ Minute of the hour for the timer, e.g., '00'. Defaults to '00'.
 
 Default value: `'00'`
 
-##### <a name="-common--systemd--timer--environment"></a>`environment`
+##### <a name="-common--system--systemd--timer--environment"></a>`environment`
 
 Data type: `Cron::Environment`
 
@@ -8907,7 +8907,7 @@ Array of environment variables for the timer. Defaults to [].
 
 Default value: `[]`
 
-##### <a name="-common--systemd--timer--user"></a>`user`
+##### <a name="-common--system--systemd--timer--user"></a>`user`
 
 Data type: `Cron::User`
 
@@ -8915,7 +8915,7 @@ User to run the timer as. Defaults to 'root'.
 
 Default value: `'root'`
 
-##### <a name="-common--systemd--timer--mode"></a>`mode`
+##### <a name="-common--system--systemd--timer--mode"></a>`mode`
 
 Data type: `Stdlib::Filemode`
 
@@ -8923,7 +8923,7 @@ File mode for the timer files. Defaults to '0644'.
 
 Default value: `'0644'`
 
-##### <a name="-common--systemd--timer--description"></a>`description`
+##### <a name="-common--system--systemd--timer--description"></a>`description`
 
 Data type: `Optional[String]`
 
@@ -8931,7 +8931,7 @@ Optional description for the timer.
 
 Default value: `undef`
 
-##### <a name="-common--systemd--timer--noop_value"></a>`noop_value`
+##### <a name="-common--system--systemd--timer--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 

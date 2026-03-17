@@ -199,7 +199,7 @@ class profile::system::authentication::sssd (
       systemd::unit_file { 'sssd.service':
         ensure  => 'present',
         content => $_sssd_override_content,
-        path    => '/etc/systemd/system/sssd.service.d/override.conf',
+        path    => '/etc/systemd/system/sssd.service.d',
         noop    => $noop_value,
         notify  => Service['sssd'],
       }
@@ -239,7 +239,7 @@ class profile::system::authentication::sssd (
           # Create the drop-in override for each service in the list
           systemd::unit_file { "${unit_name}":
             ensure  => 'absent', # ensure => false in original maps to absent
-            path    => "/etc/systemd/system/${unit_name}.service.d/override.conf",
+            path    => "/etc/systemd/system/${unit_name}.service.d",
             content => $_root_override_content,
             noop    => $noop_value,
             notify  => Service[$unit_name],
