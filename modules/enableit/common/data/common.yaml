@@ -357,8 +357,8 @@ common::user_management::security::selinux::enable: false
 common::system::updates::enable: true
 
 ## Obmondo Admin
-common::setup::obmondo_admin::manage: false
-common::setup::obmondo_admin::enable: false
+common::system::obmondo_admin::manage: false
+common::system::obmondo_admin::enable: false
 
 ## Mail
 common::system::mail::myhostname: "%{facts.networking.fqdn}"
