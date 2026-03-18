@@ -6,7 +6,7 @@
 
 ### Classes
 
-* [`common`](#common): Main common class
+* [`common`](#common): Main common class for setting up common configurations
 * [`common::backup`](#common--backup): Class for managing backup configurations
 * [`common::backup::borg`](#common--backup--borg): Class for setting up Borg backup and installing necessary packages
 * [`common::backup::cassandra`](#common--backup--cassandra): Backup Cassandra database using medusa with local storage
@@ -82,8 +82,7 @@
 * [`common::user_management::security::pkexec`](#common--security--pkexec): Class for managing the CVE-2021-4034 polkit pkexec vulnerability
 * [`common::services`](#common--services): Class for managing common services
 * [`common::settings`](#common--settings): Class for common settings for per customers
-* [`common::setup`](#common--setup): Class for setting up common configurations
-* [`common::setup::obmondo_admin`](#common--setup--obmondo_admin): Class for setting up obmondo-admin account configurations
+* [`common::system::obmondo_admin`](#common--system--obmondo_admin): Class for setting up obmondo-admin account configurations
 * [`common::software`](#common--software): Class for managing common software installation and dependencies
 * [`common::software::ansoftrsmservice`](#common--software--ansoftrsmservice): Class for managing the Ansoft Remote Simulation Manager (RSM) Service
 * [`common::software::cloudamize`](#common--software--cloudamize): Class for managing Cloudamize software
@@ -159,6 +158,53 @@
 ### <a name="common"></a>`common`
 
 Main common class
+
+Absolute path to the configuration directory. Defaults to '/etc/obmondo'. 
+
+Absolute path to the optional directory. Defaults to '/opt/obmondo'.
+
+Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
+
+#### Parameters
+
+The following parameters are available in the `common::system` class:
+
+* [`noop_value`](#-common--noop_value)
+* [`$__conf_dir`](#-common--__conf_dir)
+* [`$__opt_dir`](#-common--__opt_dir)
+* [`$__bin_dir`](#-common--__bin_dir)
+* [`__conf_dir`](#-common--__conf_dir)
+* [`__opt_dir`](#-common--__opt_dir)
+* [`__bin_dir`](#-common--__bin_dir)
+
+##### <a name="-common--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+Boolean value to control noop execution mode. Defaults to false.
+
+Default value: `undef`
+
+##### <a name="-common---__conf_dir"></a>`$__conf_dir`
+##### <a name="-common---__opt_dir"></a>`$__opt_dir`
+##### <a name="-common---__bin_dir"></a>`$__bin_dir`
+##### <a name="-common--__conf_dir"></a>`__conf_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Default value: `'/etc/obmondo'`
+
+##### <a name="-common--__opt_dir"></a>`__opt_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Default value: `'/opt/obmondo'`
+
+##### <a name="-common--__bin_dir"></a>`__bin_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Default value: `'/opt/obmondo/bin'`
 
 #### Parameters
 
@@ -4982,94 +5028,22 @@ Array of GPG key IDs. Defaults to an empty array.
 
 Default value: `[]`
 
-### <a name="common--setup"></a>`common::setup`
-
-Absolute path to the configuration directory. Defaults to '/etc/obmondo'.
-
-Absolute path to the optional directory. Defaults to '/opt/obmondo'.
-
-Absolute path to the binary directory. Defaults to '/opt/obmondo/bin'.
-
-#### Parameters
-
-The following parameters are available in the `common::setup` class:
-
-* [`noop_value`](#-common--setup--noop_value)
-* [`$__conf_dir`](#-common--setup---__conf_dir)
-* [`$__opt_dir`](#-common--setup---__opt_dir)
-* [`$__bin_dir`](#-common--setup---__bin_dir)
-* [`__conf_dir`](#-common--setup--__conf_dir)
-* [`__opt_dir`](#-common--setup--__opt_dir)
-* [`__bin_dir`](#-common--setup--__bin_dir)
-
-##### <a name="-common--setup--noop_value"></a>`noop_value`
-
-Data type: `Eit_types::Noop_Value`
-
-Boolean value to control noop execution mode. Defaults to false.
-
-Default value: `undef`
-
-##### <a name="-common--setup---__conf_dir"></a>`$__conf_dir`
-
-
-
-##### <a name="-common--setup---__opt_dir"></a>`$__opt_dir`
-
-
-
-##### <a name="-common--setup---__bin_dir"></a>`$__bin_dir`
-
-
-
-##### <a name="-common--setup--__conf_dir"></a>`__conf_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `'/etc/obmondo'`
-
-##### <a name="-common--setup--__opt_dir"></a>`__opt_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `'/opt/obmondo'`
-
-##### <a name="-common--setup--__bin_dir"></a>`__bin_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-
-
-Default value: `'/opt/obmondo/bin'`
-
-### <a name="common--setup--obmondo_admin"></a>`common::setup::obmondo_admin`
+### <a name="common--system--obmondo_admin"></a>`common::system::obmondo_admin`
 
 Class for setting up obmondo-admin account configurations
 
 #### Parameters
 
-The following parameters are available in the `common::setup::obmondo_admin` class:
+The following parameters are available in the `common::system::obmondo_admin` class:
 
-* [`manager_pubkeys`](#-common--setup--obmondo_admin--manager_pubkeys)
-* [`sre_pubkeys`](#-common--setup--obmondo_admin--sre_pubkeys)
-* [`allow_sre`](#-common--setup--obmondo_admin--allow_sre)
-* [`noop_value`](#-common--setup--obmondo_admin--noop_value)
-* [`manage`](#-common--setup--obmondo_admin--manage)
-* [`enable`](#-common--setup--obmondo_admin--enable)
+* [`manager_pubkeys`](#-common--system--obmondo_admin--manager_pubkeys)
+* [`sre_pubkeys`](#-common--system--obmondo_admin--sre_pubkeys)
+* [`allow_sre`](#-common--system--obmondo_admin--allow_sre)
+* [`noop_value`](#-common--system--obmondo_admin--noop_value)
+* [`manage`](#-common--system--obmondo_admin--manage)
+* [`enable`](#-common--system--obmondo_admin--enable)
 
-##### <a name="-common--setup--obmondo_admin--manager_pubkeys"></a>`manager_pubkeys`
-
-Data type: `Optional[Array[String]]`
-
-Array of SSH public keys for obmondo admin user.
-
-Default value: `[]`
-
-##### <a name="-common--setup--obmondo_admin--sre_pubkeys"></a>`sre_pubkeys`
+##### <a name="-common--system--obmondo_admin--manager_pubkeys"></a>`manager_pubkeys`
 
 Data type: `Optional[Array[String]]`
 
@@ -5077,7 +5051,15 @@ Array of SSH public keys for obmondo admin user.
 
 Default value: `[]`
 
-##### <a name="-common--setup--obmondo_admin--allow_sre"></a>`allow_sre`
+##### <a name="-common--system--obmondo_admin--sre_pubkeys"></a>`sre_pubkeys`
+
+Data type: `Optional[Array[String]]`
+
+Array of SSH public keys for obmondo admin user.
+
+Default value: `[]`
+
+##### <a name="-common--system--obmondo_admin--allow_sre"></a>`allow_sre`
 
 Data type: `Boolean`
 
@@ -5085,7 +5067,7 @@ Boolean value to allow SRE to login. Defaults to true.
 
 Default value: `true`
 
-##### <a name="-common--setup--obmondo_admin--noop_value"></a>`noop_value`
+##### <a name="-common--system--obmondo_admin--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
@@ -5093,7 +5075,7 @@ Boolean value to control noop execution mode. Defaults to false.
 
 Default value: `undef`
 
-##### <a name="-common--setup--obmondo_admin--manage"></a>`manage`
+##### <a name="-common--system--obmondo_admin--manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -5101,7 +5083,7 @@ Data type: `Boolean`
 
 Default value: `false`
 
-##### <a name="-common--setup--obmondo_admin--enable"></a>`enable`
+##### <a name="-common--system--obmondo_admin--enable"></a>`enable`
 
 Data type: `Boolean`
 
