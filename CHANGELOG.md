@@ -2,6 +2,18 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.6
+
+### Bug Fixes
+- c23177b1 fix: update extra options and remove stale dropin
+- 96f51a08 fix: update deprecated fields
+
+### Configuration Changes
+- d0fe9d78 chore: pin puppet-openvas module @v0.0.1
+
+### Other Changes
+- 5c861d05 gitea-backup: fix perform_local_backup_rotation func to only look at gitea-dump-* files
+
 ## LinuxAid Release Version v1.5.5
 
 ### Bug Fixes
