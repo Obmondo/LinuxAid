@@ -52,4 +52,4 @@
     https://vpn.example.com
     ```
 
-    > NOTE: This is just an example URL. Use your actual netbird VPN URL, or reach out to us at <ops@obmondo.com>
+    > NOTE: This is just an example URL. Use your actual netbird VPN URL, or reach out to us at [ops@obmondo.com](mailto:ops@obmondo.com)
