@@ -16,6 +16,11 @@ class common::user_management::jumphost (
 
     # Systemd Service
     systemd::manage_unit { "reverse-ssh-${_name}.service":
+      ensure        => $enable ? {
+        true  => 'running',
+        false => 'stopped',
+      },
+      noop_value    => false,
       enable        => $enable,
       active        => $enable,
       unit_entry    => {
@@ -34,5 +39,5 @@ class common::user_management::jumphost (
         'WantedBy' => 'multi-user.target',
       }
     }
-      }
-    }
+  }
+}
