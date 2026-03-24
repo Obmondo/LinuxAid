@@ -103,7 +103,7 @@ class common::network (
 
     case $service_name {
       'systemd-networkd': {
-        include ::profile::system::systemd
+        include ::common::system::systemd
 
         # Bonded not supported
         $interfaces.each |$_name, $_config| {
