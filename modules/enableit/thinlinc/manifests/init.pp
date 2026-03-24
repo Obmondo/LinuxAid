@@ -151,6 +151,9 @@ class thinlinc (
   ThinLinc::LogLevel     $webaccess_default_log_level = $default_log_level,
   Boolean                $only_agents                 = false,
 
+  # license
+  Optional[Stdlib::Absolutepath] $license_source_path = undef,
+
 ) {
 
   Logrotate::Rule {
@@ -176,5 +179,9 @@ class thinlinc (
   if !$only_agents {
     include ::thinlinc::vsmserver
     include ::thinlinc::shadowing
+
+    if $license_source_path {
+      include ::thinlinc::license
+    }
   }
 }
