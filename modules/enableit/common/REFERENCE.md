@@ -130,7 +130,7 @@
 * [`common::system::package_management::guix`](#common--system--package_management--guix): Class for managing Guix client setup
 * [`common::system::package_management::guix::client`](#common--system--package_management--guix--client): Class for managing the Guix client in system packages
 * [`common::system::relocatetmp`](#common--system--relocatetmp): Class for relocating /tmp directory to a specified path
-* [`common::system::selinux`](#common--system--selinux): Class for managing SELinux fcontext
+* [`common::user_management::security::selinux`](#common--user_management--security--selinux): Class for managing SELinux fcontext
 * [`common::user_management::sshd`](#common--system--sshd): Class for managing the common SSHD configuration
 * [`common::system::systemd`](#common--system--systemd): Class for managing systemd configuration
 * [`common::system::time`](#common--system--time): Class for managing system time settings
@@ -150,7 +150,7 @@
 * [`common::mkdir_p`](#common--mkdir_p): Class for providing `mkdir -p` functionality for a directory
 * [`common::services::initscript`](#common--services--initscript): Class for managing common services initscript
 * [`common::services::systemd`](#common--services--systemd): Class for managing common systemd services
-* [`common::system::selinux::module`](#common--system--selinux--module): Class for managing SELinux modules
+* [`common::user_management::security::selinux::module`](#common--user_management--security--selinux--module): Class for managing SELinux modules
 * [`common::system::systemd::timer`](#common--system--systemd--timer): Puppet class for systemd timer drop-in replacement for cron
 
 ## Classes
@@ -7680,21 +7680,21 @@ The absolute path to move /tmp to. An Optional[Stdlib::Absolutepath]. Defaults t
 
 Default value: `undef`
 
-### <a name="common--system--selinux"></a>`common::system::selinux`
+### <a name="common--user_management--security--selinux"></a>`common::user_management::security::selinux`
 
 Class for managing SELinux fcontext
 
 #### Parameters
 
-The following parameters are available in the `common::system::selinux` class:
+The following parameters are available in the `common::user_management::security::selinux` class:
 
-* [`manage`](#-common--system--selinux--manage)
-* [`enable`](#-common--system--selinux--enable)
-* [`enforce`](#-common--system--selinux--enforce)
-* [`fcontext`](#-common--system--selinux--fcontext)
-* [`enable_setroubleshoot`](#-common--system--selinux--enable_setroubleshoot)
+* [`manage`](#-common--user_management--security--selinux--manage)
+* [`enable`](#-common--user_management--security--selinux--enable)
+* [`enforce`](#-common--user_management--security--selinux--enforce)
+* [`fcontext`](#-common--user_management--security--selinux--fcontext)
+* [`enable_setroubleshoot`](#-common--user_management--security--selinux--enable_setroubleshoot)
 
-##### <a name="-common--system--selinux--manage"></a>`manage`
+##### <a name="-common--user_management--security--selinux--manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -7702,7 +7702,7 @@ Flag to manage SELinux context. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--system--selinux--enable"></a>`enable`
+##### <a name="-common--user_management--security--selinux--enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -7710,7 +7710,7 @@ Enable SELinux. Defaults to the value of $facts['selinux'].
 
 Default value: `$facts['os']['selinux']['enabled']`
 
-##### <a name="-common--system--selinux--enforce"></a>`enforce`
+##### <a name="-common--user_management--security--selinux--enforce"></a>`enforce`
 
 Data type: `Boolean`
 
@@ -7718,7 +7718,7 @@ Enforce SELinux policy. Defaults to false.
 
 Default value: `false`
 
-##### <a name="-common--system--selinux--fcontext"></a>`fcontext`
+##### <a name="-common--user_management--security--selinux--fcontext"></a>`fcontext`
 
 Data type: `Hash[String, Hash]`
 
@@ -7726,7 +7726,7 @@ Hash of fcontext definitions. Defaults to empty hash.
 
 Default value: `{}`
 
-##### <a name="-common--system--selinux--enable_setroubleshoot"></a>`enable_setroubleshoot`
+##### <a name="-common--user_management--security--selinux--enable_setroubleshoot"></a>`enable_setroubleshoot`
 
 Data type: `Boolean`
 
@@ -8768,17 +8768,17 @@ Optional. The noop setting for resource types. Defaults to undef.
 
 Default value: `undef`
 
-### <a name="common--system--selinux--module"></a>`common::system::selinux::module`
+### <a name="common--user_management--security--selinux--module"></a>`common::user_management::security::selinux::module`
 
 Class for managing SELinux modules
 
 #### Parameters
 
-The following parameters are available in the `common::system::selinux::module` defined type:
+The following parameters are available in the `common::user_management::security::selinux::module` defined type:
 
-* [`noop_value`](#-common--system--selinux--module--noop_value)
+* [`noop_value`](#-common--user_management--security--selinux--module--noop_value)
 
-##### <a name="-common--system--selinux--module--noop_value"></a>`noop_value`
+##### <a name="-common--user_management--security--selinux--module--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 

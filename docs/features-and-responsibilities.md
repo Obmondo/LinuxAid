@@ -256,7 +256,7 @@ LinuxAid includes comprehensive security features and compliance frameworks.
 | Encrypted Secrets | eyaml | Encrypted data in Hiera |
 | User Management | `common::system::users` | Centralized user accounts |
 | Sudo Management | `common::system::authentication::sudo` | Controlled privilege escalation |
-| SELinux | `common::system::selinux` | Mandatory access control |
+| SELinux | `common::user_management::security::selinux` | Mandatory access control |
 | Auditd | `common::security::auditd` | System auditing |
 
 #### Compliance Frameworks

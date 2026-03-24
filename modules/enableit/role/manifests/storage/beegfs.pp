@@ -68,7 +68,7 @@ class role::storage::beegfs (
   Boolean                     $__blendable,
 ) {
   confine($enable,
-          $::common::system::selinux::enable,
+          $::common::user_management::security::selinux::enable,
           'selinux must be disabled')
   contain 'profile::storage::beegfs'
 }
