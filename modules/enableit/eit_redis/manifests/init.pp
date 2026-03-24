@@ -62,7 +62,7 @@ class eit_redis (
     mode   => '0750',
   }
 
-  if lookup('common::system::selinux::enable', Boolean, undef, false) {
+  if lookup('common::user_management::security::selinux::enable', Boolean, undef, false) {
     selinux::fcontext { 'selinux-fcontext-redis-datadir':
       pathname            => $dir,
       context             => 'redis_var_lib_t',

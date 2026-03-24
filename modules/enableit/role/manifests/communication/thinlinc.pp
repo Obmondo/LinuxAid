@@ -58,7 +58,7 @@ class role::communication::thinlinc (
   ],
 ) inherits ::role::communication {
 
-  confine($enable, $::common::system::selinux::enable, 'selinux must be disabled')
+  confine($enable, $::common::user_management::security::selinux::enable, 'selinux must be disabled')
 
   if $enable {
     contain 'profile::communication::thinlinc'

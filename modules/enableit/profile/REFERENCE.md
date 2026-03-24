@@ -8541,7 +8541,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::selinux::enable`
+Default value: `$common::user_management::security::selinux::enable`
 
 ##### <a name="-profile--system--selinux--enforce"></a>`enforce`
 
@@ -8549,7 +8549,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::selinux::enforce`
+Default value: `$common::user_management::security::selinux::enforce`
 
 ##### <a name="-profile--system--selinux--enable_setroubleshoot"></a>`enable_setroubleshoot`
 
@@ -8557,7 +8557,7 @@ Data type: `Boolean`
 
 
 
-Default value: `$common::system::selinux::enable_setroubleshoot`
+Default value: `$common::user_management::security::selinux::enable_setroubleshoot`
 
 ##### <a name="-profile--system--selinux--fcontext"></a>`fcontext`
 
@@ -8565,7 +8565,7 @@ Data type: `Hash[String, Hash]`
 
 
 
-Default value: `$common::system::selinux::fcontext`
+Default value: `$common::user_management::security::selinux::fcontext`
 
 ### <a name="profile--system--sshd"></a>`profile::system::sshd`
 

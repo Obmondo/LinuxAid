@@ -9,7 +9,7 @@ class profile::appeng::wsgi (
 
   #FIXME / TODO
   #selinux not yet supported under this profile
-  #only solution to override common::system::selinux::enable setting - when this is used..
+  #only solution to override common::user_management::security::selinux::enable setting - when this is used..
   #that I can think off.. would be hiera data in modules..  and make profiles::wsgi override user setting
   $docroot = '/var/www/html'
   $code = 'Python WSGI'
