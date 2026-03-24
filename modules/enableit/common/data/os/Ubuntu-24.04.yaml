@@ -4,6 +4,7 @@ common::network::service_name: "systemd-networkd"
 common::system::systemd::manage_resolved: true
 common::monitor::exporter::security::enable: true
 common::software::vncserver::systemd_service: "tigervncserver"
+common::logging::log_dir_group: 'adm'
 common::software::vncserver::config_defaults:
   session: "ubuntu"
   geometry: "1920x1080"
