@@ -13,7 +13,8 @@ class profile::communication::thinlinc (
   Integer[0,default]      $max_session_per_user        = $role::communication::thinlinc::max_session_per_user,
   Array[Stdlib::Host]     $agents                      = $role::communication::thinlinc::agents,
   Stdlib::Host            $master_hostname             = $role::communication::thinlinc::master_hostname,
-  Optional[Stdlib::IP::Address] $loadbalancer_ip       = $role::communication::thinlinc::loadbalancer_ip,
+  Optional[Stdlib::IP::Address]  $loadbalancer_ip      = $role::communication::thinlinc::loadbalancer_ip,
+  Optional[Stdlib::Absolutepath] $license_source_path  = $role::communication::thinlinc::license_source_path,
 ) inherits ::profile {
 
   confine($ha, !$loadbalancer_ip,
@@ -33,5 +34,6 @@ class profile::communication::thinlinc (
     vsmagent_enable_ha             => $ha,
     version                        => $version,
     vsmserver_loadbalancer_ip      => $loadbalancer_ip,
+    license_source_path            => $license_source_path,
   }
 }

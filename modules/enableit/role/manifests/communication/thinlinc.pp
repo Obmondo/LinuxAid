@@ -25,6 +25,8 @@
 #
 # @param loadbalancer_ip The IP address of the load balancer. Defaults to undef.
 #
+# @param license_source_path Absolute path to the directory containing ThinLinc license files. Defaults to undef.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups basic_settings enable, ha, version.
@@ -34,6 +36,8 @@
 # @groups session_settings max_session_per_user, shadowing_shadow_mode, shadowing_allowed_shadowers.
 #
 # @groups load_balancer loadbalancer_ip.
+#
+# @groups license license_source_path.
 #
 # @groups security webadm_password, encrypt_params.
 #
@@ -52,13 +56,14 @@ class role::communication::thinlinc (
   Array[Eit_types::User] $shadowing_allowed_shadowers = [],
   Stdlib::Host           $master_hostname             = 'localhost',
   Optional[Stdlib::IP::Address] $loadbalancer_ip      = undef,
+  Optional[Stdlib::Absolutepath] $license_source_path = undef,
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'webadm_password',
   ],
 ) inherits ::role::communication {
 
-  confine($enable, $::common::user_management::security::selinux::enable, 'selinux must be disabled')
+  confine($enable, lookup('common::user_management::security::selinux::enable'), 'selinux must be disabled')
 
   if $enable {
     contain 'profile::communication::thinlinc'
