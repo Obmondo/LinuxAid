@@ -105,6 +105,15 @@ class common::network (
       'systemd-networkd': {
         include ::common::system::systemd
 
+        # With bonded interfaces, systemd-networkd-wait-online waits for ALL managed interfaces
+        # (bond + both slaves) to reach "online" state. LACP negotiation can exceed the default
+        # timeout, causing boot failures. --any makes the service succeed as soon as at least one
+        # interface is online.
+        systemd::dropin_file { 'wait-online-any.conf':
+          unit    => 'systemd-networkd-wait-online.service',
+          content => "[Service]\nExecStart=\nExecStart=/lib/systemd/systemd-networkd-wait-online --any\n",
+        }
+
         # Bonded not supported
         $interfaces.each |$_name, $_config| {
           if type($_config['ipaddress']) =~ Type[Stdlib::IP::Address::V4::CIDR] or $_uses_dhcp {
