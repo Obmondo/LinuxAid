@@ -22,6 +22,10 @@
 #
 # @param noop_value No-operation mode value. Defaults to undef.
 #
+# @param addons A hash of Splunk add-ons/apps to install via splunk::addon. Keys are add-on
+#   names (e.g. 'Splunk_TA_nix') and values are hashes of splunk::addon parameters.
+#   Defaults to an empty hash.
+#
 # @groups settings enable, noop_value
 #
 # @groups authentication password_hash, seed_password
@@ -31,6 +35,8 @@
 # @groups connection deploymentserver, forwarder_output
 #
 # @groups logging log_keep_count, log_max_file_size_b
+#
+# @groups addons addons
 #
 class common::monitor::splunk::forwarder (
   String[1]             $password_hash,
@@ -44,6 +50,7 @@ class common::monitor::splunk::forwarder (
   Boolean               $enable              = false,
   Boolean               $manage              = false,
   Eit_types::Noop_Value $noop_value          = undef,
+  Hash[String[1], Hash] $addons              = {},
 ) {
 
 

@@ -10,6 +10,7 @@ class profile::collector::splunk::forwarder (
   Optional[Hash]            $forwarder_output    = $common::monitor::splunk::forwarder::forwarder_output,
   Integer                   $log_keep_count      = $common::monitor::splunk::forwarder::log_keep_count,
   Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
+  Hash[String[1], Hash]     $addons              = $common::monitor::splunk::forwarder::addons,
 ) {
 
   user { 'splunkfwd' :
@@ -78,6 +79,12 @@ class profile::collector::splunk::forwarder (
         setting           => $_name,
         value             => $_value,
         notify            => Service[$splunk::params::forwarder_service],
+      }
+    }
+
+    $addons.each |$addon_name, $addon_params| {
+      splunk::addon { $addon_name:
+        * => $addon_params,
       }
     }
   } else {
