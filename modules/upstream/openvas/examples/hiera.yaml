@@ -1,0 +1,24 @@
+---
+# Example hiera.yaml configuration for openvas module
+# This shows how to configure eYAML for encrypted data
+
+version: 5
+
+defaults:
+  datadir: data
+  data_hash: yaml_data
+
+hierarchy:
+  # Encrypted data layer (using eYAML)
+  - name: 'encrypted'
+    lookup_key: eyaml_lookup_key
+    options:
+      pkcs7_private_key: /etc/puppetlabs/puppet/eyaml/keys/private_key.pkcs7.pem
+      pkcs7_public_key: /etc/puppetlabs/puppet/eyaml/keys/public_key.pkcs7.pem
+    paths:
+      - "nodes/%{trusted.certname}.yaml"
+      - "common.yaml"
+
+  # Plain data layer (fallback)
+  - name: 'plain'
+    path: 'plain.yaml'

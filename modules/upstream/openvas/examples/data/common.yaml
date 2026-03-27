@@ -1,0 +1,22 @@
+---
+# Example Hiera data for openvas module
+# 
+# IMPORTANT: In production, always encrypt sensitive values like passwords
+# using eYAML. See README.md for encryption instructions.
+
+# Basic openvas configuration
+openvas::install: true
+openvas::expose: true
+openvas::compose_dir: /opt/openvas
+openvas::feed_release: '24.10'
+openvas::web_port: 9392
+openvas::manage_docker: true
+
+# Admin password - ENCRYPT THIS VALUE in production!
+# To encrypt: echo "YourPassword" | eyaml encrypt --stdin --output=string
+# Then replace the plain text with: ENC[PKCS7,...]
+openvas::admin_password: "YourSecurePassword123!"
+
+# Example with encrypted value (replace with your actual encrypted password):
+# openvas::admin_password: >-
+#   ENC[PKCS7,MIIBiQYJKoZIhvcNAQcDoIIBejCCAXYCAQAxggEhMIIBHQIBADAFMAACAQEw...]

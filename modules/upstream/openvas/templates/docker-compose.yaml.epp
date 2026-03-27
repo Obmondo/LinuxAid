@@ -1,4 +1,4 @@
-<%- | String[1] $feed_release | -%>
+<%- | String[1] $feed_release, Optional[String[1]] $admin_password | -%>
 name: greenbone-community-edition
 
 services:
@@ -54,20 +54,20 @@ services:
 
   redis-server:
     image: registry.community.greenbone.net/community/redis-server
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - redis_socket_vol:/run/redis
 
   pg-gvm:
     image: registry.community.greenbone.net/community/pg-gvm:stable
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
 
   gvmd:
     image: registry.community.greenbone.net/community/gvmd:stable
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
@@ -78,6 +78,10 @@ services:
       - gvmd_socket_vol:/run/gvmd
       - ospd_openvas_socket_vol:/run/ospd
       - psql_socket_vol:/var/run/postgresql
+<% if $admin_password { %>
+    environment:
+      PASSWORD: "<%= $admin_password %>"
+<% } %>
     depends_on:
       pg-gvm:
         condition: service_started
@@ -96,7 +100,7 @@ services:
     image: registry.community.greenbone.net/community/gsa:stable
     environment:
       - enableGreenboneSensor=true
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - 127.0.0.1:9392:80
     volumes:
@@ -122,7 +126,7 @@ services:
 
   openvas:
     image: registry.community.greenbone.net/community/openvas-scanner:stable
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - openvas_data_vol:/etc/openvas
       - openvas_log_data_vol:/var/log/openvas
@@ -138,7 +142,7 @@ services:
 
   openvasd:
     image: registry.community.greenbone.net/community/openvas-scanner:stable
-    restart: on-failure
+    restart: unless-stopped
     environment:
       OPENVASD_MODE: service_notus
       GNUPGHOME: /etc/openvas/gnupg
@@ -162,7 +166,7 @@ services:
 
   ospd-openvas:
     image: registry.community.greenbone.net/community/ospd-openvas:stable
-    restart: on-failure
+    restart: unless-stopped
     hostname: ospd-openvas.local
     cap_add:
       - NET_ADMIN
