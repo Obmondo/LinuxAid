@@ -18,13 +18,19 @@
 # @param manage_docker
 #   Whether to manage Docker engine with puppetlabs-docker.
 #
+# @param admin_password
+#   Password for the admin user in GVMD. The password is set declaratively
+#   via the PASSWORD environment variable in the gvmd service.
+#   Recommended to provide this value via Hiera with eYAML encryption.
+#
 class openvas (
-  Boolean                $install        = true,
-  Boolean                $expose         = true,
-  Stdlib::Absolutepath   $compose_dir    = '/opt/openvas',
-  String[1]              $feed_release   = '24.10',
-  Integer[1, 65535]      $web_port       = 9392,
-  Boolean                $manage_docker  = true,
+  Boolean                $install       = true,
+  Boolean                $expose        = true,
+  Stdlib::Absolutepath   $compose_dir   = '/opt/openvas',
+  String[1]              $feed_release  = '24.10',
+  Integer[1, 65535]      $web_port      = 9392,
+  Boolean                $manage_docker = true,
+  String[1]              $admin_password,
 ) {
   if $manage_docker {
     contain docker

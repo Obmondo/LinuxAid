@@ -490,4 +490,4 @@ mod 'obmondo/puppetlabs-yumrepo_core',
 
 mod 'obmondo/openvas',
     :git => 'https://github.com/Obmondo/puppet-openvas',
-    :ref => 'v0.0.1'
+    :ref => 'v0.0.2'
