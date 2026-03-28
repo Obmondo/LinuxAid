@@ -1,18 +1,11 @@
 ---
-role::projectmanagement::gitlab_ci_runner::runners_defaults:
-  executor: "%{hiera('role::projectmanagement::gitlab_ci_runner::executor')}"
-  docker-image: "%{hiera('role::projectmanagement::gitlab_ci_runner::docker_image')}"
-  url: "%{hiera('role::projectmanagement::gitlab_ci_runner::url')}"
-  registration-token: "%{hiera('role::projectmanagement::gitlab_ci_runner::token')}"
-  check_interval: "%{hiera('role::projectmanagement::gitlab_ci_runner::check_interval')}"
-
-role::projectmanagement::gitlab_ci_runner::runners:
-  runner_1:
-    name:
-    docker:
-      tls_verify: false
-      image: "%{hiera('role::projectmanagement::gitlab_ci_runner::docker_image')}"
-      privileged: false
-      disable_cache: false
-      volumes:
-        - /cache
+role::projectmanagement::gitlab_ci_runner::concurrent: 1
+role::projectmanagement::gitlab_ci_runner::docker_defaults:
+  privileged: false
+  tls_verify: false
+  disable_cache: false
+  volumes:
+    - '/cache'
+role::projectmanagement::gitlab_ci_runner::docker_runners: {}
+role::projectmanagement::gitlab_ci_runner::shell_runners: {}
+# url and registration_token are required — set them in node-specific Hiera
