@@ -13,14 +13,37 @@ class profile::collector::splunk::forwarder (
   Hash[String[1], Hash]     $addons              = $common::monitor::splunk::forwarder::addons,
 ) {
 
+  Archive {
+    noop => $noop_value,
+  }
+  File {
+    noop => $noop_value,
+  }
+  Package {
+    noop => $noop_value,
+  }
+  Exec {
+    noop => $noop_value,
+  }
+
+  # Create group
+  group { 'splunkfwd':
+    ensure => ensure_present($enable),
+    system => true,
+    noop => $noop_value,
+  }
+
   user { 'splunkfwd' :
     ensure  => ensure_present($enable),
-    name    => 'splunk',
+    name    => 'splunkfwd',
+    gid     => 'splunkfwd',
     system  => yes,
     shell   => '/usr/sbin/nologin',
     home    => '/opt/splunkforwarder',
     comment => 'Splunk Server',
     noop    => $noop_value,
+    require => Group['splunkfwd'],
+    before  => Class['splunk::forwarder']
   }
 
   if $enable {
@@ -50,6 +73,11 @@ class profile::collector::splunk::forwarder (
       value   => $deploymentserver,
     }
 
+    # Install ACL package
+    package { 'acl':
+      ensure => installed,
+    }
+
     # Set ACL, so splunk user can read the required directories.
     posix_acl { '/var/log':
       action     => set,
@@ -57,6 +85,8 @@ class profile::collector::splunk::forwarder (
         'group:splunkfwd:rX',
       ],
       recursive  => true,
+      require    => Package['acl'],
+      noop       => $noop_value,
     }
 
     $_log_settings = {
@@ -79,12 +109,14 @@ class profile::collector::splunk::forwarder (
         setting           => $_name,
         value             => $_value,
         notify            => Service[$splunk::params::forwarder_service],
+        noop              => $noop_value,
       }
     }
 
     $addons.each |$addon_name, $addon_params| {
       splunk::addon { $addon_name:
         * => $addon_params,
+
       }
     }
   } else {
