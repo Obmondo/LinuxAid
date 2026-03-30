@@ -2,6 +2,23 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.7
+
+### Bug Fixes
+- 784c23d73 fix(docs): correct SELinux anchor links after namespace change
+- 837dffd63 fix: Replaced profile::system::systemd with common::system::systemd so that systemd parameters are sourced from the common class
+
+### Other Changes
+- 786b1b89f Add openvas module v0.0.2
+- 7b3a3f998 Added splunk add ons
+- 25639ca3f Updated the network wait online for bonded interace
+- 2d37c1af2 use group adm for ubuntu-24 for logrotate
+- 306349ad3 Added the support to add splunk add-ons
+- 64ebd8d8e Added a support to provide thinlinc license source path
+- 06e45c7a7 doc: fix email markdown
+- 0558fb9ed add: noop_value and ensure for jumphost
+- ed00bcc87 updating  the class name form common::setup::obmondo_admin to common::system::obmondo_admin
+
 ## LinuxAid Release Version v1.5.6
 
 ### Bug Fixes
