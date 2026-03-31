@@ -18,11 +18,11 @@
 #
 # @param max_lease_time Maximum lease time in seconds. Defaults to 86400.
 #
-# @param pools Hash of DHCP pool configurations. Defaults to empty hash.
+# @param pool DHCP pool configuration. Defaults to undef.
 #
-# @param hosts Hash of static DHCP host reservations. Defaults to empty hash.
+# @param host Static DHCP host reservation. Defaults to undef.
 #
-# @param ignoredsubnets Optional hash of ignored subnet configurations. Defaults to undef.
+# @param ignoredsubnet Optional ignored subnet configuration. Defaults to undef.
 #
 # @groups service_control manage, enable.
 #
@@ -30,7 +30,7 @@
 #
 # @groups lease authoritative, default_lease_time, max_lease_time.
 #
-# @groups pools pools, hosts, ignoredsubnets.
+# @groups pools pool, host, ignoredsubnet.
 #
 class common::network::dhcpd (
   Boolean                    $manage             = false,
@@ -42,12 +42,16 @@ class common::network::dhcpd (
   Boolean                    $authoritative      = true,
   Integer[-1]                $default_lease_time = 43200,
   Integer[-1]                $max_lease_time     = 86400,
-  Hash[String, Eit_types::Network::Dhcp::Pool]         $pools              = {},
-  Hash[String[1], Eit_types::Network::Dhcp::Host]      $hosts              = {},
-  Optional[Hash[String, Eit_types::Network::Dhcp::Ignoredsubnet]] $ignoredsubnets   = undef,
+  Optional[Eit_types::Network::Dhcp::Pool]         $pool             = undef,
+  Optional[Eit_types::Network::Dhcp::Host]         $host             = undef,
+  Optional[Eit_types::Network::Dhcp::Ignoredsubnet] $ignoredsubnet   = undef,
 ) {
   if $manage {
     $_service_ensure = $enable ? { true => 'running', default => 'stopped' }
+
+    $_pools = $pool ? { undef => {}, default => { 'default' => $pool } }
+    $_hosts = $host ? { undef => {}, default => { 'default' => $host } }
+    $_ignoredsubnets = $ignoredsubnet ? { undef => {}, default => { 'default' => $ignoredsubnet } }
 
     class { '::dhcp':
       interfaces         => $interfaces,
@@ -57,9 +61,9 @@ class common::network::dhcpd (
       authoritative      => $authoritative,
       default_lease_time => $default_lease_time,
       max_lease_time     => $max_lease_time,
-      pools              => $pools,
-      hosts              => $hosts,
-      ignoredsubnets     => $ignoredsubnets ? { undef => {}, default => $ignoredsubnets },
+      pools              => $_pools,
+      hosts              => $_hosts,
+      ignoredsubnets     => $_ignoredsubnets,
       service_ensure     => $_service_ensure,
     }
   }
