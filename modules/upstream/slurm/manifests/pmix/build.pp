@@ -52,10 +52,11 @@
 # with slurm-libmpi).
 #
 define slurm::pmix::build (
-  Enum['present', 'absent'] $ensure  = $slurm::params::ensure,
-  String                    $srcdir  = $slurm::params::srcdir,
-  String                    $dir     = $slurm::params::builddir,
-  Array                     $defines = [],
+  Enum['present', 'absent'] $ensure         = $slurm::params::ensure,
+  String                    $srcdir         = $slurm::params::srcdir,
+  String                    $dir            = $slurm::params::builddir,
+  Array                     $defines        = [],
+  String                    $python_version = $slurm::python_version,
 ) {
   include slurm::params
 
@@ -91,13 +92,13 @@ define slurm::pmix::build (
           ensure => 'present',
         }
       }
-      if !defined(Package['python3-devel']) {
-        package { 'python3-devel':
+      if !defined(Package["${python_version}-devel"]) {
+        package { "${python_version}-devel":
           ensure => 'present',
         }
       }
       Yum::Group[$slurm::params::groupinstall] -> Exec[$buildname]
-      Package['libevent-devel'] -> Package['python3-devel'] -> Exec[$buildname]
+      Package['libevent-devel'] -> Package["${python_version}-devel"] -> Exec[$buildname]
 
       $rpmdir = "${dir}/RPMS/${facts['os']['architecture']}"
       $rpms = prefix(suffix($slurm::params::pmix_rpms, "-${version}*.rpm"), "${rpmdir}/")

@@ -25,6 +25,10 @@ class slurm::params {
   #### MODULE INTERNAL VARIABLES  #########
   # (Modify to adapt to unsupported OSes)
   #########################################
+  # Python version for RedHat systems (e.g., 'python3', 'python36', 'python38')
+  # Value is overridden by slurm class parameter $python_version (from hiera)
+  $python_version = 'python3'
+
   $pre_requisite_packages = $facts['os']['family'] ? {
     'Redhat' => [
       'hwloc', 'hwloc-devel', 'hwloc-plugins', 'numactl', 'numactl-devel',
@@ -38,7 +42,7 @@ class slurm::params {
       'libX11-devel',
       'libssh2-devel',
       'libevent-devel',
-      'python3', 'python3-devel',
+      $python_version, "${python_version}-devel",
     ],
     default => []
   }

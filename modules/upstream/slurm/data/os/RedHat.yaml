@@ -1,0 +1,2 @@
+---
+slurm::python_version: 'python36'

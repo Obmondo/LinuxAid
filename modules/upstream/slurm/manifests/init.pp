@@ -756,6 +756,7 @@ class slurm (
   # PMIx settings -- see slurm::pmix class
   #
   Boolean $with_pmix                      = $slurm::params::with_pmix,
+  String  $python_version                 = $slurm::params::python_version,
   # String  $pmix_version                   = $slurm::params::pmix_version,
   # String  $pmix_checksum_type             = $slurm::params::pmix_src_checksum_type,
   # String  $pmix_checksum                  = $slurm::params::pmix_src_checksum,
