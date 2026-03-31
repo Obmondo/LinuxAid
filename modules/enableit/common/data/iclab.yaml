@@ -1,0 +1,67 @@
+---
+common::network::dhcpd::manage: true
+common::network::dhcpd::interfaces:
+  - 'enp2s0'
+common::network::dhcpd::dnsdomain:
+  - 'example.com'
+common::network::dhcpd::nameservers:
+  - '192.168.69.1'
+common::network::dhcpd::dnssearchdomains:
+  - 'example.com'
+common::network::dhcpd::authoritative: true
+common::network::dhcpd::default_lease_time: 43200
+common::network::dhcpd::max_lease_time: 86400
+
+common::network::dhcpd::pools:
+  '192.168.69.0':
+    network: '192.168.69.0'
+    mask: '255.255.255.0'
+    range:
+      - '192.168.69.2 192.168.69.255'
+    options:
+      routers: '192.168.1.254'
+      subnet-mask: '255.255.255.0'
+      domain-search: '"example.com"'
+      domain-name-servers: '192.168.69.1'
+      time-offset: '-18000'
+
+common::network::dhcpd::hosts:
+  'Cyberlink':
+    mac: 'dc:a6:32:32:03:66'
+    ip: '192.168.69.14'
+  'Promira':
+    mac: '90:8c:09:01:3f:dc'
+    ip: '192.168.69.17'
+  'PSU1':
+    mac: '80:09:02:1d:81:b6'
+    ip: '192.168.69.10'
+  'PSU2':
+    mac: '80:09:02:1d:a1:2f'
+    ip: '192.168.69.8'
+  'AWG':
+    mac: '80:09:02:0e:ef:bc'
+    ip: '192.168.69.13'
+  'DMM':
+    mac: '80:09:02:18:96:55'
+    ip: '192.168.69.11'
+  'SMU0':
+    mac: '08:00:11:26:6b:3c'
+    ip: '192.168.69.7'
+  'SMU1':
+    mac: '08:00:11:26:6b:31'
+    ip: '192.168.69.6'
+  'SMU2':
+    mac: '08:00:11:26:6b:36'
+    ip: '192.168.69.5'
+  'MSO':
+    mac: '80:09:02:15:03:70'
+    ip: '192.168.69.3'
+  'DSO':
+    mac: '00:30:64:50:ea:1a'
+    ip: '192.168.69.205'
+  'UPV':
+    mac: '00:e0:33:00:bf:6c'
+    ip: '192.168.69.124'
+  'CHAMBER':
+    mac: '00:0c:d8:0d:1c:0f'
+    ip: '192.168.69.57'

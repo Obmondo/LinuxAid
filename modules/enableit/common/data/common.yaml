@@ -527,3 +527,6 @@ common::network::tcpshaker::concurrency: 50
 
 ## Vrrp
 common::network::vrrp::enable: false
+
+## DHCPD
+common::network::dhcpd::manage: false

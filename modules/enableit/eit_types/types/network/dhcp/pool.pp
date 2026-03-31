@@ -1,0 +1,21 @@
+# DHCP pool configuration
+type Eit_types::Network::Dhcp::Pool = Struct[{
+  'network'          => Stdlib::IP::Address::V4,
+  'mask'             => Stdlib::IP::Address::V4,
+  'host_mask'        => Optional[Stdlib::IP::Address::V4],
+  'gateway'          => Optional[Stdlib::IP::Address::V4],
+  'range'            => Optional[Variant[Array[String[1], 1], String[1]]],
+  'failover'         => Optional[String[1]],
+  'options'          => Optional[Variant[Array[String[1]], String[1]]],
+  'parameters'       => Optional[Variant[Array[String[1]], String[1]]],
+  'sharednetwork'    => Optional[String[1]],
+  'nameservers'      => Optional[Array[String]],
+  'nameservers_ipv6' => Optional[Array[String]],
+  'pxeserver'        => Optional[String],
+  'mtu'              => Optional[Integer],
+  'domain_name'      => Optional[String[1]],
+  'ignore_unknown'   => Optional[Boolean],
+  'on_commit'        => Optional[Array[String[1]]],
+  'on_release'       => Optional[Array[String[1]]],
+  'on_expiry'        => Optional[Array[String[1]]],
+}]

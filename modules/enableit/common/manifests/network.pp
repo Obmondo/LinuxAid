@@ -356,4 +356,8 @@ Bond=${_name}
   if lookup('common::network::tcpshaker::enable', Boolean, undef, false) {
     'common::network::tcpshaker'.contain
   }
+
+  if lookup('common::network::dhcpd::manage', Boolean, undef, false) {
+    'common::network::dhcpd'.contain
+  }
 }

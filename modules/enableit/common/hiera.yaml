@@ -47,6 +47,9 @@ hierarchy:
   - name: "Subscription"
     path: "subscriptions/%{::subscription}.yaml"
 
+  - name: "ICLAB"
+    path: "iclab.yaml"
+
   - name: "common"
     path: "common.yaml"
     lookup_key: eyaml_lookup_key
