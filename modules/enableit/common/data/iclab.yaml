@@ -18,12 +18,12 @@ common::network::dhcpd::pools:
     mask: '255.255.255.0'
     range:
       - '192.168.69.2 192.168.69.255'
+    gateway: '192.168.1.254'
+    domain_name: 'example.com'
+    nameservers:
+      - '192.168.69.1'
     options:
-      routers: '192.168.1.254'
-      subnet-mask: '255.255.255.0'
-      domain-search: '"example.com"'
-      domain-name-servers: '192.168.69.1'
-      time-offset: '-18000'
+      - 'time-offset -18000'
 
 common::network::dhcpd::hosts:
   'Cyberlink':
