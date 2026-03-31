@@ -1,5 +1,5 @@
 # DHCP pool configuration
-type Eit_types::Network::Dhcp::Pool = Struct[{
+type Eit_types::Network::Dhcp::Pool = Hash[String, Struct[{
   'network'          => Stdlib::IP::Address::V4,
   'mask'             => Stdlib::IP::Address::V4,
   'host_mask'        => Optional[Stdlib::IP::Address::V4],
@@ -18,4 +18,4 @@ type Eit_types::Network::Dhcp::Pool = Struct[{
   'on_commit'        => Optional[Array[String[1]]],
   'on_release'       => Optional[Array[String[1]]],
   'on_expiry'        => Optional[Array[String[1]]],
-}]
+}]]

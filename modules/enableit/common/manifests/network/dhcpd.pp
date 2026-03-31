@@ -42,9 +42,9 @@ class common::network::dhcpd (
   Boolean                    $authoritative      = true,
   Integer[-1]                $default_lease_time = 43200,
   Integer[-1]                $max_lease_time     = 86400,
-  Hash[String, Eit_types::Network::Dhcp::Pool]         $pools              = {},
-  Hash[String[1], Eit_types::Network::Dhcp::Host]      $hosts              = {},
-  Optional[Hash[String, Eit_types::Network::Dhcp::Ignoredsubnet]] $ignoredsubnets   = undef,
+  Eit_types::Network::Dhcp::Pool           $pools              = {},
+  Eit_types::Network::Dhcp::Host           $hosts              = {},
+  Optional[Eit_types::Network::Dhcp::Ignoredsubnet] $ignoredsubnets = undef,
 ) {
   if $manage {
     $_service_ensure = $enable ? { true => 'running', default => 'stopped' }

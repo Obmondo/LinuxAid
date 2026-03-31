@@ -1,5 +1,5 @@
 # DHCP host reservation configuration
-type Eit_types::Network::Dhcp::Host = Struct[{
+type Eit_types::Network::Dhcp::Host = Hash[String, Struct[{
   'mac'               => Eit_types::MAC,
   'ip'                => Optional[Stdlib::IP::Address],
   'ddns_hostname'     => Optional[String[1]],
@@ -14,4 +14,4 @@ type Eit_types::Network::Dhcp::Host = Struct[{
   'on_commit'         => Optional[Array[String[1]]],
   'on_release'        => Optional[Array[String[1]]],
   'on_expiry'         => Optional[Array[String[1]]],
-}]
+}]]
