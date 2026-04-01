@@ -408,6 +408,7 @@ common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: tcpshaker
   - job_name: haproxy
   - job_name: wireguard
+    fallback_scrape_protocol: PrometheusText0.0.4
   - job_name: dellhw
   - job_name: cadvisor
   - job_name: security
