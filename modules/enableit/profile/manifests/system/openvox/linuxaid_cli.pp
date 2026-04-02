@@ -55,15 +55,19 @@ class profile::system::openvox::linuxaid_cli (
     owner  => 'root',
   })
 
+  $_security_exporter_host = lookup('common::monitor::exporter::security::listen_host', String, undef, '127.254.254.254')
+  $_security_exporter_port = lookup('common::monitor::exporter::security::listen_port', Integer, undef, 63396)
+
   file { '/etc/default/linuxaid-cli':
     ensure  => file,
     mode    => '0644',
     owner   => 'root',
     noop    => $noop_value,
     content => anything_to_ini({
-      'PUPPETCERT'    => $facts['hostcert'],
-      'PUPPETPRIVKEY' => $facts['hostprivkey'],
-      'HOSTNAME'      => $trusted['certname'],
+      'PUPPETCERT'             => $facts['hostcert'],
+      'PUPPETPRIVKEY'          => $facts['hostprivkey'],
+      'HOSTNAME'               => $trusted['certname'],
+      'SECURITY_EXPORTER_URL'  => "http://${_security_exporter_host}:${_security_exporter_port}",
     }),
   }
 }
