@@ -43,19 +43,22 @@ define common::backup::borg::push (
     crontab_define => 'systemd::unit_file',
     crontabs       => {
       "obmondo-backup-borg@${_reponame}.timer" => {
-        ensure  => true, #lint:ignore:ensure_first_param
+        ensure  => 'present',
         enable  => true,
-        unit    => {
-          'Description' => 'Obmondo borg backup',
-        },
-        timer   => {
-          'OnCalendar'         => systemd_make_timespec($timespec),
-          'RandomizedDelaySec' => $randomized_delay,
-          'Persistent'         => 'true', # lint:ignore:quoted_booleans
-        },
-        install => {
-          'WantedBy' => 'timers.target',
-        },
+        active  => true,
+        content => @(CONTENT)
+          [Unit]
+          Description=Obmondo borg backup
+
+          [Timer]
+          OnCalendar=${systemd_make_timespec($timespec)}
+          RandomizedDelaySec=${randomized_delay}
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+          | CONTENT
+        ,
       },
     },
     check_host     => undef,

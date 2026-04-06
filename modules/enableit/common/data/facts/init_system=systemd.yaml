@@ -1,4 +1,13 @@
 ---
+# Must be declared before common::monitor (and any other class that uses
+# systemd::dropin_file / systemd::network / systemd::unit_file etc.) so that
+# resource-style `class { 'systemd': ... }` in profile::system::systemd wins
+# over the implicit `include systemd` performed by those upstream defined
+# types. `merge: unique` on common::default::classes (see common.yaml)
+# concatenates higher-priority entries first, so this prepends to the list.
+common::default::classes:
+  - common::system::systemd
+
 common::system::systemd::manage_journald: true
 common::system::time::ntp::ntp_client: 'systemd-timesyncd'
 common::monitor::exporter::node::systemd: true

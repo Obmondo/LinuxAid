@@ -50,7 +50,6 @@ class common::system::dns (
 
   if $manage {
     contain profile::system::dns
-    contain common::system::systemd
   }
 
   if $facts['init_system'] == 'systemd' {
