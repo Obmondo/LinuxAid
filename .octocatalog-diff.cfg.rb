@@ -2,8 +2,6 @@ class OctocatalogDiff::Config
   def self.config
     settings = {}
     settings[:basedir] = Dir.pwd
-    settings[:from_branch] = 'master'
-
     # Puppet
     settings[:puppet_binary] = '/usr/local/bundle/bin/puppet'
 
