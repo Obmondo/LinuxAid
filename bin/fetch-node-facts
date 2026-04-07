@@ -1,40 +1,66 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Fetch Puppet facts from a remote host via SSH and save them locally
+# for offline catalog-diff runs.
+#
+# Usage: fetch-node-facts <certname>
+#
+#   certname — the Puppet certname (used as the fact file name and SSH hostname)
+#
+
 require 'fileutils'
 require 'json'
-require 'net/http'
-require 'openssl'
-require 'uri'
 require 'yaml'
+require 'open3'
 
-certname = ARGV[0] or abort "Usage: #{$0} <certname>  e.g. #{$0} dev-ashish21.niwyocdmk2"
-
-puppetdb_url = ENV.fetch('PUPPETDB_URL', 'https://enableit.puppetdb.obmondo.com:443')
-ca_cert      = ENV.fetch('AUTOSIGN_CA_CERT',     File.expand_path('../e2e/.certs/ca.pem', __dir__))
-client_cert  = ENV.fetch('AUTOSIGN_CLIENT_CERT') { abort 'AUTOSIGN_CLIENT_CERT not set' }
-client_key   = ENV.fetch('AUTOSIGN_CLIENT_KEY')  { abort 'AUTOSIGN_CLIENT_KEY not set' }
-
-uri = URI("#{puppetdb_url}/pdb/query/v4/nodes/#{certname}/facts")
-
-response = Net::HTTP.start(uri.host, uri.port,
-  use_ssl:     true,
-  ca_file:     ca_cert,
-  cert:        OpenSSL::X509::Certificate.new(File.read(client_cert)),
-  key:         OpenSSL::PKey::RSA.new(File.read(client_key)),
-  verify_mode: OpenSSL::SSL::VERIFY_PEER
-) do |http|
-  http.get(uri.request_uri)
+def abort_with_message(msg)
+  $stderr.puts "Error: #{msg}"
+  exit 1
 end
 
-abort "PuppetDB error #{response.code}: #{response.body}" unless response.is_a?(Net::HTTPSuccess)
+certname = ARGV[0] or abort "Usage: #{$0} <certname>"
 
-facts  = JSON.parse(response.body)
-values = facts.each_with_object({}) { |f, h| h[f['name']] = f['value'] }
-doc    = { 'name' => certname, 'values' => values }
+# Try to resolve the actual SSH host using assh if available
+ssh_host = certname
+if system('which assh >/dev/null 2>&1')
+  customer_id = certname.split('.').last
+  if system("assh config search #{certname} >/dev/null 2>&1")
+    ssh_host = certname
+  elsif customer_id != certname && system("assh config search #{customer_id} >/dev/null 2>&1")
+    ssh_host = customer_id
+  end
+end
 
-out_dir  = File.expand_path('../e2e/facts/agents', __dir__)
+# Build SSH command
+# Use a timeout and ensure we use the correct puppet binary path
+cmd = "ssh -o ConnectTimeout=10 #{ssh_host} 'sudo /opt/puppetlabs/bin/puppet facts show --render-as json'"
+$stderr.puts "Running: #{cmd}"
+
+stdout, stderr, status = Open3.capture3(cmd)
+
+unless status.success?
+  $stderr.puts "SSH/facter failed (exit #{status.exitstatus})"
+  $stderr.puts "Stderr: #{stderr}" unless stderr.empty?
+  $stderr.puts "Make sure you can SSH to '#{ssh_host}' and have sudo privileges."
+  exit status.exitstatus
+end
+
+begin
+  values = JSON.parse(stdout)
+rescue JSON::ParserError => e
+  abort_with_message "Failed to parse puppet facts output as JSON: #{e.message}\nOutput was: #{stdout}"
+end
+
+doc = { 'name' => certname, 'values' => values }
+
+out_dir  = File.expand_path('../e2e/facts', __dir__)
 out_file = File.join(out_dir, "#{certname}.yaml")
-FileUtils.mkdir_p(out_dir)
-File.write(out_file, doc.to_yaml)
-puts "Wrote #{out_file}"
+
+begin
+  FileUtils.mkdir_p(out_dir)
+  File.write(out_file, doc.to_yaml)
+  $stderr.puts "Wrote #{out_file}"
+rescue StandardError => e
+  abort_with_message "Failed to write fact file: #{e.message}"
+end

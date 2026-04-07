@@ -11,9 +11,9 @@ e2e/
 ├── enc.rb                           # Stub ENC — returns fixed params, no API
 ├── hiera.yaml                       # Hiera config pointing at e2e/ data
 ├── global.yaml                      # Defaults (monitoring off, no full mgmt)
-└── agents/
-    ├── role-basic.e2etesting.yaml      # Assigns role::basic
-    └── role-monitoring.e2etesting.yaml # Assigns role::monitoring
+└── facts/
+    ├── role-basic.e2etesting.yaml      # Agent facts
+    └── role-monitoring.e2etesting.yaml # Agent facts
 ```
 
 ## Certname convention
@@ -26,54 +26,61 @@ role-monitoring.e2etesting
 myfeature.e2etesting
 ```
 
-## Adding a new test agent
-
-Create `e2e/agents/<certname>.yaml` with the desired classes:
-
-```yaml
-# e2e/agents/myfeature.e2etesting.yaml
-classes:
-  - role::basic
-  - mymodule::myclass
-```
-
 ## Running catalog-diff in e2e mode
 
+The main entry point is `bin/catalog-diff.sh`. It runs the diff inside a Docker container.
+
 ```bash
+# Compare a single host
 ./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting
-./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting --from HEAD --to <branch>
-./bin/catalog-diff.sh --e2e --ci --hostname role-basic.e2etesting
+
+# Compare multiple hosts
+./bin/catalog-diff.sh --e2e --hostname host1 --hostname host2
+
+# Compare between branches
+./bin/catalog-diff.sh --e2e --hostname role-basic.e2etesting --from master --to <branch>
+
+# Force re-fetching facts and pull latest Docker image
+./bin/catalog-diff.sh --e2e --hostname host1 --no-cache --pull
 ```
 
-Add `--ci` to produce a Markdown summary alongside the plain-text output.
-In GitHub Actions the summary is written to `$GITHUB_STEP_SUMMARY`;
-locally it prints to stdout.
+### Options
+
+- `--e2e`: Required. Use local facts, ENC, and Hiera config.
+- `--hostname <name>`: The Puppet certname to diff. Can be used multiple times.
+- `--from <ref>` / `--to <ref>`: Git references for the base and target catalogs.
+- `--ci`: Enable CI mode (Markdown summary for GitHub Actions).
+- `--pull`: Pull the latest Docker image before running.
+- `--quiet`: Minimize non-essential output.
+- `--no-cache`: Force re-fetching facts via SSH even if they exist locally.
+- `--format-as FMT`: Output format. Options: `pretty` (default), `json`.
+- `--debug`: Keep temporary catalogs and facts in `.catalog-diff-debug/`.
+- `--config-repo <path>`: Use a customer config repo for Hiera data.
+- `--kube-context <context>`: Kubernetes context to fetch eyaml keys from.
 
 ## Node facts for catalog-diff
 
-octocatalog-diff reads node facts from local YAML files in `e2e/facts/agents/` instead of
+octocatalog-diff reads node facts from local YAML files in `e2e/facts/` instead of
 querying PuppetDB (controlled by the `PUPPET_FACT_DIR` env var set in `bin/catalog-diff.sh`).
 
 ### Seeding / refreshing facts
 
-Run `bin/fetch-node-facts` on a machine with PuppetDB access (requires the e2e certs):
+The script `bin/catalog-diff.sh` will automatically attempt to fetch facts via SSH if they are missing locally. You can also manually refresh them:
 
 ```bash
-AUTOSIGN_CLIENT_CERT=e2e/.certs/role-basic.e2etesting.pem \
-AUTOSIGN_CLIENT_KEY=e2e/.certs/role-basic.e2etesting.key \
-AUTOSIGN_CA_CERT=e2e/.certs/ca.pem \
+# Fetch facts via SSH (requires sudo on the remote node)
 bin/fetch-node-facts <certname>
 ```
 
-This writes `e2e/facts/agents/<certname>.yaml` in Puppet YAML format (`name` + `values`).
-Commit the resulting file so CI and other developers can run catalog-diff without VPN access.
+This writes `e2e/facts/<certname>.yaml` in Puppet YAML format (`name` + `values`).
+Commit the resulting file so CI and other developers can run catalog-diff without SSH access.
 
 ### Testing a fact change
 
-Edit a value in `e2e/facts/agents/<certname>.yaml`, then re-run catalog-diff:
+Edit a value in `e2e/facts/<certname>.yaml`, then re-run catalog-diff:
 
 ```bash
 # e.g. change the osfamily fact and see catalog impact
-$EDITOR e2e/facts/agents/<certname>.yaml
+$EDITOR e2e/facts/<certname>.yaml
 ./bin/catalog-diff.sh --e2e --hostname <certname>
 ```
