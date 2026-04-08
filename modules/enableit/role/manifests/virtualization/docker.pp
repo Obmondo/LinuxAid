@@ -36,7 +36,7 @@
 #
 # @param upstream_repo Whether to use the upstream repository. Defaults to true.
 #
-# @param cadvisor_image The cAdvisor image to use. Defaults to 'gcr.io/cadvisor/cadvisor:v0.39.0'.
+# @param cadvisor_image The cAdvisor image to use. Defaults to 'ghcr.io/google/cadvisor:0.56.2'.
 #
 # @param prune_duration The parameter prune_duration specifies the duration in days for which unused Docker resources will be retained before being pruned. Defaults to '30'.
 #
@@ -73,7 +73,7 @@ class role::virtualization::docker (
   Eit_types::Package_Version           $compose_version     = 'present',
   Hash[Eit_types::Domain, Hash]        $registry            = {},
   Boolean                              $upstream_repo       = true,
-  String                               $cadvisor_image      = 'gcr.io/cadvisor/cadvisor:v0.39.0',
+  String                               $cadvisor_image      = 'ghcr.io/google/cadvisor:0.56.2',
   String                               $prune_duration      = '30'
 ) inherits ::role::virtualization {
 
