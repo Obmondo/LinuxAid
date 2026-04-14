@@ -107,6 +107,7 @@ class profile::logging::logrotate (
       '/var/log/secure',
       '/var/log/spooler',
       '/var/log/user.log',
+      '/var/log/syslog'
     ],
     missingok     => true,
     sharedscripts => true,
