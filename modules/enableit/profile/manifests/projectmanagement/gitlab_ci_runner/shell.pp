@@ -52,7 +52,7 @@ define profile::projectmanagement::gitlab_ci_runner::shell (
 
     [Service]
     ExecStart=/usr/bin/gitlab-runner run \
-      --working-directory ${_working_directory} \
+      --working-directory ${_working_directory}/${run_as_user} \
       --config ${config_path} \
       --service ${service_name} \
       --user ${run_as_user}
