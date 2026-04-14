@@ -10,11 +10,14 @@
 #
 # @param install_dir Stdlib::Absolutepath parameter to control installation directory of Miniforge3.
 #
+# @param conda_forge_packages Array of conda-forge package names to install (e.g. ['exec-wrappers']).
+#
 class profile::software::miniforge (
-  Boolean              $manage      = $common::software::miniforge::manage,
-  Boolean              $enable      = $common::software::miniforge::enable,
-  Eit_types::Version   $version     = $common::software::miniforge::version,
-  Stdlib::Absolutepath $install_dir = $common::software::miniforge::install_dir,
+  Boolean              $manage               = $common::software::miniforge::manage,
+  Boolean              $enable               = $common::software::miniforge::enable,
+  Eit_types::Version   $version              = $common::software::miniforge::version,
+  Stdlib::Absolutepath $install_dir          = $common::software::miniforge::install_dir,
+  Array[String[1]]     $conda_forge_packages = $common::software::miniforge::conda_forge_packages,
 ){
 
   $package_url   = "https://github.com/conda-forge/miniforge/releases/download/${version}/Miniforge3-${version}-Linux-x86_64.sh"
@@ -45,5 +48,15 @@ class profile::software::miniforge (
       'WantedBy' => 'multi-user.target',
     },
     require       => Archive[$download_path],
+  }
+
+  # Install conda-forge packages
+  $conda_forge_packages.each |String $package| {
+    exec { "conda-install-${package}":
+      command => "${install_dir}/bin/conda install -y conda-forge::${package}",
+      unless  => "${install_dir}/bin/conda list | /bin/grep -q ${package}",
+      path    => ["${install_dir}/bin", '/usr/bin', '/bin'],
+      require => Systemd::Manage_unit['miniforge_install.service'],
+    }
   }
 }
