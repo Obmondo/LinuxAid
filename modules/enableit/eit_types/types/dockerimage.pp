@@ -1,1 +1,1 @@
-type Eit_types::DockerImage = Pattern[/([a-zA-Z0-9_-]+)\/([a-zA-Z0-9_-]+)(\:([a-zA-Z0-9_-]+))?/]
+type Eit_types::DockerImage = Pattern[/^[a-zA-Z0-9._-]+(\/[a-zA-Z0-9._-]+)*(\:[a-zA-Z0-9._-]+)?$/]
