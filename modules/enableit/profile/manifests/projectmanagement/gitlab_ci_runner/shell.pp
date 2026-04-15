@@ -19,7 +19,8 @@
 define profile::projectmanagement::gitlab_ci_runner::shell (
   Stdlib::HTTPSUrl           $url,
   String                     $registration_token,
-  Optional[Stdlib::Unixpath] $working_directory = undef,
+  Optional[Stdlib::Unixpath] $working_directory  = undef,
+  Integer[1]                 $concurrent_runners = 1,
 ) {
   $run_as_user        = $title
   $config_path        = "/etc/gitlab-runner/config-${run_as_user}.toml"
@@ -63,30 +64,32 @@ define profile::projectmanagement::gitlab_ci_runner::shell (
     WantedBy=multi-user.target
     | EOT
 
-  # Oneshot service that registers the runner if not already registered
+  $_hostname = $facts['networking']['hostname']
+  $_names = range(1, $concurrent_runners).map |$i| {
+    "${_hostname}_${run_as_user}_shell_runner_${i}"
+  }
+  $_register_cmds = $_names.map |$n| {
+    "grep -q \"name = \\\"${n}\\\"\" ${config_path} || /usr/bin/gitlab-runner register --non-interactive --config ${config_path} --url ${url} --registration-token ${registration_token} --executor shell --name ${n} --tag-list shell --run-untagged=false"
+  }.join(' && ')
+
+  systemd::unit_file { "${service_name}.service":
+    content => $_service,
+    require => File[$config_path, $_working_directory],
+  }
+
+  # One oneshot register unit; registers each concurrent runner only if its
+  # name is not already present in the config.
   $_register_service = @("EOT")
     [Unit]
-    Description=Register GitLab Runner for ${run_as_user}
+    Description=Register GitLab Runners for ${run_as_user}
     After=network-online.target
     Wants=network-online.target
     ConditionFileIsExecutable=/usr/bin/gitlab-runner
 
     [Service]
     Type=oneshot
-    ExecCondition=/bin/bash -c '! /bin/grep -q "name = \\"gitlab-runner-${run_as_user}\\"" ${config_path}'
-    ExecStart=/usr/bin/gitlab-runner register \
-      --non-interactive \
-      --config ${config_path} \
-      --url ${url} \
-      --registration-token ${registration_token} \
-      --executor shell \
-      --name gitlab-runner-${run_as_user}
+    ExecStart=/bin/bash -c '${_register_cmds}'
     | EOT
-
-  systemd::unit_file { "${service_name}.service":
-    content => $_service,
-    require => File[$config_path, $_working_directory],
-  }
 
   systemd::unit_file { "${service_name}-register.service":
     content => $_register_service,

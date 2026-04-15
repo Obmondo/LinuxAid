@@ -38,6 +38,7 @@ class profile::projectmanagement::gitlab_ci_runner (
       url                => $url,
       registration_token => $registration_token,
       working_directory  => $settings['working_directory'],
+      concurrent_runners => pick($settings['concurrent_runners'], 1),
     }
   }
 
