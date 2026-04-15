@@ -16,17 +16,13 @@
 #
 # @param log_dir The directory for log files.
 #
-# @param send_log_summary Boolean to enable or disable sending log summaries.
-#
-# @param log_summary_recipients The recipients for log summaries.
-#
 # @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version
 #
 # @groups networking domains, listens, listen_on, firewall
 #
-# @groups logging log_compressed, log_dir, send_log_summary, log_summary_recipients
+# @groups logging log_compressed, log_dir
 #
 # @groups mode mode, http
 #
@@ -53,8 +49,6 @@ class profile::web::haproxy (
   Hash                          $service_options        = {},
   Boolean                       $log_compressed         = $role::web::haproxy::log_compressed,
   Stdlib::Absolutepath          $log_dir                = $role::web::haproxy::log_dir,
-  Boolean                       $send_log_summary       = $role::web::haproxy::send_log_summary,
-  Array[String]                 $log_summary_recipients = $role::web::haproxy::log_summary_recipients,
 ) inherits profile {
   # Monitoring
   $facts.dig('haproxy_version').then |$_haproxy_version| {
@@ -92,24 +86,18 @@ class profile::web::haproxy (
     log_dir            => $log_dir,
   }
 
-  # Install log summary sender
-  if $send_log_summary {
-    package::install('obmondo-haproxy-script', {
-        ensure  => 'latest',
-    })
-    file_line { 'logdir_env_var':
-      ensure  => 'present',
-      line    => "LOGDIR='${log_dir}'",
-      match   => 'LOGDIR=',
-      path    => '/etc/default/obmondo-haproxy-script',
-      require => Package['obmondo-haproxy-script'],
-    }
-    file_line { 'mailto_env_var':
-      ensure  => 'present',
-      line    => "MAILTO='${$log_summary_recipients.join(':')}'",
-      match   => 'MAILTO=',
-      path    => '/etc/default/obmondo-haproxy-script',
-      require => Package['obmondo-haproxy-script'],
-    }
+  # Cleanup deprecated log summary sender
+  service { ['obmondo-haproxy-script.timer', 'obmondo-haproxy-script.service']:
+    ensure => 'stopped',
+    enable => false,
+    before => Package['obmondo-haproxy-script'],
+  }
+
+  package { 'obmondo-haproxy-script':
+    ensure => 'purged',
+  }
+
+  file { '/etc/default/obmondo-haproxy-script':
+    ensure => 'absent',
   }
 }
