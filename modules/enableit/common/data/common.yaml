@@ -458,6 +458,7 @@ common::monitor::exporter::node::smartmon::enable: false
 
 ## Splunk
 common::monitor::splunk::forwarder::enable: false
+common::monitor::splunk::forwarder::package_ensure: latest
 
 ## Scom
 common::monitor::scom::manage: false
