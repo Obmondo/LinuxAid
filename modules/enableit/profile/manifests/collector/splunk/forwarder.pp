@@ -11,6 +11,7 @@ class profile::collector::splunk::forwarder (
   Integer                   $log_keep_count      = $common::monitor::splunk::forwarder::log_keep_count,
   Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
   Hash[String[1], Hash]     $addons              = $common::monitor::splunk::forwarder::addons,
+  String[1]                 $package_ensure      = 'installed',
 ) {
 
   user { 'splunkfwd' :
@@ -35,6 +36,7 @@ class profile::collector::splunk::forwarder (
       password_hash    => $password_hash,
       purge_outputs    => false,
       forwarder_output => $forwarder_output,
+      package_ensure   => $package_ensure,
       forwarder_input  => {
         'default_host' => {
           section => 'default',
