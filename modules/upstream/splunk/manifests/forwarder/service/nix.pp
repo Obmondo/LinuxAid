@@ -23,20 +23,18 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
         timeout => 120,
       }
 
-      # Re-enable boot-start after package install
+      # Re-enable boot-start after package install (notifies from Package)
       exec { 'splunkforwarder-enable-boot-start':
-        command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
-        tag         => 'splunk_forwarder',
-        refreshonly => true,
-        returns     => [0, 4],
-        timeout     => 120,
+        command => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
+        tag     => 'splunk_forwarder',
+        returns => [0, 4],
+        before  => Service[$splunk::forwarder::service_name],
+        timeout => 120,
       }
 
-      # Chain upgrade sequence: disable -> stop -> package -> enable boot-start
-      Exec['splunkforwarder-disable-boot-start']
-        -> Exec['splunkforwarder-stop-for-upgrade']
-        -> Package[$splunk::forwarder::package_name]
-        -> Exec['splunkforwarder-enable-boot-start']
+      Package[$splunk::forwarder::package_name] {
+        notify => Exec['splunkforwarder-enable-boot-start'],
+      }
 
       $accept_tos_require = Exec['splunkforwarder-enable-boot-start']
     } else {

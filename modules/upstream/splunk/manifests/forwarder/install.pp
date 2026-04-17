@@ -75,6 +75,12 @@ class splunk::forwarder::install {
     Package['net-tools'] -> Package[$splunk::forwarder::package_name]
   }
 
+  # For upgrades: stop Splunk before package install
+  if $facts['splunkforwarder_version'] {
+    Exec['splunkforwarder-disable-boot-start'] -> Class['splunk::forwarder::install']
+    Exec['splunkforwarder-stop-for-upgrade'] -> Class['splunk::forwarder::install']
+  }
+
   package { $splunk::forwarder::package_name:
     ensure          => $splunk::forwarder::package_ensure,
     provider        => $splunk::forwarder::package_provider,
