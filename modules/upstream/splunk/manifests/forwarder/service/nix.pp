@@ -37,6 +37,13 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
       before      => Service[$splunk::forwarder::service_name],
       require     => Exec['stop_splunkforwarder'],
     }
+
+exec { 'fix-splunkforwarder-systemd-symlink':
+      command    => '/bin/cp /usr/lib/systemd/system/SplunkForwarder.service /etc/systemd/system/SplunkForwarder.service',
+      onlyif    => '/usr/bin/test -L /etc/systemd/system/SplunkForwarder.service',
+      refreshonly => true,
+      subscribe => Exec['enable_splunkforwarder'],
+    }
   }
   # Commands to license and disable the SplunkUniversalForwarder
   #
