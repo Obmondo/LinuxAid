@@ -140,4 +140,15 @@ class splunk::forwarder::install {
     provider        => $splunk::forwarder::package_provider,
     install_options => $splunk::forwarder::install_options,
   }
+
+  if $facts['kernel'] == 'Linux' and $facts['service_provider'] == 'systemd' and $splunk::forwarder::boot_start {
+    $_splunk_home = $splunk::forwarder::forwarder_homedir
+    $_splunk_user = $splunk::forwarder::splunk_user
+
+    exec { 'splunkforwarder-fix-ownership-always':
+      command => "/bin/chown -R ${_splunk_user}:${_splunk_user} ${_splunk_home}",
+      onlyif  => "/usr/bin/test -d ${_splunk_home}",
+      timeout => 120,
+    }
+  }
 }
