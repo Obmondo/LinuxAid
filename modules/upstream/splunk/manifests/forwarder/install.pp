@@ -82,7 +82,7 @@ class splunk::forwarder::install {
       $_splunk_user = $splunk::forwarder::splunk_user
 
       case $facts['os']['family'] {
-        'RedHat': {
+        'RedHat', 'Suse': {
           $_staged_file = "${splunk::forwarder::staging_dir}/splunkforwarder-${splunk::forwarder::version}-*.x86_64.rpm"
           $_install_cmd = "/bin/rpm -U --force ${_staged_file}"
         }
