@@ -77,7 +77,7 @@ class splunk::forwarder::install {
 
   # Upgrade handling for Linux with systemd
   if $facts['kernel'] == 'Linux' and $facts['service_provider'] == 'systemd' and $splunk::forwarder::boot_start {
-    if $facts['splunkforwarder_version'] {
+    if $facts['splunkforwarder_version'] and versioncmp($facts['splunkforwarder_version'], $splunk::forwarder::version) != 0 {
       $_splunk_home = $splunk::forwarder::forwarder_homedir
       $_splunk_user = $splunk::forwarder::splunk_user
 
