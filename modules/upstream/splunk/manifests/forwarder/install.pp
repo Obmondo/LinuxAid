@@ -116,11 +116,19 @@ class splunk::forwarder::install {
         }
 
         exec { 'splunkforwarder-enable-boot-start-after-upgrade':
-          command => "${_splunk_home}/bin/splunk enable boot-start -user ${_splunk_user} --accept-license --answer-yes --no-prompt",
+          command => "${_splunk_home}/bin/splunk enable boot-start -user ${_splunk_user} -group ${_splunk_user} --accept-license --answer-yes --no-prompt",
           onlyif  => "/usr/bin/test -f ${_splunk_home}/bin/splunk",
           returns => [0, 4],
           timeout => 120,
         }
+
+        exec { 'splunkforwarder-fix-ownership':
+          command => "/bin/chown -R ${_splunk_user}:${_splunk_user} ${_splunk_home}",
+          onlyif  => "/usr/bin/test -d ${_splunk_home}",
+          timeout => 120,
+        }
+
+        Exec['splunkforwarder-enable-boot-start-after-upgrade'] -> Exec['splunkforwarder-fix-ownership']
 
         Exec['splunkforwarder-disable-boot-start'] -> Exec['splunkforwarder-stop-for-upgrade'] -> Exec['splunkforwarder-install-package'] -> Exec['splunkforwarder-enable-boot-start-after-upgrade']
       }
