@@ -62,7 +62,16 @@ class profile::collector::splunk::forwarder (
         timeout => 300,
         noop    => $noop_value,
       }
-      ~> Class['splunk::forwarder::service']
+      -> exec { 'splunkforwarder-systemd-reload':
+        command => 'systemctl daemon-reload',
+        onlyif  => 'test -f /etc/systemd/system/SplunkForwarder.service',
+        noop    => $noop_value,
+      }
+      -> exec { 'splunkforwarder-start-after-upgrade':
+        command => '/opt/splunkforwarder/bin/splunk start --answer-yes',
+        timeout => 120,
+        noop    => $noop_value,
+      }
 
     splunkforwarder_deploymentclient { 'target-broker:deploymentServer':
       setting => 'targetUri',
