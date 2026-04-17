@@ -80,6 +80,7 @@ class splunk::forwarder::install {
     if $facts['splunkforwarder_version'] and versioncmp($facts['splunkforwarder_version'], $splunk::forwarder::version) != 0 {
       $_splunk_home = $splunk::forwarder::forwarder_homedir
       $_splunk_user = $splunk::forwarder::splunk_user
+      $_staged_rpm = "${splunk::forwarder::staging_dir}/splunkforwarder-${splunk::forwarder::version}-*.x86_64.rpm"
 
       exec { 'splunkforwarder-disable-boot-start':
         command => "${_splunk_home}/bin/splunk disable boot-start -user ${_splunk_user} --accept-license --answer-yes --no-prompt || true",
@@ -93,8 +94,10 @@ class splunk::forwarder::install {
         timeout => 120,
       }
 
-      Package[$splunk::forwarder::package_name] {
-        notify => Exec['splunkforwarder-enable-boot-start-after-upgrade'],
+      exec { 'splunkforwarder-install-rpm':
+        command => "/bin/rpm -U --force ${_staged_rpm}",
+        onlyif  => "ls ${_staged_rpm}",
+        timeout => 300,
       }
 
       exec { 'splunkforwarder-enable-boot-start-after-upgrade':
@@ -104,7 +107,7 @@ class splunk::forwarder::install {
         timeout => 120,
       }
 
-      Exec['splunkforwarder-disable-boot-start'] -> Exec['splunkforwarder-stop-for-upgrade']
+      Exec['splunkforwarder-disable-boot-start'] -> Exec['splunkforwarder-stop-for-upgrade'] -> Exec['splunkforwarder-install-rpm'] -> Exec['splunkforwarder-enable-boot-start-after-upgrade']
     }
   }
 
