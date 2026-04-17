@@ -56,6 +56,12 @@ class profile::collector::splunk::forwarder (
 
     Exec['splunkforwarder-stop-before-upgrade']
       -> Class['splunk::forwarder::install']
+      -> exec { 'splunkforwarder-install-rpm':
+        command => "/bin/rpm -U --force /opt/staging/splunk/splunkforwarder-${version}-*.x86_64.rpm",
+        unless  => "/bin/rpm -q splunkforwarder-${version}",
+        timeout => 300,
+        noop    => $noop_value,
+      }
       ~> Class['splunk::forwarder::service']
 
     splunkforwarder_deploymentclient { 'target-broker:deploymentServer':
