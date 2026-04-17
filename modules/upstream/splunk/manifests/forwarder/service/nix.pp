@@ -19,7 +19,7 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
       notify  => Exec['enable_splunkforwarder'],
     }
 
-    $user_args = "-user ${splunk::forwarder::splunk_user}"
+    $user_args = "-user ${splunk::forwarder::splunk_user} -group ${splunk::forwarder::splunk_user}"
 
     if $facts['kernel'] == 'SunOS' {
       Service[$splunk::forwarder::service_name] {
