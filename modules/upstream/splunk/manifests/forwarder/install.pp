@@ -80,7 +80,21 @@ class splunk::forwarder::install {
     if $facts['splunkforwarder_version'] and versioncmp($facts['splunkforwarder_version'], $splunk::forwarder::version) != 0 {
       $_splunk_home = $splunk::forwarder::forwarder_homedir
       $_splunk_user = $splunk::forwarder::splunk_user
-      $_staged_rpm = "${splunk::forwarder::staging_dir}/splunkforwarder-${splunk::forwarder::version}-*.x86_64.rpm"
+
+      case $facts['os']['family'] {
+        'RedHat': {
+          $_staged_file = "${splunk::forwarder::staging_dir}/splunkforwarder-${splunk::forwarder::version}-*.x86_64.rpm"
+          $_install_cmd = "/bin/rpm -U --force ${_staged_file}"
+        }
+        'Debian': {
+          $_staged_file = "${splunk::forwarder::staging_dir}/splunkforwarder-${splunk::forwarder::version}-*-amd64.deb"
+          $_install_cmd = "/usr/bin/dpkg -i ${_staged_file}"
+        }
+        default: {
+          $_staged_file = undef
+          $_install_cmd = undef
+        }
+      }
 
       exec { 'splunkforwarder-disable-boot-start':
         command => "${_splunk_home}/bin/splunk disable boot-start -user ${_splunk_user} --accept-license --answer-yes --no-prompt || true",
@@ -94,20 +108,22 @@ class splunk::forwarder::install {
         timeout => 120,
       }
 
-      exec { 'splunkforwarder-install-rpm':
-        command => "/bin/rpm -U --force ${_staged_rpm}",
-        onlyif  => "ls ${_staged_rpm}",
-        timeout => 300,
-      }
+      if $_staged_file and $_install_cmd {
+        exec { 'splunkforwarder-install-package':
+          command => $_install_cmd,
+          onlyif  => "ls ${_staged_file}",
+          timeout => 300,
+        }
 
-      exec { 'splunkforwarder-enable-boot-start-after-upgrade':
-        command => "${_splunk_home}/bin/splunk enable boot-start -user ${_splunk_user} --accept-license --answer-yes --no-prompt",
-        onlyif  => "/usr/bin/test -f ${_splunk_home}/bin/splunk",
-        returns => [0, 4],
-        timeout => 120,
-      }
+        exec { 'splunkforwarder-enable-boot-start-after-upgrade':
+          command => "${_splunk_home}/bin/splunk enable boot-start -user ${_splunk_user} --accept-license --answer-yes --no-prompt",
+          onlyif  => "/usr/bin/test -f ${_splunk_home}/bin/splunk",
+          returns => [0, 4],
+          timeout => 120,
+        }
 
-      Exec['splunkforwarder-disable-boot-start'] -> Exec['splunkforwarder-stop-for-upgrade'] -> Exec['splunkforwarder-install-rpm'] -> Exec['splunkforwarder-enable-boot-start-after-upgrade']
+        Exec['splunkforwarder-disable-boot-start'] -> Exec['splunkforwarder-stop-for-upgrade'] -> Exec['splunkforwarder-install-package'] -> Exec['splunkforwarder-enable-boot-start-after-upgrade']
+      }
     }
   }
 
