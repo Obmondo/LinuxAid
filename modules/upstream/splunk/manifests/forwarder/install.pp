@@ -75,16 +75,23 @@ class splunk::forwarder::install {
   }
 
   if $facts['kernel'] == 'Linux' and $facts['service_provider'] == 'systemd' {
-    exec { 'splunkforwarder-disable-boot-start':
-      command => "${splunk::forwarder::forwarder_homedir}/bin/splunk disable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt || true",
-      onlyif  => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
-      timeout => 120,
-    }
+    $_splunk_bin = "${splunk::forwarder::forwarder_homedir}/bin/splunk"
+    $_splunk_version_cmd = "${_splunk_bin} version 2>/dev/null | head -1 | awk '{print \$2}'"
+    $_current_version = inline_template('<%= require "puppet"; facter = @facts; splunk_version = nil; if File.exist?("/opt/splunkforwarder/bin/splunk"); begin; splunk_version = `#{facter["splunkforwarder_version"]}`.strip; rescue; end; end; splunk_version || "0" %>')
+    $_needs_upgrade = (versioncmp($_current_version, $splunk::forwarder::version) != 0)
 
-    exec { 'splunkforwarder-stop-for-upgrade':
-      command => "${splunk::forwarder::forwarder_homedir}/bin/splunk stop",
-      onlyif  => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
-      timeout => 120,
+    if $_needs_upgrade {
+      exec { 'splunkforwarder-disable-boot-start':
+        command => "${_splunk_bin} disable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt || true",
+        onlyif  => "test -f ${_splunk_bin}",
+        timeout => 120,
+      }
+
+      exec { 'splunkforwarder-stop-for-upgrade':
+        command => "${_splunk_bin} stop",
+        onlyif  => "test -f ${_splunk_bin}",
+        timeout => 120,
+      }
     }
 
     package { $splunk::forwarder::package_name:
@@ -94,23 +101,26 @@ class splunk::forwarder::install {
       install_options => $splunk::forwarder::install_options,
     }
 
-    exec { 'splunkforwarder-install-rpm':
-      command => "/bin/rpm -U --force ${pick($_staged_package, $_package_source)}",
-      onlyif  => "test -f ${pick($_staged_package, $_package_source)}",
-      timeout => 300,
-    }
+    if $_needs_upgrade {
+      exec { 'splunkforwarder-install-rpm':
+        command => "/bin/rpm -U --force ${pick($_staged_package, $_package_source)}",
+        onlyif  => "test -f ${pick($_staged_package, $_package_source)}",
+        timeout => 300,
+      }
 
-    exec { 'splunkforwarder-enable-boot-start':
-      command => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt",
-      onlyif  => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
-      timeout => 120,
-    }
+      exec { 'splunkforwarder-enable-boot-start':
+        command => "${_splunk_bin} enable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt",
+        onlyif  => "test -f ${_splunk_bin}",
+        returns => [0, 4],
+        timeout => 120,
+      }
 
-    Exec['splunkforwarder-disable-boot-start']
-      -> Exec['splunkforwarder-stop-for-upgrade']
-      -> Package[$splunk::forwarder::package_name]
-      -> Exec['splunkforwarder-install-rpm']
-      -> Exec['splunkforwarder-enable-boot-start']
+      Exec['splunkforwarder-disable-boot-start']
+        -> Exec['splunkforwarder-stop-for-upgrade']
+        -> Package[$splunk::forwarder::package_name]
+        -> Exec['splunkforwarder-install-rpm']
+        -> Exec['splunkforwarder-enable-boot-start']
+    }
   } else {
     package { $splunk::forwarder::package_name:
       ensure          => $splunk::forwarder::package_ensure,
