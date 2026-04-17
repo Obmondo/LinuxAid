@@ -86,7 +86,13 @@ class splunk::forwarder::install {
       ensure          => $splunk::forwarder::package_ensure,
       provider        => $splunk::forwarder::package_provider,
       source          => pick($_staged_package, $_package_source),
-      install_options => $splunk::forwarder::install_options + ['--force'],
+      install_options => $splunk::forwarder::install_options,
+    }
+
+    exec { 'splunkforwarder-install-rpm':
+      command => "/bin/rpm -U --force ${pick($_staged_package, $_package_source)}",
+      onlyif  => "test -f ${pick($_staged_package, $_package_source)}",
+      timeout => 300,
     }
 
     exec { 'splunkforwarder-systemd-daemon-reload':
@@ -99,7 +105,10 @@ class splunk::forwarder::install {
       notify => Exec['splunkforwarder-systemd-daemon-reload'],
     }
 
-    Exec['splunkforwarder-stop-for-upgrade'] -> Package[$splunk::forwarder::package_name]
+    Exec['splunkforwarder-stop-for-upgrade']
+      -> Package[$splunk::forwarder::package_name]
+      -> Exec['splunkforwarder-install-rpm']
+      -> Exec['splunkforwarder-systemd-daemon-reload']
   } else {
     package { $splunk::forwarder::package_name:
       ensure          => $splunk::forwarder::package_ensure,
