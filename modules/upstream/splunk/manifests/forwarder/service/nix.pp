@@ -5,65 +5,37 @@
 class splunk::forwarder::service::nix inherits splunk::forwarder::service {
   if $splunk::forwarder::boot_start {
     $accept_tos_user = 'root'
-    $user_args = "-user ${splunk::forwarder::splunk_user}"
-
-    # If Splunk is already installed (version fact exists), handle upgrade
-    if $facts['splunkforwarder_version'] {
-      # Disable boot-start before upgrade
-      exec { 'splunkforwarder-disable-boot-start':
-        command => "${splunk::forwarder::forwarder_homedir}/bin/splunk disable boot-start ${user_args} --accept-license --answer-yes --no-prompt || true",
-        onlyif  => "/usr/bin/test -f ${splunk::forwarder::forwarder_service_file}",
-        timeout => 120,
-      }
-
-      # Stop Splunk before upgrade
-      exec { 'splunkforwarder-stop-for-upgrade':
-        command => "${splunk::forwarder::forwarder_homedir}/bin/splunk stop",
-        onlyif  => "/usr/bin/test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
-        timeout => 120,
-      }
-
-      # Re-enable boot-start after package install (notifies from Package)
-      exec { 'splunkforwarder-enable-boot-start':
-        command => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
-        tag     => 'splunk_forwarder',
-        returns => [0, 4],
-        before  => Service[$splunk::forwarder::service_name],
-        timeout => 120,
-      }
-
-      Package[$splunk::forwarder::package_name] {
-        notify => Exec['splunkforwarder-enable-boot-start'],
-      }
-
-      $accept_tos_require = Exec['splunkforwarder-enable-boot-start']
-    } else {
-      # Fresh install - original logic
-      $accept_tos_require = Exec['enable_splunkforwarder']
-
-      # Ensure splunk services *not* managed by the system service file are
-      # gracefully shut down prior to enabling boot-start.
-      exec { 'stop_splunkforwarder':
-        command => "${splunk::forwarder::forwarder_homedir}/bin/splunk stop",
-        user    => $splunk::forwarder::splunk_user,
-        creates => $splunk::forwarder::forwarder_service_file,
-        timeout => 0,
-        notify  => Exec['enable_splunkforwarder'],
-      }
-
-      exec { 'enable_splunkforwarder':
-        command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
-        tag         => 'splunk_forwarder',
-        refreshonly => true,
-        before      => Service[$splunk::forwarder::service_name],
-        require     => Exec['stop_splunkforwarder'],
-      }
+    $accept_tos_require = Exec['enable_splunkforwarder']
+    # Ensure splunk services *not* managed by the system service file are
+    # gracefully shut down prior to enabling boot-start. Should the service
+    # file be enabled while binary-managed splunk services are running, you
+    # will no longer be able to control the binary-managed services
+    # (start/stop/restart).
+    exec { 'stop_splunkforwarder':
+      command => "${splunk::forwarder::forwarder_homedir}/bin/splunk stop",
+      user    => $splunk::forwarder::splunk_user,
+      creates => $splunk::forwarder::forwarder_service_file,
+      timeout => 0,
+      notify  => Exec['enable_splunkforwarder'],
     }
+
+    $user_args = "-user ${splunk::forwarder::splunk_user}"
 
     if $facts['kernel'] == 'SunOS' {
       Service[$splunk::forwarder::service_name] {
         provider => 'init',
       }
+    }
+
+    # This will fail if the unit file already exists.  Splunk does not remove
+    # unit files during uninstallation, so you may be required to manually
+    # remove existing unit files before re-installing and enabling boot-start.
+    exec { 'enable_splunkforwarder':
+      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
+      tag         => 'splunk_forwarder',
+      refreshonly => true,
+      before      => Service[$splunk::forwarder::service_name],
+      require     => Exec['stop_splunkforwarder'],
     }
   }
   # Commands to license and disable the SplunkUniversalForwarder
