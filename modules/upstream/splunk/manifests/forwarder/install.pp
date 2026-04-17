@@ -85,7 +85,8 @@ class splunk::forwarder::install {
     package { $splunk::forwarder::package_name:
       ensure          => $splunk::forwarder::package_ensure,
       provider        => $splunk::forwarder::package_provider,
-      install_options => $splunk::forwarder::install_options,
+      source          => pick($_staged_package, $_package_source),
+      install_options => $splunk::forwarder::install_options + ['--force'],
     }
 
     exec { 'splunkforwarder-systemd-daemon-reload':
@@ -103,6 +104,7 @@ class splunk::forwarder::install {
     package { $splunk::forwarder::package_name:
       ensure          => $splunk::forwarder::package_ensure,
       provider        => $splunk::forwarder::package_provider,
+      source          => pick($_staged_package, $_package_source),
       install_options => $splunk::forwarder::install_options,
     }
   }
