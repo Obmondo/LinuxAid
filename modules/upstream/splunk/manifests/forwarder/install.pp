@@ -95,20 +95,21 @@ class splunk::forwarder::install {
       timeout => 300,
     }
 
-    exec { 'splunkforwarder-systemd-daemon-reload':
-      command     => 'systemctl daemon-reload',
+    exec { 'splunkforwarder-enable-boot-start':
+      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt",
       onlyif      => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
       refreshonly => true,
+      timeout     => 120,
     }
 
     Package[$splunk::forwarder::package_name] {
-      notify => Exec['splunkforwarder-systemd-daemon-reload'],
+      notify => Exec['splunkforwarder-enable-boot-start'],
     }
 
     Exec['splunkforwarder-stop-for-upgrade']
       -> Package[$splunk::forwarder::package_name]
       -> Exec['splunkforwarder-install-rpm']
-      -> Exec['splunkforwarder-systemd-daemon-reload']
+      -> Exec['splunkforwarder-enable-boot-start']
   } else {
     package { $splunk::forwarder::package_name:
       ensure          => $splunk::forwarder::package_ensure,
