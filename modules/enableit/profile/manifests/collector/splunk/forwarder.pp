@@ -30,6 +30,13 @@ class profile::collector::splunk::forwarder (
       build   => $build,
     }
 
+    exec { 'splunkforwarder-stop-before-upgrade':
+      command => '/opt/splunkforwarder/bin/splunk stop',
+      onlyif  => 'test -f /opt/splunkforwarder/bin/splunk',
+      timeout => 120,
+      noop    => $noop_value,
+    }
+
     class { 'splunk::forwarder':
       seed_password    => $seed_password,
       splunk_user      => 'splunkfwd',
@@ -46,6 +53,10 @@ class profile::collector::splunk::forwarder (
         },
       }
     }
+
+    Exec['splunkforwarder-stop-before-upgrade']
+      -> Class['splunk::forwarder::install']
+      ~> Class['splunk::forwarder::service']
 
     splunkforwarder_deploymentclient { 'target-broker:deploymentServer':
       setting => 'targetUri',
