@@ -30,13 +30,6 @@ class profile::collector::splunk::forwarder (
       build   => $build,
     }
 
-    exec { 'splunkforwarder-stop-before-upgrade':
-      command => '/opt/splunkforwarder/bin/splunk stop',
-      onlyif  => 'test -f /opt/splunkforwarder/bin/splunk',
-      timeout => 120,
-      noop    => $noop_value,
-    }
-
     class { 'splunk::forwarder':
       seed_password    => $seed_password,
       splunk_user      => 'splunkfwd',
@@ -53,25 +46,6 @@ class profile::collector::splunk::forwarder (
         },
       }
     }
-
-    Exec['splunkforwarder-stop-before-upgrade']
-      -> Class['splunk::forwarder::install']
-      -> exec { 'splunkforwarder-install-rpm':
-        command => "/bin/rpm -U --force /opt/staging/splunk/splunkforwarder-${version}-*.x86_64.rpm",
-        unless  => "/bin/rpm -q splunkforwarder-${version}",
-        timeout => 300,
-        noop    => $noop_value,
-      }
-      -> exec { 'splunkforwarder-systemd-reload':
-        command => 'systemctl daemon-reload',
-        onlyif  => 'test -f /etc/systemd/system/SplunkForwarder.service',
-        noop    => $noop_value,
-      }
-      -> exec { 'splunkforwarder-start-after-upgrade':
-        command => '/opt/splunkforwarder/bin/splunk start --answer-yes',
-        timeout => 120,
-        noop    => $noop_value,
-      }
 
     splunkforwarder_deploymentclient { 'target-broker:deploymentServer':
       setting => 'targetUri',

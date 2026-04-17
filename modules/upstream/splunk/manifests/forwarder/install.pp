@@ -1,5 +1,5 @@
 # @summary
-#   Contains or define through additional platform specific sub-classes, the
+#   Contains or define through platform specific sub-classes, the
 #   steps for installing the Splunk Universal Forwarder
 #
 class splunk::forwarder::install {
@@ -17,7 +17,7 @@ class splunk::forwarder::install {
       source         => $_package_source,
       extract        => false,
       allow_insecure => $splunk::forwarder::allow_insecure,
-      before         => Package[$splunk::forwarder::forwarder_package_name],
+      before         => Package[$splunk::forwarder::package_name],
     }
   } else {
     $_staged_package = undef
@@ -53,7 +53,6 @@ class splunk::forwarder::install {
       content => "BASEDIR=/opt\n",
     }
 
-    # Collect any Splunk packages and give them an admin and response file.
     Package {
       adminfile    => $_adminfile,
       responsefile => $_responsefile,
@@ -75,9 +74,36 @@ class splunk::forwarder::install {
     Package['net-tools'] -> Package[$splunk::forwarder::package_name]
   }
 
-  package { $splunk::forwarder::package_name:
-    ensure          => $splunk::forwarder::package_ensure,
-    provider        => $splunk::forwarder::package_provider,
-    install_options => $splunk::forwarder::install_options,
+  if $facts['kernel'] == 'Linux' and $facts['service_provider'] == 'systemd' {
+    exec { 'splunkforwarder-stop-for-upgrade':
+      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk stop",
+      onlyif      => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
+      timeout     => 120,
+      refreshonly => false,
+    }
+
+    package { $splunk::forwarder::package_name:
+      ensure          => $splunk::forwarder::package_ensure,
+      provider        => $splunk::forwarder::package_provider,
+      install_options => $splunk::forwarder::install_options,
+    }
+
+    exec { 'splunkforwarder-systemd-daemon-reload':
+      command     => 'systemctl daemon-reload',
+      onlyif      => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
+      refreshonly => true,
+    }
+
+    Package[$splunk::forwarder::package_name] {
+      notify => Exec['splunkforwarder-systemd-daemon-reload'],
+    }
+
+    Exec['splunkforwarder-stop-for-upgrade'] -> Package[$splunk::forwarder::package_name]
+  } else {
+    package { $splunk::forwarder::package_name:
+      ensure          => $splunk::forwarder::package_ensure,
+      provider        => $splunk::forwarder::package_provider,
+      install_options => $splunk::forwarder::install_options,
+    }
   }
 }
