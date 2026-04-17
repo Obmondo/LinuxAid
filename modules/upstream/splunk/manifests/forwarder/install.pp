@@ -102,7 +102,7 @@ class splunk::forwarder::install {
       timeout     => 120,
     }
 
-    Package[$splunk::forwarder::package_name] {
+    Exec['splunkforwarder-install-rpm'] {
       notify => Exec['splunkforwarder-enable-boot-start'],
     }
 
