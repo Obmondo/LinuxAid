@@ -96,10 +96,9 @@ class splunk::forwarder::install {
     }
 
     exec { 'splunkforwarder-enable-boot-start':
-      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt",
-      onlyif      => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
-      refreshonly => true,
-      timeout     => 120,
+      command => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start -user ${splunk::forwarder::splunk_user} --accept-license --answer-yes --no-prompt",
+      onlyif  => "test -f ${splunk::forwarder::forwarder_homedir}/bin/splunk",
+      timeout => 120,
     }
 
     Exec['splunkforwarder-install-rpm'] {
