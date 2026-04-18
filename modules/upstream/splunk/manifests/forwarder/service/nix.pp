@@ -21,6 +21,11 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
 
     $user_args = "-user ${splunk::forwarder::splunk_user} -group ${splunk::forwarder::splunk_user}"
 
+    $user_args_full = $splunk::params::boot_start_args ? {
+      ''      => $user_args,
+      default => "${user_args} ${splunk::params::boot_start_args}",
+    }
+
     if $facts['kernel'] == 'SunOS' {
       Service[$splunk::forwarder::service_name] {
         provider => 'init',
@@ -31,18 +36,11 @@ class splunk::forwarder::service::nix inherits splunk::forwarder::service {
     # unit files during uninstallation, so you may be required to manually
     # remove existing unit files before re-installing and enabling boot-start.
     exec { 'enable_splunkforwarder':
-      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args} ${splunk::params::boot_start_args} --accept-license --answer-yes --no-prompt",
+      command     => "${splunk::forwarder::forwarder_homedir}/bin/splunk enable boot-start ${user_args_full} --accept-license --answer-yes --no-prompt",
       tag         => 'splunk_forwarder',
       refreshonly => true,
       before      => Service[$splunk::forwarder::service_name],
       require     => Exec['stop_splunkforwarder'],
-    }
-
-exec { 'fix-splunkforwarder-systemd-symlink':
-      command    => '/bin/cp /usr/lib/systemd/system/SplunkForwarder.service /etc/systemd/system/SplunkForwarder.service',
-      onlyif    => '/usr/bin/test -L /etc/systemd/system/SplunkForwarder.service',
-      refreshonly => true,
-      subscribe => Exec['enable_splunkforwarder'],
     }
   }
   # Commands to license and disable the SplunkUniversalForwarder
