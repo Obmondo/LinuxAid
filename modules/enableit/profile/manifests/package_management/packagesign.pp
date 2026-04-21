@@ -3,8 +3,8 @@ class profile::package_management::packagesign (
   Boolean                     $manage           = $role::package_management::repo::manage,
   Boolean                     $packagesign      = $role::package_management::repo::packagesign,
   Boolean                     $snapshot         = $role::package_management::repo::snapshot,
+  Integer[0]                  $snapshot_retention_days = $role::package_management::repo::snapshot_retention_days,
   Stdlib::Absolutepath        $basedir          = $role::package_management::repo::basedir,
-  Hash                        $locations        = $role::package_management::repo::locations,
   Array                       $volumes          = $role::package_management::repo::volumes,
   String                      $registry_path    = $role::package_management::repo::registry_path,
   Optional[String]            $server_tag       = $role::package_management::repo::server_tag,
@@ -63,5 +63,14 @@ class profile::package_management::packagesign (
       '/opt/obmondo/docker-compose/packagesign/docker-compose.yaml',
     ],
     require       => File['/opt/obmondo/docker-compose/packagesign/docker-compose.yaml'],
+  }
+
+  profile::system::cron::job { 'cleanup packagesign snapshots':
+    enable  =>  $manage and $snapshot,
+    user    => 'root',
+    hour    => 3,
+    minute  => 0,
+    command => "find '${basedir}/snapshots' -mindepth 1 -maxdepth 1 -type d -mtime +${snapshot_retention_days} -exec rm -rf {} +",
+    require => Docker_compose['packagesign'],
   }
 }
