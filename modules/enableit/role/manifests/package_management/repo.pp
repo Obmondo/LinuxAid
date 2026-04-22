@@ -23,6 +23,8 @@
 #
 # @param snapshot Whether to create a snapshot of the repository. Defaults to false.
 #
+# @param snapshot_retention_days Number of days to retain snapshots before pruning. Set to 0 to disable cleanup. Defaults to 60.
+#
 # @param signing_password The password for signing, if package signing is enabled. Defaults to undef.
 #
 # @param snapshot_tag The tag to use for snapshotting.
@@ -51,7 +53,7 @@
 #
 # @groups signing packagesign, signing_password, script_tag
 #
-# @groups snapshot snapshot, snapshot_tag
+# @groups snapshot snapshot, snapshot_retention_days, snapshot_tag
 #
 # @groups nginx nginx_path, nginx_tag
 #
@@ -73,6 +75,7 @@ class role::package_management::repo (
   Boolean          $manage,
   Hash             $locations,
   Boolean          $snapshot,
+  Integer[0]       $snapshot_retention_days,
   Optional[String] $signing_password,
   String           $snapshot_tag,
   String           $nginx_path,
