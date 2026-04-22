@@ -2,6 +2,30 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.8
+
+### Features
+- 97e5ca40 feat(gitlab-ci-runner): add shell and multiple docker runner support
+- 183fcac2 feat(logrotate): add /var/log/syslog to rotation list
+- 0b6a3dbc feat: improve catalog-diff with SSH facts, kube context support, and multiple output formats
+- 1c41ab3a feat(linuxaid-cli): add SECURITY_EXPORTER_URL to env file
+
+### Bug Fixes
+- 9b3c998d fix: remove duplicate Package[socat] declaration in eit_haproxy
+
+### Configuration Changes
+- 5d6ab77b chore(prometheus): set 30m scrape interval for security exporter job
+
+### Other Changes
+- cf996c3b Added the functionality to install conda forge packages
+- ba2a2700 Upate Linuxaid-cli package version to 1.4.0
+- 4bb4aa1b Updated the mailcow type
+- 2ec9258c Updated the mailcow template based on latest version
+- 2391c561 Upgrade cadvisor docker image
+- f78f6eab Fix wireguard_exporter metrics collection
+- 83c4b94e doc: fix comparisons filename
+- 9bff9226 Enhance Splunk forwarder setup with user, group and ACL configuration
+
 ## LinuxAid Release Version v1.5.7
 
 ### Bug Fixes
