@@ -1,5 +1,0 @@
----
-classes:
-  - role::monitoring
-
-monitor::enable: true
