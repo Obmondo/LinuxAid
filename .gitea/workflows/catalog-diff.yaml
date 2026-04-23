@@ -1,0 +1,63 @@
+---
+name: Catalog Diff
+
+"on":
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "manifests/**"
+      - "modules/**"
+      - "hiera.yaml"
+      - "linuxaid_enc.rb"
+      - "puppet_enc.rb"
+
+jobs:
+  catalog-diff:
+    name: "${{ matrix.hostname }}"
+    runs-on: ubuntu-24.04-htzhel1-ax42-a
+    # The catalogdiff image carries its own Go binary, the e2e fixtures at
+    # /e2e, and a nodejs runtime so actions/checkout can execute inside the
+    # container. The docker socket mount lets catalogdiff spawn the
+    # octocatalog-diff compilation container on the host's daemon.
+    container:
+      image: harbor.obmondo.com/obmondo/catalogdiff:v0.0.1-dev
+      credentials:
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    strategy:
+      # One failing hostname shouldn't hide others. Each matrix cell posts
+      # its own catalog-diff output as a PR job summary.
+      fail-fast: false
+      matrix:
+        hostname:
+          - role-basic.e2etesting
+          - role-basic-rhel8.e2etesting
+          - role-basic-rhel9.e2etesting
+          - role-basic-suse15.e2etesting
+          - role-basic-ubuntu2204.e2etesting
+          - role-basic-ubuntu2404.e2etesting
+          - role-monitoring.e2etesting
+          - role-monitoring-rhel8.e2etesting
+          - role-monitoring-rhel9.e2etesting
+          - role-monitoring-suse15.e2etesting
+          - role-monitoring-ubuntu2204.e2etesting
+          - role-monitoring-ubuntu2404.e2etesting
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure master is locally reachable
+        run: git fetch origin master:master
+
+      - name: catalogdiff diff
+        run: |
+          catalogdiff diff \
+            --linuxaid . \
+            --hostname ${{ matrix.hostname }} \
+            --ci \
+            -- --from master --to HEAD
