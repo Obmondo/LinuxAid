@@ -7,11 +7,6 @@ class eit_haproxy::dummy_cert (
   $_snakeoil_key = '/etc/ssl/private/ssl-cert-snakeoil.key'
   $_pem_validate_cmd = eit_haproxy::pem_validate_cmd()
 
-  file { '/etc/ssl/private':
-    ensure => directory,
-    mode   => '0710',
-  }
-
   file { $_bootstrap_dir:
     ensure  => directory,
     owner   => 'root',
