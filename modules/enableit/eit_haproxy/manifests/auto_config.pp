@@ -70,6 +70,8 @@ class eit_haproxy::auto_config (
     }
   }
 
+  contain haproxy
+
   # Setup Frontend and Backend
   $proxies.each |
   $proxy_name,

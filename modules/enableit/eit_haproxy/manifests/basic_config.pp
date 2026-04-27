@@ -120,6 +120,8 @@ class eit_haproxy::basic_config (
     }
   }
 
+  contain haproxy
+
   if $_use_native_acme {
     concat::fragment { 'haproxy_acme_section':
       target  => $haproxy::config_file,
