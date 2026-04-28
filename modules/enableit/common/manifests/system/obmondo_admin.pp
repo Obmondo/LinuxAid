@@ -26,7 +26,6 @@ class common::system::obmondo_admin (
   Boolean                 $allow_sre       = true,
   Eit_types::Noop_Value   $noop_value      = undef,
 ) {
-
   File {
     noop => $noop_value,
   }
@@ -41,14 +40,14 @@ class common::system::obmondo_admin (
     file {
       default:
         ensure => stdlib::ensure($_enable, 'directory'),
-      ;
+        ;
 
       $_home_admin:
         owner   => 'obmondo-admin',
         group   => 'obmondo',
         mode    => '0755',
         require => User['obmondo-admin'],
-      ;
+        ;
 
       $_home_admin_ssh:
         ensure  => stdlib::ensure($_enable, 'directory'),
@@ -56,7 +55,7 @@ class common::system::obmondo_admin (
         group   => 'obmondo',
         mode    => '0700',
         require => File[$_home_admin],
-      ;
+        ;
 
       [
         '/etc/ssl/private/',
@@ -65,7 +64,6 @@ class common::system::obmondo_admin (
         mode  => '0700',
         owner => 'root',
         group => 'root',
-      ;
     }
 
     user { 'obmondo-admin':

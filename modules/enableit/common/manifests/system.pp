@@ -215,7 +215,7 @@ class common::system (
   # Disable IPv6
   if $disable_ipv6 =~ Boolean {
     sysctl::configuration { 'net.ipv6.conf.all.disable_ipv6':
-      value => $disable_ipv6,
+      value => bool2str($disable_ipv6, '1', '0'),
     }
   }
 

@@ -120,6 +120,8 @@ class eit_haproxy::basic_config (
     }
   }
 
+  contain haproxy
+
   if $_use_native_acme {
     concat::fragment { 'haproxy_acme_section':
       target  => $haproxy::config_file,
@@ -305,9 +307,9 @@ class eit_haproxy::basic_config (
           $_sorted_domains_map = sort_domains_on_tld($opts['domains'], $public_ips)
           $_sorted_domains = $_sorted_domains_map.map |$cn, $san| {
             if $cn != 'rejected_domains' { $san }
-          }.flatten.delete_undef_values.uniq
+          }.flatten.delete_undef_values.unique
           $_all_domains_in_group = if $_sorted_domains.empty {
-            $opts['domains'].sort.uniq.join(',')
+            $opts['domains'].sort.unique.join(',')
           } else {
             $_sorted_domains.join(',')
           }

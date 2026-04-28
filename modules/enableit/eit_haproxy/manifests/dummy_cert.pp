@@ -7,11 +7,6 @@ class eit_haproxy::dummy_cert (
   $_snakeoil_key = '/etc/ssl/private/ssl-cert-snakeoil.key'
   $_pem_validate_cmd = eit_haproxy::pem_validate_cmd()
 
-  file { '/etc/ssl/private':
-    ensure => directory,
-    mode   => '0710',
-  }
-
   file { $_bootstrap_dir:
     ensure  => directory,
     owner   => 'root',
@@ -41,13 +36,11 @@ class eit_haproxy::dummy_cert (
   }
 
   $_managed_domain_cert_files.each |$cert_file| {
-    file { $cert_file:
-      ensure       => file,
+    concat { $cert_file:
+      ensure       => present,
       owner        => 'root',
       group        => 'root',
       mode         => '0600',
-      source       => ["file://${_snakeoil_cert}", "file://${_snakeoil_key}"],
-      sourceselect => 'all',
       validate_cmd => $_pem_validate_cmd,
       require      => [
         File[$_bootstrap_dir],
@@ -55,21 +48,43 @@ class eit_haproxy::dummy_cert (
         File[$_snakeoil_key],
       ],
     }
+
+    concat::fragment { "${cert_file}-cert":
+      target => $cert_file,
+      source => "file://${_snakeoil_cert}",
+      order  => '01',
+    }
+
+    concat::fragment { "${cert_file}-key":
+      target => $cert_file,
+      source => "file://${_snakeoil_key}",
+      order  => '02',
+    }
   }
 
   # Always keep one default fallback cert just in case
-  file { "${_bootstrap_dir}/haproxy-dummy.pem":
-    ensure       => file,
+  concat { "${_bootstrap_dir}/haproxy-dummy.pem":
+    ensure       => present,
     owner        => 'root',
     group        => 'root',
     mode         => '0600',
-    source       => ["file://${_snakeoil_cert}", "file://${_snakeoil_key}"],
-    sourceselect => 'all',
     validate_cmd => $_pem_validate_cmd,
     require      => [
       File[$_bootstrap_dir],
       File[$_snakeoil_cert],
       File[$_snakeoil_key],
     ],
+  }
+
+  concat::fragment { 'haproxy-dummy.pem-cert':
+    target => "${_bootstrap_dir}/haproxy-dummy.pem",
+    source => "file://${_snakeoil_cert}",
+    order  => '01',
+  }
+
+  concat::fragment { 'haproxy-dummy.pem-key':
+    target => "${_bootstrap_dir}/haproxy-dummy.pem",
+    source => "file://${_snakeoil_key}",
+    order  => '02',
   }
 }
