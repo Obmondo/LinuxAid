@@ -36,7 +36,10 @@ end
 
 Facter.add('publicip') do
   setcode do
-    certname = Facter.value(:obmondo)['certname']
-    obmondo_api("/server/#{certname}/publicip")
+    obmondo_facts = Facter.value(:obmondo_system) || Facter.value(:obmondo)
+    if obmondo_facts && obmondo_facts['certname']
+      certname = obmondo_facts['certname']
+      obmondo_api("/server/#{certname}/publicip")
+    end
   end
 end
