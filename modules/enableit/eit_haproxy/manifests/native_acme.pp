@@ -171,12 +171,15 @@ class eit_haproxy::native_acme (
     RandomizedDelaySec=5m
     | EOT
 
+  # No cert-name args → dump-certs.sh iterates every cert from
+  # `show ssl cert` and de-dupes via SHA256 fingerprint (cmp_certkey).
+  # No bash wrapper / socat / awk / xargs needed — the script handles it.
   $_dump_service = @(EOT)
     [Unit]
     Description=Dump HAProxy in-memory certificates to disk
     [Service]
     Type=oneshot
-    ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/'
+    ExecStart=/opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/
     | EOT
 
   systemd::timer { 'haproxy-dump-certs.timer':
