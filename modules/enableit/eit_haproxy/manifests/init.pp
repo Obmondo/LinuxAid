@@ -138,7 +138,6 @@ class eit_haproxy (
       class { 'eit_haproxy::native_acme':
         domains => $domains,
       }
-      Class['eit_haproxy::native_acme'] -> Class['eit_haproxy::basic_config']
 
       file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
         ensure => file,

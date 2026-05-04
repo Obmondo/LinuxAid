@@ -130,6 +130,9 @@ class eit_haproxy::basic_config (
           'acme_ca' => $acme_ca,
       }),
     }
+
+    # Ensure native_acme generates crt-list.txt before haproxy.cfg is assembled and validated
+    Class['eit_haproxy::native_acme'] -> Concat[$haproxy::config_file]
   }
 
   $bind_ports = [
