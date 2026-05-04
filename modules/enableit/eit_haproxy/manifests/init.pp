@@ -133,12 +133,12 @@ class eit_haproxy (
     }
 
     if $_use_native_acme {
-      ensure_packages(['socat', 'openssl', 'ssl-cert'])
+      ensure_packages(['socat', 'openssl'])
 
-      class { 'eit_haproxy::dummy_cert':
+      class { 'eit_haproxy::native_acme':
         domains => $domains,
       }
-      Class['eit_haproxy::dummy_cert'] -> Class['eit_haproxy::basic_config']
+      Class['eit_haproxy::native_acme'] -> Class['eit_haproxy::basic_config']
 
       file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
         ensure => file,
@@ -162,7 +162,7 @@ class eit_haproxy (
         Description=Dump HAProxy in-memory certificates to disk
         [Service]
         Type=oneshot
-        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
+        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/'
         | EOT
 
       systemd::timer { 'haproxy-dump-certs.timer':
@@ -177,19 +177,16 @@ class eit_haproxy (
 
     # NOTE: Needed this, we install our own haproxy 2.9 on centos7
     if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_acme_flush = if $_use_native_acme { @(EOT)
-        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        | EOT
-      } else { '' }
-
-      $_service_base = @(EOT)
+      # Dropin only adds the config-validation ExecStartPre. Persistence of
+      # ACME-issued certs is handled by the daily haproxy-dump-certs.timer;
+      # we don't dump on reload/stop because in steady state restarts are
+      # rare and LE's duplicate-cert rate limit (5/week per identical SAN
+      # set) absorbs any gap-window re-issuance comfortably.
+      $_service = @(EOT)
         [Service]
         ExecStartPre=
         ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
         | EOT
-
-      $_service = "${_service_base}${_acme_flush}"
 
       systemd::dropin_file { 'haproxy_dropin':
         filename => 'haproxy-override.conf',

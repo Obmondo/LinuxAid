@@ -1,0 +1,4 @@
+<%- | Array[Hash] $entries | -%>
+<%- $entries.each |$entry| { -%>
+<%= $entry['pem'] %> [acme LE domains "<%= $entry['acme_domains'] %>"] <%= $entry['sni_filters'] %>
+<%- } -%>
