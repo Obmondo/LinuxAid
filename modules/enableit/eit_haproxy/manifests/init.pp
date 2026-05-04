@@ -121,12 +121,17 @@ class eit_haproxy (
 
     if $_wants_haproxy3 {
       if $_is_ubuntu {
-        contain apt
+        # Ubuntu 24.04 ships HAProxy 2.8 — need vbernat's PPA for 3.x.
+        # Newer Ubuntu LTS (26.04+) ships HAProxy 3.x in stock repos,
+        # so the PPA is unnecessary there.
+        if $facts['os']['release']['major'] == '24' {
+          contain apt
 
-        $haproxy_lts_version = '3.2'
-        apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
+          $haproxy_lts_version = '3.2'
+          apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
 
-        Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
+          Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
+        }
       } else {
         warning('HAProxy 3.x auto-native ACME path is only supported on Ubuntu')
       }
