@@ -28,18 +28,17 @@
 #   - After that, the scheduler re-runs every 12h (acme.c:2147).
 #
 # Persistence to disk:
-#   - On every haproxy reload, the ExecReload dropin in init.pp runs
-#     haproxy-dump-certs.sh (reads `show ssl cert` from the admin socket
-#     and writes any in-memory cert that differs from disk).
-#   - haproxy-dump-certs.timer fires daily at 03:00 as a backstop.
+#   - HAProxy 3.2 does NOT auto-write issued certs (verified against
+#     src/acme.c at v3.2.0 — only the account key is persisted; per-domain
+#     certs live in memory and are announced via the dpapi sink).
+#   - haproxy-dump-certs.timer (defined below) fires daily at 03:00 and
+#     pulls any in-memory cert that differs from disk via the admin socket.
 #
-# Known race: ExecReload runs synchronously during the reload, before the
-# scheduler has had time to complete LE issuance. So the *first* reload
-# after a placeholder is added dumps before LE has responded — the cert
-# lives in memory only until the next reload (any subsequent puppet config
-# change) or the daily timer. Worst case: ~24h gap. If haproxy restarts in
-# that window, the placeholder is reloaded, scheduler re-issues from LE
-# (uses some LE rate-limit budget), and persistence is retried.
+# Known race: cert lives in memory until the next 03:00 dump. If haproxy
+# restarts in that window, the placeholder is reloaded and the scheduler
+# re-issues from LE (using some rate-limit budget). For Obmondo nodes
+# restarts are rare in steady state, so LE's duplicate-cert limit (5/week
+# per identical SAN set) absorbs the gap comfortably.
 #
 # Directory split:
 #   $_acme_dir (/etc/ssl/private/acme) — .crt + .key (puppet-managed, never
@@ -150,5 +149,42 @@ class eit_haproxy::native_acme (
     mode    => '0640',
     content => epp('eit_haproxy/crt-list.txt.epp', { 'entries' => $_entries }),
     notify  => Service['haproxy'],
+  }
+
+  # Persistence pipeline — see header comment for why this is needed.
+  ensure_packages(['socat', 'openssl'])
+
+  file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
+    ensure => file,
+    source => 'puppet:///modules/eit_haproxy/haproxy-dump-certs.sh',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  $_dump_timer = @(EOT)
+    [Unit]
+    Description=Dump HAProxy in-memory certificates to disk
+    Requires=haproxy-dump-certs.service
+    [Timer]
+    OnCalendar=*-*-* 03:00:00
+    RandomizedDelaySec=5m
+    | EOT
+
+  $_dump_service = @(EOT)
+    [Unit]
+    Description=Dump HAProxy in-memory certificates to disk
+    [Service]
+    Type=oneshot
+    ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/'
+    | EOT
+
+  systemd::timer { 'haproxy-dump-certs.timer':
+    ensure          => present,
+    timer_content   => $_dump_timer,
+    service_content => $_dump_service,
+    active          => true,
+    enable          => true,
+    require         => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
   }
 }

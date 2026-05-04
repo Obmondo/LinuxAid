@@ -133,44 +133,8 @@ class eit_haproxy (
     }
 
     if $_use_native_acme {
-      ensure_packages(['socat', 'openssl'])
-
       class { 'eit_haproxy::native_acme':
         domains => $domains,
-      }
-
-      file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
-        ensure => file,
-        source => 'puppet:///modules/eit_haproxy/haproxy-dump-certs.sh',
-        mode   => '0755',
-        owner  => 'root',
-        group  => 'root',
-      }
-
-      $_dump_timer = @(EOT)
-        [Unit]
-        Description=Dump HAProxy in-memory certificates to disk
-        Requires=haproxy-dump-certs.service
-        [Timer]
-        OnCalendar=*-*-* 03:00:00
-        RandomizedDelaySec=5m
-        | EOT
-
-      $_dump_service = @(EOT)
-        [Unit]
-        Description=Dump HAProxy in-memory certificates to disk
-        [Service]
-        Type=oneshot
-        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/'
-        | EOT
-
-      systemd::timer { 'haproxy-dump-certs.timer':
-        ensure          => present,
-        timer_content   => $_dump_timer,
-        service_content => $_dump_service,
-        active          => true,
-        enable          => true,
-        require         => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
       }
     }
 
