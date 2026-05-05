@@ -82,7 +82,7 @@ class eit_haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = 'latest',
-  Eit_types::Email              $acme_contact       = 'ops@obmondo.com',
+  Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
   Enum['production','staging']  $ca_type            = 'production',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
@@ -140,27 +140,6 @@ class eit_haproxy (
     if $_use_native_acme {
       class { 'eit_haproxy::native_acme':
         domains => $domains,
-      }
-    }
-
-    # NOTE: Needed this, we install our own haproxy 2.9 on centos7
-    if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      # Dropin only adds the config-validation ExecStartPre. Persistence of
-      # ACME-issued certs is handled by the daily haproxy-dump-certs.timer;
-      # we don't dump on reload/stop because in steady state restarts are
-      # rare and LE's duplicate-cert rate limit (5/week per identical SAN
-      # set) absorbs any gap-window re-issuance comfortably.
-      $_service = @(EOT)
-        [Service]
-        ExecStartPre=
-        ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
-        | EOT
-
-      systemd::dropin_file { 'haproxy_dropin':
-        filename => 'haproxy-override.conf',
-        unit     => 'haproxy.service',
-        content  => $_service,
-        notify   => Service['haproxy'],
       }
     }
 
