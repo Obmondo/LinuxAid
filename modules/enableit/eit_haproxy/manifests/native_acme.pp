@@ -179,7 +179,7 @@ class eit_haproxy::native_acme (
     Description=Dump HAProxy in-memory certificates to disk
     [Service]
     Type=oneshot
-    ExecStart=/opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/haproxy/certs/
+    ExecStart=/opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock
     | EOT
 
   systemd::timer { 'haproxy-dump-certs.timer':
