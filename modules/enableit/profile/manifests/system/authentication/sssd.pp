@@ -189,6 +189,14 @@ class profile::system::authentication::sssd (
 
     if $_is_systemd {
 
+      # Ensure directory exists before overriding the unit file
+      file { '/etc/systemd/system/sssd.service.d':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
       $_sssd_override_content = @("EOT"/)
         # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
         [Unit]
@@ -202,6 +210,7 @@ class profile::system::authentication::sssd (
         path    => '/etc/systemd/system/sssd.service.d',
         noop    => $noop_value,
         notify  => Service['sssd'],
+        require => File['/etc/systemd/system/sssd.service.d'],
       }
 
       if $_sssd_sockets_supported {
