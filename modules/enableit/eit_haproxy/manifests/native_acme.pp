@@ -31,7 +31,7 @@
 #   - HAProxy 3.2 does NOT auto-write issued certs (verified against
 #     src/acme.c at v3.2.0 — only the account key is persisted; per-domain
 #     certs live in memory and are announced via the dpapi sink).
-#   - haproxy-dump-certs.timer (defined below) fires daily at 03:00 and
+#   - haproxy-dump-certs.timer (defined below) fires every 30 minutes and
 #     pulls any in-memory cert that differs from disk via the admin socket.
 #
 # Known race: cert lives in memory until the next 03:00 dump. If haproxy
@@ -167,7 +167,7 @@ class eit_haproxy::native_acme (
     Description=Dump HAProxy in-memory certificates to disk
     Requires=haproxy-dump-certs.service
     [Timer]
-    OnCalendar=*-*-* 03:00:00
+    OnCalendar=*:0/30
     RandomizedDelaySec=5m
     | EOT
 
