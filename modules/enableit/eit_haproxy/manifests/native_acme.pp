@@ -96,8 +96,8 @@ class eit_haproxy::native_acme (
     # a CSR, so we hit the accepting path.
     openssl::certificate::x509 { $_safe:
       ensure     => present,
-      commonname => $group_name,
-      altnames   => [$group_name],
+      commonname => $opts['domains'][0],
+      altnames   => $opts['domains'],
       days       => -1,
       base_dir   => $_acme_dir,
       key_size   => 4096,

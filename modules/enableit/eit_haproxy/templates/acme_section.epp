@@ -4,7 +4,7 @@
 
 acme LE
   directory <%= $acme_ca %>
-  account-key /etc/ssl/private/letsencrypt.account.key
+  account-key /etc/haproxy/acme/account.key
   contact <%= $contact %>
   challenge http-01
   map virt@acme

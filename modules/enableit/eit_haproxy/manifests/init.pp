@@ -82,7 +82,7 @@ class eit_haproxy (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = 'latest',
-  Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
+  Eit_types::Email              $acme_contact       = 'ops@obmondo.com',
   Enum['production','staging']  $ca_type            = 'production',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,

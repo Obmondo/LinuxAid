@@ -98,6 +98,7 @@ class eit_haproxy::basic_config (
       'daemon'                    => '',
       'stats'                     => 'socket /var/run/haproxy.sock mode 600 level admin',
       'tune.ssl.default-dh-param' => '2048',
+      'httpclient.resolvers.prefer' => 'ipv4',
     } + $_ssl_options + $_native_acme_global_options,
     defaults_options => {
       'log'     => 'global',
@@ -336,8 +337,7 @@ class eit_haproxy::basic_config (
                 if $_allow_http_acl { '!allow_http' },
               ].delete_undef_values.join(' '),
             },
-            $http_only_domains_options,
-            [{ 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)]' }]
+            $http_only_domains_options
           ].delete_undef_values.flatten,
         }
       }
