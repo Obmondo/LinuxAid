@@ -19,7 +19,8 @@ class profile::network::wireguard (
       private_key => $value['private_key'],
       dport       => $value['listen_port'],
       addresses   => [{'address' => $value['address']}],
-      peers       => $value['peers']
+      peers       => $value['peers'],
+      provider    => pick($value['provider'], 'wgquick'),
     }
   }
 
