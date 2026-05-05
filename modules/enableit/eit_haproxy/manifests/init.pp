@@ -121,81 +121,25 @@ class eit_haproxy (
 
     if $_wants_haproxy3 {
       if $_is_ubuntu {
-        contain apt
+        # Ubuntu 24.04 ships HAProxy 2.8 — need vbernat's PPA for 3.x.
+        # Newer Ubuntu LTS (26.04+) ships HAProxy 3.x in stock repos,
+        # so the PPA is unnecessary there.
+        if $facts['os']['release']['major'] == '24' {
+          contain apt
 
-        $haproxy_lts_version = '3.2'
-        apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
+          $haproxy_lts_version = '3.2'
+          apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
 
-        Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
+          Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
+        }
       } else {
         warning('HAProxy 3.x auto-native ACME path is only supported on Ubuntu')
       }
     }
 
     if $_use_native_acme {
-      ensure_packages(['socat', 'openssl', 'ssl-cert'])
-
-      class { 'eit_haproxy::dummy_cert':
+      class { 'eit_haproxy::native_acme':
         domains => $domains,
-      }
-      Class['eit_haproxy::dummy_cert'] -> Class['eit_haproxy::basic_config']
-
-      file { '/opt/obmondo/bin/haproxy-dump-certs.sh':
-        ensure => file,
-        source => 'puppet:///modules/eit_haproxy/haproxy-dump-certs.sh',
-        mode   => '0755',
-        owner  => 'root',
-        group  => 'root',
-      }
-
-      $_dump_timer = @(EOT)
-        [Unit]
-        Description=Dump HAProxy in-memory certificates to disk
-        Requires=haproxy-dump-certs.service
-        [Timer]
-        OnCalendar=*-*-* 03:00:00
-        RandomizedDelaySec=5m
-        | EOT
-
-      $_dump_service = @(EOT)
-        [Unit]
-        Description=Dump HAProxy in-memory certificates to disk
-        [Service]
-        Type=oneshot
-        ExecStart=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        | EOT
-
-      systemd::timer { 'haproxy-dump-certs.timer':
-        ensure          => present,
-        timer_content   => $_dump_timer,
-        service_content => $_dump_service,
-        active          => true,
-        enable          => true,
-        require         => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
-      }
-    }
-
-    # NOTE: Needed this, we install our own haproxy 2.9 on centos7
-    if versioncmp($facts.dig('haproxy_version'), '2.5.0') >= 0 {
-      $_acme_flush = if $_use_native_acme { @(EOT)
-        ExecReload=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        ExecStop=/bin/bash -c '/usr/bin/socat - /var/run/haproxy.sock <<< "show ssl cert" | /usr/bin/awk "/^\*/ {print $2}" | /usr/bin/xargs -r /opt/obmondo/bin/haproxy-dump-certs.sh -s /var/run/haproxy.sock -p /etc/ssl/private/'
-        | EOT
-      } else { '' }
-
-      $_service_base = @(EOT)
-        [Service]
-        ExecStartPre=
-        ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
-        | EOT
-
-      $_service = "${_service_base}${_acme_flush}"
-
-      systemd::dropin_file { 'haproxy_dropin':
-        filename => 'haproxy-override.conf',
-        unit     => 'haproxy.service',
-        content  => $_service,
-        notify   => Service['haproxy'],
       }
     }
 
