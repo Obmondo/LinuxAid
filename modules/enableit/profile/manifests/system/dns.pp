@@ -82,6 +82,14 @@ class profile::system::dns (
         ]
       }
 
+      # Ensure directory exists before overriding the unit file
+      file { '/etc/systemd/system/dnsmasq.service.d':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
       $_dnsmasq_override_content = @("EOT"/)
         # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
         [Service]
@@ -102,6 +110,7 @@ class profile::system::dns (
         content => $_dnsmasq_override_content,
         noop    => $noop_value,
         notify  => Service['dnsmasq.service'],
+        require => File['/etc/systemd/system/dnsmasq.service.d'],
       }
 
       # Manage the service state
