@@ -22,7 +22,7 @@ class profile::system::time::ntp (
         before => Service['chronyd'],
       }
 
-      file { '/etc/chrony.conf':
+      file { '/etc/chrony/chrony.conf':
         ensure  => 'file',
         content => epp('profile/system/time/ntp/chrony.conf.epp', {
           servers => $servers,
