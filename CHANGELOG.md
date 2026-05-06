@@ -2,6 +2,17 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.6.0
+
+### Bug Fixes
+- fe44fa93 fix(wireguard): enforce wg-quick provider for managed interfaces
+- f2d2ca87 fix: declare systemd class before monitor to avoid duplicate Class[Systemd] on atat.enableit
+
+### Other Changes
+- 79e3c5ac Fix duplicate Service[nginx] declaration and dependency cycle
+- 06764720 Ensure dnsmasq override directory exists before managing unit file
+- 9d77b97a Ensure sssd override directory exists and enforce resource ordering
+
 ## LinuxAid Release Version v1.5.9
 
 ### Bug Fixes
