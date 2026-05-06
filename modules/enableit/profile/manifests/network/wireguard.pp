@@ -14,6 +14,21 @@ class profile::network::wireguard (
   $_unmanaged_tunnels = $tunnels - $_managed_tunnels
 
   $_managed_tunnels.each | $key, $value | {
+
+    # 1. Dynamically figure out the public interface for this specific server
+    $primary_iface = $facts['networking']['primary']
+
+    # 2. Define the default NAT/Routing commands 
+    $default_postup = [
+      "iptables -A FORWARD -i ${key} -j ACCEPT",
+      "iptables -t nat -A POSTROUTING -o ${primary_iface} -j MASQUERADE"
+    ]
+
+    $default_postdown = [
+      "iptables -D FORWARD -i ${key} -j ACCEPT",
+      "iptables -t nat -D POSTROUTING -o ${primary_iface} -j MASQUERADE"
+    ]
+
     wireguard::interface  { $key :
       ensure      => pick($value['ensure'], 'present'),
       private_key => $value['private_key'],
@@ -21,6 +36,8 @@ class profile::network::wireguard (
       addresses   => [{'address' => $value['address']}],
       peers       => $value['peers'],
       provider    => pick($value['provider'], 'wgquick'),
+      postup_cmds   => pick($value['postup_cmds'], $default_postup),
+      postdown_cmds => pick($value['postdown_cmds'], $default_postdown),
     }
   }
 
