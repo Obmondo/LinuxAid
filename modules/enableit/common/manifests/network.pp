@@ -103,7 +103,6 @@ class common::network (
 
     case $service_name {
       'systemd-networkd': {
-        include ::common::system::systemd
 
         # With bonded interfaces, systemd-networkd-wait-online waits for ALL managed interfaces
         # (bond + both slaves) to reach "online" state. LACP negotiation can exceed the default

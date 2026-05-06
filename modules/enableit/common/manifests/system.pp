@@ -109,10 +109,6 @@ class common::system (
   # SYSTEMD
   ##############
 
-  if $facts['init_system'] == 'systemd' {
-    include common::system::systemd
-  }
-
   if $remove_fstrim_cron or $facts['virtual'] == 'lxc' {
     # Remove the fstrim cron job. This comes from the `util-linux` and is
     # installed by default with no proper way to disable it. Issues at
