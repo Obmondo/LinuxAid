@@ -2,6 +2,36 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.5.9
+
+### Bug Fixes
+- b73d8a4e fix: align puppet configuration with manual acme fixes
+- f56757e5 fix: resolve dependency cycle between native_acme and basic_config
+- e898186a fix: resolve syntax error in native_acme manifest map block
+- 86c4eaaf fix: handle missing obmondo fact gracefully in publicip
+- c5c6406c fix: replace deprecated uniq function with unique
+- 5f842622 fix: correctly assemble domain-specific dummy SSL certificates
+- 46fbc3ae fix: cast disable_ipv6 boolean to string for sysctl
+- 1129245e fix: resolve config validation race condition
+- 2d82f589 fix: resolve apt install error for haproxy 3.x
+- 71303143 fix: remove reference of /etc/ssl/private from dummy cert for haproxy
+- b748ac90 fix(catalog-diff): drop duplicate docker.sock mount in workflow
+
+### Configuration Changes
+- 0835d8c9 chore: remove systemd drop-in configuration validation
+- 8fb120e4 chore: increase cert persistence frequency to 30 minutes
+- b01aecd4 chore: update linuxaid-cli version to v1.5.0
+- 2de29da7 chore(catalog-diff): migrate all catalog-diff tooling to catalogdiff-ci
+
+### Other Changes
+- c75375bb updated the dump cert script
+- ae63e064 refactor: simplify dump-certs.timer ExecStart to direct script call
+- f11d7976 refactor: gate vbernat PPA on Ubuntu 24.04 only
+- c5e0a5f5 refactor: colocate dump-certs persistence with native_acme
+- d3fa6ceb refactor: switch HAProxy 3.x ACME to native crt-list flow
+- a42ca7ca ci(catalog-diff): run catalogdiff diff on PRs that touch Puppet code
+- 1a4e42c4 add cron to delete snapshot from package-sign after 60 days
+
 ## LinuxAid Release Version v1.5.8
 
 ### Features
