@@ -45,12 +45,6 @@ class profile::web::nginx (
     notify  => Service['nginx'],
   }
 
-  # Ensure the Nginx service is managed and refreshed
-  service { 'nginx':
-    ensure  => 'running',
-    enable  => true,
-  }
-
   class { '::nginx':
     manage_repo          => $manage_repo,
     nginx_cfg_prepend    => $_nginx_cfg_prepend,
@@ -60,7 +54,6 @@ class profile::web::nginx (
     },
     http_format_log      => 'custom_access_log',
     *                    => $extra_cfg_option,
-    notify               => Service['nginx'],
     purge_passenger_repo => false,
     package_source       => $package_source,
   }
