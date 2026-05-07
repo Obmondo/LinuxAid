@@ -37,6 +37,13 @@ Puppet::Functions.create_function(:firewall_multi) do
   # @param hash The original resource params data.
   # @return Modified Hash for firewall types to be passed to create_resources().
   #
+  # @note Changed explode to also append the param value to the title when it
+  #   is a single (non-Array) value. Previously only Array-valued params were
+  #   expanded into the title; scalar values were silently ignored, which could
+  #   produce identical iptables comments for rules differing only in protocol
+  #   (e.g. TCP vs UDP), triggering "Duplicate names" errors in
+  #   puppetlabs-firewall's validate_get.
+  #
   dispatch :firewall_multi do
     param "Hash", :hash
   end
@@ -45,18 +52,16 @@ Puppet::Functions.create_function(:firewall_multi) do
     exploded = {}
 
     hash.each do |title, params|
-      if params.key?(param) &&
-         params[param].is_a?(Array)
-
-        params[param].each do |val|
-          new = [title, string, val].join(" ")
+      if params.key?(param) && !params[param].nil?
+        vals = params[param].is_a?(Array) ? params[param] : [params[param]]
+        vals.each do |val|
+          new = [title, string, val.to_s].join(" ")
           exploded[new] = params.dup
           exploded[new][param] = val
         end
-
-        next
+      else
+        exploded[title] = params.clone
       end
-      exploded[title] = params.clone
     end
 
     exploded
