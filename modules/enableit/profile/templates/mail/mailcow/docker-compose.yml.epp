@@ -18,8 +18,8 @@ services:
   mysql-mailcow:
     image: <%= $mysql_image %>
     depends_on:
-      - unbound-mailcow
-      - netfilter-mailcow
+      - unbound-mailcow<% if $letsencrypt { %>
+      - netfilter-mailcow<% } %>
     stop_grace_period: 45s
     volumes:
       - mysql-vol-1:/var/lib/mysql/
@@ -46,9 +46,9 @@ services:
     volumes:
       - redis-vol-1:/data/
       - <%= $install_dir %>/data/conf/redis/redis-conf.sh:/redis-conf.sh:z
-    restart: always
+    restart: always<% if $letsencrypt { %>
     depends_on:
-      - netfilter-mailcow
+      - netfilter-mailcow<% } %>
     ports:
       - "${REDIS_PORT:-127.0.0.1:7654}:6379"
     environment:
@@ -88,8 +88,8 @@ services:
     image: <%= $rspamd_image %>
     stop_grace_period: 30s
     depends_on:
-      - dovecot-mailcow
-      - clamd-mailcow
+      - dovecot-mailcow<% if $letsencrypt { %>
+      - clamd-mailcow<% } %>
     environment:
       - TZ=${TZ}
       - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
@@ -255,8 +255,8 @@ services:
   dovecot-mailcow:
     image: <%= $dovecot_image %>
     depends_on:
-      - mysql-mailcow
-      - netfilter-mailcow
+      - mysql-mailcow<% if $letsencrypt { %>
+      - netfilter-mailcow<% } %>
       - redis-mailcow
     dns:
       - ${IPV4_NETWORK:-172.22.1}.254
@@ -545,8 +545,8 @@ services:
     depends_on:
       - postfix-mailcow
       - dovecot-mailcow
-      - mysql-mailcow
-      - acme-mailcow
+      - mysql-mailcow<% if $letsencrypt { %>
+      - acme-mailcow<% } %>
       - redis-mailcow
     environment:
       - IPV6_NETWORK=${IPV6_NETWORK:-fd4d:6169:6c63:6f77::/64}
