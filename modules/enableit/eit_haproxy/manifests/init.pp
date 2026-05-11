@@ -124,7 +124,7 @@ class eit_haproxy (
         # Ubuntu 24.04 ships HAProxy 2.8 — need vbernat's PPA for 3.x.
         # Newer Ubuntu LTS (26.04+) ships HAProxy 3.x in stock repos,
         # so the PPA is unnecessary there.
-        if $facts['os']['release']['major'] == '24' {
+        if $facts['os']['release']['major'] =~ /^24/ {
           contain apt
 
           $haproxy_lts_version = '3.2'
