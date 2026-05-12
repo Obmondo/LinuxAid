@@ -1,2 +1,3 @@
 ---
 profile::system::openvox::package_version_suffix: '-1.sles15'
+profile::logging::logrotate::__scheduling_method: 'service'
