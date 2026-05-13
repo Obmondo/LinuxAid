@@ -10,8 +10,8 @@ type Eit_types::Resource::Mount = Variant[
   # The device providing the mount.  This can be...
   device      => Variant[
     Stdlib::Absolutepath,
-    # Try to match NFS shares
-    Pattern[/\A[a-zA-Z0-9.-]+:[a-zA-Z0-9_\/.-]+\Z/],
+    # NFS/CephFS shares
+    Pattern[/\A[a-zA-Z0-9.,:-]+:\/[A-Za-z0-9._\/-]*\Z/],
     # Could also be a zfs mount
     Pattern[/\A[A-Za-z0-9._-]+(\/[A-Za-z0-9._-]+)*\Z/],
   ],
