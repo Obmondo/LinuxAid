@@ -22,6 +22,8 @@
 #
 # @param version The version of haproxy. Defaults to 'latest'.
 #
+# @param wants_haproxy3 Internal switch indicating if HAProxy 3.x is requested.
+#
 # @param native_acme Internal switch for native ACME mode.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
@@ -48,6 +50,7 @@ class eit_haproxy::basic_config (
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = 'latest',
+  Boolean                       $wants_haproxy3     = false,
   Boolean                       $native_acme        = false,
   Eit_types::Email              $acme_contact       = $eit_haproxy::acme_contact,
   String                        $acme_ca            = 'https://acme-v02.api.letsencrypt.org/directory',
@@ -60,8 +63,15 @@ class eit_haproxy::basic_config (
   $_ssl_options = case $encryption_ciphers {
     'Intermediate': {
       {
-        'ssl-default-bind-ciphers' => 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', #lint:ignore:140chars
-        'ssl-default-bind-options' => 'no-sslv3 no-tls-tickets'
+        'ssl-default-bind-ciphers'      => if $wants_haproxy3 {
+          # Set SECLEVEL=0 to allow older clients to connect (fixes HAProxy 3.2 + OpenSSL 3.0 stricter defaults)
+          'DEFAULT:@SECLEVEL=0'
+        } else {
+          'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS' #lint:ignore:140chars
+        },
+        'ssl-default-bind-options'      => 'no-sslv3 no-tls-tickets',
+        # Modern TLS 1.3 ciphersuites to ensure strong security for clients that support it
+        'ssl-default-bind-ciphersuites' => 'TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256',
       }
     }
     'Modern': {
@@ -88,7 +98,7 @@ class eit_haproxy::basic_config (
   class { 'haproxy':
     package_ensure  => $version,
     global_options   => {
-      'log'                       => '127.0.0.1 local0',
+      'log'                       => '127.0.0.1 local0', # 'stdout format short daemon debug' for hard logs
       'crt-base'                  => '/etc/ssl/private',
       'chroot'                    => '/var/lib/haproxy',
       'pidfile'                   => '/var/run/haproxy.pid',
@@ -262,7 +272,7 @@ class eit_haproxy::basic_config (
     if $_allow_http_acl {
       # Define the allow_http ACL centrally using the map file to ensure HAProxy 3.2 compatibility.
       $http_only_domains_options = [
-        { 'acl allow_http' => 'hdr(host),lower -f /etc/haproxy/allow_http_domains.map' }
+        { 'acl allow_http' => 'hdr(host),lower -f /etc/haproxy/allow_http_domains.map' },
       ]
     } else {
       $http_only_domains_options = []
