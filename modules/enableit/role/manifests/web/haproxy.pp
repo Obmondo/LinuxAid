@@ -41,17 +41,13 @@
 # @param $__blendable 
 # Boolean to indicate if blending is enabled.
 #
-# @param send_log_summary Boolean to enable or disable sending log summaries. Defaults to false.
-#
-# @param log_summary_recipients The recipients for log summaries. Defaults to ['info@enableit.dk'].
-#
 # @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version
 #
 # @groups networking domains, listens, listen_on, firewall
 #
-# @groups logging log_compressed, log_dir, send_log_summary, log_summary_recipients
+# @groups logging log_compressed, log_dir
 #
 # @groups mode mode, http
 #
@@ -79,33 +75,28 @@ class role::web::haproxy (
   Boolean                       $log_compressed         = true,
   Stdlib::Absolutepath          $log_dir                = '/var/log',
   Boolean                       $__blendable,
-  Boolean                       $send_log_summary       = false,
-  Array[String]                 $log_summary_recipients = ['info@enableit.dk'],
 ) inherits role::web {
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
-  confine($send_log_summary, $log_summary_recipients.size == 0, 'Log summary sender needs at least 1 recipient')
 
   class { 'profile::web::haproxy':
-    domains                => $domains,
-    listens                => $listens,
-    ddos_protection        => $ddos_protection,
-    https                  => $https,
-    http                   => $http,
-    use_hsts               => $use_hsts,
-    use_lets_encrypt       => $use_lets_encrypt,
-    mode                   => $mode,
-    manual_config          => $manual_config,
-    version                => $version,
-    acme_contact           => $acme_contact,
-    ca_type                => $ca_type,
-    configure              => $configure,
-    listen_on              => $listen_on,
-    encryption_ciphers     => $encryption_ciphers,
-    firewall               => $firewall,
-    service_options        => $service_options,
-    log_compressed         => $log_compressed,
-    log_dir                => $log_dir,
-    send_log_summary       => $send_log_summary,
-    log_summary_recipients => $log_summary_recipients,
+    domains            => $domains,
+    listens            => $listens,
+    ddos_protection    => $ddos_protection,
+    https              => $https,
+    http               => $http,
+    use_hsts           => $use_hsts,
+    use_lets_encrypt   => $use_lets_encrypt,
+    mode               => $mode,
+    manual_config      => $manual_config,
+    version            => $version,
+    acme_contact       => $acme_contact,
+    ca_type            => $ca_type,
+    configure          => $configure,
+    listen_on          => $listen_on,
+    encryption_ciphers => $encryption_ciphers,
+    firewall           => $firewall,
+    service_options    => $service_options,
+    log_compressed     => $log_compressed,
+    log_dir            => $log_dir,
   }
 }
