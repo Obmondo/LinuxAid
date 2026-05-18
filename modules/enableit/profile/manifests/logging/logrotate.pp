@@ -17,11 +17,16 @@ class profile::logging::logrotate (
   }
 
   $default_config = {
-    dateext  => $dateext,
-    compress => $compress,
-    mail     => false,
-    olddir   => undef,
-    ifempty  => false,
+    dateext    => $dateext,
+    # Include epoch in suffix so multiple rotations on the same day do not
+    # collide (e.g. SUSE-shipped /etc/logrotate.d/zypper, where the default
+    # `-%Y%m%d` suffix causes "destination ... already exists, skipping rotation"
+    # when a size-triggered rotation runs more than once per day).
+    dateformat => '-%Y%m%d-%s',
+    compress   => $compress,
+    mail       => false,
+    olddir     => undef,
+    ifempty    => false,
   }
 
   $_adv_options = deep_merge($default_config, $adv_options)
