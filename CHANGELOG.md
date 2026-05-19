@@ -2,6 +2,22 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.6.1
+
+### Features
+- 9f9c2dac feat(wireguard): add default NAT masquerade rules for tunnels
+
+### Bug Fixes
+- 4955f598 fix(logrotate): use systemd scheduling for Suse15 to prevent duplicate rotations
+- d0cdbcf0 fix: allow Ubuntu 24.x releases to trigger PPA installation
+- 9b9fff63 fix(mailcow): guard netfilter-mailcow and acme-mailcow depends_on with $letsencrypt
+- 1fd93c85 fix: cleanup haproxy when disabled
+
+### Other Changes
+- 67473512 Update the sssd status check service to wait for sssd to get ready first
+- 9a99e2f4 add restart: unless-stopped to packagesign compose services
+- fd205a74 Fix chrony config path from /etc/chrony.conf to /etc/chrony/chrony.conf
+
 ## LinuxAid Release Version v1.6.0
 
 ### Bug Fixes
