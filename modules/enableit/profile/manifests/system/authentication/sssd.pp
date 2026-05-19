@@ -150,6 +150,8 @@ class profile::system::authentication::sssd (
         [Unit]
         Description=SSSD status check service
         Wants=sssd-status-check.timer
+        After=sssd.service
+        Requires=sssd.service
 
         [Service]
         Type=oneshot
