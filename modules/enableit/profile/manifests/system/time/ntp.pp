@@ -22,7 +22,12 @@ class profile::system::time::ntp (
         before => Service['chronyd'],
       }
 
-      file { '/etc/chrony/chrony.conf':
+      $_chrony_conf = $facts['os']['family'] ? {
+        'RedHat' => '/etc/chrony.conf',
+        default  => '/etc/chrony/chrony.conf',
+      }
+
+      file { $_chrony_conf:
         ensure  => 'file',
         content => epp('profile/system/time/ntp/chrony.conf.epp', {
           servers => $servers,
