@@ -41,7 +41,8 @@ class profile::web::haproxy (
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
   Enum['production','staging']  $ca_type                = 'production',
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
-  Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
+  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
+  Optional[Hash]                $custom_ciphers         = undef,
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
       Stdlib::Port
@@ -81,6 +82,7 @@ class profile::web::haproxy (
     configure          => $configure,
     firewall           => $firewall,
     encryption_ciphers => $encryption_ciphers,
+    custom_ciphers     => $custom_ciphers,
     service_options    => $service_options,
     log_compressed     => $log_compressed,
     log_dir            => $log_dir,

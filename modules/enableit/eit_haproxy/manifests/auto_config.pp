@@ -1,6 +1,7 @@
 # Haproxy Config
 class eit_haproxy::auto_config (
-  Enum['strict', 'strong']      $encryption_ciphers,
+  Enum['strict', 'strong', 'custom'] $encryption_ciphers,
+  Optional[Hash]                  $custom_ciphers      = undef,
   Hash                            $letsencrypt_setup   = {},
   Eit_types::HaproxyAuth          $auth                = {},
   Eit_types::HaproxyProxies       $proxies             = {},
@@ -9,51 +10,34 @@ class eit_haproxy::auto_config (
   Optional[Boolean]               $redirect_http       = true,
   Eit_types::Version              $version             = 'latest',
 ) {
-  $_wants_haproxy3 = String($version) =~ /^\d+(\.\d+)*$/ and versioncmp(String($version), '3.0.0') >= 0
-
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
   # Strict == Modern
-  $_encryption_ciphers = case $encryption_ciphers {
+  $_cipher_profiles = {
+    'strong' => {
+      'ssl-default-bind-ciphers'      => 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', #lint:ignore:140chars
+      'ssl-default-bind-options'      => 'no-sslv3 no-tls-tickets',
+    },
+    'strict' => {
+      'ssl-default-bind-ciphers' => 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256', #lint:ignore:140chars
+      'ssl-default-bind-options' => 'no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets',
+      'ssl-default-bind-ciphersuites' => 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256',
+    },
+  }
+
+  $_ssl_options = case $encryption_ciphers {
     'strong': {
-      if $_wants_haproxy3 {
-        # Set SECLEVEL=0 to allow older clients to connect (fixes HAProxy 3.2 + OpenSSL 3.0 stricter defaults)
-        'DEFAULT:@SECLEVEL=0'
-      } else {
-        'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS' #lint:ignore:140chars
-      }
+      $_cipher_profiles['strong']
     }
     'strict': {
-      'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256' #lint:ignore:140chars
+      $_cipher_profiles['strict']
+    }
+    'custom': {
+      # Use strict as fallback base for any keys missing in custom_ciphers
+      deep_merge($_cipher_profiles['strict'], pick($custom_ciphers, {}))
     }
     default: {
       fail("${encryption_ciphers} is not supported")
-    }
-  }
-
-  $_ssl_bind_options = case $encryption_ciphers {
-    'strong': {
-      'no-sslv3 no-tls-tickets'
-    }
-    'strict': {
-      'no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets'
-    }
-    default: {
-      fail("${encryption_ciphers} is not supported")
-    }
-  }
-
-  $_ssl_bind_ciphersuites = case $encryption_ciphers {
-    'strong': {
-      # Modern TLS 1.3 ciphersuites to ensure strong security for clients that support it
-      'TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256'
-    }
-    'strict': {
-      # Modern TLS 1.3 ciphersuites to ensure strong security for clients that support it
-      'TLS_AES_256_GCM_SHA384:TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256'
-    }
-    default: {
-      undef
     }
   }
 
@@ -70,11 +54,8 @@ class eit_haproxy::auto_config (
       'group'                     => 'haproxy',
       'daemon'                    => '',
       'stats'                     => 'socket /var/run/haproxy.sock mode 600 level admin',
-      'ssl-default-bind-ciphers'  => $_encryption_ciphers,
-      'ssl-default-bind-options'  => $_ssl_bind_options,
-      'ssl-default-bind-ciphersuites' => $_ssl_bind_ciphersuites,
       'tune.ssl.default-dh-param' => '2048',
-    },
+    } + $_ssl_options,
     defaults_options => {
       'log'     => 'global',
       'stats'   => 'enable',

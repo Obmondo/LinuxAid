@@ -22,6 +22,8 @@
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
+# @param custom_ciphers Custom SSL cipher configuration. Defaults to undef.
+#
 # @param configure The configuration method to use. Defaults to 'auto'.
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
@@ -62,7 +64,8 @@ class role::web::haproxy (
   Boolean                       $use_lets_encrypt       = true,
   Enum['tcp', 'http']           $mode                   = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
-  Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
+  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
+  Optional[Hash]                $custom_ciphers         = undef,
   Enum['auto', 'manual']        $configure              = 'auto',
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],

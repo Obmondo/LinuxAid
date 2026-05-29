@@ -80,7 +80,8 @@ class eit_haproxy (
   Boolean                       $use_lets_encrypt   = true,
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
-  Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
+  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
+  Optional[Hash]                $custom_ciphers     = undef,
   Eit_types::Version            $version            = 'latest',
   Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
   Enum['production','staging']  $ca_type            = 'production',
@@ -143,10 +144,14 @@ class eit_haproxy (
       }
     }
 
+    $_version = $_wants_haproxy3 ? {
+      true    => 'latest',
+      default => $version
+    }
+
     class { 'eit_haproxy::basic_config':
       domains            => $domains,
-      version            => $_wants_haproxy3 ? { true => 'latest', default => $version },
-      wants_haproxy3     => $_wants_haproxy3,
+      version            => $_version,
       native_acme        => $_use_native_acme,
       ddos_protection    => $ddos_protection,
       https              => $https,
@@ -159,6 +164,7 @@ class eit_haproxy (
       mode               => $mode,
       listen_on          => $listen_on,
       encryption_ciphers => $encryption_ciphers,
+      custom_ciphers     => $custom_ciphers,
     }
   }
 
