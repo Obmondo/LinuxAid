@@ -2,6 +2,15 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.6.2
+
+### Bug Fixes
+- 77634d386 fix: update chrony config path based on OS family
+
+### Other Changes
+- 9fd206a1c Extend Eit_types::UserName pattern to support Samba @group syntax
+- f0109d118 Fixed the logrotate failure due to file already exists error
+
 ## LinuxAid Release Version v1.6.1
 
 ### Features
