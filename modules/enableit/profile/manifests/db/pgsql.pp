@@ -173,9 +173,16 @@ class profile::db::pgsql (
       'wal_level':
         value => 'hot_standby',
         ;
-      'wal_keep_segments':
+    }
+
+    if versioncmp($postgresql::server::_version, '13') >= 0 {
+      postgresql::server::config_entry { 'wal_keep_size':
+        value => '512MB',
+      }
+    } else {
+      postgresql::server::config_entry { 'wal_keep_segments':
         value => 32,
-        ;
+      }
     }
 
     # Replication User
