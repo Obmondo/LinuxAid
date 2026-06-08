@@ -27,4 +27,5 @@ type Eit_types::Sssd::Domain = Struct[
     'simple_allow_groups'                     => Optional[Array[Eit_types::Group]],
     'use_fully_qualified_names'               => Boolean,
     'timeout'                                 => Integer,
+    'krb5_auth_timeout'                       => Integer,
   }]
