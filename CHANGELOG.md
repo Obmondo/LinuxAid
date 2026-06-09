@@ -2,6 +2,14 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.6.3
+
+### Features
+- ba2cdd64 feat(sssd): add krb5_auth_timeout to domain type
+
+### Bug Fixes
+- 4e4d29ee fix(gitlab-runner): set global concurrent for shell runners
+
 ## LinuxAid Release Version v1.6.2
 
 ### Bug Fixes
