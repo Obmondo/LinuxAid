@@ -46,8 +46,7 @@ class eit_haproxy::basic_config (
   Boolean                       $use_lets_encrypt   = true,
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
-  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
-  Optional[Hash]                $custom_ciphers     = undef,
+  Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = 'latest',
   Boolean                       $native_acme        = false,
   Eit_types::Email              $acme_contact       = $eit_haproxy::acme_contact,
@@ -60,7 +59,7 @@ class eit_haproxy::basic_config (
   # Strict == Modern
   $_cipher_profiles = {
     'Intermediate' => {
-      'ssl-default-bind-ciphers'      => 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', #lint:ignore:140chars
+      'ssl-default-bind-ciphers'      => 'DEFAULT:@SECLEVEL=0',
       'ssl-default-bind-options'      => 'no-sslv3 no-tls-tickets',
     },
     'Modern' => {
@@ -76,10 +75,6 @@ class eit_haproxy::basic_config (
     }
     'Modern': {
       $_cipher_profiles['Modern']
-    }
-    'Custom': {
-      # Use Modern as fallback base for any keys missing in custom_ciphers
-      deep_merge($_cipher_profiles['Modern'], pick($custom_ciphers, {}))
     }
     default: {
       fail("${encryption_ciphers} is not supported")

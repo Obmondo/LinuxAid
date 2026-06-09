@@ -80,8 +80,7 @@ class eit_haproxy (
   Boolean                       $use_lets_encrypt   = true,
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
-  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
-  Optional[Hash]                $custom_ciphers     = undef,
+  Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = 'latest',
   Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
   Enum['production','staging']  $ca_type            = 'production',
@@ -164,7 +163,6 @@ class eit_haproxy (
       mode               => $mode,
       listen_on          => $listen_on,
       encryption_ciphers => $encryption_ciphers,
-      custom_ciphers     => $custom_ciphers,
     }
   }
 

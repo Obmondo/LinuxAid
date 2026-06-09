@@ -40,7 +40,7 @@
 #
 # @param log_dir The directory for log files. Defaults to '/var/log'.
 #
-# @param $__blendable 
+# @param __blendable 
 # Boolean to indicate if blending is enabled.
 #
 # @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
@@ -64,8 +64,7 @@ class role::web::haproxy (
   Boolean                       $use_lets_encrypt       = true,
   Enum['tcp', 'http']           $mode                   = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
-  Enum['Modern','Intermediate','Custom'] $encryption_ciphers = 'Modern',
-  Optional[Hash]                $custom_ciphers         = undef,
+  Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
