@@ -20,6 +20,9 @@
 #
 # @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
 #
+# @param wireguard_port
+#   Optional UDP port for mesh WireGuard firewall rule; undef skips the rule (see common::network::netbird).
+#
 class profile::network::netbird (
   Boolean                 $enable         = $common::network::netbird::enable,
   Eit_types::Noop_Value   $noop_value     = $common::network::netbird::noop_value,
@@ -27,6 +30,7 @@ class profile::network::netbird (
   Stdlib::HTTPSUrl        $server         = $common::network::netbird::server,
   Eit_types::Version      $version        = $common::network::netbird::version,
   Enum['package', 'repo'] $install_method = $common::network::netbird::install_method,
+  Optional[Stdlib::Port]  $wireguard_port = $common::network::netbird::wireguard_port,
 ) {
   # Include archive module for download capabilities
   include archive
@@ -138,5 +142,14 @@ class profile::network::netbird (
     proto  => 'udp',
     jump   => 'accept',
     dport  => '49152-65535',
+  }
+
+  if $wireguard_port {
+    firewall { '0002 allow netbird wireguard mesh':
+      ensure => ensure_present($enable),
+      proto  => 'udp',
+      jump   => 'accept',
+      dport  => $wireguard_port,
+    }
   }
 }
