@@ -143,9 +143,14 @@ class eit_haproxy (
       }
     }
 
+    $_version = $_wants_haproxy3 ? {
+      true    => 'latest',
+      default => $version
+    }
+
     class { 'eit_haproxy::basic_config':
       domains            => $domains,
-      version            => $_wants_haproxy3 ? { true => 'latest', default => $version },
+      version            => $_version,
       native_acme        => $_use_native_acme,
       ddos_protection    => $ddos_protection,
       https              => $https,

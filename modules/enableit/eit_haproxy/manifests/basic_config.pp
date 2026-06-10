@@ -57,18 +57,24 @@ class eit_haproxy::basic_config (
   # https://wiki.mozilla.org/Security/Server_Side_TLS
   # Strong == Intermediate
   # Strict == Modern
+  $_cipher_profiles = {
+    'Intermediate' => {
+      'ssl-default-bind-ciphers'      => 'DEFAULT:@SECLEVEL=0',
+      'ssl-default-bind-options'      => 'no-sslv3 no-tls-tickets',
+    },
+    'Modern' => {
+      'ssl-default-bind-ciphers' => 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256', #lint:ignore:140chars
+      'ssl-default-bind-options' => 'no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets',
+      'ssl-default-bind-ciphersuites' => 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256',
+    },
+  }
+
   $_ssl_options = case $encryption_ciphers {
     'Intermediate': {
-      {
-        'ssl-default-bind-ciphers' => 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS', #lint:ignore:140chars
-        'ssl-default-bind-options' => 'no-sslv3 no-tls-tickets'
-      }
+      $_cipher_profiles['Intermediate']
     }
     'Modern': {
-      {
-        'ssl-default-bind-ciphers' => 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256', #lint:ignore:140chars
-        'ssl-default-bind-options' => 'no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets'
-      }
+      $_cipher_profiles['Modern']
     }
     default: {
       fail("${encryption_ciphers} is not supported")
@@ -88,7 +94,7 @@ class eit_haproxy::basic_config (
   class { 'haproxy':
     package_ensure  => $version,
     global_options   => {
-      'log'                       => '127.0.0.1 local0',
+      'log'                       => '127.0.0.1 local0', # 'stdout format short daemon debug' for hard logs
       'crt-base'                  => '/etc/ssl/private',
       'chroot'                    => '/var/lib/haproxy',
       'pidfile'                   => '/var/run/haproxy.pid',
@@ -183,9 +189,10 @@ class eit_haproxy::basic_config (
     # If any domains hash map has set force_https to false
     # then we need to add allow_http acl to allow direct http hits
     # as well otherwise haproxy will redirect all traffic to https
+    # We use pick() here to robustly check for explicitly or implicitly allowed HTTP traffic.
     $_allow_http_acl = false in $domains.map |$x, $opts| {
-      $opts['force_https']
-    }.flatten.delete_undef_values
+      pick($opts['force_https'], false)
+    }.flatten
 
     $frontend_headers = [
       { 'http-request add-header'  => 'X-Forwarded-Proto https if { ssl_fc }' },
@@ -249,15 +256,23 @@ class eit_haproxy::basic_config (
       }
     }
 
-    $http_only_domains_options = $domains.values.filter |$_domain_opts| {
-      # remove all entries that do not force HTTPS
+    # Collect all domains that allow HTTP traffic to be written to a map file.
+    # This prevents HAProxy 3.2 from failing to parse multiple repeating ACL definitions.
+    $allow_http_domains = $domains.values.filter |$_domain_opts| {
+      # remove all entries that do force HTTPS
       !pick($_domain_opts.dig('force_https'), false)
     }.map |$_domain_opts| {
-      $_domains = $_domain_opts['domains']
-      $_domains.map |$_domain| {
-        { 'acl allow_http hdr(host)' => $_domain }
-      }
-    }.flatten
+      $_domain_opts['domains']
+    }.flatten.sort
+
+    if $_allow_http_acl {
+      # Define the allow_http ACL centrally using the map file to ensure HAProxy 3.2 compatibility.
+      $http_only_domains_options = [
+        { 'acl allow_http' => 'hdr(host),lower -f /etc/haproxy/allow_http_domains.map' },
+      ]
+    } else {
+      $http_only_domains_options = []
+    }
 
     if $https and $use_lets_encrypt and !$_use_native_acme {
       # letsencrypt backend
@@ -332,12 +347,14 @@ class eit_haproxy::basic_config (
               Hash(["${listen}:80", []])
           }),
           options => [
+            $http_only_domains_options,
             { 'http-request' => 'return status 200 content-type text/plain lf-string "%[path,field(-1,/)].%[path,field(-1,/),map(virt@acme)]\n" if { path_beg \'/.well-known/acme-challenge/\' }' },
-            { 'http-request redirect scheme https' => [
-                if $_allow_http_acl { '!allow_http' },
+            # Explicitly include 'if' before the condition, as required by HAProxy 3.2 parser.
+            { 'http-request' => [
+                'redirect scheme https',
+                if $_allow_http_acl { 'if !allow_http' },
               ].delete_undef_values.join(' '),
-            },
-            $http_only_domains_options
+            }
           ].delete_undef_values.flatten,
         }
       }
@@ -345,6 +362,14 @@ class eit_haproxy::basic_config (
       haproxy::mapfile { 'domains-to-backends':
         ensure   => 'present',
         mappings => $domains_with_backend,
+      }
+
+      if $_allow_http_acl {
+        # Generate the map file consumed by the allow_http ACL.
+        haproxy::mapfile { 'allow_http_domains':
+          ensure   => 'present',
+          mappings => $allow_http_domains,
+        }
       }
 
       $domains.each | $domain, $opts | {

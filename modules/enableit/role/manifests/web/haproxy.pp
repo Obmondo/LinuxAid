@@ -22,6 +22,8 @@
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
+# @param custom_ciphers Custom SSL cipher configuration. Defaults to undef.
+#
 # @param configure The configuration method to use. Defaults to 'auto'.
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
@@ -38,7 +40,7 @@
 #
 # @param log_dir The directory for log files. Defaults to '/var/log'.
 #
-# @param $__blendable 
+# @param __blendable 
 # Boolean to indicate if blending is enabled.
 #
 # @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
