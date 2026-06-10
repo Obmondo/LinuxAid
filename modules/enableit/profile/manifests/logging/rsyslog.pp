@@ -267,15 +267,19 @@ class profile::logging::rsyslog (
               'type'  => 'legacy',
               'value' => '-1',
             },
-            'SystemLogRateLimitBurst'    => {
-              'type'  => 'legacy',
-              'value' => '100',
+          } + (versioncmp($_rsyslog_version, '8.2312') < 0 ? {
+            true => {
+              'SystemLogRateLimitBurst'    => {
+                'type'  => 'legacy',
+                'value' => '100',
+              },
+              'SystemLogRateLimitInterval' => {
+                'type'  => 'legacy',
+                'value' => '1',
+              },
             },
-            'SystemLogRateLimitInterval' => {
-              'type'  => 'legacy',
-              'value' => '1',
-            },
-          },
+            false => {},
+          }),
           modules       => {
             'imuxsock' => {},
             'imklog'   => {},
