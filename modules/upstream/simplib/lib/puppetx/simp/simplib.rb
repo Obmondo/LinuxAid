@@ -1,10 +1,10 @@
 # PuppetX
 module PuppetX; end
 # PuppetX::SIMP
-module PuppetX::SIMP; end
+module PuppetX::SIMP; end # rubocop:disable Style/OneClassPerFile
 
 # PuppetX::SIMP::Simplib
-module PuppetX::SIMP::Simplib
+module PuppetX::SIMP::Simplib # rubocop:disable Style/OneClassPerFile
   # Sort a list of values based on usual human sorting semantics.
   #
   # This regex taken from

@@ -1,6 +1,6 @@
 {
   "name": "simp-simplib",
-  "version": "4.14.2",
+  "version": "5.0.3",
   "author": "SIMP Team",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",

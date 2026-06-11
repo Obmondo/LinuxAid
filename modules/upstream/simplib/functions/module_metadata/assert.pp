@@ -16,6 +16,7 @@ function simplib::module_metadata::assert (
   String[1] $module_name,
   Optional[Struct[{
     enable => Optional[Boolean],
+    fatal  => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
@@ -34,6 +35,7 @@ function simplib::module_metadata::assert (
 
   $_default_options = {
     'enable' => true,
+    'fatal'  => false,
     'blacklist_validation' => {
       'enable' => true
     },
@@ -53,19 +55,19 @@ function simplib::module_metadata::assert (
     $_module_metadata = load_module_metadata($module_name)
 
     if empty($_module_metadata) {
-      fail("Could not find metadata for module '${module_name}'")
+      simplib::error("Could not find metadata for module '${module_name}'", $_options['fatal'])
     }
 
     if $_options['blacklist_validation']['enable'] and $_options['blacklist'] {
       if simplib::module_metadata::os_blacklisted($_module_metadata, $_options['blacklist'], $_options['blacklist_validation']['options']) {
         $_caller = simplib::caller()
-        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported at '${_caller}'")
+        simplib::error("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported at '${_caller}'", $_options['fatal'])
       }
     }
 
     if $_options['os_validation']['enable'] {
       unless simplib::module_metadata::os_supported($_module_metadata, $_options['os_validation']['options']) {
-        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported by '${module_name}'")
+        simplib::error("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported by '${module_name}'", $_options['fatal'])
       }
     }
   }

@@ -29,16 +29,16 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
     retval = :false
 
     if @resource[:persist] == :true
-      inittab = File.open('/etc/inittab', 'r')
-      inittab.each_line do |line|
-        next unless %r{^\s*id}.match?(line)
-        # We have the initdefault line
-        current_value = line.split(':').at(1)
-        if current_value.eql?(@resource[:name])
-          retval = :true
+      File.open('/etc/inittab', 'r') do |inittab|
+        inittab.each_line do |line|
+          next unless %r{^\s*id}.match?(line)
+          # We have the initdefault line
+          current_value = line.split(':').at(1)
+          if current_value.eql?(@resource[:name])
+            retval = :true
+          end
         end
       end
-      inittab.close
     end
 
     retval
@@ -47,18 +47,18 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
   def persist=(_should)
     # Essentially do the same as the read, but save contents to new file
     newfile = ''
-    inittab = File.open('/etc/inittab', 'r')
-
     found_line = false
 
-    inittab.each_line do |line|
-      if %r{^\s*id}.match?(line)
-        # We've found the default line, so rewrite
-        found_line = true
-        newfile << "id:#{@resource[:name]}:initdefault:nil\n"
-      else
-        # Just add this line as is
-        newfile << line
+    File.open('/etc/inittab', 'r') do |inittab|
+      inittab.each_line do |line|
+        if %r{^\s*id}.match?(line)
+          # We've found the default line, so rewrite
+          found_line = true
+          newfile << "id:#{@resource[:name]}:initdefault:nil\n"
+        else
+          # Just add this line as is
+          newfile << line
+        end
       end
     end
 
@@ -66,10 +66,8 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
       newfile << "id:#{@resource[:name]}:initdefault:nil\n"
     end
 
-    inittab.close
-
-    inittab = File.open('/etc/inittab', 'w')
-    inittab.write(newfile)
-    inittab.close
+    File.open('/etc/inittab', 'w') do |inittab|
+      inittab.write(newfile)
+    end
   end
 end

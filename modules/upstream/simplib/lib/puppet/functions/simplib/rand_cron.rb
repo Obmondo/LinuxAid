@@ -115,7 +115,7 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
                [base]
              else
                (1..occurs).map do |i|
-                 ((base - (modulus / occurs * i)) % modulus)
+                 (base - (modulus / occurs * i)) % modulus
                end
              end
     values.sort

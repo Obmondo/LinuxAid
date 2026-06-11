@@ -122,14 +122,18 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
     %('#{name}-#{module_version}' does not satisfy '#{version_requirement}')
   end
 
-  def raise_error(msg, env)
-    raise(Puppet::ParseError, %(assert_optional_dependency(): #{msg} in environment '#{env}'))
+  def raise_error(msg, env, fatal: false)
+    error_message = %(assert_optional_dependency(): #{msg} in environment '#{env}')
+    raise(Puppet::ParseError, error_message) if fatal
+
+    Puppet.err(error_message)
   end
 
   def assert_optional_dependency(
     source_module,
     target_module = nil,
-    dependency_tree = 'simp:optional_dependencies'
+    dependency_tree = 'simp:optional_dependencies',
+    fatal: false
   )
     current_environment = closure_scope.compiler.environment.to_s
 
@@ -154,9 +158,9 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
       if target_dependency
         result = check_dependency(tgt, target_dependency)
 
-        raise_error(result, current_environment) if result
+        raise_error(result, current_environment, fatal: fatal) if result
       else
-        raise_error(%(module '#{target_module}' not found in metadata.json for '#{source_module}'), current_environment)
+        raise_error(%(module '#{target_module}' not found in metadata.json for '#{source_module}'), current_environment, fatal: fatal)
       end
     else
       results = []
@@ -167,7 +171,7 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
       end
 
       unless results.empty?
-        raise_error(%(\n* #{results.join("\n* ")}\n), current_environment)
+        raise_error(%(\n* #{results.join("\n* ")}\n), current_environment, fatal: fatal)
       end
     end
   end
