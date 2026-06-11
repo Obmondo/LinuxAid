@@ -28,19 +28,32 @@
 #
 function simplib::assert_metadata (
   String[1] $module_name,
-  Optional[Struct[{
-    enable    => Optional[Boolean],
-    os        => Optional[Struct[{
-      validate => Optional[Boolean],
-      options  => Optional[Struct[{
-        release_match => Enum['none','full','major']
-      }]]
-    }]]
-  }]]       $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }),
+  Optional[
+    Struct[
+      {
+        enable => Optional[Boolean],
+        fatal  => Optional[Boolean],
+        os     => Optional[
+          Struct[
+            {
+              validate => Optional[Boolean],
+              options  => Optional[
+                Struct[
+                  {
+                    release_match => Enum['none', 'full', 'major']
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ]       $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }),
 ) {
-
   $_default_options = {
     'enable'    => true,
+    'fatal'     => false,
     'os'        => {
       'validate' => true,
       'options'  => {
@@ -58,6 +71,7 @@ function simplib::assert_metadata (
 
   $_options = {
     'enable'        => $_tmp_options['enable'],
+    'fatal'         => $_tmp_options['fatal'],
     'os_validation' => {
       'enable'  => $_tmp_options['os']['validate'],
       'options' => $_tmp_options['os']['options']
@@ -68,12 +82,12 @@ function simplib::assert_metadata (
     $_module_metadata = load_module_metadata($module_name)
 
     if empty($_module_metadata) {
-      fail("Could not find metadata for module '${module_name}'")
+      simplib::error("Could not find metadata for module '${module_name}'", $_options['fatal'])
     }
 
     if $_options['os_validation']['enable'] {
       unless simplib::module_metadata::os_supported($_module_metadata, $_options['os_validation']['options']) {
-        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported by '${module_name}'")
+        simplib::error("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported by '${module_name}'", $_options['fatal'])
       }
     }
   }

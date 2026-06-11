@@ -10,15 +10,15 @@ Puppet::Type.type(:script_umask).provide(:ruby) do
     end
 
     umasks = []
-    fh = File.open(@resource[:name], 'r')
-    fh.each_line do |line|
-      next if %r{\s*#}.match?(line)
+    File.open(@resource[:name], 'r') do |fh|
+      fh.each_line do |line|
+        next if %r{\s*#}.match?(line)
 
-      if line =~ %r{^\s*umask\s+(\d{3,4})}
-        umasks << Regexp.last_match(1)
+        if line =~ %r{^\s*umask\s+(\d{3,4})}
+          umasks << Regexp.last_match(1)
+        end
       end
     end
-    fh.close
 
     # Doing this so that, if multiple different umasks are found, we still get
     # the proper match.

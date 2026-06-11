@@ -13,15 +13,14 @@ Puppet::Type.type(:prepend_file_line).provide(:ruby) do
     tmpfile = "#{File.dirname(resource[:path])}/.~puppet_#{File.basename(resource[:path])}"
     begin
       File.exist?(tmpfile) and File.unlink(tmpfile)
-      tmp_fh = File.open(tmpfile, 'w')
-
-      tmp_fh.puts(resource[:line])
-      orig_fh = File.open(resource[:path], 'r')
-      orig_fh.each_line do |ln|
-        tmp_fh.puts(ln)
+      File.open(tmpfile, 'w') do |tmp_fh|
+        tmp_fh.puts(resource[:line])
+        File.open(resource[:path], 'r') do |orig_fh|
+          orig_fh.each_line do |ln|
+            tmp_fh.puts(ln)
+          end
+        end
       end
-      orig_fh.close
-      tmp_fh.close
 
       FileUtils.mv(tmpfile, resource[:path])
     rescue

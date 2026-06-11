@@ -293,15 +293,15 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     if File.exist?(toread)
       passwd = IO.readlines(toread)[0].to_s.chomp
       sf = "#{File.dirname(toread)}/#{File.basename(toread, '.last')}.salt.last"
-      saltfile = File.open(sf, 'a+', 0o640)
-      if saltfile.stat.size.zero? # rubocop:disable Style/ZeroLengthPredicate
-        salt = if options.key?('salt')
-                 options['salt']
-               else
-                 gen_salt(options)
-               end
-        saltfile.puts(salt)
-        saltfile.close
+      File.open(sf, 'a+', 0o640) do |saltfile|
+        if saltfile.stat.size.zero? # rubocop:disable Style/ZeroLengthPredicate
+          salt = if options.key?('salt')
+                   options['salt']
+                 else
+                   gen_salt(options)
+                 end
+          saltfile.puts(salt)
+        end
       end
       salt = IO.readlines(sf)[0].to_s.chomp
     else

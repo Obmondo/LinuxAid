@@ -25,7 +25,7 @@ simplib__tmp_mount_target_dirs.each do |dir|
     confine { File.directory?(dir) }
     setcode do
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
-      next unless simplib__tmp_mount_list[dir]
+      next unless simplib__tmp_mount_list && simplib__tmp_mount_list[dir]
       simplib__tmp_mount_list[dir]['options'].join(',')
     end
   end
@@ -35,7 +35,7 @@ simplib__tmp_mount_target_dirs.each do |dir|
     confine { File.directory?(dir) }
     setcode do
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
-      next unless simplib__tmp_mount_list[dir]
+      next unless simplib__tmp_mount_list && simplib__tmp_mount_list[dir]
       simplib__tmp_mount_list[dir]['device']
     end
   end
@@ -45,7 +45,7 @@ simplib__tmp_mount_target_dirs.each do |dir|
     confine { File.directory?(dir) }
     setcode do
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
-      next unless simplib__tmp_mount_list[dir]
+      next unless simplib__tmp_mount_list && simplib__tmp_mount_list[dir]
       simplib__tmp_mount_list[dir]['filesystem']
     end
   end
