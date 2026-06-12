@@ -1,0 +1,3 @@
+---
+role::mail::smtprelay::myhostname: "%{facts.networking.fqdn}"
+role::mail::smtprelay::mydomain: "%{facts.networking.domain}"
