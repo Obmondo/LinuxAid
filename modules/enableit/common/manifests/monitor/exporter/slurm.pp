@@ -43,7 +43,7 @@ class common::monitor::exporter::slurm (
 
   prometheus::daemon { 'slurm_exporter':
     package_name      => 'obmondo-slurm-exporter',
-    version           => '1.1.1',
+    version           => '1.9.1',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
     package_ensure    => ensure_latest($enable),

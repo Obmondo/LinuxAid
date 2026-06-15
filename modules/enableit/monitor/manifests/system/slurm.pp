@@ -7,8 +7,18 @@
 class monitor::system::slurm (
   Boolean $enable = true,
 ) {
-  @@monitor::alert { "${title}::node_status":
-    enable => $enable,
-    tag    => $::trusted['certname'],
+  $alerts = [
+    'job_failed',
+    'nodes_down',
+    'jobs_pending',
+    'node_drain',
+    'node_error',
+  ]
+
+  $alerts.each |$alert| {
+    @@monitor::alert { "${title}::${alert}":
+      enable => $enable,
+      tag    => $::trusted['certname'],
+    }
   }
 }
