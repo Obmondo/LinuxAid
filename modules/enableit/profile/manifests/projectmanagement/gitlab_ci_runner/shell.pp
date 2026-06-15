@@ -71,9 +71,10 @@ define profile::projectmanagement::gitlab_ci_runner::shell (
   # gitlab-runner register has no flag for the global `concurrent` setting and
   # seeds it at 1, leaving the extra registered runners idle. After registering,
   # force `concurrent` to match the number of runners so all can run jobs.
-  $_register_cmds = $_names.map |$n| {
+  $_register_each = $_names.map |$n| {
     "grep -q \"name = \\\"${n}\\\"\" ${config_path} || /usr/bin/gitlab-runner register --non-interactive --config ${config_path} --url ${url} --registration-token ${registration_token} --executor shell --name ${n} --tag-list shell --run-untagged=false"
-  }.join(' && ') + " && sed -i \"s/^concurrent = .*/concurrent = ${concurrent_runners}/\" ${config_path}"
+  }.join(' && ')
+  $_register_cmds = "${_register_each} && sed -i \"s/^concurrent = .*/concurrent = ${concurrent_runners}/\" ${config_path}"
 
   systemd::unit_file { "${service_name}.service":
     content => $_service,
