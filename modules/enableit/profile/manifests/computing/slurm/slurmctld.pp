@@ -9,6 +9,15 @@ class profile::computing::slurm::slurmctld (
 
   $scrape_host = $::trusted['certname']
 
+  # Exports the obmondo_monitoring alert toggles for the slurm alert rules.
+  contain ::monitor::system::slurm
+
+  # Monitoring: obmondo-slurm-exporter sidecar (scrapes slurm via CLI).
+  # Only for slurm < 25.11.1; from 25.11 native /metrics scrape (below) is used.
+  if versioncmp($slurm_version, '25.11.1') < 0 {
+    contain ::common::monitor::exporter::slurm
+  }
+
   firewall_multi {'100 allow slurmctld':
     jump    => 'accept',
     iniface => $interface,
@@ -19,7 +28,7 @@ class profile::computing::slurm::slurmctld (
 
   include ::slurm::slurmctld
 
-  if versioncmp($slurm_version, '25.11') >= 0 {
+  if versioncmp($slurm_version, '25.11.1') >= 0 {
     $metrics.each |$metric| {
       prometheus::scrape_job { "${metric}_${scrape_host}_${slurmctldport}":
         job_name    => 'slurm',
