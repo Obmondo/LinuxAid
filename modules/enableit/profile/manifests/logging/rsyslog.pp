@@ -9,6 +9,7 @@ class profile::logging::rsyslog (
   Boolean                       $log_auth        = $common::logging::rsyslog::log_auth,
   Boolean                       $log_boot        = $common::logging::rsyslog::log_boot,
   Boolean                       $system_log      = $common::logging::rsyslog::system_log,
+  Stdlib::Host                  $log_address     = $common::logging::rsyslog::log_address,
   Eit_types::Rsyslog::Remote_Ip $remote_servers  = $common::logging::rsyslog::remote_servers,
 ) {
   if $facts['os']['family'] == 'Suse' {
@@ -298,7 +299,7 @@ class profile::logging::rsyslog (
               'type'   => 'imudp',
               'config' => {
                 'Port'    => '514',
-                'Address' => '127.0.0.1',
+                'Address' => $log_address,
               },
             },
           },

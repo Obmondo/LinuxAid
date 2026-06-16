@@ -20,11 +20,13 @@
 #
 # @param log_boot Enable boot logging. Defaults to false.
 #
+# @param log_address Local address for rsyslog to listen on. Defaults to 127.0.0.1.
+#
 # @param remote_servers Hash of remote server IPs for remote logging. Defaults to an empty hash.
 #
 # @groups management manage, enable, purge_rsyslog_d.
 #
-# @groups logging_options log_remote, log_local, system_log, log_cron, log_mail, log_auth, log_boot.
+# @groups logging_options log_remote, log_local, system_log, log_cron, log_mail, log_auth, log_boot, log_address.
 #
 # @groups remote_logging remote_servers.
 #
@@ -39,6 +41,7 @@ class common::logging::rsyslog (
   Boolean                       $log_mail        = true,
   Boolean                       $log_auth        = true,
   Boolean                       $log_boot        = false,
+  Stdlib::Host                  $log_address     = '127.0.0.1',
   Eit_types::Rsyslog::Remote_Ip $remote_servers  = {},
 ) {
 
