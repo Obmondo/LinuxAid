@@ -515,10 +515,10 @@ common::network::wireguard::enable: false
 common::network::netbird::enable: false
 common::network::netbird::wireguard_port: 51820
 common::network::netbird::install_method: repo
-common::network::netbird::version: 0.65.1
+common::network::netbird::version: 0.72.4
 common::network::netbird::checksums:
-  0.64.5: 661732289c5ceb0e2742a0bc0a06834f84c0656662fae55983937538f1774c1b
   0.65.1: f6453be7da9d8dc96f9d49580f3f764c4e1f530a64011b5d52dac085dc78a03d
+  0.72.4: 8ee7807d716ed088ab05976bc161838120730f9cf9fec794aacb5b51d904f1fc
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
