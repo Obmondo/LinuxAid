@@ -3,9 +3,10 @@ class profile::software::vncserver (
   Boolean                             $enable         = $common::software::vncserver::enable,
   Eit_types::Noop_Value                   $noop_value     = $common::software::vncserver::noop_value,
   Struct[{
-    session  => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
-    geometry => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
-    localhost => Optional[Enum['yes', 'no']],
+    session            => Enum['gnome', 'kde', 'xfce', 'lxde', 'ubuntu'],
+    geometry           => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
+    localhost          => Optional[Enum['yes', 'no']],
+    'BlacklistThreshold' => Optional[String],
   }]                                  $config_defaults = $common::software::vncserver::config_defaults,
   Hash[String, Stdlib::Port]          $vnc_users       = $common::software::vncserver::vnc_users,
   Enum['vncserver', 'tigervncserver'] $systemd_service = $common::software::vncserver::systemd_service,
