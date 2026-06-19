@@ -154,6 +154,16 @@ repository::mirror::default_configurations:
         sections: ["prod"]
         repodir: "microsoft/yum"
         package_format: "rpm"
+  rocky:
+    yum:
+      enable: false
+      all:
+        enable: false
+        mirror_url: "https://dl.rockylinux.org/pub/rocky"
+        package_format: "rpm"
+        repodir: "yum/rocky"
+        architectures: ["x86_64"]
+        dists: ["8", "9"]
   ubuntu:
     apt:
       enable: false

@@ -117,6 +117,11 @@ class eit_repos (
           }
 
         }
+        'Rocky': {
+          class { 'yum':
+            manage_os_default_repos => $upstream,
+          }
+        }
         default: {
           fail("This ${distro_id} is not supported for upstream repos")
         }

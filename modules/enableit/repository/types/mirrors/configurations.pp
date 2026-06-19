@@ -3,6 +3,7 @@ type Repository::Mirrors::Configurations = Hash[
     'ubuntu',
     'ubuntu_arm64',
     'epel',
+    'rocky',
     'docker',
     'microsoft',
     'jenkins',
