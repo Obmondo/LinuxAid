@@ -1,6 +1,6 @@
 # @summary HAProxy 3.x native ACME — placeholder certs and crt-list assembly.
 #
-# For each managed domain group with force_https=true:
+# For each managed domain group:
 #   1. Generates a self-signed placeholder cert via openssl::certificate::x509
 #      at $_acme_dir/<sanitised>.{crt,key} (puppet-managed source material).
 #   2. An exec concatenates cert+key into $_pem_dir/<sanitised>.pem (HAProxy's
@@ -56,9 +56,12 @@ class eit_haproxy::native_acme (
   $_crt_list_path = '/etc/haproxy/crt-list.txt'
   $_public_ips    = lookup('common::system::publicips', Array, undef, [])
 
-  $_managed_groups = $domains.filter |$_group_name, $opts| {
-    $opts['force_https']
-  }
+  # Generate certs and crt-list entries for ALL domain groups, regardless of
+  # force_https. force_https controls only the HTTP->HTTPS redirect (handled
+  # in basic_config.pp); cert loading is independent. Domains with
+  # force_https=false still need certs because HSTS-cached browsers will
+  # force HTTPS and strict-sni would otherwise reject the handshake.
+  $_managed_groups = $domains
 
   # Source material — puppet generates .crt + .key here. force => false on
   # the openssl resource means these are never regenerated once present, so
