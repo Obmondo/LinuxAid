@@ -161,6 +161,39 @@ class profile::computing::slurm (
     }
   }
 
+  if $enable {
+    $_slurm_locked_packages = ['slurm'] + [
+      if $slurmctld { 'slurm-slurmctld' },
+      if $slurmdbd  { 'slurm-slurmdbd' },
+      if $slurmd    { 'slurm-slurmd' },
+    ].filter |$p| { $p =~ NotUndef }
+
+    $_slurm_locked_packages.each |$pkg| {
+      case $facts['package_provider'] {
+        'apt': {
+          apt::pin { "pin_slurm_${pkg}":
+            version  => $slurm_version,
+            priority => 999,
+            packages => $pkg,
+          }
+        }
+        /^(yum|dnf)$/: {
+          $_verparts = split($slurm_version, '-')
+          $_ver = $_verparts[0]
+          yum::versionlock { $pkg:
+            ensure  => present,
+            version => $_ver,
+            release => $_verparts[1] ? { undef => '*', default => $_verparts[1] },
+            arch    => $facts['os']['architecture'],
+          }
+        }
+        default: {
+          info("Unsupported package_provider '${facts['package_provider']}' for slurm version locking")
+        }
+      }
+    }
+  }
+
   if !$enable {
     package::remove( ['slurm', 'slurm-slurmdbd', 'slurm-slurmctld', 'slurm-slurmd', 'munge'])
   }
