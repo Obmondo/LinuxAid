@@ -328,7 +328,7 @@ common::system::openvox::configure_agent: true
 common::system::openvox::linuxaid_cli::install_method: package
 common::system::openvox::linuxaid_cli::version: 1.6.0
 common::system::openvox::linuxaid_cli::checksums:
-  1.6.0: 6fe8f1d4c5641f2240646250dcfb2bd35a2ec3e6c292844ec619c8060192d342
+  1.6.0: 4d01213e0c43ba69a43f16b32c6784e6da64d4749b537a75f404e7db42b5e294
   1.5.0: 8d9bd4fdfa65e53680f76db6637182632cc960a37a2c7168d84ccdb2abc05e34
   1.4.0: ef0f044f1a731f59614ac7bad1b57a02dc2e3d2236e7309a24f4e15b94600e59
 
