@@ -32,15 +32,6 @@ define repository::mirror::repo (
     fail("exclude not supported (repo ${name})")
   }
 
-  if $sections.size > 0 and $package_format != 'deb' {
-    $_valid_sections = ['prod', 'stable', 'BaseOS', 'AppStream', 'extras']
-    $sections.each |$s| {
-      if $s !in $_valid_sections {
-        fail("section '${s}' not supported for ${package_format} repo (repo ${name})")
-      }
-    }
-  }
-
   $_config_file = "${repo_config_dir}/${name}.repo_config"
 
   file { $_config_file:
