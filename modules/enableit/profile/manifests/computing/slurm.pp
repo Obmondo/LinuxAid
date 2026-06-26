@@ -63,6 +63,27 @@ class profile::computing::slurm (
     default => true,
   }
 
+  # Publish the running slurm version (controller and every worker) as a
+  # node_exporter textfile metric, so a Prometheus rule can detect version skew
+  # between the controller and the workers. `cluster` groups all nodes that
+  # share the same control machine.
+  $_running_version = $facts['slurm_running_version']
+  if $enable and $_running_version {
+    $_textfile_dir = lookup('common::monitor::exporter::node::textfile_directory', Stdlib::AbsolutePath)
+    file { "${_textfile_dir}/slurm_version.prom":
+      ensure  => file,
+      owner   => 'node_exporter',
+      group   => 'node_exporter',
+      mode    => '0644',
+      content => @("EOT"),
+        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+        # HELP slurm_node_version_info Running slurm version on this node (value always 1; use the version label).
+        # TYPE slurm_node_version_info gauge
+        slurm_node_version_info{version="${_running_version}",cluster="${control_machine}"} 1
+        | EOT
+    }
+  }
+
   if versioncmp($slurm_version, '24.0.11') >= 0 {
     $selecttype_value = 'cons_tres'
   } else {
