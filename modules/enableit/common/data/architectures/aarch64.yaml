@@ -1,5 +1,6 @@
 ---
 common::system::openvox::linuxaid_cli::checksums:
+  1.6.0: 0eef03d0b022551283d8bfa4ff027433a54c368c19f36f81e4c1b5b3a6590c4a
   1.5.0: def91dfc7bb90f95cd073e1ef2fe42dc5a093c657f5333289c5dc90eb64bbc5d
   1.4.0: fdb127f986aacf3341b9cd68e867bb3ee5d778e57d8e6b23c9d79050529dd6e4
 
