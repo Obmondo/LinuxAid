@@ -2,6 +2,27 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.0
+
+### Features
+- 62695bf9 feat: add slurm package version locking support
+- 7fc374f9 feat: add Rocky Linux support
+- b6309e0d feat(vnc): add BlacklistThreshold=20 to VNC config defaults
+- 4ccea4c1 feat(rsyslog): add log_address parameter with hiera support
+
+### Bug Fixes
+- 856fd8f5 fix: omit acme LE annotation for non-force_https crt-list entries
+- 220af210 fix: generate certs for all domain groups regardless of force_https
+- 83a2b226 fix: allow http backends for non-acme endpoints
+- 94be057d fix: remove metric_relabel_configs from dns job
+
+### Configuration Changes
+- f2f0df7b chore: update linuxaid-cli versions with their checksums to latest tagged 1.5.0 version
+- 620820ba chore: update netbird client versions with their checksums to latest tagged 0.72.4 version
+
+### Other Changes
+- 991d46d0 Update linuxaid_cli to v1.6.0
+
 ## LinuxAid Release Version v1.7.0
 
 ### Bug Fixes
