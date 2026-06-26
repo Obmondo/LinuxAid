@@ -11,7 +11,7 @@ PACKAGE_FORMAT='<%= $package_format %>'
 SYNC_TYPE='<%= $sync_type %>'
 <% } -%>
 EXCLUDE=(<%= $exclude.join(' ') %>)
-SECTIONS='<%= $sections.join(',') %>'
+SECTIONS=(<%= $sections.map |$s| { "'${s}'" }.join(' ') %>)
 ARCHITECTURES='<%= $architectures.join(',') %>'
 DISTS='<%= $dists.join(',') %>'
 JOB_USER='<%= $user %>'
