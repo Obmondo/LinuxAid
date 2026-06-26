@@ -120,6 +120,10 @@ class common::system::repo (
         }
       }
     }
+    # Snapshot path without install_date comparison — used for repos that should
+    # always pin to the snapshot date when $snapshot is set (e.g. newly-managed
+    # OS repos like Rocky Linux BaseOS/AppStream/Extras).
+    $_snapshot_path = if $snapshot { "snapshots/${snapshot}/" }
     $_os = $facts['os']
     $_os_major = $_os['release']['major']
     $_osfamily = $_os['family']
@@ -162,6 +166,26 @@ class common::system::repo (
           rh_repo { $repo:
             ensure => present,
             noop   => $noop_value,
+          }
+        }
+        if $_os['name'] == 'Rocky' and $domain {
+          ['BaseOS', 'AppStream', 'Extras'].each |$repo| {
+            yumrepo { $repo:
+              ensure   => present,
+              noop     => $noop_value,
+              enabled  => 1,
+              gpgcheck => 1,
+              gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
+              descr    => "Rocky Linux \$releasever - ${repo}",
+              baseurl  => "https://${domain}/${_snapshot_path}yum/rocky/${_os_major}/${repo}/\$basearch/",
+              target   => '/etc/yum.repos.d/Rocky.repo',
+            }
+          }
+          eit_repos::yum::gpgkey { 'rockyofficial':
+            ensure     => present,
+            path       => '/etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
+            source     => "puppet:///modules/eit_repos/yum/RPM-GPG-KEY-Rocky-${_os_major}",
+            noop_value => $noop_value,
           }
         }
       }
@@ -255,27 +279,6 @@ class common::system::repo (
               }
             }
           }
-          if $_os['name'] == 'Rocky' {
-            ['BaseOS', 'AppStream', 'Extras'].each |$repo| {
-              yumrepo { $repo:
-                ensure   => present,
-                noop     => $noop_value,
-                enabled  => 1,
-                gpgcheck => 1,
-                gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
-                descr    => "Rocky Linux \$releasever - ${repo}",
-                baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/rocky/${_os_major}/${repo}/\$basearch/",
-                target   => '/etc/yum.repos.d/Rocky.repo',
-              }
-            }
-            eit_repos::yum::gpgkey { 'rockyofficial':
-              ensure     => present,
-              path       => '/etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
-              source     => "puppet:///modules/eit_repos/yum/RPM-GPG-KEY-Rocky-${_os_major}",
-              noop_value => $noop_value,
-            }
-          }
-
           yumrepo { 'epel_local':
             ensure   => present,
             noop     => $noop_value,
