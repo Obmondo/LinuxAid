@@ -168,6 +168,10 @@ repository::mirror::default_configurations:
           - "AppStream"
           - "extras"
         dists: ["8", "9"]
+        exclude:
+          - "EFI"
+          - "isolinux"
+          - "images"
   ubuntu:
     apt:
       enable: false
