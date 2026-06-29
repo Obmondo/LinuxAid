@@ -1,8 +1,4 @@
 <%- | Array[Hash] $entries | -%>
 <%- $entries.each |$entry| { -%>
-<%- if $entry['manage_acme'] { -%>
 <%= $entry['pem'] %> [acme LE domains <%= $entry['acme_domains'] %>] <%= $entry['sni_filters'] %>
-<%- } else { -%>
-<%= $entry['pem'] %> <%= $entry['sni_filters'] %>
-<%- } -%>
 <%- } -%>
