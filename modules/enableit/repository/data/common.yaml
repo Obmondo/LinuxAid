@@ -163,7 +163,15 @@ repository::mirror::default_configurations:
         package_format: "rpm"
         repodir: "yum/rocky"
         architectures: ["x86_64"]
+        sections:
+          - "BaseOS"
+          - "AppStream"
+          - "extras"
         dists: ["8", "9"]
+        exclude:
+          - "EFI"
+          - "isolinux"
+          - "images"
   ubuntu:
     apt:
       enable: false

@@ -32,10 +32,6 @@ define repository::mirror::repo (
     fail("exclude not supported (repo ${name})")
   }
 
-  if $sections.size > 1 and $package_format != 'deb' {
-    fail("sections not supported (repo ${name})")
-  }
-
   $_config_file = "${repo_config_dir}/${name}.repo_config"
 
   file { $_config_file:

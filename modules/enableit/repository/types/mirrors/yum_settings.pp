@@ -8,6 +8,9 @@ type Repository::Mirrors::Yum_Settings = Struct[{
   sections       => Optional[Array[Enum[
     'prod',
     'stable',
+    'BaseOS',
+    'AppStream',
+    'extras',
   ]]],
   key_id         => Optional[String],
   key_source     => Optional[String],

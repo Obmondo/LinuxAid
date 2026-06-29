@@ -10,7 +10,7 @@ PACKAGE_FORMAT='<%= $package_format %>'
 <% if $package_format == 'deb' { -%>
 SYNC_TYPE='<%= $sync_type %>'
 <% } -%>
-EXCLUDE=(<%= $exclude.join(' ') %>)
+EXCLUDE='<%= $exclude.join(',') %>'
 SECTIONS='<%= $sections.join(',') %>'
 ARCHITECTURES='<%= $architectures.join(',') %>'
 DISTS='<%= $dists.join(',') %>'
