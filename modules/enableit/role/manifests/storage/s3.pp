@@ -11,6 +11,8 @@
 #
 # @param roles The S3 storage roles.
 #
+# @param read_only_roles The S3 read-only storage roles.
+#
 # @param manage Whether to manage the S3 storage resources. Defaults to true.
 #
 # @param image The Docker image to use for S3. Defaults to 'zenko/cloudserver:latest-7.10.19'.
@@ -22,13 +24,14 @@
 # @groups network endpoint.
 #
 class role::storage::s3 (
-  Stdlib::Fqdn     $endpoint,
-  Stdlib::Unixpath $data_dir,
-  Stdlib::Unixpath $metadata_dir,
-  Stdlib::Unixpath $conf_dir,
-  Eit_types::Storage::S3 $roles,
-  Boolean      $manage = true,
-  String       $image  = 'zenko/cloudserver:latest-7.10.19',
+  Stdlib::Fqdn                     $endpoint,
+  Stdlib::Unixpath                 $data_dir,
+  Stdlib::Unixpath                 $metadata_dir,
+  Stdlib::Unixpath                 $conf_dir,
+  Eit_types::Storage::S3           $roles,
+  Eit_types::Storage::S3::ReadOnly $read_only_roles,
+  Boolean                          $manage = true,
+  String                           $image  = 'zenko/cloudserver:latest-7.10.19',
 ) inherits role::storage {
 
   contain role::virtualization::docker
