@@ -1,4 +1,5 @@
 ---
+package::vim: 'vim-enhanced'
 package::augeas-dev: 'augeas-devel'
 package::imagemagick: 'ImageMagick'
 package::libpam-systemd: 'systemd-libs'
