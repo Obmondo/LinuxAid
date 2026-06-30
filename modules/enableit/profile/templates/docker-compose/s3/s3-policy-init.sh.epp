@@ -1,0 +1,47 @@
+#!/bin/sh
+set -e
+
+echo "=== Waiting for Zenko to be ready ==="
+while ! curl -s http://s3:8000 > /dev/null 2>&1; do sleep 2; done
+echo "=== Zenko ready ==="
+
+EP="http://s3:8000"
+CONFIG="/tmp/config.json"
+
+BUCKET_POLICIES() {
+  jq -c '.bucketPolicies[]' "$CONFIG"
+}
+
+count=$(BUCKET_POLICIES | wc -l 2>/dev/null || echo 0)
+if [ "$count" -eq 0 ]; then
+  echo "No bucket policies configured. Exiting."
+  exit 0
+fi
+
+echo "=== Applying bucket-specific policies ==="
+apply_policies() {
+  BUCKET_POLICIES | while read -r policy; do
+    bucket=$(echo "$policy" | jq -r '.bucket')
+    owner_ak=$(echo "$policy" | jq -r '.ownerAccessKey')
+    owner_sk=$(echo "$policy" | jq -r '.ownerSecretKey')
+    POLICY=$(echo "$policy" | jq --arg bucket "$bucket" '{
+      "Version": "2012-10-17",
+      "Statement": [.readOnlyAccounts[] | {
+        "Effect": "Allow",
+        "Principal": {"AWS": [.shortid]},
+        "Action": ["s3:GetObject", "s3:ListBucket"],
+        "Resource": ["arn:aws:s3:::" + $bucket, "arn:aws:s3:::" + $bucket + "/*"]
+      }]
+    }')
+
+    export AWS_ACCESS_KEY_ID="$owner_ak"
+    export AWS_SECRET_ACCESS_KEY="$owner_sk"
+
+    echo "[${owner_ak}] Applying policy to bucket: ${bucket}"
+    POL_OUT=$(aws s3api put-bucket-policy --endpoint-url "$EP" --bucket "$bucket" --policy "$POLICY" 2>&1) && \
+      echo "[${owner_ak}] Policy applied to ${bucket}" || \
+      echo "[${owner_ak}] Policy apply to ${bucket} failed: ${POL_OUT}"
+  done
+}
+
+apply_policies

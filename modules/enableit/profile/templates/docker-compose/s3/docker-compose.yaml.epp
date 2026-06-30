@@ -14,3 +14,14 @@ services:
       - ENDPOINT=<%= $endpoint %>
     ports:
       - '127.0.0.1:8000:8000'
+
+  s3-policy-init:
+    image: amazon/aws-cli
+    depends_on:
+      - s3
+    volumes:
+      - <%= $conf_dir %>/s3-sideloader-config.json:/tmp/config.json:ro
+      - /opt/obmondo/docker-compose/s3/s3-policy-init.sh:/script/s3-policy-init.sh:ro
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+    entrypoint: ["/bin/sh", "/script/s3-policy-init.sh"]
