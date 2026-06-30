@@ -141,7 +141,6 @@ class eit_haproxy::native_acme (
       'pem'          => "${_pem_dir}/${_safe}.pem",
       'acme_domains' => $_dom_array.join(','),
       'sni_filters'  => $_dom_array.join(' '),
-      'manage_acme'  => pick($opts['force_https'], false),
     }
     $_hash
   }
