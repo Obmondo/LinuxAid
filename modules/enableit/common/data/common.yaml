@@ -303,6 +303,7 @@ common::system::package::default_packages:
   - "tcpdump"
   - "tmux"
   - "net-tools"
+  - "vim"
 
 common::system::disabled_services:
   - "smartd"

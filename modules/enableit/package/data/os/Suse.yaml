@@ -1,3 +1,4 @@
 ---
+package::netcat: 'netcat-openbsd'
 package::openldap-clients: 'openldap2-client'
 package::samba-common-tools: 'samba-tool'
