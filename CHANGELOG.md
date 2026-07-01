@@ -2,6 +2,27 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.1
+
+### Features
+- cf5f770a feat: support for read only roles in role::storage::s3
+- 60d31222 feat: publish running slurm version for skew detection
+
+### Bug Fixes
+- c198beaf fix: correct netcat and vim package names for SUSE and RedHat
+- 90c85aa7 fix(repository): exclude EFI,isolinux,images from rocky mirror, use CSV format for EXCLUDE
+- ef86395b fix: enable certificate monitoring with acme for http only domains
+- b7e63260 fix: restore SECTIONS template to master format
+- a9304e15 fix: remove SECTIONS line from template
+- ab054d6b fix: render SECTIONS as bash array instead of CSV string
+- 1872ddcf fix: remove sections validation for RPM repos
+- 8ab08e28 fix: validate sections against allowed list for RPM repos
+- 862417ea fix: allow multiple sections for RPM repos (e.g. Rocky Linux BaseOS, AppStream, extras)
+- 582ac5e5 fix: add Rocky Linux yum sections (BaseOS, AppStream, extras) to mirrors config
+
+### Configuration Changes
+- feff6d83 chore: update linuxaid-cli package v1.6.0 checksums
+
 ## LinuxAid Release Version v1.8.0
 
 ### Features
