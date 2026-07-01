@@ -1,0 +1,2 @@
+---
+common::system::purge_root_ssh_keys: false

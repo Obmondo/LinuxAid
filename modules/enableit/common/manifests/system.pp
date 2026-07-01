@@ -244,16 +244,20 @@ class common::system (
     noop    => false,
   }
 
-  # load subclasses
+  if $::obmondo_classes.grep('::kubeaid').empty {
+    # load subclasses
 
-  # NOTE: includes all these system profile, but some are set to enable
-  # and some set to disable, depending on the requirement.
-  lookup('common::system::classes').each | $subclass | {
-    include $subclass
+    # NOTE: includes all these system profile, but some are set to enable
+    # and some set to disable, depending on the requirement.
+    lookup('common::system::classes').each | $subclass | {
+      include $subclass
+    }
+
+    # Only manage mail if not using a role that provides it
+    if $::obmondo_classes.grep('::mailcow').empty {
+      contain common::system::mail
+    }
   }
 
-  # Only manage mail if not using a role that provides it
-  if $::obmondo_classes.grep('::mailcow').empty {
-    contain common::system::mail
-  }
+
 }
