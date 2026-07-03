@@ -412,6 +412,7 @@ common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: cadvisor
   - job_name: security
     scrape_interval: 30m
+  - job_name: zfs
   - job_name: slurm
 
 # Prometheus Exporters
@@ -454,6 +455,7 @@ common::monitor::exporter::node::tcpstat: false
 common::monitor::exporter::node::thermal_zone: false
 common::monitor::exporter::node::wifi: false
 common::monitor::exporter::node::zoneinfo: false
+common::monitor::exporter::zfs::enable: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
 
