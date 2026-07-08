@@ -12,6 +12,11 @@ services:
     environment:
       - REMOTE_MANAGEMENT_DISABLE=1
       - ENDPOINT=<%= $endpoint %>
+    networks:
+      default:
+        aliases:
+          # needed to access using s3-policy-init service
+          - <%= $endpoint %>
     ports:
       - '127.0.0.1:8000:8000'
 
