@@ -49,6 +49,15 @@ class common::monitor::prometheus::server (
   $_extra_options = "--web.listen-address=${listen_address} --agent --storage.agent.path=/opt/obmondo/prometheus"
   $_prometheus_url = "https://${common::monitor::prometheus::server}/api/v1/write"
   $install_method = lookup('common::monitor::prometheus::install_method')
+  $_remote_write_certname_keep_relabel_config = if defined('$::obmondo') {
+    [{
+      source_labels => ['certname'],
+      regex         => ".*.${::obmondo['customer_id']}",
+      action        => 'keep',
+    }]
+  } else {
+    []
+  }
 
   $_shared_dir = $install_method ? {
     'package' => '/usr/local/share/prometheus',
@@ -109,12 +118,7 @@ class common::monitor::prometheus::server (
           regex         => 'go_gc_.*',
           action        => 'drop',
         },
-        {
-          source_labels => ['certname'],
-          regex         => ".*.${::obmondo['customer_id']}",
-          action        => 'keep',
-        },
-      ],
+      ] + $_remote_write_certname_keep_relabel_config,
     }],
   }
 
