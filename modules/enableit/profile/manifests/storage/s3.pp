@@ -152,7 +152,9 @@ class profile::storage::s3 (
     '/opt/obmondo/docker-compose/s3/s3-policy-init.sh':
       ensure  => file,
       mode    => '0755',
-      content => epp('profile/docker-compose/s3/s3-policy-init.sh.epp'),
+      content => epp('profile/docker-compose/s3/s3-policy-init.sh.epp', {
+        endpoint => $endpoint,
+      }),
       require => File['/opt/obmondo/docker-compose/s3'],
     ;
   }

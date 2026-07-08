@@ -2,10 +2,11 @@
 set -e
 
 echo "=== Waiting for Zenko to be ready ==="
-while ! curl -s http://s3:8000 > /dev/null 2>&1; do sleep 2; done
+while ! curl -s http://<%= $endpoint %>:8000 > /dev/null 2>&1; do sleep 2; done
 echo "=== Zenko ready ==="
 
-EP="http://s3:8000"
+# CHANGE: Target the domain on its internal port over HTTP
+EP="http://<%= $endpoint %>:8000"
 CONFIG="/tmp/config.json"
 
 BUCKET_POLICIES() {
