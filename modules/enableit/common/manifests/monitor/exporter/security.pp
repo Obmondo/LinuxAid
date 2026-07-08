@@ -30,6 +30,7 @@ class common::monitor::exporter::security (
   Stdlib::Host          $listen_host     = '127.254.254.254',
   Stdlib::Port          $listen_port     = 63396,
   Stdlib::HTTPUrl       $vuls_server_url = 'https://vuls.obmondo.com',
+  String                $timeout         = '5m',
   Stdlib::Absolutepath  $config_file     = "${common::monitor::exporter::config_dir}/security_exporter.yaml",
 ) {
   unless $enable { return() }
@@ -89,7 +90,7 @@ class common::monitor::exporter::security (
     content => stdlib::to_yaml({
         'vuls_server'    => {
           'url'       => $vuls_server_url,
-          'timeout'   => '5m',
+          'timeout'   => $timeout,
           'cert_file' => "/etc/puppetlabs/puppet/ssl/certs/${host}.pem",
           'key_file'  => "/etc/puppetlabs/puppet/ssl/private_keys/${host}.pem",
         },
