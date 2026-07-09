@@ -74,14 +74,15 @@ define repository::mirror::repo (
   }
 
   functions::systemd_timer { "repository_mirror_sync_${name}":
-    ensure  => ensure_present($enable),
-    enable  => $enable,
-    user    => $user,
-    weekday => $weekday,
-    hour    => fqdn_rand(8, $name), # from 00:00 to 08:00 am in morning on
-                                    # Sunday which is default
-    command => "/usr/local/bin/repository_mirror ${_config_file}",
-    require => Package['obmondo-repository-mirror'],
+    ensure     => ensure_present($enable),
+    enable     => $enable,
+    user       => $user,
+    weekday    => $weekday,
+    hour       => fqdn_rand(8, $name), # from 00:00 to 08:00 am in morning on
+                                        # Sunday which is default
+    command    => "/usr/local/bin/repository_mirror ${_config_file}",
+    require    => Package['obmondo-repository-mirror'],
+    noop_value => false,
   }
 
 }
