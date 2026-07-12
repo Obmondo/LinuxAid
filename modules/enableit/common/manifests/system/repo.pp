@@ -256,7 +256,7 @@ class common::system::repo (
             }
           }
           if $_os['name'] == 'Rocky' {
-            ['BaseOS', 'AppStream', 'Extras'].each |$repo| {
+            ['BaseOS', 'AppStream', 'extras'].each |$repo| {
               yumrepo { $repo:
                 ensure   => present,
                 noop     => $noop_value,
@@ -264,7 +264,7 @@ class common::system::repo (
                 gpgcheck => 1,
                 gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
                 descr    => "Rocky Linux \$releasever - ${repo}",
-                baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/rocky/${_os_major}/${repo}/\$basearch/",
+                baseurl  => "https://${domain}/${_snapshot_uri_fragment}yum/rocky/${_os_major}/${repo}/\$basearch/os",
                 target   => '/etc/yum.repos.d/Rocky.repo',
               }
             }
