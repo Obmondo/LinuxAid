@@ -82,13 +82,23 @@ info { $_node_info_msg: }
 node default {
   # No class or tags is given, ask user to add it
   if $obmondo_classes.empty and $_has_tags.size == 0 {
-    $_role_msg = @("EOT"/$n)
+    # Opensource nodes (served by linuxaid_enc.rb) have no `customer`
+    # parameter and can only add roles via linuxaid-config.
+    $_role_msg = if getvar('customer') =~ Undef {
+      @("EOT"/$n)
 
-      Missing role on ${trusted['certname']}
-      Please add a role on https://obmondo.com/user/servers/add-server?certname=${trusted['certname']}&isOldServer=true&step=2"
-      or
-      Add the role in linuxaid-config/agents/${trusted['certname']}.yaml
-    | EOT
+        Missing role on ${trusted['certname']}
+        Add the role in linuxaid-config/agents/${trusted['certname']}.yaml
+      | EOT
+    } else {
+      @("EOT"/$n)
+
+        Missing role on ${trusted['certname']}
+        Please add a role on https://obmondo.com/user/servers/add-server?certname=${trusted['certname']}&isOldServer=true&step=2"
+        or
+        Add the role in linuxaid-config/agents/${trusted['certname']}.yaml
+      | EOT
+    }
 
     info { $_role_msg: }
   }
