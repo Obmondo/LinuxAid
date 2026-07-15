@@ -5,5 +5,6 @@ common::system::openvox::linuxaid_cli::checksums:
   1.4.0: fdb127f986aacf3341b9cd68e867bb3ee5d778e57d8e6b23c9d79050529dd6e4
 
 common::network::netbird::checksums:
-  0.65.1: 9d0b258954c24838b8e215c26ac7f3cb9eb6c5e658daeeae62df38a024bc4b5c
+  0.74.6: ba722ec00fbd0e2bfda31ebb37934a9a86174e6fc810cbc8bc0cae255fd76865
   0.72.4: 7d2be0ef0cbe82bc18071505f69ff7d9967b492664aafdc39ce531233d6e6405
+  0.65.1: 9d0b258954c24838b8e215c26ac7f3cb9eb6c5e658daeeae62df38a024bc4b5c
