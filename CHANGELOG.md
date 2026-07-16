@@ -2,6 +2,18 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.2
+
+### Bug Fixes
+- bc4452d9 fix(repository): force repository_mirror_sync timer to activate under --noop
+- 5515af03 fix: role::storage::s3 s3 service in docker compose and init policy script
+- 51558019 fix: patched monitoring-based manifests to work properly with linuxaid_enc.rb
+
+### Other Changes
+- c01574ef add timeout variable in obmondo security exporter instead of hardcoded value
+- 8e910539 monitoring: configure zfs exporter via appropriate packages
+- 1525b211 added kubeaid role
+
 ## LinuxAid Release Version v1.8.1
 
 ### Features
