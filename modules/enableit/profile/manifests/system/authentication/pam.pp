@@ -54,7 +54,7 @@ class profile::system::authentication::pam (
     }
 
   class { 'pam':
-    allowed_users               => $allowed_users.functions::knockout + $_managed_users,
+    allowed_users               => $allowed_users + $_managed_users,
     manage_nsswitch             => false,
     manage_pwquality            => !$manage_pwquality,
     pam_d_sshd_template         => 'pam/sshd.custom.erb',
