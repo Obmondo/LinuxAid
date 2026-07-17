@@ -468,6 +468,7 @@ common::software::vncserver::config_defaults:
   session: "gnome"
   geometry: "1920x1080"
   BlacklistThreshold: "20"
+  UseBlacklist: "0"
 
 # Logging
 common::logging::logrotate::manage: true

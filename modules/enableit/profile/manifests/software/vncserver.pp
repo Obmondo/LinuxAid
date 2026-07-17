@@ -7,6 +7,7 @@ class profile::software::vncserver (
     geometry           => Enum['2000x1200', '1280x1024', '1920x1080', '1920x1200'],
     localhost          => Optional[Enum['yes', 'no']],
     'BlacklistThreshold' => Optional[String],
+    'UseBlacklist'     => Optional[Enum['0', '1']],
   }]                                  $config_defaults = $common::software::vncserver::config_defaults,
   Hash[String, Stdlib::Port]          $vnc_users       = $common::software::vncserver::vnc_users,
   Enum['vncserver', 'tigervncserver'] $systemd_service = $common::software::vncserver::systemd_service,
