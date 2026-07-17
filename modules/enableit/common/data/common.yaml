@@ -13,7 +13,6 @@ lookup_options:
   common::user_management::authentication::allowed_users:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
   common::system::grub::parameters:
     merge: "deep"
   common::user_management::authentication::protected_users:
@@ -34,99 +33,79 @@ lookup_options:
   common::user_management::authentication::sudo::sudoers:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
   common::system::files:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
   common::system::users:
     merge:
       strategy: "deep"
-      knockout_prefix: "!"
   common::system::user_groups:
     merge:
       strategy: "deep"
-      knockout_prefix: "!"
   common::user_management::authentication::sssd::domains:
     merge:
       strategy: "deep"
-      knockout_prefix: "!"
   common::storage::mounts:
     merge:
       strategy: "hash"
   common::system::kernel::sysctl:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
   common::storage::samba::shares:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::account_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::auth_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::password_account_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::password_auth_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::password_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::password_password_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::password_session_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::session_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::sshd_account_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::sshd_auth_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::sshd_password_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::user_management::authentication::pam::sshd_session_lines:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::system::services:
     merge:
       strategy: "deep"
-      knockout_prefix: "!!"
 
   common::system::nsswitch::passwd:
     merge: "unique"

@@ -185,7 +185,7 @@ class common::system (
   # `puppet:///modules/customers/files/$customer_id/some_file.txt`)
 
   # sort the files to ensure that directores always come before files
-  Array($files.functions::knockout).sort |$x, $y| {
+  Array($files).sort |$x, $y| {
     compare($x[0], $y[0])
   }.each |$_element| {
     [$key, $_file_parameters] = $_element

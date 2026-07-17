@@ -3,7 +3,6 @@ lookup_options:
   profile::appeng::php::default_modules:
     merge:
       strategy: 'deep'
-      knockout_prefix: '!'
   profile::web::haproxy::manual:
     merge: 'deep'
 
