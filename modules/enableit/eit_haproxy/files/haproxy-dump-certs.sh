@@ -13,13 +13,14 @@
 set -euo pipefail
 
 SOCKET="${SOCKET:-/var/run/haproxy.sock}"
+MAX_RETRIES=5
+RETRY_DELAY=5
 
+# Restored argument parsing
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [-s SOCKET] [CERT_PATH ...]
-
+Usage: $(basename "$0") [-s SOCKET]
   -s SOCKET   HAProxy stats socket (default: ${SOCKET})
-  -h          This help
 EOF
 }
 
@@ -41,7 +42,24 @@ dump_one() {
   tmp=$(mktemp "${dir}/.$(basename "$path").XXXXXX")
   trap 'rm -f "$tmp"' RETURN
 
-  echo "dump ssl cert ${path}" | hap > "$tmp"
+  local output
+  local retries=0
+  while [ $retries -lt $MAX_RETRIES ]; do
+    output=$(echo "dump ssl cert ${path}" | hap)
+    if echo "$output" | grep -q 'locked'; then
+      echo "Locked, retrying in ${RETRY_DELAY}s... (${path})" >&2
+      sleep $RETRY_DELAY
+      ((retries++))
+    else
+      echo "$output" > "$tmp"
+      break
+    fi
+  done
+
+  if [ $retries -eq $MAX_RETRIES ]; then
+      echo "Error: ${path}: Failed to dump (still locked after ${MAX_RETRIES} retries)" >&2
+      exit 1
+  fi
 
   if ! grep -q 'BEGIN CERTIFICATE'      "$tmp" \
   || ! grep -q 'BEGIN .*PRIVATE KEY'    "$tmp"; then
@@ -63,7 +81,9 @@ dump_one() {
 if [ $# -gt 0 ]; then
   for p in "$@"; do dump_one "$p"; done
 else
-  echo "show ssl cert" | hap | awk '/^[^#]/ && NF' | while read -r p; do
+  # Use a temporary file to avoid pipe issues with the loop
+  echo "show ssl cert" | hap | awk '/^[^#]/ && NF' > /tmp/cert_list.txt
+  while read -r p; do
     dump_one "$p"
-  done
+  done < /tmp/cert_list.txt
 fi
