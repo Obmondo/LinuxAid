@@ -67,10 +67,13 @@ dump_one() {
     return 0
   fi
 
-  if [ -f "$path" ] && cmp -s \
-        <(openssl x509 -in "$tmp"  -noout -fingerprint -sha256) \
-        <(openssl x509 -in "$path" -noout -fingerprint -sha256); then
-    return 0
+  # Optimization: Content verification with fast sha256sum
+  if [ -f "$path" ]; then
+    if cmp -s \
+        <(sha256sum "$tmp" | cut -d ' ' -f1) \
+        <(sha256sum "$path" | cut -d ' ' -f1); then
+      return 0
+    fi
   fi
 
   chmod 600 "$tmp"
