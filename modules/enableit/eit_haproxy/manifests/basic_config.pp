@@ -250,7 +250,8 @@ class eit_haproxy::basic_config (
         } else {
           # Monitor the CN, since SAN are part of same cert, so expiry would be same ofcourse :)
           monitor::domains { $cn:
-            enable => true,
+            enable      => true,
+            expiry_days => 7,
           }
         }
       }
