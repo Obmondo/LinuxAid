@@ -4,7 +4,7 @@ $platform_tag = undef
 
 # Remove any classes that start with the knockout prefix `!!`. I'm not sure if
 # this is smart...
-$obmondo_classes = lookup('classes', Array[String], undef, []).functions::knockout
+$obmondo_classes = lookup('classes', Array[String], undef, [])
 
 # Check if the given class is role::monitoring only.
 # If role::monitoring is mixed with other role, then fail
