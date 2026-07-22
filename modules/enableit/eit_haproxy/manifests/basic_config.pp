@@ -356,7 +356,9 @@ class eit_haproxy::basic_config (
                 if $_allow_http_acl { 'if !allow_http' },
               ].delete_undef_values.join(' '),
             },
-            { 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)] if allow_http' }
+            if $_allow_http_acl {
+              { 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)] if allow_http' }
+            }
           ].delete_undef_values.flatten,
         }
       }
