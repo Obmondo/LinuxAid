@@ -2,8 +2,6 @@
 # https://github.com/puppetlabs/puppetlabs-puppet_agent/blob/caaa52fb3d080f277243c6e78ce842df71cdd146/manifests/install.pp#L191
 $platform_tag = undef
 
-# Remove any classes that start with the knockout prefix `!!`. I'm not sure if
-# this is smart...
 $obmondo_classes = lookup('classes', Array[String], undef, [])
 
 # Check if the given class is role::monitoring only.
