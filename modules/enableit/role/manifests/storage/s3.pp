@@ -10,14 +10,13 @@
 # @param conf_dir The Unix path to the configuration directory.
 #
 # @param roles
-#   All S3 accounts, keyed by name. `bucket_access` is optional (omit it
-#   entirely for an account with nothing to declare - e.g. a plain identity
-#   that only ever acts as another entry's `managed_by`). For every
-#   `bucket_access` entry, `managed_by` names the account whose credentials
-#   get used to actually apply that bucket's policy (the S3 PutBucketPolicy
-#   call has to be authenticated as an account with rights over that
-#   bucket - typically its real owner), and `role` is the grant level
-#   applied for the entry's own account:
+#   All S3 accounts, keyed by name. `owns` is optional (omit it entirely for
+#   an account that owns no buckets - e.g. a plain grantee identity). Under
+#   `owns`, each key is a bucket the account owns: its credentials apply that
+#   bucket's policy (the S3 PutBucketPolicy call has to be authenticated as
+#   an account with rights over the bucket - the owner). Ownership is
+#   therefore structural, not a separate field. Each bucket's `grants` maps a
+#   grantee account name to the grant level applied for it:
 #   - `read`: `s3:GetObject` + `s3:ListBucket`.
 #   - `write`: `s3:PutObject` + `s3:ListBucket` + `s3:GetBucketVersioning`
 #     - no `s3:GetObject`, the account genuinely can't read existing
@@ -25,39 +24,33 @@
 #   - `readwrite`: everything `write` grants, plus `s3:GetObject` - needed
 #     by replication clients (e.g. RustFS) that HEAD/GET the destination
 #     object before uploading, which `write` alone can't satisfy.
-#   - `admin`: full access (`s3:*`) on the bucket - the broadest grant,
-#     not a claim of ownership; `managed_by` still names whose
-#     credentials apply the policy.
+#   - `admin`: full access (`s3:*`) on the bucket - the broadest grant.
 #
-#   `managed_by` must match the name of an account declared here,
-#   otherwise that bucket_access entry is skipped with a warning.
+#   Each grantee name must match an account declared here, otherwise that
+#   grant is skipped with a warning.
 #
 # @example Hiera
 #   role::storage::s3::roles:
 #     app:
 #       access_key: ENC[PKCS7,...]
 #       email: app@example.com
+#       owns:
+#         app-logs-backup:
+#           grants:
+#             backup-exporter: read
+#         app-uploads:
+#           grants:
+#             upload-only: write
+#             replication-backup: readwrite
 #     backup-exporter:
 #       access_key: ENC[PKCS7,...]
 #       email: backup-exporter@example.com
-#       bucket_access:
-#         - bucket: app-logs-backup
-#           role: read
-#           managed_by: app
 #     upload-only:
 #       access_key: ENC[PKCS7,...]
 #       email: upload-only@example.com
-#       bucket_access:
-#         - bucket: app-uploads
-#           role: write
-#           managed_by: app
 #     replication-backup:
 #       access_key: ENC[PKCS7,...]
 #       email: replication-backup@example.com
-#       bucket_access:
-#         - bucket: app-uploads
-#           role: readwrite
-#           managed_by: app
 #
 # @param manage Whether to manage the S3 storage resources. Defaults to true.
 #

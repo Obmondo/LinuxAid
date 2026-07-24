@@ -37,51 +37,49 @@ class profile::storage::s3 (
     { 'accessKey' => $_name, 'secretKey' => $_opts['access_key'] }
   }
 
-  # Build per-bucket policies grouped by (bucket, managed_by); each grant
-  # carries its own role so s3-policy-init.sh can build the right
-  # statements.
-  $_raw_policies = $roles.reduce([]) |$acc, $role| {
-    [$_name, $opts] = $role
-    $_canonical_id = seeded_rand_string(65, "${opts['email']}_${_name}")
-    $_shortid = 123456789013 + seeded_rand(999, "${opts['email']}_${_name}")
+  # Build one policy per owned bucket. Ownership is structural: the account
+  # a bucket sits under (`owns`) is the one whose credentials apply the
+  # policy (PutBucketPolicy must authenticate as an account with rights over
+  # the bucket). Each grant names a grantee account and its role level so
+  # s3-policy-init.sh can build the right statements.
+  $_bucket_policies = $roles.reduce([]) |$acc, $role| {
+    [$_owner, $owner_opts] = $role
 
-    $_entries = pick_default($opts['bucket_access'], []).reduce([]) |$inner_acc, $be| {
-      if $be['managed_by'] in $roles {
-        $inner_acc << {
-          'bucket'         => $be['bucket'],
-          'ownerAccessKey' => $be['managed_by'],
-          'ownerSecretKey' => $roles[$be['managed_by']]['access_key'],
-          'grants'         => [{
-            'accessKey'   => $_name,
-            'secretKey'   => $opts['access_key'],
-            'canonicalId' => $_canonical_id,
-            'shortid'     => String($_shortid),
-            'access'      => $be['role'],
-          }],
+    $_owned = pick_default($owner_opts['owns'], {}).reduce([]) |$bucket_acc, $bucket_entry| {
+      [$_bucket, $_spec] = $bucket_entry
+
+      $_grants = $_spec['grants'].reduce([]) |$grant_acc, $grant| {
+        [$_grantee, $_access] = $grant
+        if $_grantee in $roles {
+          $_g_opts = $roles[$_grantee]
+          $_g_seed = "${_g_opts['email']}_${_grantee}"
+          $grant_acc << {
+            'accessKey'   => $_grantee,
+            'secretKey'   => $_g_opts['access_key'],
+            'canonicalId' => seeded_rand_string(65, $_g_seed),
+            'shortid'     => String(123456789013 + seeded_rand(999, $_g_seed)),
+            'access'      => $_access,
+          }
+        } else {
+          warning("S3 bucket policy: grantee '${_grantee}' for bucket '${_bucket}' (owned by '${_owner}') not found among roles, skipping")
+          $grant_acc
         }
+      }
+
+      if empty($_grants) {
+        $bucket_acc
       } else {
-        warning("S3 bucket policy: managed_by '${be['managed_by']}' not found among roles, skipping bucket '${be['bucket']}' for '${_name}'")
-        $inner_acc
+        $bucket_acc << {
+          'bucket'         => $_bucket,
+          'ownerAccessKey' => $_owner,
+          'ownerSecretKey' => $owner_opts['access_key'],
+          'grants'         => $_grants,
+        }
       }
     }
 
-    $acc + $_entries
+    $acc + $_owned
   }
-
-  $_bucket_policies = $_raw_policies.reduce({}) |$map, $entry| {
-    $_key = "${entry['bucket']}|${entry['ownerAccessKey']}"
-    if $_key in $map {
-      $_existing = $map[$_key]
-      $map + { $_key => {
-        'bucket'         => $_existing['bucket'],
-        'ownerAccessKey' => $_existing['ownerAccessKey'],
-        'ownerSecretKey' => $_existing['ownerSecretKey'],
-        'grants'         => $_existing['grants'] + $entry['grants'],
-      }}
-    } else {
-      $map + { $_key => $entry }
-    }
-  }.values
 
   file { default:
     ensure => ensure_dir($manage),
