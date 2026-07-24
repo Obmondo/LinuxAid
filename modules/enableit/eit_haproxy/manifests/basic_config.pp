@@ -348,15 +348,21 @@ class eit_haproxy::basic_config (
               Hash(["${listen}:80", []])
           }),
           options => [
+            if $ddos_protection {
+              $ddos_protection_options
+            },
             $http_only_domains_options,
             { 'http-request' => 'return status 200 content-type text/plain lf-string "%[path,field(-1,/)].%[path,field(-1,/),map(virt@acme)]\n" if { path_beg \'/.well-known/acme-challenge/\' }' },
+
             # Explicitly include 'if' before the condition, as required by HAProxy 3.2 parser.
             { 'http-request' => [
                 'redirect scheme https',
                 if $_allow_http_acl { 'if !allow_http' },
               ].delete_undef_values.join(' '),
             },
-            { 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)] if allow_http' }
+            if $_allow_http_acl {
+              { 'use_backend' => '%[req.hdr(host),lower,map(/etc/haproxy/domains-to-backends.map)] if allow_http' }
+            }
           ].delete_undef_values.flatten,
         }
       }
