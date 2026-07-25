@@ -263,6 +263,17 @@ The OpenVox Server is written in Clojure with workload separation:
 
 ---
 
+## Supply Chain Security & Repository Management
+
+LinuxAid includes built-in supply chain protection and package repository management:
+
+- **Air-Gapped Operation**: Package repository mirroring allows servers to operate securely without requiring direct internet connectivity.
+- **Automated GPG Package Signing**: Uses the `packagesign` daemon to pull RPM and Deb packages built by CI/CD pipelines, GPG-sign them automatically, and publish them to trusted repositories.
+- **GPG Git Verification**: Protects against compromised Git hosts by verifying GPG signatures on release branches before CI runners execute build pipelines.
+- **Staged Snapshot Rollouts**: Enables hardlink-based repository snapshots, allowing security updates to be staged and rolled out to server groups incrementally.
+
+---
+
 ## Getting Started
 
 ### Adding a New Node
@@ -278,10 +289,18 @@ To add a new node to LinuxAid:
 
 ## Documentation
 
-- [Guides](./docs/guides)
-- [Facts](./docs/facts)
-- [Monitoring](./docs/monitoring)
-- [Roles](./docs/roles)
-- [Setup](./docs/setup)
-- [Comparison with other IaC tools](./docs/comparisonMetrics.md)
-- [Contributing](./CONTRIBUTING.md)
+| Guide / Reference | Description |
+| ----------------- | ----------- |
+| [Getting Started](./docs/setup/linuxaid_config.md) | Initial setup and configuration |
+| [Adding Nodes & ENC](./docs/setup/enc.md) | External Node Classifier and node onboarding |
+| [OpenVAS Setup](./docs/openvas-setup-guide.md) | Greenbone vulnerability scanner deployment |
+| [IaC Comparisons](./docs/comparisons.md) | Architectural comparison vs Ansible, Terraform, Puppet |
+| [Features & Responsibilities](./docs/features-and-responsibilities.md) | Feature matrix and operational scope |
+| [ZFS Replication](./docs/guides/zfs-replication-using-sanoid.md) | Sanoid/Syncoid automated ZFS backup setup |
+| [Eyaml Secrets](./docs/guides/eyaml.md) | Encrypted Hiera data management |
+| [Netbird VPN](./docs/guides/netbird-install.md) | Secure node mesh VPN setup |
+| [Puppetboard](./docs/guides/puppetboard.md) | Web dashboard for OpenVox/Puppet |
+| [Roles Reference](./docs/roles) | Pre-configured application roles |
+| [Code of Conduct](./CODE_OF_CONDUCT.md) | DPGA-compliant community guidelines |
+| [Contributing](./CONTRIBUTING.md) | Development and contribution workflow |
+
