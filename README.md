@@ -120,11 +120,11 @@ graph TB
 
 ## Key Features & Managed Responsibilities
 
-The detailed feature breakdown and the managed responsibilities checklist now live in `./docs/features-and-responsibilities.md`. See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
+The detailed feature breakdown and the managed responsibilities checklist now live in [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md). See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
 
 ## Managed Responsibilities Checklist
 
-The full checklist and guidance are available at [https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist](https://github.com/Obmondo/LinuxAid/blob/master/docs/features-and-responsibilities.md#managed-responsibilities-checklist).
+The full checklist and guidance are available in the [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md#managed-responsibilities-checklist).
 
 ### 10. Data Ownership and Licensing
 
@@ -157,11 +157,11 @@ Under each module that you use in LinuxAid, you can see the documentation in the
 
 ### LinuxAid Modules
 
-- **[Roles](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/role/REFERENCE.md)**: The list of roles (software and configs currently supported). Note: some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
+- **[Roles](./modules/enableit/role/REFERENCE.md)**: The list of roles (software and configs currently supported). Note: some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
 
-- **[Common Settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/REFERENCE.md)**: The list of common configurations you can roll out for any server, regardless of its configured role.
+- **[Common Settings](./modules/enableit/common/REFERENCE.md)**: The list of common configurations you can roll out for any server, regardless of its configured role.
 
-- **[Monitoring Settings](https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/monitor/REFERENCE.md)**: Settings for monitoring
+- **[Monitoring Settings](./modules/enableit/monitor/REFERENCE.md)**: Settings for monitoring
 
 ### Configuration Scopes
 
@@ -190,7 +190,7 @@ LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated dat
 - Clear separation between code logic and environment-specific data
 - Similar flexibility to Helm values in Kubernetes
 
-**View the hierarchy:** <https://github.com/Obmondo/LinuxAid/blob/master/hiera.yaml#L10>
+**View the hierarchy:** See `hiera.yaml` (also available as [./hiera.yaml](./hiera.yaml)) for the full hierarchy configuration starting at the `hierarchy:` section.
 
 ### 60+ Supported Applications
 
@@ -263,6 +263,17 @@ The OpenVox Server is written in Clojure with workload separation:
 
 ---
 
+## Supply Chain Security & Repository Management
+
+LinuxAid includes built-in supply chain protection and package repository management:
+
+- **Air-Gapped Operation**: Package repository mirroring allows servers to operate securely without requiring direct internet connectivity.
+- **Automated GPG Package Signing**: Uses the `packagesign` daemon to pull RPM and Deb packages built by CI/CD pipelines, GPG-sign them automatically, and publish them to trusted repositories.
+- **GPG Git Verification**: Protects against compromised Git hosts by verifying GPG signatures on release branches before CI runners execute build pipelines.
+- **Staged Snapshot Rollouts**: Enables hardlink-based repository snapshots, allowing security updates to be staged and rolled out to server groups incrementally.
+
+---
+
 ## Getting Started
 
 ### Adding a New Node
@@ -278,10 +289,18 @@ To add a new node to LinuxAid:
 
 ## Documentation
 
-- [Guides](./docs/guides)
-- [Facts](./docs/facts)
-- [Monitoring](./docs/monitoring)
-- [Roles](./docs/roles)
-- [Setup](./docs/setup)
-- [Comparison with other IaC tools](./docs/comparisons.md)
-- [Contributing](./CONTRIBUTING.md)
+| Guide / Reference | Description |
+| ----------------- | ----------- |
+| [Getting Started](./docs/setup/linuxaid_config.md) | Initial setup and configuration |
+| [Adding Nodes & ENC](./docs/setup/enc.md) | External Node Classifier and node onboarding |
+| [OpenVAS Setup](./docs/openvas-setup-guide.md) | Greenbone vulnerability scanner deployment |
+| [IaC Comparisons](./docs/comparisons.md) | Architectural comparison vs Ansible, Terraform, Puppet |
+| [Features & Responsibilities](./docs/features-and-responsibilities.md) | Feature matrix and operational scope |
+| [ZFS Replication](./docs/guides/zfs-replication-using-sanoid.md) | Sanoid/Syncoid automated ZFS backup setup |
+| [Eyaml Secrets](./docs/guides/eyaml.md) | Encrypted Hiera data management |
+| [Netbird VPN](./docs/guides/netbird-install.md) | Secure node mesh VPN setup |
+| [Puppetboard](./docs/guides/puppetboard.md) | Web dashboard for OpenVox/Puppet |
+| [Roles Reference](./docs/roles) | Pre-configured application roles |
+| [Code of Conduct](./CODE_OF_CONDUCT.md) | DPGA-compliant community guidelines |
+| [Contributing](./CONTRIBUTING.md) | Development and contribution workflow |
+
