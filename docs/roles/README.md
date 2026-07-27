@@ -21,6 +21,7 @@ When no role is selected:
 * [OpenVAS Scanner](./openvas.md)
 * [GitLab CI Runner](./gitlab-ci-runner.md)
 * [S3 Object Storage](./storage-s3.md)
+* [Mail Relay Host](./mail-relay.md)
 * [Mailcow Mail Server](./mailcow.md)
 * [WireGuard Mesh](./wireguard.md)
 
