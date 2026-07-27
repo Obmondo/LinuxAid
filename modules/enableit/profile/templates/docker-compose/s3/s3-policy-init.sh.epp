@@ -27,12 +27,38 @@ apply_policies() {
     owner_sk=$(echo "$policy" | jq -r '.ownerSecretKey')
     POLICY=$(echo "$policy" | jq --arg bucket "$bucket" '{
       "Version": "2012-10-17",
-      "Statement": [.readOnlyAccounts[] | {
-        "Effect": "Allow",
-        "Principal": {"AWS": [.shortid]},
-        "Action": ["s3:GetObject", "s3:ListBucket"],
-        "Resource": ["arn:aws:s3:::" + $bucket, "arn:aws:s3:::" + $bucket + "/*"]
-      }]
+      "Statement": (
+        [.grants[] | select(.access == "read" or .access == "readwrite") | {
+          "Effect": "Allow",
+          "Principal": {"AWS": [.shortid]},
+          "Action": ["s3:GetObject"],
+          "Resource": ["arn:aws:s3:::" + $bucket + "/*"]
+        }]
+        + [.grants[] | select(.access == "read") | {
+          "Effect": "Allow",
+          "Principal": {"AWS": [.shortid]},
+          "Action": ["s3:ListBucket"],
+          "Resource": ["arn:aws:s3:::" + $bucket]
+        }]
+        + [.grants[] | select(.access == "write" or .access == "readwrite") | {
+          "Effect": "Allow",
+          "Principal": {"AWS": [.shortid]},
+          "Action": ["s3:PutObject"],
+          "Resource": ["arn:aws:s3:::" + $bucket + "/*"]
+        }]
+        + [.grants[] | select(.access == "write" or .access == "readwrite") | {
+          "Effect": "Allow",
+          "Principal": {"AWS": [.shortid]},
+          "Action": ["s3:ListBucket", "s3:GetBucketVersioning"],
+          "Resource": ["arn:aws:s3:::" + $bucket]
+        }]
+        + [.grants[] | select(.access == "admin") | {
+          "Effect": "Allow",
+          "Principal": {"AWS": [.shortid]},
+          "Action": ["s3:*"],
+          "Resource": ["arn:aws:s3:::" + $bucket, "arn:aws:s3:::" + $bucket + "/*"]
+        }]
+      )
     }')
 
     export AWS_ACCESS_KEY_ID="$owner_ak"

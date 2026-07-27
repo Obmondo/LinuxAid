@@ -7,16 +7,14 @@ class profile::storage::s3 (
   String           $image        = $role::storage::s3::image,
   Stdlib::Unixpath $conf_dir     = $role::storage::s3::conf_dir,
 
-  Eit_types::Storage::S3 $roles = $role::storage::s3::roles,
-
-  Eit_types::Storage::S3::ReadOnly $read_only_roles = $role::storage::s3::read_only_roles,
+  Eit_types::Storage::S3::Role $roles = $role::storage::s3::roles,
 ) {
 
   # TODO: function does not work as it should
   #s3_roles($roles)
 
   # TODO: Add a check for shortid should not be a duplicate
-  $_admin_accounts = $roles.reduce([]) |$acc, $role| {
+  $_accounts = $roles.reduce([]) |$acc, $role| {
     [$_name, $opts] = $role
 
     $_shortid = 123456789013 + seeded_rand(999, "${opts['email']}_${_name}")
@@ -34,82 +32,54 @@ class profile::storage::s3 (
       }]
     }
   }
-
-  $_readonly_accounts = $read_only_roles.reduce([]) |$acc, $role| {
-    [$_name, $opts] = $role
-
-    $_shortid = 123456789013 + seeded_rand(999, "${opts['email']}_${_name}")
-    $_arn = "arn:aws:iam::${_shortid}:root"
-
-    $acc << {
-      name        => $_name,
-      canonicalID => seeded_rand_string(65, "${opts['email']}_${_name}"),
-      email       => $opts['email'],
-      arn         => $_arn,
-      shortid     => String($_shortid),
-      keys        => [{
-        'access' => $_name,
-        'secret' => $opts['access_key'],
-      }]
-    }
-  }
-
-  $_accounts = $_admin_accounts + $_readonly_accounts
 
   $_admin_creds = $roles.map |$_name, $_opts| {
     { 'accessKey' => $_name, 'secretKey' => $_opts['access_key'] }
   }
 
-  $_readonly_creds = $read_only_roles.map |$_name, $_opts| {
-    { 'accessKey' => $_name, 'secretKey' => $_opts['access_key'] }
-  }
+  # Build one policy per owned bucket. Ownership is structural: the account
+  # a bucket sits under (`owns`) is the one whose credentials apply the
+  # policy (PutBucketPolicy must authenticate as an account with rights over
+  # the bucket). Each grant names a grantee account and its role level so
+  # s3-policy-init.sh can build the right statements.
+  $_bucket_policies = $roles.reduce([]) |$acc, $role| {
+    [$_owner, $owner_opts] = $role
 
-  $_readonly_canonical_ids = $read_only_roles.map |$_name, $_opts| {
-    seeded_rand_string(65, "${_opts['email']}_${_name}")
-  }
+    $_owned = pick_default($owner_opts['owns'], {}).reduce([]) |$bucket_acc, $bucket_entry| {
+      [$_bucket, $_spec] = $bucket_entry
 
-  # Build per-bucket read-only policies grouped by (bucket, owner)
-  $_raw_policies = $read_only_roles.reduce([]) |$acc, $role| {
-    [$_ro_name, $_ro_opts] = $role
-    $_ro_canonical_id = seeded_rand_string(65, "${_ro_opts['email']}_${_ro_name}")
-    $_ro_shortid = 123456789013 + seeded_rand(999, "${_ro_opts['email']}_${_ro_name}")
-
-    $_entries = $_ro_opts['buckets'].reduce([]) |$inner_acc, $be| {
-      if $be['owner'] in $roles {
-        $inner_acc << {
-          'bucket'           => $be['bucket'],
-          'ownerAccessKey'   => $be['owner'],
-          'ownerSecretKey'   => $roles[$be['owner']]['access_key'],
-          'readOnlyAccounts' => [{
-            'accessKey'   => $_ro_name,
-            'secretKey'   => $_ro_opts['access_key'],
-            'canonicalId' => $_ro_canonical_id,
-            'shortid'     => String($_ro_shortid),
-          }],
+      $_grants = $_spec['grants'].reduce([]) |$grant_acc, $grant| {
+        [$_grantee, $_access] = $grant
+        if $_grantee in $roles {
+          $_g_opts = $roles[$_grantee]
+          $_g_seed = "${_g_opts['email']}_${_grantee}"
+          $grant_acc << {
+            'accessKey'   => $_grantee,
+            'secretKey'   => $_g_opts['access_key'],
+            'canonicalId' => seeded_rand_string(65, $_g_seed),
+            'shortid'     => String(123456789013 + seeded_rand(999, $_g_seed)),
+            'access'      => $_access,
+          }
+        } else {
+          warning("S3 bucket policy: grantee '${_grantee}' for bucket '${_bucket}' (owned by '${_owner}') not found among roles, skipping")
+          $grant_acc
         }
+      }
+
+      if empty($_grants) {
+        $bucket_acc
       } else {
-        warning("S3 bucket policy: owner '${be['owner']}' not found in roles, skipping bucket '${be['bucket']}' for read-only role '${$_ro_name}'")
-        $inner_acc
+        $bucket_acc << {
+          'bucket'         => $_bucket,
+          'ownerAccessKey' => $_owner,
+          'ownerSecretKey' => $owner_opts['access_key'],
+          'grants'         => $_grants,
+        }
       }
     }
 
-    $acc + $_entries
+    $acc + $_owned
   }
-
-  $_bucket_policies = $_raw_policies.reduce({}) |$map, $entry| {
-    $_key = "${entry['bucket']}|${entry['ownerAccessKey']}"
-    if $_key in $map {
-      $_existing = $map[$_key]
-      $map + { $_key => {
-        'bucket'           => $_existing['bucket'],
-        'ownerAccessKey'   => $_existing['ownerAccessKey'],
-        'ownerSecretKey'   => $_existing['ownerSecretKey'],
-        'readOnlyAccounts' => $_existing['readOnlyAccounts'] + $entry['readOnlyAccounts'],
-      }}
-    } else {
-      $map + { $_key => $entry }
-    }
-  }.values
 
   file { default:
     ensure => ensure_dir($manage),
@@ -143,10 +113,8 @@ class profile::storage::s3 (
     "${conf_dir}/s3-sideloader-config.json":
       ensure  => file,
       content => stdlib::to_json_pretty({
-        adminAccounts        => $_admin_creds,
-        readOnlyAccounts     => $_readonly_creds,
-        readOnlyCanonicalIds => $_readonly_canonical_ids,
-        bucketPolicies       => $_bucket_policies,
+        adminAccounts  => $_admin_creds,
+        bucketPolicies => $_bucket_policies,
       }).node_encrypt::secret,
     ;
     '/opt/obmondo/docker-compose/s3/s3-policy-init.sh':
