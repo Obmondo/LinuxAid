@@ -15,8 +15,14 @@ When no role is selected:
 
 ### Available Roles
 
-* [Monitoring](./monitoring.md)
 * [Basic](./basic.md)
+* [Monitoring](./monitoring.md)
+* [KubeAid Node](./kubeaid.md)
+* [OpenVAS Scanner](./openvas.md)
+* [GitLab CI Runner](./gitlab-ci-runner.md)
+* [S3 Object Storage](./storage-s3.md)
+* [Mailcow Mail Server](./mailcow.md)
+* [WireGuard Mesh](./wireguard.md)
 
 ### Host Management
 
