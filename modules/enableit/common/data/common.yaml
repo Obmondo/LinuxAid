@@ -306,11 +306,11 @@ common::system::openvox::configure_agent: true
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
 common::system::openvox::linuxaid_cli::install_method: package
-common::system::openvox::linuxaid_cli::version: 1.6.0
+common::system::openvox::linuxaid_cli::version: 1.8.0
 common::system::openvox::linuxaid_cli::checksums:
+  1.8.0: fbf66f14b2d68bc297616a51291b029a9b522853e74dc3a45e5125062ca8459c
+  1.7.0: 9694a2726a0c93073af8ce47f1db0f2ba7aa86ad208a24e641cede8b1565f116
   1.6.0: 4d01213e0c43ba69a43f16b32c6784e6da64d4749b537a75f404e7db42b5e294
-  1.5.0: 8d9bd4fdfa65e53680f76db6637182632cc960a37a2c7168d84ccdb2abc05e34
-  1.4.0: ef0f044f1a731f59614ac7bad1b57a02dc2e3d2236e7309a24f4e15b94600e59
 
 ## KeepAlived
 common::system::keepalived::global_defs:
