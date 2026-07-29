@@ -1,0 +1,214 @@
+#!/bin/bash
+# THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+set -euo pipefail
+
+# Configuration
+BACKUP_DIR='<%= $backup_dir %>'
+GITEA_CONTAINER='<%= $container %>'
+GITEA_USER='<%= $container_user %>'
+GITEA_DUMP_FILENAME="gitea-dump"
+MAX_LOCAL_BACKUPS=<%= $max_local_backups %> # Maximum number of local backups to retain
+MAX_S3_BACKUPS=<%= $max_s3_backups %> # Maximum number of S3 backups to retain
+S3_BUCKET='<%= $s3_bucket %>'
+S3_ENDPOINT='<%= $s3_endpoint %>'
+SOURCE_DIR='<%= $source_dir %>'
+UPLOAD_TIMEOUT=<%= $upload_timeout %> # Read timeout in seconds for the S3 upload
+
+LOCK_FILE="/run/gitea-backup.lock"
+S3_BUCKET_NAME="${S3_BUCKET#s3://}"
+S3_BUCKET_NAME="${S3_BUCKET_NAME%/}"
+LATEST_DUMP=""
+
+# Logging function
+log() {
+    local timestamp
+    timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+    echo "[$timestamp] $1"
+    logger -t gitea-backup "$1"  # Send message to syslog
+}
+
+# 1. Clean disk before creating a new backup
+check_and_clean_source() {
+
+    # Clean Gitea container's temp folder (Always do this to prevent stuck files)
+    # gitea only removes /tmp/gitea-dump-* and /tmp/gitea-db.sql* on a clean exit,
+    # so a killed run leaves tens of GB behind in the container layer.
+    log "Cleaning Gitea container /tmp directory..."
+    docker exec -u "$GITEA_USER" "$GITEA_CONTAINER" bash -c "rm -rf /tmp/gitea-dump-* /tmp/gitea-db.sql*" || true
+
+    # Remove leftover zips on the HOST source directory
+    rm -f "$SOURCE_DIR"/gitea-dump-*.zip
+}
+
+# 2. Create local backup directory
+create_backup_directory() {
+    mkdir -p "$BACKUP_DIR"
+    log "Backup directory created: $BACKUP_DIR"
+}
+
+# 3. Dump Gitea data (Generates the NEW backup)
+dump_gitea_data() {
+    log "Dumping Gitea data..."
+    docker exec -u "$GITEA_USER" "$GITEA_CONTAINER" bash -c \
+        "cd ~ && /app/gitea/gitea dump -c /data/gitea/conf/app.ini"
+}
+
+# 4. Move the NEW dump into the local backup directory
+move_latest_dump() {
+    local new_dumps
+
+    # Move the newly generated backup
+    new_dumps=("$SOURCE_DIR"/gitea-dump-*.zip)
+
+    if [ ! -e "${new_dumps[0]}" ]; then
+        log "Error: New backup file was not found after dump command."
+        return 1
+    fi
+
+    mv "${new_dumps[@]}" "$BACKUP_DIR"
+    LATEST_DUMP="$BACKUP_DIR/$(basename "${new_dumps[0]}")"
+    log "Latest dump moved to $BACKUP_DIR: $(basename "$LATEST_DUMP")"
+}
+
+# 5. Confirm an object of the expected size exists in S3
+s3_object_matches_local() {
+    local local_size remote_size
+
+    local_size=$(stat -c %s "$LATEST_DUMP")
+    remote_size=$(aws s3api head-object \
+        --bucket "$S3_BUCKET_NAME" \
+        --key "$(basename "$LATEST_DUMP")" \
+        --endpoint-url="$S3_ENDPOINT" \
+        --query ContentLength --output text 2>/dev/null) || return 1
+
+    [ "$remote_size" = "$local_size" ]
+}
+
+# 6. Drop the parts a failed upload leaves behind, they stay billed and are
+# invisible to `aws s3 ls`
+abort_stale_multipart_upload() {
+    local key upload_id
+
+    key=$(basename "$LATEST_DUMP")
+    upload_id=$(aws s3api list-multipart-uploads \
+        --bucket "$S3_BUCKET_NAME" \
+        --endpoint-url="$S3_ENDPOINT" \
+        --query "Uploads[?Key=='$key'].UploadId | [0]" \
+        --output text 2>/dev/null) || return 0
+
+    if [ -n "$upload_id" ] && [ "$upload_id" != "None" ]; then
+        aws s3api abort-multipart-upload \
+            --bucket "$S3_BUCKET_NAME" \
+            --key "$key" \
+            --upload-id "$upload_id" \
+            --endpoint-url="$S3_ENDPOINT"
+        log "Aborted incomplete multipart upload for $key"
+    fi
+}
+
+# 7. Upload the dump to S3
+upload_to_s3() {
+    local attempt
+
+    log "Moving backup to S3..."
+
+    for attempt in 1 2 3; do
+        if aws s3 cp "$LATEST_DUMP" "$S3_BUCKET" \
+            --endpoint-url="$S3_ENDPOINT" \
+            --cli-read-timeout "$UPLOAD_TIMEOUT" \
+            --only-show-errors; then
+            log "Uploaded $(basename "$LATEST_DUMP") to $S3_BUCKET"
+            return 0
+        fi
+
+        # A CompleteMultipartUpload slower than the read timeout gets retried by
+        # botocore and reports InvalidPart even though the object landed intact.
+        if s3_object_matches_local; then
+            log "Upload reported failure but the object is complete in S3."
+            return 0
+        fi
+
+        log "Upload attempt $attempt failed."
+        abort_stale_multipart_upload
+    done
+
+    return 1
+}
+
+# 8. Rotate S3 backups
+perform_s3_backup_rotation() {
+    local s3_backups num_s3_backups num_s3_to_remove older_s3_backups older_backup
+
+    log "Performing S3 backup rotation: Deleting older backups..."
+    s3_backups=$(aws s3 ls "$S3_BUCKET" --recursive --endpoint-url="$S3_ENDPOINT" | sort -k1,2 | awk '{print $4}')
+
+    if [ -z "$s3_backups" ]; then
+        return 0
+    fi
+
+    num_s3_backups=$(echo "$s3_backups" | wc -l)
+
+    if [ "$num_s3_backups" -gt "$MAX_S3_BACKUPS" ]; then
+        num_s3_to_remove=$((num_s3_backups - MAX_S3_BACKUPS))
+        older_s3_backups=$(echo "$s3_backups" | head -n "$num_s3_to_remove")
+
+        for older_backup in $older_s3_backups; do
+            aws s3 rm "$S3_BUCKET$older_backup" --endpoint-url="$S3_ENDPOINT"
+            log "Removed old S3 backup: $older_backup"
+        done
+    fi
+}
+
+# Function to perform local backup rotation
+perform_local_backup_rotation() {
+    local backups num_backups num_local_to_remove i
+
+    backups=("$BACKUP_DIR"/"${GITEA_DUMP_FILENAME}"-*.zip)
+    [ -e "${backups[0]}" ] || return 0
+
+    num_backups=${#backups[@]}
+
+    if [ "$num_backups" -gt "$MAX_LOCAL_BACKUPS" ]; then
+        num_local_to_remove=$((num_backups - MAX_LOCAL_BACKUPS))
+        log "Performing local backup rotation: Removing $num_local_to_remove old backup(s)..."
+
+        for ((i = 0; i < num_local_to_remove; i++)); do
+            rm "${backups[i]}"
+            log "Removed old local backup: ${backups[i]}"
+        done
+    fi
+}
+
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+    log "Another gitea-backup run is in progress, exiting."
+    exit 0
+fi
+
+# Execute functions directly
+rc=0
+
+check_and_clean_source
+create_backup_directory
+# Rotate first so the disk has room for the new dump
+perform_local_backup_rotation
+dump_gitea_data
+
+if move_latest_dump; then
+    upload_to_s3 || rc=1
+else
+    rc=1
+fi
+
+# Rotation runs whether or not the upload succeeded, otherwise one failed upload
+# leaves both the bucket and the disk growing without bound.
+perform_s3_backup_rotation
+perform_local_backup_rotation
+
+if [ "$rc" -ne 0 ]; then
+    log "Backup process completed with errors."
+else
+    log "Backup process completed."
+fi
+
+exit "$rc"
