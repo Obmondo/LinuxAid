@@ -23,6 +23,7 @@ common::system::openvox::package_name: "openvox"
 common::system::openvox::version: "8.24.1"
 common::system::openvox::linuxaid_cli::install_method: archive
 common::system::openvox::linuxaid_cli::checksums:
+  1.9.0: 6dae44c8afbce01e87965ecd9cf6ac9527b43172efb7906fdfb95aebecee922c
   1.8.0: a564af283010afdbf0f0f3bdd954b6f87a9c3ba3c853d71d398f69dbb89bfd22
   1.7.0: 2266dede063528c2c63f196be1b8eb76c0a53f1553b669e3774ad93b68801b4c
   1.6.0: 24e2427fc509326c8bac7eb392aa24364d5541e27beea4853fed2d598a55421c
