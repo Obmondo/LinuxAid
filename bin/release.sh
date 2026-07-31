@@ -137,7 +137,7 @@ echo "Pushing tag to Gitea"
 git push origin "$NEW_TAG"
 
 echo "Pushing changelog changes to Github"
-git push github master
+git push gitea master
 
 echo "Pushing tag to Github"
-git push github "$NEW_TAG"
+git push gitea "$NEW_TAG"
