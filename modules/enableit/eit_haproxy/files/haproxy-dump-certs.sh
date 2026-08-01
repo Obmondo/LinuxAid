@@ -13,8 +13,8 @@
 set -euo pipefail
 
 SOCKET="${SOCKET:-/var/run/haproxy.sock}"
-MAX_RETRIES=5
-RETRY_DELAY=5
+MAX_RETRIES=20
+RETRY_DELAY=10
 
 # Restored argument parsing
 usage() {
@@ -37,6 +37,7 @@ hap() { socat - "UNIX-CONNECT:${SOCKET}"; }
 
 dump_one() {
   local path="$1"
+  echo "Attempting dump for: ${path}" >&2
   local dir tmp
   dir=$(dirname "$path")
   tmp=$(mktemp "${dir}/.$(basename "$path").XXXXXX")
@@ -57,6 +58,9 @@ dump_one() {
   done
 
   if [ $retries -eq $MAX_RETRIES ]; then
+      echo "--- Lock contention detected. Capturing HAProxy state ---" >&2
+      echo "show tasks" | hap > /tmp/haproxy_tasks_dump.txt 2>&1
+      echo "show threads" | hap > /tmp/haproxy_threads_dump.txt 2>&1
       echo "Error: ${path}: Failed to dump (still locked after ${MAX_RETRIES} retries)" >&2
       exit 1
   fi
@@ -72,13 +76,15 @@ dump_one() {
     if cmp -s \
         <(sha256sum "$tmp" | cut -d ' ' -f1) \
         <(sha256sum "$path" | cut -d ' ' -f1); then
+      echo "Already up-to-date: ${path}" >&2
       return 0
     fi
   fi
 
   chmod 600 "$tmp"
   mv "$tmp" "$path"
-  echo "updated: ${path}"
+  echo "SUCCESS: ${path} updated and verified." >&2
+  sleep 0.25
 }
 
 if [ $# -gt 0 ]; then
@@ -89,4 +95,12 @@ else
   while read -r p; do
     dump_one "$p"
   done < /tmp/cert_list.txt
+
+  echo "----------------------------------------------------------------------------------"
+  echo "Analyzing for unused certificates..."
+  comm -23 \
+      <(ls /etc/haproxy/certs/*.pem 2>/dev/null | sort) \
+      <(sort /tmp/cert_list.txt) | while read -r unused_cert; do
+          echo "The following certificate is no longer being used and can be removed: $unused_cert"
+  done
 fi
