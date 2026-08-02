@@ -1,4 +1,4 @@
-# Obmondo Customers: Setting up Git & Deploy
+# Obmondo Customers: Git Setup
 
 **Purpose:** This guide walks you through connecting your Git hosting platform to your Obmondo environment to enable seamless deployments.
 
@@ -10,19 +10,20 @@
 
 ## Phase 1: Configure in Obmondo UI
 
-1. **Navigate to Git & Deploy:** Log in to the Obmondo UI.
-    ![Obmondo Dashboard](../images/obmondo_dashboard.png)
-    Click on `Set up deploy key` or navigate directly to the [Git & Deploy page](https://obmondo.com/user/settings/organization/git-deploy).
-    ![Finish Setting Up](../images/finish_setting_up.png)
-    ![Git & Deploy Page](../images/git_and_deploy.png)
+1. **Navigate to Git & Deploy:** Navigate directly to the [Git & Deploy page](https://obmondo.com/user/settings/organization/git-deploy).
+
+    ![Git & Deploy Page](../images/git_and_deploy_white.png)
 
 2. **Select Platform:** Choose your `Git Hosting Platform`.
-    ![Git Hosting Platform](../images/git_hosting_platform.png)
+
+    ![Git Hosting Platform](../images/git_hosting_platform_white.png)
 
 3. **Provide Config URL:** Enter your `Linuxaid Config URL` and click `Save Changes`.
-    ![Linuxaid Details](../images/linuxaid_details.png)
+
+    ![Linuxaid Details](../images/linuxaid_details_white.png)
 
 4. **Generate SSH Key:** Locate the `Linuxaid Deploy Key` section and click `Generate SSH Key`.
+
     ![Linuxaid Deploy Key 1](../images/linuxaid_deploy_key_1.png)
     ![Linuxaid Deploy Key 2](../images/linuxaid_deploy_key_2.png)
 
