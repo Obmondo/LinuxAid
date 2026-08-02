@@ -1,2 +1,14 @@
 ---
 eit_repos::source_protocol: 'https'
+
+eit_repos::dell::repo_baseurl: 'https://linux.dell.com/repo/hardware/dsu/'
+eit_repos::dell::gpg_key_baseurl: 'https://linux.dell.com/repo/pgp_pubkeys/'
+# Dell signs DSU packages with a rotating set of keys; keep in sync with
+# https://linux.dell.com/repo/hardware/dsu/bootstrap.cgi
+eit_repos::dell::gpg_key_ids:
+  - '0x756ba70b1019ced6'
+  - '0x1285491434D8786F'
+  - '0xca77951d23b66a9d'
+  - '0x3CA66B4946770C59'
+  - '0x274E9C32857A9594'
+  - '0x076B95DB2FFC7F4A'
