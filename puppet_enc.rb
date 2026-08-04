@@ -59,7 +59,6 @@ server_data = if TESTING
 
 subscription_product_id = server_data&.dig('product_id')
 tag_keys = server_data&.dig('tags') || []
-environment = server_data&.dig('environment')&.gsub(/[^a-zA-Z0-9]/, '_')
 
 # ensure that we don't have too many tags -- if we allow for more tags, we also
 # need to update hiera.yaml!
@@ -93,10 +92,11 @@ parameters = {
   'obmondo_tags'    => tag_keys,
 }.merge(tags)
 
+# NOTE: no 'environment' key here on purpose. An environment returned by an ENC overrides the one
+# the agent asks for, which would make `puppet agent -E <environment>` a no-op. The agent decides
+# instead: linuxaid-cli reads the environment for the node from the API and passes it to the run.
 output = {
   'parameters' => parameters
 }
-
-output['environment'] = environment
 
 puts YAML.dump(output)

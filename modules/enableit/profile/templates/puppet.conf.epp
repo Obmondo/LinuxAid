@@ -25,4 +25,3 @@
     splaylimit = 60s
     splay = <%= $splay %>
     usecacheonfailure = <%= $usecacheonfailure %>
-    environment = <%= $environment %>

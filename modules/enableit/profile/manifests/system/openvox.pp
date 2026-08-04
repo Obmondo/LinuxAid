@@ -8,7 +8,6 @@ class profile::system::openvox (
   Boolean              $run_agent_as_noop      = $common::system::openvox::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $common::system::openvox::extra_main_settings,
   String               $aio_package_name       = $common::system::openvox::package_name,
-  String               $environment            = $common::system::openvox::environment,
 
   Eit_types::Noop_Value $noop_value             = $common::system::openvox::noop_value,
   Optional[String]      $package_version_suffix = undef,
@@ -141,7 +140,6 @@ class profile::system::openvox (
       'onetime'                          => false,
       'certname'                         => $::trusted['certname'],
       'manage_internal_file_permissions' => false,
-      'environment'                      => regsubst($environment, '\.', '_', 'G'),
       'runtimeout'                       => '10m',
       'masterport'                       => $server_port,
       'extra_main_settings'              => $extra_main_settings,
