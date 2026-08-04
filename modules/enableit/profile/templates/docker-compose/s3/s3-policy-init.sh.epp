@@ -38,7 +38,7 @@ apply_policies() {
           "Effect": "Allow",
           "Principal": {"AWS": [.shortid]},
           "Action": ["s3:ListBucket"],
-          "Resource": ["arn:aws:s3:::" + $bucket]
+          "Resource": ["arn:aws:s3:::" + $bucket, "arn:aws:s3:::" + $bucket + "/*"]
         }]
         + [.grants[] | select(.access == "write" or .access == "readwrite") | {
           "Effect": "Allow",
@@ -50,7 +50,7 @@ apply_policies() {
           "Effect": "Allow",
           "Principal": {"AWS": [.shortid]},
           "Action": ["s3:ListBucket", "s3:GetBucketVersioning"],
-          "Resource": ["arn:aws:s3:::" + $bucket]
+          "Resource": ["arn:aws:s3:::" + $bucket, "arn:aws:s3:::" + $bucket + "/*"]
         }]
         + [.grants[] | select(.access == "admin") | {
           "Effect": "Allow",
