@@ -2,6 +2,23 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.4
+
+### Features
+- e0f73542 feat: add Ubuntu 26 (resolute) repo mirrors, bump linuxaid-cli to 1.9.1
+- 78020c6d feat(openvox): let the agent decide the puppet environment
+
+### Bug Fixes
+- 23a93991 fix: show unused haproxy certificates
+
+### Configuration Changes
+- 67d4ad4e chore: clean the docs and removed unnecessary ones
+- 8c21fd0d chore: update the git and deploy docs with key regeneration
+- 6163eb1d chore: update git setup doc with light theme pictures
+
+### Other Changes
+- ea09cb16 Fix broken Dell DSU repo: retired version pin, http block, missing GPG keys
+
 ## LinuxAid Release Version v1.8.3
 
 ### Features
