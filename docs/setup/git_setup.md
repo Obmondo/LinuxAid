@@ -27,6 +27,14 @@
     ![Linuxaid Deploy Key 1](../images/linuxaid_deploy_key_1.png)
     ![Linuxaid Deploy Key 2](../images/linuxaid_deploy_key_2.png)
 
+### Deploy Key Already Generated
+
+If you have already created one deploy key, and want to re-generate it, you can do so.
+It will invalidate the previous one.
+
+![Regenrate Deploy Key 1](../images/regenerate_deploy_key_1.png)
+![Regenrate Deploy Key 2](../images/regenerate_deploy_key_2.png)
+
 ## Phase 2: Configure in your Git Repository
 
 1. **Add Deploy Key:** In your `linuxaid-config` repository, go to **Settings** > **Deploy keys** > **Add deploy key**.
