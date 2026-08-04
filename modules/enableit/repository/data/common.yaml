@@ -70,6 +70,7 @@ repository::mirror::default_configurations:
           - "ubuntu20.04"
           - "ubuntu22.04"
           - "ubuntu24.04"
+          - "ubuntu26.04"
         package_format: "deb"
         architectures:
           - "amd64"
@@ -81,7 +82,7 @@ repository::mirror::default_configurations:
       all:
         enable: false
         mirror_url: "https://download.docker.com/linux/ubuntu"
-        dists: ["focal", "jammy", "noble"]
+        dists: ["focal", "jammy", "noble", "resolute"]
         architectures: ["amd64"]
         sections: ["stable"]
         repodir: "docker/apt"
@@ -128,6 +129,16 @@ repository::mirror::default_configurations:
         architectures: ["amd64"]
         sections: ["main"]
         repodir: "microsoft/apt/noble"
+        package_format: "deb"
+        key_ids:
+          - "BC528686B50D79E339D3721CEB3E94ADBE1229CF"
+      resolute:
+        enable: false
+        mirror_url: "https://packages.microsoft.com/ubuntu/26.04/prod"
+        dists: ["resolute"]
+        architectures: ["amd64"]
+        sections: ["main"]
+        repodir: "microsoft/apt/resolute"
         package_format: "deb"
         key_ids:
           - "BC528686B50D79E339D3721CEB3E94ADBE1229CF"
@@ -203,6 +214,10 @@ repository::mirror::default_configurations:
           - "noble-backports"
           - "noble-security"
           - "noble-updates"
+          - "resolute"
+          - "resolute-backports"
+          - "resolute-security"
+          - "resolute-updates"
   ubuntu_arm64:
     apt:
       enable: false
@@ -234,3 +249,7 @@ repository::mirror::default_configurations:
           - "noble-backports"
           - "noble-security"
           - "noble-updates"
+          - "resolute"
+          - "resolute-backports"
+          - "resolute-security"
+          - "resolute-updates"
