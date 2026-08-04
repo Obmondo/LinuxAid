@@ -1,37 +1,102 @@
-# LinuxAid
+<div align="center">
+
+<a href="https://linuxaid.io/">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/images/linuxaid-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="./docs/images/linuxaid-logo.svg">
+    <img alt="LinuxAid" src="./docs/images/linuxaid-logo.svg" width="320">
+  </picture>
+</a>
+
+**Secure, compliant Linux infrastructure — managed and automated at scale.**
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Obmondo/LinuxAid)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](./LICENSE)
 
-LinuxAid is a comprehensive platform for managing secure and reliable Linux operations at scale. Built on OpenVox (an open-source Puppet-compatible configuration management system), LinuxAid provides infrastructure automation, monitoring, and compliance management for enterprise Linux environments. 
+[Website](https://linuxaid.io/) • [How It Works](#how-it-works) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Roles Reference](./modules/enableit/role/REFERENCE.md) • [Contributing](./CONTRIBUTING.md)
 
-## Table of Contents
-- [Core Capabilities](#core-capabilities)
-- [High-Level Architecture](#high-level-architecture)
-  - [Architecture Components](#architecture-components)
-- [Key Features & Managed Responsibilities](#key-features--managed-responsibilities)
-  - [Data Ownership and Licensing](#10-data-ownership-and-licensing)
-- [High Availability](#high-availability)
-- [Getting Started](#getting-started)
-  - [Adding a New Node](#adding-a-new-node)
-- [Documentation](#documentation)
+</div>
 
-## Core Capabilities
+LinuxAid is a comprehensive platform for managing secure and reliable Linux operations at scale. Built on **OpenVox** (an open-source, Puppet-compatible configuration management system), LinuxAid provides infrastructure automation, monitoring, and compliance management for enterprise Linux environments — from a handful of servers to fleets of tens of thousands.
 
-- **Configuration Management**: Automated system configuration using a hierarchical data model (Hiera) with role-based abstractions
-- **60+ Pre-configured Applications**: Production-ready deployments for web servers (Apache, HAProxy), email (Mailcow), databases (MySQL, PostgreSQL), CI/CD (GitLab), and more
-- **Comprehensive Monitoring**: Automated deployment of 11+ Prometheus exporters with hardware detection, SSL certificate monitoring, and pre-built Grafana dashboards
-- **GitOps Workflows**: All configuration changes tracked in Git with change preview capabilities before deployment
-- **Supply Chain Security**: Built-in package repository server with GPG signing, staged rollouts, and air-gap support
-- **Compliance Frameworks**: Pre-built configurations for GDPR, CIS, and NIS2 compliance
-- **Multi-Customer Architecture**: Isolated configuration and subscription-based feature management
-
-**Scale**: LinuxAid is designed to manage from dozens to thousands of nodes, with proven architecture supporting 20,000+ servers.
+Everything is **declarative** and **version-controlled**: infrastructure is defined as code, changes are previewed before they touch production, and the full history lives in Git.
 
 ---
 
-## High-Level Architecture
+## Table of Contents
 
-LinuxAid follows a layered architecture with clear separation between control plane, configuration logic, and managed infrastructure.
+- [Key Features](#key-features)
+- [How It Works](#how-it-works)
+  - [Add a Server in 3 Steps](#add-a-server-in-3-steps)
+  - [Architecture](#architecture)
+- [Managed Responsibilities](#managed-responsibilities)
+- [Configuration Options](#configuration-options)
+- [Proven at Enterprise Scale](#proven-at-enterprise-scale)
+- [High Availability](#high-availability)
+- [Supply Chain Security & Repository Management](#supply-chain-security--repository-management)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Key Features
+
+| Configuration | Monitoring | Security & Compliance | Automation | Platforms |
+|---|---|---|---|---|
+| ✅ Hierarchical data model (Hiera) | ✅ 11+ Prometheus exporters | ✅ GDPR-ready configurations | ✅ GitOps change preview | ✅ Any Linux distro supported by OpenVox/Puppet |
+| ✅ Role-based abstractions | ✅ Auto hardware detection | ✅ CIS benchmark configurations | ✅ Automated system updates with safety checks | ✅ Single-host or multi-node HA (Kubernetes) |
+| ✅ [60+ pre-configured applications](#60-supported-applications) | ✅ SSL certificate monitoring | ✅ NIS2 compliance | ✅ Staged, hardlink-based repo rollouts | ✅ Cloud, on-prem, or air-gapped |
+| ✅ Multi-customer, isolated configs | ✅ Pre-built Grafana dashboards | ✅ GPG-signed packages | ✅ Agents pull config on a configurable interval | ✅ Subscription-tiered feature management |
+| ✅ Data ownership, no vendor lock-in | ✅ AlertManager, tier-based routing | ✅ GPG-verified Git releases | ✅ Auto-deployed exporters based on role/facts | ✅ Secure mesh VPN access (no exposed SSH) |
+
+**Scale**: LinuxAid is designed to manage from dozens to thousands of nodes, on architecture proven to support 20,000+ servers.
+
+---
+
+## How It Works
+
+A lightweight **LinuxAid-Agent** runs on each of your servers. It applies the configuration and security policy you've chosen, then continuously reports health and metrics back to a central monitoring stack. You build your application; LinuxAid handles the rest.
+
+### Add a Server in 3 Steps
+
+| | Step | What happens |
+|---|---|---|
+| **1** | **Add server** — give it a hostname | Obmondo creates a unique identity for your server |
+| **2** | **Choose configuration & subscription** — pick the role it should run | Configuration and support tier are applied to your server |
+| **3** | **Run one command as root** | LinuxAid-Agent installs, connects, and starts managing the server |
+
+Works on physical servers, virtual machines, cloud instances, and your own datacenter — on any supported Linux distribution.
+
+### Architecture
+
+The **LinuxAid-Agent** sits between your infrastructure and the monitoring stack. It receives policies and configuration from the control plane, runs exporters locally, and pushes metrics out over a secure channel — so nothing needs to reach *into* your servers.
+
+**What the agent does on each server**
+
+- Collects system, application, and service metrics
+- Monitors processes and services, with health checks and status reporting
+- Manages configuration and keeps the system in its desired state
+- Receives policies and updates from the control plane
+- Runs exporters — Node Exporter for system metrics, Security Exporter for CVE scanning
+- Sends metrics to Prometheus over a secure, outbound-only channel
+
+**Beyond metrics, LinuxAid also manages**
+
+| | |
+|---|---|
+| **Service windows** | Schedule and manage maintenance windows with zero downtime |
+| **Configuration management** | Enforce desired state and track configuration changes |
+| **Security & compliance** | Continuous security scans, CVE reports, and compliance monitoring |
+| **Logging** | Centralized logs for better visibility and troubleshooting |
+
+Because configuration is **declarative**, the agent re-checks the server on every run and corrects any drift. Changes are previewed before they reach production, and every change is version-controlled in Git.
+
+<details>
+<summary><b>Under the hood</b> — OpenVox, Hiera, and the module layers</summary>
+
+LinuxAid is built on OpenVox, a Puppet-compatible configuration management system. The agent is an `openvox-agent`; the control plane compiles a catalog for each node and the agent applies it.
 
 ```mermaid
 graph TB
@@ -39,110 +104,71 @@ graph TB
     hiera[Hiera Data]
     enc[External Node Classifier]
     openvox[OpenVox Server]
-    
+
     common[common module]
     role[role module]
     profile[profile module]
     monitor[monitor module]
-    
-    updates[System Updates]
-    vpn[Netbird VPN]
-    repos[Package Repositories]
-    
+
     linux_servers[Linux Servers]
-    
-    exporters[Prometheus Exporters]
-    prometheus[Prometheus]
-    grafana[Grafana]
-    alertmanager[AlertManager]
-    
-    apache[Apache]
-    mailcow[Mailcow]
-    gitlab[GitLab]
-    
+
     git -->|version control| hiera
     hiera -->|data lookup| openvox
     enc -->|certname + facts| openvox
-    
+
     openvox -->|includes| common
     openvox -->|includes| role
     openvox -->|includes| profile
     openvox -->|includes| monitor
-    
+
     common -->|configures| linux_servers
     role -->|orchestrates| linux_servers
     profile -->|implements| linux_servers
-    
-    updates -->|patches| linux_servers
-    vpn -->|secure access| linux_servers
-    repos -->|packages| linux_servers
-    
-    linux_servers -->|metrics| exporters
-    exporters -->|scrape| prometheus
-    
-    prometheus --> grafana
-    prometheus --> alertmanager
-    
-    linux_servers --> apache
-    linux_servers --> mailcow
-    linux_servers --> gitlab
+    monitor -->|observes| linux_servers
 ```
 
-### Architecture Components
+**Control plane**
+- **OpenVox Server** — compiles catalogs by combining module code with Hiera data
+- **Hiera** — hierarchical data lookup, from node-specific overrides down to global defaults
+- **External Node Classifier** — resolves a node's certname and facts into its classes and data
+- **Git** — all configuration is version-controlled
 
-#### Control Plane
-- **OpenVox Server**: Compiles catalogs by combining code from modules with data from Hiera
-- **Hiera**: Provides hierarchical data lookup from node-specific overrides to global defaults
-- **Git**: All configurations are version-controlled
+**Configuration module layers**
+- **common** — foundation layer: system baseline (users, SSH, packages, monitoring)
+- **profile** — implementation layer: *how* to deploy a specific technology
+- **role** — business logic layer: *what* services a node should run
+- **monitor** — observability layer: service health checks and metrics
 
-#### Configuration Modules
-- **common module**: Foundation layer providing system baseline (users, SSH, packages, monitoring)
-- **profile module**: Implementation layer defining how to deploy specific technologies
-- **role module**: Business logic layer defining what services a node should run
-- **monitor module**: Observability layer for service health checks and metrics
-
-#### Managed Infrastructure
-- Agents pull configurations every 30 minutes (configurable)
+**Managed infrastructure**
+- Agents pull configuration every 30 minutes (configurable)
 - Services are deployed and managed declaratively
-- Prometheus exporters automatically deployed based on roles and system facts
+- Prometheus exporters are deployed automatically based on roles and system facts
 
-#### Monitoring Stack
-- **Prometheus**: Scrapes metrics from all exporters
-- **Grafana**: Displays pre-built dashboards
-- **AlertManager**: Routes alerts based on subscription tier
+**Support systems**
+- **Package repositories** — serve openvox-agent and monitoring exporters
+- **Netbird VPN** — secure node access without exposing SSH
+- **Automated system updates** — applied with safety checks
 
-#### Support Systems
-- **Package repositories**: Provide openvox-agent and monitoring exporters
-- **Netbird VPN**: Provides secure access without exposing SSH
-- **Automated system updates**: With safety checks
+</details>
 
 ---
 
-## Key Features & Managed Responsibilities
+## Managed Responsibilities
 
-The detailed feature breakdown and the managed responsibilities checklist now live in [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md). See that page for diagrams, deployment patterns, subscription tiers, operational modes, security/compliance features, monitoring coverage, and the responsibilities matrix.
+The detailed feature breakdown and managed-responsibilities checklist — deployment patterns, subscription tiers, operational modes, security/compliance coverage, and the full responsibilities matrix — live in [`docs/features-and-responsibilities.md`](./docs/features-and-responsibilities.md).
 
-## Managed Responsibilities Checklist
+### Data Ownership and Licensing
 
-The full checklist and guidance are available in the [Managed Responsibilities Checklist section](./docs/features-and-responsibilities.md#managed-responsibilities-checklist).
+LinuxAid provides true data ownership with no vendor lock-in:
 
-### 10. Data Ownership and Licensing
+- Your setup runs on **your** servers
+- Infrastructure code remains on your systems
+- Full control even after subscription ends
+- Can be hosted on-premises or in any cloud
 
-LinuxAid provides true data ownership with no vendor lock-in.
-
-#### 100% Data Ownership
-
-- **Your setup runs on your servers**
-- **Infrastructure code remains on your systems**
-- **Full control even after subscription ends**
-- **No vendor lock-in**
-- **Can be hosted on-premises or in any cloud**
-
-#### Deployment Options
-
-| Option | Description | Use Case |
-|--------|-------------|----------|
-| Single Host | OpenVox server on single Linux server | Small deployments |
+| Deployment Option | Description | Use Case |
+|---|---|---|
+| Single Host | OpenVox server on a single Linux server | Small deployments |
 | HA Cluster | Multi-node Kubernetes cluster | Production environments |
 | Cloud | AWS, Azure, GCP, or any provider | Cloud-native deployments |
 | On-Premises | Self-hosted infrastructure | Security/compliance requirements |
@@ -153,113 +179,86 @@ The Kubernetes setup is documented in KubeAid and can scale from single-host to 
 
 ## Configuration Options
 
-Under each module that you use in LinuxAid, you can see the documentation in the corresponding `REFERENCE.md` file - following the Puppet standard way of documenting modules.
+Every module used by LinuxAid documents its parameters in a `REFERENCE.md` file, following the standard Puppet module documentation convention.
 
 ### LinuxAid Modules
 
-- **[Roles](./modules/enableit/role/REFERENCE.md)**: The list of roles (software and configs currently supported). Note: some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
-
-- **[Common Settings](./modules/enableit/common/REFERENCE.md)**: The list of common configurations you can roll out for any server, regardless of its configured role.
-
-- **[Monitoring Settings](./modules/enableit/monitor/REFERENCE.md)**: Settings for monitoring
+- **[Roles](./modules/enableit/role/REFERENCE.md)** — the list of roles (software and configs currently supported). Some roles support mixing, but multiple roles cannot always be assigned to a server as they can conflict.
+- **[Common Settings](./modules/enableit/common/REFERENCE.md)** — configurations that can be rolled out to any server, regardless of its role.
+- **[Monitoring Settings](./modules/enableit/monitor/REFERENCE.md)** — settings for monitoring.
 
 ### Configuration Scopes
 
-These options can be applied in different scopes:
+Options can be applied at different scopes:
 
-#### Tags
-- Groups defined by OpenVox ENC
-- TODO: Document ENC features and custom tag support
-
-#### Facts
-- 'Knowledge about a system' - over 7,000 facts available
-- Define config for any fact, including:
-  - OS, Distribution, software versions installed
-  - Location
-  - Specific hardware configurations (RAID controller, memory, etc.)
-- Filter is adjustable if you want to use facts not enabled by default
-- See [Facts documentation](./docs/facts) for details
+- **Tags** — groups defined by the OpenVox ENC
+- **Facts** — over 7,000 available facts (OS/distribution/software versions, location, hardware configuration, etc.). See [Facts documentation](./docs/facts) for details.
 
 ### Hierarchical Data Management with Hiera
 
-LinuxAid leverages Hiera's hierarchical data lookup system for sophisticated data separation from code.
+LinuxAid leverages Hiera's hierarchical data lookup system to separate data from code:
 
-**Benefits:**
 - Same codebase across dev, staging, and production
-- Override data at appropriate specificity levels (node, location, OS, etc.)
+- Override data at the appropriate specificity level (node, location, OS, etc.)
 - Clear separation between code logic and environment-specific data
 - Similar flexibility to Helm values in Kubernetes
 
-**View the hierarchy:** See `hiera.yaml` (also available as [./hiera.yaml](./hiera.yaml)) for the full hierarchy configuration starting at the `hierarchy:` section.
+See [`hiera.yaml`](./hiera.yaml) for the full hierarchy configuration, starting at the `hierarchy:` section.
 
 ### 60+ Supported Applications
 
-LinuxAid provides out-of-the-box support for 60+ applications, including:
-- Web servers (Nginx, Apache, HAProxy)
-- Databases (MySQL, PostgreSQL, MongoDB)
-- Monitoring tools (Prometheus, Grafana)
-- Mail servers (Mailcow)
-- VPN solutions (WireGuard)
-- And many more
+LinuxAid ships out-of-the-box, production-ready support for 60+ applications, including:
 
-All with pre-configured, production-ready settings that follow best practices.
+- Web servers — Nginx, Apache, HAProxy
+- Databases — MySQL, PostgreSQL, MongoDB
+- Monitoring — Prometheus, Grafana
+- Mail servers — Mailcow
+- VPN — WireGuard
+- CI/CD — GitLab
+- ...and many more, all pre-configured to follow best practices.
 
 ---
 
 ## Proven at Enterprise Scale
 
-The architecture LinuxAid is built on has been proven at massive scale:
-
-### Scale Evidence
+The Puppet/OpenVox architecture LinuxAid is built on has been proven at massive scale:
 
 | Deployment | Scale | Evidence |
-|------------|-------|----------|
+|---|---|---|
 | Puppet Enterprise | 20,000+ nodes | Officially documented support |
 | GitHub | Thousands of nodes | 500,000+ lines of Puppet code, 200+ contributors |
 | Financial Institutions | 30,000+ servers | Major banks in highly regulated environments |
 | Enterprise Deployments | 100,000+ servers | Organizations across various industries |
 
-### Why This Architecture Scales
+**Why this architecture scales:**
+- **Declarative configuration** — define desired state, not steps
+- **Change calculation** — preview all changes before execution
+- **Heterogeneous support** — manage diverse systems with a single codebase
+- **Operational maturity** — battle-tested at scale
 
-The Puppet/OpenVox architecture provides operational scalability advantages:
-- **Declarative configuration**: Define desired state, not steps
-- **Change calculation**: Preview all changes before execution
-- **Heterogeneous support**: Manage diverse systems with single codebase
-- **Operational maturity**: Battle-tested at scale
-
-### LinuxAid Enhancements
-
-While the underlying architecture is proven, LinuxAid adds:
+**What LinuxAid adds on top:**
 - 60+ pre-configured applications
 - Built-in compliance frameworks (GDPR, CIS, NIS2)
 - Enterprise-grade monitoring out of the box
-- Years of Obmondo's expertise
+- Years of Obmondo's operational expertise
 
-### Change Confidence at Scale
-
-The change preview capability becomes essential at scale:
-- Know exactly what will change before touching production
-- Reduce 30,000 servers to 5-7 distinct changeset patterns
-- Prevent incidents from untested changes
-- Enable confident deployments with multiple contributors
-
-This operational maturity is what enables managing thousands of systems sustainably.
+At scale, change-preview capability becomes essential: it can reduce 30,000 servers to 5–7 distinct changeset patterns, preventing incidents from untested changes and enabling confident deployments with multiple contributors.
 
 ---
 
 ## High Availability
 
-LinuxAid runs under a Kubernetes setup (documented in KubeAid) which can be deployed on:
-- Single-host Linux server
-- Multi-node high availability cluster
+LinuxAid runs under a Kubernetes setup (documented in KubeAid), deployable on:
+
+- A single-host Linux server
+- A multi-node high-availability cluster
 - Any cloud provider or on-premises
 
-### Scalable Architecture
-
 The OpenVox Server is written in Clojure with workload separation:
-- **Compiler**: Builds configurations (CPU-intensive work)
-- **API Layer**: Handles agent communications
-- **Independent scaling**: Scale components based on workload
+
+- **Compiler** — builds configurations (CPU-intensive work)
+- **API Layer** — handles agent communications
+- **Independent scaling** — scale components based on workload
 
 ---
 
@@ -267,10 +266,10 @@ The OpenVox Server is written in Clojure with workload separation:
 
 LinuxAid includes built-in supply chain protection and package repository management:
 
-- **Air-Gapped Operation**: Package repository mirroring allows servers to operate securely without requiring direct internet connectivity.
-- **Automated GPG Package Signing**: Uses the `packagesign` daemon to pull RPM and Deb packages built by CI/CD pipelines, GPG-sign them automatically, and publish them to trusted repositories.
-- **GPG Git Verification**: Protects against compromised Git hosts by verifying GPG signatures on release branches before CI runners execute build pipelines.
-- **Staged Snapshot Rollouts**: Enables hardlink-based repository snapshots, allowing security updates to be staged and rolled out to server groups incrementally.
+- **Air-Gapped Operation** — package repository mirroring lets servers operate securely without direct internet connectivity
+- **Automated GPG Package Signing** — the `packagesign` daemon pulls RPM/Deb packages built by CI/CD, GPG-signs them, and publishes them to trusted repositories
+- **GPG Git Verification** — protects against compromised Git hosts by verifying GPG signatures on release branches before CI runners execute build pipelines
+- **Staged Snapshot Rollouts** — hardlink-based repository snapshots let security updates be staged and rolled out to server groups incrementally
 
 ---
 
@@ -278,29 +277,55 @@ LinuxAid includes built-in supply chain protection and package repository manage
 
 ### Adding a New Node
 
-To add a new node to LinuxAid:
-
 1. **Set certname** to `hostname.customer_id` format
-2. **Create node file** in `agents/<certname>.yaml` in customer's hiera-data repository
-3. **Assign role(s)** via `classes:` parameter to desired role(s)
-4. **Run Puppet agent**: `puppet agent -t` to apply initial configuration
+2. **Create node file** in `agents/<certname>.yaml` in the customer's hiera-data repository
+3. **Assign role(s)** via the `classes:` parameter
+4. **Run the Puppet agent**: `puppet agent -t` to apply the initial configuration
+
+Node classification is handled by the External Node Classifier (see [`puppet_enc.rb`](./puppet_enc.rb)), which resolves the certname and facts into the classes and Hiera data for that node.
+
+To connect your Git hosting platform to your Obmondo environment, see the [Git Setup guide](./docs/setup/git_setup.md).
 
 ---
 
 ## Documentation
 
-| Guide / Reference | Description |
-| ----------------- | ----------- |
-| [Getting Started](./docs/setup/linuxaid_config.md) | Initial setup and configuration |
-| [Adding Nodes & ENC](./docs/setup/enc.md) | External Node Classifier and node onboarding |
-| [OpenVAS Setup](./docs/openvas-setup-guide.md) | Greenbone vulnerability scanner deployment |
-| [IaC Comparisons](./docs/comparisons.md) | Architectural comparison vs Ansible, Terraform, Puppet |
-| [Features & Responsibilities](./docs/features-and-responsibilities.md) | Feature matrix and operational scope |
-| [ZFS Replication](./docs/guides/zfs-replication-using-sanoid.md) | Sanoid/Syncoid automated ZFS backup setup |
-| [Eyaml Secrets](./docs/guides/eyaml.md) | Encrypted Hiera data management |
-| [Netbird VPN](./docs/guides/netbird-install.md) | Secure node mesh VPN setup |
-| [Puppetboard](./docs/guides/puppetboard.md) | Web dashboard for OpenVox/Puppet |
-| [Roles Reference](./docs/roles) | Pre-configured application roles |
-| [Code of Conduct](./CODE_OF_CONDUCT.md) | DPGA-compliant community guidelines |
-| [Contributing](./CONTRIBUTING.md) | Development and contribution workflow |
+### Setup & Operations
 
+| Guide | Description |
+|---|---|
+| [Git Setup](./docs/setup/git_setup.md) | Connect your Git hosting platform to your Obmondo environment |
+| [Netbird VPN](./docs/guides/netbird-install.md) | Secure node mesh VPN setup |
+| [Eyaml Secrets](./docs/guides/eyaml.md) | Encrypted Hiera data management |
+| [Updates](./docs/guides/updates.md) | Updating Puppet modules and the Puppetfile |
+| [Release Process](./docs/guides/release.md) | Tagging and publishing a LinuxAid release |
+| [Turris Install](./docs/guides/linuxaid-turris-install.md) | Installing LinuxAid on Turris routers with Netbird |
+
+### Monitoring & Security
+
+| Guide | Description |
+|---|---|
+| [Monitoring](./docs/monitoring/monitoring.md) | Kube Prometheus stack, Grafana, and alerting |
+| [Puppetboard](./docs/guides/puppetboard.md) | Web dashboard for OpenVox/Puppet |
+| [OpenVAS Setup](./docs/openvas-setup-guide.md) | Greenbone vulnerability scanner deployment |
+| [ZFS Replication](./docs/guides/zfs-replication-using-sanoid.md) | Sanoid/Syncoid automated ZFS backup setup |
+
+### Reference
+
+| Reference | Description |
+|---|---|
+| [Roles](./docs/roles) | Pre-configured application roles |
+| [Facts](./docs/facts) | Fact-based configuration targeting |
+| [Features & Responsibilities](./docs/features-and-responsibilities.md) | Feature matrix and operational scope |
+| [IaC Comparisons](./docs/comparisons.md) | Architectural comparison vs. Ansible, Terraform, Puppet |
+| [Generating Docs](./docs/guides/generate-docs.md) | Regenerating module REFERENCE.md with Puppet Strings |
+
+---
+
+## Contributing
+
+Contributions are welcome. Please read [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the development workflow, and [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) (DPGA-compliant) before opening issues or pull requests.
+
+## License
+
+LinuxAid is licensed under the [GNU Affero General Public License v3.0](./LICENSE).
