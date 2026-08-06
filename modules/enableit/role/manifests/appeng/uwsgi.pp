@@ -3,23 +3,18 @@
 #
 # @param domains The list of fully qualified domain names. 
 #
-# @param enable_python Whether to enable Python support. Defaults to true.
-#
 # @param ssl Whether to enable SSL. Defaults to false.
 #
-# @groups services enable_python, ssl
+# @groups services ssl
 #
 # @groups networking domains
 #
 class role::appeng::uwsgi (
   Array[Stdlib::Fqdn]     $domains,
-  Boolean                 $enable_python = true,
-  Boolean                 $ssl           = false,
+  Boolean                 $ssl = false,
 ) inherits ::role::appeng {
 
-  if $enable_python {
-    contain ::profile::web::python
-  }
+  contain ::profile::web::python
 
   class { 'profile::appeng::wsgi' :
     domains     => $domains,
