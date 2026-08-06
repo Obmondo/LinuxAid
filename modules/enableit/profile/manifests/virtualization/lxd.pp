@@ -1,7 +1,5 @@
 # LXD profile
 class profile::virtualization::lxd (
-  Eit_types::IP $network                               = '10.0.3.0',
-  String $lxd_bridge                                   = 'lxdbr0',
   Hash $instances                                      = {},
   Array[Eit_types::SimpleString] $requires_filesystems = [],
 ) {
@@ -25,8 +23,8 @@ class profile::virtualization::lxd (
   }
 
   class { 'lxd':
-    network              => $network,
-    lxd_bridge           => $lxd_bridge,
+    network              => '10.0.3.0',
+    lxd_bridge           => 'lxdbr0',
     manage_firewall      => true,
     manage_logrotate     => true,
     requires_filesystems => $requires_filesystems,
