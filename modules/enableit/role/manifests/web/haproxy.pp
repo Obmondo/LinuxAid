@@ -16,13 +16,7 @@
 #
 # @param use_lets_encrypt Boolean to enable or disable Let's Encrypt. Defaults to true.
 #
-# @param mode The mode of haproxy. Defaults to 'http'.
-#
-# @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
-#
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
-#
-# @param custom_ciphers Custom SSL cipher configuration. Defaults to undef.
 #
 # @param configure The configuration method to use. Defaults to 'auto'.
 #
@@ -32,26 +26,20 @@
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
-#
-# @param service_options Additional options for the haproxy service. Defaults to an empty hash.
-#
 # @param log_compressed Boolean to enable or disable compressed logs. Defaults to true.
 #
-# @param log_dir The directory for log files. Defaults to '/var/log'.
-#
-# @param __blendable 
+# @param __blendable
 # Boolean to indicate if blending is enabled.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact
 #
-# @groups configuration manual_config, configure, service_options, version
+# @groups configuration manual_config, configure, version
 #
-# @groups networking domains, listens, listen_on, firewall
+# @groups networking domains, listens, firewall
 #
-# @groups logging log_compressed, log_dir
+# @groups logging log_compressed
 #
-# @groups mode mode, http
+# @groups mode http
 #
 class role::web::haproxy (
   Optional[String]              $manual_config          = undef,
@@ -62,8 +50,6 @@ class role::web::haproxy (
   Boolean                       $http                   = false,
   Boolean                       $use_hsts               = true,
   Boolean                       $use_lets_encrypt       = true,
-  Enum['tcp', 'http']           $mode                   = 'http',
-  Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
   Hash[Eit_types::IP,Variant[
@@ -72,10 +58,7 @@ class role::web::haproxy (
   ]]                            $firewall               = {},
   Eit_types::Version            $version                = 'latest',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
-  Enum['production','staging']  $ca_type                = 'production',
-  Hash                          $service_options        = {},
   Boolean                       $log_compressed         = true,
-  Stdlib::Absolutepath          $log_dir                = '/var/log',
   Boolean                       $__blendable,
 ) inherits role::web {
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
@@ -88,17 +71,12 @@ class role::web::haproxy (
     http               => $http,
     use_hsts           => $use_hsts,
     use_lets_encrypt   => $use_lets_encrypt,
-    mode               => $mode,
     manual_config      => $manual_config,
     version            => $version,
     acme_contact       => $acme_contact,
-    ca_type            => $ca_type,
     configure          => $configure,
-    listen_on          => $listen_on,
     encryption_ciphers => $encryption_ciphers,
     firewall           => $firewall,
-    service_options    => $service_options,
     log_compressed     => $log_compressed,
-    log_dir            => $log_dir,
   }
 }
