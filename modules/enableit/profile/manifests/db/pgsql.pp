@@ -6,14 +6,13 @@ class profile::db::pgsql (
   Eit_types::Pgsql::Mode             $mode                 = $role::db::pgsql::mode,
   Integer[0, default]                $max_connections      = $role::db::pgsql::max_connections,
   Array[Stdlib::IP::Address]         $listen_address       = $role::db::pgsql::listen_address,
-  Array[Stdlib::IP::Address]         $allow_remote_hosts   = $role::db::pgsql::allow_remote_hosts,
-  Optional[Eit_types::SimpleString]  $recovery_username    = $role::db::pgsql::recovery_username,
-  Optional[String]                   $recovery_password    = $role::db::pgsql::recovery_password,
-  Optional[Eit_types::Host]          $recovery_host        = $role::db::pgsql::recovery_host,
-  Optional[Stdlib::Port]             $recovery_port        = $role::db::pgsql::recovery_port,
-  Optional[Stdlib::Unixpath]         $recovery_trigger     = $role::db::pgsql::recovery_trigger,
-  Optional[Eit_types::SimpleString]  $replication_username = $role::db::pgsql::replication_username,
-  Optional[String]                   $replication_password = $role::db::pgsql::replication_password,
+  Optional[Eit_types::SimpleString]  $recovery_username    = $role::db::pgsql::mode::standby::recovery_username,
+  Optional[String]                   $recovery_password    = $role::db::pgsql::mode::standby::recovery_password,
+  Optional[Eit_types::Host]          $recovery_host        = $role::db::pgsql::mode::standby::recovery_host,
+  Optional[Stdlib::Port]             $recovery_port        = $role::db::pgsql::mode::standby::recovery_port,
+  Optional[Stdlib::Unixpath]         $recovery_trigger     = $role::db::pgsql::mode::standby::recovery_trigger,
+  Optional[Eit_types::SimpleString]  $replication_username = $role::db::pgsql::mode::primary::replication_username,
+  Optional[String]                   $replication_password = $role::db::pgsql::mode::primary::replication_password,
   Optional[Eit_types::SimpleString]  $application_name     = $role::db::pgsql::application_name,
   Optional[Eit_types::Pgsql::Pg_hba] $pg_hba_rule          = $role::db::pgsql::pg_hba_rule,
   Optional[Boolean]                  $backup               = $role::db::pgsql::backup,
@@ -22,25 +21,6 @@ class profile::db::pgsql (
   # Backup
   if $backup {
     contain ::common::backup::db::pgsql
-  }
-
-  $allow_remote_hosts.each |$host| {
-    # Firewall
-    firewall_multi { "000 allow pgsql connections from ${host}":
-      proto       => 'tcp',
-      dport       => 5432,
-      destination => $listen_address,
-      source      => $host,
-      jump        => 'accept',
-    }
-
-    postgresql::server::pg_hba_rule { "allow outside TCP access from ${host}":
-      type        => 'host',
-      user        => 'all',
-      database    => 'all',
-      address     => $host,
-      auth_method => 'md5',
-    }
   }
 
   $_listen_address = $listen_address.map |$addr| {
