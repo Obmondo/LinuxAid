@@ -1,5 +1,14 @@
 # MongoDB class
-class profile::db::mongodb {
+class profile::db::mongodb (
+  Boolean                        $create_admin            = $role::db::mongodb::create_admin,
+  Optional[String]               $admin_username          = $role::db::mongodb::create_admin::admin_username,
+  Optional[Eit_types::Password]  $admin_password          = $role::db::mongodb::create_admin::admin_password,
+  Array[String]                  $admin_roles             = $role::db::mongodb::create_admin::admin_roles,
+  Boolean                        $admin_store_credentials = $role::db::mongodb::create_admin::admin_store_credentials,
+  Boolean                        $ssl                     = $role::db::mongodb::ssl,
+  Optional[Stdlib::Absolutepath] $ssl_ca                  = $role::db::mongodb::ssl::ca,
+  Optional[Stdlib::Absolutepath] $ssl_key                 = $role::db::mongodb::ssl::key,
+) {
 
   $_server_settings = {
     manage_pidfile  => false,
@@ -34,14 +43,14 @@ class profile::db::mongodb {
     storage_engine  => 'wiredTiger',
     set_parameter   => undef,
     restart         => true,
-    create_admin    => false,
-    admin_username  => undef,
-    admin_password  => undef,
-    admin_roles     => ['root'],
-    store_creds     => false,
-    ssl             => false,
-    ssl_ca          => undef,
-    ssl_key         => undef,
+    create_admin    => $create_admin,
+    admin_username  => $admin_username,
+    admin_password  => $admin_password,
+    admin_roles     => $admin_roles,
+    store_creds     => $admin_store_credentials,
+    ssl             => $ssl,
+    ssl_ca          => $ssl_ca,
+    ssl_key         => $ssl_key,
   }
 
   # Need to force this due to https://tickets.puppetlabs.com/browse/MODULES-5274

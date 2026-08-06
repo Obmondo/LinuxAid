@@ -19,6 +19,9 @@ class role::db::opensearch (
   Boolean $expose    = false,
 ) inherits ::role::db {
 
+  # contained before the profile below, which reads its parameters
+  contain role::db::opensearch::ssl
+
   contain profile::db::opensearch
 
   if $cerebro {
@@ -27,7 +30,6 @@ class role::db::opensearch (
 
   # Opensearch Dashboard
   if $dashboard {
-    contain role::db::opensearch::ssl
     contain profile::db::opensearch::dashboard
   }
 }
