@@ -1,24 +1,18 @@
 ---
 role::package_management::repo::manage: true
 role::package_management::repo::snapshot: true
-role::package_management::repo::snapshot_tag: 'v3.1.5'
-role::package_management::repo::snapshot_retention_days: 60
+role::package_management::repo::snapshot::image_tag: 'v3.1.5'
+role::package_management::repo::snapshot::retention_days: 60
 role::package_management::repo::basedir: '/var/cache/packagesign'
-role::package_management::repo::enable: true
 role::package_management::repo::weekday: 'Sun'
 role::package_management::repo::user: root
-role::package_management::repo::repodir: /var/lib/repository
 role::package_management::repo::ssl: false
-role::package_management::repo::ssl_cert:
-role::package_management::repo::ssl_key:
-role::package_management::repo::yum: {}
-role::package_management::repo::apt: {}
 role::package_management::repo::locations: {}
 role::package_management::repo::registry_path: 'ghcr.io/obmondo/dockerfiles'
 role::package_management::repo::packagesign: true
 role::package_management::repo::provider:
-role::package_management::repo::script_tag: 'v3.1.5'
-role::package_management::repo::signing_password:
+role::package_management::repo::packagesign::script_tag: 'v3.1.5'
+role::package_management::repo::packagesign::signing_password:
 role::package_management::repo::server_tag:
 role::package_management::repo::nginx_tag: '1.27.0'
 role::package_management::repo::nginx_path: ghcr.io/obmondo/dockerfiles/repository-mirror
