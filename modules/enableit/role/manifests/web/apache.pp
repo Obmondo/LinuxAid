@@ -5,8 +5,6 @@
 #
 # @param http Whether to enable HTTP. Defaults to true.
 #
-# @param manage_haproxy Whether to manage HAProxy. Defaults to false.
-#
 # @param ciphers The ciphers to use for SSL. Defaults to 'default'.
 #
 # @param modules The list of Apache modules to enable. Defaults to [].
@@ -17,7 +15,7 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups connection https, http, manage_haproxy
+# @groups connection https, http
 #
 # @groups security ciphers
 #
@@ -28,7 +26,6 @@
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,
-  Boolean                     $manage_haproxy = false,
   Enum['default', 'insecure'] $ciphers        = 'default',
   Array                       $modules        = [],
 
@@ -40,10 +37,6 @@ class role::web::apache (
     'vhosts.*.ssl_cert',
   ]
 ) inherits role::web {
-  if $manage_haproxy {
-    contain role::web::haproxy
-  }
-
   confine(!$https, !$http, size($vhosts) == 0, 'Need https or http to be true or else you need to define vhosts')
 
   $vhosts.each | $vhost_name, $params | {
