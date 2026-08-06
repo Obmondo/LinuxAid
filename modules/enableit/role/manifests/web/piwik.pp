@@ -23,7 +23,7 @@ class role::web::piwik (
 
 ) inherits ::role::web {
 
-  class { '::role::appeng::phpfpm': }
+  class { '::role::appeng::mod_php': }
 
   class { '::role::db::mysql': }
 
