@@ -1,8 +1,8 @@
 # PHPFPm profile
 class profile::appeng::phpfpm (
   Boolean                             $ssl                  = false,
-  Optional[String]                    $ssl_cert             = $::role::appeng::phpfpm::ssl_cert,
-  Optional[String]                    $ssl_key              = $::role::appeng::phpfpm::ssl_key,
+  Optional[String]                    $ssl_cert             = $::role::appeng::phpfpm::ssl::cert,
+  Optional[String]                    $ssl_key              = $::role::appeng::phpfpm::ssl::key,
   Boolean                             $mysql                = false,
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,
