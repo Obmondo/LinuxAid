@@ -5,21 +5,16 @@
 #
 # @param ssl Specifies whether to enable SSL. Defaults to false.
 #
-# @param enable_python Specifies whether to enable Python support. Defaults to true.
-#
-# @groups application domains, enable_python
+# @groups application domains
 #
 # @groups security ssl
 #
 class role::appeng::mod_wsgi (
   Array[Stdlib::Fqdn] $domains,
-  Boolean              $ssl         = false,
-  Boolean              $enable_python = true,
+  Boolean             $ssl = false,
 ) inherits ::role::appeng {
 
-  if $enable_python {
-    contain ::profile::web::python
-  }
+  contain ::profile::web::python
 
   class { 'profile::appeng::wsgi':
     domains     => $domains,
