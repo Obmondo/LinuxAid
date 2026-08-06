@@ -23,8 +23,6 @@
 #
 # @param extra_public_ports An array of extra public ports to expose.
 #
-# @param etcd_initial_cluster The initial cluster for etcd. Defaults to undef.
-#
 # @param etcd_peers An array of etcd peer nodes. Defaults to undef.
 #
 # @param worker_peers An array of worker peer nodes. Defaults to undef.
@@ -45,27 +43,11 @@
 #
 # @param etcdpeer_key The key for etcd peers. Defaults to undef.
 #
-# @param etcd_ca_crt The CA certificate for etcd. Defaults to undef.
-#
-# @param etcd_ca_key The CA key for etcd. Defaults to undef.
-#
 # @param etcdclient_crt The certificate for the etcd client. Defaults to undef.
 #
 # @param etcdclient_key The key for the etcd client. Defaults to undef.
 #
-# @param kubernetes_ca_crt The CA certificate for Kubernetes. Defaults to undef.
-#
-# @param kubernetes_ca_key The CA key for Kubernetes. Defaults to undef.
-#
-# @param sa_pub The public key for the service account. Defaults to undef.
-#
-# @param sa_key The private key for the service account. Defaults to undef.
-#
 # @param apiserver_cert_extra_sans An array of extra Subject Alternative Names for the API server certificate. Defaults to an empty array.
-#
-# @param front_proxy_ca_crt The CA certificate for the front proxy. Defaults to undef.
-#
-# @param front_proxy_ca_key The CA key for the front proxy. Defaults to undef.
 #
 # @param docker_storage_driver The storage driver for Docker. Defaults to undef.
 #
@@ -81,19 +63,19 @@
 #
 # @groups identity role, discovery_token_hash, token
 #
-# @groups networking controller_address, pod_cidr, apiserver_extra_args, extra_public_ports, etcd_initial_cluster
+# @groups networking controller_address, pod_cidr, apiserver_extra_args, extra_public_ports
 #
-# @groups security etcd_peers, allow_k8s_api, etcdserver_crt, etcdserver_key, etcdpeer_crt, etcdpeer_key, etcd_ca_crt, etcd_ca_key, etcdclient_crt, etcdclient_key, kubernetes_ca_crt, kubernetes_ca_key
+# @groups security etcd_peers, allow_k8s_api, etcdserver_crt, etcdserver_key, etcdpeer_crt, etcdpeer_key, etcdclient_crt, etcdclient_key
 #
 # @groups keycloak keycloak_oidc_domain, keycloak_oidc_client_id, keycloak_oidc_groups_claim
 #
-# @groups master expose_https_on_master, expose_http_on_master, sa_pub, sa_key, apiserver_cert_extra_sans, front_proxy_ca_crt, front_proxy_ca_key
+# @groups master expose_https_on_master, expose_http_on_master, apiserver_cert_extra_sans
 #
 # @groups container docker_storage_driver, containerd_version, image_repository, containerd_install_method, containerd_snapshotter
 #
 # @groups dashboard install_dashboard, version, worker_peers, encrypt_params
 #
-# @encrypt_params discovery_token_hash, token, etcdserver_key, etcdpeer_key, etcd_ca_key, etcdclient_key, kubernetes_ca_key, sa_key, front_proxy_ca_key
+# @encrypt_params discovery_token_hash, token, etcdserver_key, etcdpeer_key, etcdclient_key
 #
 class role::virtualization::kubernetes (
   Enum['controller','worker'] $role,
@@ -107,7 +89,6 @@ class role::virtualization::kubernetes (
   Boolean                     $expose_http_on_master      = true,
   Array                       $apiserver_extra_args       = [],
   Array[Stdlib::Port]         $extra_public_ports         = [],
-  Optional[String]            $etcd_initial_cluster       = undef,
   Optional[Array]             $etcd_peers                 = undef,
   Optional[Array]             $worker_peers               = undef,
   Optional[Stdlib::Fqdn]      $keycloak_oidc_domain       = undef,
@@ -117,17 +98,9 @@ class role::virtualization::kubernetes (
   Optional[String]            $etcdserver_key             = undef,
   Optional[String]            $etcdpeer_crt               = undef,
   Optional[String]            $etcdpeer_key               = undef,
-  Optional[String]            $etcd_ca_crt                = undef,
-  Optional[String]            $etcd_ca_key                = undef,
   Optional[String]            $etcdclient_crt             = undef,
   Optional[String]            $etcdclient_key             = undef,
-  Optional[String]            $kubernetes_ca_crt          = undef,
-  Optional[String]            $kubernetes_ca_key          = undef,
-  Optional[String]            $sa_pub                     = undef,
-  Optional[String]            $sa_key                     = undef,
   Optional[Array]             $apiserver_cert_extra_sans  = [],
-  Optional[String]            $front_proxy_ca_crt         = undef,
-  Optional[String]            $front_proxy_ca_key         = undef,
   Optional[String]            $docker_storage_driver      = undef,
   Optional[String]            $containerd_version         = '1.6.20-1',
   Optional[String]            $image_repository           = 'registry.k8s.io',
@@ -141,26 +114,25 @@ class role::virtualization::kubernetes (
     'token',
     'etcdserver_key',
     'etcdpeer_key',
-    'etcd_ca_key',
     'etcdclient_key',
-    'kubernetes_ca_key',
-    'sa_key',
-    'front_proxy_ca_key',
   ]
 
 ) inherits role::virtualization {
 
+  # contained before the confines below, which read its parameters
+  contain role::virtualization::kubernetes::role::controller
+
   if ($role == 'controller') {
-    confine(!$etcd_initial_cluster, 'Kubernetes controller missing etdc_initial_cluster')
+    confine(!$role::virtualization::kubernetes::role::controller::etcd_initial_cluster, 'Kubernetes controller missing etdc_initial_cluster')
     confine(!$discovery_token_hash, 'Kubernetes controller missing discovery_token_hash')
-    confine(!$etcd_ca_crt, 'Kubernetes controller missing etdc_ca_crt')
-    confine(!$etcd_ca_key, 'Kubernetes controller missing etcd_ca_key')
-    confine(!$kubernetes_ca_crt, 'Kubernetes controller missing kubernetes_ca_crt')
-    confine(!$kubernetes_ca_key, 'Kubernetes controller missing kubernetes_ca_key')
-    confine(!$front_proxy_ca_crt, 'Kubernetes controller missing front_proxy_ca_crt')
-    confine(!$front_proxy_ca_key, 'Kubernetes controller missing front_proxy_ca_key')
-    confine(!$sa_pub, 'Kubernetes controller missing sa_pub')
-    confine(!$sa_key, 'Kubernetes controller missing sa_key')
+    confine(!$role::virtualization::kubernetes::role::controller::etcd_ca_crt, 'Kubernetes controller missing etdc_ca_crt')
+    confine(!$role::virtualization::kubernetes::role::controller::etcd_ca_key, 'Kubernetes controller missing etcd_ca_key')
+    confine(!$role::virtualization::kubernetes::role::controller::kubernetes_ca_crt, 'Kubernetes controller missing kubernetes_ca_crt')
+    confine(!$role::virtualization::kubernetes::role::controller::kubernetes_ca_key, 'Kubernetes controller missing kubernetes_ca_key')
+    confine(!$role::virtualization::kubernetes::role::controller::front_proxy_ca_crt, 'Kubernetes controller missing front_proxy_ca_crt')
+    confine(!$role::virtualization::kubernetes::role::controller::front_proxy_ca_key, 'Kubernetes controller missing front_proxy_ca_key')
+    confine(!$role::virtualization::kubernetes::role::controller::sa_pub, 'Kubernetes controller missing sa_pub')
+    confine(!$role::virtualization::kubernetes::role::controller::sa_key, 'Kubernetes controller missing sa_key')
   }
 
   confine($facts.dig('os', 'family') != 'Debian', 'Only Debian-based distributions are supported')
