@@ -10,14 +10,13 @@ class profile::db::elasticsearch::kibana (
   Boolean                      $oss              = $role::db::elasticsearch::oss,
   Boolean                      $expose           = $role::db::elasticsearch::expose,
   Boolean                      $ssl              = $role::db::elasticsearch::ssl,
-  Stdlib::Fqdn                 $host             = $role::db::elasticsearch::host,
   Eit_types::Version           $version          = $role::db::elasticsearch::version,
-  Optional[String]             $ssl_combined_pem = $role::db::elasticsearch::ssl_combined_pem,
-  Optional[Hash]               $elasticsearch    = $role::db::elasticsearch::kibana_elasticsearch,
+  Optional[String]             $ssl_combined_pem = $role::db::elasticsearch::kibana::ssl_combined_pem,
+  Optional[Hash]               $elasticsearch    = $role::db::elasticsearch::kibana::elasticsearch,
   Array[Stdlib::Host]          $nodes            = $role::db::elasticsearch::nodes,
   Optional[String]             $ca_cert          = $role::db::elasticsearch::ca_cert,
-  Optional[String]             $kibana_username  = $role::db::elasticsearch::kibana_username,
-  Optional[String]             $kibana_password  = $role::db::elasticsearch::kibana_password,
+  Optional[String]             $kibana_username  = $role::db::elasticsearch::kibana::username,
+  Optional[String]             $kibana_password  = $role::db::elasticsearch::kibana::password,
 ) {
   if $expose {
     if $ssl {
