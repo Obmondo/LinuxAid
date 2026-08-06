@@ -3,10 +3,6 @@
 #
 # @param ssl Enable SSL support. Defaults to false.
 #
-# @param ssl_cert The path to the SSL certificate file. Defaults to undef.
-#
-# @param ssl_key The path to the SSL key file. Defaults to undef.
-#
 # @param mysql Enable MySQL support. Defaults to false.
 #
 # @param mssql Enable MS SQL support. Defaults to false.
@@ -35,9 +31,7 @@
 #
 # @param virtualhosts A hash of virtual host configurations. Defaults to an empty hash.
 #
-# @param encrypt_params The list of params, which needs to be encrypted
-#
-# @groups ssl ssl, ssl_cert, ssl_key
+# @groups ssl ssl
 #
 # @groups database mysql, mssql
 #
@@ -47,14 +41,10 @@
 #
 # @groups cache opcodecache, modules
 #
-# @groups config version, memory_limit, encrypt_params
-#
-# @encrypt_params ssl_cert, ssl_key
+# @groups config version, memory_limit
 #
 class role::appeng::phpfpm (
   Boolean                             $ssl                  = false,
-  Optional[String]                    $ssl_cert             = undef,
-  Optional[String]                    $ssl_key              = undef,
   Boolean                             $mysql                = false,
   Boolean                             $mssql                = false,
   Boolean                             $catch_workers_output = false,
@@ -72,23 +62,22 @@ class role::appeng::phpfpm (
     ensure        => Boolean,
     document_root => Stdlib::Unixpath,
   }]]                                 $virtualhosts         = {},
-  Eit_types::Encrypt::Params          $encrypt_params            = [
-    'ssl_cert',
-    'ssl_key',
-  ],
 ) inherits ::role::appeng {
+
+  # contained before the confine and the profile below, which read its parameters
+  contain role::appeng::phpfpm::ssl
 
   confine($opcodecache == 'opcache',
     $version and $version !~ /^7/,
     "${opcodecache} is only support with PHP 7.0"
   )
 
-  confine($ssl, !($ssl_key and $ssl_cert), 'if SSL is enabled, ssl_key and ssl_cert is required')
+  confine($ssl, !($role::appeng::phpfpm::ssl::key and $role::appeng::phpfpm::ssl::cert), 'if SSL is enabled, ssl_key and ssl_cert is required')
 
   class { '::profile::appeng::phpfpm' :
     ssl                  => $ssl,
-    ssl_key              => $ssl_key,
-    ssl_cert             => $ssl_cert,
+    ssl_key              => $role::appeng::phpfpm::ssl::key,
+    ssl_cert             => $role::appeng::phpfpm::ssl::cert,
     mysql                => $mysql,
     mssql                => $mssql,
     catch_workers_output => $catch_workers_output,
