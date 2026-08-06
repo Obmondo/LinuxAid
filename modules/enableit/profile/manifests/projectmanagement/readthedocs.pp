@@ -1,13 +1,6 @@
 # Read The Docs
 class profile::projectmanagement::readthedocs (
-  Eit_types::URL          $upstream_git_repo  = $::role::projectmanagement::readthedocs::upstream_git_repo,
-  Eit_types::SimpleString $revision           = $::role::projectmanagement::readthedocs::revision,
-  Eit_types::Host         $bind               = $::role::projectmanagement::readthedocs::bind,
-  Stdlib::Port            $port               = $::role::projectmanagement::readthedocs::port,
-  String                  $ssl_combined_pem   = $::role::projectmanagement::readthedocs::ssl_combined_pem,
-  Boolean                 $manage_haproxy     = $::role::projectmanagement::readthedocs::manage_haproxy,
-  Stdlib::Fqdn            $public_domainname  = $::role::projectmanagement::readthedocs::public_domainname,
-
+  String $ssl_combined_pem = $::role::projectmanagement::readthedocs::ssl_combined_pem,
 ) inherits ::profile {
 
   $_os_packages = [
@@ -21,6 +14,7 @@ class profile::projectmanagement::readthedocs (
   $_user_home = '/var/lib/readthedocs'
   $_repo_dir = "${_user_home}/repo"
   $_virtualenv_dir = "${_user_home}/virtualenv"
+  $_port = 8000
 
   package::install($_os_packages)
 
@@ -40,9 +34,9 @@ class profile::projectmanagement::readthedocs (
     ensure   => present,
     name     => $_repo_dir,
     provider => 'git',
-    source   => $upstream_git_repo,
+    source   => 'https://github.com/rtfd/readthedocs.org.git',
     user     => $_user,
-    revision => $revision,
+    revision => '2.7.0',
     force    => true,
     require  => [
       Package['git'],
@@ -147,7 +141,7 @@ class profile::projectmanagement::readthedocs (
     [Service]
     EnvironmentFile=-/etc/default/readthedocs
     WorkingDirectory=${_repo_dir}
-    ExecStart=/usr/local/bin/with_virtualenv.sh ${_virtualenv_dir} 'python manage.py runserver ${bind}:${port}'
+    ExecStart=/usr/local/bin/with_virtualenv.sh ${_virtualenv_dir} 'python manage.py runserver 0.0.0.0:${_port}'
     Restart=always
     RestartSec=30s
 
@@ -181,40 +175,38 @@ class profile::projectmanagement::readthedocs (
       ;
   }
 
-  if $manage_haproxy {
-    class { '::eit_haproxy::auto_config' :
-      encryption_ciphers => 'strict',
-      redirect_http      => true,
-      proxies            => {
-        readthedocs_http => {
-          letsencrypt   => false,
-          mode          => 'http',
-          binds         => {
-            https_0_0_0_0_80  => {
-              'ports'     => [80],
-              'ssl'       => false,
-              'ipaddress' => '0.0.0.0',
-            },
-            https_0_0_0_0_443 => {
-              'ports'     => [443],
-              'ssl'       => true,
-              'options'   => 'crt /etc/ssl/private/readthedocs/combined.pem',
-              'ipaddress' => '0.0.0.0',
-            },
+  class { '::eit_haproxy::auto_config' :
+    encryption_ciphers => 'strict',
+    redirect_http      => true,
+    proxies            => {
+      readthedocs_http => {
+        letsencrypt   => false,
+        mode          => 'http',
+        binds         => {
+          https_0_0_0_0_80  => {
+            'ports'     => [80],
+            'ssl'       => false,
+            'ipaddress' => '0.0.0.0',
           },
-          sites         => {
-            readthedocs_http => {
-                servers         => [
-                  "127.0.0.1:${port}",
-                ],
-                default_backend => true,
-            },
+          https_0_0_0_0_443 => {
+            'ports'     => [443],
+            'ssl'       => true,
+            'options'   => 'crt /etc/ssl/private/readthedocs/combined.pem',
+            'ipaddress' => '0.0.0.0',
           },
-          extra_options => {
-            option => ['forwardfor'],
-          }
+        },
+        sites         => {
+          readthedocs_http => {
+              servers         => [
+                "127.0.0.1:${_port}",
+              ],
+              default_backend => true,
+          },
+        },
+        extra_options => {
+          option => ['forwardfor'],
         }
-      },
-    }
+      }
+    },
   }
 }
