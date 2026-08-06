@@ -1,4 +1,0 @@
----
-role::db::opensearch::host: "%{facts.networking.hostname}"
-role::db::opensearch::nodes:
-  - "%{facts.network_primary_ip}"
