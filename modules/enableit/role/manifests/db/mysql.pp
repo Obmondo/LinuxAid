@@ -13,21 +13,7 @@
 #
 # @param binlog Boolean indicating whether to enable binary logging. Defaults to true.
 #
-# @param binlog_format The format for binary logs. Defaults to 'MIXED'.
-#
 # @param local_tcp_root_access Boolean indicating whether to allow local TCP root access. Defaults to false.
-#
-# @param binlog_dir The directory for binary logs. Defaults to "${datadir}/binlog/${facts['networking']['fqdn']}".
-#
-# @param binlog_max_size_bytes The maximum size of binary log files in bytes. Defaults to 1 GB.
-#
-# @param binlog_sync The binary log sync configuration. Defaults to 1.
-#
-# @param binlog_backup_target The target for binlog backups. Defaults to undef.
-#
-# @param binlog_backup_target_dir The directory for binlog backups. Defaults to undef.
-#
-# @param binlog_backup_interval The interval for binlog backups. Defaults to undef.
 #
 # @param override_options Custom MySQL variable overrides. Defaults to an empty hash.
 #
@@ -37,7 +23,7 @@
 #
 # @groups data_configuration datadir, memlimit, override_options
 #
-# @groups binlog_configuration binlog, binlog_format, binlog_dir, binlog_max_size_bytes, binlog_sync, binlog_backup_target, binlog_backup_target_dir, binlog_backup_interval
+# @groups binlog_configuration binlog
 #
 # @groups access_control access_mysql_from, mysql_restart_on_config_change
 #
@@ -50,27 +36,23 @@ class role::db::mysql (
   Boolean                               $mysql_restart_on_config_change = false,
   Boolean                               $backup                         = true,
   Boolean                               $binlog                         = true,
-  Enum['MIXED', 'ROW', 'STATEMENT']     $binlog_format                  = 'MIXED',
   Boolean                               $local_tcp_root_access          = false,
-  Optional[Stdlib::Absolutepath]        $binlog_dir                     = "${datadir}/binlog/${facts['networking']['fqdn']}",
-  Optional[Integer[4096, 1073741824]]   $binlog_max_size_bytes          = 1*1024*1024*1024, # 1 GB
-  Optional[Integer[0, 4294967295]]      $binlog_sync                    = 1,
-  Optional[Eit_types::CustomerHost]     $binlog_backup_target           = undef,
-  Optional[Stdlib::Absolutepath]        $binlog_backup_target_dir       = undef,
-  Optional[Eit_types::TimeSpan]         $binlog_backup_interval         = undef,
   Hash[Eit_types::Mysql_Variable, Data] $override_options               = {},
   Array[Stdlib::IP::Address]            $access_mysql_from              = ['0.0.0.0/0'],
 ) inherits ::role::db {
 
-  confine($binlog, !$binlog_max_size_bytes, '`binlog_max_size_bytes` is needed for `binlog`')
-  confine($binlog, $binlog_sync == undef, '`binlog_sync` is needed for `binlog`')
-  confine($binlog, $binlog_backup_interval, !$binlog_backup_target, '`binlog_sync_target` must be set if `binlog_sync_interval` is defined')
-  confine($binlog, !$binlog_backup_interval, $binlog_backup_target, '`binlog_sync_interval` must be set if `binlog_sync_target` is defined')
+  # contained before the confines and the profile below, which read its parameters
+  contain role::db::mysql::binlog
+
+  confine($binlog, !$role::db::mysql::binlog::max_size_bytes, '`binlog_max_size_bytes` is needed for `binlog`')
+  confine($binlog, $role::db::mysql::binlog::sync == undef, '`binlog_sync` is needed for `binlog`')
+  confine($binlog, $role::db::mysql::binlog::backup_interval, !$role::db::mysql::binlog::backup_target, '`binlog_sync_target` must be set if `binlog_sync_interval` is defined')
+  confine($binlog, !$role::db::mysql::binlog::backup_interval, $role::db::mysql::binlog::backup_target, '`binlog_sync_interval` must be set if `binlog_sync_target` is defined')
 
   #we only handle backup if they are on lvm disks for now -
   #FIXME : handle mysql on /root - using regular mysqldump at night
   #FIXME: confirm that mysqld_datadir_on_root actually checks that the datadir IS an lvm device !
-  class { '::profile::mysql':
+  class { '::profile::db::mysql':
     datadir                        => $datadir,
     backup                         => $backup,
     root_password                  => $root_password,
@@ -78,20 +60,21 @@ class role::db::mysql (
     mysql_restart_on_config_change => $mysql_restart_on_config_change,
     local_tcp_root_access          => $local_tcp_root_access,
     binlog                         => $binlog,
-    binlog_dir                     => $binlog_dir,
-    binlog_max_size_bytes          => $binlog_max_size_bytes,
-    binlog_sync                    => $binlog_sync,
+    binlog_format                  => $role::db::mysql::binlog::format,
+    binlog_dir                     => $role::db::mysql::binlog::dir,
+    binlog_max_size_bytes          => $role::db::mysql::binlog::max_size_bytes,
+    binlog_sync                    => $role::db::mysql::binlog::sync,
     override_options               => $override_options,
     access_mysql_from              => $access_mysql_from,
   }
 
   # FIXME: binlog backup not implemented
-  if $binlog_backup_target {
+  if $role::db::mysql::binlog::backup_target {
     @@commmon::backup::pull::backup { "pull mysql binlog from ${facts['networking']['fqdn']}":
       from        => $facts['networking']['fqdn'],
-      to          => $binlog_backup_target,
+      to          => $role::db::mysql::binlog::backup_target,
       source      => 1,
-      destination => $binlog_backup_target_dir,
+      destination => $role::db::mysql::binlog::backup_target_dir,
     }
   }
 }
