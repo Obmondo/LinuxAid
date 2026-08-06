@@ -53,19 +53,11 @@
 #
 # @param slurm_policy Rules governing resource allocation in SLURM clusters.
 #
-# @param db_buffer_pool_size Size of memory pool for database caching operations.
-#
-# @param slurmctldport Port for slurm slurmctld.
-#
-# @param metrics Optional metrics array.
-#
-# @param db_log_file_size Maximum size allocated for database log files.
-#
 # @groups authentication munge_key, jwt_key, encrypt_params
 #
 # @groups daemon_control slurmctld, slurmdbd, slurmd
 #
-# @groups network interface, node_cidrs, accounting_storage_host, control_machine, metrics
+# @groups network interface, node_cidrs, accounting_storage_host, control_machine
 #
 # @groups version_control slurm_version, munge_version
 #
@@ -73,9 +65,7 @@
 #
 # @groups management enable, noop_value
 #
-# @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy, slurmctldport
-#
-# @groups db db_buffer_pool_size, db_log_file_size
+# @groups slurm slurm_web, slurm_agent, slurm_gateway, slurm_policy
 #
 # @encrypt_params munge_key, jwt_key, slurm_gateway.*.bind_password
 #
@@ -98,8 +88,6 @@ class role::computing::slurm (
   Hash                                $nodes                   = {},
   Hash                                $partitions              = {},
   String                              $srun_port_range         = '50000-53000',
-  Stdlib::Port                        $slurmctldport           = 6817,
-  Eit_types::Slurm::Metrics           $metrics                 = [],
   Stdlib::Host                        $accounting_storage_host = $facts['networking']['hostname'],
   Stdlib::Host                        $control_machine         = $facts['networking']['hostname'],
   Integer[0,2]                        $return_to_service       = 2,
@@ -110,11 +98,11 @@ class role::computing::slurm (
   Optional[Eit_types::Slurm::Agent]   $slurm_agent             = undef,
   Optional[Eit_types::Slurm::Gateway] $slurm_gateway           = undef,
   Optional[Eit_types::Slurm::Policy]  $slurm_policy            = undef,
-  String                              $db_buffer_pool_size     = '256M',
-  String                              $db_log_file_size        = '24M',
   Eit_types::Encrypt::Params          $encrypt_params          = ['munge_key', 'jwt_key','slurm_gateway.*.bind_password']
 
 ) inherits ::role::computing {
+  contain role::computing::slurm::slurmctld
+  contain role::computing::slurm::slurmdbd
   contain 'profile::computing::slurm'
 
   if $slurm_web {
