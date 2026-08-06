@@ -11,10 +11,6 @@
 #
 # @param kibana Include Kibana support. Defaults to false.
 #
-# @param cache_only_node Indicator for whether this is a cache-only node. Defaults to false.
-#
-# @param host The host for Elasticsearch. No default provided.
-#
 # @param access_9200_port_from A list of hosts allowed to access the 9200 port. Defaults to an empty array.
 #
 # @param plugins A hash of plugins to install. Defaults to an empty hash.
@@ -35,11 +31,7 @@
 #
 # @param expose Expose the Elasticsearch service. Defaults to false.
 #
-# @param ssl_combined_pem Optional combined PEM file for SSL. Defaults to undef.
-#
 # @param secrets Optional hash of secrets. Defaults to undef.
-#
-# @param kibana_elasticsearch Optional settings for Kibana's Elasticsearch connection. Defaults to undef.
 #
 # @param http Optional HTTP settings. Defaults to undef.
 #
@@ -47,25 +39,17 @@
 #
 # @param ca_cert Optional CA certificate for SSL. Defaults to undef.
 #
-# @param kibana_username Optional username for Kibana. Defaults to undef.
-#
-# @param kibana_password Optional password for Kibana. Defaults to undef.
-#
-# @param encrypt_params The list of params, which needs to be encrypted
-#
 # @groups memory es_heap_size_pct, es_heap_size_max_gb
 #
-# @groups components cerebro, kibana, cache_only_node
+# @groups components cerebro, kibana
 #
-# @groups network host, access_9200_port_from, nodes
+# @groups network access_9200_port_from, nodes
 #
 # @groups storage datadir, curate_filters
 #
-# @groups security_options security, ssl, ssl_combined_pem, ca_cert
+# @groups security_options security, ssl, ca_cert
 #
-# @groups configuration version, cluster_name, plugins, oss, expose, secrets, kibana_elasticsearch, http, transport, kibana_username, kibana_password, encrypt_params
-#
-# @encrypt_params kibana_username, kibana_password
+# @groups configuration version, cluster_name, plugins, oss, expose, secrets, http, transport
 #
 class role::db::elasticsearch (
   Eit_types::Version                  $version               = '7.10.2',
@@ -73,8 +57,6 @@ class role::db::elasticsearch (
   Variant[Integer[1,31], Float[1,31]] $es_heap_size_max_gb   = 31,
   Boolean                             $cerebro               = false,
   Boolean                             $kibana                = false,
-  Boolean                             $cache_only_node       = false,
-  Stdlib::Fqdn                        $host,
   Optional[Array[Stdlib::Host]]       $access_9200_port_from = [],
   Optional[Hash]                      $plugins               = {},
   Array[Stdlib::Host]                 $nodes,
@@ -85,18 +67,10 @@ class role::db::elasticsearch (
   Boolean                             $ssl                   = false,
   Boolean                             $oss                   = true,
   Boolean                             $expose                = false,
-  Optional[String]                    $ssl_combined_pem      = undef,
   Optional[Hash]                      $secrets               = undef,
-  Optional[Hash]                      $kibana_elasticsearch  = undef,
   Optional[String]                    $http                  = undef,
   Optional[String]                    $transport             = undef,
   Optional[String]                    $ca_cert               = undef,
-  Optional[String]                    $kibana_username       = undef,
-  Optional[String]                    $kibana_password       = undef,
-  Eit_types::Encrypt::Params          $encrypt_params             = [
-    'kibana_username',
-    'kibana_password',
-  ],
 ) inherits ::role::db {
 
   confine($facts['os']['family'] != 'Debian', 'Only Debian-based distributions are supported')
@@ -110,6 +84,7 @@ class role::db::elasticsearch (
 
   # Kibana
   if $kibana {
+    contain role::db::elasticsearch::kibana
     contain profile::db::elasticsearch::kibana
   }
 }
