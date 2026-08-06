@@ -2,24 +2,21 @@
 class profile::mail::mailcow (
   Boolean                     $manage                   = $role::mail::mailcow::manage,
   Boolean                     $letsencrypt              = $role::mail::mailcow::letsencrypt,
-  Optional[Eit_types::Email]  $acme_contact             = $role::mail::mailcow::acme_contact,
   Eit_types::Mailcow::Version $version                  = $role::mail::mailcow::version,
-  Stdlib::Unixpath            $install_dir              = $role::mail::mailcow::install_dir,
   Stdlib::Unixpath            $backup_dir               = $role::mail::mailcow::backup_dir,
-  Eit_types::Timezone         $timezone                 = $role::mail::mailcow::timezone,
   String                      $dbroot                   = $role::mail::mailcow::dbroot,
   String                      $dbpass                   = $role::mail::mailcow::dbpass,
   String                      $redispass                = $role::mail::mailcow::redispass,
+  Optional[Eit_types::Email]  $acme_contact             = $role::mail::mailcow::letsencrypt::acme_contact,
+  Eit_types::Timezone         $timezone                 = $role::mail::mailcow::timezone,
   Optional[Hash]              $extra_settings           = $role::mail::mailcow::extra_settings,
   Stdlib::Fqdn                $domain                   = $role::mail::mailcow::domain,
-  Integer[3,30]               $backup_retention         = $role::mail::mailcow::backup_retention,
-  String                      $exporter_image           = $role::mail::mailcow::exporter_image,
-  Eit_types::IPPort           $exporter_listen_address  = $role::mail::mailcow::exporter_listen_address,
   String                      $exporter_api_key         = $role::mail::mailcow::exporter_api_key,
-
-  Stdlib::IP::Address::V4::Nosubnet $http_bind          = $role::mail::mailcow::http_bind,
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
 ) {
+  $install_dir              = '/opt/mailcow'
+  $http_bind                = '0.0.0.0'
+  $exporter_listen_address  = '127.254.254.254:63382'
 
   confine($letsencrypt,
     !$acme_contact,
@@ -61,7 +58,7 @@ class profile::mail::mailcow (
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
     Environment="BACKUP_LOCATION=${backup_dir}"
     Environment="CREATE_BACKUP_LOCATION=yes"
-    ExecStart=/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days ${backup_retention}
+    ExecStart=/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days 5
     | EOT
 
   systemd::timer { 'mailcow-backup.timer':
@@ -184,7 +181,7 @@ class profile::mail::mailcow (
         'olefy_image'          => 'ghcr.io/mailcow/olefy:1.15',
         'olefia_image'         => 'docker.io/mcuadros/ofelia:latest',
         'ipv6nat_image'        => 'docker.io/robbertkl/ipv6nat',
-        'exporter_image'  => $exporter_image,
+        'exporter_image'  => 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
       }),
       require => [
         File['/opt/obmondo/docker-compose/mailcow'],
