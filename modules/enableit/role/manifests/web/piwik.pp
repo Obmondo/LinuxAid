@@ -42,9 +42,7 @@ class role::web::piwik (
 
 ) inherits ::role::web {
 
-  class { '::role::web::php':
-    variant => $variant,
-  }
+  class { $variant: }
 
   class { $database: }
 
