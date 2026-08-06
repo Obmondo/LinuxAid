@@ -23,8 +23,8 @@ class profile::computing::slurm (
   Hash                           $nodes                   = $::role::computing::slurm::nodes,
   Hash                           $partitions              = $::role::computing::slurm::partitions,
   String                         $srun_port_range         = $::role::computing::slurm::srun_port_range,
-  Stdlib::Port                   $slurmctldport           = $::role::computing::slurm::slurmctldport,
-  Eit_types::Slurm::Metrics       $metrics                 = $::role::computing::slurm::metrics,
+  Stdlib::Port                   $slurmctldport           = $::role::computing::slurm::slurmctld::port,
+  Eit_types::Slurm::Metrics       $metrics                 = $::role::computing::slurm::slurmctld::metrics,
   Stdlib::Host                   $accounting_storage_host = $::role::computing::slurm::accounting_storage_host,
   Stdlib::Host                   $control_machine         = $::role::computing::slurm::control_machine,
   # Make DOWN nodes available automatically, even after unexpected reboots. This
@@ -34,8 +34,8 @@ class profile::computing::slurm (
   Boolean                        $disable_root_jobs       = $::role::computing::slurm::disable_root_jobs,
   Boolean                        $use_pam                 = $::role::computing::slurm::use_pam,
   Boolean                        $hwloc_enabled           = $::role::computing::slurm::hwloc_enabled,
-  String                         $db_buffer_pool_size     = $::role::computing::slurm::db_buffer_pool_size,
-  String                         $db_log_file_size        = $::role::computing::slurm::db_log_file_size,
+  String                         $db_buffer_pool_size     = $::role::computing::slurm::slurmdbd::buffer_pool_size,
+  String                         $db_log_file_size        = $::role::computing::slurm::slurmdbd::log_file_size,
 ) {
 
   # We manually install SLURM and munge packages because we're using packages
