@@ -12,21 +12,15 @@
 #
 # @param allowed_networks List of client IPs/CIDRs permitted to relay through this server. Loopback is always allowed in addition to this list.
 #
-# @param inet_interfaces The interfaces Postfix should listen on. Defaults to 'all' so clients can reach it.
-#
 # @param myhostname The hostname for the relay.
 #
 # @param mydomain The domain for the relay. Defaults to undef.
 #
-# @param relay_domains Optional list of recipient domains to relay for (in addition to trusted-network relaying). Defaults to undef.
+# @groups management manage.
 #
-# @param noop_value A value for no-operation configurations. Defaults to undef.
+# @groups relay relayhost, allowed_networks.
 #
-# @groups management manage, noop_value.
-#
-# @groups relay relayhost, allowed_networks, relay_domains.
-#
-# @groups interfaces inet_interfaces, myhostname, mydomain.
+# @groups interfaces myhostname, mydomain.
 #
 class role::mail::smtprelay (
   Eit_types::Hostname                                 $myhostname,
@@ -34,9 +28,6 @@ class role::mail::smtprelay (
   Boolean                                             $manage          = false,
   Optional[Eit_types::Host]                           $relayhost       = undef,
   Array[Variant[Eit_types::IP, Eit_types::IPCIDR]]    $allowed_networks = [],
-  Variant[Eit_types::IP, Enum['all', 'localhost']]    $inet_interfaces = 'all',
-  Optional[Array[Eit_types::Domain]]                  $relay_domains   = undef,
-  Eit_types::Noop_Value                               $noop_value      = undef,
 ) {
   # Always trust loopback so locally-generated mail relays, then the
   # operator-supplied client networks.
@@ -46,10 +37,8 @@ class role::mail::smtprelay (
     manage          => $manage,
     relayhost       => $relayhost,
     mynetworks      => $mynetworks,
-    relay_domains   => $relay_domains,
-    inet_interfaces => $inet_interfaces,
+    inet_interfaces => 'all',
     myhostname      => $myhostname,
     mydomain        => $mydomain,
-    noop_value      => $noop_value,
   }
 }

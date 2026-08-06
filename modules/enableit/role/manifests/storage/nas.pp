@@ -1,37 +1,13 @@
 
 # @summary Storage Nas roleclass
 #
-# @param devices A hash of devices with their properties. Defaults to {}.
-#
-# @param backuphost Whether to enable the backup host. Defaults to true.
-#
-# @groups storage devices.
-#
-# @groups backup backuphost.
-#
-class role::storage::nas (
-  Hash[
-    String,
-    Struct[{
-      device                             => String[1],
-      target                             => Optional[Stdlib::Absolutepath],
-      mount                              => Optional[Boolean],
-      use_luks                           => Optional[Boolean],
-      luks_secret                        => Optional[String[1]],
-      luks_key_service                   => Optional[Eit_types::URL],
-      luks_key_service_headers           => Optional[Hash[String, String]]
-    }]
-  ] $devices = {},
-  Boolean $backuphost = true,
-) inherits role::storage {
+class role::storage::nas () inherits role::storage {
 
   confine(!($facts['init_system'] in ['systemd']), 'Only systemd is supported')
 
   class { 'profile::storage::block':
-    devices => $devices,
+    devices => {},
   }
 
-  if $backuphost {
-    class { 'profile::storage::backuphost': }
-  }
+  class { 'profile::storage::backuphost': }
 }

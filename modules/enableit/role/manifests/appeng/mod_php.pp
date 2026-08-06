@@ -1,32 +1,27 @@
 
 # @summary Class for managing the PHP role
 #
-# @param opcodecache The opcode cache to use. Defaults to undef.
-#
-# @param url The URL for the application. Defaults to undef.
-#
-# @param ssl Specifies if SSL is enabled. Defaults to false.
-#
 # @param http_server The HTTP server to use. Defaults to 'apache'.
 #
 # @param mysql Specifies if MySQL support is enabled. Defaults to false.
 #
 # @param memory_limit Sets the memory limit for PHP. Defaults to undef.
 #
-# @groups server url, http_server
+# @groups server http_server
 #
-# @groups resources opcodecache, memory_limit
+# @groups resources memory_limit
 #
-# @groups security ssl, mysql
+# @groups security mysql
 #
 class role::appeng::mod_php (
-  Optional[Enum['apc', 'xcache']] $opcodecache  = undef,
-  Optional[Eit_types::URL] $url                 = undef,
-  Boolean $ssl                                  = false,
   Enum['apache', 'nginx'] $http_server          = 'apache',
   Boolean $mysql                                = false,
   Optional[Pattern[/[0-9]+[MG]/]] $memory_limit = undef,
 ) inherits ::role::appeng {
+
+  $opcodecache = undef
+  $url = undef
+  $ssl = false
 
   class { '::profile::appeng::php':
     url          => $url,

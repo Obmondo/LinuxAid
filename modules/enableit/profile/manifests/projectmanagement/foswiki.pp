@@ -1,7 +1,6 @@
 # Foswiki Profile
 class profile::projectmanagement::foswiki (
-  Variant[Integer, String] $version        = $::role::projectmanagement::foswiki::version,
-  Boolean                  $manage_haproxy = $::role::projectmanagement::foswiki::manage_haproxy,
+  Variant[Integer, String] $version = $::role::projectmanagement::foswiki::version,
 ) {
 
   $compose_file_path = '/opt/obmondo/docker-compose/foswiki.yml'
@@ -20,40 +19,38 @@ class profile::projectmanagement::foswiki (
     subscribe     => File[$compose_file_path],
   }
 
-  if $manage_haproxy {
-    class { '::eit_haproxy::auto_config' :
-      encryption_ciphers => 'strict',
-      redirect_http      => true,
-      proxies            => {
-        foswiki_http => {
-          letsencrypt   => false,
-          mode          => 'http',
-          binds         => {
-            https_0_0_0_0_80  => {
-              'ports'     => [80],
-              'ssl'       => false,
-              'ipaddress' => '0.0.0.0',
-            },
-            https_0_0_0_0_443 => {
-              'ports'     => [443],
-              'ssl'       => true,
-              'options'   => 'crt /etc/ssl/private/static-certs/combined',
-              'ipaddress' => '0.0.0.0',
-            },
+  class { '::eit_haproxy::auto_config' :
+    encryption_ciphers => 'strict',
+    redirect_http      => true,
+    proxies            => {
+      foswiki_http => {
+        letsencrypt   => false,
+        mode          => 'http',
+        binds         => {
+          https_0_0_0_0_80  => {
+            'ports'     => [80],
+            'ssl'       => false,
+            'ipaddress' => '0.0.0.0',
           },
-          sites         => {
-            foswiki_http => {
-              servers         => [
-                '127.0.0.1:8080',
-              ],
-              default_backend => true,
-            },
+          https_0_0_0_0_443 => {
+            'ports'     => [443],
+            'ssl'       => true,
+            'options'   => 'crt /etc/ssl/private/static-certs/combined',
+            'ipaddress' => '0.0.0.0',
           },
-          extra_options => {
-            option => ['forwardfor'],
-          }
+        },
+        sites         => {
+          foswiki_http => {
+            servers         => [
+              '127.0.0.1:8080',
+            ],
+            default_backend => true,
+          },
+        },
+        extra_options => {
+          option => ['forwardfor'],
         }
-      },
-    }
+      }
+    },
   }
 }

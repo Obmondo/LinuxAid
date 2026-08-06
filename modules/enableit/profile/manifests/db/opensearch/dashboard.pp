@@ -1,11 +1,8 @@
 # Opensearch Dashboard
 class profile::db::opensearch::dashboard (
-  Boolean            $manage           = $role::db::opensearch::dashboard,
-  Boolean            $expose           = $role::db::opensearch::expose,
-  Boolean            $ssl              = $role::db::opensearch::ssl,
-  Stdlib::Fqdn       $host             = $role::db::opensearch::host,
-  Eit_types::Version $version          = $role::db::opensearch::version,
-  Optional[String]   $ssl_combined_pem = $role::db::opensearch::ssl_combined_pem,
+  Boolean          $expose           = $role::db::opensearch::expose,
+  Boolean          $ssl              = $role::db::opensearch::ssl,
+  Optional[String] $ssl_combined_pem = $role::db::opensearch::ssl::combined_pem,
 ) {
   if $expose {
     if $ssl {
@@ -79,7 +76,7 @@ class profile::db::opensearch::dashboard (
   }
 
   class { 'opensearch_dashboards':
-    version                   => $version,
+    version                   => '2.11.0',
     settings                  => {
       'opensearch.hosts' => [
         'http://127.0.0.1:9200',

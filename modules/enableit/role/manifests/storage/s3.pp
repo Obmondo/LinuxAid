@@ -52,13 +52,11 @@
 #       access_key: ENC[PKCS7,...]
 #       email: replication-backup@example.com
 #
-# @param manage Whether to manage the S3 storage resources. Defaults to true.
-#
 # @param image The Docker image to use for S3. Defaults to 'zenko/cloudserver:latest-7.10.19'.
 #
 # @groups directories data_dir, metadata_dir, conf_dir.
 #
-# @groups settings roles, manage, image.
+# @groups settings roles, image.
 #
 # @groups network endpoint.
 #
@@ -68,8 +66,7 @@ class role::storage::s3 (
   Stdlib::Unixpath           $metadata_dir,
   Stdlib::Unixpath           $conf_dir,
   Eit_types::Storage::S3::Role $roles,
-  Boolean                    $manage = true,
-  String                     $image  = 'zenko/cloudserver:latest-7.10.19',
+  String                     $image = 'zenko/cloudserver:latest-7.10.19',
 ) inherits role::storage {
 
   contain role::virtualization::docker

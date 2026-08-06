@@ -3,18 +3,15 @@
 #
 # @param url The URL for the application. Defaults to undef.
 #
-# @param http_server The HTTP server to use. Defaults to 'apache'.
-#
-# @groups server url, http_server
+# @groups server url
 #
 class role::appeng::mod_perl (
-  Optional[Eit_types::URL] $url           = undef,
-  Enum['apache'] $http_server  = 'apache',
+  Optional[Eit_types::URL] $url = undef,
 ) inherits ::role::appeng {
 
   class { '::profile::web::perl':
     mod_perl    => true,
     url         => $url,
-    http_server => $http_server,
+    http_server => 'apache',
   }
 }

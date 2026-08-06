@@ -24,7 +24,6 @@ profile::system::authentication::sssd::extra_packages:
 
 profile::system::nscd::use_socket_activation: false
 
-profile::appeng::nodejs::__package_allow_virtual: false
 profile::software::cloudamize::__packages:
   - 'cloudamize-agent'
 

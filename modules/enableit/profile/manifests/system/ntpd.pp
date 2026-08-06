@@ -1,17 +1,13 @@
 # NTP
 class profile::system::ntpd (
-  Array[Stdlib::Host]     $servers,
-  Optional[Boolean]       $burst    = false,
-  Optional[Array[String]] $restrict = [],
-  Optional[Boolean]       $tinker   = false,
-  Optional[Integer[0]]    $panic    = undef,
+  Array[Stdlib::Host] $servers,
 ) {
 
   class { 'ntp':
-    restrict      => $restrict,
-    iburst_enable => $burst,
-    tinker        => $tinker,
-    panic         => $panic,
+    restrict      => [],
+    iburst_enable => false,
+    tinker        => false,
+    panic         => undef,
     servers       => $servers,
   }
 }

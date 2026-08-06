@@ -1,24 +1,48 @@
 # MongoDB class
-class profile::db::mongodb (
-  Hash                $global_settings,
-  Hash                $server_settings,
-  Eit_types::User     $monitor_user,
-  Eit_types::Password $monitor_password,
-  Hash                $server_defaults = {
-    manage_pidfile => false,
-  },
-  Boolean             $backup           = false,
-) {
+class profile::db::mongodb {
 
-  # Backup
-  if $backup {
-    contain common::backup::db::mongodb
+  $_server_settings = {
+    manage_pidfile  => false,
+    ensure          => true,
+    dbpath          => undef,
+    # If we pass undef directly we just get the default from the module
+    logpath         => false,
+    # Since we run under systemd we'd rather not fork and instead output logs
+    # on stdout/stderr.
+    fork            => false,
+    bind_ip         => ['127.0.0.1'],
+    ipv6            => false,
+    port            => 27017,
+    journal         => true,
+    nojournal       => false,   # this is a bit weird, but...
+    smallfiles      => false,
+    auth            => true,
+    noauth          => false,
+    verbose         => false,
+    verbositylevel  => '',
+    objcheck        => true,
+    quota           => false,
+    quotafiles      => undef,
+    directoryperdb  => false,
+    maxconns        => undef,
+    nohttpinterface => false,
+    noscripting     => false,
+    notablescan     => false,
+    noprealloc      => false,
+    nssize          => 16,
+    rest            => false,
+    storage_engine  => 'wiredTiger',
+    set_parameter   => undef,
+    restart         => true,
+    create_admin    => false,
+    admin_username  => undef,
+    admin_password  => undef,
+    admin_roles     => ['root'],
+    store_creds     => false,
+    ssl             => false,
+    ssl_ca          => undef,
+    ssl_key         => undef,
   }
-
-  # Bind Ip
-  $_bind = $server_settings['bind_ip']
-
-  $_server_settings = $server_defaults + $server_settings
 
   # Need to force this due to https://tickets.puppetlabs.com/browse/MODULES-5274
   Package <| title == 'mongodb_server' |> {
@@ -30,7 +54,9 @@ class profile::db::mongodb (
   }
 
   class {'::mongodb::globals':
-    * => $global_settings,
+    version             => '8.0',
+    manage_package      => true,
+    manage_package_repo => true,
   }
 
   class {'::mongodb::client':
@@ -89,7 +115,7 @@ class profile::db::mongodb (
   mongodb_user { 'obmondo-monitor':
     ensure        => present,
     database      => 'admin',
-    password_hash => mongodb_password($monitor_user, $monitor_password),
+    password_hash => mongodb_password('obmondo-mon', stdlib::fqdn_rand_string(20)),
     roles         => ['clusterMonitor', 'readAnyDatabase'],
     require       => Class['mongodb::server'],
   }

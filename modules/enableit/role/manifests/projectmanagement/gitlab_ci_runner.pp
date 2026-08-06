@@ -39,20 +39,28 @@
 #         working_directory: '/local'
 #       build: {}
 #
+# @param encrypt_params The list of params, which needs to be encrypted
+#
 # @param __blendable An internal parameter.
 #
-# @groups configuration url, registration_token, concurrent, docker_defaults, docker_runners, shell_runners.
+# @groups configuration url, registration_token, concurrent, docker_defaults, docker_runners, shell_runners, encrypt_params.
 #
 # @groups internal __blendable.
 #
+# @encrypt_params registration_token
+#
 class role::projectmanagement::gitlab_ci_runner (
   Stdlib::HTTPSUrl                          $url,
-  String                                    $registration_token,
+  Eit_types::Password                       $registration_token,
   Integer[1]                                $concurrent,
   Eit_types::Gitlab::Runner::Docker         $docker_runners,
   Eit_types::Gitlab::Runner::Docker::Defaults $docker_defaults,
   Eit_types::Gitlab::Runner::Shell          $shell_runners,
   Boolean                                   $__blendable,
+
+  Eit_types::Encrypt::Params $encrypt_params = [
+    'registration_token',
+  ]
 ) inherits ::role::projectmanagement {
 
   unless $docker_runners.empty {

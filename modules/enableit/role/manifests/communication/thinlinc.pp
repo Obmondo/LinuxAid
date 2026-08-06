@@ -5,8 +5,6 @@
 #
 # @param version The version of ThinLinc. Defaults to '4.9.0'.
 #
-# @param enable A flag to enable the ThinLinc communication role. Defaults to true.
-#
 # @param ha A flag to enable high availability. Defaults to false.
 #
 # @param masters A list of master hosts. Defaults to an empty array.
@@ -23,19 +21,15 @@
 #
 # @param master_hostname The hostname of the master ThinLinc server. Defaults to 'localhost'.
 #
-# @param loadbalancer_ip The IP address of the load balancer. Defaults to undef.
-#
 # @param license_source_path Absolute path to the directory containing ThinLinc license files. Defaults to undef.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups basic_settings enable, ha, version.
+# @groups basic_settings ha, version.
 #
 # @groups hosts masters, agents, agent_hostname, master_hostname.
 #
 # @groups session_settings max_session_per_user, shadowing_shadow_mode, shadowing_allowed_shadowers.
-#
-# @groups load_balancer loadbalancer_ip.
 #
 # @groups license license_source_path.
 #
@@ -46,7 +40,6 @@
 class role::communication::thinlinc (
   Eit_types::Password    $webadm_password,
   String                 $version                     = '4.9.0',
-  Boolean                $enable                      = true,
   Boolean                $ha                          = false,
   Array[Stdlib::Host]    $masters                     = [],
   Array[Stdlib::Host]    $agents                      = [],
@@ -55,7 +48,6 @@ class role::communication::thinlinc (
   ThinLinc::ShadowMode   $shadowing_shadow_mode       = 'ask',
   Array[Eit_types::User] $shadowing_allowed_shadowers = [],
   Stdlib::Host           $master_hostname             = 'localhost',
-  Optional[Stdlib::IP::Address] $loadbalancer_ip      = undef,
   Optional[Stdlib::Absolutepath] $license_source_path = undef,
 
   Eit_types::Encrypt::Params $encrypt_params = [
@@ -63,9 +55,10 @@ class role::communication::thinlinc (
   ],
 ) inherits ::role::communication {
 
-  confine($enable, lookup('common::user_management::security::selinux::enable'), 'selinux must be disabled')
+  # contained before the profile below, which reads its parameters
+  contain role::communication::thinlinc::ha
 
-  if $enable {
-    contain 'profile::communication::thinlinc'
-  }
+  confine(lookup('common::user_management::security::selinux::enable'), 'selinux must be disabled')
+
+  contain 'profile::communication::thinlinc'
 }

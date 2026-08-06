@@ -2,20 +2,17 @@
 #
 # https://www.perforce.com/manuals/helix-for-git/Content/Helix4Git/Home-helix4git.html
 class profile::projectmanagement::perforce::git_connector (
-  Perforce::Version    $version         = $::role::projectmanagement::perforce::git_connector::version,
-  Stdlib::Port         $service_port    = $::role::projectmanagement::perforce::git_connector::service_port,
-  Eit_types::User      $p4_gconn_user   = $::role::projectmanagement::perforce::git_connector::p4_gconn_user,
-  Stdlib::Absolutepath $git_user_home   = $::role::projectmanagement::perforce::git_connector::git_user_home,
-  Stdlib::Absolutepath $gconn_dir       = $::role::projectmanagement::perforce::git_connector::gconn_dir,
-  Stdlib::Absolutepath $repos_dir       = $::role::projectmanagement::perforce::git_connector::repos_dir,
-  Stdlib::Absolutepath $log_dir         = $::role::projectmanagement::perforce::git_connector::log_dir,
-  Perforce::LogFile    $gconn_log_file  = $::role::projectmanagement::perforce::git_connector::gconn_log_file,
-  Perforce::LogLevel   $gconn_log_level = $::role::projectmanagement::perforce::git_connector::gconn_log_level,
-  Perforce::LogFile    $p4gc_log_file   = $::role::projectmanagement::perforce::git_connector::p4gc_log_file,
-  Perforce::LogLevel   $p4gc_log_level  = $::role::projectmanagement::perforce::git_connector::p4gc_log_level,
+  Perforce::Version    $version        = $::role::projectmanagement::perforce::git_connector::version,
+  Stdlib::Port         $service_port   = $::role::projectmanagement::perforce::service_port,
+  Stdlib::Absolutepath $repos_dir      = $::role::projectmanagement::perforce::git_connector::repos_dir,
+  Perforce::LogFile    $gconn_log_file = $::role::projectmanagement::perforce::git_connector::gconn_log_file,
+  Perforce::LogFile    $p4gc_log_file  = $::role::projectmanagement::perforce::git_connector::p4gc_log_file,
 ) inherits ::profile::projectmanagement::perforce {
 
-  $_version_suffix = ".el${facts['os']['release']['major']}"
+  $_version_suffix  = ".el${facts['os']['release']['major']}"
+  $_git_user_home   = '/var/lib/git'
+  $_gconn_log_level = 1
+  $_p4gc_log_level  = 1
 
   $versionrelease = $version.split('-')
 
@@ -45,7 +42,7 @@ class profile::projectmanagement::perforce::git_connector (
       'gconn-auth',
       'perforce',
     ],
-    home       => $git_user_home,
+    home       => $_git_user_home,
     shell      => '/bin/bash',
     comment    => 'Helix GitConnector',
     managehome => true,
@@ -57,16 +54,16 @@ class profile::projectmanagement::perforce::git_connector (
     log           => {
       path => $gconn_log_file,
       levels => [
-        "time=${gconn_log_level}",
-        "gconn=${gconn_log_level}",
+        "time=${_gconn_log_level}",
+        "gconn=${_gconn_log_level}",
       ]
     },
     reposDir      => $repos_dir,
-    p4User        => $p4_gconn_user,
+    p4User        => 'gconn-user',
     p4Port        => String($service_port),
     p4TicketsFile => '/opt/perforce/git-connector/.p4tickets',
     p4TrustFile   => '/opt/perforce/git-connector/.p4trust',
-    authKeysFile  => "${git_user_home}/.ssh/authorized_keys",
+    authKeysFile  => "${_git_user_home}/.ssh/authorized_keys",
     # authKeysFile  => 'none',
     gitExecPath   => '/bin',
     envPath       => '/usr/bin:/usr/local/bin:/opt/perforce/git-connector/bin',
@@ -77,8 +74,8 @@ class profile::projectmanagement::perforce::git_connector (
     log => {
       path   => $p4gc_log_file,
       levels => [
-        "time=${p4gc_log_level}",
-        "gconn=${p4gc_log_level}",
+        "time=${_p4gc_log_level}",
+        "gconn=${_p4gc_log_level}",
       ],
     }
   }

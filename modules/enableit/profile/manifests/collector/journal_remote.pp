@@ -3,7 +3,6 @@
 class profile::collector::journal_remote (
   Boolean          $enable        = $role::monitoring::journal_remote::remote_enable,
   Boolean          $manage_output = $role::monitoring::journal_remote::manage_output,
-  Stdlib::Unixpath $output        = $role::monitoring::journal_remote::output,
 ) {
 
   confine($facts['init_system'] != 'systemd', 'Only systemd is supported')
@@ -23,7 +22,7 @@ class profile::collector::journal_remote (
       'listen-http' => -3,
       'compress'    => 'yes',
       'split-mode'  => 'host',
-      'output'      => $output,
+      'output'      => '/var/log/journal/remote',
     },
   }
 

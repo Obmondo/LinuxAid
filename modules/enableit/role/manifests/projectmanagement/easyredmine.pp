@@ -13,44 +13,15 @@
 #
 # @param location NOTE: Local filesystem path where the easyredmine zip file has been placed manually, BEFORE running puppet. Necessary as one cannot just download easyredmine.
 #
-# @param serveralias The server alias to be used. Defaults to $servername.
-#
-# @param database The database role to use. Defaults to 'role::db::pgsql'.
-#
-# @param version The version of easyredmine to install. Defaults to '3.3.0'.
-#
-# @param plugins A list of plugins to be installed. Defaults to an empty hash.
-#
-# @param custom_fragment A custom fragment for configuration. Defaults to an empty string.
-#
-# @groups server servername, serveralias, location
-#
-# @groups database database
-#
-# @groups configuration version, plugins, custom_fragment
+# @groups server servername, location
 #
 class role::projectmanagement::easyredmine (
-  Stdlib::Fqdn                $servername,
-  # NOTE: Local filesystem path where the easyredmine zip file has been placed manually, 
+  Stdlib::Fqdn     $servername,
+  # NOTE: Local filesystem path where the easyredmine zip file has been placed manually,
   # BEFORE running puppet. Necessary as one cannot just download easyredmine.
-  Stdlib::Unixpath            $location,
-  Variant[
-    Array[Stdlib::Fqdn],
-    Stdlib::Fqdn
-  ]                           $serveralias        = $servername,
-  Enum[
-    'role::db::mysql',
-    'role::db::pgsql'
-  ]                           $database           = 'role::db::pgsql',
-  Eit_types::Version          $version            = '3.3.0',
-  Optional[Hash]              $plugins            = {},
-  Optional[String]            $custom_fragment    = '',
+  Stdlib::Unixpath $location,
 ) inherits role::projectmanagement {
 
-  $_database = $database ? {
-    'role::db::mysql' => 'mysql2',
-    'role::db::pgsql' => 'postgresql'
-  }
-
-  profile::projectmanagement::easyredmine.contain $database.contain
+  profile::projectmanagement::easyredmine.contain
+  role::db::pgsql.contain
 }

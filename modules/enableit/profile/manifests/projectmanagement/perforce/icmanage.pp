@@ -1,27 +1,25 @@
 # ICManage on top of Perforce
 class profile::projectmanagement::perforce::icmanage (
   Integer[0,default]       $version           = $::role::projectmanagement::perforce::icmanage::version,
-  Stdlib::Absolutepath     $install_path      = $::role::projectmanagement::perforce::icmanage::install_path,
-
-  Stdlib::Host             $hostname          = $::role::projectmanagement::perforce::icmanage::hostname,
 
   Boolean                  $manage_db         = $::role::projectmanagement::perforce::icmanage::manage_db,
   Eit_types::Password      $root_password     = $::role::projectmanagement::perforce::icmanage::root_password,
-  Eit_types::SimpleString  $db_user           = $::role::projectmanagement::perforce::icmanage::db_user,
   Eit_types::Password      $db_password       = $::role::projectmanagement::perforce::icmanage::db_password,
-  Boolean                  $db_backup         = $::role::projectmanagement::perforce::icmanage::db_backup,
+  Boolean                  $db_backup         = $::role::projectmanagement::perforce::icmanage::manage_db::db_backup,
 
-  Eit_types::SimpleString  $db_admin_user     = $::role::projectmanagement::perforce::icmanage::db_admin_user,
   Eit_types::Password      $db_admin_password = $::role::projectmanagement::perforce::icmanage::db_admin_password,
-  Eit_types::SimpleString  $db_charset        = $::role::projectmanagement::perforce::icmanage::db_charset,
-  Eit_types::SimpleString  $db_collate        = $::role::projectmanagement::perforce::icmanage::db_collate,
+  Eit_types::SimpleString  $db_charset        = $::role::projectmanagement::perforce::icmanage::manage_db::db_charset,
+  Eit_types::SimpleString  $db_collate        = $::role::projectmanagement::perforce::icmanage::manage_db::db_collate,
 
-  Stdlib::Absolutepath     $config_file       = '/etc/icmanage/icmPm.cfg',
-
-  String                   $mysql_version     = $::role::projectmanagement::perforce::icmanage::mysql_version,
+  String                   $mysql_version     = $::role::projectmanagement::perforce::icmanage::manage_db::mysql_version,
   Stdlib::Absolutepath     $backup_dir        = $::role::projectmanagement::perforce::icmanage::backup_dir,
   Array[Eit_types::IPCIDR] $access_mysql_from = $::role::projectmanagement::perforce::icmanage::access_mysql_from,
 ) inherits ::profile::projectmanagement::perforce {
+
+  $install_path  = '/opt/icmanage'
+  $config_file   = '/etc/icmanage/icmPm.cfg'
+  $db_user       = 'icm'
+  $db_admin_user = 'icmadmin'
 
   # Monitoring
   if $manage_db {
@@ -91,7 +89,7 @@ class profile::projectmanagement::perforce::icmanage (
   }
 
   functions::create_ini_file($config_file, {
-    'icm.host'       => $hostname,
+    'icm.host'       => $facts['networking']['hostname'],
     'mysql.user'     => $db_admin_user,
     'mysql.password' => $db_admin_password,
   })

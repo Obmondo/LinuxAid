@@ -1,28 +1,23 @@
 # Opensearch Profile
-class profile::db::opensearch (
-  Eit_types::Version                  $version               = $role::db::opensearch::version,
-  Eit_types::Percentage               $es_heap_size_pct      = $role::db::opensearch::es_heap_size_pct,
-  Variant[Integer[1,31], Float[1,31]] $es_heap_size_max_gb   = $role::db::opensearch::es_heap_size_max_gb,
-  Optional[Array[Stdlib::Host]]       $access_9200_port_from = $role::db::opensearch::access_9200_port_from,
-  Array[Stdlib::Host]                 $nodes                 = $role::db::opensearch::nodes,
-  Stdlib::Unixpath                    $datadir               = $role::db::opensearch::datadir,
-  Eit_types::SimpleString             $cluster_name          = $role::db::opensearch::cluster_name,
-  Hash[Eit_types::SimpleString, Hash] $curate_filters        = $role::db::opensearch::curate_filters,
-){
+class profile::db::opensearch {
 
   # Monitoring
   # contain common::monitor::exporter::elasticsearch
 
+  $nodes = [$facts.dig('network_primary_ip')]
+
+  $access_9200_port_from = []
+
   # Merge the instances value
   $instances = {
-    'cluster.name'                          => $cluster_name,
+    'cluster.name'                          => 'opensearch-cluster',
     'network.host'                          => [
       '_local_',
       $facts.dig('network_primary_ip'),
     ],
     'discovery.seed_hosts'                  => $nodes,
     'cluster.initial_cluster_manager_nodes' => $nodes,
-    'path.data'                             => $datadir,
+    'path.data'                             => '/var/lib/opensearch',
     'plugins.security.ssl.http.enabled'     => false,
 
   }
@@ -74,13 +69,13 @@ class profile::db::opensearch (
     }
   }
 
-  $_naive_heap_gb = functions::memory_human_readable('GB')*($es_heap_size_pct/100.0)
+  $_naive_heap_gb = functions::memory_human_readable('GB')*(50/100.0)
 
-  $_es_heap_size_g = clamp(1, $_naive_heap_gb, $es_heap_size_max_gb)
+  $_es_heap_size_g = clamp(1, $_naive_heap_gb, 31)
 
   # Setup Opensearch
   class { 'opensearch':
-    version                   => $version,
+    version                   => '2.11.0',
     settings                  => $instances,
     pin_package               => true,
     heap_size                 => "${_es_heap_size_g}g",

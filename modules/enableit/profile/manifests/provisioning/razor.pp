@@ -1,16 +1,10 @@
 # razor
 class profile::provisioning::razor (
-  Boolean                       $manage_postgres = $role::provisioning::razor::manage_postgres,
-  Eit_types::Host               $db_server       = $role::provisioning::razor::db_server,
-  Eit_types::SimpleString       $db_name         = $role::provisioning::razor::db_name,
-  Eit_types::SimpleString       $db_user         = $role::provisioning::razor::db_user,
-  Eit_types::Password           $db_password     = $role::provisioning::razor::db_password,
-  Eit_types::IP                 $dhcp_start      = $role::provisioning::razor::dhcp_start,
-  Eit_types::IP                 $dhcp_end        = $role::provisioning::razor::dhcp_end,
-  Eit_types::IP                 $dhcp_route      = $role::provisioning::razor::dhcp_route,
-  Array[Eit_types::IP, 1]       $dhcp_dns        = $role::provisioning::razor::dhcp_dns,
-  Eit_types::Domain             $dhcp_domain     = $role::provisioning::razor::dhcp_domain,
-  Boolean                       $manage_tftpd    = $role::provisioning::razor::manage_tftpd,
+  Eit_types::Password           $db_password = $role::provisioning::razor::db_password,
+  Eit_types::IP                 $dhcp_start  = $role::provisioning::razor::dhcp_start,
+  Eit_types::IP                 $dhcp_end    = $role::provisioning::razor::dhcp_end,
+  Eit_types::IP                 $dhcp_route  = $role::provisioning::razor::dhcp_route,
+  Eit_types::Domain             $dhcp_domain = $role::provisioning::razor::dhcp_domain,
 ) inherits ::profile {
 
   $_base_path = '/opt/obmondo/razor'
@@ -43,10 +37,10 @@ class profile::provisioning::razor (
   }
 
   class { 'razor':
-    manage_postgres    => $manage_postgres,
-    db_server          => $db_server,
-    db_name            => $db_name,
-    db_user            => $db_user,
+    manage_postgres    => false,
+    db_server          => 'localhost',
+    db_name            => 'razor_prd',
+    db_user            => 'razor',
     db_password        => $db_password,
     additional_brokers => $_additional_brokers,
     additional_hooks   => $_additional_hooks,
@@ -54,7 +48,7 @@ class profile::provisioning::razor (
   }
 
   $dhcp_range = "${dhcp_start},${dhcp_end}"
-  $dhcp_dns_servers = join($dhcp_dns, ',')
+  $dhcp_dns_servers = join($common::system::dns::nameservers, ',')
 
   file { '/etc/dnsmasq.conf':
     ensure  => file,

@@ -1,18 +1,13 @@
 # Perforce version control system
 class profile::projectmanagement::perforce (
-  Eit_types::User           $user              = $role::projectmanagement::perforce::user,
   Stdlib::Absolutepath      $service_root      = $role::projectmanagement::perforce::service_root,
-  Eit_types::SimpleString   $service_name      = $role::projectmanagement::perforce::service_name,
   Boolean                   $ssl               = $role::projectmanagement::perforce::ssl,
-  Stdlib::Absolutepath      $service_ssldir    = $role::projectmanagement::perforce::service_ssldir,
   Stdlib::Port              $service_port      = $role::projectmanagement::perforce::service_port,
   Eit_types::Password       $service_password  = $role::projectmanagement::perforce::service_password,
-  Optional[String]          $license_content   = $role::projectmanagement::perforce::license_content,
   Stdlib::Host              $hostname          = $role::projectmanagement::perforce::hostname,
   Perforce::Version         $version           = $role::projectmanagement::perforce::version,
   Stdlib::Absolutepath      $log_dir           = $role::projectmanagement::perforce::log_dir,
   Stdlib::Absolutepath      $log_file          = "${log_dir}/p4d.log",
-  Perforce::LogLevel        $log_level         = $role::projectmanagement::perforce::log_level,
 
   Boolean                   $git_connector     = $role::projectmanagement::perforce::git_connector,
 
@@ -22,8 +17,10 @@ class profile::projectmanagement::perforce (
   Eit_types::Password       $operator_password = $role::projectmanagement::perforce::operator_password,
 
   Stdlib::Absolutepath      $backup_dir        = $role::projectmanagement::perforce::backup_dir,
-  Eit_types::Duration::Days $backup_retention  = 7,
 ) inherits profile {
+
+  $_user = 'perforce'
+  $_service_ssldir = '/etc/perforce/ssl'
 
   $_version_suffix = ".el${facts['os']['release']['major']}"
 
@@ -40,15 +37,15 @@ class profile::projectmanagement::perforce (
   }
 
   class { 'perforce':
-    user              => $user,
+    user              => $_user,
     service_root      => $service_root,
-    service_name      => $service_name,
-    service_ssldir    => if $ssl { $service_ssldir },
+    service_name      => 'perforce',
+    service_ssldir    => if $ssl { $_service_ssldir },
     service_port      => $service_port,
-    license_content   => $license_content,
+    license_content   => undef,
     service_password  => $service_password,
     service_log       => $log_file,
-    service_log_level => $log_level,
+    service_log_level => 1,
     version           => $version,
     # FIXME: remove this
     packages          => [
@@ -62,9 +59,9 @@ class profile::projectmanagement::perforce (
     var_dir           => '/var/lib/perforce',
   }
 
-  file { $service_ssldir:
+  file { $_service_ssldir:
     ensure => directory,
-    owner  => $user,
+    owner  => $_user,
     group  => 'root',
     mode   => 'a=,ug+rX',
     before => Service['p4d'],
@@ -102,12 +99,12 @@ class profile::projectmanagement::perforce (
 
   file { $backup_dir:
     ensure => directory,
-    owner  => $user,
+    owner  => $_user,
     group  => 'root'
   }
 
   profile::system::cron::job { 'p4d checkpoint and snapshot':
-    command => "chronic /opt/obmondo/bin/perforce-p4d-backup --log-dir '${log_dir}' --backup-target-dir '${backup_dir}' --all --keep-days ${backup_retention} --delete", # lint:ignore:140chars
+    command => "chronic /opt/obmondo/bin/perforce-p4d-backup --log-dir '${log_dir}' --backup-target-dir '${backup_dir}' --all --keep-days 7 --delete", # lint:ignore:140chars
     hour    => 3,
     minute  => 0,
     require => [ Package['perforce-p4d-backup'], File[$backup_dir] ]

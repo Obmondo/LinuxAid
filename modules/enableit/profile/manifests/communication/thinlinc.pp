@@ -7,13 +7,12 @@ class profile::communication::thinlinc (
   Array[Stdlib::Host]     $masters                     = $role::communication::thinlinc::masters,
   Optional[Stdlib::Host]  $agent_hostname              = $role::communication::thinlinc::agent_hostname,
   Eit_types::Password     $webadm_password             = $role::communication::thinlinc::webadm_password,
-  Boolean                 $enable                      = $role::communication::thinlinc::enable,
   ThinLinc::ShadowMode    $shadowing_shadow_mode       = $role::communication::thinlinc::shadowing_shadow_mode,
   Optional[Array[String]] $shadowing_allowed_shadowers = $role::communication::thinlinc::shadowing_allowed_shadowers,
   Integer[0,default]      $max_session_per_user        = $role::communication::thinlinc::max_session_per_user,
   Array[Stdlib::Host]     $agents                      = $role::communication::thinlinc::agents,
   Stdlib::Host            $master_hostname             = $role::communication::thinlinc::master_hostname,
-  Optional[Stdlib::IP::Address]  $loadbalancer_ip      = $role::communication::thinlinc::loadbalancer_ip,
+  Optional[Stdlib::IP::Address]  $loadbalancer_ip      = $role::communication::thinlinc::ha::loadbalancer_ip,
   Optional[Stdlib::Absolutepath] $license_source_path  = $role::communication::thinlinc::license_source_path,
 ) inherits ::profile {
 
