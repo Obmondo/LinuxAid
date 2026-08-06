@@ -1,16 +1,16 @@
 # Nginx Profile
 class profile::web::nginx (
-  Boolean                    $ssl              = $role::web::nginx::ssl,
-  Boolean                    $http             = $role::web::nginx::http,
-  Boolean                    $manage_repo      = $role::web::nginx::manage_repo,
-  Hash                       $cfg_prepend      = $role::web::nginx::cfg_prepend,
-  Hash                       $http_cfg_prepend = $role::web::nginx::http_cfg_prepend,
-  Array                      $modules          = $role::web::nginx::modules,
-  Hash                       $extra_cfg_option = $role::web::nginx::extra_cfg_option,
-  Hash                       $servers          = $role::web::nginx::servers,
+  Boolean                    $ssl              = false,
+  Boolean                    $http             = true,
+  Boolean                    $manage_repo      = false,
+  Hash                       $cfg_prepend      = {},
+  Hash                       $http_cfg_prepend = {},
+  Array                      $modules          = [],
+  Hash                       $extra_cfg_option = {},
+  Hash                       $servers          = {},
   String                     $module_directory = '/usr/lib64/nginx/modules',
-  Stdlib::Port               $monitor_port     = $role::web::nginx::monitor_port,
-  Enum['nginx', 'passenger'] $package_source   = $role::web::nginx::package_source,
+  Stdlib::Port               $monitor_port     = 63080,
+  Enum['nginx', 'passenger'] $package_source   = 'nginx',
 ) {
 
   # Firewall Rule
