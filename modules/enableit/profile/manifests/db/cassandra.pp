@@ -1,13 +1,9 @@
 # @summary Profile for managing Cassandra database
 #
 # @param settings Additional configuration settings that override baseline_settings
-# @param cassandra_version Version of Cassandra to install
-# @param seeds List of seed nodes for Cassandra
 #
 class profile::db::cassandra (
-  Hash                          $settings          = $role::db::cassandra::settings,
-  Enum['41']                    $cassandra_version = $role::db::cassandra::cassandra_version,
-  Optional[Array[Stdlib::Host]] $seeds             = $role::db::cassandra::seeds,
+  Hash $settings = $role::db::cassandra::settings,
 ) {
   $baseline_settings = {
     'authenticator' => 'AllowAllAuthenticator',
@@ -90,6 +86,8 @@ class profile::db::cassandra (
     'write_request_timeout_in_ms' => 2000,
   }
 
+  $cassandra_version = '41'
+
   case $facts['os']['family'] {
     'RedHat': {
       class { 'cassandra::apache_repo':
@@ -129,22 +127,9 @@ class profile::db::cassandra (
   # Ensure initscripts is installed before Cassandra.
   Package['initscripts'] -> Class['cassandra']
 
-  $_settings = deep_merge($settings, $seeds ? {
-    []      => {},
-    undef   => {},
-    default => {
-      'seed_provider' => [
-        {
-          'class_name' => 'org.apache.cassandra.locator.SimpleSeedProvider',
-          'parameters' => [{ 'seeds' => join($seeds, ',') }],
-        },
-      ],
-    }
-  })
-
   class { 'cassandra':
     baseline_settings => $baseline_settings,
-    settings          => $_settings,
+    settings          => $settings,
     package_name      => 'cassandra',
     package_ensure    => 'present',
     service_provider  => $facts['service_provider'],
