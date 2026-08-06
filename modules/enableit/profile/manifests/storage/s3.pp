@@ -1,7 +1,6 @@
 # s3 storage
 class profile::storage::s3 (
   Stdlib::Fqdn     $endpoint     = $role::storage::s3::endpoint,
-  Boolean          $manage       = $role::storage::s3::manage,
   Stdlib::Unixpath $data_dir     = $role::storage::s3::data_dir,
   Stdlib::Unixpath $metadata_dir = $role::storage::s3::metadata_dir,
   String           $image        = $role::storage::s3::image,
@@ -82,7 +81,7 @@ class profile::storage::s3 (
   }
 
   file { default:
-    ensure => ensure_dir($manage),
+    ensure => 'directory',
     ;
     [
       '/opt/obmondo/docker-compose/s3',
@@ -92,13 +91,13 @@ class profile::storage::s3 (
     ]:
     ;
       "${conf_dir}/authdata.json":
-      ensure  => ensure_present($manage),
+      ensure  => 'present',
       content => stdlib::to_json_pretty({
         accounts => $_accounts,
       }).node_encrypt::secret,
     ;
     '/opt/obmondo/docker-compose/s3/docker-compose.yaml':
-      ensure  => ensure_present($manage),
+      ensure  => 'present',
       content => epp('profile/docker-compose/s3/docker-compose.yaml.epp', {
         endpoint     => $endpoint,
         image        => $image,
@@ -128,7 +127,7 @@ class profile::storage::s3 (
   }
 
   docker_compose { 's3':
-    ensure        => ensure_present($manage),
+    ensure        => 'present',
     compose_files => [
       '/opt/obmondo/docker-compose/s3/docker-compose.yaml',
     ],
