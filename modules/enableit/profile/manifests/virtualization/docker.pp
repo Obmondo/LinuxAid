@@ -1,20 +1,13 @@
 # Docker profile
 class profile::virtualization::docker (
   Stdlib::Absolutepath                 $docker_lib_dir      = $role::virtualization::docker::docker_lib_dir,
-  Boolean                              $manage_compose      = $role::virtualization::docker::manage_compose,
   Hash                                 $instances           = $role::virtualization::docker::instances,
   Eit_types::Docker::ComposeInstances  $compose_instances   = $role::virtualization::docker::compose_instances,
   Hash                                 $networks            = $role::virtualization::docker::networks,
   Optional[Array[Stdlib::IP::Address]] $dns                 = $role::virtualization::docker::dns,
   Optional[Array[Eit_types::Domain]]   $dns_search          = $role::virtualization::docker::dns_search,
   Optional[Array[Eit_types::FQDNPort]] $insecure_registries = $role::virtualization::docker::insecure_registries,
-  Array[Eit_types::User]               $users               = $role::virtualization::docker::users,
   Optional[Eit_types::IPCIDR]          $fixed_cidr          = $role::virtualization::docker::fixed_cidr,
-  Optional[Eit_types::IPCIDR]          $bip                 = $role::virtualization::docker::bip,
-  Optional[Eit_types::IP]              $default_gateway     = $role::virtualization::docker::default_gateway,
-  Eit_types::SimpleString              $bridge_interface    = $role::virtualization::docker::bridge_interface,
-  Boolean                              $prune_system        = $role::virtualization::docker::prune_system,
-  Boolean                              $prune_volume        = $role::virtualization::docker::prune_volume,
   Hash[Eit_types::Domain, Hash]        $registry            = $role::virtualization::docker::registry,
   Boolean                              $upstream_repo       = $role::virtualization::docker::upstream_repo,
   Optional[Eit_types::SimpleString]    $prune_duration      = $role::virtualization::docker::prune_duration,
@@ -99,13 +92,8 @@ class profile::virtualization::docker (
     service_enable              => true,
     manage_service              => true,
     root_dir                    => $docker_lib_dir,
-    docker_users                => $users,
+    docker_users                => [],
     log_opt                     => [ 'max-size=10m', 'max-file=3' ]
-    # bridge                      => $bridge_interface,
-    # fixed_cidr                  => $fixed_cidr,
-    # bip                         => $bip,
-    # default_gateway             => $default_gateway,
-    # dns                         => $dns,
   }
 
   $registry.each |$k, $s| {
@@ -148,12 +136,10 @@ class profile::virtualization::docker (
     }
   }
 
-  if $manage_compose {
-    include docker::compose
-  }
+  include docker::compose
 
   file { '/opt/obmondo/docker-compose':
-    ensure => ensure_dir($manage_compose),
+    ensure => 'directory',
   }
 
   $compose_instances.each |$key, $value| {
@@ -209,7 +195,7 @@ class profile::virtualization::docker (
   }
 
   profile::system::cron::job { 'regularly prune docker system':
-    enable  => $prune_system,
+    enable  => true,
     command => "chronic docker system prune --all --force --filter until=$(( ${prune_duration} * 24 ))h",
     user    => 'root',
     hour    => 2,
