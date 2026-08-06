@@ -15,7 +15,6 @@ class role::web::java (
   }
 
   class { '::role::appeng::tomcat':
-    version     => $version,
-    http_server => 'apache',
+    version => $version,
   }
 }
