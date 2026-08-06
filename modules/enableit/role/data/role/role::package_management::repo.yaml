@@ -30,5 +30,4 @@ role::package_management::repo::volumes:
 role::web::haproxy::http: true
 role::web::haproxy::https: true
 role::web::haproxy::use_hsts: false
-role::web::haproxy::global_hsts: false
 role::web::haproxy::use_lets_encrypt: false

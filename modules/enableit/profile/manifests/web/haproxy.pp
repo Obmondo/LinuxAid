@@ -2,29 +2,21 @@
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
-# @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
-#
-# @param listen_on The IP addresses for haproxy to listen on. Defaults to ['0.0.0.0'].
-#
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
 #
-# @param service_options Additional options for the haproxy service. Defaults to an empty hash.
-#
 # @param log_compressed Boolean to enable or disable compressed logs.
 #
-# @param log_dir The directory for log files.
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
+# @groups configuration manual_config, configure, version
 #
-# @groups configuration manual_config, configure, service_options, version
+# @groups networking domains, listens, firewall
 #
-# @groups networking domains, listens, listen_on, firewall
+# @groups logging log_compressed
 #
-# @groups logging log_compressed, log_dir
-#
-# @groups mode mode, http
+# @groups mode http
 #
 class profile::web::haproxy (
   Enum['auto', 'manual']        $configure,
@@ -36,19 +28,14 @@ class profile::web::haproxy (
   Boolean                       $http                   = false,
   Boolean                       $use_hsts               = true,
   Boolean                       $use_lets_encrypt       = true,
-  Enum['http','tcp']            $mode                   = 'http',
   Eit_types::Version            $version                = 'latest',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
-  Enum['production','staging']  $ca_type                = 'production',
-  Array[Stdlib::IP::Address,1]  $listen_on              = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
       Stdlib::Port
   ]]                            $firewall               = {},
-  Hash                          $service_options        = {},
-  Boolean                       $log_compressed         = $role::web::haproxy::log_compressed,
-  Stdlib::Absolutepath          $log_dir                = $role::web::haproxy::log_dir,
+  Boolean                       $log_compressed         = true,
 ) inherits profile {
   # Monitoring
   $facts.dig('haproxy_version').then |$_haproxy_version| {
@@ -73,17 +60,17 @@ class profile::web::haproxy (
     http               => $http,
     use_lets_encrypt   => $use_lets_encrypt,
     acme_contact       => $acme_contact,
-    ca_type            => $ca_type,
+    ca_type            => 'production',
     use_hsts           => $use_hsts,
-    mode               => $mode,
-    listen_on          => $listen_on,
+    mode               => 'http',
+    listen_on          => ['0.0.0.0'],
     manual_config      => $manual_config,
     configure          => $configure,
     firewall           => $firewall,
     encryption_ciphers => $encryption_ciphers,
-    service_options    => $service_options,
+    service_options    => {},
     log_compressed     => $log_compressed,
-    log_dir            => $log_dir,
+    log_dir            => '/var/log',
   }
 
   # Cleanup deprecated log summary sender
