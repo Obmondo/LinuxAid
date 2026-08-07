@@ -352,8 +352,6 @@ common::system::dns::listen_address:
   - "192.168.0.1"
 # Prometheus Server
 common::monitor::prometheus::install_method: package
-common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
-common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
 common::monitor::prometheus::server: prometheus.obmondo.com
 common::monitor::prometheus::server::version: 3.8.1
