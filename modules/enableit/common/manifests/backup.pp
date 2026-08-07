@@ -8,17 +8,7 @@
 #
 # @param dump_dir The directory for dumps. Defaults to undef.
 #
-# @param luks Whether to enable LUKS encryption. Defaults to undef.
-#
-# @param lukspass The LUKS passphrase. Defaults to undef.
-#
-# @param luks_service_name The service name that manages LUKS. Defaults to undef.
-#
 # @param lvm Whether to enable LVM. Defaults to undef.
-#
-# @param lvm_vg The LVM volume group name. Defaults to undef.
-#
-# @param lvm_extents_min_required The minimum required LVM extents percentage. Defaults to 15.
 #
 # @param conf_dir The configuration directory path. Defaults to $common::__conf_dir.
 #
@@ -26,28 +16,16 @@
 #
 # @groups storage dump_dir
 #
-# @groups encryption luks, lukspass, luks_service_name
-#
-# @groups lvm lvm, lvm_vg, lvm_extents_min_required
+# @groups lvm lvm
 #
 class common::backup (
-  Boolean                        $manage                   = true,
-  Boolean                        $enable                   = false,
-  Eit_types::User                $backup_user              = 'obmondo-backup',
-  Optional[Stdlib::Absolutepath] $dump_dir                 = undef,
-  Optional[Boolean]              $luks                     = undef,
-  Optional[String]               $lukspass                 = undef,
-  Optional[String]               $luks_service_name        = undef,
-  Optional[Boolean]              $lvm                      = undef,
-  Optional[String]               $lvm_vg                   = undef,
-  Stdlib::Absolutepath           $conf_dir                 = $common::__conf_dir,
-  Eit_types::Percentage          $lvm_extents_min_required = 15,
+  Boolean                        $manage      = true,
+  Boolean                        $enable      = false,
+  Eit_types::User                $backup_user = 'obmondo-backup',
+  Optional[Stdlib::Absolutepath] $dump_dir    = undef,
+  Optional[Boolean]              $lvm         = undef,
+  Stdlib::Absolutepath           $conf_dir    = $common::__conf_dir,
 ) {
-  confine($lvm, !$lvm_vg, 'A LVM volume group must be set if `lvm` is enabled')
-  confine($luks, !($lukspass or $luks_service_name),
-    'A LUKS passphrase or the name of the service that starts LUKS must be defined if `luks` is enabled')
-  confine($luks, $lukspass, $luks_service_name, 'Only one of `lukspass` and `luks_service_name` may be set')
-
   if $manage {
     user { $backup_user:
       ensure         => present,

@@ -2,8 +2,6 @@
 #
 # @param backup_user_password The password for the backup user. Defaults to $::common::backup::db::backup_user_password.
 #
-# @param ignore_tables List of tables to ignore during backup. Defaults to $::common::backup::db::ignore_tables.
-#
 # @param backup_method The backup method to use ('xtrabackup', 'mysqldump', 'mysqlbackup'). Defaults to $common::backup::db::backup_method.
 #
 # @param host The database host. Defaults to 'localhost'.
@@ -18,13 +16,10 @@
 #
 # @groups authentication backup_user_password, root_password, host
 #
-# @groups retention ignore_tables
-#
 # @groups backup_config backup_method
 #
 class common::backup::db::mysql (
   Eit_types::Password        $backup_user_password  = $::common::backup::db::backup_user_password,
-  Array[String]              $ignore_tables         = $::common::backup::db::ignore_tables,
   Enum[
     'xtrabackup',
     'mysqldump',
