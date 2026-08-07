@@ -1,22 +1,12 @@
 # @summary Class for managing common::system::utility::bash
 #
-# @param manage Whether to manage the files. Defaults to true.
-#
-# @param noop_value Whether to perform no-operation. Defaults to false.
-#
-# @groups management manage, noop_value
-#
-class common::system::utility::bash (
-  Boolean               $manage     = true,
-  Eit_types::Noop_Value $noop_value = undef,
-) {
+class common::system::utility::bash () {
   file {
     default:
-      ensure => ensure_file($manage),
-      noop   => $noop_value,
+      ensure => 'file',
       ;
     '/opt/obmondo/share/bash':
-      ensure => ensure_dir($manage),
+      ensure => 'directory',
       ;
     '/opt/obmondo/share/bash/bashrc':
       source  => 'puppet:///modules/common/system/utility/bash/bashrc',
