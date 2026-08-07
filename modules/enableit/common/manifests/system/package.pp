@@ -1,19 +1,16 @@
 # @summary Class for managing the installation and removal of packages
 #
-# @param install_default_packages Boolean to determine whether to install default packages. Defaults to false.
-#
 # @param manage Hash mapping package names to options for managing them.
 #
 # @param default_packages Array of package names to install by default.
 #
 # @param removed_packages Array of package names to remove.
 #
-# @groups general install_default_packages, manage.
+# @groups general manage.
 #
 # @groups packages default_packages, removed_packages.
 #
 class common::system::package (
-  Boolean                $install_default_packages  = false,
   Hash[
     String,
     Struct[{
@@ -64,16 +61,11 @@ class common::system::package (
       }
     }
   }
-  $_packages = if $install_default_packages {
-    $default_packages
-  } else {
-    []
-  }
   # Packages to install are all packages except those ending with a `-` (dash)
-  $_default_removed = $_packages.filter |$package| {
+  $_default_removed = $default_packages.filter |$package| {
     $package =~ /-$/
   }
-  $_default_installed = $_packages - $_default_removed
+  $_default_installed = $default_packages - $_default_removed
   package::install($_default_installed)
   package::remove($_default_removed.map |$p| {
     regsubst($p, '^(.*?)-?$', '\1', 'E')

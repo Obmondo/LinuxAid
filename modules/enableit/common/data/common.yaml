@@ -268,7 +268,6 @@ common::system::cloud_init::manage: false
 common::user_management::jumphost::enable: false
 
 ## Packages
-common::system::package::install_default_packages: true
 common::system::package::default_packages:
   - "bash-completion"
   - "curl"
