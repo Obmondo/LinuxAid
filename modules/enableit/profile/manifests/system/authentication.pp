@@ -1,7 +1,6 @@
 #
 class profile::system::authentication (
   Eit_types::Common::Allowed_users $allowed_users                = $::common::user_management::authentication::allowed_users,
-  Boolean                          $allow_managed_users          = $::common::user_management::authentication::allow_managed_users,
   Boolean                          $manage_pam                   = $::common::user_management::authentication::manage_pam,
   Boolean                          $ignore_expired_root_password = $::common::user_management::authentication::ignore_expired_root_password,
   Boolean                          $purge_ubuntu_user            = $::common::user_management::authentication::purge_ubuntu_user,
