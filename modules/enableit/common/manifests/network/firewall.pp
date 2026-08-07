@@ -18,27 +18,15 @@
 #
 # @param allow_azure Allow Azure traffic. Defaults to false.
 #
-# @param allow_netbird Allow Netbird traffic. Defaults to lookup('common::network::netbird::enable', Boolean, undef, false).
-#
 # @param block_bogons Block bogon IP addresses. Defaults to false.
-#
-# @param block_mdns Block mDNS traffic. Defaults to true.
-#
-# @param block_kaspersky_sccc Block Kaspersky SCCC traffic. Defaults to true.
-#
-# @param block_hasp_lm Block Hasp LM traffic. Defaults to true.
-#
-# @param block_dhcp_broadcast Block DHCP broadcast traffic. Defaults to true.
-#
-# @param block_netbios_broadcast Block NetBIOS broadcast traffic. Defaults to true.
 #
 # @param rules Custom firewall rules. Defaults to {}.
 #
 # @groups management manage, enable, enable_ipv6, enable_forwarding, drop_all, drop_action
 #
-# @groups allow_traffic allow_docker, allow_k8s, allow_azure, allow_netbird
+# @groups allow_traffic allow_docker, allow_k8s, allow_azure
 #
-# @groups block_traffic block_bogons, block_mdns, block_kaspersky_sccc, block_hasp_lm, block_dhcp_broadcast, block_netbios_broadcast
+# @groups block_traffic block_bogons
 #
 # @groups custom_rules rules
 #
@@ -52,14 +40,7 @@ class common::network::firewall (
   Boolean             $allow_docker      = false,
   Boolean             $allow_k8s         = false,
   Boolean             $allow_azure       = false,
-  Boolean             $allow_netbird     = lookup('common::network::netbird::enable', Boolean, undef, false),
-
-  Boolean             $block_bogons            = false,
-  Boolean             $block_mdns              = true,
-  Boolean             $block_kaspersky_sccc    = true,
-  Boolean             $block_hasp_lm           = true,
-  Boolean             $block_dhcp_broadcast    = true,
-  Boolean             $block_netbios_broadcast = true,
+  Boolean             $block_bogons      = false,
 
   Eit_types::Firewall $rules = {},
 ) {
