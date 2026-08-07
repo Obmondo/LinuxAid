@@ -1,10 +1,10 @@
 # PAM
 class profile::system::authentication::pam (
   Boolean                              $manage                  = $common::user_management::authentication::pam::manage,
-  Eit_types::Common::Allowed_users     $allowed_users           = $common::user_management::authentication::pam::allowed_users,
-  Boolean                              $allow_managed_users     = $common::user_management::authentication::pam::allow_managed_users,
+  Eit_types::Common::Allowed_users     $allowed_users           = $common::user_management::authentication::allowed_users,
+  Boolean                              $allow_managed_users     = true,
   Boolean                              $manage_pwquality        = $common::user_management::authentication::pam::manage_pwquality,
-  Array[Eit_types::Group, 0, 1]        $nologin_allowed_group   = $common::user_management::authentication::pam::nologin_allowed_group,
+  Array[Eit_types::Group, 0, 1]        $nologin_allowed_group   = [],
   Array[Tuple[Integer[0,99], String]]  $auth_lines              = $common::user_management::authentication::pam::auth_lines,
   Array[Tuple[Integer[0,99], String]]  $account_lines           = $common::user_management::authentication::pam::account_lines,
   Array[Tuple[Integer[0,99], String]]  $password_lines          = $common::user_management::authentication::pam::password_lines,

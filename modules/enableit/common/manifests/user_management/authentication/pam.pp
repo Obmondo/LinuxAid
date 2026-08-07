@@ -26,13 +26,7 @@
 #
 # @param manage Boolean to manage PAM configuration. Defaults to $common::user_management::authentication::manage_pam.
 #
-# @param allowed_users Allowed users list. Defaults to $common::user_management::authentication::allowed_users.
-#
-# @param allow_managed_users Boolean to allow managed users. Defaults to true.
-#
 # @param manage_pwquality Boolean to manage password quality. Defaults to false.
-#
-# @param nologin_allowed_group Array of Group, 0 or 1 elements, specifying allowed groups for nologin.
 #
 class common::user_management::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $auth_lines,
@@ -49,10 +43,7 @@ class common::user_management::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $sshd_session_lines,
 
   Boolean                             $manage                = $common::user_management::authentication::manage_pam,
-  Eit_types::Common::Allowed_users    $allowed_users         = $common::user_management::authentication::allowed_users,
-  Boolean                             $allow_managed_users   = true,
   Boolean                             $manage_pwquality      = false,
-  Array[Eit_types::Group, 0, 1]       $nologin_allowed_group = [],
 
 ) {
   if $manage {
