@@ -2,28 +2,22 @@
 #
 # @param enable Whether to enable the exporter.
 #
-# @param listen_address The IP and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63394'.
-#
 # @param noop_value Whether to perform noop actions. Defaults to false.
-#
-# @param exclude Regexes for datasets/snapshots/volumes that should be excluded from collection.
 #
 # @param scrape_job_labels Extra labels to attach to the exported Prometheus scrape job.
 #
 # @groups settings enable, noop_value
 #
-# @groups network listen_address
-#
-# @groups collection exclude, scrape_job_labels
+# @groups collection scrape_job_labels
 #
 class common::monitor::exporter::zfs (
-  Boolean               $enable         = false,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63394',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
-  Array[String[1]]      $exclude        = ['@autosnap_'],
+  Boolean                    $enable            = false,
+  Eit_types::Noop_Value      $noop_value        = $common::monitor::exporter::noop_value,
   Hash[String[1], String[1]] $scrape_job_labels = {},
 ) {
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63394'
 
   File {
     noop => $noop_value
@@ -45,10 +39,6 @@ class common::monitor::exporter::zfs (
     noop => $noop_value
   }
 
-  $_exclude_options = $exclude.map |String[1] $pattern| {
-    "--exclude=${pattern}"
-  }
-
   $_options = [
     "--web.listen-address=${listen_address}",
     '--properties.pool=health',
@@ -56,8 +46,8 @@ class common::monitor::exporter::zfs (
     '--collector.dataset-snapshot',
     '--properties.dataset-snapshot=creation',
     '--no-collector.dataset-volume',
-    $_exclude_options,
-  ].flatten
+    '--exclude=@autosnap_',
+  ]
 
   prometheus::daemon { 'zfs_exporter':
     package_name      => 'obmondo-zfs-exporter',
