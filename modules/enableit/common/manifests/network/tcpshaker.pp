@@ -2,12 +2,6 @@
 #
 # @param listen_port The port to listen on. Must be a Stdlib::Port.
 #
-# @param check_interval The interval between checks in seconds. Must be an Integer.
-#
-# @param requests_per_check Number of requests per check. Must be an Integer.
-#
-# @param concurrency Concurrency level. Must be an Integer.
-#
 # @param enable Whether to enable the service. Defaults to false.
 #
 # @param tcp_addresses Array of TCP addresses to bind to. Defaults to an empty array.
@@ -16,15 +10,10 @@
 #
 # @groups network listen_port, tcp_addresses.
 #
-# @groups operation check_interval, requests_per_check, concurrency.
-#
 # @groups service_control enable, noop_value.
 #
 class common::network::tcpshaker (
   Stdlib::Port      $listen_port,
-  Integer           $check_interval,
-  Integer           $requests_per_check,
-  Integer           $concurrency,
 
   Boolean               $enable         = false,
   Array[String]         $tcp_addresses  = [],
@@ -39,7 +28,7 @@ class common::network::tcpshaker (
     content => epp('common/network/tcpshaker.yaml.epp', {
       listen_port    => $listen_port,
       tcp_addresses  => $tcp_addresses,
-      check_interval => $check_interval,
+      check_interval => 15,
     }),
   }
 
@@ -55,7 +44,7 @@ class common::network::tcpshaker (
 
     [Service]
     Type=simple
-    ExecStart=/opt/obmondo/bin/tcp_shaker -d -f ${config_location} -n ${requests_per_check} -c ${concurrency}
+    ExecStart=/opt/obmondo/bin/tcp_shaker -d -f ${config_location} -n 50 -c 50
 
     [Install]
     WantedBy=multi-user.target
