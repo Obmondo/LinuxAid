@@ -1,7 +1,5 @@
 # @summary Class for managing common system configuration
 #
-# @param remove_fstrim_cron Boolean indicating whether to remove the fstrim cron job. Defaults to false.
-#
 # @param purge_root_ssh_keys Boolean indicating whether to purge SSH keys for the root user. Defaults to true.
 #
 # @param ssh_authorized_keys Hash of SSH authorized keys with parameters such as 'key', 'user', 'options', 'noop_value'. Defaults to {}.
@@ -32,7 +30,7 @@
 #
 # @groups user_management users, user_groups, ssh_authorized_keys, purge_root_ssh_keys
 #
-# @groups system_config remove_fstrim_cron, disable_ipv6, disabled_services
+# @groups system_config disable_ipv6, disabled_services
 #
 # @groups network_config locations, publicips
 #
@@ -45,7 +43,6 @@
 # @encrypt_params ssh_authorized_keys.*.key
 #
 class common::system (
-  Boolean                        $remove_fstrim_cron  = false,
   Boolean                        $purge_root_ssh_keys = true,
   Eit_types::Ssh_authorized_keys $ssh_authorized_keys = {},
   Eit_types::Users               $users               = {},
@@ -109,7 +106,7 @@ class common::system (
   # SYSTEMD
   ##############
 
-  if $remove_fstrim_cron or $facts['virtual'] == 'lxc' {
+  if $facts['virtual'] == 'lxc' {
     # Remove the fstrim cron job. This comes from the `util-linux` and is
     # installed by default with no proper way to disable it. Issues at
     # https://github.com/lxc/lxd/issues/2030 and
