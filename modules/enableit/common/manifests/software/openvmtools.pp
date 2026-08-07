@@ -4,14 +4,11 @@
 #
 # @param ensure Whether to ensure the openvmtools package is installed and running. Defaults to false.
 #
-# @param autoupgrade Whether to enable automatic upgrade of openvmtools. Defaults to true.
-#
-# @groups package_management manage, ensure, autoupgrade
+# @groups package_management manage, ensure
 #
 class common::software::openvmtools (
-  Boolean $manage      = false,
-  Boolean $ensure      = false,
-  Boolean $autoupgrade = true,
+  Boolean $manage = false,
+  Boolean $ensure = false,
 ) {
 
   if $manage {
