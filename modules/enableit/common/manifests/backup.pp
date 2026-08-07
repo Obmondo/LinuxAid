@@ -8,22 +8,17 @@
 #
 # @param dump_dir The directory for dumps. Defaults to undef.
 #
-# @param lvm Whether to enable LVM. Defaults to undef.
-#
 # @param conf_dir The configuration directory path. Defaults to $common::__conf_dir.
 #
 # @groups management manage, enable, backup_user, conf_dir
 #
 # @groups storage dump_dir
 #
-# @groups lvm lvm
-#
 class common::backup (
   Boolean                        $manage      = true,
   Boolean                        $enable      = false,
   Eit_types::User                $backup_user = 'obmondo-backup',
   Optional[Stdlib::Absolutepath] $dump_dir    = undef,
-  Optional[Boolean]              $lvm         = undef,
   Stdlib::Absolutepath           $conf_dir    = $common::__conf_dir,
 ) {
   if $manage {
