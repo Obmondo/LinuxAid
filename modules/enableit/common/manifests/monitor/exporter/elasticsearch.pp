@@ -2,20 +2,17 @@
 #
 # @param enable Boolean flag to enable or disable the exporter. Defaults to value of $common::monitor::exporter::enable.
 #
-# @param listen_address The IP and port for the exporter to listen on. Defaults to '127.254.254.254:9105'.
-#
 # @param noop_value Boolean for noop mode. Defaults to false.
 #
 # @groups settings enable, noop_value
 #
-# @groups network listen_address
-#
 class common::monitor::exporter::elasticsearch (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:9105',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Boolean               $enable     = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:9105'
 
   class { 'prometheus::elasticsearch_exporter':
     package_name      => 'obmondo-elasticsearch-exporter',
