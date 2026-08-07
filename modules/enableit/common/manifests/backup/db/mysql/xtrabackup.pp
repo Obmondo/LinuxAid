@@ -2,49 +2,26 @@
 #
 # @param backup_user_password The password for the backup user. Defaults to the value of ::common::backup::db::backup_user_password.
 #
-# @param enable Enable or disable the backup. Defaults to the value of ::common::backup::db::enable.
-#
-# @param backup_hour The hour of day to run the backup (0-23). Defaults to the value of ::common::backup::db::backup_hour.
-#
-# @param ignore_tables List of tables to ignore during backup. Defaults to the value of ::common::backup::db::ignore_tables.
-#
-# @param backup_user The backup database user. Defaults to the value of ::common::backup::db::backup_user.
-#
-# @param dump_dir Directory where backups are stored. Defaults to the value of ::common::backup::db::dump_dir.
-#
-# @param backup_retention Duration (in days) to retain backups. Defaults to the value of ::common::backup::db::backup_retention.
-#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @encrypt_params backup_user_password
 #
-# @groups general enable, encrypt_params
-#
-# @groups authentication backup_user, backup_user_password
-#
-# @groups schedule backup_hour
-#
-# @groups storage dump_dir
-#
-# @groups retention backup_retention, ignore_tables
+# @groups authentication backup_user_password, encrypt_params
 #
 class common::backup::db::mysql::xtrabackup (
-  Eit_types::Password       $backup_user_password  = $::common::backup::db::backup_user_password,
-  Boolean                   $enable                = $::common::backup::db::enable,
-  Integer[0,23]             $backup_hour           = $::common::backup::db::backup_hour,
-  Array[String]             $ignore_tables         = $::common::backup::db::ignore_tables,
-  Eit_types::SimpleString   $backup_user           = $::common::backup::db::backup_user,
-  Stdlib::Absolutepath      $dump_dir              = $::common::backup::db::dump_dir,
-  Eit_types::Duration::Days $backup_retention      = $::common::backup::db::backup_retention,
+  Eit_types::Password        $backup_user_password = $::common::backup::db::backup_user_password,
   Eit_types::Encrypt::Params $encrypt_params       = ['backup_user_password'],
 ) inherits ::common::backup::db {
+
+  $_backup_user = $::common::backup::db::backup_user
+  $_dump_dir    = $::common::backup::db::dump_dir
 
   # To support multiple borg repos, we need to see if the dump_dir and the borg archive is same.
   # if it is, then we assume that the borg repo is correct for this particular backup.
   if ! lookup('common::backup::borg::repos', Hash, undef, {}).empty {
     $last_borgbackup = $::common::backup::borg::last_borgbackup
     $repo_name = lookup('common::backup::borg::repos').map |$key, $value| {
-      if $dump_dir in $value['archives'] {
+      if $_dump_dir in $value['archives'] {
         $key
       }
     }.delete_undef_values.unique.sort.join(', ')
@@ -61,14 +38,14 @@ class common::backup::db::mysql::xtrabackup (
     'REPLICATION CLIENT',
   ]
   class { '::xtrabackup':
-    backup_dir       => $dump_dir,
-    mysql_user       => $backup_user,
+    backup_dir       => $_dump_dir,
+    mysql_user       => $_backup_user,
     mysql_pass       => $backup_user_password,
-    backup_retention => $backup_retention,
-    cron_hour        => $backup_hour,
+    backup_retention => $::common::backup::db::backup_retention,
+    cron_hour        => $::common::backup::db::backup_hour,
     last_borgbackup  => $_last_borgbackup,
   }
-  $_fq_backup_user = "${backup_user}@localhost"
+  $_fq_backup_user = "${_backup_user}@localhost"
   mysql_user { $_fq_backup_user:
     ensure        => present,
     password_hash => mysql_password($backup_user_password),
@@ -83,8 +60,8 @@ class common::backup::db::mysql::xtrabackup (
     require    => Mysql_user[$_fq_backup_user],
   }
   $env = {
-    'MYSQL_IGNORE_TABLES' => $ignore_tables,
-    'MYSQL_BACKUP_USER'   => $backup_user,
+    'MYSQL_IGNORE_TABLES' => $::common::backup::db::ignore_tables,
+    'MYSQL_BACKUP_USER'   => $_backup_user,
   }
   $env_file = "${common::backup::__conf_dir}/mysql/backup.env"
   file { $env_file:
@@ -107,7 +84,7 @@ class common::backup::db::mysql::xtrabackup (
 
         "my.cnf ${section} backup user":
           setting => 'user',
-          value   => "'${backup_user}'",
+          value   => "'${_backup_user}'",
         ;
 
         "my.cnf ${section} backup password":
