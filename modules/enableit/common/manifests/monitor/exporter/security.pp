@@ -7,34 +7,30 @@
 #
 # @param noop_value Eit_types::Noop_Value flag to run in noop mode. Defaults to $common::monitor::exporter::noop_value.
 #
-# @param host The host certificate name, used for mTLS and scrape target. Defaults to $trusted['certname'].
-#
 # @param listen_host The host to listen on. Defaults to '127.254.254.254'.
 #
 # @param listen_port The port to listen on. Defaults to 63396.
 #
 # @param vuls_server_url The URL of the Vuls server to send package lists to. Defaults to 'https://vuls.obmondo.com'.
 #
-# @param config_file Path to the configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/security_exporter.yaml".
-#
 # @groups settings enable, noop_value
 #
-# @groups network host, listen_host, listen_port
+# @groups network listen_host, listen_port
 #
-# @groups configuration vuls_server_url, config_file
+# @groups configuration vuls_server_url
 #
 class common::monitor::exporter::security (
   Boolean               $enable          = false,
   Eit_types::Noop_Value $noop_value      = $common::monitor::exporter::noop_value,
-  Eit_types::Certname   $host            = $trusted['certname'],
   Stdlib::Host          $listen_host     = '127.254.254.254',
   Stdlib::Port          $listen_port     = 63396,
   Stdlib::HTTPUrl       $vuls_server_url = 'https://vuls.obmondo.com',
   String                $timeout         = '5m',
-  Stdlib::Absolutepath  $config_file     = "${common::monitor::exporter::config_dir}/security_exporter.yaml",
 ) {
   unless $enable { return() }
 
+  $host = $trusted['certname']
+  $config_file = "${common::monitor::exporter::config_dir}/security_exporter.yaml"
   $service_name = 'obmondo-security-exporter'
 
   Package {
