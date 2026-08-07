@@ -1,22 +1,17 @@
 # @summary Class for managing the Prometheus Slurm Exporter
 #
-# @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
-#
-# @param listen_address The IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63397'.
-#
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
-# @groups settings enable, noop_value
-#
-# @groups network listen_address
+# @groups settings noop_value
 #
 class common::monitor::exporter::slurm (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63397',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
+  $enable = $common::monitor::exporter::enable
 
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63397'
 
   File {
     noop => $noop_value
@@ -37,9 +32,6 @@ class common::monitor::exporter::slurm (
   Group {
     noop => $noop_value
   }
-
-  $_address = $listen_address.split(':')[0]
-  $_port = $listen_address.split(':')[1]
 
   prometheus::daemon { 'slurm_exporter':
     package_name      => 'obmondo-slurm-exporter',
