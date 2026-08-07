@@ -10,7 +10,7 @@
 #
 # @param remote_backup_root The root directory for remote backups. Defaults to $::common::backup::borg::remote_backup_root.
 #
-# @param randomized_delay Optional delay to randomize backup timing. Defaults to $::common::backup::borg::randomized_delay.
+# @param randomized_delay Optional delay to randomize backup timing. Defaults to '10 minutes'.
 #
 # @param timespec Scheduled time for backups. Defaults to $::common::backup::borg::timespec.
 define common::backup::borg::push (
@@ -19,7 +19,7 @@ define common::backup::borg::push (
   Variant[Eit_types::IP, Stdlib::FQDN]    $remote_ip          = $::common::backup::borg::remote_ip,
   Optional[Eit_types::Password]           $password           = undef,
   Stdlib::Absolutepath                    $remote_backup_root = $::common::backup::borg::remote_backup_root,
-  Optional[Eit_types::SystemdTimeSpan]    $randomized_delay   = $::common::backup::borg::randomized_delay,
+  Optional[Eit_types::SystemdTimeSpan]    $randomized_delay   = '10 minutes',
   Optional[Eit_types::SystemdTime]        $timespec           = $::common::backup::borg::timespec,
 ) {
   $_ssh_key_file = '/etc/obmondo/borg/borg_id_rsa'
