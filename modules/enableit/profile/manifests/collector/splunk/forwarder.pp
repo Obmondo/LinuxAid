@@ -7,7 +7,7 @@ class profile::collector::splunk::forwarder (
   Optional[Stdlib::HTTPUrl] $deploymentserver    = $common::monitor::splunk::forwarder::deploymentserver,
   Boolean                   $seed_password       = $common::monitor::splunk::forwarder::seed_password,
   String[1]                 $password_hash       = $common::monitor::splunk::forwarder::password_hash,
-  Optional[Hash]            $forwarder_output    = $common::monitor::splunk::forwarder::forwarder_output,
+  Optional[Hash]            $forwarder_output    = {},
   Integer                   $log_keep_count      = $common::monitor::splunk::forwarder::log_keep_count,
   Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
   Hash[String[1], Hash]     $addons              = $common::monitor::splunk::forwarder::addons,

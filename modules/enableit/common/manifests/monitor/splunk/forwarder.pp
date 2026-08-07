@@ -10,8 +10,6 @@
 #
 # @param seed_password Whether to seed the password. Defaults to true.
 #
-# @param forwarder_output Additional output configuration as a hash. Defaults to an empty hash.
-#
 # @param log_keep_count Number of log files to keep. Defaults to 5.
 #
 # @param log_max_file_size_b Maximum size in bytes for log files. Defaults to 25000000.
@@ -32,7 +30,7 @@
 #
 # @groups package_config version, build
 #
-# @groups connection deploymentserver, forwarder_output
+# @groups connection deploymentserver
 #
 # @groups logging log_keep_count, log_max_file_size_b
 #
@@ -44,7 +42,6 @@ class common::monitor::splunk::forwarder (
   Optional[String]      $build               = '8a94541dcfac',
   Stdlib::HTTPUrl       $deploymentserver    = undef,
   Boolean               $seed_password       = true,
-  Hash                  $forwarder_output    = {},
   Integer               $log_keep_count      = 5,
   Eit_types::Bytes      $log_max_file_size_b = 25000000,
   Boolean               $enable              = false,
