@@ -1,13 +1,10 @@
 # @summary Class for managing filesystem quotas
 #
-# @param enable Boolean to enable quotas. Defaults to false.
-#
 # @param quotas Hash of quotas configuration per filesystem, default is empty hash.
 #
-# @groups configuration enable, quotas
+# @groups configuration quotas
 #
 class common::storage::quota (
-  Boolean $enable = false,
   Hash[Stdlib::Absolutepath, Struct[{
     user  => Optional[Hash[Eit_types::User, Eit_types::Storage::Quota]],
     group => Optional[Hash[Eit_types::Group, Eit_types::Storage::Quota]],
