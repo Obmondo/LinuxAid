@@ -1,8 +1,8 @@
 # Microsoft SCOM
 class profile::monitor::scom (
-  Optional[Array[Stdlib::Host]] $scom_masters       = $common::monitor::scom::scom_masters,
-  Boolean                       $install_sudo_rules = $common::monitor::scom::install_sudo_rules,
-  Eit_types::User               $scom_user          = $common::monitor::scom::scom_user,
+  Optional[Array[Stdlib::Host]] $scom_masters       = undef,
+  Boolean                       $install_sudo_rules = true,
+  Eit_types::User               $scom_user          = 'svclinuxmon',
   Eit_types::Noop_Value         $noop_value         = $common::monitor::scom::noop_value,
 ) {
 
