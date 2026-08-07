@@ -1,26 +1,17 @@
 # @summary Class for managing NTP Exporter
 #
-# @param enable Boolean to enable or disable the NTP exporter. Defaults to $common::monitor::exporter::enable.
-#
-# @param listen_address The IP and port to listen on, default is '127.254.254.254:9559'.
-#
 # @param noop_value Optional boolean to specify noop mode. Defaults to undef.
 #
-# @param telemetry_path The telemetry endpoint path. Defaults to '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s'.
-#
-# @groups settings enable, noop_value
-#
-# @groups network listen_address
-#
-# @groups configuration telemetry_path
+# @groups settings noop_value
 #
 class common::monitor::exporter::ntp (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:9559',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
-  String                $telemetry_path = '/metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
+  $enable = $common::monitor::exporter::enable
+
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:9559'
 
   File {
     noop => $noop_value
@@ -40,7 +31,7 @@ class common::monitor::exporter::ntp (
   $_options = [
     '-ntp.source http',
     "-web.listen-address ${listen_address}",
-    "-web.telemetry-path ${telemetry_path}",
+    '-web.telemetry-path /metrics?target=ntp.ubuntu.com&protocol=4&duration=10s',
   ]
   prometheus::daemon { 'ntp_exporter':
     package_name      => 'obmondo-ntp-exporter',

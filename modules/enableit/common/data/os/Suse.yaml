@@ -159,6 +159,5 @@ common::user_management::authentication::pam::password_session_lines:
 
 common::monitor::exporter::mtail::enable: false
 common::monitor::prometheus::env_file_path: '/etc/default'
-common::monitor::prometheus::usershell: '/usr/sbin/nologin'
 common::monitor::exporter::security::enable: true
 common::system::systemd::manage_resolved: true

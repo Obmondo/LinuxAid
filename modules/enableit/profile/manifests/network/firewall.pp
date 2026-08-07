@@ -8,17 +8,12 @@ class profile::network::firewall (
   Boolean             $allow_docker      = $common::network::firewall::allow_docker,
   Boolean             $allow_k8s         = $common::network::firewall::allow_docker,
   Boolean             $allow_azure       = $common::network::firewall::allow_azure,
-  Boolean             $allow_netbird     = $common::network::firewall::allow_netbird,
-
-  Boolean             $block_bogons            = $common::network::firewall::block_bogons,
-  Boolean             $block_mdns              = $common::network::firewall::block_mdns,
-  Boolean             $block_kaspersky_sccc    = $common::network::firewall::block_kaspersky_sccc,
-  Boolean             $block_hasp_lm           = $common::network::firewall::block_hasp_lm,
-  Boolean             $block_dhcp_broadcast    = $common::network::firewall::block_dhcp_broadcast,
-  Boolean             $block_netbios_broadcast = $common::network::firewall::block_netbios_broadcast,
+  Boolean             $block_bogons      = $common::network::firewall::block_bogons,
 
   Eit_types::Firewall $rules = $common::network::firewall::rules,
 ) {
+
+  $_allow_netbird = lookup('common::network::netbird::enable', Boolean, undef, false)
 
   class { 'firewall':
     ensure    => $enable.ensure_service,
@@ -62,7 +57,7 @@ class profile::network::firewall (
     }
   }
 
-  if $allow_docker or $allow_k8s or $allow_azure or $allow_netbird {
+  if $allow_docker or $allow_k8s or $allow_azure or $_allow_netbird {
     # This is to support a more relaxed firewall setup, where only
     # INPUT, FORWARD and OUTPUT chains are purged/managed
     # and docker inserted rules are ignored
@@ -99,7 +94,7 @@ class profile::network::firewall (
         'KUBE-PROXY-FIREWALL',
         '--comment "cali:*',
       ] },
-      if $allow_netbird { [ 'NETBIRD-RT-FWD' ] },
+      if $_allow_netbird { [ 'NETBIRD-RT-FWD' ] },
     ].flatten.delete_undef_values
 
     $_prerouting = [
@@ -110,7 +105,7 @@ class profile::network::firewall (
     $_postrouting = [
       if $allow_docker { ['docker', '172', '-o br-', '192.168'] },
       if $allow_k8s { ['cali-POSTROUTING', 'CNI-HOSTPORT-MASQ', 'KUBE-POSTROUTING'] },
-      if $allow_netbird { [ 'NETBIRD-RT-NAT' ] },
+      if $_allow_netbird { [ 'NETBIRD-RT-NAT' ] },
     ].flatten.delete_undef_values
 
     # Flush INPUT and OUTPUT chains
@@ -201,63 +196,53 @@ class profile::network::firewall (
   }
 
   # Multicast DNS
-  if $block_mdns {
-    firewall { '010 drop mdns':
-      chain       => 'INPUT',
-      proto       => 'udp',
-      destination => '224.0.0.251',
-      jump        => $drop_action,
-    }
+  firewall { '010 drop mdns':
+    chain       => 'INPUT',
+    proto       => 'udp',
+    destination => '224.0.0.251',
+    jump        => $drop_action,
   }
 
   # Kaspersky Security Center Cloud Console
   #
   # See https://support.kaspersky.com/KSC/CloudConsole/en-US/158830.htm
-  if $block_kaspersky_sccc {
-    firewall { '910 drop kaspersky sccc broadcast':
-      chain       => 'INPUT',
-      proto       => 'udp',
-      dport       => 15000,
-      destination => '255.255.255.255',
-      jump        => $drop_action,
-    }
+  firewall { '910 drop kaspersky sccc broadcast':
+    chain       => 'INPUT',
+    proto       => 'udp',
+    dport       => 15000,
+    destination => '255.255.255.255',
+    jump        => $drop_action,
   }
 
   # https://forums.centos.org/viewtopic.php?t=69517#p292129
-  if $block_hasp_lm {
-    firewall_multi { '910 drop hasp license manager broadcast':
-      chain       => 'INPUT',
-      proto       => 'udp',
-      dport       => 1947,
-      destination => '255.255.255.255',
-      jump        => $drop_action,
-    }
+  firewall_multi { '910 drop hasp license manager broadcast':
+    chain       => 'INPUT',
+    proto       => 'udp',
+    dport       => 1947,
+    destination => '255.255.255.255',
+    jump        => $drop_action,
   }
 
-  if $block_dhcp_broadcast {
-    firewall { '950 ignore broadcast: dhcp':
+  firewall { '950 ignore broadcast: dhcp':
+    proto => 'udp',
+    sport => 68,
+    dport => 67,
+    jump  => $drop_action,
+  }
+
+  firewall {
+    default:
       proto => 'udp',
-      sport => 68,
-      dport => 67,
       jump  => $drop_action,
-    }
-  }
-
-  if $block_netbios_broadcast {
-    firewall {
-      default:
-        proto => 'udp',
-        jump  => $drop_action,
-        ;
-      '951 ignore netbios broadcast udp port 137':
-        sport => 137,
-        dport => 137,
-        ;
-      '952 ignore netbios broadcast udp port 138':
-        sport => 138,
-        dport => 138,
-        ;
-    }
+      ;
+    '951 ignore netbios broadcast udp port 137':
+      sport => 137,
+      dport => 137,
+      ;
+    '952 ignore netbios broadcast udp port 138':
+      sport => 138,
+      dport => 138,
+      ;
   }
 
   # Block Bogons

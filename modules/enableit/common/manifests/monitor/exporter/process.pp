@@ -1,34 +1,26 @@
 # @summary Class for managing the Prometheus process exporter
 #
-# @param enable Whether to enable the exporter. Defaults to true.
-#
 # @param noop_value Whether to perform noop operations. Defaults to false.
 #
-# @param listen_address The IP and port to listen on, in 'IP:port' format. Defaults to '127.254.254.254:63388'.
-#
-# @groups settings enable, noop_value
-#
-# @groups network listen_address
+# @groups settings noop_value
 #
 class common::monitor::exporter::process (
-  Boolean               $enable         = true,
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63388',
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
-  unless $enable { return() }
+  $listen_address = '127.254.254.254:63388'
 
   class { 'prometheus::process_exporter':
     package_name      => 'obmondo-process-exporter',
-    package_ensure    => ensure_latest($enable),
-    service_enable    => $enable,
-    service_ensure    => ensure_service($enable),
-    manage_service    => $enable,
+    package_ensure    => ensure_latest(true),
+    service_enable    => true,
+    service_ensure    => ensure_service(true),
+    manage_service    => true,
     init_style        => $facts['service_provider'],
-    restart_on_change => $enable,
+    restart_on_change => true,
     tag               => $::trusted['certname'],
     user              => process_exporter,
     group             => process_exporter,
-    export_scrape_job => $enable,
+    export_scrape_job => true,
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     extra_options     => "--web.listen-address=${listen_address}",

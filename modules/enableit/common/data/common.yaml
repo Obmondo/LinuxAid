@@ -127,9 +127,6 @@ common::full_host_management: true
 common::logging::manage: false
 common::backup::manage: true
 common::network::manage: false
-common::software::manage: false
-common::storage::manage: false
-common::system::manage: false
 
 common::default::classes:
   - common::system::openvox
@@ -177,7 +174,7 @@ common::user_management::authentication::manage_sssd: false
 common::user_management::authentication::manage_sudo: false
 common::user_management::authentication::ignore_expired_root_password: false
 common::user_management::authentication::purge_ubuntu_user: false
-common::user_management::authentication::purge_user: false
+common::user_management::authentication::purge_users: false
 common::user_management::authentication::sudo::purge: false
 common::user_management::authentication::manage: false
 common::user_management::authentication::allowed_users:
@@ -216,7 +213,6 @@ common::system::hardware::manage_multipath: false
 
 ## Limits
 common::system::limits::manage: false
-common::system::limits::purge: false
 
 ## Guix
 common::system::guix::manage: false
@@ -269,7 +265,6 @@ common::system::cloud_init::manage: false
 common::user_management::jumphost::enable: false
 
 ## Packages
-common::system::package::install_default_packages: true
 common::system::package::default_packages:
   - "bash-completion"
   - "curl"
@@ -294,7 +289,6 @@ common::system::openvox::version: "8.24.2"
 common::system::openvox::environment: "v1.8.4"
 common::system::openvox::server: enableit.puppet.obmondo.com
 common::system::openvox::package_name: "openvox-agent"
-common::system::openvox::configure_agent: true
 
 # Update the linuxaid-cli version as per the latest release on Github
 # https://github.com/Obmondo/linuxaid-cli/releases/latest
@@ -313,17 +307,11 @@ common::system::openvox::linuxaid_cli::checksums:
   1.8.0: fbf66f14b2d68bc297616a51291b029a9b522853e74dc3a45e5125062ca8459c
   1.7.0: 9694a2726a0c93073af8ce47f1db0f2ba7aa86ad208a24e641cede8b1565f116
 
-## KeepAlived
-common::system::keepalived::global_defs:
-  smtp_server: "127.0.0.1"
-  smtp_connect_timeout: 30
-
 ## Certs
 common::system::certs::__base_dir: "/etc/ssl/private/static-certs"
 common::system::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
 ## Utility
-common::system::utility::atop::install: false
 common::system::utility::atop::daemon: false
 
 ## Hosts entries
@@ -345,22 +333,16 @@ common::system::obmondo_admin::enable: false
 ## Mail
 common::system::mail::myhostname: "%{facts.networking.fqdn}"
 common::system::mail::mydomain: "%{facts.networking.domain}"
-common::system::mail::stats_daemon_port: 63777
 
 ## DNS
 common::system::dns::listen_address:
   - "192.168.0.1"
 # Prometheus Server
 common::monitor::prometheus::install_method: package
-common::monitor::prometheus::bin_dir: "/opt/obmondo/bin"
-common::monitor::prometheus::usershell: "/usr/sbin/nologin"
 
 common::monitor::prometheus::server: prometheus.obmondo.com
-common::monitor::prometheus::server::version: 3.8.1
 common::monitor::prometheus::server::checksums:
   3.8.1: a09972ced892cd298e353eb9559f1a90f499da3fb4ff0845be352fc138780ee7
-common::monitor::prometheus::server::listen_address: 127.254.254.254:63400
-common::monitor::prometheus::server::config_dir: "/etc/prometheus"
 common::monitor::prometheus::server::collect_scrape_jobs:
   - job_name: node
   - job_name: blackbox
@@ -403,38 +385,12 @@ common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315
 
 common::monitor::exporter::node::enable: true
-common::monitor::exporter::node::version: 1.10.2
 common::monitor::exporter::node::checksums:
   1.10.2: c46e5b6f53948477ff3a19d97c58307394a29fe64a01905646f026ddc32cb65b
 
-common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
-common::monitor::exporter::node::buddyinfo: false
-common::monitor::exporter::node::cgroups: false
-common::monitor::exporter::node::drbd: false
-common::monitor::exporter::node::drm: false
-common::monitor::exporter::node::ethtool: false
-common::monitor::exporter::node::interrupts: false
-common::monitor::exporter::node::ksmd: false
-common::monitor::exporter::node::lnstat: false
-common::monitor::exporter::node::logind: false
-common::monitor::exporter::node::meminfo_numa: false
-common::monitor::exporter::node::mountstats: true
-common::monitor::exporter::node::network_route: false
-common::monitor::exporter::node::ntp: false
-common::monitor::exporter::node::perf: false
-common::monitor::exporter::node::processes: false
-common::monitor::exporter::node::qdisc: false
-common::monitor::exporter::node::runit: false
-common::monitor::exporter::node::slabinfo: false
-common::monitor::exporter::node::supervisord: false
-common::monitor::exporter::node::sysctl: false
 common::monitor::exporter::node::systemd: false
-common::monitor::exporter::node::tcpstat: false
-common::monitor::exporter::node::thermal_zone: false
-common::monitor::exporter::node::wifi: false
-common::monitor::exporter::node::zoneinfo: false
 common::monitor::exporter::zfs::enable: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
@@ -460,7 +416,7 @@ common::software::fwupd::manage: false
 common::software::microsoft_mde::manage: false
 common::software::nvidia_driver::manage: false
 common::software::rubrik::manage: false
-common::software::teleport::manage: false
+common::software::teleport::enable: false
 common::software::vscode::manage: false
 common::software::insights::manage: false
 
@@ -499,7 +455,6 @@ common::network::wireguard::enable: false
 ## Netbird
 common::network::netbird::enable: false
 common::network::netbird::wireguard_port: 51820
-common::network::netbird::install_method: repo
 common::network::netbird::version: 0.76.0
 common::network::netbird::checksums:
   0.76.0: cb4097121d5247890e42b4e211c4965fa8b06ac00b879bfe4abb73af4c28cbd3
@@ -509,9 +464,6 @@ common::network::netbird::checksums:
 
 common::network::tcpshaker::enable: false
 common::network::tcpshaker::listen_port: 8785
-common::network::tcpshaker::check_interval: 15
-common::network::tcpshaker::requests_per_check: 50
-common::network::tcpshaker::concurrency: 50
 
 ## Vrrp
 common::network::vrrp::enable: false

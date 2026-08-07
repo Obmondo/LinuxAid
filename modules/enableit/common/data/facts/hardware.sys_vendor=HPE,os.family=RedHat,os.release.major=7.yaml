@@ -4,7 +4,6 @@ common::system::kernel::modules:
     - 'acpi_power_meter'
 
 # Allow us to use text-based iLO access using the `textcons` command
-common::system::grub::manage: true
 common::system::grub::parameters:
   nofb:
     ensure: true

@@ -4,29 +4,23 @@
 #
 # @param noop_value Eit_types::Noop_Value value used for noop operations during testing. Defaults to false.
 #
-# @param config_file The path to the exporter configuration YAML file. Defaults to "${common::monitor::exporter::config_dir}/filestat_exporter.yaml".
-#
 # @param working_directory The working directory for the exporter process. Defaults to '/backup'.
 #
 # @param file_pattern An array of file patterns to monitor. Defaults to an empty array.
 #
-# @param listen_address The IP and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63387'.
-#
 # @groups settings enable, noop_value
 #
-# @groups network listen_address
-#
-# @groups configuration config_file, working_directory, file_pattern
+# @groups configuration working_directory, file_pattern
 #
 class common::monitor::exporter::filestat (
-  Boolean                     $enable            = false,
-  Eit_types::Noop_Value       $noop_value        = $common::monitor::exporter::noop_value,
-  Stdlib::Absolutepath        $config_file       = "${common::monitor::exporter::config_dir}/filestat_exporter.yaml",
-  Stdlib::Absolutepath        $working_directory = '/backup',
-  Array[String]               $file_pattern      = [],
-  Eit_types::IPPort           $listen_address    = '127.254.254.254:63387',
+  Boolean               $enable            = false,
+  Eit_types::Noop_Value $noop_value        = $common::monitor::exporter::noop_value,
+  Stdlib::Absolutepath  $working_directory = '/backup',
+  Array[String]         $file_pattern      = [],
 ) {
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63387'
 
   confine($enable, $file_pattern.size == 0, 'filestat needs some file_pattern, so it can monitor those, try setting common::monitor::exporter::filestat::file_pattern in hiera') #lint:ignore:140chars
   File {
@@ -49,7 +43,7 @@ class common::monitor::exporter::filestat (
     "-web.listen-address=${listen_address}",
     '-config.file /opt/obmondo/etc/exporter/filestat_exporter.yaml',
   ]
-  file { $config_file :
+  file { "${common::monitor::exporter::config_dir}/filestat_exporter.yaml" :
     ensure  => ensure_file($enable),
     noop    => false,
     owner   => $user,

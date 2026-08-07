@@ -4,10 +4,6 @@
 # including setting up environment variables and configuring
 # the service startup command.
 #
-# @param enable
-#   Whether to enable and manage the service. Defaults to value from
-#   `common::software::ansoftrsmservice::enable`.
-#
 # @param env
 #   A hash of environment variables to set in `/etc/default/ansoftrsmservice`.
 #   Defaults to value from `common::software::ansoftrsmservice::env`.
@@ -18,13 +14,12 @@
 #   Defaults to value from `common::software::ansoftrsmservice::ansysrsm_path`.
 # 
 class profile::software::ansoftrsmservice (
-  Boolean $enable        = $common::software::ansoftrsmservice::enable,
   Hash    $env           = $common::software::ansoftrsmservice::env,
   String  $ansysrsm_path = $common::software::ansoftrsmservice::ansysrsm_path,
 ) {
 
   file { '/etc/default/ansoftrsmservice':
-    ensure  => ensure_present($enable),
+    ensure  => 'present',
     mode    => '0644',
     owner   => 'root',
     content => anything_to_ini($env),
@@ -55,9 +50,9 @@ class profile::software::ansoftrsmservice (
     | EOT
 
   systemd::unit_file { 'ansoftrsmservice.service':
-    ensure    => ensure_present($enable),
-    enable    => $enable,
-    active    => $enable,
+    ensure    => 'present',
+    enable    => true,
+    active    => true,
     content   => $_service_content,
     require   => File['/etc/default/ansoftrsmservice'],
     subscribe => File['/etc/default/ansoftrsmservice'],

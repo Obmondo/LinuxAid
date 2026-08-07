@@ -18,8 +18,6 @@
 # @example Valid Netbird client version
 #   version = "0.59.3"
 #
-# @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
-#
 # @param wireguard_port
 #   Optional UDP port for mesh WireGuard firewall rule; undef skips the rule (see common::network::netbird).
 #
@@ -29,7 +27,6 @@ class profile::network::netbird (
   String                  $setup_key      = $common::network::netbird::setup_key,
   Stdlib::HTTPSUrl        $server         = $common::network::netbird::server,
   Eit_types::Version      $version        = $common::network::netbird::version,
-  Enum['package', 'repo'] $install_method = $common::network::netbird::install_method,
   Optional[Stdlib::Port]  $wireguard_port = $common::network::netbird::wireguard_port,
 ) {
   # Include archive module for download capabilities

@@ -4,10 +4,6 @@
 # including setting up environment variables and configuring
 # the service startup command.
 #
-# @param enable
-#   Whether to enable and manage the service. Defaults to value from
-#   `common::software::ansoftrsmservice::enable`.
-#
 # @param environment
 #   A hash of environment variables to set in `/etc/default/ansoftrsmservice`.
 #   Defaults to value from `common::software::ansoftrsmservice::environment`.
@@ -21,12 +17,11 @@
 #
 # @param manage Whether to manage ansoftrsmservice. Defaults to false.
 #
-# @groups service enable, manage.
+# @groups service manage.
 #
 # @groups configuration env, ansysrsm_path.
 #
 class common::software::ansoftrsmservice (
-  Boolean $enable        = true,
   Boolean $manage        = false,
   Hash    $env           = {},
   String  $ansysrsm_path = undef,

@@ -4,10 +4,6 @@
 #
 # @param manage Boolean indicating whether to manage the network interfaces. Defaults to false.
 #
-# @param purge Boolean indicating whether to purge unmanaged network configs. Defaults to true.
-#
-# @param restart_on_change Boolean indicating whether to restart network service on config change. Defaults to true.
-#
 # @param ipaddress_package The package name for IP addressing tools. Defaults to undef.
 #
 # @param ipaddress_provider The provider for IP address management. Defaults to undef.
@@ -21,9 +17,9 @@
 # @param $__required_packages
 # Array of package names required for networking.
 #
-# @groups service service_name, restart_on_change
+# @groups service service_name
 #
-# @groups management_settings manage, purge
+# @groups management_settings manage
 #
 # @groups ip_management ipaddress_package, ipaddress_provider
 #
@@ -40,8 +36,6 @@ class common::network (
     'networking'
   ]             $service_name,
   Boolean       $manage              = false,
-  Boolean       $purge               = true,
-  Boolean       $restart_on_change   = true,
   String        $ipaddress_package   = undef,
   String        $ipaddress_provider  = undef,
   Hash[Pattern[/^[:a-z0-9]+$/],Struct[{
@@ -196,9 +190,7 @@ Bond=${_name}
           before => Network_config['lo'],
         })
 
-        $_network_notify = if $restart_on_change {
-          Service['network']
-        }
+        $_network_notify = Service['network']
 
         if $facts['init_system'] == 'systemd' {
           systemd::unit_file { [
@@ -220,7 +212,7 @@ Bond=${_name}
           hasrestart => true,
         }
 
-        if $purge and $::facts['os']['family'] == 'RedHat' {
+        if $::facts['os']['family'] == 'RedHat' {
           tidy { '/etc/sysconfig/network-scripts':
             age     => '0',
             recurse => 1,

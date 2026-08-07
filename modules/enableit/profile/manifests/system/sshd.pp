@@ -2,17 +2,16 @@
 class profile::system::sshd (
   Boolean                                $manage                  = $common::user_management::sshd::manage,
   Variant[Boolean, Enum['no-noop']]      $distribute_hostkeys     = $common::user_management::sshd::distribute_hostkeys,
-  Eit_types::Package::Version::Installed $version                 = $common::user_management::sshd::version,
-  Array[Stdlib::Port]                    $ports                   = $common::user_management::sshd::ports,
-  Array[Eit_types::IPPort]               $listenaddresses         = $common::user_management::sshd::listenaddresses,
+  Eit_types::Package::Version::Installed $version                 = 'latest',
+  Array[Stdlib::Port]                    $ports                   = [22],
+  Array[Eit_types::IPPort]               $listenaddresses         = [],
   Boolean                                $managed_users_only      = $common::user_management::sshd::managed_users_only,
-  Boolean                                $compression             = $common::user_management::sshd::compression,
+  Boolean                                $compression             = true,
   Boolean                                $password_authentication = $common::user_management::sshd::password_authentication,
-  Boolean                                $tcp_forwarding          = $common::user_management::sshd::tcp_forwarding,
-  Boolean                                $permit_user_rc          = $common::user_management::sshd::permit_user_rc,
-  Integer[0,default]                     $max_auth_tries          = $common::user_management::sshd::max_auth_tries,
-  Integer[0,default]                     $max_sessions            = $common::user_management::sshd::max_sessions,
-  Integer[0,default]                     $login_grace_time        = $common::user_management::sshd::login_grace_time,
+  Boolean                                $tcp_forwarding          = true,
+  Boolean                                $permit_user_rc          = true,
+  Integer[0,default]                     $max_auth_tries          = 4,
+  Integer[0,default]                     $login_grace_time        = 30,
 
   Array[Stdlib::Absolutepath] $hostkeys                = $common::user_management::sshd::hostkeys,
   Enum[
@@ -25,7 +24,7 @@ class profile::system::sshd (
     'DEBUG1',
     'DEBUG2',
     'DEBUG3'
-  ] $log_level                                         = $common::user_management::sshd::log_level,
+  ] $log_level                                         = 'VERBOSE',
 
   Array[Eit_types::Ssh::Kexalgorithms] $kexalgorithms  = $common::user_management::sshd::kexalgorithms,
   Array[Eit_types::Ssh::Ciphers]       $ciphers        = $common::user_management::sshd::ciphers,
@@ -43,7 +42,7 @@ class profile::system::sshd (
   Boolean $x11_use_localhost = $common::user_management::sshd::x11_use_localhost,
   Hash    $client_options    = $common::user_management::sshd::client_options,
 
-  Array[String]                      $accept_env = $common::user_management::sshd::accept_env,
+  Array[String]                      $accept_env = ['LANG', 'LC_*'],
   Hash[String, Hash[String, Any]] $match      = $common::user_management::sshd::match,
 ) {
 

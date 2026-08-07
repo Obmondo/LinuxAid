@@ -48,7 +48,7 @@ class common::backup::db::pgsql (
       owner  => $backup_user,
       mode   => '0755',
     }
-    file { "${common::backup::__conf_dir}/pgsql":
+    file { "${common::backup::conf_dir}/pgsql":
       ensure => directory,
     }
   }
@@ -77,7 +77,7 @@ class common::backup::db::pgsql (
     'BACKUP_DIR'          => $dump_dir,
     'PGSQL_IGNORE_TABLES' => $ignore_tables,
   }
-  $env_file = "${common::backup::__conf_dir}/pgsql/backup.env"
+  $env_file = "${common::backup::conf_dir}/pgsql/backup.env"
   functions::create_ini_file($env_file, $env, {
     ensure => $enable ? {
       true    => 'present',

@@ -6,10 +6,6 @@
 #
 # @param env_file_path The absolute path to the environment file.
 #
-# @param bin_dir The absolute path to the binary directory.
-#
-# @param usershell The absolute path to the user's shell.
-#
 # @param init_style Init style
 #
 # @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
@@ -18,7 +14,7 @@
 #
 # @groups installation install_method, init_style.
 #
-# @groups paths env_file_path, bin_dir, usershell.
+# @groups paths env_file_path.
 #
 # @groups server_config server.
 #
@@ -26,8 +22,6 @@ class common::monitor::prometheus (
   Enum['package','url'] $install_method,
   Prometheus::Initstyle $init_style,
   Stdlib::Absolutepath  $env_file_path,
-  Stdlib::Absolutepath  $bin_dir,
-  Stdlib::Absolutepath  $usershell,
   Stdlib::Fqdn          $server,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
@@ -53,8 +47,8 @@ class common::monitor::prometheus (
 
   class { 'prometheus':
     install_method    => $install_method,
-    bin_dir           => $bin_dir,
-    usershell         => $usershell,
+    bin_dir           => '/opt/obmondo/bin',
+    usershell         => '/usr/sbin/nologin',
     restart_on_change => true,
     env_file_path     => $env_file_path,
     init_style        => $init_style,

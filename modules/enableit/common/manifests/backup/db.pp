@@ -2,7 +2,7 @@
 #
 # @param enable Boolean flag to enable or disable backup. Defaults to the value of $::common::backup::enable.
 #
-# @param backup_user_password Optional password for backup user. Defaults to the value of $::common::backup::backup_user_password.
+# @param backup_user_password Optional password for backup user. Defaults to undef.
 #
 # @param backup_user The username for backup. Defaults to the value of $::common::backup::backup_user.
 #
@@ -30,7 +30,7 @@
 #
 class common::backup::db (
   Boolean                       $enable               = $::common::backup::enable,
-  Optional[Eit_types::Password] $backup_user_password = $::common::backup::backup_user_password,
+  Optional[Eit_types::Password] $backup_user_password = undef,
   String                        $backup_user          = $::common::backup::backup_user,
   Stdlib::Unixpath              $dump_dir             = $::common::backup::dump_dir,
   Eit_types::Duration::Days     $backup_retention     = 30,

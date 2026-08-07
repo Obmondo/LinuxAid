@@ -6,11 +6,9 @@
 #
 # @param footer The footer content for the MOTD. Defaults to undef.
 #
-# @param diplay_system_stats Whether to display system stats in the MOTD. Defaults to true.
-#
 # @param noop_value Optional boolean to specify noop mode for file resources. Defaults to undef.
 #
-# @groups motd enable, header, footer, diplay_system_stats.
+# @groups motd enable, header, footer.
 #
 # @groups file_resources noop_value.
 #
@@ -18,7 +16,6 @@ class common::user_management::motd (
   Boolean               $enable              = true,
   Optional[String]      $header              = undef,
   Optional[String]      $footer              = undef,
-  Boolean               $diplay_system_stats = true,
   Eit_types::Noop_Value $noop_value          = undef,
 ) inherits ::common::system {
 

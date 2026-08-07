@@ -2,11 +2,7 @@
 #
 # @param __dir The absolute path to the backup configuration directory.
 #
-# @param prune_keep Hash defining retention periods for daily, weekly, and monthly backups. Defaults to {'daily' => 7, 'weekly' => 2, 'monthly' => 2}.
-#
 # @param timespec Hash specifying the schedule time. Defaults to { 'weekday' => undef, 'year' => '*', 'month' => '*', 'day' => '*', 'hour' => 02, 'minute' => 0, 'second' => 0 }.
-#
-# @param randomized_del Optional delay to introduce randomness in schedule. Defaults to '10 minutes'.
 #
 # @param remote_user Optional user for remote backups. Defaults to $::common::backup::backup_user.
 #
@@ -14,11 +10,7 @@
 #
 # @param remote_backup_root Optional path for remote backup root.
 #
-# @param backup_root Path for local backup root. Defaults to $::common::backup::dump_dir.
-#
 # @param repos Hash of repositories to backup.
-#
-# @param archives Array of archive paths to include in backup.
 #
 # @param authorized_keys Optional hash of authorized keys for remote backup.
 #
@@ -30,11 +22,11 @@
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups config __dir, prune_keep, timespec, randomized_delay, last_borgbackup
+# @groups config __dir, timespec, last_borgbackup
 #
 # @groups remote remote_user, remote_ip, remote_backup_root, authorized_keys
 #
-# @groups local backup_root, repos, archives
+# @groups local repos
 #
 # @groups server server
 #
@@ -44,11 +36,6 @@
 #
 class common::backup::borg (
   Stdlib::Absolutepath                 $__dir,
-  Eit_types::Borg_prune_numbers        $prune_keep = {
-    'daily'   => 7,
-    'weekly'  => 2,
-    'monthly' => 2,
-  },
   Eit_types::SystemdTime               $timespec   = {
     'weekday' => undef,
     'year'    => '*',
@@ -58,13 +45,10 @@ class common::backup::borg (
     'minute'  => 0,
     'second'  => 0,
   },
-  Optional[Eit_types::SystemdTimeSpan]              $randomized_delay   = '10 minutes',
   Optional[Eit_types::User]                         $remote_user        = $::common::backup::backup_user,
   Optional[Variant[Eit_types::IP, Stdlib::FQDN]]    $remote_ip          = undef,
   Optional[Stdlib::Absolutepath]                    $remote_backup_root = undef,
-  Stdlib::Absolutepath                              $backup_root        = $::common::backup::dump_dir,
   Hash                                              $repos              = {},
-  Array[Stdlib::Absolutepath]                       $archives           = [],
   Optional[Hash]                                    $authorized_keys    = undef,
   Boolean                                           $server             = false,
   Optional[Stdlib::Absolutepath]                    $last_borgbackup    = '/var/tmp',
@@ -95,7 +79,7 @@ class common::backup::borg (
       require => Package['obmondo-borg-exporter'],
     }
     common::backup::borg::server { $facts['networking']['hostname'] :
-      backup_root     => $backup_root,
+      backup_root     => $::common::backup::dump_dir,
       authorized_keys => $authorized_keys,
     }
   } else {

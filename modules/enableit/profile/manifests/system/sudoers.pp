@@ -51,13 +51,13 @@ class profile::system::sudoers (
   }
 
   sudo::conf { 'yubikey_sudo_enable':
-    ensure   => ensure_present($common::user_management::authentication::sudo::ssh_agent_auth),
+    ensure   => ensure_present(false),
     priority => 1,
     content  => 'Defaults env_keep += "SSH_AUTH_SOCK"',
     require  => File[$sudoers_d_dir],
   }
 
-  package::install('pam-ssh-agent-auth', ensure_present($common::user_management::authentication::sudo::ssh_agent_auth))
+  package::install('pam-ssh-agent-auth', ensure_present(false))
 
   $sudoers.each |$name, $v| {
     profile::system::sudoers::conf { $name:

@@ -1,32 +1,19 @@
 # @summary Class for managing the Prometheus server
 #
-# @param version The version of Prometheus to install. Must be a Eit_types::Version.
-#
 # @param collect_scrape_jobs An array of hashes defining scrape jobs to collect. Defaults to an empty array.
-#
-# @param config_dir The absolute path to the configuration directory. Must be a Stdlib::Absolutepath.
-#
-# @param listen_address The IP and port on which the server listens. Must be of type Eit_types::IPPort.
-#
-# @param enable Boolean to enable or disable the monitoring. Defaults to true.
 #
 # @param noop_value Notifies Puppet to define if changes are to be made to the system or simulated.
 #
-# @groups settings enable, noop_value
+# @groups settings noop_value
 #
-# @groups network listen_address
-#
-# @groups configuration version, collect_scrape_jobs, config_dir
+# @groups configuration collect_scrape_jobs
 #
 class common::monitor::prometheus::server (
-  Eit_types::Version    $version,
   Array[Hash]           $collect_scrape_jobs,
-  Stdlib::Absolutepath  $config_dir,
-  Eit_types::IPPort     $listen_address,
-
-  Boolean               $enable     = $common::monitor::enable,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
+  $version = '3.8.1'
+  $listen_address = '127.254.254.254:63400'
 
   Exec {
     noop => $noop_value,
@@ -87,7 +74,7 @@ class common::monitor::prometheus::server (
     install_method                 => $install_method,
     shared_dir                     => $_shared_dir,
     include_default_scrape_configs => false,
-    config_dir                     => $config_dir,
+    config_dir                     => '/etc/prometheus',
     manage_config_dir              => true,
     restart_on_change              => true,
     package_name                   => $_package_name,

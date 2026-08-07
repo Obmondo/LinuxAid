@@ -1,5 +1,5 @@
 ---
-role::computing::slurm::metrics:
+role::computing::slurm::slurmctld::metrics:
   - jobs
   - nodes
   - scheduler

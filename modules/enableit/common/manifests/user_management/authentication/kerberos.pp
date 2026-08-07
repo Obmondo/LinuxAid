@@ -1,7 +1,5 @@
 # @summary Class for managing Kerberos integration
 #
-# @param manage Whether to manage the Kerberos configuration. Defaults to the value of $common::user_management::authentication::manage_sssd.
-#
 # @param enable Enable or disable Kerberos. Defaults to false.
 #
 # @param base_dn The base distinguished name for Kerberos. Defaults to undef.
@@ -33,7 +31,6 @@
 # @encrypt_params join_password.
 #
 class common::user_management::authentication::kerberos (
-  Boolean                       $manage         = $common::user_management::authentication::manage_sssd,
   Boolean                       $enable         = false,
   Optional[String]              $base_dn        = undef,
   Optional[String]              $ou             = undef,
@@ -53,7 +50,7 @@ class common::user_management::authentication::kerberos (
           '`join_user` and `join_password` must be provided for join to work')
   confine($enable, !($default_realm and $realms),
           '`default_realm` and `realms` must be provided when kerberos authentication is enabled')
-  if $manage {
+  if $common::user_management::authentication::manage_sssd {
     include ::profile::system::authentication::kerberos
   }
 }

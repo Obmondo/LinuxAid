@@ -1,13 +1,12 @@
 # Setup openvmtools on the guest.
 class profile::virtualization::vmware::openvmtools (
-  Boolean $ensure      = $common::software::openvmtools::ensure,
-  Boolean $autoupgrade = $common::software::openvmtools::autoupgrade,
+  Boolean $ensure = $common::software::openvmtools::ensure,
 ) {
 
   if $ensure {
     class { '::openvmtools':
       ensure      => ensure_present($ensure),
-      autoupgrade => $autoupgrade,
+      autoupgrade => true,
       supported   => true,
     }
   } else {

@@ -2,13 +2,10 @@
 #
 # @param enable Whether to enable the NFS server. Defaults to false.
 #
-# @param unmount_snapshots Whether to unmount snapshots. Defaults to true.
-#
-# @groups server_config enable, unmount_snapshots
+# @groups server_config enable
 #
 class common::storage::nfs (
-  Boolean $enable            = false,
-  Boolean $unmount_snapshots = true,
+  Boolean $enable = false,
 ) {
   if lookup('common::storage::nfs::server::enable', Boolean, undef, false) {
     contain ::common::storage::nfs::server

@@ -5,6 +5,5 @@ role::projectmanagement::gitlab_ci_runner::__blendable: true
 role::projectmanagement::perforce::git_connector::__blendable: true
 role::projectmanagement::perforce::icmanage::__blendable: true
 role::storage::beegfs::__blendable: true
-role::virtualization::docker::__blendable: true
 role::web::haproxy::__blendable: true
 role::web::nginx::__blendable: true

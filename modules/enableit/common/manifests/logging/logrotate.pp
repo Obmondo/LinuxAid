@@ -2,28 +2,19 @@
 #
 # @param manage Boolean flag to determine whether to manage logrotate rules. Defaults to false.
 #
-# @param purge Boolean flag to determine whether to purge existing rules. Defaults to false.
-#
-# @param dateext Boolean to enable date extension in logrotate filenames. Defaults to true.
-#
-# @param compress Boolean to enable compression of rotated logs. Defaults to true.
-#
 # @param su Boolean indicating whether to use 'su' directive. Defaults to true (note: not supported).
 #
 # @param rules Hash of custom logrotate rules. Defaults to empty hash.
 #
-# @groups management manage, purge.
+# @groups management manage.
 #
-# @groups options dateext, compress, su.
+# @groups options su.
 #
 # @groups custom rules.
 #
 class common::logging::logrotate (
-  Boolean $manage   = false,
-  Boolean $purge    = false,
-  Boolean $dateext  = true,
-  Boolean $compress = true,
-  Boolean $su       = true,
+  Boolean $manage = false,
+  Boolean $su     = true,
   Eit_types::Common::Logging::Logrotate::Rules $rules = {},
 ) inherits ::common::logging {
   # su directive is not supported.

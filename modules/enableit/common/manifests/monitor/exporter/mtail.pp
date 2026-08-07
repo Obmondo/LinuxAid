@@ -4,27 +4,21 @@
 #
 # @param noop_value The noop value for resources. Defaults to false.
 #
-# @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63389'.
-#
 # @param logs An array of log file paths to monitor. Defaults to an empty array.
-#
-# @param progs The path to the programs directory. Defaults to "${common::monitor::exporter::config_dir}/mtail".
 #
 # @groups settings enable, noop_value
 #
-# @groups network listen_address
-#
-# @groups configuration logs, progs
+# @groups configuration logs
 #
 class common::monitor::exporter::mtail (
-  Boolean                     $enable         = $common::monitor::exporter::enable,
-  Eit_types::Noop_Value       $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort           $listen_address = '127.254.254.254:63389',
-  Array[Stdlib::Absolutepath] $logs           = [],
-  Stdlib::Absolutepath        $progs          = "${common::monitor::exporter::config_dir}/mtail",
+  Boolean                     $enable     = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value       $noop_value = $common::monitor::exporter::noop_value,
+  Array[Stdlib::Absolutepath] $logs       = [],
 ) {
 
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63389'
 
   File {
     noop => $noop_value
@@ -61,7 +55,7 @@ class common::monitor::exporter::mtail (
   }
 
   $_options = [
-    "-progs ${progs}",
+    "-progs ${common::monitor::exporter::config_dir}/mtail",
     "-address ${_address}",
     "-port ${_port}",
     '-logtostderr',

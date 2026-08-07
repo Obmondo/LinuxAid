@@ -7,22 +7,19 @@
 # @param noop_value Eit_types::Noop_Value to indicate if operations should be in noop mode.
 # Defaults to $common::monitor::exporter::noop_value.
 #
-# @param config_file The absolute path to the configuration file. Defaults to "${common::monitor::exporter::config_dir}/blackbox.yml".
-#
 # @param targets An array of domain targets to monitor. Defaults to an empty array.
 #
 # @groups settings enable, noop_value
 #
 # @groups network listen_port
 #
-# @groups configuration config_file, targets
+# @groups configuration targets
 #
 class common::monitor::exporter::blackbox (
   Boolean                $enable,
   Stdlib::Port           $listen_port,
-  Eit_types::Noop_Value  $noop_value  = $common::monitor::exporter::noop_value,
-  Stdlib::Absolutepath   $config_file = "${common::monitor::exporter::config_dir}/blackbox.yml",
-  Array[Stdlib::HttpUrl] $targets     = [],
+  Eit_types::Noop_Value  $noop_value = $common::monitor::exporter::noop_value,
+  Array[Stdlib::HttpUrl] $targets    = [],
 ) {
 
   unless $enable { return() }
@@ -50,7 +47,7 @@ class common::monitor::exporter::blackbox (
     scrape_host       => $trusted['certname'],
     scrape_port       => $listen_port,
     extra_options     => "--web.listen-address='127.254.254.254:${listen_port}'",
-    config_file       => $config_file,
+    config_file       => "${common::monitor::exporter::config_dir}/blackbox.yml",
     tag               => $::trusted['certname'],
     export_scrape_job => $enable,
     scrape_job_labels => { 'certname' => $::trusted['certname'] },

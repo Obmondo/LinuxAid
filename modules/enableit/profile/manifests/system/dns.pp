@@ -2,12 +2,10 @@
 class profile::system::dns (
   Enum['dnsmasq', 'systemd-resolved', 'resolv']       $resolver             = $common::system::dns::resolver,
   Array                                               $nameservers          = $common::system::dns::nameservers,
-  Array                                               $fallback_nameservers = $common::system::dns::fallback_nameservers,
   Array[Eit_types::Hostname]                          $searchpath           = $common::system::dns::searchpath,
   Optional[Variant[Boolean, Enum['allow-downgrade']]] $dnssec               = $common::system::dns::dnssec,
   Optional[Variant[Boolean, Enum['opportunistic']]]   $dns_over_tls         = $common::system::dns::dns_over_tls,
   Array[Stdlib::IP::Address]                          $listen_address       = $common::system::dns::listen_address,
-  Boolean                                             $allow_external       = $common::system::dns::allow_external,
   Eit_types::Noop_Value                               $noop_value           = $common::system::dns::noop_value,
 ) {
 
@@ -36,7 +34,7 @@ class profile::system::dns (
       }.join("\n")
 
       firewall_multi { '110 allow external dns':
-        ensure => ensure_present($allow_external),
+        ensure => 'absent',
         dport  => 53,
         proto  => [
           'tcp',

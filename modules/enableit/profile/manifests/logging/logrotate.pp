@@ -1,8 +1,5 @@
 # Manage logrotation
 class profile::logging::logrotate (
-  Boolean                                      $purge       = $::common::logging::logrotate::purge,
-  Boolean                                      $dateext     = $::common::logging::logrotate::dateext,
-  Boolean                                      $compress    = $::common::logging::logrotate::compress,
   Eit_types::Common::Logging::Logrotate::Rules $rules       = $::common::logging::logrotate::rules,
   Hash                                         $adv_options = {},
 
@@ -17,13 +14,13 @@ class profile::logging::logrotate (
   }
 
   $default_config = {
-    dateext    => $dateext,
+    dateext    => true,
     # Include epoch in suffix so multiple rotations on the same day do not
     # collide (e.g. SUSE-shipped /etc/logrotate.d/zypper, where the default
     # `-%Y%m%d` suffix causes "destination ... already exists, skipping rotation"
     # when a size-triggered rotation runs more than once per day).
     dateformat => '-%Y%m%d-%s',
-    compress   => $compress,
+    compress   => true,
     mail       => false,
     olddir     => undef,
     ifempty    => false,
@@ -33,7 +30,7 @@ class profile::logging::logrotate (
 
   class { '::logrotate':
     ensure              => 'latest',
-    purge_configdir     => $purge,
+    purge_configdir     => false,
     config              => {
       # logrotate will complain loudly if the log dir is writable by groups
       # other than root. On Debian/Ubuntu rsyslog runs as `syslog` so we need to

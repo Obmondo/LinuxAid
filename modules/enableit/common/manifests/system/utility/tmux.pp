@@ -1,31 +1,21 @@
 # @summary Class for managing common::system::utility::tmux
 #
-# @param manage Boolean indicating whether to manage tmux package and files. Defaults to true.
-#
-# @param noop_value Optional Boolean for noop operations. Defaults to false.
-#
-# @groups management manage, noop_value
-#
-class common::system::utility::tmux (
-  Boolean               $manage     = true,
-  Eit_types::Noop_Value $noop_value = undef,
-) {
+class common::system::utility::tmux () {
 
   package::install('tmux')
 
   file {
     default:
-    ensure => ensure_file($manage),
-    noop   => $noop_value,
+    ensure => 'file',
       ;
 
     '/etc/tmux.conf':
-      ensure => ensure_file($manage),
+      ensure => 'file',
       source => 'puppet:///modules/common/system/utility/tmux/tmux.conf',
       ;
 
     '/opt/obmondo/share/tmux':
-      ensure => ensure_dir($manage),
+      ensure => 'directory',
       ;
 
     '/opt/obmondo/share/tmux/badges.sh':

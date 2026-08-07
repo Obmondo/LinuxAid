@@ -6,21 +6,9 @@
 #
 # @param snapshot Boolean indicating whether snapshots should be taken before updates. Defaults to true.
 #
-# @param blacklist Array of package names to exclude from updates. Defaults to an empty array.
-#
-# @param remove_unused_packages Boolean indicating whether to remove unused packages. Defaults to true.
-#
-# @param remove_unused_kernels Boolean indicating whether to remove unused kernels. Defaults to true.
-#
-# @param reboot Boolean indicating whether to reboot after updates. Defaults to false.
-#
-# @param mail_to Email address to notify after updates. Defaults to 'ops@obmondo.com'.
-#
 # @param noop_value Optional Boolean to perform no-op runs for testing. Defaults to false.
 #
-# @groups general manage, enable, snapshot, reboot, mail_to
-#
-# @groups packages blacklist, remove_unused_packages, remove_unused_kernels
+# @groups general manage, enable, snapshot
 #
 # @groups noop noop_value
 #
@@ -28,11 +16,6 @@ class common::system::updates (
   Boolean               $manage                 = false,
   Boolean               $enable                 = false,
   Boolean               $snapshot               = true,
-  Array                 $blacklist              = [],
-  Boolean               $remove_unused_packages = true,
-  Boolean               $remove_unused_kernels  = true,
-  Boolean               $reboot                 = false,
-  Eit_types::Email      $mail_to                = 'ops@obmondo.com',
   Eit_types::Noop_Value $noop_value             = undef,
 ) {
   if $manage {

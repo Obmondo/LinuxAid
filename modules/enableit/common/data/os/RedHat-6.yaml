@@ -1,10 +1,6 @@
 ---
 common::user_management::authentication::ignore_expired_root_password: true
 
-# Since we don't have a postfix-stats init script for non-systemd we may as well
-# disable this
-common::monitor::postfix::enable_stats: false
-
 common::user_management::sshd::kexalgorithms:
   - 'diffie-hellman-group-exchange-sha256'
   - 'diffie-hellman-group-exchange-sha1'

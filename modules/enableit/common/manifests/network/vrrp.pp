@@ -2,21 +2,16 @@
 #
 # @param enable Boolean to enable or disable the VRRP setup. Defaults to false.
 #
-# @param hosts Array of IP addresses for VRRP hosts. Defaults to an empty array.
-#
 # @param instances Hash defining VRRP instances with their configurations. Defaults to an empty hash.
 #
 # @param sync_groups Hash defining synchronization groups with their configurations. Defaults to an empty hash.
 #
 # @groups general enable.
 #
-# @groups network hosts.
-#
 # @groups configuration instances, sync_groups.
 #
 class common::network::vrrp (
   Boolean                    $enable       = false,
-  Array[Stdlib::IP::Address] $hosts        = [],
   Hash                       $instances    = {},
   Hash                       $sync_groups  = {},
 ) inherits ::common::network {

@@ -4,10 +4,6 @@ class profile::logging::rsyslog (
   Boolean                       $purge_rsyslog_d = $common::logging::rsyslog::purge_rsyslog_d,
   Boolean                       $log_remote      = $common::logging::rsyslog::log_remote,
   Boolean                       $log_local       = $common::logging::rsyslog::log_local,
-  Boolean                       $log_cron        = $common::logging::rsyslog::log_cron,
-  Boolean                       $log_mail        = $common::logging::rsyslog::log_mail,
-  Boolean                       $log_auth        = $common::logging::rsyslog::log_auth,
-  Boolean                       $log_boot        = $common::logging::rsyslog::log_boot,
   Boolean                       $system_log      = $common::logging::rsyslog::system_log,
   Stdlib::Host                  $log_address     = $common::logging::rsyslog::log_address,
   Eit_types::Rsyslog::Remote_Ip $remote_servers  = $common::logging::rsyslog::remote_servers,
@@ -103,51 +99,34 @@ class profile::logging::rsyslog (
           }
         }
 
-        $_auth_logs = if $log_auth {
-          file { '/var/log/auth.log': }
+        file { '/var/log/auth.log': }
 
-          Hash([
-              'auth', {
-                key => 'auth,authpriv.*',
-                value => '/var/log/auth.log',
-              },
-          ])
-        }
+        $_auth_logs = Hash([
+            'auth', {
+              key => 'auth,authpriv.*',
+              value => '/var/log/auth.log',
+            },
+        ])
 
-        $_cron_logs = if $log_cron {
-          file { '/var/log/cron.log': }
+        file { '/var/log/cron.log': }
 
-          Hash(['cron', {
-                key   => 'cron.*',
-                value => '/var/log/cron.log',
-          }])
-        }
+        $_cron_logs = Hash(['cron', {
+              key   => 'cron.*',
+              value => '/var/log/cron.log',
+        }])
 
-        $_mail_logs = if $log_mail {
-          file { '/var/log/mail.log': }
+        file { '/var/log/mail.log': }
 
-          Hash([
-              'mail', {
-                key => 'mail.*',
-                value => '-/var/log/mail.log',
-              },
-              'mail2', {
-                key => 'mail.err',
-                value => '/var/log/mail.err',
-              },
-          ])
-        }
-
-        $_boot_logs = if $log_boot {
-          file { '/var/log/boot.log': }
-
-          Hash([
-              'boot', {
-                key   => 'local7.*',
-                value => '-/var/log/boot.log',
-              },
-          ])
-        }
+        $_mail_logs = Hash([
+            'mail', {
+              key => 'mail.*',
+              value => '-/var/log/mail.log',
+            },
+            'mail2', {
+              key => 'mail.err',
+              value => '/var/log/mail.err',
+            },
+        ])
 
         $_standard_logs = stdlib::merge($_auth_logs, $_cron_logs, $_mail_logs)
 
@@ -220,7 +199,7 @@ class profile::logging::rsyslog (
         }
 
         $log_rules = if $log_local {
-          stdlib::merge($_boot_logs, $os_rules)
+          $os_rules
         }
 
         # This file  with Ubuntu and will cause journal logs to be

@@ -10,8 +10,6 @@
 #
 # @param manage Boolean to control overall management. Defaults to false.
 #
-# @param allow_managed_users Boolean to allow managed users. Defaults to true.
-#
 # @param ignore_expired_root_password Boolean to ignore expired root password checks. Defaults to false.
 #
 # @param purge_ubuntu_user Boolean to purge Ubuntu user. Defaults to false.
@@ -24,7 +22,7 @@
 #
 # @groups management manage, manage_pam, manage_sssd, manage_nis, manage_sudo
 #
-# @groups users allowed_users, allow_managed_users, protected_users
+# @groups users allowed_users, protected_users
 #
 # @groups purge purge_ubuntu_user, purge_users, ignore_expired_root_password
 #
@@ -35,7 +33,6 @@ class common::user_management::authentication (
   Boolean                          $manage_nis,
   Boolean                          $manage_sudo,
   Boolean                          $manage,
-  Boolean                          $allow_managed_users          = true,
   Boolean                          $ignore_expired_root_password = false,
   Boolean                          $purge_ubuntu_user            = false,
   Boolean                          $purge_users                  = false,

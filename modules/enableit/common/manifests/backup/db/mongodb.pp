@@ -62,7 +62,7 @@ class common::backup::db::mongodb (
     'PRUNE_BACKUPS'    => true,
   }
 
-  $env_dir  = "${common::backup::__conf_dir}/mongodb"
+  $env_dir  = "${common::backup::conf_dir}/mongodb"
   $env_file = "${env_dir}/backup.env"
 
   file { $env_dir:

@@ -1,22 +1,17 @@
 # @summary Class for managing the Prometheus Wireguard Exporter
 #
-# @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
-#
-# @param listen_address The IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63390'.
-#
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
-# @groups settings enable, noop_value
-#
-# @groups network listen_address
+# @groups settings noop_value
 #
 class common::monitor::exporter::wireguard (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63390',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
+  $enable = $common::monitor::exporter::enable
 
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63390'
 
   File {
     noop => $noop_value
