@@ -322,7 +322,6 @@ common::system::certs::__base_dir: "/etc/ssl/private/static-certs"
 common::system::certs::letsencrypt::deploy_hook_command: "/opt/obmondo/bin/letsencrypt_deploy_hook.sh"
 
 ## Utility
-common::system::utility::atop::install: false
 common::system::utility::atop::daemon: false
 
 ## Hosts entries
