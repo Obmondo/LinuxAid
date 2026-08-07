@@ -1,3 +1,2 @@
 ---
 common::software::openvmtools::manage: true
-common::system::hardware::enable_multipath: false
