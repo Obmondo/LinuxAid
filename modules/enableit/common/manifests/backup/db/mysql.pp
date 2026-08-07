@@ -18,7 +18,7 @@
 #
 # @param host The database host. Defaults to 'localhost'.
 #
-# @param root_password The root password for the database. Defaults to $::common::backup::root_password.
+# @param root_password The root password for the database. Defaults to undef.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
@@ -52,7 +52,7 @@ class common::backup::db::mysql (
   Eit_types::Encrypt::Params $encrypt_params        = ['backup_user_password'],
   Optional[Eit_types::Host]  $host                  = 'localhost',
 
-  Optional[Eit_types::Password] $root_password = $::common::backup::root_password,
+  Optional[Eit_types::Password] $root_password = undef,
 
 ) inherits ::common::backup::db {
   contain "common::backup::db::mysql::${backup_method}"
