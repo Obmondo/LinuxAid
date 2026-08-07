@@ -1,22 +1,11 @@
 # @summary Class for managing the Prometheus GitLab Runner exporter
 #
-# @param enable Whether to enable the exporter. Defaults to $common::monitor::exporter::enable.
-#
 # @param noop_value The value for noop. Defaults to false.
 #
-# @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63384'.
-#
-# @param host The hostname. Defaults to $trusted['certname'].
-#
-# @groups settings enable, noop_value
-#
-# @groups network listen_address, host
+# @groups settings noop_value
 #
 class common::monitor::exporter::gitlab_runner (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63384',
-  Eit_types::Certname   $host           = $trusted['certname'],
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
   File {
     noop => $noop_value,
@@ -24,7 +13,7 @@ class common::monitor::exporter::gitlab_runner (
   prometheus::scrape_job { 'gitlab_runner':
     job_name    => 'gitlab_runner',
     tag         => $::trusted['certname'],
-    targets     => [ $listen_address ],
+    targets     => [ '127.254.254.254:63384' ],
     labels      => { 'certname' => $::trusted['certname'] },
     collect_dir => '/etc/prometheus/file_sd_config.d',
   }
