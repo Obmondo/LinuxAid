@@ -403,38 +403,12 @@ common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::blackbox::listen_port: 63315
 
 common::monitor::exporter::node::enable: true
-common::monitor::exporter::node::version: 1.10.2
 common::monitor::exporter::node::checksums:
   1.10.2: c46e5b6f53948477ff3a19d97c58307394a29fe64a01905646f026ddc32cb65b
 
-common::monitor::exporter::node::lib_directory: "/var/lib/node_exporter"
 common::monitor::exporter::node::textfile_directory: "/var/lib/node_exporter/textfile_collector"
 common::monitor::exporter::node::listen_address: 127.254.254.254:63385
-common::monitor::exporter::node::buddyinfo: false
-common::monitor::exporter::node::cgroups: false
-common::monitor::exporter::node::drbd: false
-common::monitor::exporter::node::drm: false
-common::monitor::exporter::node::ethtool: false
-common::monitor::exporter::node::interrupts: false
-common::monitor::exporter::node::ksmd: false
-common::monitor::exporter::node::lnstat: false
-common::monitor::exporter::node::logind: false
-common::monitor::exporter::node::meminfo_numa: false
-common::monitor::exporter::node::mountstats: true
-common::monitor::exporter::node::network_route: false
-common::monitor::exporter::node::ntp: false
-common::monitor::exporter::node::perf: false
-common::monitor::exporter::node::processes: false
-common::monitor::exporter::node::qdisc: false
-common::monitor::exporter::node::runit: false
-common::monitor::exporter::node::slabinfo: false
-common::monitor::exporter::node::supervisord: false
-common::monitor::exporter::node::sysctl: false
 common::monitor::exporter::node::systemd: false
-common::monitor::exporter::node::tcpstat: false
-common::monitor::exporter::node::thermal_zone: false
-common::monitor::exporter::node::wifi: false
-common::monitor::exporter::node::zoneinfo: false
 common::monitor::exporter::zfs::enable: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
