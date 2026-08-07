@@ -344,7 +344,6 @@ common::system::obmondo_admin::enable: false
 ## Mail
 common::system::mail::myhostname: "%{facts.networking.fqdn}"
 common::system::mail::mydomain: "%{facts.networking.domain}"
-common::system::mail::stats_daemon_port: 63777
 
 ## DNS
 common::system::dns::listen_address:
