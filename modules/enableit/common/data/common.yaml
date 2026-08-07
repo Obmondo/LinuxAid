@@ -174,7 +174,7 @@ common::user_management::authentication::manage_sssd: false
 common::user_management::authentication::manage_sudo: false
 common::user_management::authentication::ignore_expired_root_password: false
 common::user_management::authentication::purge_ubuntu_user: false
-common::user_management::authentication::purge_user: false
+common::user_management::authentication::purge_users: false
 common::user_management::authentication::sudo::purge: false
 common::user_management::authentication::manage: false
 common::user_management::authentication::allowed_users:
