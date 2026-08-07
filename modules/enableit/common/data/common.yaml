@@ -467,7 +467,6 @@ common::network::wireguard::enable: false
 ## Netbird
 common::network::netbird::enable: false
 common::network::netbird::wireguard_port: 51820
-common::network::netbird::install_method: repo
 common::network::netbird::version: 0.76.0
 common::network::netbird::checksums:
   0.76.0: cb4097121d5247890e42b4e211c4965fa8b06ac00b879bfe4abb73af4c28cbd3

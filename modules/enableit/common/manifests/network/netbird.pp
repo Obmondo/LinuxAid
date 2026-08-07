@@ -15,8 +15,6 @@
 # @example Valid Netbird client version  
 #   version = "0.59.3"
 #
-# @param install_method The method to install Netbird. The default is to download via their GitHub repo releases.
-#
 # @param wireguard_port
 #   Optional UDP port to allow for NetBird mesh WireGuard inbound (default 51820). Set to undef in Hiera (e.g. `~`)
 #   to skip the mesh firewall rule when direct mesh/WG ingress is not required or policy forbids opening it.
@@ -24,14 +22,13 @@
 #
 # @groups authentication setup_key, enable, noop_value.
 #
-# @groups server_details server, version, install_method.
+# @groups server_details server, version.
 #
 class common::network::netbird (
   Boolean                  $enable,
   Stdlib::HTTPSUrl         $server,
   Eit_types::Version       $version,
   String                   $setup_key,
-  Enum['package', 'repo']  $install_method,
   Eit_types::Noop_Value    $noop_value =  undef,
   Optional[Stdlib::Port]   $wireguard_port = 51820,
 ) {
