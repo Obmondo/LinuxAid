@@ -127,9 +127,6 @@ common::full_host_management: true
 common::logging::manage: false
 common::backup::manage: true
 common::network::manage: false
-common::software::manage: false
-common::storage::manage: false
-common::system::manage: false
 
 common::default::classes:
   - common::system::openvox
@@ -292,7 +289,6 @@ common::system::openvox::version: "8.24.2"
 common::system::openvox::environment: "v1.8.4"
 common::system::openvox::server: enableit.puppet.obmondo.com
 common::system::openvox::package_name: "openvox-agent"
-common::system::openvox::configure_agent: true
 
 # Update the linuxaid-cli version as per the latest release on Github
 # https://github.com/Obmondo/linuxaid-cli/releases/latest
@@ -310,11 +306,6 @@ common::system::openvox::linuxaid_cli::checksums:
   1.9.0: 16e338e83c942100aabe5104f2f6bbfa32f1f61e650a74d7bf77df6294d3ad00
   1.8.0: fbf66f14b2d68bc297616a51291b029a9b522853e74dc3a45e5125062ca8459c
   1.7.0: 9694a2726a0c93073af8ce47f1db0f2ba7aa86ad208a24e641cede8b1565f116
-
-## KeepAlived
-common::system::keepalived::global_defs:
-  smtp_server: "127.0.0.1"
-  smtp_connect_timeout: 30
 
 ## Certs
 common::system::certs::__base_dir: "/etc/ssl/private/static-certs"
