@@ -4,30 +4,24 @@
 #
 # @param noop_value The value to use for noop mode. Defaults to false.
 #
-# @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63395'.
-#
-# @param interval_seconds The interval in seconds for the metrics. Defaults to 120.
-#
 # @param domains Array of domain names to monitor. Defaults to ['nrk.no', 'vg.no', 'example.com'].
 #
 # @groups settings enable, noop_value
 #
-# @groups network listen_address
-#
-# @groups configuration interval_seconds, domains
+# @groups configuration domains
 #
 class common::monitor::exporter::dns (
-  Boolean                      $enable           = $common::monitor::exporter::enable,
-  Eit_types::Noop_Value        $noop_value       = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort            $listen_address   = '127.254.254.254:63395',
-  Eit_types::Duration::Seconds $interval_seconds = 120,
-  Array[Eit_types::Hostname]   $domains          = [
+  Boolean                    $enable     = $common::monitor::exporter::enable,
+  Eit_types::Noop_Value      $noop_value = $common::monitor::exporter::noop_value,
+  Array[Eit_types::Hostname] $domains    = [
     'nrk.no',
     'vg.no',
     'example.com',
   ],
 ) {
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63395'
 
   File {
     noop => $noop_value,
@@ -48,7 +42,7 @@ class common::monitor::exporter::dns (
   $_options = [
     "-listen-address=${listen_address}",
     "-test-hosts ${_domains.join(',')}",
-    "-test-interval-seconds ${interval_seconds}",
+    '-test-interval-seconds 120',
   ]
   prometheus::daemon { 'dns_exporter':
     package_name      => 'obmondo-dns-exporter',
