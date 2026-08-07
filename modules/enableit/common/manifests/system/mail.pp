@@ -12,8 +12,6 @@
 #
 # @param mynetworks List of trusted clients (IPs/CIDRs) allowed to relay through this server. Empty disables explicit mynetworks. Defaults to empty array.
 #
-# @param relay_domains Optional list of recipient domains this server will relay mail for. Defaults to undef.
-#
 # @param smtp_sasl_auth Boolean to enable SMTP SASL authentication. Defaults to false.
 #
 # @param smtp_sasl_password_maps Optional SMTP SASL password maps. Defaults to undef.
@@ -80,7 +78,6 @@ class common::system::mail (
   Optional[Eit_types::Domain] $mydomain,
   Optional[Eit_types::Host] $relayhost                       = undef,
   Array[String] $mynetworks                                  = [],
-  Optional[Array[Eit_types::Domain]] $relay_domains          = undef,
   Boolean $smtp_sasl_auth                                    = false,
   Optional[String] $smtp_sasl_password_maps                  = undef,
   Optional[String] $smtp_sasl_security_options               = undef,
@@ -113,16 +110,15 @@ class common::system::mail (
       if $facts[os][family] == 'RedHat' {
         package::install('ssmtp', { ensure => absent })
       }
-      # postfix::server treats `false` as "leave unset"; only emit these when
+      # postfix::server treats `false` as "leave unset"; only emit this when
       # the caller actually supplied entries.
-      $real_mynetworks    = $mynetworks    =~ Array[Any, 1] ? { true => $mynetworks, default => false }
-      $real_relay_domains = $relay_domains =~ Array[Any, 1] ? { true => join($relay_domains, ', '), default => false }
+      $real_mynetworks = $mynetworks =~ Array[Any, 1] ? { true => $mynetworks, default => false }
       class { 'postfix::server':
         myhostname                 => $myhostname,
         mydomain                   => $mydomain,
         relayhost                  => $relayhost,
         mynetworks                 => $real_mynetworks,
-        relay_domains              => $real_relay_domains,
+        relay_domains              => false,
         inet_interfaces            => $inet_interfaces,
         smtp_sasl_auth             => $smtp_sasl_auth,
         smtp_sasl_password_maps    => $smtp_sasl_password_maps,
