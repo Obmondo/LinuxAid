@@ -1,7 +1,6 @@
 #
 class profile::system::limits (
   Boolean                    $manage  = $common::system::limits::manage,
-  Boolean                    $purge   = $common::system::limits::purge,
   Eit_types::System::Ulimits $ulimits = $common::system::limits::ulimits,
 ) {
 

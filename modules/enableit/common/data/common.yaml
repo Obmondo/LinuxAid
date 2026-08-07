@@ -216,7 +216,6 @@ common::system::hardware::manage_multipath: false
 
 ## Limits
 common::system::limits::manage: false
-common::system::limits::purge: false
 
 ## Guix
 common::system::guix::manage: false
