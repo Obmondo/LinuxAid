@@ -6,17 +6,14 @@
 #
 # @param listen_port The port to listen on. Defaults to 63392.
 #
-# @param host The host certname. Defaults to $trusted['certname'].
-#
 # @groups settings enable, noop_value
 #
-# @groups network listen_port, host
+# @groups network listen_port
 #
 class common::monitor::exporter::cadvisor (
   Boolean               $enable      = $common::monitor::exporter::enable,
   Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
   Stdlib::Port          $listen_port = 63392,
-  Eit_types::Certname   $host        = $trusted['certname'],
 ) {
   File {
     noop => $noop_value,
@@ -24,7 +21,7 @@ class common::monitor::exporter::cadvisor (
   @@prometheus::scrape_job { 'cadvisor':
     job_name    => 'cadvisor',
     tag         => $::trusted['certname'],
-    targets     => [ "${host}:${listen_port}" ],
+    targets     => [ "${trusted['certname']}:${listen_port}" ],
     labels      => { 'certname' => $::trusted['certname'] },
     collect_dir => '/etc/prometheus/file_sd_config.d',
   }
