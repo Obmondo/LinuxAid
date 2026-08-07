@@ -6,22 +6,19 @@
 #
 # @param manage_repo Boolean to determine if repository should be managed. Defaults to false.
 #
-# @param listen_address IP address and port to listen on, in the format 'IP:port'. Defaults to '127.254.254.254:63386'.
-#
 # @groups settings enable, noop_value
-#
-# @groups network listen_address
 #
 # @groups configuration manage_repo
 #
 class common::monitor::exporter::dellhw (
-  Boolean               $enable         = false,
-  Boolean               $manage_repo    = false,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63386',
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
+  Boolean               $enable      = false,
+  Boolean               $manage_repo = false,
+  Eit_types::Noop_Value $noop_value  = $common::monitor::exporter::noop_value,
 ) {
 
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63386'
 
   File {
     noop => $noop_value
