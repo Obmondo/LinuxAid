@@ -1,22 +1,17 @@
 # @summary Class for managing Prometheus Systemd Exporter
 #
-# @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
-#
 # @param noop_value Whether to perform noop actions. Defaults to false.
 #
-# @param listen_address The IP and port to listen on. Defaults to '127.254.254.254:63391'.
-#
-# @groups settings enable, noop_value
-#
-# @groups network listen_address
+# @groups settings noop_value
 #
 class common::monitor::exporter::systemd (
-  Boolean               $enable         = $common::monitor::exporter::enable,
-  Eit_types::Noop_Value $noop_value     = $common::monitor::exporter::noop_value,
-  Eit_types::IPPort     $listen_address = '127.254.254.254:63391',
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
+  $enable = $common::monitor::exporter::enable
 
   unless $enable { return() }
+
+  $listen_address = '127.254.254.254:63391'
 
   File {
     noop => $noop_value
