@@ -1,7 +1,6 @@
 # Storage NFS profile
 class profile::storage::nfs (
-  Boolean $enable            = $common::storage::nfs::enable,
-  Boolean $unmount_snapshots = $common::storage::nfs::unmount_snapshots,
+  Boolean $enable = $common::storage::nfs::enable,
 ) {
 
   class { 'nfs::client': }
