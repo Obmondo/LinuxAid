@@ -2,10 +2,7 @@
 # so we can setup openvox-agent package
 class profile::system::openvox (
   Stdlib::Host         $server                 = $common::system::openvox::server,
-  Stdlib::Port         $server_port            = $common::system::openvox::server_port,
   Eit_types::Version   $version                = $common::system::openvox::version,
-  Stdlib::Absolutepath $config_file            = $common::system::openvox::config_file,
-  Boolean              $run_agent_as_noop      = $common::system::openvox::run_agent_as_noop,
   Optional[Hash]       $extra_main_settings    = $common::system::openvox::extra_main_settings,
   String               $aio_package_name       = $common::system::openvox::package_name,
 
@@ -131,17 +128,17 @@ class profile::system::openvox (
     }
   }
 
-  file { $config_file:
+  file { $facts['puppet_config']:
     ensure  => present,
     content => epp('profile/puppet.conf.epp', {
       'server'                           => $server,
       'graph'                            => true,
-      'noop'                             => $run_agent_as_noop,
+      'noop'                             => true,
       'onetime'                          => false,
       'certname'                         => $::trusted['certname'],
       'manage_internal_file_permissions' => false,
       'runtimeout'                       => '10m',
-      'masterport'                       => $server_port,
+      'masterport'                       => 443,
       'extra_main_settings'              => $extra_main_settings,
       'splay'                            => true,
       'usecacheonfailure'                => false,
