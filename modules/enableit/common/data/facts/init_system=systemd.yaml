@@ -17,7 +17,6 @@ common::logging::rsyslog::enable: true
 common::logging::rsyslog::purge_rsyslog_d: false
 common::logging::rsyslog::log_remote: false
 common::logging::rsyslog::log_local: true
-common::logging::rsyslog::log_auth: true
 common::logging::rsyslog::system_log: false
 
 common::monitor::exporter::mtail::logs:
