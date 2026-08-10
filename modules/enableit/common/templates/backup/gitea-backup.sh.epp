@@ -108,12 +108,21 @@ abort_stale_multipart_upload() {
 
 # 7. Upload the dump to S3
 upload_to_s3() {
-    local attempt
+    local attempt aws_config
+
+    aws_config=$(mktemp)
+    cat > "$aws_config" <<EOF
+[default]
+s3 =
+    multipart_chunksize = 64MB
+    multipart_threshold = 64MB
+EOF
+    trap 'rm -f "$aws_config"' RETURN
 
     log "Moving backup to S3..."
 
     for attempt in 1 2 3; do
-        if aws s3 cp "$LATEST_DUMP" "$S3_BUCKET" \
+        if AWS_CONFIG_FILE="$aws_config" aws s3 cp "$LATEST_DUMP" "$S3_BUCKET" \
             --endpoint-url="$S3_ENDPOINT" \
             --cli-read-timeout "$UPLOAD_TIMEOUT" \
             --only-show-errors; then
