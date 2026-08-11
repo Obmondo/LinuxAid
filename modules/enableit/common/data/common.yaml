@@ -300,12 +300,12 @@ common::system::openvox::package_name: "openvox-agent"
 # Update other architecture checksums in their respective heira config file.
 # https://github.com/Obmondo/LinuxAid/blob/master/modules/enableit/common/data/architectures/armv7l.yaml
 common::system::openvox::linuxaid_cli::install_method: package
-common::system::openvox::linuxaid_cli::version: 1.9.1
+common::system::openvox::linuxaid_cli::version: 1.10.0
 common::system::openvox::linuxaid_cli::checksums:
+  1.10.0: 5efff631468b4041aab674775f626e4124403d08a6d31bce599bb63363a03dde
   1.9.1: 416fbac4596ee6a15c7ef8d319b5e4274be95ab20d83f918a3681a9702363506
   1.9.0: 16e338e83c942100aabe5104f2f6bbfa32f1f61e650a74d7bf77df6294d3ad00
   1.8.0: fbf66f14b2d68bc297616a51291b029a9b522853e74dc3a45e5125062ca8459c
-  1.7.0: 9694a2726a0c93073af8ce47f1db0f2ba7aa86ad208a24e641cede8b1565f116
 
 ## Certs
 common::system::certs::__base_dir: "/etc/ssl/private/static-certs"
