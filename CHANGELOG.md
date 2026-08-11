@@ -2,6 +2,162 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.5
+
+### Bug Fixes
+- 431ce38a fix(gitea-backup): set S3 multipart chunk size to 64MB
+- 5705c297 fix: correct the teleport manage data key to the real enable param
+- 8e8b277c fix: correct the authentication purge_user data key to the real purge_users param
+- 9eb9c021 fix: move the slurm metrics role default onto slurmctld, where the param actually lives
+- 63592d94 fix: point the db backup env files at common::backup::conf_dir instead of the nonexistent __conf_dir
+- f2a064dd fix: always contain the opensearch ssl gate class, not only under dashboard
+- 2d6cc6c7 fix: restore mod_php as the piwik php engine
+
+### Configuration Changes
+- 9fe76224 chore: bump linuxaid-cli to 1.10.0
+
+### Other Changes
+- f8c6d463 refactor: drop the readerless common::backup lvm param
+- 6de1de6c refactor: drop the common::monitor::postfix enable_stats key; the class is gone
+- ce5d9f05 refactor: drop the dead enable_multipath key; manage_multipath already defaults to false
+- ebddc594 refactor: drop the dead common::system::grub manage key; the class only takes parameters
+- 6c4d61fc refactor: drop five dead common/data keys whose class or param no longer exists
+- 328fcc9a refactor: drop the role::virtualization::docker __blendable key; the class has no such param
+- 9e2fb4a8 refactor: drop five dead role::db::elasticsearch data keys whose params no longer exist
+- 9d2ee6b8 refactor: drop dead per-OS role::web::haproxy data keys superseded by eit_haproxy's own
+- 8357380c refactor: drop the always-on install_default_packages param and its data key
+- 56ea7a3f refactor: drop the never-set common::system::utility::atop install param and its data key
+- 3119cf8b refactor: drop the unrendered mysql snapshot backup template and its six sole-reader params
+- b54dbba6 refactor: drop 18 never-set common::system::mail params and inline their values
+- 136f635b refactor: drop 20 default-pinned common::system::mail pass-throughs from role::mail::postfix
+- 1d168386 refactor: drop four never-set rsyslog log toggles and inline their values
+- 1f6085fb refactor: drop three never-set common::logging::logrotate params and inline their values
+- 01f3f2c2 refactor: drop three never-set common::storage::zfs params and inline their values
+- 84c107db refactor: drop the unread enable param from common::storage::quota
+- 48a6f949 refactor: drop the unread unmount_snapshots param from common::storage::nfs
+- 3943aed4 refactor: drop the unread hosts param from common::network::vrrp
+- 44b9c226 refactor: inline the three never-set tcpshaker tuning params and drop their data keys
+- 3f9d4261 refactor: drop the unread netbird install_method param and its data key
+- 861bf649 refactor: drop six never-set common::network::firewall params and inline their values
+- 3008b3cb refactor: drop the never-set common::network purge and restart_on_change params
+- 0f733f67 refactor: drop 5 never-configured common::backup::db::mysql params and read them from common::backup::db
+- b7f35b64 refactor: drop 6 never-configured common::backup::db::mysql::xtrabackup params and read them from common::backup::db
+- bb4b3afb refactor: drop 6 never-configured common::backup::db::mysql::mysqlbackup params and read them from common::backup::db
+- fdf4113f refactor: drop 6 never-configured common::backup::db::mysql::mysqldump params and read them from common::backup::db
+- 5bbde197 refactor: drop 8 never-configured common::backup::gitea params and inline their values
+- d26f8096 refactor: drop 10 never-configured common::backup::cassandra params and inline their values
+- 2d84e29e refactor: drop 4 never-configured common::backup::borg params and inline their values
+- 38da7942 refactor: drop 7 never-configured common::backup params and inline their values
+- 341f2c23 refactor: drop 11 never-set sshd params and inline their values in the profile
+- 6ef9782b refactor: drop the never-set auditd root_audit_level param and inline its value
+- fd3311f1 refactor: drop the motd diplay_system_stats param, it was never set and never read
+- 999db703 refactor: drop the never-set sudo ssh_agent_auth param and inline its value
+- d2949434 refactor: drop three never-set sssd params and read manage_sssd directly
+- e6034c83 refactor: drop three never-set pam params and inline their values in the profile
+- 277f93e4 refactor: drop the never-set kerberos manage param and read the parent manage_sssd toggle directly
+- 6ea248ff refactor: drop the never-set authentication allow_managed_users param and its unused profile mirror
+- 098adc40 refactor: drop the four never-set common::user_management subsystem toggles
+- f7af4e96 refactor: drop the always-on autoupgrade param from common::software::openvmtools
+- a56628eb refactor: drop the always-on enable param from common::software::ansoftrsmservice
+- 46754dba refactor: drop the never-set tmux manage and noop_value params
+- 4ebe030b refactor: drop the never-set bash manage and noop_value params
+- e7014678 refactor: drop five updates params that no longer reach the update mechanism
+- 9b3df2fc refactor: drop the never-set package required_packages param
+- 90c885f5 refactor: drop the never-set openvox manage, server_port, config_file and run_agent_as_noop params
+- 8ede8bdf refactor: drop the never-set mail relay_domains param
+- 4c84e4f3 refactor: drop all eight unconfigured nscd params and inline their values
+- af3609ab refactor: drop the never-set limits purge param and its module data key
+- 661020dd refactor: drop the never-set dns fallback_nameservers and allow_external params
+- a27484df refactor: drop the inert letsencrypt renew, warning, critical and http_01_port params
+- b6665a1d refactor: drop the never-set remove_fstrim_cron param from common::system
+- ba1ef90a refactor: drop the dead common::monitor manage param
+- ff659801 refactor: drop the never-set splunk forwarder forwarder_output param
+- e608c6c0 refactor: drop never-set scom_masters, install_sudo_rules and scom_user from the scom class
+- 00432faf refactor: minimize prometheus server params from 6 to 2 and drop their ops data keys
+- 3fc3a7b0 refactor: inline the ops-only prometheus bin_dir and usershell paths
+- 9a50fb07 refactor: drop the never-set exporter config_dir param
+- 886ae695 refactor: drop never-set zfs exporter listen_address and exclude params
+- f3037968 refactor: drop never-set wireguard exporter enable and listen_address params
+- 2fe5838b refactor: drop the dead tcpshaker exporter enable param and never-set listen_port and host
+- 434d597c refactor: drop never-set systemd exporter enable and listen_address params
+- 72d52ed0 refactor: drop never-set slurm exporter enable and listen_address params
+- 06928bc6 refactor: drop never-set security exporter host and config_file params
+- ec38d9ba refactor: drop the always-on process exporter enable param and its never-set listen_address
+- 8e75ea1c refactor: drop the never-set ntp exporter enable, listen_address and telemetry_path params
+- dcefede9 refactor: minimize node exporter params from 36 to 5 and drop the dead collector data keys
+- 9d3a338f refactor: drop the dead mysql exporter mysql_port and mysql_monitor_hostname params and inline listen_port
+- 6238ec93 refactor: drop never-set mtail exporter listen_address and progs params
+- 38a6211b refactor: drop the never-set iptables exporter listen_address param
+- 2b507bd0 refactor: inline the never-set haproxy exporter listen_port and host params
+- b38aefc9 refactor: drop the dead gitlab_runner exporter enable and host params and inline its listen address
+- da5f328f refactor: drop never-set filestat exporter config_file and listen_address params
+- 86b1ae24 refactor: drop the never-set elasticsearch exporter listen_address param
+- 5c779ee6 refactor: drop never-set dns exporter listen_address and interval_seconds params
+- facbe4ce refactor: drop the never-set dellhw exporter listen_address param
+- 288a481c refactor: inline the never-set cadvisor exporter host param
+- 742be540 refactor: inline the never-set blackbox exporter config_file path
+- c7f7f22f refactor: restore mongodb create_admin and ssl as nested gate classes
+- 0259fc30 refactor: minimize role::projectmanagement::readthedocs parameters
+- d0799ba0 refactor: drop the unconfigured nas role params
+- 6f2d456f refactor: inline the single-value web ruby variant param and contain passenger
+- f461eab8 refactor: drop the never-set exports param from the storage nfs role
+- dec13859 refactor: drop unconfigured foswiki manage_haproxy param and always manage haproxy
+- 3a75906f refactor: drop both redis role params, neither was ever configured
+- 294ac5d0 refactor: drop the always-on enable_python param from the mod_wsgi role
+- acbac49d refactor: drop the always-on enable_python param from the uwsgi role
+- f7603589 refactor: inline the single-valued http_server param in the mod_perl role
+- df2814f6 refactor: inline the single-valued http_server param in the fastcgi role
+- 2dc9316b refactor: inline the single-valued http_server param in the cgi role
+- 0ef74faa refactor: drop three never-set reverse_cache role params and inline their values
+- 621f7beb refactor: drop both unconfigured wildfly role params
+- a55993e5 refactor: drop the unconfigured tomcat http_server param
+- 308a361a refactor: drop 3 unconfigured java role params and collapse the variant case
+- 3c018629 refactor: drop never-set role::ntpd params and inline their values
+- cacaac39 refactor: minimize role::appeng::node parameters
+- 3cdd7b5e refactor: drop 5 unconfigured piwik params and declare phpfpm and mysql directly
+- 2965117d refactor: drop five never-set easyredmine params and inline their values
+- fcaf8103 refactor: drop 2 unconfigured passenger role params, inline their values
+- 20611cba refactor: drop 4 unconfigured rubyonrails params and inline their values
+- a3b40025 refactor: drop the dead reverse_cache param and inline memcached and password
+- 886637d8 refactor: drop 6 unconfigured razor role params and inline their values
+- 2e6f01e7 refactor: drop three never-set role::appeng::mod_php params, values kept body-local
+- 5b7d46ec refactor: minimize role::webframeworks::wordpress parameters
+- 367a96d8 refactor: drop all 10 nginx role params, none was ever configured
+- 101ca6c5 refactor: drop all 13 rsyslog role params, none was ever configured
+- 79212216 refactor: nest the opensearch ssl pem under its toggle and drop 9 unconfigured params
+- b5649ac9 refactor: minimize role::util::kubernetes params from 23 to 6
+- 09b8d456 refactor: drop all 19 murmur params, none was ever configured
+- 186dafe2 refactor: drop 26 unconfigured postfix params and the dead role data keys
+- 64fc48f3 refactor: nest beegfs daemon params under their toggles and drop two dead ports
+- fe1eba07 refactor: drop all 35 mongodb params, none was ever configured
+- cc6af5f7 refactor: mark gitlab ci runner registration_token as an encrypted password
+- b8609b68 refactor: drop lamp php param, its contain was never enabled
+- 86fd56aa refactor: drop the never-set web php variant param and let piwik declare its own
+- 78ef9e5b refactor: drop the unconfigured s3 manage param
+- ae113210 refactor: drop the unconfigured journal_remote output param and inline its path
+- afae4c50 refactor: nest loadbalancer_ip under the ha toggle and drop the unset enable param
+- 2c498cef refactor: drop 3 unconfigured lxd params and inline their values in the profile
+- 62022bbc refactor: drop three unconfigured smtprelay params and inline the listen interfaces
+- 047793c9 refactor: drop three unconfigured cassandra params
+- 4c68d1ad refactor: drop 7 unconfigured perforce git connector params
+- 30016ceb refactor: drop all 8 subversion params, none was ever configured
+- b1cd7ed4 refactor: minimize role::projectmanagement::perforce params and fix inert child gates
+- 44c83b4f refactor: nest icmanage db params under manage_db and drop 5 unconfigured params
+- 57d6afa5 refactor: nest recovery and replication params under their mode and drop allow_remote_hosts
+- 272f99bd refactor: nest control-plane params under role::controller
+- 9e577525 refactor: nest slurmctld and slurmdbd params under their toggles
+- 6dce61c1 refactor: nest ssl cert and key under the ssl toggle
+- 457b2686 refactor: nest binlog params under their toggle and fix the profile class reference
+- 84008277 refactor: nest kibana params under their toggle and drop two dead params
+- 769a04bd refactor: nest backup, registry, mattermost, pages and prometheus params under their toggles
+- b6bad3e1 refactor: drop unused apache manage_haproxy param
+- 91bb0e5e refactor: drop 6 unconfigured mailcow params and nest acme_contact under letsencrypt
+- fce5938e refactor: drop all 35 openvas params, none was ever configured
+- ac49ea53 refactor: nest ssl, packagesign and snapshot params under their toggles
+- def480ff refactor: drop 5 unconfigured haproxy params and the dead global_hsts key
+- 766fddb0 refactor: drop 8 docker role params that never change behaviour
+- a76fdacc docs: rewrite README with professional layout and branding
+
 ## LinuxAid Release Version v1.8.4
 
 ### Features
