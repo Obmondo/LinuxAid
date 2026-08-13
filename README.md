@@ -2,9 +2,9 @@
 
 <a href="https://linuxaid.io/">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/images/linuxaid-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="./docs/images/linuxaid-logo.svg">
-    <img alt="LinuxAid" src="./docs/images/linuxaid-logo.svg" width="320">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Obmondo/LinuxAid/master/docs/images/linuxaid-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Obmondo/LinuxAid/master/docs/images/linuxaid-logo.svg">
+    <img alt="LinuxAid" src="https://raw.githubusercontent.com/Obmondo/LinuxAid/master/docs/images/linuxaid-logo.svg" width="320">
   </picture>
 </a>
 
