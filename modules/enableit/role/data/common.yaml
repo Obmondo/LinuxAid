@@ -5,5 +5,12 @@ role::projectmanagement::gitlab_ci_runner::__blendable: true
 role::projectmanagement::perforce::git_connector::__blendable: true
 role::projectmanagement::perforce::icmanage::__blendable: true
 role::storage::beegfs::__blendable: true
+
+# RustFS - S3-compatible object storage, run via docker-compose.
+# endpoint, data_dir, logs_dir, access_key and secret_key have no default
+# and must be set per node.
+role::storage::rustfs::image: 'rustfs/rustfs:latest'
+role::storage::rustfs::console_enable: true
+
 role::web::haproxy::__blendable: true
 role::web::nginx::__blendable: true

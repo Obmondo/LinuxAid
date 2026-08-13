@@ -1,0 +1,22 @@
+---
+version: '3'
+
+services:
+  rustfs:
+    hostname: <%= $endpoint %>
+    image: <%= $image %>
+    volumes:
+      - <%= $data_dir %>:/data/rustfs0
+      - <%= $logs_dir %>:/app/logs
+    environment:
+      - RUSTFS_VOLUMES=/data/rustfs0
+      - RUSTFS_ADDRESS=0.0.0.0:9000
+      - RUSTFS_CONSOLE_ADDRESS=0.0.0.0:9001
+      - RUSTFS_CONSOLE_ENABLE=<%= $console_enable %>
+      - RUSTFS_ACCESS_KEY=<%= $access_key %>
+      - RUSTFS_SECRET_KEY=<%= $secret_key %>
+      - RUSTFS_OBS_LOG_DIRECTORY=/app/logs
+      - RUSTFS_OBS_LOGGER_LEVEL=warn
+    ports:
+      - '127.0.0.1:9000:9000'
+      - '127.0.0.1:9001:9001'
