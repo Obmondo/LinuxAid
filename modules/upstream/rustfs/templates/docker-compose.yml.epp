@@ -1,0 +1,13 @@
+services:
+  rustfs:
+    image: <%= $image %>:<%= $version %>
+    restart: always
+    volumes:
+      - <%= $data_dir %>:/data
+    environment:
+<%- $env_vars.each |$key, $value| { -%>
+      <%= $key %>: '<%= $value %>'
+<%- } -%>
+    ports:
+      - 9000:9000
+      - 9001:9001
