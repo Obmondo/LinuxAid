@@ -1,0 +1,9 @@
+---
+rustfs::enable: false
+rustfs::version: "1.0.0-rc.2"
+rustfs::dependencies: []
+rustfs::container_image: "rustfs/rustfs"
+rustfs::data_dir: "/opt/rustfs/data"
+rustfs::access_key: "admin"
+rustfs::secret_key: "admin"
+rustfs::env_vars: {}
