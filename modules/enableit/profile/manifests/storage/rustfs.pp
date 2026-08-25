@@ -6,31 +6,31 @@
 # @param secret_key The S3 secret access key.
 # @param env_vars Additional hash of environment variables for the container.
 # @param enable Whether to enable and manage the rustfs component.
-# @param enable_expose Whether to expose the service via HAProxy.
+# @param expose Whether to expose the service via HAProxy.
 # @param domains HAProxy domain configuration.
 #
 class profile::storage::rustfs (
-  Stdlib::Unixpath     $data_dir      = $role::storage::rustfs::data_dir,
-  String[1]            $version       = $role::storage::rustfs::version,
   String[1]            $access_key    = $role::storage::rustfs::access_key,
   String[1]            $secret_key    = $role::storage::rustfs::secret_key,
-  Hash                 $env_vars      = $role::storage::rustfs::env_vars,
   Boolean              $enable        = $role::storage::rustfs::enable,
-  Boolean              $enable_expose = $role::storage::rustfs::enable_expose,
+  Stdlib::Unixpath     $data_dir      = $role::storage::rustfs::data_dir,
+  String[1]            $version       = '1.0.0-rc.2',
+  Hash                 $env_vars      = {},
+  Boolean              $expose        = $role::storage::rustfs::expose,
   Eit_haproxy::Domains $domains       = $role::storage::rustfs::domains,
 ) {
   # 1. Manage RustFS
   class { 'rustfs':
+    access_key => $access_key,
+    secret_key => $secret_key,
     enable     => $enable,
     data_dir   => $data_dir,
     version    => $version,
-    access_key => $access_key,
-    secret_key => $secret_key,
     env_vars   => $env_vars,
   }
 
   # 2. Conditional HAProxy Exposure using profile::web::haproxy (HAProxy 3.2 + Native ACME)
-  if $enable and $enable_expose {
+  if $enable and $expose {
     class { 'profile::web::haproxy':
       configure          => 'auto',
       manual_config      => undef,
