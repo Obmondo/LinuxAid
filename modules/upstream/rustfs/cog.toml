@@ -1,0 +1,9 @@
+tag_prefix = "v"
+from_latest_tag = true
+branch_whitelist = ["main"]
+ignore_merge_commits = true
+disable_changelog = false
+
+pre_bump_hooks = [
+  'jq --arg ver "{{version}}" ".version = \$ver" metadata.json > metadata.json.tmp && mv metadata.json.tmp metadata.json'
+]
