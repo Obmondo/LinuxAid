@@ -259,6 +259,7 @@ function add_module() {
 
   # Pin to specific commit
   if [[ -n "$COMMIT_HASH" ]]; then
+    LATEST_TAG="$COMMIT_HASH"
     setup_module_git_clone "$COMMIT_HASH"
     COMMIT_MESSAGE="chore: pin puppet-${MODULE_NAME} module @${COMMIT_HASH}
 
