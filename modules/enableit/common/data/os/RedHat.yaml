@@ -1,4 +1,10 @@
 ---
+common::software::nvidia_driver::packages:
+  - 'kernel-devel'
+  - 'kernel-headers'
+  - 'nvidia-driver-latest-dkms'
+  - 'cuda'
+
 common::system::mail::maildrop_perms: 'o=rwx,g=wx'
 common::logging::log_dir_group: 'root'
 common::user_management::security::selinux::enable: true

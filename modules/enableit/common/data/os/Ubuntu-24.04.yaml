@@ -1,4 +1,6 @@
 ---
+common::software::nvidia_driver::packages:
+  - 'nvidia-driver-595-server-open'
 common::monitor::exporter::enable: true
 common::network::service_name: "systemd-networkd"
 common::system::systemd::manage_resolved: true

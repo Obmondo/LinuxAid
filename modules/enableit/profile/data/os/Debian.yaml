@@ -34,6 +34,3 @@ profile::system::cloud_init::services:
   - 'cloud-init.service'
   - 'cloud-init-local.service'
   - 'cloud-init.target'
-profile::software::nvidia_driver::packages:
-  - 'nvidia-driver'
-  - 'cuda-drivers'
