@@ -21,6 +21,12 @@ class role::storage::rustfs (
   contain role::virtualization::docker
   contain profile::storage::rustfs
   if $expose {
-    contain role::web::haproxy
+    confine($expose, $domains.empty, 'Exposing rustfs via HAProxy requires domains to be provided')
+
+    class { 'role::web::haproxy':
+      domains            => $domains,
+      version            => '3.2.0',
+      encryption_ciphers => 'Intermediate',
+    }
   }
 }
