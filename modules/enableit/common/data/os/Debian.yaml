@@ -1,4 +1,8 @@
 ---
+common::software::nvidia_driver::packages:
+  - 'nvidia-driver'
+  - 'cuda-drivers'
+
 common::logging::log_dir_mode: "775"
 common::system::mail::maildrop_perms: "1730"
 

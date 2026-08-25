@@ -2,6 +2,7 @@
 class profile::software::nvidia_driver (
   Boolean               $enable     = $common::software::nvidia_driver::enable,
   Eit_types::Noop_Value $noop_value = $common::software::nvidia_driver::noop_value,
+  Array[String[1]]      $packages   = $common::software::nvidia_driver::packages,
 ) {
 
   confine(
@@ -20,8 +21,8 @@ class profile::software::nvidia_driver (
         architecture => 'amd64',
         release      => '/',
         key          => {
-          'id'     => 'EB693B3035CD5710E231E123A4B469963BF863CC',
-          'source' => "https://developer.download.nvidia.com/compute/cuda/repos/${distro}/x86_64/3bf863cc.pub",
+          'name'   => 'cuda.gpg',
+          'source' => 'puppet:///modules/eit_repos/apt/cuda-apt-keyring.gpg',
         },
       }
     }
@@ -43,7 +44,7 @@ class profile::software::nvidia_driver (
     }
   }
 
-  package { lookup('profile::software::nvidia_driver::packages'):
+  package { $packages:
     ensure => ensure_present($enable),
     noop   => $noop_value,
   }
