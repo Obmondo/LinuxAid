@@ -18,7 +18,10 @@ define monitor::domains (
 
   $job_name = 'probe_blackbox_domains'
   $collect_dir = '/etc/prometheus/file_sd_config.d'
-  $_domain = regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0]
+  # Hostnames are case-insensitive; normalise so the same domain reaching us
+  # with different casing cannot produce two separate probe targets and two
+  # separate threshold recording rules.
+  $_domain = downcase(regsubst($domain, '^(https?://)?([^/]+)(/.*)?$', '\2', 'G').split('/')[0])
 
   @@prometheus::scrape_job { $_domain :
     job_name    => $job_name,

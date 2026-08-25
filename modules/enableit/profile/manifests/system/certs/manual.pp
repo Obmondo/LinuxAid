@@ -68,10 +68,20 @@ define profile::system::certs::manual (
     content => $key_and_cert,
   }
 
-  $_domain = extract_common_name($cert)
+  # NOTE: monitor the domain this cert is *deployed* for, not the cert's CN.
+  # The CN is only one of the names a cert carries and is deprecated as an
+  # identifier; the hiera title is the name we actually serve on this host.
+  # Casing is normalised because CAs emit whatever casing they were asked for.
+  $_domain = downcase($domain)
 
   if $ports.empty {
-    monitor::domains { $_domain: }
+    # NOTE: the scheme is required. Given a bare hostname, blackbox scores the
+    # plain-HTTP request, so probe_http_ssl is 0 and fail_if_not_ssl marks the
+    # probe failed - which silences cert expiry alerting for this domain even
+    # though probe_ssl_earliest_cert_expiry is scraped fine.
+    monitor::domains { $_domain:
+      domain => "https://${_domain}",
+    }
   } else {
     $ports.each |$port| {
       monitor::domains { "${_domain}_${port}":
