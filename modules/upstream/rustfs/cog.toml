@@ -7,3 +7,7 @@ disable_changelog = false
 pre_bump_hooks = [
   'jq --arg ver "{{version}}" ".version = \$ver" metadata.json > metadata.json.tmp && mv metadata.json.tmp metadata.json'
 ]
+
+post_bump_hooks = [
+  "git push origin main {{version_tag}}"
+]

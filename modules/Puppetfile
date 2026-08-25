@@ -494,4 +494,4 @@ mod 'obmondo/openvas',
 
 mod 'obmondo/rustfs',
     :git => 'https://github.com/Obmondo/puppet-rustfs.git',
-    :ref => 'v0.1.0'
+    :ref => 'v0.1.1'

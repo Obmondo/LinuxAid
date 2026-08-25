@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.1.1 - 2026-08-25
+#### Bug Fixes
+- add missing heira data level - (3365ced) - Sidharth Jawale
+#### Miscellaneous Chores
+- update rustfs container image version to 1.0.0-rc.3 - (3b36441) - Sidharth Jawale
+- add release workflow using cog - (33bc112) - Sidharth Jawale
+
+- - -
+
 ## v0.1.0 - 2026-08-22
 #### Features
 - add puppet-rustfs module - (725f92f) - Sidharth Jawale
