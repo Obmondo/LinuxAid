@@ -484,12 +484,15 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
       default => $_exporters['registry'],
     }
 
-    { 'registry' => $_registry_exporter + { 'nginx' => $registry_nginx } }
-  } else {
-    {}
+    $_registry_hash = { 'registry' => $_registry_exporter + { 'nginx' => $registry_nginx } }
+
+    $_registry_hash
   }
 
-  $_gitlab_params = $_exporters + $_registry_config
+  $_gitlab_params = $_exporters + ($_registry_config ? {
+      undef   => {},
+      default => $_registry_config,
+  })
 
   class { 'gitlab':
     external_url                 => "${_protocol}://${domain}",
