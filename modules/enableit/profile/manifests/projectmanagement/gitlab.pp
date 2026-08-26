@@ -475,10 +475,27 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
     }
   }
 
+  # GitLab 19.0 moved the bundled NGINX settings under `gitlab_rails['nginx']`
+  # and `registry['nginx']`; the old top-level `nginx[...]`/`registry_nginx[...]`
+  # keys are deprecated and fail the package pre-install check.
+  $_registry_config = if $registry {
+    $_registry_exporter = $_exporters['registry'] ? {
+      undef   => {},
+      default => $_exporters['registry'],
+    }
+
+    { 'registry' => $_registry_exporter + { 'nginx' => $registry_nginx } }
+  } else {
+    {}
+  }
+
+  $_gitlab_params = $_exporters + $_registry_config
+
   class { 'gitlab':
     external_url                 => "${_protocol}://${domain}",
     gitlab_rails                 => [
       {
+        nginx                     => $_nginx,
         time_zone                 => $time_zone,
         gitlab_email_enabled      => $email_enabled,
         gitlab_default_theme      => $_theme,
@@ -496,17 +513,19 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
       shutdown_timeout => 5,
     },
     git                          => $git_config,
-    nginx                        => $_nginx,
     backup_cron_enable           => $backup,
     backup_cron_hour             => $backup_cron_hour,
     manage_package               => true,
     package_ensure               => $package_version,
     registry_external_url        => if $registry { $registry_external_url },
-    registry_nginx               => if $registry { $registry_nginx },
-    mattermost                   => {
-      'enable'                      => $mattermost,
-      'service_enable_custom_emoji' => true,
-    } + $mattermost_config,
+    # Bundled Mattermost was removed in GitLab 19.0 — only emit the keys when it
+    # is actually in use, otherwise the package pre-install check fails.
+    mattermost                   => if $mattermost {
+      {
+        'enable'                      => $mattermost,
+        'service_enable_custom_emoji' => true,
+      } + $mattermost_config
+    },
     mattermost_external_url      => if $mattermost { $mattermost_external_url },
     mattermost_nginx             => if $mattermost { $mattermost_nginx },
     pages_external_url           => if $enable_pages { $pages_external_url },
@@ -516,7 +535,7 @@ if $registry and ! $prometheus_exporters.dig('registry') =~ Eit_types::Listen {
       # we need this enabled if the gitlab exporter is enabled
       { enable => !!($prometheus_exporters.dig('gitlab')), }
     },
-    *                            => $_exporters,
+    *                            => $_gitlab_params,
   }
 
   if $backup {
