@@ -62,7 +62,7 @@ sudo chmod 755 /mnt/backups/rustfs
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `rustfs::enable` | `Boolean` | `false` | Whether to enable and manage the RustFS deployment. |
-| `rustfs::version` | `String[1]` | `"1.0.0-rc.2"` | The version tag of the `rustfs/rustfs` container image. |
+| `rustfs::version` | `String[1]` | `"1.0.0-rc.3"` | The version tag of the `rustfs/rustfs` container image. |
 | `rustfs::container_image` | `String[1]` | `"rustfs/rustfs"` | The container image repository name. |
 | `rustfs::data_dir` | `Stdlib::Unixpath` | `"/opt/rustfs/data"` | Host directory where backup data is stored (must be pre-mounted). |
 | `rustfs::access_key` | `String[1]` | `"admin"` | S3 Access Key ID for authentication. |
@@ -86,7 +86,7 @@ sudo chmod 755 /mnt/backups/rustfs
 class { 'rustfs':
   enable     => true,
   data_dir   => '/mnt/backups/rustfs',
-  version    => '1.0.0-rc.2',
+  version    => '1.0.0-rc.3',
   access_key => 'your-access-key',
   secret_key => 'your-secret-key',
 }
@@ -107,7 +107,7 @@ This will output a PKCS7 block (`ENC[...]`) which you can paste directly into yo
 ```yaml
 ---
 rustfs::enable: true
-rustfs::version: '1.0.0-rc.2'
+rustfs::version: '1.0.0-rc.3'
 rustfs::container_image: 'rustfs/rustfs'
 rustfs::data_dir: '/mnt/backups/rustfs'
 rustfs::access_key: 'my-backup-admin'
