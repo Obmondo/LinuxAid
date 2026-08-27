@@ -87,21 +87,19 @@ Puppet::Functions.create_function(:sort_domains_on_tld) do
     return "#{domain_tld}.#{root_tld}"
   end
 
+  # Selects the domains whose A record resolves to one of the host's declared
+  # public IPs, which come from the common::system::publicips hiera key.
+  #
+  # With no declared IPs nothing is eligible. This used to fall back to a
+  # `publicip` fact, but that fact asked the API for the caller's own source
+  # address and so answered the ingress pod's address for every node in the
+  # fleet -- a private 10.244/16 address that no public A record could ever
+  # match. The fallback selected nothing, exactly as returning nothing does.
   def domain_ip(domains, ips)
-    scope = closure_scope
-    host_publicip = scope['facts']['publicip']
-
-    if ips.size > 0
-      public_ip = ips
-    else
-      public_ip = [host_publicip]
-    end
+    return [] if ips.empty?
 
     domains.select do |d|
-      domainip = call_function('getdomainip', d)
-      if [domainip].size == 1
-        public_ip.include? domainip
-      end
+      ips.include?(call_function('getdomainip', d))
     end
   end
 
