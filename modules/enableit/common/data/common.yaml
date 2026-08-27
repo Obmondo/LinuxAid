@@ -144,7 +144,6 @@ common::system::classes:
   - common::system::hosts
   - common::system::kernel
   - common::system::limits
-  - common::system::mail
   - common::system::nscd
   - common::system::nsswitch
   - common::system::obmondo_admin

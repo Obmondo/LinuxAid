@@ -250,8 +250,10 @@ class common::system (
       include $subclass
     }
 
-    # Only manage mail if not using a role that provides it
-    if $::obmondo_classes.grep('::mailcow').empty {
+    # Only manage mail if no role::mail::* subrole provides it. Those subroles
+    # (mailcow, postfix, smtprelay) declare common::system::mail themselves, so
+    # containing it here too would be a duplicate declaration.
+    if $::obmondo_classes.grep('role::mail::').empty {
       contain common::system::mail
     }
   }
