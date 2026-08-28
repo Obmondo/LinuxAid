@@ -28,7 +28,7 @@ class role::mail::smtprelay (
   Boolean                                             $manage          = false,
   Optional[Eit_types::Host]                           $relayhost       = undef,
   Array[Variant[Eit_types::IP, Eit_types::IPCIDR]]    $allowed_networks = [],
-) {
+) inherits ::role::mail {
   # Always trust loopback so locally-generated mail relays, then the
   # operator-supplied client networks.
   $mynetworks = ['127.0.0.0/8', '[::1]/128'] + $allowed_networks
