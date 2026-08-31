@@ -65,6 +65,7 @@ Puppet::Functions.create_function(:sort_domains_on_tld) do
   dispatch :sort_domains_on_tld do
     required_param 'Array', :args
     optional_param 'Array', :ips
+    optional_param 'Boolean', :ignore_existing_cns
   end
 
   def letsencrypt_cert_cn
@@ -116,12 +117,12 @@ Puppet::Functions.create_function(:sort_domains_on_tld) do
     end
   end
 
-  def sort_domains_on_tld(args, ips = [])
+  def sort_domains_on_tld(args, ips = [], ignore_existing_cns = false)
     cn_domains  = Hash.new
     san_domains = Hash.new
     tld_domains = Hash.new { |h, k| h[k] = Hash.new(&h.default_proc) }
 
-    cns = letsencrypt_cert_cn
+    cns = ignore_existing_cns ? [] : letsencrypt_cert_cn
 
     # Check if the domain is pointing to correct host.
     # If not, then remove that domain from the list

@@ -234,7 +234,7 @@ class eit_haproxy::basic_config (
 
     if $_use_native_acme {
       # Add Native ACME Monitoring which will loop and directly call monitor::domains
-      sort_domains_on_tld($alldomains, $public_ips).each |$cn, $san| {
+      sort_domains_on_tld($alldomains, $public_ips, true).each |$cn, $san| {
         if $cn == 'rejected_domains' {
           if $san.size > 0 {
             notify { "These domains got rejected because its not pointing to correct server = ${san}": }

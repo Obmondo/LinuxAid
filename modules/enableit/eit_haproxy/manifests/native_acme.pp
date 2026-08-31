@@ -129,7 +129,7 @@ class eit_haproxy::native_acme (
   # Build the entries list once, render the whole crt-list from a template.
   $_entries = $_managed_groups.map |$group_name, $opts| {
     $_safe = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
-    $_sorted_map = sort_domains_on_tld($opts['domains'], $_public_ips)
+    $_sorted_map = sort_domains_on_tld($opts['domains'], $_public_ips, true)
     $_sorted = $_sorted_map.map |$cn, $san| {
       if $cn != 'rejected_domains' { $san }
     }.flatten.delete_undef_values.unique
