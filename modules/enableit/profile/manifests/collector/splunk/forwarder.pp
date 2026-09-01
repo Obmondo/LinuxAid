@@ -25,6 +25,9 @@ class profile::collector::splunk::forwarder (
   Exec {
     noop => $noop_value,
   }
+  Service {
+    noop => $noop_value,
+  }
 
   # Create group
   group { 'splunkfwd':
@@ -53,6 +56,12 @@ class profile::collector::splunk::forwarder (
     }
 
     class { 'splunk::forwarder':
+      # dpkg/rpm's `latest` reads the version straight from the staged source file (the archive we
+      # just downloaded for $version/$build) and, if it differs from what's installed, upgrades or
+      # downgrades in place via `dpkg -i`/`rpm -U --oldpackage` - no purge needed, and existing
+      # etc/system/local/* (incl. the seeded admin credentials) isn't touched since it's not a
+      # packaged conffile.
+      package_ensure   => 'latest',
       seed_password    => $seed_password,
       splunk_user      => 'splunkfwd',
       password_hash    => $password_hash,
@@ -66,6 +75,11 @@ class profile::collector::splunk::forwarder (
           tag     => 'splunk_forwarder',
         },
       }
+    }
+
+    # Default 300s exec timeout is too short for a fresh install's first start; override without patching the vendored module.
+    Exec <| title == 'splunk-forwarder-accept-tos' |> {
+      timeout => 900,
     }
 
     splunkforwarder_deploymentclient { 'target-broker:deploymentServer':
