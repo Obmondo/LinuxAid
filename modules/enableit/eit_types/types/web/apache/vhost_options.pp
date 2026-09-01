@@ -6,6 +6,7 @@ type Eit_types::Web::Apache::Vhost_options = Struct[{
   docroot         => Variant[Stdlib::Unixpath, Boolean],
   domains         => Optional[Array[Stdlib::Fqdn]],
   port            => Optional[Stdlib::Port],
+  servername      => Optional[Stdlib::Fqdn],
   redirect_dest   => Optional[Array[String]],
   redirect_status => Optional[Array[String]],
   serveraliases   => Optional[Array],
