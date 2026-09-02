@@ -2,6 +2,34 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.6
+
+### Features
+- 50b13494 feat: add rustfs role and profile with haproxy integration
+
+### Bug Fixes
+- 695b6426 fix: bypass legacy letsencrypt facts in sort_domains_on_tld for native acme
+- bc656487 fix: move haproxy configs from rustfs profile to role
+- a8fb43e9 fix: add hiera data for rustfs
+- d4871318 fix: remove unnecessary configs ingestion and restrict role values
+- 1b9cd620 fix(repository/microsoft): add new Microsoft signing key for resolute (26.04) mirror
+- fad39b85 fix: update the puppet file script to handle commit hash and branch
+- b3f40b33 fix: use absolute raw urls for the readme hero logo so the docs site finds it
+
+### Configuration Changes
+- 4bbb3885 chore: add doc to generate haproxy cert manually
+- b576209e chore: update rustfs container image version to 1.0.0-rc.3
+- d4f827aa chore: updated puppet-rustfs module @v0.1.1
+- e2656482 chore: updated puppet-rustfs module @v0.1.0
+- 42a47a92 chore: pin puppet-rustfs module @feat/add-puppet-rustfs-module
+
+### Other Changes
+- 64f53d3f Make role::mail::smtprelay inherit ::role::mail
+- 9b3a0703 Fixed the rendering issue
+- 7698c2bd Updated the config changes based on the new gitlab version configuration
+- 1b65db48 Expose nvidia_driver packages via common::software and vendor the CUDA apt key
+- 10f8f0af initial description of WHY
+
 ## LinuxAid Release Version v1.8.5
 
 ### Bug Fixes
