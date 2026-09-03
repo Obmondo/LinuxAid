@@ -14,24 +14,42 @@
 #
 # @param server_extra_dependencies Array[String] parameter to install OS specific dependencies. Defaults to [].
 #
+# @param expose Whether to expose the service via HAProxy. Defaults to false.
+#
+# @param domains HAProxy domain configuration. Defaults to {}.
+#
 # @groups management manage.
 #
 # @groups client client_enable, client_version, client_extra_dependencies.
 #
 # @groups server server_enable, server_version, server_extra_dependencies.
 #
+# @groups networking expose, domains.
 class common::software::rustdesk (
-  Boolean             $manage                    = false,
+  Boolean              $manage                    = false,
 
-  Boolean             $client_enable             = false,
-  Array[String]       $client_extra_dependencies = [],
-  Eit_types::Version  $client_version            = '1.4.3',
+  Boolean              $client_enable             = false,
+  Array[String]        $client_extra_dependencies = [],
+  Eit_types::Version   $client_version            = '1.4.3',
 
-  Boolean             $server_enable             = false,
-  Array[String]       $server_extra_dependencies = [],
-  Eit_types::Version  $server_version            = '1.7.1',
+  Boolean              $server_enable             = false,
+  Array[String]        $server_extra_dependencies = [],
+  Eit_types::Version   $server_version            = '1.7.1',
+
+  Boolean              $expose                    = false,
+  Eit_haproxy::Domains $domains                   = {},
 ) {
   if $manage {
     include profile::software::rustdesk
+
+    if $expose {
+      confine($expose, $domains.empty, 'Exposing rustdesk via HAProxy requires domains to be provided')
+
+      class { 'role::web::haproxy':
+        domains            => $domains,
+        version            => '3.2.0',
+        encryption_ciphers => 'Intermediate',
+      }
+    }
   }
 }
