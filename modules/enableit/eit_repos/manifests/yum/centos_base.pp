@@ -14,9 +14,14 @@ class eit_repos::yum::centos_base (
     }
 
     $_os = $facts['os']
-    $_repo_parameters = "${_os['name']}-${_os['release']['major']}" ? {
-      'CentOS-6' => {
-        baseurl => "http://vault.centos.org/${_os['release']['full']}/${_repo}/\$basearch/",
+
+    # CentOS 7 and older are EOL: mirrorlist.centos.org no longer resolves and
+    # the packages only remain on the vault archive. Newer CentOS keeps the
+    # mirrorlist.
+    $_repo_parameters = ($_os['name'] == 'CentOS' and Integer($_os['release']['major']) < 8) ? {
+      true    => {
+        baseurl    => "http://vault.centos.org/${_os['release']['full']}/${_repo}/\$basearch/",
+        mirrorlist => 'absent',
       },
       default => {
         mirrorlist => "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=${_repo}",
