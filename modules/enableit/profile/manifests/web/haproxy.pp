@@ -19,8 +19,8 @@
 # @groups mode http
 #
 class profile::web::haproxy (
-  Enum['auto', 'manual']        $configure,
-  Optional[String]              $manual_config,
+  Enum['auto', 'manual']        $configure              = 'auto',
+  Optional[String]              $manual_config          = undef,
   Eit_haproxy::Domains          $domains                = {},
   Eit_haproxy::Listen           $listens                = {},
   Boolean                       $ddos_protection        = false,
