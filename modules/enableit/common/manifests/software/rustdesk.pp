@@ -16,8 +16,6 @@
 #
 # @param expose Whether to expose the service via HAProxy. Defaults to false.
 #
-# @param domains HAProxy domain configuration. Defaults to {}.
-#
 # @groups management manage.
 #
 # @groups client client_enable, client_version, client_extra_dependencies.
@@ -37,19 +35,11 @@ class common::software::rustdesk (
   Eit_types::Version   $server_version            = '1.7.1',
 
   Boolean              $expose                    = false,
-  Eit_haproxy::Domains $domains                   = {},
 ) {
   if $manage {
     include profile::software::rustdesk
-
     if $expose {
-      confine($expose, $domains.empty, 'Exposing rustdesk via HAProxy requires domains to be provided')
-
-      class { 'role::web::haproxy':
-        domains            => $domains,
-        version            => '3.2.0',
-        encryption_ciphers => 'Intermediate',
-      }
+      include profile::web::haproxy
     }
   }
 }

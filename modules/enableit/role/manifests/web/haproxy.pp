@@ -22,7 +22,7 @@
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
 #
-# @param version The version of haproxy. Defaults to 'present'.
+# @param version The version of haproxy. Defaults to '3.2.0'.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
@@ -56,7 +56,7 @@ class role::web::haproxy (
       Array[Stdlib::Port],
       Stdlib::Port
   ]]                            $firewall               = {},
-  Eit_types::Version            $version                = 'latest',
+  Eit_types::Version            $version                = '3.2.0',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
   Boolean                       $log_compressed         = true,
   Boolean                       $__blendable,

@@ -28,7 +28,7 @@ class profile::web::haproxy (
   Boolean                       $http                   = false,
   Boolean                       $use_hsts               = true,
   Boolean                       $use_lets_encrypt       = true,
-  Eit_types::Version            $version                = 'latest',
+  Eit_types::Version            $version                = '3.2.0',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Hash[Eit_types::IP,Variant[
