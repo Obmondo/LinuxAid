@@ -19,23 +19,23 @@
 # @groups mode http
 #
 class profile::web::haproxy (
-  Enum['auto', 'manual']        $configure              = 'auto',
-  Optional[String]              $manual_config          = undef,
-  Eit_haproxy::Domains          $domains                = {},
-  Eit_haproxy::Listen           $listens                = {},
-  Boolean                       $ddos_protection        = false,
-  Boolean                       $https                  = true,
-  Boolean                       $http                   = false,
-  Boolean                       $use_hsts               = true,
-  Boolean                       $use_lets_encrypt       = true,
-  Eit_types::Version            $version                = '3.2.0',
-  Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
-  Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
+  Enum['auto', 'manual']        $configure              = $role::web::haproxy::configure,
+  Optional[String]              $manual_config          = $role::web::haproxy::manual_config,
+  Eit_haproxy::Domains          $domains                = $role::web::haproxy::domains,
+  Eit_haproxy::Listen           $listens                = $role::web::haproxy::listens,
+  Boolean                       $ddos_protection        = $role::web::haproxy::ddos_protection,
+  Boolean                       $https                  = $role::web::haproxy::https,
+  Boolean                       $http                   = $role::web::haproxy::http,
+  Boolean                       $use_hsts               = $role::web::haproxy::use_hsts,
+  Boolean                       $use_lets_encrypt       = $role::web::haproxy::use_lets_encrypt,
+  Eit_types::Version            $version                = $role::web::haproxy::version,
+  Eit_types::Email              $acme_contact           = $role::web::haproxy::acme_contact,
+  Enum['Modern','Intermediate'] $encryption_ciphers     = $role::web::haproxy::encryption_ciphers,
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
       Stdlib::Port
-  ]]                            $firewall               = {},
-  Boolean                       $log_compressed         = true,
+  ]]                            $firewall               = $role::web::haproxy::firewall,
+  Boolean                       $log_compressed         = $role::web::haproxy::log_compressed,
 ) inherits profile {
   # Monitoring
   $facts.dig('haproxy_version').then |$_haproxy_version| {

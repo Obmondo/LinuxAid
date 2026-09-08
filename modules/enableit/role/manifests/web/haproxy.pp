@@ -63,20 +63,5 @@ class role::web::haproxy (
 ) inherits role::web {
   confine($configure == 'manual', !$manual_config, 'Manual configuration need static haproxy config file')
 
-  class { 'profile::web::haproxy':
-    domains            => $domains,
-    listens            => $listens,
-    ddos_protection    => $ddos_protection,
-    https              => $https,
-    http               => $http,
-    use_hsts           => $use_hsts,
-    use_lets_encrypt   => $use_lets_encrypt,
-    manual_config      => $manual_config,
-    version            => $version,
-    acme_contact       => $acme_contact,
-    configure          => $configure,
-    encryption_ciphers => $encryption_ciphers,
-    firewall           => $firewall,
-    log_compressed     => $log_compressed,
-  }
+  contain profile::web::haproxy
 }
