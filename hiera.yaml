@@ -2,9 +2,13 @@
 version: 5
 
 defaults:
-  # relative path as per puppetserver on k8s, defaulting to main branch
-  # in case of opensource the customer_id will be empty
-  datadir: ../../hiera-data/%{hiera_datapath}
+  # TEST BRANCH ONLY - DO NOT MERGE
+  # Pinned straight at linuxaid-config-enableit PR #311's branch so this
+  # environment previews LinuxAid#103 + #311 together on bantha, reading the
+  # real (live) hiera data instead of a copy of it. Same pattern as
+  # 214cb9f98/56b7ddbd3 (mdasif, 2026-09-02, abbnoa6nlk/splunk_forwarder_10_2_2).
+  # Normally: datadir: ../../hiera-data/%{hiera_datapath}
+  datadir: ../../hiera-data/enableit/fail2ban
   data_hash: yaml_data
 
 hierarchy:
