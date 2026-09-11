@@ -20,7 +20,7 @@
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
-# @param version The version of haproxy. Defaults to 'latest'.
+# @param version The version of haproxy. Defaults to '3.2.0'.
 #
 # @param native_acme Internal switch for native ACME mode.
 #
@@ -43,12 +43,12 @@ class eit_haproxy::basic_config (
   Boolean                       $https              = true,
   Boolean                       $http               = false,
   Boolean                       $use_hsts           = true,
-  Boolean                       $use_lets_encrypt   = true,
+  Boolean                       $use_lets_encrypt   = false,
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Version            $version            = 'latest',
-  Boolean                       $native_acme        = false,
+  Eit_types::Version            $version            = '3.2',
+  Boolean                       $native_acme        = true,
   Eit_types::Email              $acme_contact       = $eit_haproxy::acme_contact,
   String                        $acme_ca            = 'https://acme-v02.api.letsencrypt.org/directory',
 ) {

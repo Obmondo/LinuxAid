@@ -12,7 +12,7 @@ class profile::storage::rustfs (
   String[1]            $secret_key    = $role::storage::rustfs::secret_key,
   Boolean              $enable        = $role::storage::rustfs::enable,
   Stdlib::Unixpath     $data_dir      = $role::storage::rustfs::data_dir,
-  String[1]            $version       = '1.0.0-rc.3',
+  String[1]            $version       = '1.0.0-rc.5',
   Hash                 $env_vars      = {},
 ) {
   # 1. Manage RustFS
