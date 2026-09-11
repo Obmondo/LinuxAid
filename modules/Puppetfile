@@ -68,6 +68,11 @@ mod 'dhoppe/fail2ban',
     :git => "https://github.com/dhoppe/puppet-fail2ban.git",
     :ref => 'v5.0.2'
 
+# Dependency of dhoppe/fail2ban (extlib::default_content in fail2ban::init/define)
+mod 'puppet/extlib',
+    :git => "https://github.com/voxpupuli/puppet-extlib.git",
+    :ref => 'v7.5.1'
+
 mod 'puppetlabs/firewall',
     :git => "https://github.com/puppetlabs/puppetlabs-firewall.git",
     :ref => 'v8.2.0'
