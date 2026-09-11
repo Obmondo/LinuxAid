@@ -7,8 +7,8 @@ role::web::haproxy::ddos_protection: false
 role::web::haproxy::https: true
 role::web::haproxy::http: false
 role::web::haproxy::use_hsts: true
-role::web::haproxy::use_lets_encrypt: true
-role::web::haproxy::version: "3.2.0"
+role::web::haproxy::use_lets_encrypt: false
+role::web::haproxy::version: "3.2"
 role::web::haproxy::acme_contact: "ops@enableit.dk"
 role::web::haproxy::encryption_ciphers: "Modern"
 role::web::haproxy::firewall: {}

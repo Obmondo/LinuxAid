@@ -24,7 +24,7 @@
 #
 # @param use_hsts Boolean to enable or disable HSTS. Defaults to true.
 #
-# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt. Defaults to true.
+# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt / certbot legacy mode. Defaults to false (native ACME used for HAProxy 3.2+).
 #
 # @param mode The mode of haproxy. Defaults to 'http'.
 #
@@ -32,7 +32,7 @@
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
-# @param version The version of haproxy. Defaults to '3.2.0'.
+# @param version The version or LTS stream of haproxy (e.g. '3.2', '3.4'). Defaults to '3.2'. Even-minor LTS streams (3.2, 3.4, etc.) are supported for HAProxy 3.x.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
@@ -77,11 +77,11 @@ class eit_haproxy (
   Boolean                       $https              = true,
   Boolean                       $http               = false,
   Boolean                       $use_hsts           = true,
-  Boolean                       $use_lets_encrypt   = true,
+  Boolean                       $use_lets_encrypt   = false,
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Version            $version            = '3.2.0',
+  Eit_types::Version            $version            = '3.2',
   Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
   Enum['production','staging']  $ca_type            = 'production',
   Eit_types::Service_Ensure     $service_ensure     = true,
@@ -102,7 +102,23 @@ class eit_haproxy (
   if $configure == 'auto' {
     $_is_ubuntu = $facts['os']['name'] == 'Ubuntu'
 
-    $_wants_haproxy3 = String($version) =~ /^\d+(\.\d+)*$/ and versioncmp(String($version), '3.2.0') >= 0
+    if String($version) =~ /^(\d+)\.(\d+)(?:\.(\d+))?$/ {
+      $major = Integer($1)
+      $minor = Integer($2)
+
+      if $major >= 3 {
+        if $minor % 2 != 0 {
+          fail("HAProxy version ${version} is invalid. Only even minor versions (LTS releases like 3.2, 3.4, etc.) are supported for HAProxy 3.x.")
+        }
+        $_wants_haproxy3 = true
+        $haproxy_lts_version = "${major}.${minor}"
+      } else {
+        $_wants_haproxy3 = false
+      }
+    } else {
+      $_wants_haproxy3 = versioncmp(String($version), '3.2.0') >= 0
+      $haproxy_lts_version = '3.2'
+    }
 
     if $_wants_haproxy3 and !$_is_ubuntu {
       fail("HAProxy 3.x is only supported on Ubuntu, not ${facts['os']['name']}")
@@ -122,16 +138,16 @@ class eit_haproxy (
     if $_wants_haproxy3 {
       if $_is_ubuntu {
         # Ubuntu 24.04 ships HAProxy 2.8 — need vbernat's PPA for 3.x.
+        # See: https://launchpad.net/~vbernat/+archive/ubuntu/haproxy-3.2 (adjusting the suffix for newer LTS like haproxy-3.4).
         # Newer Ubuntu LTS (26.04+) ships HAProxy 3.x in stock repos,
         # so the PPA is unnecessary there.
         if $facts['os']['release']['major'] =~ /^24/ {
-          $haproxy_lts_version = '3.2'
           apt::ppa { "ppa:vbernat/haproxy-${haproxy_lts_version}": }
 
           Class['apt'] -> Apt::Ppa["ppa:vbernat/haproxy-${haproxy_lts_version}"] -> Class['eit_haproxy::basic_config']
         }
       } else {
-        warning('HAProxy 3.2.x auto-native ACME path is only supported on Ubuntu')
+        warning("HAProxy ${haproxy_lts_version} auto-native ACME path is only supported on Ubuntu")
       }
     }
 
@@ -142,8 +158,11 @@ class eit_haproxy (
     }
 
     $_version = $_wants_haproxy3 ? {
-      true    => 'latest',
-      default => $version
+      true    => ($version =~ /^\d+\.\d+$/) ? {
+        true    => 'latest',
+        default => $version,
+      },
+      default => $version,
     }
 
     class { 'eit_haproxy::basic_config':

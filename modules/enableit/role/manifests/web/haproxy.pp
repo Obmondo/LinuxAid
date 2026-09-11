@@ -14,7 +14,7 @@
 #
 # @param use_hsts Boolean to enable or disable HSTS. Defaults to true.
 #
-# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt. Defaults to true.
+# @param use_lets_encrypt Boolean to enable or disable Let's Encrypt / certbot legacy mode. Defaults to false (native ACME used for HAProxy 3.2+).
 #
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
@@ -22,7 +22,7 @@
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
 #
-# @param version The version of haproxy. Defaults to '3.2.0'.
+# @param version The version or LTS stream of haproxy (e.g. '3.2', '3.4'). Defaults to '3.2'. Even-minor LTS streams are supported for HAProxy 3.x.
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
@@ -49,14 +49,14 @@ class role::web::haproxy (
   Boolean                       $https                  = true,
   Boolean                       $http                   = false,
   Boolean                       $use_hsts               = true,
-  Boolean                       $use_lets_encrypt       = true,
+  Boolean                       $use_lets_encrypt       = false,
   Enum['Modern','Intermediate'] $encryption_ciphers     = 'Modern',
   Enum['auto', 'manual']        $configure              = 'auto',
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
       Stdlib::Port
   ]]                            $firewall               = {},
-  Eit_types::Version            $version                = '3.2.0',
+  Eit_types::Version            $version                = '3.2',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
   Boolean                       $log_compressed         = true,
   Boolean                       $__blendable,
