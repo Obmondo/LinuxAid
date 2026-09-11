@@ -29,9 +29,15 @@
 #
 # @param package_ensure Passed through to the fail2ban package. Defaults to 'present'.
 #
+# @param custom_jails Passed straight through to the upstream `fail2ban` class's
+#   `custom_jails` param — one hash entry per jail, each fully defining its own
+#   filter (`filter_failregex`, etc.) and jail settings (`logpath`, `port`,
+#   `maxretry`, `findtime`, `bantime`, ...). See `fail2ban::jail` in the vendored
+#   module for the full set of keys. Defaults to {} (no custom jails).
+#
 # @groups management enable
 #
-# @groups configuration jails, bantime, maxretry, ignoreip, banaction, action, email, package_ensure
+# @groups configuration jails, bantime, maxretry, ignoreip, banaction, action, email, package_ensure, custom_jails
 #
 class common::user_management::security::fail2ban (
   Boolean                                       $enable         = false,
@@ -43,6 +49,7 @@ class common::user_management::security::fail2ban (
   String[1]                                     $action         = 'action_',
   Optional[String[1]]                           $email          = undef,
   Enum['absent', 'latest', 'present', 'purged'] $package_ensure = 'present',
+  Hash[String[1], Hash]                         $custom_jails   = {},
 ) inherits ::common::user_management::security {
 
   if $enable {
@@ -64,6 +71,7 @@ class common::user_management::security::fail2ban (
       action         => $action,
       email          => $_email,
       whitelist      => unique($_base_ignoreip + $ignoreip),
+      custom_jails   => $custom_jails,
     }
   }
 }
