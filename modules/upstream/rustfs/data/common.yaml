@@ -1,6 +1,6 @@
 ---
 rustfs::enable: false
-rustfs::version: "1.0.0-rc.3"
+rustfs::version: "1.0.0-rc.5"
 rustfs::container_image: "rustfs/rustfs"
 rustfs::data_dir: "/opt/rustfs/data"
 rustfs::access_key: "admin"
