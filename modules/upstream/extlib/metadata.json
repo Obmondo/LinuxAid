@@ -1,0 +1,74 @@
+{
+  "name": "puppet-extlib",
+  "version": "7.5.1",
+  "source": "https://github.com/voxpupuli/puppet-extlib.git",
+  "project_page": "https://github.com/voxpupuli/puppet-extlib",
+  "issues_url": "https://github.com/voxpupuli/puppet-extlib/issues",
+  "author": "Vox Pupuli",
+  "license": "Apache-2.0",
+  "summary": "extlib provides functions out of scope puppetlabs/stdlib",
+  "description": "extlib provides functions out of scope puppetlabs/stdlib",
+  "tags": [
+    "voxpupuli",
+    "extlib",
+    "stdlib"
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.18.0 < 10.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04",
+        "20.04"
+      ]
+    }
+  ]
+}
