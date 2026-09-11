@@ -2,6 +2,23 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.7
+
+### Bug Fixes
+- 7b4485c1 fix: update the update_puppetfile script to differentiate refs based on tag, branch, and commit SHA + update rustfs module to v0.1.2
+- fd97b877 fix(apache): default vhost port so vhosts bind an address
+
+### Configuration Changes
+- c5b7e4e7 chore: update linuxaid-cli to v1.11.0 with checksums
+- 6e955c4f chore(default-repos): added cloudflared repository configuration in repo mirror defaults
+
+### Other Changes
+- 8f66f8ee eit_repos::yum::centos_base: use vault archive for CentOS < 8
+- 56b7ddbd Revert hiera.yaml datadir test hack back to %{hiera_datapath}
+- 214cb9f9 Hardcode hiera datadir to abbnoa6nlk/splunk_forwarder_10_2_2 for testing
+- 386fbe5c Fix constant leak, unmanaged cache path, return_type violation, and write race
+- 9ae73a0b Add automated Splunk forwarder version updates
+
 ## LinuxAid Release Version v1.8.6
 
 ### Features
