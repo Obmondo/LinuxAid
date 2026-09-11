@@ -15,6 +15,15 @@ class profile::network::firewall (
 
   $_allow_netbird = lookup('common::network::netbird::enable', Boolean, undef, false)
 
+  # fail2ban (see common::user_management::security::fail2ban) inserts its own
+  # jump rules into the INPUT chain at runtime. Keep the purge logic from
+  # fighting them.
+  $_fail2ban_enabled = lookup('common::user_management::security::fail2ban::enable', Boolean, undef, false)
+  $_fail2ban_ignore = $_fail2ban_enabled ? {
+    true    => ['-j f2b-', '-j F2B-'],
+    default => [],
+  }
+
   class { 'firewall':
     ensure    => $enable.ensure_service,
     ensure_v6 => $enable_ipv6.ensure_service,
@@ -57,7 +66,7 @@ class profile::network::firewall (
     }
   }
 
-  if $allow_docker or $allow_k8s or $allow_azure or $_allow_netbird {
+  if $allow_docker or $allow_k8s or $allow_azure or $_allow_netbird or $_fail2ban_enabled {
     # This is to support a more relaxed firewall setup, where only
     # INPUT, FORWARD and OUTPUT chains are purged/managed
     # and docker inserted rules are ignored
@@ -71,7 +80,8 @@ class profile::network::firewall (
         'cali-INPUT',
         'KUBE-PROXY-FIREWALL',
         'KUBE-NODEPORTS',
-      ] }
+      ] },
+      $_fail2ban_ignore,
     ].flatten.delete_undef_values
 
     $_output = [
