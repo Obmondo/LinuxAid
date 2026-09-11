@@ -35,15 +35,15 @@ function ARGFAIL() {
 Usage: ${SCRIPT_NAME} [OPTIONS]
 
 OPTIONS:
-  --update-module <module-name> [commit-hash]
+  --update-module <module-name> [ref]
                         Update a specific Openvox module
                         Requires: Upstream module name
-                        Optional: Commit hash to pin to specific version
+                        Optional: Ref (commit hash, tag, or branch name)
 
-  --add-module <module-url> [commit-hash]
+  --add-module <module-url> [ref]
                         Add a specific Openvox module (defaults to latest tag)
                         Requires: Upstream module git URL
-                        Optional: Commit hash to pin to specific version
+                        Optional: Ref (commit hash, tag, or branch name)
 
   --puppetfile          Path to Puppetfile
                         Default: $(pwd)/Puppetfile
@@ -94,7 +94,7 @@ while [[ $# -gt 0 ]]; do
 
       ADD_MODULE=true
       GIT_URL=$1
-      COMMIT_HASH="${2:-}"
+      CHECKOUT_REF="${2:-}"
 
       # Validate HTTPS URL with optional .git suffix
       if [[ ! "$GIT_URL" =~ ^https://[^/]+/.+(\.git)?$ ]]; then
@@ -104,7 +104,7 @@ while [[ $# -gt 0 ]]; do
       fi
 
       shift
-      [[ -n "$COMMIT_HASH" ]] && shift
+      [[ -n "$CHECKOUT_REF" ]] && shift
       ;;
     --update-module)
       if [[ $# -eq 0 ]]; then
@@ -114,7 +114,7 @@ while [[ $# -gt 0 ]]; do
 
       UPDATE_MODULE=true
       MODULE_NAME=$1
-      COMMIT_HASH="${2:-}"
+      CHECKOUT_REF="${2:-}"
 
       if ! test -d "${OPENVOX_UPSTREAM_MODULES_PATH}/${MODULE_NAME}"; then
         echo "Openvox module ${MODULE_NAME} under ${OPENVOX_UPSTREAM_MODULES_PATH} dir does not exist"
@@ -122,7 +122,7 @@ while [[ $# -gt 0 ]]; do
       fi
 
       shift
-      [[ -n "$COMMIT_HASH" ]] && shift
+      [[ -n "$CHECKOUT_REF" ]] && shift
       ;;
     --puppetfile)
       PUPPETFILE_PATH=${1:-${PUPPETFILE}}
@@ -252,19 +252,42 @@ EOF
   git add "$PUPPETFILE"
 }
 
+function determine_ref_type() {
+  if git -C "${TEMP_CLONE_DIR}" rev-parse --verify "refs/tags/${CHECKOUT_REF}" >/dev/null 2>&1; then
+    echo "tag"
+  elif git -C "${TEMP_CLONE_DIR}" rev-parse --verify "refs/heads/${CHECKOUT_REF}" >/dev/null 2>&1 || git -C "${TEMP_CLONE_DIR}" rev-parse --verify "remotes/origin/${CHECKOUT_REF}" >/dev/null 2>&1; then
+    echo "branch"
+  elif git -C "${TEMP_CLONE_DIR}" rev-parse --verify "${CHECKOUT_REF}^{commit}" >/dev/null 2>&1; then
+    echo "commit"
+  else
+    echo "commit"
+  fi
+}
+
 # Function to add new module in linuxaid
 function add_module() {
   MODULE_NAME=$(extract_module_name_from_url "$GIT_URL")
   MODULE_DIR="${OPENVOX_UPSTREAM_MODULES_PATH}/${MODULE_NAME##*/}/"
 
-  # Pin to specific commit
-  if [[ -n "$COMMIT_HASH" ]]; then
-    LATEST_TAG="$COMMIT_HASH"
-    setup_module_git_clone "$COMMIT_HASH"
-    COMMIT_MESSAGE="chore: pin puppet-${MODULE_NAME} module @${COMMIT_HASH}
+  if [[ -n "$CHECKOUT_REF" ]]; then
+    LATEST_TAG="$CHECKOUT_REF"
+    setup_module_git_clone "$CHECKOUT_REF"
+    REF_TYPE=$(determine_ref_type)
+
+    if [[ "$REF_TYPE" == "tag" ]]; then
+      COMMIT_MESSAGE="chore: added puppet-${MODULE_NAME} module ${CHECKOUT_REF}
+
+Source: ${GIT_URL}/releases/tag/${CHECKOUT_REF}"
+    elif [[ "$REF_TYPE" == "branch" ]]; then
+      COMMIT_MESSAGE="chore: added puppet-${MODULE_NAME} module @${CHECKOUT_REF}
+
+Source: ${GIT_URL}/tree/${CHECKOUT_REF}"
+    else
+      COMMIT_MESSAGE="chore: pin puppet-${MODULE_NAME} module @${CHECKOUT_REF}
 
 Pinned to specific commit instead of tagged release.
-Source: ${GIT_URL}/commit/${COMMIT_HASH}"
+Source: ${GIT_URL}/commit/${CHECKOUT_REF}"
+    fi
   else
     LATEST_TAG=$(get_module_latest_tag "${GIT_URL}")
     setup_module_git_clone "$LATEST_TAG"
@@ -283,16 +306,28 @@ function update_module() {
 
   get_module_git_url
 
-  # Pin to specific commit
-  if [[ -n "$COMMIT_HASH" ]]; then
-    LATEST_TAG="${COMMIT_HASH}"
-    setup_module_git_clone "$COMMIT_HASH"
-    echo "Using ref ${COMMIT_HASH}"
-    COMMIT_MESSAGE="chore: updated puppet-${MODULE_NAME} module @${COMMIT_HASH}
+  if [[ -n "$CHECKOUT_REF" ]]; then
+    LATEST_TAG="${CHECKOUT_REF}"
+    setup_module_git_clone "$CHECKOUT_REF"
+    echo "Using ref ${CHECKOUT_REF}"
+    REF_TYPE=$(determine_ref_type)
+    CURRENT_TAG=$(get_module_current_version "${MODULE_NAME}")
+
+    if [[ "$REF_TYPE" == "tag" ]]; then
+      COMMIT_MESSAGE="chore: updated puppet-${MODULE_NAME} module v${CURRENT_TAG} -> ${CHECKOUT_REF}
+
+Source: ${GIT_URL}/releases/tag/${CHECKOUT_REF}"
+    elif [[ "$REF_TYPE" == "branch" ]]; then
+      COMMIT_MESSAGE="chore: updated puppet-${MODULE_NAME} module @${CHECKOUT_REF}
+
+Source: ${GIT_URL}/tree/${CHECKOUT_REF}"
+    else
+      COMMIT_MESSAGE="chore: updated puppet-${MODULE_NAME} module @${CHECKOUT_REF}
 
 Pinned to specific commit instead of tagged release.
 
-Source: ${GIT_URL}/commit/${COMMIT_HASH}"
+Source: ${GIT_URL}/commit/${CHECKOUT_REF}"
+    fi
   else
     LATEST_TAG=$(get_module_latest_tag "${MODULE_NAME}")
     CURRENT_TAG=$(get_module_current_version "${MODULE_NAME}")
@@ -351,9 +386,9 @@ EOF
 }
 
 if "$UPDATE_MODULE"; then
-  update_module "$MODULE_NAME" "$COMMIT_HASH"
+  update_module "$MODULE_NAME" "$CHECKOUT_REF"
 fi
 
 if "$ADD_MODULE"; then
-  add_module "$GIT_URL" "$COMMIT_HASH"
+  add_module "$GIT_URL" "$CHECKOUT_REF"
 fi
