@@ -19,14 +19,18 @@ RETRY_DELAY=10
 # Restored argument parsing
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [-s SOCKET]
+Usage: $(basename "$0") [-s SOCKET] [-d]
   -s SOCKET   HAProxy stats socket (default: ${SOCKET})
+  -d          Enable debug/verbose logging
 EOF
 }
 
-while getopts ":s:h" opt; do
+DEBUG=false
+
+while getopts ":s:hd" opt; do
   case "$opt" in
     s) SOCKET="$OPTARG" ;;
+    d) DEBUG=true ;;
     h) usage; exit 0 ;;
     *) usage >&2; exit 2 ;;
   esac
@@ -37,7 +41,9 @@ hap() { socat - "UNIX-CONNECT:${SOCKET}"; }
 
 dump_one() {
   local path="$1"
-  echo "Attempting dump for: ${path}" >&2
+  if [ "${DEBUG:-false}" = true ]; then
+    echo "Attempting dump for: ${path}" >&2
+  fi
   local dir tmp
   dir=$(dirname "$path")
   tmp=$(mktemp "${dir}/.$(basename "$path").XXXXXX")
@@ -76,7 +82,9 @@ dump_one() {
     if cmp -s \
         <(sha256sum "$tmp" | cut -d ' ' -f1) \
         <(sha256sum "$path" | cut -d ' ' -f1); then
-      echo "Already up-to-date: ${path}" >&2
+      if [ "${DEBUG:-false}" = true ]; then
+        echo "Already up-to-date: ${path}" >&2
+      fi
       return 0
     fi
   fi
