@@ -45,7 +45,7 @@ class thinlinc (
   ThinLinc::KeyboardLayout $session_keyboard_layout  = 'us(alt-intl)',
 
   # vsmserver
-  String                         $vsmserver_admin_email              = 'root@localhost',
+  Variant[String, Array[String]] $vsmserver_admin_email              = 'root@localhost',
   Array[Stdlib::Host]            $vsmserver_terminal_servers         =  ['127.0.0.1',],
   Integer[0,default]             $vsmserver_ram_per_user_mb          = 100,
   Integer[0,default]             $vsmserver_bogomips_per_user        = 600,

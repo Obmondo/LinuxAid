@@ -5,7 +5,7 @@
 # @example
 #   include thinlinc::vsmserver
 class thinlinc::vsmserver (
-  String                         $admin_email              = $::thinlinc::vsmserver_admin_email,
+  Variant[String, Array[String]] $admin_email              = $::thinlinc::vsmserver_admin_email,
   Array[Stdlib::Host]            $terminal_servers         = $::thinlinc::vsmserver_terminal_servers,
   Integer[0,default]             $ram_per_user_mb          = $::thinlinc::vsmserver_ram_per_user_mb,
   Integer[0,default]             $bogomips_per_user        = $::thinlinc::vsmserver_bogomips_per_user,
