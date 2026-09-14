@@ -158,10 +158,7 @@ class eit_haproxy (
     }
 
     $_version = $_wants_haproxy3 ? {
-      true    => ($version =~ /^\d+\.\d+$/) ? {
-        true    => 'latest',
-        default => $version,
-      },
+      true    => 'latest',
       default => $version,
     }
 
