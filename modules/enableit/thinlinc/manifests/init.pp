@@ -142,6 +142,16 @@ class thinlinc (
   Stdlib::Port         $webaccess_listen_port     = 300,
   String               $webaccess_gnutls_priority = 'NORMAL:-VERS-SSL3.0',
 
+  # webaccess, ThinLinc 4.20 and later
+  Optional[Array[Stdlib::IP::Address]] $webaccess_trusted_proxies   = undef,
+  Optional[Stdlib::Absolutepath]       $webaccess_branding_logo       = undef,
+  Optional[Stdlib::Absolutepath]       $webaccess_branding_background = undef,
+  Optional[String]                     $webaccess_branding_title      = undef,
+
+  # webaccess, ThinLinc 4.21 and later
+  Optional[Boolean]         $webaccess_login_password = undef,
+  ThinLinc::Webaccess::Oidc $webaccess_oidc           = {},
+
   Boolean                $webaccess_log_to_file       = $log_to_file,
   Stdlib::Absolutepath   $webaccess_log_dir           = $log_dir,
   Boolean                $webaccess_log_to_syslog     = $log_to_syslog,
