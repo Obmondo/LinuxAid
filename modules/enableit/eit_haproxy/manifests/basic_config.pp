@@ -47,7 +47,7 @@ class eit_haproxy::basic_config (
   Enum['http','tcp']            $mode               = 'http',
   Array[Stdlib::IP::Address,1]  $listen_on          = ['0.0.0.0'],
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
-  Eit_types::Version            $version            = '3.2',
+  Eit_types::Version            $version            = 'latest',
   Boolean                       $native_acme        = true,
   Eit_types::Email              $acme_contact       = $eit_haproxy::acme_contact,
   String                        $acme_ca            = 'https://acme-v02.api.letsencrypt.org/directory',
