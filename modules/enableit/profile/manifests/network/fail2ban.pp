@@ -1,6 +1,6 @@
 # @summary Class for managing fail2ban (SSH brute-force protection)
 #
-# Thin wrapper around the upstream `fail2ban` module (dhoppe/voxpupuli).
+# Thin wrapper around the upstream `fail2ban` module (voxpupuli/puppet-fail2ban).
 # See common::network::fail2ban for the hiera-facing parameters.
 #
 # @param enable Whether to install, configure and run fail2ban.
