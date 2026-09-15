@@ -43,6 +43,7 @@ class common::monitor::exporter::wireguard (
 
   prometheus::daemon { 'wireguard_exporter':
     package_name      => 'obmondo-wireguard-exporter',
+    bin_name          => 'prometheus_wireguard_exporter', # binary name of obmondo-wireguard-exporter is prometheus_wireguard_exporter
     version           => '3.6.6',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
