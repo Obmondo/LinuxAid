@@ -51,12 +51,11 @@ class thinlinc::service (
     enable => true,
   }
 
+  # ThinLinc ships tl-license-stats.timer, which collects the same statistics
+  # on the same five minute interval.
   cron::job { 'tl-statistics-cron':
-    minute      => '*/5',
-    user        => 'root',
-    command     => 'chronic tl-collect-licensestats',
-    environment => [
-      'PATH=/opt/thinlinc/sbin:/usr/local/bin:/usr/bin:/bin',
-    ],
+    ensure  => 'absent',
+    user    => 'root',
+    command => 'chronic tl-collect-licensestats',
   }
 }
