@@ -38,11 +38,11 @@ class common::monitor::exporter::wireguard (
   $_options = [
     "--address=${_address}",
     "--port=${_port}",
-    "--prepend_sudo=true",
   ]
 
   prometheus::daemon { 'wireguard_exporter':
     package_name      => 'obmondo-wireguard-exporter',
+    bin_name          => 'obmondo-wireguard-exporter',
     version           => '3.6.6',
     service_enable    => $enable,
     service_ensure    => ensure_service($enable),
@@ -50,8 +50,10 @@ class common::monitor::exporter::wireguard (
     init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
-    user              => 'wireguard_exporter',
-    group             => 'wireguard_exporter',
+    manage_user       => false, # follows zfs.pp and security.pp pattern
+    manage_group      => false,
+    user              => 'root',
+    group             => 'root',
     notify_service    => Service['wireguard_exporter'],
     real_download_url => 'https://github.com/MindFlavor/prometheus_wireguard_exporter',
     export_scrape_job => $enable,
