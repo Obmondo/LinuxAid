@@ -19,14 +19,18 @@ RETRY_DELAY=10
 # Restored argument parsing
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [-s SOCKET]
+Usage: $(basename "$0") [-s SOCKET] [-d]
   -s SOCKET   HAProxy stats socket (default: ${SOCKET})
+  -d          Enable debug/verbose logging
 EOF
 }
 
-while getopts ":s:h" opt; do
+DEBUG=false
+
+while getopts ":s:hd" opt; do
   case "$opt" in
     s) SOCKET="$OPTARG" ;;
+    d) DEBUG=true ;;
     h) usage; exit 0 ;;
     *) usage >&2; exit 2 ;;
   esac
@@ -37,7 +41,9 @@ hap() { socat - "UNIX-CONNECT:${SOCKET}"; }
 
 dump_one() {
   local path="$1"
-  echo "Attempting dump for: ${path}" >&2
+  if [ "${DEBUG:-false}" = true ]; then
+    echo "Attempting dump for: ${path}" >&2
+  fi
   local dir tmp
   dir=$(dirname "$path")
   tmp=$(mktemp "${dir}/.$(basename "$path").XXXXXX")
@@ -71,12 +77,20 @@ dump_one() {
     return 0
   fi
 
+  local cn
+  cn=$(openssl x509 -in "$tmp" -noout -subject 2>/dev/null | sed -n 's/.*CN[[:space:]]*=[[:space:]]*\([^,/[:space:]]*\).*/\1/p')
+  if [ -n "$cn" ]; then
+    echo "$cn" >> /tmp/active_cert_domains.txt
+  fi
+
   # Optimization: Content verification with fast sha256sum
   if [ -f "$path" ]; then
     if cmp -s \
         <(sha256sum "$tmp" | cut -d ' ' -f1) \
         <(sha256sum "$path" | cut -d ' ' -f1); then
-      echo "Already up-to-date: ${path}" >&2
+      if [ "${DEBUG:-false}" = true ]; then
+        echo "Already up-to-date: ${path}" >&2
+      fi
       return 0
     fi
   fi
@@ -97,10 +111,24 @@ else
   done < /tmp/cert_list.txt
 
   echo "----------------------------------------------------------------------------------"
-  echo "Analyzing for unused certificates..."
+  echo "Analyzing for unused certificates which can be removed..."
   comm -23 \
       <(ls /etc/haproxy/certs/*.pem 2>/dev/null | sort) \
       <(sort /tmp/cert_list.txt) | while read -r unused_cert; do
-          echo "The following certificate is no longer being used and can be removed: $unused_cert"
+          echo "$unused_cert"
   done
+
+  echo "----------------------------------------------------------------------------------"
+  echo "Analyzing for unused domain expiry threshold .prom files which can be removed..."
+  if [ -f /tmp/active_cert_domains.txt ]; then
+    sort -u /tmp/active_cert_domains.txt -o /tmp/active_cert_domains.txt
+    for prom_file in /var/lib/node_exporter/textfile_collector/threshold_monitor_domains_expiry_*.prom; do
+      [ -e "$prom_file" ] || continue
+      prom_domain=$(basename "$prom_file" | sed 's/^threshold_monitor_domains_expiry_//;s/\.prom$//')
+      if ! grep -q "^${prom_domain}$" /tmp/active_cert_domains.txt; then
+        echo "$prom_file"
+      fi
+    done
+    rm -f /tmp/active_cert_domains.txt
+  fi
 fi

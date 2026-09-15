@@ -94,7 +94,7 @@ class common::monitor::exporter::blackbox (
     File <| tag == 'prometheus::scrape_job' |> {
       noop => $noop_value,
     }
-    Prometheus::Scrape_job <<| job_name == 'probe_blackbox_domains' and tag == $customer_id |>> {
+    Prometheus::Scrape_job <<| job_name == 'probe_blackbox_domains' and tag == $trusted['certname'] |>> {
       notify => Class['prometheus::service_reload'],
     }
   }

@@ -20,16 +20,17 @@
 #
 # @groups server server_enable, server_version, server_extra_dependencies.
 #
+# @groups networking, domains.
 class common::software::rustdesk (
-  Boolean             $manage                    = false,
+  Boolean              $manage                    = false,
 
-  Boolean             $client_enable             = false,
-  Array[String]       $client_extra_dependencies = [],
-  Eit_types::Version  $client_version            = '1.4.3',
+  Boolean              $client_enable             = false,
+  Array[String]        $client_extra_dependencies = [],
+  Eit_types::Version   $client_version            = '1.4.3',
 
-  Boolean             $server_enable             = false,
-  Array[String]       $server_extra_dependencies = [],
-  Eit_types::Version  $server_version            = '1.7.1',
+  Boolean              $server_enable             = false,
+  Array[String]        $server_extra_dependencies = [],
+  Eit_types::Version   $server_version            = '1.7.1',
 ) {
   if $manage {
     include profile::software::rustdesk
