@@ -16,40 +16,23 @@ class thinlinc::profiles (
     content => epp('thinlinc/conf.d/profiles.hconf.epp'),
   }
 
-  # Create a directory where we can copy the logs and give the required
-  # permissions so that user can copy the files here
-  file { '/var/log/thinlinc/sessions':
-    ensure  => 'directory',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0777',
-    require => File['/var/log/thinlinc'],
-  }
-
-  # A shell script which copies to log to the /var/log/thinlinc folder
-  file { "${thinlinc::install_dir}/libexec/tl-log-rotation.sh":
-    ensure  => present,
-    source  => 'puppet:///modules/thinlinc/tl-log-rotation.sh',
-    mode    => '0755',
-    require => File['/var/log/thinlinc/sessions'],
-  }
-
-  # Create a symlink
+  # ThinLinc 4.21 logs sessions to the system journal instead of writing an
+  # xinit.log per session, so there is nothing left to copy out at logout.
+  # Retention now comes from journald - see
+  # common::system::systemd::journald_settings.
+  #
+  # The directory is left in place: it still holds the logs collected while
+  # this ran, and they are worth keeping until they age out.
   file { "${thinlinc::install_dir}/etc/xlogout.d/tl-log-rotation.sh":
-    ensure => link,
-    target => "${thinlinc::install_dir}/libexec/tl-log-rotation.sh",
+    ensure => 'absent',
   }
 
-  # Logroate rule so that we don't keep the logs for more than a week
+  file { "${thinlinc::install_dir}/libexec/tl-log-rotation.sh":
+    ensure => 'absent',
+  }
+
   logrotate::rule { 'thinlinc-sessions':
-    ensure        => 'present',
-    path          => '/var/log/thinlinc/sessions/*/*.log',
-    rotate_every  => 'daily',
-    rotate        => 30,
-    compress      => true,
-    create        => false,
-    delaycompress => true,
-    missingok     => true,
+    ensure => 'absent',
   }
 
 }
