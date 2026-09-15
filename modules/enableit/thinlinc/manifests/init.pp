@@ -181,12 +181,16 @@ class thinlinc (
   include ::thinlinc::service
   include ::thinlinc::profiles
   include ::thinlinc::session
-  include ::thinlinc::tlwebadm
   include ::thinlinc::vsm
   include ::thinlinc::vsmagent
-  include ::thinlinc::webaccess
 
+  # An agent runs vsmagent and nothing else: the web services belong on the
+  # masters. Both classes notify their own service, so including them on an
+  # agent forces those services into thinlinc::service::services just to make
+  # the catalogue compile.
   if !$only_agents {
+    include ::thinlinc::tlwebadm
+    include ::thinlinc::webaccess
     include ::thinlinc::vsmserver
     include ::thinlinc::shadowing
 
