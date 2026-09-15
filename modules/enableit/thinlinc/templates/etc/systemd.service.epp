@@ -1,7 +1,10 @@
+<%- | String               $description,
+      Stdlib::Absolutepath $exec_start,
+| -%>
 # MANAGED BY PUPPET; CAVEAT LECTOR
 
 [Unit]
-Description=Start or stop the ThinLinc Web Administration
+Description=<%= $description %>
 After=network-online.target
 Wants=network-online.target
 
@@ -10,3 +13,6 @@ Type=forking
 Restart=always
 TimeoutSec=30s
 ExecStart=<%= $exec_start %>
+
+[Install]
+WantedBy=multi-user.target

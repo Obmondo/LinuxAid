@@ -6,6 +6,13 @@
 #   include thinlinc::service
 class thinlinc::service (
   Array[String] $services,
+
+  Hash[String,String] $descriptions = {
+    'vsmserver'   => 'ThinLinc VSM Server',
+    'vsmagent'    => 'ThinLinc VSM Agent',
+    'tlwebadm'    => 'ThinLinc Web Administration',
+    'tlwebaccess' => 'ThinLinc Web Access',
+  },
 ) inherits ::thinlinc {
 
   if $facts['service_provider'] == 'systemd' {
@@ -27,7 +34,8 @@ class thinlinc::service (
       file { "/etc/systemd/system/${_unit}":
         ensure  => 'file',
         content => epp('thinlinc/etc/systemd.service.epp', {
-          exec_start => "/opt/thinlinc/sbin/${_service}",
+          description => pick($descriptions.dig($_service), "ThinLinc ${_service}"),
+          exec_start  => "/opt/thinlinc/sbin/${_service}",
         }),
         before  => Service[$_service],
         notify  => [
