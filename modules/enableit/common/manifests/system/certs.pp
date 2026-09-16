@@ -41,6 +41,9 @@ class common::system::certs (
   File {
     noop => false,
   }
+  Exec {
+    noop => false,
+  }
   include ::trusted_ca
   include ::common::system::certs::letsencrypt
   if $manual.size {
