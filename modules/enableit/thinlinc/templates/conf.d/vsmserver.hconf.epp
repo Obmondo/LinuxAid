@@ -5,7 +5,7 @@
 [/vsmserver]
 
 # Administrators email
-admin_email=<%= $thinlinc::vsmserver::admin_email %>
+admin_email=<%= Array($thinlinc::vsmserver::admin_email, true).join(' ') %>
 
 #
 # Terminal servers. A space-separated list of agent server hostnames. These will

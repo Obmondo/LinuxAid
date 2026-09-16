@@ -22,6 +22,57 @@ listen_port=<%= $thinlinc::webaccess::listen_port %>
 # and handshake options for GnuTLS, also called a GnuTLS priority
 # string.
 gnutls_priority=<%= $thinlinc::webaccess::gnutls_priority %>
+<% if $thinlinc::webaccess::trusted_proxies =~ NotUndef { -%>
+
+# A space-separated list of proxies that are trusted when handling the
+# X-Forwarded-For HTTP header. Requires ThinLinc 4.20 or later.
+trusted_proxies=<%= $thinlinc::webaccess::trusted_proxies.join(' ') %>
+<% } -%>
+<% if $thinlinc::webaccess::login_password =~ NotUndef { -%>
+
+[/webaccess/login]
+# Allow logging in with username and password. Requires ThinLinc 4.21 or
+# later. When false, only OIDC login is available.
+password=<%= $thinlinc::webaccess::login_password.bool %>
+<% } -%>
+<% if [$thinlinc::webaccess::branding_logo,
+       $thinlinc::webaccess::branding_background,
+       $thinlinc::webaccess::branding_title].any |$_value| { $_value =~ NotUndef } { -%>
+
+# Custom branding of the login page. Requires ThinLinc 4.20 or later.
+# Every file referenced here must be readable by an unprivileged user.
+[/webaccess/branding]
+<% if $thinlinc::webaccess::branding_logo =~ NotUndef { -%>
+logo=<%= $thinlinc::webaccess::branding_logo %>
+<% } -%>
+<% if $thinlinc::webaccess::branding_background =~ NotUndef { -%>
+background=<%= $thinlinc::webaccess::branding_background %>
+<% } -%>
+<% if $thinlinc::webaccess::branding_title =~ NotUndef { -%>
+title=<%= $thinlinc::webaccess::branding_title %>
+<% } -%>
+<% } -%>
+<% $thinlinc::webaccess::oidc.each |$_provider, $_config| { -%>
+
+# OpenID Connect provider. Requires ThinLinc 4.21 or later.
+[/webaccess/oidc/<%= $_provider %>]
+username_claim=<%= $_config['username_claim'] %>
+discovery_url=<%= $_config['discovery_url'] %>
+client_id=<%= $_config['client_id'] %>
+client_secret_path=<%= $_config['client_secret_path'] %>
+<% if $_config['button_text'] =~ NotUndef { -%>
+button_text=<%= $_config['button_text'] %>
+<% } -%>
+<% if $_config['icon_path'] =~ NotUndef { -%>
+icon_path=<%= $_config['icon_path'] %>
+<% } -%>
+<% if $_config['prompt'] =~ NotUndef { -%>
+prompt=<%= $_config['prompt'] %>
+<% } -%>
+<% if $_config['scope'] =~ NotUndef { -%>
+scope=<%= $_config['scope'].join(' ') %>
+<% } -%>
+<% } -%>
 
 [/webaccess/logging]
 log_to_file=<%= $thinlinc::webaccess::log_to_file.bool %>

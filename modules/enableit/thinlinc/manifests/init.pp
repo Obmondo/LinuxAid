@@ -45,7 +45,7 @@ class thinlinc (
   ThinLinc::KeyboardLayout $session_keyboard_layout  = 'us(alt-intl)',
 
   # vsmserver
-  String                         $vsmserver_admin_email              = 'root@localhost',
+  Variant[String, Array[String]] $vsmserver_admin_email              = 'root@localhost',
   Array[Stdlib::Host]            $vsmserver_terminal_servers         =  ['127.0.0.1',],
   Integer[0,default]             $vsmserver_ram_per_user_mb          = 100,
   Integer[0,default]             $vsmserver_bogomips_per_user        = 600,
@@ -142,6 +142,16 @@ class thinlinc (
   Stdlib::Port         $webaccess_listen_port     = 300,
   String               $webaccess_gnutls_priority = 'NORMAL:-VERS-SSL3.0',
 
+  # webaccess, ThinLinc 4.20 and later
+  Optional[Array[Stdlib::IP::Address]] $webaccess_trusted_proxies   = undef,
+  Optional[Stdlib::Absolutepath]       $webaccess_branding_logo       = undef,
+  Optional[Stdlib::Absolutepath]       $webaccess_branding_background = undef,
+  Optional[String]                     $webaccess_branding_title      = undef,
+
+  # webaccess, ThinLinc 4.21 and later
+  Optional[Boolean]         $webaccess_login_password = undef,
+  ThinLinc::Webaccess::Oidc $webaccess_oidc           = {},
+
   Boolean                $webaccess_log_to_file       = $log_to_file,
   Stdlib::Absolutepath   $webaccess_log_dir           = $log_dir,
   Boolean                $webaccess_log_to_syslog     = $log_to_syslog,
@@ -171,12 +181,16 @@ class thinlinc (
   include ::thinlinc::service
   include ::thinlinc::profiles
   include ::thinlinc::session
-  include ::thinlinc::tlwebadm
   include ::thinlinc::vsm
   include ::thinlinc::vsmagent
-  include ::thinlinc::webaccess
 
+  # An agent runs vsmagent and nothing else: the web services belong on the
+  # masters. Both classes notify their own service, so including them on an
+  # agent forces those services into thinlinc::service::services just to make
+  # the catalogue compile.
   if !$only_agents {
+    include ::thinlinc::tlwebadm
+    include ::thinlinc::webaccess
     include ::thinlinc::vsmserver
     include ::thinlinc::shadowing
 
