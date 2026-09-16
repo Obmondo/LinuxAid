@@ -28,8 +28,6 @@ $obmondo_classes.filter |$_class| {
     }.join("\n")
 
     $_msg = @("EOT"/$n)
-      ${_info_msg}
-
       More than 1 role that does not support mixing has been selected:
       ${_unblendable_list}
 
