@@ -347,8 +347,4 @@ Bond=${_name}
   if lookup('common::network::tcpshaker::enable', Boolean, undef, false) {
     'common::network::tcpshaker'.contain
   }
-
-  if lookup('common::network::fail2ban::enable', Boolean, undef, false) {
-    'common::network::fail2ban'.contain
-  }
 }
