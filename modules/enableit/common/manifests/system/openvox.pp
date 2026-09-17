@@ -10,11 +10,13 @@
 #
 # @param package_name The package name.
 #
+# @param manage Whether to manage the openvox agent, its puppet.conf and the run-openvox timer. Defaults to true.
+#
 # @param noop_value Boolean value for noop mode. Defaults to undef.
 #
 # @groups server_config server
 #
-# @groups agent noop_value
+# @groups agent manage, noop_value
 #
 # @groups settings extra_main_settings, environment
 #
@@ -25,8 +27,11 @@ class common::system::openvox (
   Stdlib::Host          $server,
   String                $package_name,
   String                $environment,
+  Boolean               $manage              = true,
   Eit_types::Noop_Value $noop_value          = undef,
   Optional[Hash]        $extra_main_settings = undef,
 ) {
-  contain profile::system::openvox
+  if $manage {
+    contain profile::system::openvox
+  }
 }
