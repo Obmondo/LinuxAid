@@ -113,6 +113,15 @@ class profile::web::apache (
         ;
       }
 
+      if $params['ssl_ca'] {
+        file { "/etc/ssl/private/${vhost_name}/ca.pem":
+          content => $params['ssl_ca'].node_encrypt::secret,
+          owner   => $apache_user,
+          mode    => '0600',
+          notify  => Service['httpd'],
+        }
+      }
+
       if ! $params['domains'].empty {
         $params['domains'].map |$domain| {
           monitor::domains { "${domain}_${_port}":
@@ -142,6 +151,7 @@ class profile::web::apache (
       servername      => $params['servername'],
       ssl_cert        => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.pem" },
       ssl_key         => if $params['ssl'] { "/etc/ssl/private/${vhost_name}/cert.key" },
+      ssl_ca          => if $params['ssl'] and $params['ssl_ca'] { "/etc/ssl/private/${vhost_name}/ca.pem" },
       docroot         => $params['docroot'],
       manage_docroot  => false,
       override        => ['ALL'],

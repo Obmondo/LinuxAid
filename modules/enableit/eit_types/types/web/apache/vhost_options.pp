@@ -3,6 +3,7 @@ type Eit_types::Web::Apache::Vhost_options = Struct[{
   ssl             => Optional[Boolean],
   ssl_cert        => Optional[String],
   ssl_key         => Optional[String],
+  ssl_ca          => Optional[String],
   docroot         => Variant[Stdlib::Unixpath, Boolean],
   domains         => Optional[Array[Stdlib::Fqdn]],
   port            => Optional[Stdlib::Port],
