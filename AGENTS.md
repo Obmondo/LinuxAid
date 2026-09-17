@@ -22,8 +22,7 @@ Current status:
 If these files are added, treat them as higher-priority instructions and update this file.
 
 ## Key Paths
-- `manifests/site.pp`: top-level role selection and guardrails
-- `manifests/defaults.pp`: shared defaults
+- `manifests/site.pp`: shared defaults, top-level role selection and guardrails; keep it the only manifest, since masterless runs apply it alone
 - `modules/enableit/`: first-party LinuxAid logic
 - `modules/upstream/`: externally sourced modules
 - `.puppet-lint.rc`: root puppet-lint config

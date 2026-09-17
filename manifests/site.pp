@@ -1,3 +1,17 @@
+include stdlib
+
+Package {
+  allow_virtual => false,
+}
+
+if $facts['service_provider'] == 'systemd' {
+  exec { 'daemon-reload':
+    path        => ['/bin','/sbin'],
+    command     => 'systemctl daemon-reload',
+    refreshonly => true,
+  }
+}
+
 # Fix for undefined variables caused by
 # https://github.com/puppetlabs/puppetlabs-puppet_agent/blob/caaa52fb3d080f277243c6e78ce842df71cdd146/manifests/install.pp#L191
 $platform_tag = undef
