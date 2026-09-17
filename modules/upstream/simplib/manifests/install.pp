@@ -39,7 +39,7 @@
 define simplib::install (
   Hash[String[1], Optional[Hash]] $packages,
   Hash[String[1], String[1]]      $defaults  = { 'ensure' => 'present' }
-){
+) {
   $packages.each |String $package, Optional[Hash] $opts| {
     if $opts =~ Hash {
       $_opts = merge($defaults, $opts)

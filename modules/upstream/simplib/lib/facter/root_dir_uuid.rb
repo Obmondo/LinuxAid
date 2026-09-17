@@ -3,12 +3,12 @@ Facter.add('root_dir_uuid') do
   confine kernel: 'Linux'
 
   setcode do
-    df_cmd = Facter::Util::Resolution.which('df')
-    blkid_cmd = Facter::Util::Resolution.which('blkid')
+    df_cmd = Facter::Core::Execution.which('df')
+    blkid_cmd = Facter::Core::Execution.which('blkid')
 
-    partition = Facter::Core::Execution.exec("#{df_cmd} -P /").strip.split("\n").last.split(' ').first
+    partition = Facter::Core::Execution.execute("#{df_cmd} -P /", on_fail: nil).strip.split("\n").last.split(' ').first
 
-    uuid = Facter::Core::Execution.exec("#{blkid_cmd} -s UUID -o value #{partition}").strip
+    uuid = Facter::Core::Execution.execute("#{blkid_cmd} -s UUID -o value #{partition}", on_fail: nil).strip
 
     uuid = nil if uuid.nil? || uuid.empty?
 
