@@ -5,4 +5,8 @@
 class role::kubeaid inherits ::role {
 
   include common::system
+
+  # common only loads user management with monitoring on, which KubeAid nodes leave off;
+  # authentication (e.g. sudo) is still switched on per cluster in hiera.
+  include common::user_management::authentication
 }

@@ -135,6 +135,13 @@ class common::system (
     $users
   }
 
+  # Sudo rules (users' sudoroot, profile::system::sudoers) are written to this directory.
+  if lookup('common::user_management::authentication::manage_sudo', Boolean, undef, false) {
+    file { "${common::__conf_dir}/sudoers.d":
+      ensure => directory,
+    }
+  }
+
   create_resources('eit_users::user', $_users)
 
   # If $users doesn't contain `root` we simply manage the user
