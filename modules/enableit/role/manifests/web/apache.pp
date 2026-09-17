@@ -21,8 +21,8 @@
 #
 # @groups configuration modules, domains, vhosts, encrypt_params
 #
-# @encrypt_params vhosts.*.ssl_key, vhosts.*.ssl_cert
-# 
+# @encrypt_params vhosts.*.ssl_key, vhosts.*.ssl_cert, vhosts.*.ssl_ca
+#
 class role::web::apache (
   Boolean                     $https          = false,
   Boolean                     $http           = true,
@@ -35,6 +35,7 @@ class role::web::apache (
   Eit_types::Encrypt::Params $encrypt_params       = [
     'vhosts.*.ssl_key',
     'vhosts.*.ssl_cert',
+    'vhosts.*.ssl_ca',
   ]
 ) inherits role::web {
   confine(!$https, !$http, size($vhosts) == 0, 'Need https or http to be true or else you need to define vhosts')
