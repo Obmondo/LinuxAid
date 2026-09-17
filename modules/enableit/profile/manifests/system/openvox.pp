@@ -60,6 +60,13 @@ class profile::system::openvox (
     provider => $_package_provider,
   }
 
+  if $os_name == 'TurrisOS' {
+    package { 'lscpu':
+      ensure => present,
+      noop   => $noop_value,
+    }
+  }
+
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
   if $_pin_version {
     case $facts['package_provider'] {
