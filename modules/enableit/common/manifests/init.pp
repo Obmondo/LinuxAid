@@ -18,7 +18,7 @@ class common (
   Exec { path => ['/bin', '/usr/bin', '/usr/sbin', '/usr/local/bin'] }
   Stage['setup'] -> Stage['main']
 
-  if $::obmondo_monitoring_status { #lint:ignore:top_scope_facts
+  if $::obmondo_monitoring_status and $facts['os']['name'] != 'TurrisOS' { #lint:ignore:top_scope_facts
     # NOTE: Lets not allow anyone to remove our public repo, otherwise monitoring won't be setup
     # NOTE: For now, ignore setting up monitoring for TurrisOS, since opkg isn't supported as package provider.
     # NOTE: Later this needs to be fixed.

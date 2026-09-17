@@ -1,4 +1,5 @@
 ---
+monitor::enable: false
 common::system::openvox::package_name: "openvox"
 common::system::openvox::version: "8.24.2"
 common::system::openvox::linuxaid_cli::install_method: archive
