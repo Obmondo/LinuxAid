@@ -65,6 +65,24 @@ class profile::system::openvox (
       ensure => present,
       noop   => $noop_value,
     }
+
+    file { '/opt/puppetlabs':
+      ensure => directory,
+      noop   => $noop_value,
+    }
+
+    file { '/opt/puppetlabs/bin':
+      ensure  => directory,
+      noop    => $noop_value,
+      require => File['/opt/puppetlabs'],
+    }
+
+    file { '/opt/puppetlabs/bin/puppet':
+      ensure  => link,
+      target  => '/usr/bin/puppet',
+      noop    => $noop_value,
+      require => File['/opt/puppetlabs/bin'],
+    }
   }
 
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
