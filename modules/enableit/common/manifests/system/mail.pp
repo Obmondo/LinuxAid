@@ -8,6 +8,8 @@
 #
 # @param mydomain Optional domain name.
 #
+# @param myorigin Optional domain appended to locally-posted mail. Defaults to undef, meaning postfix's own default ($myhostname) is used.
+#
 # @param relayhost Optional relay host. Defaults to undef.
 #
 # @param mynetworks List of trusted clients (IPs/CIDRs) allowed to relay through this server. Empty disables explicit mynetworks. Defaults to empty array.
@@ -20,7 +22,7 @@
 #
 # @param noop_value Optional noop value. Defaults to undef.
 #
-# @groups main manage, myhostname, mydomain, relayhost, aliases, _extra_main_parameters.
+# @groups main manage, myhostname, mydomain, myorigin, relayhost, aliases, _extra_main_parameters.
 #
 # @groups smtp smtp_tls_security_level.
 #
@@ -36,6 +38,7 @@ class common::system::mail (
   ] $inet_interfaces                                         = 'localhost',
   Eit_types::Hostname $myhostname,
   Optional[Eit_types::Domain] $mydomain,
+  Optional[Eit_types::Domain] $myorigin                      = undef,
   Optional[Eit_types::Host] $relayhost                       = undef,
   Array[String] $mynetworks                                  = [],
   Eit_types::Postfix_Security_Level $smtp_tls_security_level = 'encrypt',
@@ -57,6 +60,7 @@ class common::system::mail (
       class { 'postfix::server':
         myhostname                 => $myhostname,
         mydomain                   => $mydomain,
+        myorigin                   => $myorigin,
         relayhost                  => $relayhost,
         mynetworks                 => $real_mynetworks,
         relay_domains              => false,
