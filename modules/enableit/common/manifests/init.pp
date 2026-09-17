@@ -48,7 +48,6 @@ class common (
         "${__opt_dir}/home",
         "${__opt_dir}/share",
         "${__opt_dir}/etc",
-        "${__conf_dir}/sudoers.d",
       ]:
         ;
     }
