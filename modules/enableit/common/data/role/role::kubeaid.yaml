@@ -1,6 +1,9 @@
 ---
 common::system::purge_root_ssh_keys: false
-common::default::classes: []
+common::system::openvox::manage: false
+common::monitor::enable: false
+common::system::systemd::manage_journald: false
+common::system::systemd::manage_resolved: false
 common::backup::manage: false
 common::user_management::security::manage: false
 common::user_management::motd::enable: false
