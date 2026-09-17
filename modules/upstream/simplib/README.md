@@ -40,6 +40,13 @@ If you find any issues, they can be submitted to our
 `simp-simplib` provides a standard library of resources commonly used by SIMP
 modules but generally suited for any Puppet environment.
 
+Its functions and data types are pure Puppet/Ruby and OS-agnostic, and its
+facts are confined to the platforms where they apply, so the module loads
+safely in any Puppet environment. Formal, tested support (see the
+`operatingsystem_support` entry in `metadata.json`) covers the Enterprise Linux
+8/9/10 family (AlmaLinux, CentOS, OracleLinux, RedHat, and Rocky); use on other
+platforms is best-effort.
+
 ## Setup
 
 ### What simplib affects

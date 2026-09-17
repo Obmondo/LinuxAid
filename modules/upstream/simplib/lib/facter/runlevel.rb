@@ -6,6 +6,8 @@
 Facter.add('runlevel') do
   confine kernel: 'Linux'
   setcode do
-    `"/sbin/runlevel"`.split.last
+    if File.executable?('/sbin/runlevel')
+      `"/sbin/runlevel"`.split.last
+    end
   end
 end

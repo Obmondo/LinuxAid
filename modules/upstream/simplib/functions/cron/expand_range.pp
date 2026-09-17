@@ -8,7 +8,6 @@
 function simplib::cron::expand_range(
   String $range
 ) {
-
   if $range =~ /^(.*?)(\d+)-(\d+)(.*)$/ {
     if $2 < $3 {
       $expanded_range = range($2,$3).join(',')

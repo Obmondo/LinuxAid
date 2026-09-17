@@ -1,6 +1,102 @@
+* Tue Sep 15 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
+- (#289) Key the connections in the `simplib__networkmanager` fact by
+  connection UUID rather than by device, and report the device as a member of
+  each connection. Connections that are not attached to a device (defined but
+  inactive connections) have no device, so they were all stored under a single
+  empty key, overwriting each other and sometimes replacing an unrelated
+  connection whose device happened to match their name.
+  - NetworkManager only guarantees that the UUID is unique and present for
+    every connection, so it is the only safe key
+  - Thanks to Daniel Forste for reporting the issue and proposing the fix
+- (#367) Parse `nmcli` terse output correctly when a value contains an escaped
+  character. In terse tabular mode `nmcli` escapes `:` as `\:` and `\` as
+  `\\` inside values, so splitting on every colon shifted every field of a
+  connection whose name contains a colon, putting the name in `uuid`, the uuid
+  in `type`, and dropping the device.
+
+* Fri Sep 04 2026 Steven Pritchard <steve@sicura.us> - 7.0.2
+- Replace long-deprecated Facter API calls, which OpenVox 9 (OpenFact 9) now
+  emits runtime deprecation warnings for:
+  - `Facter::Util::Resolution.which` -> `Facter::Core::Execution.which`
+  - `Facter::Util::Resolution.exec` and `Facter::Core::Execution.exec` ->
+    `Facter::Core::Execution.execute(..., on_fail: nil)`
+  This silences the warnings emitted by every affected fact on OpenVox 9. Fact
+  values are unchanged
+
+* Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 7.0.1
+- [puppetsync] Update metadata.json dependency ranges from the Forge
+
+* Thu Jul 30 2026 Steven Pritchard <steve@sicura.us> - 7.0.0
+- BREAKING CHANGE: (#351) Correct `Simplib::Hostname` so that it enforces the
+  host name restrictions of RFC 1123, Section 2.1. The highest-level label may
+  no longer be all-numeric, so malformed dotted-decimal addresses such as
+  `1.2.3.400` and `10.0.0.256` are now rejected instead of validating as host
+  names. This also fixes `Simplib::Host`, which silently accepted those values
+  because it falls back to `Simplib::Hostname` when `Simplib::IP` does not
+  match
+- BREAKING CHANGE: `Simplib::Hostname` and `Simplib::Domain` are now anchored
+  to the whole string rather than to a line. Multi-line strings containing a
+  single valid line, such as `"foo.com\nevil"`, are no longer accepted
+- `Simplib::Hostname` now accepts single-character host names such as `a`. The
+  previous pattern imposed a two-character minimum on the highest-level label
+  that has no basis in RFC 1123
+- `Simplib::Hostname` now enforces the 63-octet label and 253-octet name
+  length limits that `Simplib::Domain` already enforced
+- Fix `Simplib::Domain` so that a trailing period does not bypass the
+  all-numeric TLD check (`0.` and `test.400.` were accepted)
+- Apply the same corrections to `Simplib::Hostname::Port`.
+  `Simplib::Host::Port`, `Simplib::Netlist`, `Simplib::Netlist::Host`, and
+  `Simplib::Netlist::Port` inherit the fixes
+- Add the previously missing type alias tests for `Simplib::Hostname`,
+  `Simplib::Hostname::Port`, `Simplib::Host`, and `Simplib::Host::Port`
+- BREAKING CHANGE: (#353) Anchor the remaining `Pattern` types to the whole
+  string with `\A`...`\z` instead of the line anchors `^`...`$`. Because
+  Puppet's `Pattern` performs a regex search, any multi-line string containing
+  a single valid line satisfied these types, which made an embedded newline a
+  config-injection primitive. Affects `Simplib::EmailAddress`,
+  `Simplib::Macaddress`, `Simplib::Umask`, `Simplib::URI`,
+  `Simplib::Systemd::ServiceName`, `Simplib::ShadowPass`, and all twelve
+  `Simplib::Libcrypt::*` types. The IPv4/IPv6 types were already anchored
+  internally and are unchanged
+- BREAKING CHANGE: Exclude newlines from the salt in
+  `Simplib::Libcrypt::MD5_FreeBSD`. The salt is a negated character class,
+  which matches a newline even when the pattern is anchored, so a newline
+  could be smuggled into the middle of an otherwise valid value
+- Fix `Simplib::Libcrypt::Yescrypt`, which has never been loadable (#354).
+  It was defined in `types/libcrypt/yescript.pp`, so the autoloader could not
+  find it, and the corresponding `Simplib::ShadowPass` branch silently never
+  matched - yescrypt hashes, the default on recent Fedora and EL10, were
+  rejected. Renamed to `types/libcrypt/yescrypt.pp`
+- Add type alias tests for the twelve `Simplib::Libcrypt::*` types, which had
+  no direct coverage, and for `Simplib::EmailAddress`, `Simplib::Umask`,
+  `Simplib::URI`, and `Simplib::Systemd::ServiceName`
+
+* Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
+- Resolved puppet-lint manifest whitespace offenses; disabled the crashing strict_indent check
+
+* Tue Jun 23 2026 Steven Pritchard <steve@sicura.us> - 6.0.1
+- Fix the `ipv6_enabled` and `shmall` facts so they read `/proc/sys` directly
+  instead of running `sysctl`. They no longer depend on the `procps-ng` package
+  and return a sensible value instead of erroring when the kernel setting is
+  unavailable (Closes #347)
+
 * Thu Jun 11 2026 Aman Shah <aman@obmondo.com> - 5.0.3
 - Fix tmp_mount* facts raising "undefined method `[]' for nil:NilClass"
   when simplib__mountpoints resolves to nil
+
+* Mon Jun 08 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
+- Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
+- Point `issues_url` at GitHub Issues
+- Curate `operatingsystem_support` to the tested platforms with explicit
+  versions: the Enterprise Linux 8/9/10 family (AlmaLinux, CentOS, OracleLinux,
+  RedHat, Rocky), dropping CentOS 8 and EL7 and adding EL10. This replaces the
+  previous broad, un-versioned list (inherited from puppetlabs-stdlib) that
+  advertised many untested operating systems. The pure-Puppet functions and
+  data types remain OS-agnostic and the facts are confined, so the module still
+  loads safely on other platforms; only the tested/supported matrix is narrowed.
+- Allow newer SIMP module dependencies (see metadata.json diff)
+- Sync Gemfile with current puppetsync baseline (adds OpenVox to test gems)
+- Drop Puppet 7 / Ruby 2.7 from GitHub Actions; use Ruby 3.2.11 with OpenVox 8 and 3.4.9 elsewhere
 
 * Sun Jun 07 2026 Steven Pritchard <steve@sicura.us> - 5.0.2
 - Additional cleanup for rubocop
@@ -612,13 +708,13 @@
 - Added a 'simplib::inspect' debugging function for dumping parameters during
   Puppet runs.
 
-* Sun Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
+* Sat Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
 - Use PATH lookup for simp_version's rpm call
 
 * Mon Mar 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
 - move passgen to Puppet[:vardir]
 
-* Thu Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
+* Wed Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
   - move passgen to /var/simp
 
 * Wed Mar 01 2017 Ryan Russel-Yates <ryan.russel-yates@onyxpoint.com> - 3.2.1-0

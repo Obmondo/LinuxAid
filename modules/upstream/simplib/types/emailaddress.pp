@@ -1,2 +1,2 @@
 # Matches valid email addresses
-type Simplib::EmailAddress = Pattern['^.+@.+$']
+type Simplib::EmailAddress = Pattern['\A.+@.+\z']

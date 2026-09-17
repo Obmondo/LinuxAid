@@ -25,7 +25,7 @@ Facter.add('simplib_sysctl') do
     retval = {}
 
     relevant_entries.each do |entry|
-      module_value = Facter::Core::Execution.exec("sysctl -n -e #{entry}")
+      module_value = Facter::Core::Execution.execute("sysctl -n -e #{entry}", on_fail: nil)
 
       # we have observed this exec non-deterministically populate $? with
       # nil, although the exec succeeds.  This will happen with %x, ``, or

@@ -17,7 +17,7 @@
 Facter.add('simplib__crypto_policy_state') do
   confine kernel: 'Linux'
 
-  crypto_policy_cmd = Facter::Util::Resolution.which('update-crypto-policies')
+  crypto_policy_cmd = Facter::Core::Execution.which('update-crypto-policies')
   confine { crypto_policy_cmd }
 
   setcode do
