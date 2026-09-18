@@ -10,7 +10,6 @@ class profile::system::openvox (
   Optional[String]      $package_version_suffix = undef,
   Optional[String]      $package_version_prefix = undef,
 ) {
-
   $puppetversion = $facts['puppetversion']
   $os_major = $facts['os']['release']['major']
   $os_name = $facts['os']['name']
@@ -37,15 +36,16 @@ class profile::system::openvox (
     }
 
     # Remove the puppetlabs repo package
-    package { [
-      'puppet7-release',
-      'puppet8-release',
-      'puppet-agent'
-    ]:
-      ensure  => absent,
-      noop    => $noop_value,
-      notify  => Package[$aio_package_name],
-      require => Eit_repos::Repo['openvox'],
+    package {
+      [
+        'puppet7-release',
+        'puppet8-release',
+        'puppet-agent',
+      ]:
+        ensure  => absent,
+        noop    => $noop_value,
+        notify  => Package[$aio_package_name],
+        require => Eit_repos::Repo['openvox'],
     }
   }
 
@@ -58,6 +58,31 @@ class profile::system::openvox (
     ensure   => $_version,
     noop     => $noop_value,
     provider => $_package_provider,
+  }
+
+  if $os_name == 'TurrisOS' {
+    package { 'lscpu':
+      ensure => present,
+      noop   => $noop_value,
+    }
+
+    file { '/opt/puppetlabs':
+      ensure => directory,
+      noop   => $noop_value,
+    }
+
+    file { '/opt/puppetlabs/bin':
+      ensure  => directory,
+      noop    => $noop_value,
+      require => File['/opt/puppetlabs'],
+    }
+
+    file { '/opt/puppetlabs/bin/puppet':
+      ensure  => link,
+      target  => '/usr/bin/puppet',
+      noop    => $noop_value,
+      require => File['/opt/puppetlabs/bin'],
+    }
   }
 
   $_pin_version = !($_version in ['latest', 'held', 'installed', 'absent', 'purged', 'present'])
@@ -129,19 +154,19 @@ class profile::system::openvox (
   }
 
   file { $facts['puppet_config']:
-    ensure  => present,
+    ensure  => file,
     content => epp('profile/puppet.conf.epp', {
-      'server'                           => $server,
-      'graph'                            => true,
-      'noop'                             => true,
-      'onetime'                          => false,
-      'certname'                         => $::trusted['certname'],
-      'manage_internal_file_permissions' => false,
-      'runtimeout'                       => '10m',
-      'masterport'                       => 443,
-      'extra_main_settings'              => $extra_main_settings,
-      'splay'                            => true,
-      'usecacheonfailure'                => false,
+        'server'                           => $server,
+        'graph'                            => true,
+        'noop'                             => true,
+        'onetime'                          => false,
+        'certname'                         => $::trusted['certname'],
+        'manage_internal_file_permissions' => false,
+        'runtimeout'                       => '10m',
+        'masterport'                       => 443,
+        'extra_main_settings'              => $extra_main_settings,
+        'splay'                            => true,
+        'usecacheonfailure'                => false,
     }),
     noop    => $noop_value,
   }
@@ -178,14 +203,19 @@ class profile::system::openvox (
   $_facter_dir = "${_puppet_dir}/facter"
   $_facts_d_dir = "${_facter_dir}/facts.d"
 
+  $_facter_conf_notify = $os_name ? {
+    'TurrisOS' => File["${_facter_dir}/facter.conf"],
+    default    => [
+      Hocon_Setting['facter external-dir'],
+      Hocon_Setting['facter ttls'],
+      Hocon_Setting['facter blocklist'],
+    ],
+  }
+
   file { functions::dir_to_dirs($_facts_d_dir):
     ensure => 'directory',
     noop   => $noop_value,
-    notify => Hocon_Setting[
-      'facter external-dir',
-      'facter ttls',
-      'facter blocklist',
-    ]
+    notify => $_facter_conf_notify,
   }
 
   $facts_ttls = [
@@ -226,30 +256,52 @@ class profile::system::openvox (
     'simplib__efi_enabled',
   ].sort
 
-  hocon_setting {
-    default:
-      ensure  => present,
-      path    => "${_facter_dir}/facter.conf",
+  if $os_name == 'TurrisOS' {
+    $facter_conf_hash = {
+      'global' => {
+        'external-dir' => "${_facter_dir}/facts.d",
+      },
+      'facts'  => {
+        'ttls'      => $facts_ttls,
+        'blocklist' => $facts_blocklist,
+      },
+    }
+
+    file { "${_facter_dir}/facter.conf":
+      ensure  => file,
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      content => stdlib::to_json($facter_conf_hash),
       noop    => $noop_value,
       require => File[$_facter_dir],
-      ;
+    }
+  } else {
+    hocon_setting {
+      default:
+        ensure  => present,
+        path    => "${_facter_dir}/facter.conf",
+        noop    => $noop_value,
+        require => File[$_facter_dir],
+        ;
 
-    'facter external-dir':
-      setting => 'global.external-dir',
-      value   => "${_facter_dir}/facts.d",
-      ;
+      'facter external-dir':
+        setting => 'global.external-dir',
+        value   => "${_facter_dir}/facts.d",
+        ;
 
-    'facter ttls':
-      setting => 'facts.ttls',
-      type    => 'array_element',
-      value   => $facts_ttls,
-      ;
+      'facter ttls':
+        setting => 'facts.ttls',
+        type    => 'array_element',
+        value   => $facts_ttls,
+        ;
 
-    'facter blocklist':
-      setting => 'facts.blocklist',
-      type    => 'array_element',
-      value   => $facts_blocklist,
-      ;
+      'facter blocklist':
+        setting => 'facts.blocklist',
+        type    => 'array_element',
+        value   => $facts_blocklist,
+        ;
+    }
   }
 
   contain profile::system::openvox::linuxaid_cli

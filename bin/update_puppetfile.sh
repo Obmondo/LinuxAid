@@ -236,7 +236,7 @@ function update_puppetfile() {
   # Check if module exists in Puppetfile
   if grep -q "mod '[^']*/${MODULE_NAME}'" "$PUPPETFILE"; then
     # Update existing entry
-    sed -i "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s/:ref => '[^']*'/:ref => '${LATEST_TAG}'/" "$PUPPETFILE"
+    sed -i "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s|:ref => '[^']*'|:ref => '${LATEST_TAG}'|" "$PUPPETFILE"
     echo "Updated ${MODULE_NAME} to ${LATEST_TAG} in Puppetfile"
   else
     # Append new entry

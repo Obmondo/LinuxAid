@@ -16,8 +16,8 @@
 Facter.add('simplib__auditd') do
   confine kernel: 'Linux'
 
-  @auditctl = Facter::Util::Resolution.which('auditctl')
-  @ps = Facter::Util::Resolution.which('ps')
+  @auditctl = Facter::Core::Execution.which('auditctl')
+  @ps = Facter::Core::Execution.which('ps')
 
   confine { !@auditctl.nil? }
   confine { !@ps.nil? }
@@ -29,13 +29,13 @@ Facter.add('simplib__auditd') do
       'enabled' => 0,
     }
 
-    audit_version = Facter::Core::Execution.exec("#{@auditctl} -v").split(%r{\s+}).last
+    audit_version = Facter::Core::Execution.execute("#{@auditctl} -v", on_fail: nil).split(%r{\s+}).last
 
     status['version'] = audit_version if audit_version && !audit_version.empty?
 
     auditctl_status = {}
 
-    Facter::Core::Execution.exec("#{@auditctl} -s").lines.each do |l|
+    Facter::Core::Execution.execute("#{@auditctl} -s", on_fail: nil).lines.each do |l|
       l.strip!
 
       next if l.empty?
@@ -57,7 +57,7 @@ Facter.add('simplib__auditd') do
     if status['enabled']
       status['kernel_enforcing'] = true
 
-      procs = Facter::Core::Execution.exec("#{@ps} -e").lines
+      procs = Facter::Core::Execution.execute("#{@ps} -e", on_fail: nil).lines
       status['enforcing'] = procs.any? { |x| x =~ %r{\sauditd\Z} }
     else
       cmdline = Facter.value('cmdline') || {}

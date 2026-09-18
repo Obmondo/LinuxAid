@@ -2,7 +2,7 @@ forge "https://forgeapi.puppetlabs.com"
 
 mod 'simp/simplib',
     :git => "https://github.com/Obmondo/pupmod-simp-simplib.git",
-    :ref => 'fix-tmp_mounts-nil-mountpoints'
+    :ref => 'fix/tmp_mounts-nil-mountpoints'
 
 mod 'simp/auditd',
     :git => "https://github.com/simp/pupmod-simp-auditd.git",
