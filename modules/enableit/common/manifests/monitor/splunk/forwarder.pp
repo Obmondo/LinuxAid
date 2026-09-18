@@ -25,6 +25,12 @@
 #
 # @param noop_value No-operation mode value. Defaults to undef.
 #
+# @param output_settings Settings enforced in an add-on's outputs.conf on every run. Keys are
+#   "<app>/<stanza>" (e.g. 'nix_uf_outputs/tcpout:splunkssl'), values are hashes of
+#   setting => value. splunk::addon only extracts its tarball when the app directory is
+#   absent, so a shipped config change never reaches hosts that installed it earlier -
+#   anything that must not drift belongs here. Defaults to {}.
+#
 # @param addons A hash of Splunk add-ons/apps to install via splunk::addon. Keys are add-on
 #   names (e.g. 'Splunk_TA_nix') and values are hashes of splunk::addon parameters.
 #   Defaults to an empty hash.
@@ -53,6 +59,7 @@ class common::monitor::splunk::forwarder (
   Boolean                      $manage              = false,
   Eit_types::Noop_Value        $noop_value          = undef,
   Hash[String[1], Hash]        $addons              = {},
+  Hash[String[1], Hash]        $output_settings     = {},
 ) {
 
   # Must be pinned together, or the unset one falls back to splunk::params's hardcoded default and mismatches.

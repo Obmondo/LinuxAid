@@ -11,6 +11,7 @@ class profile::collector::splunk::forwarder (
   Integer                   $log_keep_count      = $common::monitor::splunk::forwarder::log_keep_count,
   Eit_types::Bytes          $log_max_file_size_b = $common::monitor::splunk::forwarder::log_max_file_size_b,
   Hash[String[1], Hash]     $addons              = $common::monitor::splunk::forwarder::addons,
+  Hash[String[1], Hash]     $output_settings     = $common::monitor::splunk::forwarder::output_settings,
 ) {
 
   Archive {
@@ -124,6 +125,26 @@ class profile::collector::splunk::forwarder (
         value             => $_value,
         notify            => Service[$splunk::params::forwarder_service],
         noop              => $noop_value,
+      }
+    }
+
+    # splunk::addon extracts its tarball only when the app dir is absent (`creates`),
+    # so a corrected config in the tarball never reaches a host that installed the app
+    # earlier - it silently keeps the old values for as long as the dir exists.
+    # Settings listed here are enforced on every run instead.
+    $output_settings.each |$_target, $_settings| {
+      $_app     = $_target.split('/')[0]
+      $_stanza  = $_target.split('/')[1]
+
+      $_settings.each |$_setting, $_value| {
+        splunkforwarder_output { "${_app}_${_stanza}_${_setting}":
+          section => $_stanza,
+          setting => $_setting,
+          value   => $_value,
+          context => "apps/${_app}/local",
+          tag     => 'splunk_forwarder',
+          require => Splunk::Addon[$_app],
+        }
       }
     }
 
