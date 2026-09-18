@@ -16,16 +16,19 @@
 #
 # @param mydomain The domain for the relay. Defaults to undef.
 #
+# @param myorigin Optional domain appended to locally-posted mail. Defaults to undef, meaning postfix's own default ($myhostname) is used.
+#
 # @groups management manage.
 #
 # @groups relay relayhost, allowed_networks.
 #
-# @groups interfaces myhostname, mydomain.
+# @groups interfaces myhostname, mydomain, myorigin.
 #
 class role::mail::smtprelay (
   Eit_types::Hostname                                 $myhostname,
   Optional[Eit_types::Domain]                         $mydomain,
   Boolean                                             $manage          = false,
+  Optional[Eit_types::Domain]                         $myorigin        = undef,
   Optional[Eit_types::Host]                           $relayhost       = undef,
   Array[Variant[Eit_types::IP, Eit_types::IPCIDR]]    $allowed_networks = [],
 ) inherits ::role::mail {
@@ -40,5 +43,6 @@ class role::mail::smtprelay (
     inet_interfaces => 'all',
     myhostname      => $myhostname,
     mydomain        => $mydomain,
+    myorigin        => $myorigin,
   }
 }
