@@ -34,13 +34,20 @@ class rustdesk::client (
   SemVer             $version            = $rustdesk::client_version,
   Array[String]      $extra_dependencies = $rustdesk::client_extra_dependencies,
 ) {
+  $_arch = pick($facts['os']['architecture'], 'x86_64')
+  $_client_arch = $_arch ? {
+    /(amd64|x86_64)/ => 'x86_64',
+    /(arm64|aarch64)/ => 'aarch64',
+    default          => fail("Unsupported architecture for RustDesk client: ${_arch}"),
+  }
+
   # Fixed common dependencies
   $common_deps = lookup('rustdesk::client_dependencies')
 
   # Merge common + OS-specific dependencies
   $dependencies = concat($common_deps, $extra_dependencies)
 
-  $package_name  = "rustdesk-${version}-x86_64.deb"
+  $package_name  = "rustdesk-${version}-${_client_arch}.deb"
   $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/${package_name}"
   $download_path = "/tmp/${package_name}"
 

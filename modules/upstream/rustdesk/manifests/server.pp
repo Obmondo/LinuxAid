@@ -34,6 +34,13 @@ class rustdesk::server (
   SemVer             $version            = $rustdesk::server_version,
   Array[String]      $extra_dependencies = $rustdesk::server_extra_dependencies,
 ) {
+  $_arch = pick($facts['os']['architecture'], 'x86_64')
+  $_server_arch = $_arch ? {
+    /(amd64|x86_64)/ => 'amd64',
+    /(arm64|aarch64)/ => 'arm64',
+    default          => fail("Unsupported architecture for RustDesk server: ${_arch}"),
+  }
+
   # Fixed common dependencies
   $common_deps = lookup('rustdesk::server_dependencies')
 
@@ -48,8 +55,8 @@ class rustdesk::server (
   $servers = lookup('rustdesk::server::package_names')
 
   $servers.each | $server_type, $package_name | {
-    $package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${package_name}_${version}_amd64.deb"
-    $download_path = "/tmp/${package_name}_${version}_amd64.deb"
+    $package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${package_name}_${version}_${_server_arch}.deb"
+    $download_path = "/tmp/${package_name}_${version}_${_server_arch}.deb"
 
     archive { $download_path :
       ensure => stdlib::ensure($enable),
