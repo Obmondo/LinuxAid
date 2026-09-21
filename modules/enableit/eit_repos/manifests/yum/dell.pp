@@ -4,7 +4,6 @@ class eit_repos::yum::dell (
   Eit_types::Noop_Value $noop_value = undef,
 
   String                $repo_baseurl    = lookup('eit_repos::dell::repo_baseurl'),
-  String                $gpg_key_baseurl = lookup('eit_repos::dell::gpg_key_baseurl'),
   Array[String]         $gpg_key_ids     = lookup('eit_repos::dell::gpg_key_ids'),
 ) inherits eit_repos::yum {
 
@@ -12,7 +11,7 @@ class eit_repos::yum::dell (
     eit_repos::yum::gpgkey { "dell-system-update-${key_id}" :
       ensure     => ensure_present($ensure),
       path       => "/etc/pki/rpm-gpg/RPM-GPG-KEY-dell-system-update-${key_id}",
-      source     => "${gpg_key_baseurl}${key_id}.asc",
+      source     => "puppet:///modules/eit_repos/yum/dell/${key_id}.asc",
       noop_value => $noop_value,
     }
   }
