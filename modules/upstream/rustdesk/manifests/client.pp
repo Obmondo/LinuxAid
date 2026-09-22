@@ -53,7 +53,7 @@ class rustdesk::client (
   $download_path = "/tmp/${package_name}"
 
   $_package_ensure = $enable ? {
-    true    => string($_version),
+    true    => "${_version}",
     default => 'absent',
   }
 

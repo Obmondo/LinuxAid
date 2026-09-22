@@ -49,7 +49,7 @@ class rustdesk::server (
   $dependencies = concat($common_deps, $extra_dependencies)
 
   $_package_ensure = $enable ? {
-    true    => string($_version),
+    true    => "${_version}",
     default => 'absent',
   }
 

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.4 - 2026-09-22
+#### Bug Fixes
+- use double quotes string interpolation for package version - (a73504d) - Sidharth Jawale
+
+- - -
+
 ## v1.1.3 - 2026-09-22
 #### Bug Fixes
 - enforce the exact version string for upgrades - (783bcdf) - Sidharth Jawale
