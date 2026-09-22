@@ -58,14 +58,16 @@ class rustdesk::client (
   }
 
   archive { $download_path:
-    ensure => stdlib::ensure($enable),
-    source => $package_url,
+    ensure  => stdlib::ensure($enable),
+    source  => $package_url,
+    creates => $download_path,
   }
 
   package { 'rustdesk':
-    ensure  => stdlib::ensure($enable, 'package'),
+    ensure  => stdlib::ensure($enable, $_version),
     source  => $download_path,
     require => Archive[$download_path],
+    notify  => Service['rustdesk'],
   }
 
   service { 'rustdesk':

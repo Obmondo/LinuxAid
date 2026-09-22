@@ -60,14 +60,16 @@ class rustdesk::server (
     $download_path = "/tmp/${package_name}_${_version}_${_server_arch}.deb"
 
     archive { $download_path :
-      ensure => stdlib::ensure($enable),
-      source => $package_url,
+      ensure  => stdlib::ensure($enable),
+      source  => $package_url,
+      creates => $download_path,
     }
 
     package { $package_name:
-      ensure  => stdlib::ensure($enable, 'package'),
+      ensure  => stdlib::ensure($enable, $_version),
       source  => $download_path,
       require => Archive[$download_path],
+      notify  => Service[regsubst($package_name, '-server', '', 'G')],
     }
 
     service { regsubst($package_name, '-server', '', 'G'):

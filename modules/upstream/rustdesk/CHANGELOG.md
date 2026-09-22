@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.2 - 2026-09-22
+#### Bug Fixes
+- trigger rustdesk package updates and service restart upon finding new client and server versions - (946cef9) - Sidharth Jawale
+
+- - -
+
 ## v1.1.1 - 2026-09-22
 #### Bug Fixes
 - (**rustdesk**) support string versions in Hiera via internal SemVer coercion - (ee564ae) - Sidharth Jawale
