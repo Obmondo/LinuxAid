@@ -10,7 +10,7 @@
 #  
 # @param version  
 #   The version of RustDesk server to install.  
-#   Must be a valid version string conforming to SemVer.  
+#   Accepts a string or SemVer object.  
 #
 # @param extra_dependencies  
 #   Array of OS specific package names that are required dependencies for the RustDesk server.  
@@ -21,7 +21,7 @@
 #  
 # @example Install specific version  
 #   class { 'rustdesk::server':  
-#     version => '1.7.1',  
+#     version => '1.7.2',  
 #   }  
 #  
 # @example Disable server management  
@@ -30,10 +30,11 @@
 #   }  
 #  
 class rustdesk::server (
-  Boolean            $enable             = $rustdesk::server_enable,
-  SemVer             $version            = $rustdesk::server_version,
-  Array[String]      $extra_dependencies = $rustdesk::server_extra_dependencies,
+  Boolean                    $enable             = $rustdesk::server_enable,
+  Variant[String[1], SemVer] $version            = $rustdesk::server_version,
+  Array[String]              $extra_dependencies = $rustdesk::server_extra_dependencies,
 ) {
+  $_version = SemVer($version)
   $_arch = pick($facts['os']['architecture'], 'x86_64')
   $_server_arch = $_arch ? {
     /(amd64|x86_64)/ => 'amd64',
@@ -55,8 +56,8 @@ class rustdesk::server (
   $servers = lookup('rustdesk::server::package_names')
 
   $servers.each | $server_type, $package_name | {
-    $package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${version}/${package_name}_${version}_${_server_arch}.deb"
-    $download_path = "/tmp/${package_name}_${version}_${_server_arch}.deb"
+    $package_url="https://github.com/rustdesk/rustdesk-server-pro/releases/download/${_version}/${package_name}_${_version}_${_server_arch}.deb"
+    $download_path = "/tmp/${package_name}_${_version}_${_server_arch}.deb"
 
     archive { $download_path :
       ensure => stdlib::ensure($enable),

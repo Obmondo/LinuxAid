@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.1 - 2026-09-22
+#### Bug Fixes
+- (**rustdesk**) support string versions in Hiera via internal SemVer coercion - (ee564ae) - Sidharth Jawale
+
+- - -
+
 ## v1.1.0 - 2026-09-21
 #### Features
 - add rspec unit tests for rustdesk module - (f281667) - Sidharth Jawale

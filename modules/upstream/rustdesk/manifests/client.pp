@@ -10,7 +10,7 @@
 #  
 # @param version  
 #   The version of RustDesk client to install.  
-#   Must be a valid version string conforming to SemVer.  
+#   Accepts a string or SemVer object.  
 #  
 # @param extra_dependencies  
 #   Array of OS specific package names that are required dependencies for the RustDesk client.  
@@ -21,7 +21,7 @@
 #  
 # @example Install specific version  
 #   class { 'rustdesk::client':  
-#     version => '1.4.3',  
+#     version => '1.4.4',  
 #   }  
 #  
 # @example Disable client management  
@@ -30,10 +30,11 @@
 #   }  
 #  
 class rustdesk::client (
-  Boolean            $enable             = $rustdesk::client_enable,
-  SemVer             $version            = $rustdesk::client_version,
-  Array[String]      $extra_dependencies = $rustdesk::client_extra_dependencies,
+  Boolean                    $enable             = $rustdesk::client_enable,
+  Variant[String[1], SemVer] $version            = $rustdesk::client_version,
+  Array[String]              $extra_dependencies = $rustdesk::client_extra_dependencies,
 ) {
+  $_version = SemVer($version)
   $_arch = pick($facts['os']['architecture'], 'x86_64')
   $_client_arch = $_arch ? {
     /(amd64|x86_64)/ => 'x86_64',
@@ -47,8 +48,8 @@ class rustdesk::client (
   # Merge common + OS-specific dependencies
   $dependencies = concat($common_deps, $extra_dependencies)
 
-  $package_name  = "rustdesk-${version}-${_client_arch}.deb"
-  $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${version}/${package_name}"
+  $package_name  = "rustdesk-${_version}-${_client_arch}.deb"
+  $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${_version}/${package_name}"
   $download_path = "/tmp/${package_name}"
 
   # Ensure dependencies are installed first
