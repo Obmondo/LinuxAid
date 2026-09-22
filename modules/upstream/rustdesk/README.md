@@ -1,117 +1,98 @@
-# rustdesk
+<!-- markdownlint-disable-file MD041 -->
+<!-- markdownlint-disable MD033 -->
+<div align="center">
 
-Welcome to your new module. A short overview of the generated parts can be found
-in the [PDK documentation][1].
+# puppet-rustdesk
 
-The README template below provides a starting point with details about what
-information to include in your README.
+*Deploy RustDesk client and self-hosted server components (`hbbs`/`hbbr`) across your infrastructure with a single Puppet class*
 
-## Table of Contents
+[![Latest Release](https://img.shields.io/github/v/release/Obmondo/puppet-rustdesk?sort=semver&label=release)](https://github.com/Obmondo/puppet-rustdesk/releases)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/Obmondo/puppet-rustdesk?label=stars)](https://github.com/Obmondo/puppet-rustdesk/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/Obmondo/puppet-rustdesk)](https://github.com/Obmondo/puppet-rustdesk/commits/main)
 
-1. [Description](#description)
-1. [Setup - The basics of getting started with rustdesk](#setup)
-    * [What rustdesk affects](#what-rustdesk-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with rustdesk](#beginning-with-rustdesk)
-1. [Usage - Configuration options and additional functionality](#usage)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development - Guide for contributing to the module](#development)
+*Maintained by [Obmondo](https://obmondo.com)*
 
-## Description
+</div>
+<!-- markdownlint-enable MD033 -->
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
+---
 
-This should be a fairly short description helps the user decide if your module
-is what they want.
+## Upstream References & Resources
 
-## Setup
+- **Upstream Project (GitHub)**: [rustdesk/rustdesk](https://github.com/rustdesk/rustdesk)
+- **RustDesk Server Pro**: [rustdesk/rustdesk-server-pro](https://github.com/rustdesk/rustdesk-server-pro)
+- **Official Website**: [rustdesk.com](https://rustdesk.com)
 
-### What rustdesk affects **OPTIONAL**
+---
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
+## Features
 
-If there's more that they should know about, though, this is the place to
-mention:
+- **Automated Client & Server Deployment**: Manages installation of RustDesk desktop client and self-hosted server components (`hbbs` ID server and `hbbr` relay server) via `.deb` packages.
+- **Multi-Architecture Support**: Supports both AMD64 (`x86_64`) and ARM64 (`aarch64`) architectures seamlessly.
+- **Dependency Management**: Automatically installs required X11, Wayland, and GStreamer graphic libraries for clients, and system packages for servers.
+- **Flexible Configuration**: Control client and server independently via class parameters or Hiera.
 
-* Files, packages, services, or operations that the module will alter, impact,
-  or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
+---
 
-### Setup Requirements **OPTIONAL**
+## Module Parameters & Configuration Reference
 
-If your module requires anything extra before setting up (pluginsync enabled,
-another module, etc.), mention it here.
+### Class: `rustdesk`
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section here.
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `rustdesk::client_enable` | `Boolean` | `false` | Whether to enable and manage the RustDesk client component. |
+| `rustdesk::client_version` | `SemVer` | `"1.4.9"` | The version of the RustDesk client to install. |
+| `rustdesk::client_extra_dependencies` | `Array[String]` | `[]` | Additional OS packages required for the client. |
+| `rustdesk::server_enable` | `Boolean` | `false` | Whether to enable and manage the RustDesk server components (`hbbs` / `hbbr`). |
+| `rustdesk::server_version` | `SemVer` | `"1.8.6"` | The version of the RustDesk server to install. |
+| `rustdesk::server_extra_dependencies` | `Array[String]` | `[]` | Additional OS packages required for the server. |
 
-### Beginning with rustdesk
+---
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most basic
-use of the module.
+## Ports Used (Server Components)
 
-## Usage
+- **Port 21115 (TCP)**: NAT test
+- **Port 21116 (TCP/UDP)**: ID registration and heartbeat service (`hbbs`)
+- **Port 21117 (TCP)**: Relay service (`hbbr`)
+- **Port 21118 & 21119 (TCP)**: Web socket / HTTP tunneling
 
-Include usage examples for common use cases in the **Usage** section. Show your
-users how to use your module to solve problems, and be sure to include code
-examples. Include three to five examples of the most important or common tasks a
-user can accomplish with your module. Show users how to accomplish more complex
-tasks that involve different types, classes, and functions working in tandem.
+---
 
-## Reference
+## Usage Examples
 
-This section is deprecated. Instead, add reference information to your code as
-Puppet Strings comments, and then use Strings to generate a REFERENCE.md in your
-module. For details on how to add code comments and generate documentation with
-Strings, see the [Puppet Strings documentation][2] and [style guide][3].
+### 1. Enable Client Only
 
-If you aren't ready to use Strings yet, manually create a REFERENCE.md in the
-root of your module directory and list out each of your module's classes,
-defined types, facts, functions, Puppet tasks, task plans, and resource types
-and providers, along with the parameters for each.
-
-For each element (class, defined type, function, and so on), list:
-
-* The data type, if applicable.
-* A description of what the element does.
-* Valid values, if the data type doesn't make it obvious.
-* Default value, if any.
-
-For example:
-
-```
-### `pet::cat`
-
-#### Parameters
-
-##### `meow`
-
-Enables vocalization in your cat. Valid options: 'string'.
-
-Default: 'medium-loud'.
+```puppet
+class { 'rustdesk':
+  client_enable  => true,
+  client_version => '1.4.9',
+  server_enable  => false,
+}
 ```
 
-## Limitations
+### 2. Enable Server Only
 
-In the Limitations section, list any incompatibilities, known issues, or other
-warnings.
+```puppet
+class { 'rustdesk':
+  client_enable  => false,
+  server_enable  => true,
+  server_version => '1.8.6',
+}
+```
 
-## Development
+### 3. Hiera Configuration (`data/common.yaml`)
 
-In the Development section, tell other users the ground rules for contributing
-to your project and how they should submit their work.
+```yaml
+---
+rustdesk::client_enable: true
+rustdesk::client_version: '1.4.9'
+rustdesk::server_enable: false
+```
 
-## Release Notes/Contributors/Etc. **Optional**
+---
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel are
-necessary or important to include here. Please use the `##` header.
+## Limitations & Support
 
-[1]: https://puppet.com/docs/pdk/latest/pdk_generating_modules.html
-[2]: https://puppet.com/docs/puppet/latest/puppet_strings.html
-[3]: https://puppet.com/docs/puppet/latest/puppet_strings_style.html
+- **Operating Systems**: Currently supports Ubuntu (`22.04`, `24.04`, and `26.04`).
+- **Architectures**: Supports `amd64`/`x86_64` and `arm64`/`aarch64`.

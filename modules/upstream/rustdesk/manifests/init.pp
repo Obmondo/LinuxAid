@@ -10,7 +10,7 @@
 #  
 # @param client_version  
 #   The version of RustDesk client to install.  
-#   Must be a valid version string conforming to SemVer.  
+#   Accepts a string or SemVer object.  
 #  
 # @param client_extra_dependencies  
 #   Array of OS specific package names that are required dependencies for the RustDesk client.  
@@ -22,7 +22,7 @@
 #  
 # @param server_version  
 #   The version of RustDesk server to install.  
-#   Must be a valid version string conforming to SemVer.  
+#   Accepts a string or SemVer object.  
 #  
 # @param server_extra_dependencies  
 #   Array of OS specific package names that are required dependencies for the RustDesk server.  
@@ -31,29 +31,29 @@
 # @example Enable only the client with specific version  
 #   class { 'rustdesk':  
 #     client_enable  => true,  
-#     client_version => SemVer('1.2.3'),  
+#     client_version => '1.4.4',  
 #     server_enable  => false,  
 #   }  
 #  
 # @example Enable both client and server with different versions  
 #   class { 'rustdesk':  
 #     client_enable  => true,  
-#     client_version => SemVer('1.2.3'),  
+#     client_version => '1.4.4',  
 #     server_enable  => true,  
-#     server_version => SemVer('1.2.4'),  
+#     server_version => '1.7.2',  
 #   }  
 #  
 # @example Basic usage with defaults  
 #   include rustdesk  
 #
 class rustdesk (
-  Boolean            $client_enable,
-  SemVer             $client_version,
-  Array[String]      $client_extra_dependencies,
+  Boolean                    $client_enable,
+  Variant[String[1], SemVer] $client_version,
+  Array[String]              $client_extra_dependencies,
 
-  Boolean            $server_enable,
-  SemVer             $server_version,
-  Array[String]      $server_extra_dependencies,
+  Boolean                    $server_enable,
+  Variant[String[1], SemVer] $server_version,
+  Array[String]              $server_extra_dependencies,
 ) {
   $_osname = $facts['os']['name']
   if $_osname != 'Ubuntu' {
