@@ -52,6 +52,11 @@ class rustdesk::client (
   $package_url   = "https://github.com/rustdesk/rustdesk/releases/download/${_version}/${package_name}"
   $download_path = "/tmp/${package_name}"
 
+  $_package_ensure = $enable ? {
+    true    => string($_version),
+    default => 'absent',
+  }
+
   # Ensure dependencies are installed first
   package { $dependencies:
     ensure => stdlib::ensure($enable, 'package'),
@@ -64,7 +69,7 @@ class rustdesk::client (
   }
 
   package { 'rustdesk':
-    ensure  => stdlib::ensure($enable, $_version),
+    ensure  => $_package_ensure,
     source  => $download_path,
     require => Archive[$download_path],
     notify  => Service['rustdesk'],

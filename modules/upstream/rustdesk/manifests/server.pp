@@ -48,6 +48,11 @@ class rustdesk::server (
   # Merge common + OS-specific dependencies
   $dependencies = concat($common_deps, $extra_dependencies)
 
+  $_package_ensure = $enable ? {
+    true    => string($_version),
+    default => 'absent',
+  }
+
   # Ensure dependencies are installed first
   package { $dependencies:
     ensure => stdlib::ensure($enable, 'package'),
@@ -66,7 +71,7 @@ class rustdesk::server (
     }
 
     package { $package_name:
-      ensure  => stdlib::ensure($enable, $_version),
+      ensure  => $_package_ensure,
       source  => $download_path,
       require => Archive[$download_path],
       notify  => Service[regsubst($package_name, '-server', '', 'G')],
