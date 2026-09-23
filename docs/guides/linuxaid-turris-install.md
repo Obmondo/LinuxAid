@@ -37,7 +37,8 @@ Before starting, ensure you have:
     </a>
 
     > NOTE: Please ensure the `{server-name}` is unique, since it will generate a certname in the format `turris-{server-name}.{customer-id}`.
-    > For example, you can use unique location/network names such as `turris-filmtraefdisk`, `turris-ebillethq-soeborg`, etc.
+    > For example, you can use unique location/network names such as `turris-filmtraefdisk`, `turris-kanten-faxe`, etc.
+    > The `{customer-id}` is appended at the end of `{server-name}` automatically. No need to repeat it in the `{server-name}`.
 
 3. In the next step, choose the `Basic` role, since we only want basic and essential services configured for Linuxaid to run properly on the `TurrisOS` router.
 
