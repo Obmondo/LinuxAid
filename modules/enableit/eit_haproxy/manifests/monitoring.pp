@@ -5,23 +5,25 @@ class eit_haproxy::monitoring {
     # if version is >= 2.0.0
     if versioncmp($_haproxy_version, '2.0.0') >= 0 {
       haproxy::listen { 'obmondo-monitoring':
-        ipaddress => '127.254.254.254',
-        ports     => '63661',
-        mode      => 'http',
-        options   => {
+        ipaddress        => '127.254.254.254',
+        ports            => '63661',
+        mode             => 'http',
+        options          => {
           'stats'        => 'enable',
           'http-request' => 'use-service prometheus-exporter if { path /metrics }',
         },
+        collect_exported => false,
       }
     }
   }.lest || {
     haproxy::listen { 'obmondo-monitoring':
-      ipaddress => '127.254.254.254',
-      ports     => '63661',
-      mode      => 'http',
-      options   => {
+      ipaddress        => '127.254.254.254',
+      ports            => '63661',
+      mode             => 'http',
+      options          => {
         'stats' => 'enable',
       },
+      collect_exported => false,
     }
   }
 }

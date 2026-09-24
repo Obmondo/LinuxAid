@@ -278,10 +278,11 @@ class eit_haproxy::basic_config (
     if $https and $use_lets_encrypt and !$_use_native_acme {
       # letsencrypt backend
       haproxy::backend { 'letsencrypt':
-        mode    => 'http',
-        options => {
+        mode             => 'http',
+        options          => {
           'server letsencrypt_0' => '127.0.0.1:63480',
         },
+        collect_exported => false,
       }
     }
 
@@ -386,10 +387,11 @@ class eit_haproxy::basic_config (
 
         # Setup the Backend
         haproxy::backend { $domain_backend:
-          mode    => $mode,
-          options => $opts['servers'].map |$index, $endpoint| {
+          mode             => $mode,
+          options          => $opts['servers'].map |$index, $endpoint| {
             { "server ${domain_backend}_${index}" => "${endpoint} ${extra_options}" }
           },
+          collect_exported => false,
         }
       }
     }
@@ -423,15 +425,16 @@ class eit_haproxy::basic_config (
     }
 
     haproxy::listen { $key:
-      mode    => $mode,
-      bind    => $bind,
-      options => {
+      mode             => $mode,
+      bind             => $bind,
+      options          => {
         'option'                => 'tcplog',
         'balance'               => 'roundrobin',
         'http-request redirect' => if $value['force_https'] { 'scheme https code 301 unless { ssl_fc }' },
         'server'                => $_servers,
         'timeout'               => 'server 10m',
       },
+      collect_exported => false,
     }
   }
 }
