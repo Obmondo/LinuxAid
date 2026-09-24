@@ -3,11 +3,11 @@ Facter.add('init_systems') do
   setcode do
     init_systems = ['rc']
 
-    if Facter::Util::Resolution.which('initctl')
+    if Facter::Core::Execution.which('initctl')
       init_systems << 'upstart'
     end
 
-    if Facter::Util::Resolution.which('systemctl')
+    if Facter::Core::Execution.which('systemctl')
       init_systems << 'systemd'
     end
 

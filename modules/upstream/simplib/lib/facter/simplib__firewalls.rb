@@ -31,7 +31,7 @@ Facter.add('simplib__firewalls') do
         fw_cmd = fw_opts[:command]
       end
 
-      discovered_firewalls << fw_name if Facter::Util::Resolution.which(fw_cmd)
+      discovered_firewalls << fw_name if Facter::Core::Execution.which(fw_cmd)
     end
 
     discovered_firewalls

@@ -29,7 +29,6 @@ function simplib::inspect (
   String $var_name,
   Enum['json','yaml', 'oneline_json'] $output_type = 'json'
 ) {
-
   if $output_type == 'oneline_json' {
     $_output_type = 'json'
   }
@@ -46,7 +45,6 @@ function simplib::inspect (
   else {
     $_separator = "\n"
   }
-
 
   notify { "DEBUG_INSPECT_${var_name}":
     message => "Type => ${var_class}${_separator}Content =>${_separator}${var_value}"

@@ -25,7 +25,6 @@ function simplib::module_metadata::os_supported (
     release_match => Enum['none','full','major']
   }]] $options = undef
 ) >> Boolean {
-
   $_default_options = { 'release_match' => 'none' }
 
   if $options {

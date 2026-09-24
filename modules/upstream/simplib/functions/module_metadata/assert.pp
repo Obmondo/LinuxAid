@@ -32,7 +32,6 @@ function simplib::module_metadata::assert (
     }]]
   }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef })
 ) {
-
   $_default_options = {
     'enable' => true,
     'fatal'  => false,
@@ -40,7 +39,7 @@ function simplib::module_metadata::assert (
       'enable' => true
     },
     'os_validation' => {
-      'enable' =>  true
+      'enable' => true
     }
   }
 

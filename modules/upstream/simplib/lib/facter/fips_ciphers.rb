@@ -12,6 +12,6 @@ Facter.add('fips_ciphers') do
     # - NULL (no encryption)
     # - EXPORT (weak export-grade)
     # - anon (anonymous, no authentication)
-    Facter::Core::Execution.exec("#{openssl_bin} ciphers 'FIPS:-3DES:-LOW:-NULL:-EXPORT:-aNULL'").split(':') if openssl_bin
+    Facter::Core::Execution.execute("#{openssl_bin} ciphers 'FIPS:-3DES:-LOW:-NULL:-EXPORT:-aNULL'", on_fail: nil).split(':') if openssl_bin
   end
 end

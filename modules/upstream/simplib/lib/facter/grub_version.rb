@@ -4,12 +4,12 @@
 #
 Facter.add('grub_version') do
   setcode do
-    if Facter::Util::Resolution.which('grub')
-      Facter::Util::Resolution.exec('grub --version').split.last.delete('()')
-    elsif Facter::Util::Resolution.which('grub2-mkconfig')
-      Facter::Util::Resolution.exec('grub2-mkconfig --version').split.last.delete('()')
-    elsif Facter::Util::Resolution.which('grub-mkconfig')
-      Facter::Util::Resolution.exec('grub-mkconfig --version').split.last.delete('()')
+    if Facter::Core::Execution.which('grub')
+      Facter::Core::Execution.execute('grub --version', on_fail: nil).split.last.delete('()')
+    elsif Facter::Core::Execution.which('grub2-mkconfig')
+      Facter::Core::Execution.execute('grub2-mkconfig --version', on_fail: nil).split.last.delete('()')
+    elsif Facter::Core::Execution.which('grub-mkconfig')
+      Facter::Core::Execution.execute('grub-mkconfig --version', on_fail: nil).split.last.delete('()')
     end
   end
 end

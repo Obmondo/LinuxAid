@@ -1,7 +1,7 @@
 Facter.add(:simplib__networkmanager) do
   confine kernel: 'Linux'
 
-  @nmcli_cmd = Facter::Util::Resolution.which('nmcli')
+  @nmcli_cmd = Facter::Core::Execution.which('nmcli')
   confine { @nmcli_cmd }
 
   setcode do
@@ -36,10 +36,38 @@ Facter.add(:simplib__networkmanager) do
       info['enabled'] = true
       info['connection'] = {}
 
-      connections.lines.each do |conn|
-        name, uuid, type, device = conn.strip.split(':')
+      # nmcli escapes ':' as '\:' and '\' as '\\' in the values it prints in
+      # terse tabular mode, so the fields cannot be split on every colon. A
+      # lookbehind is not enough either: in 'foo\\:<uuid>:...' the colon really
+      # is a separator, even though the character before it is a backslash.
+      split_terse = ->(line) do
+        fields = ['']
+        escaped = false
 
-        info['connection'][device] = {
+        line.each_char do |char|
+          if escaped
+            fields[-1] += char
+            escaped = false
+          elsif char == '\\'
+            escaped = true
+          elsif char == ':'
+            fields << ''
+          else
+            fields[-1] += char
+          end
+        end
+
+        fields
+      end
+
+      connections.lines.each do |conn|
+        name, uuid, type, device = split_terse.call(conn.chomp)
+
+        # nmcli reports an empty device for a connection that is not active
+        device = nil if device.nil? || device.empty?
+
+        info['connection'][uuid] = {
+          'device' => device,
           'uuid' => uuid,
           'type' => type,
           'name' => name,
