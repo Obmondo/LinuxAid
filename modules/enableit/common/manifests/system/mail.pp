@@ -14,6 +14,8 @@
 #
 # @param mynetworks List of trusted clients (IPs/CIDRs) allowed to relay through this server. Empty disables explicit mynetworks. Defaults to empty array.
 #
+# @param submission Enable the submission service on port 587. Clients in mynetworks may relay without SASL or TLS, mirroring port 25. Defaults to false.
+#
 # @param smtp_tls_security_level TLS security level. Defaults to 'encrypt'.
 #
 # @param aliases Hash of mail aliases. Defaults to empty hash.
@@ -22,7 +24,7 @@
 #
 # @param noop_value Optional noop value. Defaults to undef.
 #
-# @groups main manage, myhostname, mydomain, myorigin, relayhost, aliases, _extra_main_parameters.
+# @groups main manage, myhostname, mydomain, myorigin, relayhost, submission, aliases, _extra_main_parameters.
 #
 # @groups smtp smtp_tls_security_level.
 #
@@ -41,6 +43,7 @@ class common::system::mail (
   Optional[Eit_types::Domain] $myorigin                      = undef,
   Optional[Eit_types::Host] $relayhost                       = undef,
   Array[String] $mynetworks                                  = [],
+  Boolean $submission                                        = false,
   Eit_types::Postfix_Security_Level $smtp_tls_security_level = 'encrypt',
   Hash[String, String] $aliases                              = {},
   Hash[String, String] $_extra_main_parameters               = {},
@@ -58,17 +61,23 @@ class common::system::mail (
       # the caller actually supplied entries.
       $real_mynetworks = $mynetworks =~ Array[Any, 1] ? { true => $mynetworks, default => false }
       class { 'postfix::server':
-        myhostname                 => $myhostname,
-        mydomain                   => $mydomain,
-        myorigin                   => $myorigin,
-        relayhost                  => $relayhost,
-        mynetworks                 => $real_mynetworks,
-        relay_domains              => false,
-        inet_interfaces            => $inet_interfaces,
-        smtp_sasl_auth             => false,
-        smtp_sasl_password_maps    => undef,
-        smtp_sasl_security_options => undef,
-        extra_main_parameters      => stdlib::merge({
+        myhostname                           => $myhostname,
+        mydomain                             => $mydomain,
+        myorigin                             => $myorigin,
+        relayhost                            => $relayhost,
+        mynetworks                           => $real_mynetworks,
+        relay_domains                        => false,
+        inet_interfaces                      => $inet_interfaces,
+        smtp_sasl_auth                       => false,
+        smtp_sasl_password_maps              => undef,
+        smtp_sasl_security_options           => undef,
+        # No smtpd SASL or TLS cert is managed here, so port 587 trusts
+        # mynetworks exactly like port 25 does.
+        submission                           => $submission,
+        submission_smtpd_tls_security_level  => 'none',
+        submission_smtpd_sasl_auth_enable    => 'no',
+        submission_smtpd_client_restrictions => 'permit_mynetworks,reject',
+        extra_main_parameters                => stdlib::merge({
           smtp_tls_security_level               => $smtp_tls_security_level,
           smtp_tls_loglevel                     => 1,
           smtpd_tls_auth_only                   => 'yes',
