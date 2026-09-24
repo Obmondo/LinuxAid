@@ -269,8 +269,9 @@ class eit_haproxy::auto_config (
       ))
 
       haproxy::backend { $site :
-        mode    => $mode,
-        options => $_options,
+        mode             => $mode,
+        options          => $_options,
+        collect_exported => false,
       }
     }
   }
@@ -298,13 +299,14 @@ class eit_haproxy::auto_config (
     })
 
     haproxy::listen { $listen_name :
-      bind    => $_nested_binds,
-      mode    => $_mode,
-      options => union(
+      bind             => $_nested_binds,
+      mode             => $_mode,
+      options          => union(
         $_server,
         [{ 'option' => "${_mode}log" }],
         [$listen_value['extra_options']],
       ),
+      collect_exported => false,
     }
   }
 
