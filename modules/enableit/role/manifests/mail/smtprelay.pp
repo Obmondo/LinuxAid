@@ -12,6 +12,8 @@
 #
 # @param allowed_networks List of client IPs/CIDRs permitted to relay through this server. Loopback is always allowed in addition to this list.
 #
+# @param submission Also accept relay traffic on port 587 (submission). Same trust model as port 25: allowed_networks only, no auth. Defaults to false.
+#
 # @param myhostname The hostname for the relay.
 #
 # @param mydomain The domain for the relay. Defaults to undef.
@@ -20,7 +22,7 @@
 #
 # @groups management manage.
 #
-# @groups relay relayhost, allowed_networks.
+# @groups relay relayhost, allowed_networks, submission.
 #
 # @groups interfaces myhostname, mydomain, myorigin.
 #
@@ -31,6 +33,7 @@ class role::mail::smtprelay (
   Optional[Eit_types::Domain]                         $myorigin        = undef,
   Optional[Eit_types::Host]                           $relayhost       = undef,
   Array[Variant[Eit_types::IP, Eit_types::IPCIDR]]    $allowed_networks = [],
+  Boolean                                             $submission      = false,
 ) inherits ::role::mail {
   # Always trust loopback so locally-generated mail relays, then the
   # operator-supplied client networks.
@@ -44,5 +47,6 @@ class role::mail::smtprelay (
     myhostname      => $myhostname,
     mydomain        => $mydomain,
     myorigin        => $myorigin,
+    submission      => $submission,
   }
 }
