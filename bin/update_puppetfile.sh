@@ -5,13 +5,7 @@
 
 set -eou pipefail
 
-# This script requires Linux and bash to run
-if [[ "$(uname -s)" != "Linux" ]]; then
-  echo "Error: This script must be run on Linux"
-  echo "Current OS: $(uname -s)"
-  echo "This script uses GNU sed which is not compatible with BSD sed (macOS)"
-  exit 1
-fi
+# Runs on Linux and macOS: only flags that GNU and BSD tools share are used.
 
 # Ensure we're running in bash
 if [[ -z "$BASH_VERSION" ]]; then
@@ -21,7 +15,7 @@ if [[ -z "$BASH_VERSION" ]]; then
   exit 1
 fi
 
-for program in rsync yq git; do
+for program in rsync jq git; do
   if ! command -v "$program" >/dev/null; then
     echo "Missing $program"
     exit 1
@@ -76,8 +70,10 @@ declare ADD_MODULE=false
 declare OPENVOX_UPSTREAM_MODULES_PATH
 declare PUPPETFILE
 
-OPENVOX_UPSTREAM_MODULES_PATH="$(dirname "$(readlink -f "${SCRIPT_NAME}/..")")/modules/upstream"
-PUPPETFILE="$(dirname "$(readlink -f "${SCRIPT_NAME}/..")")/modules/Puppetfile"
+# Repo root = parent of this script's directory, so the script works from any cwd
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OPENVOX_UPSTREAM_MODULES_PATH="${REPO_ROOT}/modules/upstream"
+PUPPETFILE="${REPO_ROOT}/modules/Puppetfile"
 
 [ $# -eq 0 ] && { ARGFAIL; exit 1; }
 
@@ -155,7 +151,7 @@ cat "$PUPPETFILE" > "$TEMP_FILE"
 
 function get_module_latest_tag() {
   LATEST_TAG=$(git ls-remote --tags "$GIT_URL" 2>/dev/null | \
-    grep -oP 'refs/tags/\K[^{}^]+' | \
+    sed -n 's|^.*refs/tags/\([^^{}]*\).*$|\1|p' | \
     grep -E '^v?([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$' |
     sort -V | tail -1)
 
@@ -165,7 +161,7 @@ function get_module_latest_tag() {
 function setup_module_git_clone() {
   CHECKOUT_REF=$1
   # Create tempdir to clone the module locally
-  TEMP_CLONE_DIR="$(mktemp -d --suffix="-${MODULE_NAME##*/}")"
+  TEMP_CLONE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/${MODULE_NAME##*/}.XXXXXX")"
 
   chmod a+rX "${TEMP_CLONE_DIR}"
   git clone --quiet "${GIT_URL}" "${TEMP_CLONE_DIR}"
@@ -236,7 +232,9 @@ function update_puppetfile() {
   # Check if module exists in Puppetfile
   if grep -q "mod '[^']*/${MODULE_NAME}'" "$PUPPETFILE"; then
     # Update existing entry
-    sed -i "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s/:ref => '[^']*'/:ref => '${LATEST_TAG}'/" "$PUPPETFILE"
+    # -i.bak is the in-place form both GNU and BSD sed accept
+    sed -i.bak "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s/:ref => '[^']*'/:ref => '${LATEST_TAG}'/" "$PUPPETFILE"
+    rm -f "${PUPPETFILE}.bak"
     echo "Updated ${MODULE_NAME} to ${LATEST_TAG} in Puppetfile"
   else
     # Append new entry
