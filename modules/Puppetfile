@@ -315,6 +315,10 @@ mod 'bodgit/zfs',
     :git => 'https://github.com/bodgit/puppet-zfs.git',
     :ref => 'v3.0.0'
 
+mod 'puppetlabs/zfs_core',
+    :git => 'https://github.com/puppetlabs/puppetlabs-zfs_core.git',
+    :ref => 'v2.0.1'
+
 mod 'cirrax-borgbackup', '1.8.1'
 
 mod 'deric/beegfs',

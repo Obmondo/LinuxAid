@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018 Puppet, Inc.
+# This file is distributed under the same license as the puppetlabs-zfs_core package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+# 
+# Translators:
+# Erwin Hom <erwin.hom@puppet.com>, 2018
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: puppetlabs-zfs_core 1.0.0-5-g43d6225\n"
+"\n"
+"Report-Msgid-Bugs-To: docs@puppet.com\n"
+"POT-Creation-Date: 2018-08-20 08:41-0700\n"
+"PO-Revision-Date: 2018-10-24 01:05+0000\n"
+"Last-Translator: Erwin Hom <erwin.hom@puppet.com>, 2018\n"
+"Language-Team: Japanese (Japan) (https://www.transifex.com/puppet/teams/41915/ja_JP/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja_JP\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../lib/puppet/type/zpool.rb:68
+msgid ""
+"mirror names must be provided as string separated, not a comma-separated "
+"list"
+msgstr "ミラー名はカンマ区切りリストではなく、区切られた文字列として指定する必要があります。"
+
+#: ../lib/puppet/type/zpool.rb:81
+msgid ""
+"raid names must be provided as string separated, not a comma-separated list"
+msgstr "レイド名はカンマ区切りリストではなく、区切られた文字列として指定する必要があります。"
+
+#: ../lib/puppet/type/zpool.rb:104
+msgid "You cannot specify %{multiple_props} on this type (only one)"
+msgstr "このタイプで%{multiple_props}を指定することはできません(1つのみ)。"

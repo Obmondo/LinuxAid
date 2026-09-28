@@ -8,3 +8,7 @@ common::backup::manage: false
 common::user_management::security::manage: false
 common::user_management::motd::enable: false
 common::user_management::sshd::manage: false
+common::system::kernel::modules: {}
+# ZFS is usually installed by KubeAid StorageCTL; overrides facts/zfs_present=true.yaml,
+# which would install it (dkms + repo) on any host that has it.
+common::storage::zfs::enable: false
