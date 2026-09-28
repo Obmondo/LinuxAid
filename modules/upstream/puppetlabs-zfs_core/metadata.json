@@ -1,0 +1,27 @@
+{
+  "name": "puppetlabs-zfs_core",
+  "version": "2.0.1",
+  "author": "puppetlabs",
+  "summary": "Manage zfs. Create destroy and set properties on zfs instances.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-zfs_core",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-zfs_core",
+  "issues_url": "https://github.com/puppetlabs/puppetlabs-zfs_core/issues",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Solaris"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 8.0.0 < 9.0.0"
+    }
+  ],
+  "pdk-version": "3.5.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#3.5.1",
+  "template-ref": "tags/3.5.1-0-g9d5b193"
+}
