@@ -9,4 +9,12 @@ class role::kubeaid inherits ::role {
   # common only loads user management with monitoring on, which KubeAid nodes leave off;
   # authentication (e.g. sudo) is still switched on per cluster in hiera.
   include common::user_management::authentication
+
+  # common::system skips its subclasses on KubeAid nodes; kernel is loaded here so a
+  # cluster can set common::system::kernel::sysctl (e.g. inotify limits) in hiera.
+  include common::system::kernel
+
+  # Likewise for ZFS dataset properties (common::storage::zfs::datasets); ZFS itself is usually
+  # installed by KubeAid StorageCTL, so common::storage::zfs::enable stays off by default.
+  include common::storage::zfs
 }
