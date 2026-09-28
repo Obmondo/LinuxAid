@@ -9,5 +9,5 @@ services:
       <%= $key %>: '<%= $value %>'
 <%- } -%>
     ports:
-      - 9000:9000
-      - 9001:9001
+      - <%= $listen_address %>:9000:9000
+      - <%= $listen_address %>:9001:9001
