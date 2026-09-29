@@ -25,7 +25,10 @@ class profile::storage::zfs (
     ensure => absent,
   }
 
-  if $replications {
+  # Snapshots are useful on their own, not only as the source for a replication -
+  # they are the one copy an S3 or application credential cannot reach. Declare
+  # sanoid whenever either is configured.
+  if $replications or !empty($pools) {
     class { '::sanoid':
       pools           => $pools,
       templates       => undef,
@@ -34,7 +37,12 @@ class profile::storage::zfs (
     }
   }
 
-  zfs::scrub { keys($pools):
+  # $pools is keyed by the dataset sanoid should snapshot, which may be a child
+  # such as 'vol0/data/rustfs'. Scrubbing happens per zpool, so reduce those keys
+  # to their pool roots - 'zpool scrub vol0/data/rustfs' is not a valid command.
+  $scrub_pools = unique($pools.keys.map |$dataset| { split($dataset, '/')[0] })
+
+  zfs::scrub { $scrub_pools:
     hour     => 23,
     minute   => 00,
     month    => '*',
