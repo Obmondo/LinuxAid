@@ -219,44 +219,40 @@ class sudo::params {
         'env_reset' => undef,
       }
     }
+    'Archlinux': {
+      $package            = 'sudo'
+      $package_ldap       = $package
+      $package_ensure     = 'present'
+      $package_source     = undef
+      $package_admin_file = undef
+      $config_file        = '/etc/sudoers'
+      $config_dir         = '/etc/sudoers.d'
+      $content_template   = "${content_base}sudoers.archlinux.erb"
+      $secure_path        = undef
+      $config_file_group  = 'root'
+      $config_dir_keepme  = false
+      $package_provider   = undef
+      $wheel_config       = 'absent'
+      $defaults           = {}
+    }
+    'Gentoo': {
+      $package            = 'sudo'
+      $package_ldap       = $package
+      $package_ensure     = 'present'
+      $package_source     = undef
+      $package_admin_file = undef
+      $config_file        = '/etc/sudoers'
+      $config_dir         = '/etc/sudoers.d'
+      $content_template   = "${content_base}sudoers.gentoo.erb"
+      $secure_path        = undef
+      $config_file_group  = 'root'
+      $config_dir_keepme  = false
+      $package_provider   = undef
+      $wheel_config       = 'absent'
+      $defaults           = {}
+    }
     default: {
-      case $facts['os']['name'] {
-        'Gentoo': {
-          $package            = 'sudo'
-          $package_ldap       = $package
-          $package_ensure     = 'present'
-          $package_source     = undef
-          $package_admin_file = undef
-          $config_file        = '/etc/sudoers'
-          $config_dir         = '/etc/sudoers.d'
-          $content_template   = "${content_base}sudoers.gentoo.erb"
-          $secure_path        = undef
-          $config_file_group  = 'root'
-          $config_dir_keepme  = false
-          $package_provider   = undef
-          $wheel_config       = 'absent'
-          $defaults           = {}
-        }
-        /^(Arch|Manjaro)(.{0}|linux)$/: {
-          $package            = 'sudo'
-          $package_ldap       = $package
-          $package_ensure     = 'present'
-          $package_source     = undef
-          $package_admin_file = undef
-          $config_file        = '/etc/sudoers'
-          $config_dir         = '/etc/sudoers.d'
-          $content_template   = "${content_base}sudoers.archlinux.erb"
-          $secure_path        = undef
-          $config_file_group  = 'root'
-          $config_dir_keepme  = false
-          $package_provider   = undef
-          $wheel_config       = 'absent'
-          $defaults           = {}
-        }
-        default: {
-          fail("Unsupported platform: ${facts['os']['family']}/${facts['os']['name']}")
-        }
-      }
+      fail("Unsupported platform: ${facts['os']['family']}/${facts['os']['name']}")
     }
   }
 }
