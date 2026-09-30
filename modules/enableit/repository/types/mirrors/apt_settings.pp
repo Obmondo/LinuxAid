@@ -18,6 +18,10 @@ type Repository::Mirrors::Apt_Settings = Struct[{
     'noble-backports',
     'noble-security',
     'noble-updates',
+    'resolute',
+    'resolute-backports',
+    'resolute-security',
+    'resolute-updates',
   ]]],
   sections       => Optional[Array[Enum[
     'main',
