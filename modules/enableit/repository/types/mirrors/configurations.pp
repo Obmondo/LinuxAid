@@ -19,11 +19,12 @@ type Repository::Mirrors::Configurations = Hash[
       sles15 => Optional[Repository::Mirrors::Yum_Settings],
     }]],
     apt => Optional[Struct[{
-      enable => Boolean,
-      all    => Optional[Repository::Mirrors::Apt_Settings],
-      jammy  => Optional[Repository::Mirrors::Apt_Settings],
-      noble  => Optional[Repository::Mirrors::Apt_Settings],
-      focal  => Optional[Repository::Mirrors::Apt_Settings],
+      enable   => Boolean,
+      all      => Optional[Repository::Mirrors::Apt_Settings],
+      jammy    => Optional[Repository::Mirrors::Apt_Settings],
+      noble    => Optional[Repository::Mirrors::Apt_Settings],
+      focal    => Optional[Repository::Mirrors::Apt_Settings],
+      resolute => Optional[Repository::Mirrors::Apt_Settings],
     }]],
   }]
 ]
