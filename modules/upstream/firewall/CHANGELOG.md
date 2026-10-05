@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v8.6.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.6.0) - 2026-09-02
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.5.0...v8.6.0)
+
+### Added
+
+- MODULES-11717: Add Puppet 9 support [#1302](https://github.com/puppetlabs/puppetlabs-firewall/pull/1302) ([span786](https://github.com/span786))
+
+## [v8.5.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.5.0) - 2026-06-25
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.4.0...v8.5.0)
+
+### Added
+
+- (MODULES-11840) Allow puppetlabs/stdlib 10.x [#1288](https://github.com/puppetlabs/puppetlabs-firewall/pull/1288) ([imaqsood](https://github.com/imaqsood))
+
+### Fixed
+
+- (#1254) Remove iptables-services from EL9+ package defaults [#1296](https://github.com/puppetlabs/puppetlabs-firewall/pull/1296) ([david22swan](https://github.com/david22swan))
+- (#1257) Allow dots in ipset names for the ipset attribute pattern [#1295](https://github.com/puppetlabs/puppetlabs-firewall/pull/1295) ([david22swan](https://github.com/david22swan))
+- (#1266) Strip iptables-legacy warnings interleaved in iptables-save output [#1294](https://github.com/puppetlabs/puppetlabs-firewall/pull/1294) ([david22swan](https://github.com/david22swan))
+- (#1270) Fix chain detection for names prefixed with built-in chain names [#1293](https://github.com/puppetlabs/puppetlabs-firewall/pull/1293) ([david22swan](https://github.com/david22swan))
+
+## [v8.4.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.4.0) - 2026-06-10
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.3.0...v8.4.0)
+
+### Added
+
+- (feat) Add restore_mark, nfmask, ctmask support for CONNMARK-based policy routing [#1291](https://github.com/puppetlabs/puppetlabs-firewall/pull/1291) ([david22swan](https://github.com/david22swan))
+
+### Fixed
+
+- (bugfix) Fix icmp_name_to_number to support type/code format (e.g. 3/4) [#1290](https://github.com/puppetlabs/puppetlabs-firewall/pull/1290) ([david22swan](https://github.com/david22swan))
+- (bugfix) Allow underscores in firewall rule names [#1289](https://github.com/puppetlabs/puppetlabs-firewall/pull/1289) ([david22swan](https://github.com/david22swan))
+- (bugfix) Fix ipset idempotency: single-element array not in sync with String equivalent [#1286](https://github.com/puppetlabs/puppetlabs-firewall/pull/1286) ([david22swan](https://github.com/david22swan))
+- (bugfix) Fix table parsing when iptables-save output contains * in rule comments [#1285](https://github.com/puppetlabs/puppetlabs-firewall/pull/1285) ([david22swan](https://github.com/david22swan))
+- (bugfix) Fix log_level idempotency when explicitly setting the iptables default value [#1284](https://github.com/puppetlabs/puppetlabs-firewall/pull/1284) ([david22swan](https://github.com/david22swan))
+- fix(firewall): avoid parsing flags from chain names and quoted values [#1275](https://github.com/puppetlabs/puppetlabs-firewall/pull/1275) ([ashishrase](https://github.com/ashishrase))
+- explicitly do AAAA lookups even if IPv6 is unavailable [#1255](https://github.com/puppetlabs/puppetlabs-firewall/pull/1255) ([kjetilho](https://github.com/kjetilho))
+- Ensure global variables are unique among providers [#1227](https://github.com/puppetlabs/puppetlabs-firewall/pull/1227) ([nabertrand](https://github.com/nabertrand))
+
+## [v8.3.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.3.0) - 2026-02-09
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.2.0...v8.3.0)
+
+### Changed
+
+- (CAT-2345) Prepare module for Puppetcore / Drop Support for Puppet 7 [#1265](https://github.com/puppetlabs/puppetlabs-firewall/pull/1265) ([david22swan](https://github.com/david22swan))
+
+### Added
+
+- MODULES-11593: Add IPv6 rule saving command for Suse in utility and update specs [#1272](https://github.com/puppetlabs/puppetlabs-firewall/pull/1272) ([span786](https://github.com/span786))
+
 ## [v8.2.0](https://github.com/puppetlabs/puppetlabs-firewall/tree/v8.2.0) - 2025-08-11
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-firewall/compare/v8.1.7...v8.2.0)
@@ -663,7 +717,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - (MODULES 3932) - We need to call Facter.flush to clear Facter cache [#603](https://github.com/puppetlabs/puppetlabs-firewall/pull/603) ([jonnytdevops](https://github.com/jonnytdevops))
 - (MODULES-2159) ignore the --connlimit-saddr switch when parsing rules [#602](https://github.com/puppetlabs/puppetlabs-firewall/pull/602) ([paulseward](https://github.com/paulseward))
 - Adding in log_uid boolean for LOG [#593](https://github.com/puppetlabs/puppetlabs-firewall/pull/593) ([mlosapio](https://github.com/mlosapio))
-- (MODULES-2836) Fix handling of chains that contain '-f' [#579](https://github.com/puppetlabs/puppetlabs-firewall/pull/579) ([maxvozeler](https://github.com/maxvozeler))
+- (MODULES-2836) Fix handling of chains that contain '-f' [#579](https://github.com/puppetlabs/puppetlabs-firewall/pull/579) ([mvz0](https://github.com/mvz0))
 - (MODULES-2783) Missing ip6tables service name [#578](https://github.com/puppetlabs/puppetlabs-firewall/pull/578) ([abednarik](https://github.com/abednarik))
 
 ## [1.7.2](https://github.com/puppetlabs/puppetlabs-firewall/tree/1.7.2) - 2015-12-07
