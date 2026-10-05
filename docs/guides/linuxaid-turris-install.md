@@ -42,7 +42,7 @@ Before starting, ensure you have:
 
 3. In the next step, choose the `Basic` role, since we only want basic and essential services configured for Linuxaid to run properly on the `TurrisOS` router.
 
-4. Before running the installation command, ensure that root SSH access and port 22 are enabled on your TurrisOS router by following these steps:
+4. Before running the installation command, ensure that root SSH access, firewall rules, and DNS settings are configured on your TurrisOS router by following these steps:
 
     1. From your workstation, open the Turris LuCI admin dashboard in your web browser and enter your credentials and click **Login**:
 
@@ -101,13 +101,63 @@ Before starting, ensure you have:
             <img alt="Turris Save and Apply Changes" src="../images/turris-apply-changes.png" width="360">
         </picture>
 
-    6. Open your terminal (or Powershell) and connect to your TurrisOS router as the `root` user using the router's IPv4 address:
+    > NOTE: Configuring reliable upstream DNS (such as Cloudflare with DNSSEC) is strongly recommended. In some environments, default upstream DNS resolution fails on TurrisOS routers, which breaks commands like `opkg update` and prevents the Puppet agent from successfully resolving the Puppet server URL.
 
-       ```sh
-       ssh root@<router-ip>
-       ```
+    1. Open the Turris reForis admin dashboard in your web browser and enter your credentials and click **Login**:
 
-    7. Copy and run the installation command provided on the final step of the Linuxaid installation wizard. This setup is fully automated and will install and configure Linuxaid on your router.
+        ```text
+        http://{router-ip}/reforis/overview
+        ```
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-reforis-url.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-reforis-url-light.png">
+            <img alt="Turris reForis URL" src="../images/turris-reforis-url.png" width="720">
+        </picture>
+
+       *(Note: `{router-ip}` is the `IPv4` address we got from Step 2).*
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-reforis-login.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-reforis-login-light.png">
+            <img alt="Turris reForis Login" src="../images/turris-reforis-login.png" width="720">
+        </picture>
+
+        ```txt
+        Password: your admin password
+        ```
+
+    2. After a successful login, locate the `DNS Settings` under `Network Settings`. Ensure that `Use forwarding` is enabled.
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-reforis-network-settings.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-reforis-network-settings-light.png">
+            <img alt="Turris reForis Network Settings" src="../images/turris-reforis-network-settings.png" width="720">
+        </picture>
+
+    3. Scroll down till the bottom and select `Cloudflare (TLS)`. Ensure `Enable DNSSEC` is also enabled and then click on `Save`.
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-reforis-cloudflare.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-reforis-cloudflare-light.png">
+            <img alt="Turris reForis Cloudflare" src="../images/turris-reforis-cloudflare.png" width="720">
+        </picture>
+
+    4. Test your DNS changes by clicking on `Test connection`/`Test connection again`.
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-reforis-connection-test.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-reforis-connection-test-light.png">
+            <img alt="Turris reForis Connection Test" src="../images/turris-reforis-connection-test.png" width="720">
+        </picture>
+
+    5. Open your terminal (or Powershell) and connect to your TurrisOS router as the `root` user using the router's IPv4 address:
+
+        ```sh
+        ssh root@<router-ip>
+        ```
+
+    6. Copy and run the installation command provided on the final step of the Linuxaid installation wizard. This setup is fully automated and will install and configure Linuxaid on your router.
 
 5. Once the Linuxaid setup completes on the TurrisOS router, log in to your Git hosting platform (e.g., GitHub/GitLab/Azure DevOps), open your `linuxaid-config` repository (configured during Git setup), and navigate to the **Pull Requests** section. You will see a prompt suggesting a new PR created from the newly added router's branch. Create the pull request and merge the changes into your `default` (or `main`) branch.
 
