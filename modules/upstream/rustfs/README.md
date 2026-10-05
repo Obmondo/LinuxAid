@@ -62,12 +62,13 @@ sudo chmod 755 /mnt/backups/rustfs
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `rustfs::enable` | `Boolean` | `false` | Whether to enable and manage the RustFS deployment. |
-| `rustfs::version` | `String[1]` | `"1.0.0"` | The version tag of the `rustfs/rustfs` container image. |
+| `rustfs::version` | `String[1]` | `"1.0.1"` | The version tag of the `rustfs/rustfs` container image. |
 | `rustfs::container_image` | `String[1]` | `"rustfs/rustfs"` | The container image repository name. |
 | `rustfs::data_dir` | `Stdlib::Unixpath` | `"/opt/rustfs/data"` | Host directory where backup data is stored (must be pre-mounted). |
 | `rustfs::access_key` | `String[1]` | `"admin"` | S3 Access Key ID for authentication. |
 | `rustfs::secret_key` | `String[1]` | `"admin"` | S3 Secret Access Key for authentication (recommended via eyaml). |
 | `rustfs::env_vars` | `Hash` | `{}` | Additional environment variables passed to the RustFS container. |
+| `rustfs::listen_address` | `String[1]` | `"0.0.0.0"` | Address the container publishes its ports on. |
 
 ---
 
@@ -86,7 +87,7 @@ sudo chmod 755 /mnt/backups/rustfs
 class { 'rustfs':
   enable     => true,
   data_dir   => '/mnt/backups/rustfs',
-  version    => '1.0.0',
+  version    => '1.0.1',
   access_key => 'your-access-key',
   secret_key => 'your-secret-key',
 }
@@ -107,13 +108,14 @@ This will output a PKCS7 block (`ENC[...]`) which you can paste directly into yo
 ```yaml
 ---
 rustfs::enable: true
-rustfs::version: '1.0.0'
+rustfs::version: '1.0.1'
 rustfs::container_image: 'rustfs/rustfs'
 rustfs::data_dir: '/mnt/backups/rustfs'
 rustfs::access_key: 'my-backup-admin'
 rustfs::secret_key: 'ENC[PKCS7,MIIB7AYJKoZIhvcNAQcDoIIB3TCCAdkCAQAxggF7MIIBewIBADAFMAAC...]'
 rustfs::env_vars:
   RUSTFS_LOG: 'info'
+rustfs::listen_address: '0.0.0.0'
 ```
 
 ---
