@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.5 - 2026-10-05
+#### Miscellaneous Chores
+- update rustdesk client package version to 1.5.0 - (d5c068b) - Sidharth Jawale
+- update rustdesk server package version to 1.8.7 - (3e094e6) - Sidharth Jawale
+
+- - -
+
 ## v1.1.4 - 2026-09-22
 #### Bug Fixes
 - use double quotes string interpolation for package version - (a73504d) - Sidharth Jawale
