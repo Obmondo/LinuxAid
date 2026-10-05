@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.0 - 2026-10-05
+#### Features
+- publish the container on a configurable address - (f5344d4) - aman
+#### Bug Fixes
+- default listen_address to 0.0.0.0, keeping existing behaviour - (d274021) - aman
+#### Miscellaneous Chores
+- update rustfs container image version to 1.0.1 - (94cecda) - Sidharth Jawale
+- update listen address param docs and references - (0957618) - Sidharth Jawale
+
+- - -
+
 ## v1.0.0 - 2026-09-17
 #### Miscellaneous Chores
 - update rustfs container image version to 1.0.0 - (e766caf) - Sidharth Jawale
