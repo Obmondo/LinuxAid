@@ -1,0 +1,18 @@
+---
+common::software::nvidia_driver::packages:
+  - 'nvidia-driver-595-server-open'
+common::monitor::exporter::enable: true
+common::network::service_name: "systemd-networkd"
+common::system::systemd::manage_resolved: true
+common::monitor::exporter::security::enable: true
+common::software::vncserver::systemd_service: "tigervncserver"
+common::logging::log_dir_group: 'adm'
+common::software::vncserver::config_defaults:
+  session: "ubuntu"
+  geometry: "1920x1080"
+  localhost: "no"
+  BlacklistThreshold: "20"
+  UseBlacklist: "0"
+common::software::rustdesk::client_extra_dependencies:
+  - libgtk-3-0t64
+  - libasound2t64
