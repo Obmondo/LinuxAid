@@ -42,10 +42,10 @@
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `rustdesk::client_enable` | `Boolean` | `false` | Whether to enable and manage the RustDesk client component. |
-| `rustdesk::client_version` | `SemVer` | `"1.4.9"` | The version of the RustDesk client to install. |
+| `rustdesk::client_version` | `SemVer` | `"1.5.0"` | The version of the RustDesk client to install. |
 | `rustdesk::client_extra_dependencies` | `Array[String]` | `[]` | Additional OS packages required for the client. |
 | `rustdesk::server_enable` | `Boolean` | `false` | Whether to enable and manage the RustDesk server components (`hbbs` / `hbbr`). |
-| `rustdesk::server_version` | `SemVer` | `"1.8.6"` | The version of the RustDesk server to install. |
+| `rustdesk::server_version` | `SemVer` | `"1.8.7"` | The version of the RustDesk server to install. |
 | `rustdesk::server_extra_dependencies` | `Array[String]` | `[]` | Additional OS packages required for the server. |
 
 ---
@@ -66,7 +66,7 @@
 ```puppet
 class { 'rustdesk':
   client_enable  => true,
-  client_version => '1.4.9',
+  client_version => '1.5.0',
   server_enable  => false,
 }
 ```
@@ -77,7 +77,7 @@ class { 'rustdesk':
 class { 'rustdesk':
   client_enable  => false,
   server_enable  => true,
-  server_version => '1.8.6',
+  server_version => '1.8.7',
 }
 ```
 
@@ -86,7 +86,7 @@ class { 'rustdesk':
 ```yaml
 ---
 rustdesk::client_enable: true
-rustdesk::client_version: '1.4.9'
+rustdesk::client_version: '1.5.0'
 rustdesk::server_enable: false
 ```
 
