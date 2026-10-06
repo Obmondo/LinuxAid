@@ -97,3 +97,19 @@
           Endpoint: 10.10.10.1:44223
           PersistentKeepalive: 10
   ```
+
+### Wireguard server notes
+
+* Tunnels with `manage_config: true` (the default) use the `wgquick` provider. Puppet writes
+  `/etc/wireguard/<tunnel>.conf` and keeps `wg-quick@<tunnel>.service` enabled and running.
+  A change to the tunnel config restarts the service, so active clients reconnect within a few seconds.
+
+* Hosts that were first set up with the `systemd` provider still carry
+  `/etc/systemd/network/<tunnel>.netdev` and `<tunnel>.network`. With those in place systemd-networkd
+  creates the interface at boot, without an address, and `wg-quick` fails because the interface already
+  exists. The tunnel then handshakes but forwards nothing. Puppet removes both files and the interface
+  networkd created, then starts `wg-quick`.
+
+* On the server, a peer's `allowed_ips` lists only what sits behind that peer: its tunnel address and any
+  network it routes for. Do not copy the client's own `AllowedIPs` here. WireGuard hands a range to one
+  peer only (the last one listed wins) and `wg-quick` routes every listed range into the tunnel.
