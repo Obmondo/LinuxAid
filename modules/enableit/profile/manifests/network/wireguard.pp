@@ -49,17 +49,15 @@ class profile::network::wireguard (
       if $_ensure == 'present' {
         service { "wg-quick@${key}.service":
           ensure    => running,
-          provider  => 'systemd',
           enable    => true,
           subscribe => Wireguard::Interface[$key],
         }
       } else {
         # wg-quick needs the config file to take the tunnel down
         service { "wg-quick@${key}.service":
-          ensure   => stopped,
-          provider => 'systemd',
-          enable   => false,
-          before   => Wireguard::Interface[$key],
+          ensure => stopped,
+          enable => false,
+          before => Wireguard::Interface[$key],
         }
       }
 
