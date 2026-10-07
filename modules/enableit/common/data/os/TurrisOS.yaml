@@ -47,3 +47,6 @@ common::monitor::exporter::node::lsof::enable: false
 common::monitor::exporter::node::topprocesses::enable: false
 common::monitor::exporter::node::ssacli::enable: false
 common::monitor::exporter::node::smartmon::enable: false
+
+common::system::package::default_packages:
+  - lscpu
