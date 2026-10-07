@@ -165,6 +165,7 @@ common::system::mail::manage: false
 ## System Systemd
 common::system::systemd::manage_journald: false
 common::system::systemd::manage_resolved: false
+common::system::systemd::manage_networkd: false
 
 ## System Authentication
 common::user_management::authentication::manage_nis: false

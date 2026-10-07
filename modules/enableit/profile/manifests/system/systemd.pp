@@ -2,6 +2,7 @@
 class profile::system::systemd (
   Boolean $manage_journald = $common::system::systemd::manage_journald,
   Boolean $manage_resolved = $common::system::systemd::manage_resolved,
+  Boolean $manage_networkd = $common::system::systemd::manage_networkd,
 
   # Jounald Settings
   Systemd::JournaldSettings $journald_settings = $common::system::systemd::journald_settings,
@@ -45,8 +46,9 @@ class profile::system::systemd (
     journald_settings => $journald_settings,
     manage_resolved   => lookup('common::system::dns::resolver') == 'systemd-resolved' and $manage_resolved,
     *                 => $_resolved_settings,
-    # Only enable when it manage is true and service_name is set to systemd-networkd
-    manage_networkd   => (
+    # Enable when asked for explicitly (common::system::systemd::manage_networkd),
+    # or when common::network manages the interfaces through systemd-networkd
+    manage_networkd   => $manage_networkd or (
       (lookup('common::network::service_name') == 'systemd-networkd')
       and
       (lookup('common::network::manage', Boolean, undef, false))
