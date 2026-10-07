@@ -6,7 +6,7 @@
 #
 # @param env_file_path The absolute path to the environment file.
 #
-# @param init_style Init style
+# @param init_style Init style. 'procd' is the OpenWrt init system.
 #
 # @param server The HTTPS url for prometheus URL. Must be a Stdlib::FQDN
 #
@@ -19,11 +19,11 @@
 # @groups server_config server.
 #
 class common::monitor::prometheus (
-  Enum['package','url'] $install_method,
-  Prometheus::Initstyle $init_style,
-  Stdlib::Absolutepath  $env_file_path,
-  Stdlib::Fqdn          $server,
-  Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
+  Enum['package','url']                         $install_method,
+  Variant[Prometheus::Initstyle, Enum['procd']] $init_style,
+  Stdlib::Absolutepath                          $env_file_path,
+  Stdlib::Fqdn                                  $server,
+  Eit_types::Noop_Value                         $noop_value = $common::monitor::noop_value,
 ) {
   File {
     noop => $noop_value,
@@ -45,13 +45,19 @@ class common::monitor::prometheus (
     noop => $noop_value,
   }
 
+  # The upstream module has no procd style, functions::procd_service writes the init script
+  $_init_style = $init_style ? {
+    'procd' => 'none',
+    default => $init_style,
+  }
+
   class { 'prometheus':
     install_method    => $install_method,
     bin_dir           => '/opt/obmondo/bin',
     usershell         => '/usr/sbin/nologin',
     restart_on_change => true,
     env_file_path     => $env_file_path,
-    init_style        => $init_style,
+    init_style        => $_init_style,
   }
 
   include common::monitor::prometheus::server

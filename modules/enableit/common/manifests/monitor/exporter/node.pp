@@ -65,7 +65,10 @@ class common::monitor::exporter::node (
     ]
   }
 
-  $_init_style = $enable ? {
+  $_procd = lookup('common::monitor::prometheus::init_style') == 'procd'
+
+  # The upstream module has no procd style, functions::procd_service writes the init script
+  $_init_style = ($enable and !$_procd) ? {
     true    => lookup('common::monitor::prometheus::init_style'),
     default => 'none',
   }
@@ -98,6 +101,14 @@ class common::monitor::exporter::node (
     scrape_job_labels => {
       'certname' => $::trusted['certname']
     },
+  }
+
+  if $_procd {
+    functions::procd_service { 'node_exporter':
+      command    => "${prometheus::bin_dir}/node_exporter ${prometheus::node_exporter::options}",
+      user       => 'node_exporter',
+      noop_value => $noop_value,
+    }
   }
 
   $port = Integer($listen_address.split(':')[1])

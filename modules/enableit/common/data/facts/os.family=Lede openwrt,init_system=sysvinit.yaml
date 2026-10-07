@@ -1,0 +1,2 @@
+---
+common::monitor::prometheus::init_style: 'procd'

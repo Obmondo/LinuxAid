@@ -13,6 +13,7 @@ common::logging::manage: false
 
 common::default::classes:
   - common::network
+  - common::system::hosts
 
 common::role_basic::classes: []
 

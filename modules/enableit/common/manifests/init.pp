@@ -20,8 +20,7 @@ class common (
 
   if $::obmondo_monitoring_status { #lint:ignore:top_scope_facts
     # NOTE: Lets not allow anyone to remove our public repo, otherwise monitoring won't be setup
-    # NOTE: For now, ignore setting up monitoring for TurrisOS, since opkg isn't supported as package provider.
-    # NOTE: Later this needs to be fixed.
+    # NOTE: The repo has no opkg feed, TurrisOS installs monitoring from the upstream releases.
     if $facts['os']['name'] != 'TurrisOS' {
       eit_repos::repo { 'enableit_client':
         noop_value => false,
