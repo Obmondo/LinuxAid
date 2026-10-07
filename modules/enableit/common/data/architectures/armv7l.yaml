@@ -3,6 +3,7 @@ common::monitor::prometheus::install_method: "url"
 common::monitor::prometheus::env_file_path: "/etc/default"
 common::monitor::prometheus::server::checksums:
   3.8.1: 70159946928dce8e11a5d38b6f478b5b6b65533e67c7909644cf613eb59cdf5c
+  3.15.0: 66c26d503b8600fd512f9fddf6937f37597c4d35cc162c329b8a6c3c7d67def0
 
 common::logging::manage: false
 

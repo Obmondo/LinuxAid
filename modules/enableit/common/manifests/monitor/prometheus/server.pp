@@ -12,7 +12,7 @@ class common::monitor::prometheus::server (
   Array[Hash]           $collect_scrape_jobs,
   Eit_types::Noop_Value $noop_value = $common::monitor::noop_value,
 ) {
-  $version = '3.8.1'
+  $version = '3.15.0'
   $listen_address = '127.254.254.254:63400'
 
   Exec {
