@@ -30,17 +30,19 @@ class profile::system::openvox::linuxaid_cli (
       }
     }
     'archive': {
-      archive { 'linuxaid-cli':
-        ensure          => present,
-        source          => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${_version}/linuxaid-cli_v${_version}_linux_${_arch}.tar.gz",
-        extract         => true,
-        extract_command => 'tar xzf %s linuxaid-cli',
-        path            => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
-        extract_path    => '/opt/obmondo/bin',
-        checksum        => $_checksum[$_version],
-        checksum_type   => 'sha256',
-        cleanup         => true,
-        noop            => $noop_value,
+      if $facts['linuxaid_cli_version'] != $_version {
+        archive { 'linuxaid-cli':
+          ensure          => present,
+          source          => "https://github.com/Obmondo/Linuxaid-cli/releases/download/v${_version}/linuxaid-cli_v${_version}_linux_${_arch}.tar.gz",
+          extract         => true,
+          extract_command => 'tar xzf %s linuxaid-cli',
+          path            => "/tmp/linuxaid-cli_Linux_${_arch}.tar.gz",
+          extract_path    => '/opt/obmondo/bin',
+          checksum        => $_checksum[$_version],
+          checksum_type   => 'sha256',
+          cleanup         => true,
+          noop            => $noop_value,
+        }
       }
     }
     default: {
