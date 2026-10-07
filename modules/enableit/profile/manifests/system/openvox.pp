@@ -1,16 +1,15 @@
 # Manage openvox-agent
 # so we can setup openvox-agent package
 class profile::system::openvox (
-  Stdlib::Host         $server                 = $common::system::openvox::server,
-  Eit_types::Version   $version                = $common::system::openvox::version,
-  Optional[Hash]       $extra_main_settings    = $common::system::openvox::extra_main_settings,
-  String               $aio_package_name       = $common::system::openvox::package_name,
+  Stdlib::Host          $server                 = $common::system::openvox::server,
+  Eit_types::Version    $version                = $common::system::openvox::version,
+  Optional[Hash]        $extra_main_settings    = $common::system::openvox::extra_main_settings,
+  String                $aio_package_name       = $common::system::openvox::package_name,
 
   Eit_types::Noop_Value $noop_value             = $common::system::openvox::noop_value,
   Optional[String]      $package_version_suffix = undef,
   Optional[String]      $package_version_prefix = undef,
 ) {
-
   $puppetversion = $facts['puppetversion']
   $os_major = $facts['os']['release']['major']
   $os_name = $facts['os']['name']
@@ -38,14 +37,14 @@ class profile::system::openvox (
 
     # Remove the puppetlabs repo package
     package { [
-      'puppet7-release',
-      'puppet8-release',
-      'puppet-agent'
-    ]:
-      ensure  => absent,
-      noop    => $noop_value,
-      notify  => Package[$aio_package_name],
-      require => Eit_repos::Repo['openvox'],
+        'puppet7-release',
+        'puppet8-release',
+        'puppet-agent',
+      ]:
+        ensure  => absent,
+        noop    => $noop_value,
+        notify  => Package[$aio_package_name],
+        require => Eit_repos::Repo['openvox'],
     }
   }
 
@@ -129,19 +128,19 @@ class profile::system::openvox (
   }
 
   file { $facts['puppet_config']:
-    ensure  => present,
+    ensure  => file,
     content => epp('profile/puppet.conf.epp', {
-      'server'                           => $server,
-      'graph'                            => true,
-      'noop'                             => true,
-      'onetime'                          => false,
-      'certname'                         => $::trusted['certname'],
-      'manage_internal_file_permissions' => false,
-      'runtimeout'                       => '10m',
-      'masterport'                       => 443,
-      'extra_main_settings'              => $extra_main_settings,
-      'splay'                            => true,
-      'usecacheonfailure'                => false,
+        'server'                           => $server,
+        'graph'                            => true,
+        'noop'                             => true,
+        'onetime'                          => false,
+        'certname'                         => $::trusted['certname'],
+        'manage_internal_file_permissions' => false,
+        'runtimeout'                       => '10m',
+        'masterport'                       => 443,
+        'extra_main_settings'              => $extra_main_settings,
+        'splay'                            => true,
+        'usecacheonfailure'                => false,
     }),
     noop    => $noop_value,
   }
@@ -181,11 +180,6 @@ class profile::system::openvox (
   file { functions::dir_to_dirs($_facts_d_dir):
     ensure => 'directory',
     noop   => $noop_value,
-    notify => Hocon_Setting[
-      'facter external-dir',
-      'facter ttls',
-      'facter blocklist',
-    ]
   }
 
   $facts_ttls = [
@@ -226,30 +220,24 @@ class profile::system::openvox (
     'simplib__efi_enabled',
   ].sort
 
-  hocon_setting {
-    default:
-      ensure  => present,
-      path    => "${_facter_dir}/facter.conf",
-      noop    => $noop_value,
-      require => File[$_facter_dir],
-      ;
+  $facter_conf_hash = {
+    'global' => {
+      'external-dir' => "${_facter_dir}/facts.d",
+    },
+    'facts'  => {
+      'ttls'      => $facts_ttls,
+      'blocklist' => $facts_blocklist,
+    },
+  }
 
-    'facter external-dir':
-      setting => 'global.external-dir',
-      value   => "${_facter_dir}/facts.d",
-      ;
-
-    'facter ttls':
-      setting => 'facts.ttls',
-      type    => 'array_element',
-      value   => $facts_ttls,
-      ;
-
-    'facter blocklist':
-      setting => 'facts.blocklist',
-      type    => 'array_element',
-      value   => $facts_blocklist,
-      ;
+  file { "${_facter_dir}/facter.conf":
+    ensure  => file,
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    content => stdlib::to_json($facter_conf_hash),
+    noop    => $noop_value,
+    require => File[$_facter_dir],
   }
 
   contain profile::system::openvox::linuxaid_cli
