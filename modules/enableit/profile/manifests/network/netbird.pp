@@ -126,4 +126,10 @@ class profile::network::netbird (
     noop   => $noop_value,
     notify => Exec['netbird_up'],
   }
+
+  if $wireguard_port and $_os_name != 'TurrisOS' {
+    class { 'nftables::rules::wireguard':
+      ports => [$wireguard_port],
+    }
+  }
 }
