@@ -24,7 +24,8 @@ common::user_management::authentication::sudo::manage: false
 common::system::dns::resolver: "dnsmasq"
 common::user_management::motd::enable: false
 
-common::system::obmondo_admin::manage: false
+common::system::obmondo_admin::manage: true
+common::system::obmondo_admin::password: undef
 
 common::system::nsswitch::ethers: []
 common::system::nsswitch::group: []

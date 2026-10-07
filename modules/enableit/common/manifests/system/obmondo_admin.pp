@@ -24,6 +24,7 @@ class common::system::obmondo_admin (
   Optional[Array[String]] $manager_pubkeys = [],
   Optional[Array[String]] $sre_pubkeys     = [],
   Boolean                 $allow_sre       = true,
+  Optional[String]        $password        = '!',
   Eit_types::Noop_Value   $noop_value      = undef,
 ) {
   File {
@@ -75,7 +76,7 @@ class common::system::obmondo_admin (
       shell          => '/bin/bash',
       managehome     => true,
       home           => '/opt/obmondo/home/obmondo-admin',
-      password       => '!',
+      password       => $password,
       purge_ssh_keys => true,
       noop           => $noop_value,
       require        => Group['obmondo'],
