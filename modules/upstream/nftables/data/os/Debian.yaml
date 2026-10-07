@@ -1,0 +1,7 @@
+---
+
+# firewalld is not installed by default in Debian
+nftables::firewalld_enable: false
+nftables::echo: /bin/echo
+nftables::configuration_path: /etc/nftables.conf
+nftables::nft_path: /usr/sbin/nft

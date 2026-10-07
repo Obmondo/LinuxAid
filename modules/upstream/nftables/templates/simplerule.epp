@@ -1,0 +1,90 @@
+<%- | String                   $action,
+      Optional[String]         $comment,
+      Boolean                  $counter,
+      Optional[Nftables::Addr] $daddr,
+      Optional[Nftables::Port] $dport,
+      Optional[String]         $proto,
+      Optional[Nftables::Addr] $saddr,
+      String                   $set_type,
+      Optional[Nftables::Port] $sport,
+      Array[String[1]]         $iifname,
+      Array[String[1]]         $oifname,
+| -%>
+<%- if $proto {
+  $_proto = $proto ? {
+    /tcp(4|6)?/ => 'tcp',
+    /udp(4|6)?/ => 'udp',
+  }
+  $_ip_version_filter = $proto ? {
+    /(tcp4|udp4)/ => 'ip version 4',
+    /(tcp6|udp6)/ => 'ip6 version 6',
+    default       => undef,
+  }
+} else {
+  $_ip_version_filter = undef
+} -%>
+<%- if $daddr {
+  $_daddr = ($daddr =~ Array) ? {
+    true    => "{${$daddr.join(', ')}}",
+    default => $daddr,
+  }
+  if $daddr =~ Stdlib::IP::Address::V6 or $daddr =~ Array[Stdlib::IP::Address::V6] {
+    $_daddr_type = 'ip6'
+  } elsif $daddr =~ Stdlib::IP::Address::V4 or $daddr =~ Array[Stdlib::IP::Address::V4] {
+    $_daddr_type = 'ip'
+  } else {
+    $_daddr_type = $set_type # ip or ip6
+  }
+  $_dst_hosts = "${_daddr_type} daddr ${_daddr}"
+} else {
+  $_dst_hosts = undef
+} -%>
+<%- if $saddr {
+  $_saddr = ($saddr =~ Array) ? {
+    true    => "{${$saddr.join(', ')}}",
+    default => $saddr,
+  }
+  if $saddr =~ Stdlib::IP::Address::V6 or $saddr =~ Array[Stdlib::IP::Address::V6] {
+    $_saddr_type = 'ip6'
+  } elsif $saddr =~ Stdlib::IP::Address::V4 or $saddr =~ Array[Stdlib::IP::Address::V4] {
+    $_saddr_type = 'ip'
+  } else {
+    $_saddr_type = $set_type # ip or ip6
+  }
+  $_src_hosts = "${_saddr_type} saddr ${_saddr}"
+} else {
+  $_src_hosts = undef
+} -%>
+<%- if $proto and $dport {
+  $_dst_port = "${_proto} dport {${Array($dport, true).join(', ')}}"
+} else {
+  $_dst_port = undef
+} -%>
+<%- if $comment {
+  $_comment = "comment \"${comment}\""
+} else {
+  $_comment = undef
+} -%>
+<%- if $proto and $sport {
+  $_src_port = "${_proto} sport {${Array($sport, true).join(', ')}}"
+} else {
+  $_src_port = undef
+} -%>
+<%- if $counter {
+  $_counter = "counter"
+} else {
+  $_counter = undef
+} -%>
+<%- if empty($iifname) {
+  $_iifname = undef
+} else {
+  $iifdata = $iifname.map |String[1] $interface| { "\"${interface}\"" }.join(', ')
+  $_iifname = "iifname { ${iifdata} }"
+} -%>
+<%- if empty($oifname) {
+  $_oifname = undef
+} else {
+  $oifdata = $oifname.map |String[1] $interface| { "\"${interface}\"" }.join(', ')
+  $_oifname = "oifname { ${oifdata} }"
+} -%>
+<%= regsubst(strip([$_ip_version_filter, $_iifname, $_oifname, $_src_port, $_dst_port, $_src_hosts, $_dst_hosts, $_counter, $action, $_comment].join(' ')), '\s+', ' ', 'G') -%>

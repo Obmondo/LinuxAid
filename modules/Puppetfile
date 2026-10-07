@@ -500,3 +500,7 @@ mod 'obmondo/rustfs',
 mod 'obmondo/puppetlabs-zfs_core',
     :git => 'https://github.com/OpenVoxProject/puppetlabs-zfs_core.git',
     :ref => 'v2.0.1'
+
+mod 'obmondo/nftables',
+    :git => 'https://github.com/voxpupuli/puppet-nftables.git',
+    :ref => 'v7.5.0'
