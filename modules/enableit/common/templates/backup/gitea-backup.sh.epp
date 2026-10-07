@@ -150,12 +150,20 @@ upload_to_s3() {
     #
     # The real fix is on the rustfs side; this only keeps the backup honest in
     # the meantime, which is why the size check below is load-bearing.
+    #
+    # Settings measured against the 21GB dump, parts completed per minute:
+    # concurrency 1 -> 1.5, concurrency 4 -> 2.2, concurrency 8 -> 3.8. Higher
+    # concurrency also raises the share of parts that error and get retried, so
+    # max_attempts matters as much as the concurrency: aws-cli defaults to 2
+    # attempts and every run died on "reached max retries: 2" before this.
     cat > "$aws_config" <<EOF
 [default]
+retry_mode = adaptive
+max_attempts = 10
 s3 =
-    multipart_chunksize = 16MB
-    multipart_threshold = 16MB
-    max_concurrent_requests = 2
+    multipart_chunksize = 32MB
+    multipart_threshold = 32MB
+    max_concurrent_requests = 8
 EOF
     trap 'rm -f "$aws_config"' RETURN
 
