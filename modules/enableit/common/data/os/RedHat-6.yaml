@@ -78,7 +78,6 @@ common::system::dns::resolver: 'resolv'
 common::monitor::exporter::enable: false
 common::monitor::exporter::blackbox::enable: false
 common::monitor::exporter::cadvisor::enable: false
-common::monitor::exporter::dns::enable: false
 common::monitor::exporter::elasticsearch::enable: false
 common::monitor::exporter::haproxy::enable: false
 common::monitor::exporter::iptables::enable: false

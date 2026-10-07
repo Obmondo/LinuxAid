@@ -42,8 +42,4 @@ class common::system::dns (
   if $manage {
     contain profile::system::dns
   }
-
-  if $facts['init_system'] == 'systemd' {
-    include common::monitor::exporter::dns
-  }
 }

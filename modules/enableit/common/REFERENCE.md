@@ -41,7 +41,7 @@
 * [`common::monitor::exporter::blackbox`](#common--monitor--exporter--blackbox): Class for managing the Prometheus Blackbox Exporter
 * [`common::monitor::exporter::cadvisor`](#common--monitor--exporter--cadvisor): Class to manage the Prometheus cAdvisor exporter
 * [`common::monitor::exporter::dellhw`](#common--monitor--exporter--dellhw): Class for managing Prometheus dellhw exporter
-* [`common::monitor::exporter::dns`](#common--monitor--exporter--dns): Class for managing the common monitoring exporter DNS
+* [`common::monitor::exporter::dns`](#common--monitor--exporter--dns): Removes the DNS exporter (obmondo-dns-exporter) from hosts that still have it
 * [`common::monitor::exporter::elasticsearch`](#common--monitor--exporter--elasticsearch): Class for managing Prometheus Elasticsearch Exporter
 * [`common::monitor::exporter::filestat`](#common--monitor--exporter--filestat): Class for monitoring file statistics with Prometheus exporter
 * [`common::monitor::exporter::gitlab_runner`](#common--monitor--exporter--gitlab_runner): Class for managing the Prometheus GitLab Runner exporter
@@ -2652,65 +2652,30 @@ Default value: `'127.254.254.254:63386'`
 
 ### <a name="common--monitor--exporter--dns"></a>`common::monitor::exporter::dns`
 
-Class for managing the common monitoring exporter DNS
+Removes the DNS exporter (obmondo-dns-exporter) from hosts that still have it
+
+The DNS exporter has been dropped: its package source is gone from
+obmondo-custom-scripts and nothing consumes its metrics. This class only
+stops and purges the exporter on hosts that still run it, removes its user,
+group, unit and environment file, and exports the scrape job with
+ensure => absent so the Prometheus side drops it too.
+
+NOTE: delete this class and its include in common::monitor::exporter once
+every host has applied it (one release is enough).
 
 #### Parameters
 
 The following parameters are available in the `common::monitor::exporter::dns` class:
 
-* [`enable`](#-common--monitor--exporter--dns--enable)
 * [`noop_value`](#-common--monitor--exporter--dns--noop_value)
-* [`listen_address`](#-common--monitor--exporter--dns--listen_address)
-* [`interval_seconds`](#-common--monitor--exporter--dns--interval_seconds)
-* [`domains`](#-common--monitor--exporter--dns--domains)
-
-##### <a name="-common--monitor--exporter--dns--enable"></a>`enable`
-
-Data type: `Boolean`
-
-Enable the DNS exporter monitor. Defaults to true.
-
-Default value: `$common::monitor::exporter::enable`
 
 ##### <a name="-common--monitor--exporter--dns--noop_value"></a>`noop_value`
 
 Data type: `Eit_types::Noop_Value`
 
-The value to use for noop mode. Defaults to false.
+The value to use for noop mode. Defaults to the monitoring exporter noop value.
 
 Default value: `$common::monitor::exporter::noop_value`
-
-##### <a name="-common--monitor--exporter--dns--listen_address"></a>`listen_address`
-
-Data type: `Eit_types::IPPort`
-
-The IP and port to listen on. Defaults to '127.254.254.254:63395'.
-
-Default value: `'127.254.254.254:63395'`
-
-##### <a name="-common--monitor--exporter--dns--interval_seconds"></a>`interval_seconds`
-
-Data type: `Eit_types::Duration::Seconds`
-
-The interval in seconds for the metrics. Defaults to 120.
-
-Default value: `120`
-
-##### <a name="-common--monitor--exporter--dns--domains"></a>`domains`
-
-Data type: `Array[Eit_types::Hostname]`
-
-Array of domain names to monitor. Defaults to ['nrk.no', 'vg.no', 'example.com'].
-
-Default value:
-
-```puppet
-[
-    'nrk.no',
-    'vg.no',
-    'example.com',
-  ]
-```
 
 ### <a name="common--monitor--exporter--elasticsearch"></a>`common::monitor::exporter::elasticsearch`
 
