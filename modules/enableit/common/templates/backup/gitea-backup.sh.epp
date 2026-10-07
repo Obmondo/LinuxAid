@@ -136,26 +136,31 @@ upload_to_s3() {
     local attempt aws_config
 
     aws_config=$(mktemp)
-    # rustfs stalls intermittently on UploadPart. Measured directly against
-    # rustfs 1.0.1 over loopback, no proxy in the path, 25 sequential 16MB PUTs:
-    # median 0.8s, p90 9.2s, max 120s - all returning 200. A multi-thousand-part
-    # upload therefore hits a stall longer than any sane read timeout almost
-    # every run; one timed-out part aborts the whole multipart upload and no
-    # object is created.
+    # The S3 endpoint stalls intermittently on UploadPart, so a multi-hundred
+    # part upload reliably trips over it. Measured on the offsite host with 25
+    # sequential 16MB PUTs against the same rustfs build, varying only the
+    # filesystem under its data directory:
     #
-    # Part size is NOT the trigger - 64MB, 16MB and 8MB parts all fail, and the
-    # same 16MB part that stalled for 180s completed in 298ms minutes later.
-    # What helps is sampling that latency tail less often: fewer parts in flight
-    # at once, and a read timeout well above the observed worst case.
+    #   ext4   min=739  median=1031  p90=2308  max=3711   ms
+    #   ZFS    min=455  median=803   p90=9237  max=120096 ms
     #
-    # The real fix is on the rustfs side; this only keeps the backup honest in
-    # the meantime, which is why the size check below is load-bearing.
+    # Medians match; only the tail differs, by a factor of 32. The ZFS pool is
+    # a raidz1 at 86% capacity and 38% fragmentation, where the write allocator
+    # starts searching for contiguous space - which is why requests stall for
+    # minutes while the disks sit idle, and why restarting the server appears to
+    # help for a while without changing anything. This is a storage problem to
+    # fix on the host, not a client problem and not an S3 server bug.
     #
-    # Settings measured against the 21GB dump, parts completed per minute:
-    # concurrency 1 -> 1.5, concurrency 4 -> 2.2, concurrency 8 -> 3.8. Higher
-    # concurrency also raises the share of parts that error and get retried, so
-    # max_attempts matters as much as the concurrency: aws-cli defaults to 2
-    # attempts and every run died on "reached max retries: 2" before this.
+    # Part size is not a factor: 64MB, 16MB and 8MB all fail, and the same 16MB
+    # request that stalled for 180s completed in 298ms minutes later.
+    #
+    # What the settings below can do is survive the stalls rather than avoid
+    # them. Parts completed per minute against the 21GB dump: concurrency 1 ->
+    # 1.5, 4 -> 2.2, 8 -> 3.8. max_attempts matters more than concurrency -
+    # aws-cli defaults to 2 and every run died on "reached max retries: 2".
+    #
+    # None of this makes the upload reliable while the pool stays full, which is
+    # why the size check below is load-bearing rather than belt-and-braces.
     cat > "$aws_config" <<EOF
 [default]
 retry_mode = adaptive
