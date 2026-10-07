@@ -17,6 +17,11 @@ Some family and some specific os are supported by this module
 * gentoo operating system
 * archlinux operating system
 * amazon operating system
+* openwrt / turrisos operating system
+
+### Facts
+* `sudo` - structured fact, returns `kind` and `version`
+* `sudoversion` - deprecated, use the `sudo` fact instead
 
 ## Usage
 

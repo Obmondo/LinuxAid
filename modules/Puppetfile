@@ -173,7 +173,7 @@ mod 'saz/memcached',
 
 mod 'saz/sudo',
     :git => 'https://github.com/saz/puppet-sudo.git',
-    :ref => 'v10.0.0'
+    :ref => 'feat/add-openwrt-support'
 
 mod 'saz/limits',
     :git => 'https://github.com/saz/puppet-limits.git',
