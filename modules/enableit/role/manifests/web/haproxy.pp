@@ -26,12 +26,14 @@
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
+# @param acme_renew_days Renew a native ACME certificate once it has fewer than this many days left. Between 8 and 30, defaults to 30.
+#
 # @param log_compressed Boolean to enable or disable compressed logs. Defaults to true.
 #
 # @param __blendable
 # Boolean to indicate if blending is enabled.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, acme_renew_days
 #
 # @groups configuration manual_config, configure, version
 #
@@ -58,6 +60,7 @@ class role::web::haproxy (
   ]]                            $firewall               = {},
   Eit_types::Version            $version                = '3.2',
   Eit_types::Email              $acme_contact           = 'ops@enableit.dk',
+  Integer[8,30]                 $acme_renew_days        = 30,
   Boolean                       $log_compressed         = true,
   Boolean                       $__blendable,
 ) inherits role::web {

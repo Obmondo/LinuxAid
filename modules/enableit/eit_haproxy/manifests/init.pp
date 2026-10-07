@@ -36,6 +36,8 @@
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
+# @param acme_renew_days Renew a native ACME certificate once it has fewer than this many days left. Between 8 and 30, defaults to 30.
+#
 # @param ca_type ACME CA type. Use 'production' or 'staging'. Defaults to 'production'.
 #
 # @param service_ensure The desired state of the haproxy service. Defaults to true.
@@ -48,7 +50,7 @@
 #
 # @param log_dir The directory for log files. Defaults to '/var/log'.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, ca_type
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, acme_renew_days, ca_type
 #
 # @groups configuration manual_config, configure, service_options, version, defaults_file_path, restart_command
 #
@@ -83,6 +85,7 @@ class eit_haproxy (
   Enum['Modern','Intermediate'] $encryption_ciphers = 'Modern',
   Eit_types::Version            $version            = '3.2',
   Eit_types::Email              $acme_contact       = 'ops@enableit.dk',
+  Integer[8,30]                 $acme_renew_days    = 30,
   Enum['production','staging']  $ca_type            = 'production',
   Eit_types::Service_Ensure     $service_ensure     = true,
   Eit_types::Service_Enable     $service_enable     = true,
@@ -153,7 +156,8 @@ class eit_haproxy (
 
     if $_use_native_acme {
       class { 'eit_haproxy::native_acme':
-        domains => $domains,
+        domains    => $domains,
+        renew_days => $acme_renew_days,
       }
     }
 

@@ -65,7 +65,7 @@ openssl req -new \
 
 ### Step 3: Sign the Expired Placeholder Certificate
 
-LinuxAid runs HAProxy with its own ACME scheduler switched off and renews certificates with `haproxy-acme-renew.service`, which treats any certificate expiring within 30 days as due. A born-expired certificate (`-days -1`) is therefore requested from Let's Encrypt on the next run.
+LinuxAid runs HAProxy with its own ACME scheduler switched off and renews certificates with `haproxy-acme-renew.service`, which treats any certificate expiring within `acme_renew_days` (30 by default) as due. A born-expired certificate (`-days -1`) is therefore requested from Let's Encrypt on the next run.
 
 ```bash
 openssl x509 -req \

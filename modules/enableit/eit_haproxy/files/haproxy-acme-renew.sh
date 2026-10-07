@@ -1,19 +1,20 @@
 #!/bin/bash
 #
-# Renew HAProxy ACME certificates that expire within 30 days, one at a time,
-# and dump each renewed certificate to disk.
+# Renew HAProxy ACME certificates that expire within <days> days, one at a
+# time, and dump each renewed certificate to disk.
 #
 # HAProxy runs with "acme.scheduler off" because its own scheduler starts
 # every due certificate in the same pass.
 #
 set -u
 
+DAYS="${1:?usage: $0 <days>}"
 SOCKET="${SOCKET:-/var/run/haproxy.sock}"
 CRT_LIST=/etc/haproxy/crt-list.txt
 
 while read -r cert; do
-  # still valid for 30 days
-  openssl x509 -checkend 2592000 -noout -in "$cert" > /dev/null && continue
+  # still valid for that long
+  openssl x509 -checkend "$((DAYS * 86400))" -noout -in "$cert" > /dev/null && continue
 
   echo "renewing ${cert}"
   echo "acme renew ${cert}" | socat - "UNIX-CONNECT:${SOCKET}" || exit 1

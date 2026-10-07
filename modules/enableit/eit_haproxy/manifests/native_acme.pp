@@ -14,9 +14,10 @@
 #   - HAProxy runs with `acme.scheduler off` (basic_config.pp). Its own
 #     scheduler starts every due cert in the same pass, which sends hundreds
 #     of orders to LE at once on a large host.
-#   - haproxy-acme-renew.sh renews certs that expire within 30 days, one a
-#     minute, and dumps each to disk. It runs every 12 hours and on every
-#     haproxy start, so a new domain gets its cert right after the restart.
+#   - haproxy-acme-renew.sh renews certs that expire within $renew_days days,
+#     one a minute, and dumps each to disk. It runs every 12 hours and on
+#     every haproxy start, so a new domain gets its cert right after the
+#     restart.
 #   - The placeholder is born expired (`days => -1`), so it is due on the
 #     first run.
 #
@@ -36,8 +37,14 @@
 #
 # @param domains
 #   The eit_haproxy domains hash (group => { force_https, domains, ... }).
+#
+# @param renew_days
+#   Renew a certificate once it has fewer than this many days left. It has to
+#   start before the 7-day expiry alert and stay well under the certificate
+#   lifetime, or every run would renew everything.
 class eit_haproxy::native_acme (
-  Eit_haproxy::Domains $domains = {},
+  Eit_haproxy::Domains $domains    = {},
+  Integer[8,30]        $renew_days = 30,
 ) {
   $_acme_dir      = '/etc/ssl/private/acme'
   $_pem_dir       = '/etc/haproxy/certs'
@@ -200,13 +207,13 @@ class eit_haproxy::native_acme (
     WantedBy=timers.target
     | EOT
 
-  $_renew_service = @(EOT)
+  $_renew_service = @("EOT")
     [Unit]
     Description=Renew HAProxy ACME certificates that are due
     After=haproxy.service
     [Service]
     Type=oneshot
-    ExecStart=/opt/obmondo/bin/haproxy-acme-renew.sh
+    ExecStart=/opt/obmondo/bin/haproxy-acme-renew.sh ${renew_days}
     | EOT
 
   systemd::timer { 'haproxy-acme-renew.timer':
@@ -223,9 +230,14 @@ class eit_haproxy::native_acme (
   }
 
   # Run the renew job on every haproxy start.
+  $_renew_dropin = @(EOT)
+    [Unit]
+    Wants=haproxy-acme-renew.service
+    | EOT
+
   systemd::dropin_file { 'acme-renew.conf':
     unit           => 'haproxy.service',
-    content        => "[Unit]\nWants=haproxy-acme-renew.service\n",
+    content        => $_renew_dropin,
     notify_service => false,
   }
 }
