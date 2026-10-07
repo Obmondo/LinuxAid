@@ -29,16 +29,21 @@ class common (
     }
 
     # Create Obmondo group for exporter to run under this group
+    # NOTE: the group and the /opt/obmondo directories are never noop: the
+    # subscription data forces obmondo_admin, monitor and openvox to apply
+    # even in a noop run, and all of them need the group and directories
+    # (first run on a new host fails with "group 'obmondo' does not exist"
+    # and "parent directory /opt/obmondo/etc does not exist" otherwise).
     group { 'obmondo':
       ensure => present,
       system => true,
-      noop   => $noop_value,
+      noop   => false,
     }
 
     file {
       default:
         ensure => ensure_dir($::obmondo_monitor), #lint:ignore:top_scope_facts
-        noop   => $noop_value,
+        noop   => false,
         ;
 
       [
