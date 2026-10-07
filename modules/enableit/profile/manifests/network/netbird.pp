@@ -126,27 +126,4 @@ class profile::network::netbird (
     noop   => $noop_value,
     notify => Exec['netbird_up'],
   }
-
-  firewall { '0001 allow netbird turn service':
-    ensure => ensure_present($enable),
-    proto  => 'udp',
-    jump   => 'accept',
-    dport  => 3478,
-  }
-
-  firewall { '0001 allow netbird turn relay connection':
-    ensure => ensure_present($enable),
-    proto  => 'udp',
-    jump   => 'accept',
-    dport  => '49152-65535',
-  }
-
-  if $wireguard_port {
-    firewall { '0002 allow netbird wireguard mesh':
-      ensure => ensure_present($enable),
-      proto  => 'udp',
-      jump   => 'accept',
-      dport  => $wireguard_port,
-    }
-  }
 }
