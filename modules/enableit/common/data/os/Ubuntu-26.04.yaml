@@ -4,6 +4,10 @@ common::software::nvidia_driver::packages:
   - "cuda-drivers-590"
 common::monitor::exporter::enable: true
 common::network::service_name: "systemd-networkd"
+# systemd-networkd is the network service on 26.04 (netplan renders into it),
+# so keep the service managed (enabled and running) even when the interfaces
+# themselves are not managed by common::network.
+common::system::systemd::manage_networkd: true
 common::monitor::exporter::security::enable: true
 common::software::rustdesk::client_extra_dependencies:
   - libgtk-3-0
