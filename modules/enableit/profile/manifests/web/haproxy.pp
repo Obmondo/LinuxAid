@@ -2,13 +2,15 @@
 #
 # @param acme_contact The contact email for Let's Encrypt ACME. Defaults to 'ops@enableit.dk'.
 #
+# @param acme_renew_days Renew a native ACME certificate once it has fewer than this many days left. Between 8 and 30, defaults to 30.
+#
 # @param encryption_ciphers The encryption ciphers to use. Defaults to 'Modern'.
 #
 # @param firewall The firewall configurations. Defaults to an empty hash.
 #
 # @param log_compressed Boolean to enable or disable compressed logs.
 #
-# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact
+# @groups security ddos_protection, https, use_hsts, use_lets_encrypt, encryption_ciphers, acme_contact, acme_renew_days
 #
 # @groups configuration manual_config, configure, version
 #
@@ -30,6 +32,7 @@ class profile::web::haproxy (
   Boolean                       $use_lets_encrypt       = $role::web::haproxy::use_lets_encrypt,
   Eit_types::Version            $version                = $role::web::haproxy::version,
   Eit_types::Email              $acme_contact           = $role::web::haproxy::acme_contact,
+  Integer[8,30]                 $acme_renew_days        = $role::web::haproxy::acme_renew_days,
   Enum['Modern','Intermediate'] $encryption_ciphers     = $role::web::haproxy::encryption_ciphers,
   Hash[Eit_types::IP,Variant[
       Array[Stdlib::Port],
@@ -60,6 +63,7 @@ class profile::web::haproxy (
     http               => $http,
     use_lets_encrypt   => $use_lets_encrypt,
     acme_contact       => $acme_contact,
+    acme_renew_days    => $acme_renew_days,
     ca_type            => 'production',
     use_hsts           => $use_hsts,
     mode               => 'http',
