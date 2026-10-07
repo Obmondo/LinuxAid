@@ -13,6 +13,7 @@ S3_BUCKET='<%= $s3_bucket %>'
 S3_ENDPOINT='<%= $s3_endpoint %>'
 SOURCE_DIR='<%= $source_dir %>'
 UPLOAD_TIMEOUT=<%= $upload_timeout %> # Read timeout in seconds for the S3 upload
+MIN_DUMP_BYTES=<%= $min_dump_bytes %> # A dump smaller than this is treated as failed
 
 LOCK_FILE="/run/gitea-backup.lock"
 S3_BUCKET_NAME="${S3_BUCKET#s3://}"
@@ -106,50 +107,107 @@ abort_stale_multipart_upload() {
     fi
 }
 
-# 7. Upload the dump to S3
+# 7. Verify the dump before anything is allowed to rely on it
+#
+# A dump that is truncated or corrupt is still a file, and with
+# max_local_backups=1 and max_s3_backups=<%= $max_s3_backups %> an unchecked bad dump
+# propagates to S3 and evicts a good one. Check it before it can do that.
+verify_dump() {
+    local size
+
+    size=$(stat -c %s "$LATEST_DUMP")
+    if [ "$size" -lt "$MIN_DUMP_BYTES" ]; then
+        log "Error: dump is only ${size} bytes, below the ${MIN_DUMP_BYTES} byte floor."
+        return 1
+    fi
+
+    # -t reads every entry and checks its CRC, so this catches truncation and
+    # silent corruption, not just a malformed trailer.
+    if ! unzip -t -qq "$LATEST_DUMP" >/dev/null 2>&1; then
+        log "Error: dump failed zip integrity check."
+        return 1
+    fi
+
+    log "Dump verified: ${size} bytes, archive intact."
+}
+
+# 8. Upload the dump to S3
 upload_to_s3() {
     local attempt aws_config
 
     aws_config=$(mktemp)
+    # rustfs stalls intermittently on UploadPart. Measured directly against
+    # rustfs 1.0.1 over loopback, no proxy in the path, 25 sequential 16MB PUTs:
+    # median 0.8s, p90 9.2s, max 120s - all returning 200. A multi-thousand-part
+    # upload therefore hits a stall longer than any sane read timeout almost
+    # every run; one timed-out part aborts the whole multipart upload and no
+    # object is created.
+    #
+    # Part size is NOT the trigger - 64MB, 16MB and 8MB parts all fail, and the
+    # same 16MB part that stalled for 180s completed in 298ms minutes later.
+    # What helps is sampling that latency tail less often: fewer parts in flight
+    # at once, and a read timeout well above the observed worst case.
+    #
+    # The real fix is on the rustfs side; this only keeps the backup honest in
+    # the meantime, which is why the size check below is load-bearing.
     cat > "$aws_config" <<EOF
 [default]
 s3 =
-    multipart_chunksize = 64MB
-    multipart_threshold = 64MB
+    multipart_chunksize = 16MB
+    multipart_threshold = 16MB
+    max_concurrent_requests = 2
 EOF
     trap 'rm -f "$aws_config"' RETURN
 
     log "Moving backup to S3..."
 
     for attempt in 1 2 3; do
+        # The exit status is not trustworthy in either direction, so it only
+        # decides what to log - s3_object_matches_local decides the outcome.
+        #
+        # Exit 0 with no object stored: seen on 3 of 4 failing runs. aws-cli
+        # crashes formatting the error ("AttributeError: 'NoneType' object has
+        # no attribute 'get'" in awscli/customizations/s3/results.py) and the
+        # failure never reaches the exit path, so a 21GB dump reported success
+        # with nothing in the bucket.
+        #
+        # Exit non-zero with the object intact: a CompleteMultipartUpload slower
+        # than the read timeout gets retried by botocore and reports InvalidPart
+        # even though the object landed.
         if AWS_CONFIG_FILE="$aws_config" aws s3 cp "$LATEST_DUMP" "$S3_BUCKET" \
             --endpoint-url="$S3_ENDPOINT" \
             --cli-read-timeout "$UPLOAD_TIMEOUT" \
             --only-show-errors; then
-            log "Uploaded $(basename "$LATEST_DUMP") to $S3_BUCKET"
-            return 0
+            if s3_object_matches_local; then
+                log "Uploaded $(basename "$LATEST_DUMP") to $S3_BUCKET"
+                return 0
+            fi
+            log "Upload attempt $attempt reported success but no complete object is in S3."
+        else
+            if s3_object_matches_local; then
+                log "Upload reported failure but the object is complete in S3."
+                return 0
+            fi
+            log "Upload attempt $attempt failed."
         fi
 
-        # A CompleteMultipartUpload slower than the read timeout gets retried by
-        # botocore and reports InvalidPart even though the object landed intact.
-        if s3_object_matches_local; then
-            log "Upload reported failure but the object is complete in S3."
-            return 0
-        fi
-
-        log "Upload attempt $attempt failed."
         abort_stale_multipart_upload
     done
 
     return 1
 }
 
-# 8. Rotate S3 backups
+# 9. Rotate S3 backups
 perform_s3_backup_rotation() {
     local s3_backups num_s3_backups num_s3_to_remove older_s3_backups older_backup
 
     log "Performing S3 backup rotation: Deleting older backups..."
-    s3_backups=$(aws s3 ls "$S3_BUCKET" --recursive --endpoint-url="$S3_ENDPOINT" | sort -k1,2 | awk '{print $4}')
+    # Only our own dumps are eligible. Listing the whole bucket would let any
+    # other object - a test upload, something a colleague parked here - be
+    # treated as an old backup and deleted in its place.
+    s3_backups=$(aws s3 ls "$S3_BUCKET" --recursive --endpoint-url="$S3_ENDPOINT" \
+        | sort -k1,2 \
+        | awk -v prefix="$GITEA_DUMP_FILENAME-" '$4 ~ "^" prefix {print $4}')
 
     if [ -z "$s3_backups" ]; then
         return 0
@@ -203,7 +261,7 @@ create_backup_directory
 perform_local_backup_rotation
 dump_gitea_data
 
-if move_latest_dump; then
+if move_latest_dump && verify_dump; then
     upload_to_s3 || rc=1
 else
     rc=1
