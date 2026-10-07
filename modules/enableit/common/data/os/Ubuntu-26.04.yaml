@@ -4,6 +4,8 @@ common::software::nvidia_driver::packages:
   - "cuda-drivers-590"
 common::monitor::exporter::enable: true
 common::network::service_name: "systemd-networkd"
+# the ubuntu26.04 openvox repo starts at 8.25.0, the global default 8.24.2 does not exist there
+common::system::openvox::version: "8.28.1"
 # systemd-networkd is the network service on 26.04 (netplan renders into it),
 # so keep the service managed (enabled and running) even when the interfaces
 # themselves are not managed by common::network.
