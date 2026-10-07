@@ -8,3 +8,7 @@ common::monitor::exporter::security::enable: true
 common::software::rustdesk::client_extra_dependencies:
   - libgtk-3-0
   - libasound2
+# obmondo-dns-exporter and obmondo-mtail-exporter are not built for
+# Ubuntu 26.04, so keep them off until the packages exist.
+common::monitor::exporter::dns::enable: false
+common::monitor::exporter::mtail::enable: false
