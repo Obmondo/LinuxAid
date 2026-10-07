@@ -65,7 +65,7 @@ openssl req -new \
 
 ### Step 3: Sign the Expired Placeholder Certificate
 
-HAProxy 3.2+'s native ACME scheduler uses validity checks (`acme_will_expire()`) during configuration post-parsing. Generating a born-expired certificate (`-days -1`) prompts HAProxy to immediately trigger an HTTP-01 challenge against Let's Encrypt upon startup/reload.
+LinuxAid runs HAProxy with its own ACME scheduler switched off and renews certificates with `haproxy-acme-renew.service`, which treats any certificate expiring within 30 days as due. A born-expired certificate (`-days -1`) is therefore requested from Let's Encrypt on the next run.
 
 ```bash
 openssl x509 -req \
@@ -134,4 +134,11 @@ backend this_example_com
    systemctl reload haproxy
    ```
 
-Upon reload, HAProxy 3.2+'s native ACME engine will automatically request a real certificate from Let's Encrypt. The background systemd timer (`haproxy-dump-certs.timer`) will automatically dump the in-memory issued certificate back to `/etc/haproxy/certs/this.example.com.pem` within 30 minutes for disk persistence across future restarts.
+3. Request the certificate. A reload does not trigger this on its own; a restart does:
+
+   ```bash
+   systemctl start --no-block haproxy-acme-renew.service
+   journalctl -u haproxy-acme-renew.service -f
+   ```
+
+The renew job asks HAProxy's native ACME engine for a real certificate from Let's Encrypt and, about a minute later, dumps it to `/etc/haproxy/certs/this.example.com.pem` so it survives future restarts. The background systemd timer (`haproxy-dump-certs.timer`) repeats that dump every 30 minutes as a safety net.

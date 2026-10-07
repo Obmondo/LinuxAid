@@ -8,24 +8,17 @@
 #      rebuilt once it exists, which protects real LE certs that
 #      haproxy-dump-certs.sh later writes back to the same path.
 #   3. The crt-list is rendered as a single file from an EPP template,
-#      binding each PEM to the `acme LE` section. Notifying haproxy reload
-#      causes haproxy's native ACME scheduler to fire on the new worker's
-#      config postparse — see below.
+#      binding each PEM to the `acme LE` section.
 #
-# How issuance happens (no custom bootstrap script needed):
-#   - HAProxy 3.2 has a native ACME scheduler that's enabled by default
-#     (`global_ssl.acme_scheduler = 1`) and registered as a config
-#     postparser (REGISTER_CONFIG_POSTPARSER). Every config parse — initial
-#     start AND every reload — wakes the scheduler task immediately
-#     (task_wakeup with TASK_WOKEN_INIT, see src/acme.c:577-587 at v3.2.0).
-#   - The scheduler walks every cert in the crt-list, calls
-#     acme_will_expire() (renewal window = validity / 12), and for our
-#     `days => -1` placeholder this is trivially true (notAfter is in the
-#     past, so any future-time check passes). Renewal is kicked off
-#     immediately via acme_start_task().
-#   - LE responds in ~5-30s, scheduler swaps the real cert into memory at
-#     the same crt-list slot.
-#   - After that, the scheduler re-runs every 12h (acme.c:2147).
+# How issuance happens:
+#   - HAProxy runs with `acme.scheduler off` (basic_config.pp). Its own
+#     scheduler starts every due cert in the same pass, which sends hundreds
+#     of orders to LE at once on a large host.
+#   - haproxy-acme-renew.sh renews certs that expire within 30 days, one a
+#     minute, and dumps each to disk. It runs every 12 hours and on every
+#     haproxy start, so a new domain gets its cert right after the restart.
+#   - The placeholder is born expired (`days => -1`), so it is due on the
+#     first run.
 #
 # Persistence to disk:
 #   - HAProxy 3.2 does NOT auto-write issued certs (verified against
@@ -33,12 +26,7 @@
 #     certs live in memory and are announced via the dpapi sink).
 #   - haproxy-dump-certs.timer (defined below) fires every 30 minutes and
 #     pulls any in-memory cert that differs from disk via the admin socket.
-#
-# Known race: cert lives in memory until the next 03:00 dump. If haproxy
-# restarts in that window, the placeholder is reloaded and the scheduler
-# re-issues from LE (using some rate-limit budget). For Obmondo nodes
-# restarts are rare in steady state, so LE's duplicate-cert limit (5/week
-# per identical SAN set) absorbs the gap comfortably.
+#     It covers certs the renew run did not dump itself.
 #
 # Directory split:
 #   $_acme_dir (/etc/ssl/private/acme) — .crt + .key (puppet-managed, never
@@ -89,8 +77,7 @@ class eit_haproxy::native_acme (
     $_safe = regsubst($group_name, /[^a-zA-Z0-9.-]/, '_', 'G')
 
     # Self-signed placeholder cert + key. Born expired (days => -1) so
-    # haproxy's ACME scheduler treats it as renewal-pending on the first
-    # config postparse and triggers LE issuance immediately.
+    # haproxy-acme-renew.sh treats it as due on its first run.
     #
     # NOTE on days => -1: this works because the provider's CSR branch shells
     # out to `openssl x509 -req -days <n> ...` which accepts negative values.
@@ -192,5 +179,53 @@ class eit_haproxy::native_acme (
     active          => true,
     enable          => true,
     require         => [File['/opt/obmondo/bin/haproxy-dump-certs.sh'], Package['socat']],
+  }
+
+  # Renewal pipeline — see header comment.
+  file { '/opt/obmondo/bin/haproxy-acme-renew.sh':
+    ensure => file,
+    source => 'puppet:///modules/eit_haproxy/haproxy-acme-renew.sh',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  $_renew_timer = @(EOT)
+    [Unit]
+    Description=Renew HAProxy ACME certificates that are due
+    [Timer]
+    OnCalendar=*-*-* 00/12:00:00
+    RandomizedDelaySec=30m
+    [Install]
+    WantedBy=timers.target
+    | EOT
+
+  $_renew_service = @(EOT)
+    [Unit]
+    Description=Renew HAProxy ACME certificates that are due
+    After=haproxy.service
+    [Service]
+    Type=oneshot
+    ExecStart=/opt/obmondo/bin/haproxy-acme-renew.sh
+    | EOT
+
+  systemd::timer { 'haproxy-acme-renew.timer':
+    ensure          => present,
+    timer_content   => $_renew_timer,
+    service_content => $_renew_service,
+    active          => true,
+    enable          => true,
+    require         => [
+      File['/opt/obmondo/bin/haproxy-acme-renew.sh'],
+      File['/opt/obmondo/bin/haproxy-dump-certs.sh'],
+      Package['socat'],
+    ],
+  }
+
+  # Run the renew job on every haproxy start.
+  systemd::dropin_file { 'acme-renew.conf':
+    unit           => 'haproxy.service',
+    content        => "[Unit]\nWants=haproxy-acme-renew.service\n",
+    notify_service => false,
   }
 }

@@ -84,6 +84,8 @@ class eit_haproxy::basic_config (
   $_native_acme_global_options = if $_use_native_acme {
     {
       'expose-experimental-directives'  => '',
+      # renewals are driven by haproxy-acme-renew.timer (eit_haproxy::native_acme)
+      'acme.scheduler'                  => 'off',
       'ssl-default-bind-ciphersuites'   => 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256',
     }
   } else {
