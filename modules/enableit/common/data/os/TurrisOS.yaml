@@ -51,3 +51,4 @@ common::monitor::exporter::node::smartmon::enable: false
 
 common::system::package::default_packages:
   - lscpu
+  - sudo
