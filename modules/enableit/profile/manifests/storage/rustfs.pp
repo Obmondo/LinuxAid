@@ -5,6 +5,7 @@
 # @param secret_key The S3 secret access key.
 # @param env_vars Additional hash of environment variables for the container.
 # @param enable Whether to enable and manage the rustfs component.
+# @param listen_address Address the container publishes its ports on.
 #
 class profile::storage::rustfs (
   String[1]            $access_key    = $role::storage::rustfs::access_key,
@@ -12,13 +13,15 @@ class profile::storage::rustfs (
   Boolean              $enable        = $role::storage::rustfs::enable,
   Stdlib::Unixpath     $data_dir      = $role::storage::rustfs::data_dir,
   Hash                 $env_vars      = {},
+  String[1]            $listen_address = $role::storage::rustfs::listen_address,
 ) {
   # 1. Manage RustFS
   class { 'rustfs':
-    access_key => $access_key,
-    secret_key => $secret_key,
-    enable     => $enable,
-    data_dir   => $data_dir,
-    env_vars   => $env_vars,
+    access_key     => $access_key,
+    secret_key     => $secret_key,
+    enable         => $enable,
+    data_dir       => $data_dir,
+    env_vars       => $env_vars,
+    listen_address => $listen_address,
   }
 }
