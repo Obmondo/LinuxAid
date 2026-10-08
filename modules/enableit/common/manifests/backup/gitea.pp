@@ -15,7 +15,9 @@
 # @param secret_access_key S3 secret for that key. Keep it in eyaml.
 #
 # @param min_dump_bytes A dump smaller than this is treated as failed rather
-#   than uploaded. Guards against a truncated dump evicting good backups.
+#   than uploaded. Guards against a truncated dump evicting good backups. This
+#   is only a floor - verify_dump also requires the dump to be at least half
+#   the size of the previous one, which is what actually catches truncation.
 #
 # @groups backup enable
 #
@@ -31,7 +33,7 @@ class common::backup::gitea (
   Stdlib::Absolutepath                         $source_dir        = '/opt/gitea/data/git',
   Optional[String[1]]                          $access_key_id     = undef,
   Optional[Sensitive[String[1]]]               $secret_access_key = undef,
-  Integer[1]                                   $min_dump_bytes    = 1048576,
+  Integer[1]                                   $min_dump_bytes    = 1073741824,
 ) {
 
   # verify_dump checks the archive's CRCs before the dump is uploaded or allowed

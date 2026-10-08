@@ -121,6 +121,21 @@ verify_dump() {
         return 1
     fi
 
+    # An absolute floor cannot tell a whole dump from a truncated one - this
+    # instance's dump is ~22GB, so a dump cut to 1GB clears any fixed floor.
+    # The previous dump is still on disk at this point (local rotation runs
+    # before the new dump is taken), so compare against it: a healthy dump
+    # grows slowly, and anything under half the previous size is a bad dump.
+    local prev prev_size
+    prev=$(ls -1t "$BACKUP_DIR"/"${GITEA_DUMP_FILENAME}"-*.zip 2>/dev/null | sed -n 2p)
+    if [ -n "$prev" ] && [ -s "$prev" ]; then
+        prev_size=$(stat -c %s "$prev")
+        if [ "$size" -lt "$(( prev_size / 2 ))" ]; then
+            log "Error: dump is ${size} bytes, less than half the previous ${prev_size} bytes."
+            return 1
+        fi
+    fi
+
     # -t reads every entry and checks its CRC, so this catches truncation and
     # silent corruption, not just a malformed trailer.
     if ! unzip -t -qq "$LATEST_DUMP" >/dev/null 2>&1; then
@@ -280,10 +295,23 @@ else
     rc=1
 fi
 
-# Rotation runs whether or not the upload succeeded, otherwise one failed upload
-# leaves both the bucket and the disk growing without bound.
+# S3 rotation runs either way, otherwise a run of failures leaves the bucket
+# growing without bound.
 perform_s3_backup_rotation
-perform_local_backup_rotation
+
+# Local rotation is different. With max_local_backups=1 it prunes the previous
+# dump, and if this run's upload failed that previous dump may be the only copy
+# of anything that is not in the bucket - which is exactly how the dump from
+# 7 October was lost: the upload reported success, stored nothing, and rotation
+# then deleted the file. On failure keep one extra dump so a bad run cannot
+# destroy the last good one, while still bounding disk growth.
+if [ "$rc" -eq 0 ]; then
+    perform_local_backup_rotation
+else
+    log "Upload failed, keeping one extra local dump."
+    MAX_LOCAL_BACKUPS=$((MAX_LOCAL_BACKUPS + 1))
+    perform_local_backup_rotation
+fi
 
 if [ "$rc" -ne 0 ]; then
     log "Backup process completed with errors."
