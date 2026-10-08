@@ -109,6 +109,16 @@ class common::monitor::prometheus::server (
     }],
   }
 
+  if $common::monitor::prometheus::init_style == 'procd' {
+    $_flags = $prometheus::config::daemon_flags.join(' ')
+
+    functions::procd_service { 'prometheus':
+      command    => "${prometheus::bin_dir}/prometheus ${_flags}",
+      user       => 'prometheus',
+      noop_value => $noop_value,
+    }
+  }
+
   Monitor::Threshold <<| tag == $::trusted['certname'] |>>
   Monitor::Alert <<| tag == $::trusted['certname'] |>>
 
