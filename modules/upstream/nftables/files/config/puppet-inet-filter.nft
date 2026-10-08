@@ -1,0 +1,2 @@
+  include "inet-filter-helper-*.nft"
+  include "inet-filter-chain-*.nft"

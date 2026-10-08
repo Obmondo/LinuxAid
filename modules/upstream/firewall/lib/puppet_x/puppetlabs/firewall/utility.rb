@@ -43,6 +43,8 @@ module PuppetX::Firewall # rubocop:disable Style/ClassAndModuleChildren
               case protocol
               when 'IPv4', 'iptables'
                 ['/bin/sh', '-c', '/usr/sbin/iptables-save > /etc/sysconfig/iptables']
+              when 'IPv6', 'ip6tables'
+                ['/bin/sh', '-c', '/usr/sbin/ip6tables-save > /etc/sysconfig/ip6tables']
               end
             else
               # Catch unsupported OSs
@@ -93,27 +95,29 @@ module PuppetX::Firewall # rubocop:disable Style/ClassAndModuleChildren
       begin
         value = PuppetX::Firewall::IPCidr.new(value)
       rescue StandardError
-        family = case proto
-                 when 'IPv4', 'iptables'
-                   Socket::AF_INET
-                 when 'IPv6', 'ip6tables'
-                   Socket::AF_INET6
-                 when nil
-                   raise ArgumentError, 'Proto must be specified for a hostname'
-                 else
-                   raise ArgumentError, "Unsupported address family: #{proto}"
-                 end
+        case proto
+        when 'IPv4', 'iptables'
+          family = Socket::AF_INET
+          rr = Resolv::DNS::Resource::IN::A
+        when 'IPv6', 'ip6tables'
+          family = Socket::AF_INET6
+          rr = Resolv::DNS::Resource::IN::AAAA
+        when nil
+          raise ArgumentError, 'Proto must be specified for a hostname'
+        else
+          raise ArgumentError, "Unsupported address family: #{proto}"
+        end
 
         new_value = nil
-        Resolv.each_address(value) do |addr|
+        Resolv::DNS.new.each_resource(value, rr) do |addr|
           begin # rubocop:disable Style/RedundantBegin
-            new_value = PuppetX::Firewall::IPCidr.new(addr, family)
+            new_value = PuppetX::Firewall::IPCidr.new(addr.address.to_s, family)
             break
           rescue StandardError # looking for the one that works # rubocop:disable Lint/SuppressedException
           end
         end
 
-        raise "Failed to resolve hostname #{value}" if new_value.nil?
+        raise "Failed to resolve hostname #{proto} #{value}" if new_value.nil?
 
         value = new_value
       end
@@ -141,7 +145,7 @@ module PuppetX::Firewall # rubocop:disable Style/ClassAndModuleChildren
 
     # Translate the symbolic names for icmp packet types to integers
     def self.icmp_name_to_number(value_icmp, protocol)
-      if value_icmp.to_s.match?(%r{^\d+$})
+      if value_icmp.to_s.match?(%r{^\d+(\/\d+)?$})
         value_icmp.to_s
       elsif ['IPv4', 'iptables'].include?(protocol)
         # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml

@@ -10,7 +10,7 @@
 type Simplib::ShadowPass = Variant[
   Enum['*','!','!!'],
   # Disabled Entries
-  Pattern['^!.*'],
+  Pattern['\A!.*\z'],
   Simplib::Libcrypt::SHA2_512,
   Simplib::Libcrypt::SHA2_256,
   Simplib::Libcrypt::SHA1,

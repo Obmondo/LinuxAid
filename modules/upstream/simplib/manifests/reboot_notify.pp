@@ -13,7 +13,7 @@
 #
 class simplib::reboot_notify (
   Simplib::PuppetLogLevel $log_level = 'notice'
-){
+) {
   reboot_notify { '__simplib_control__':
     log_level    => $log_level,
     control_only => true

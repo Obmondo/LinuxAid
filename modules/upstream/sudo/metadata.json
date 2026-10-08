@@ -1,6 +1,6 @@
 {
   "name": "saz-sudo",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "author": "saz",
   "license": "Apache-2.0",
   "summary": "Manage sudo configuration via Puppet",
@@ -82,6 +82,12 @@
         "10",
         "11"
       ]
+    },
+    {
+      "operatingsystem": "TurrisOS"
+    },
+    {
+      "operatingsystem": "OpenWrt"
     }
   ],
   "dependencies": [],

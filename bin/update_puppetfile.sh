@@ -233,7 +233,7 @@ function update_puppetfile() {
   if grep -q "mod '[^']*/${MODULE_NAME}'" "$PUPPETFILE"; then
     # Update existing entry
     # -i.bak is the in-place form both GNU and BSD sed accept
-    sed -i.bak "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s/:ref => '[^']*'/:ref => '${LATEST_TAG}'/" "$PUPPETFILE"
+    sed -i.bak "/mod '[^']*\/${MODULE_NAME}'/,/:ref =>/ s|:ref => '[^']*'|:ref => '${LATEST_TAG}'|" "$PUPPETFILE"
     rm -f "${PUPPETFILE}.bak"
     echo "Updated ${MODULE_NAME} to ${LATEST_TAG} in Puppetfile"
   else

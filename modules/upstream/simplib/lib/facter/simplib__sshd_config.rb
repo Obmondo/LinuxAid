@@ -14,7 +14,7 @@ Facter.add('simplib__sshd_config') do
       'AuthorizedKeysFile' => '.ssh/authorized_keys',
     }
 
-    sshd = Facter::Util::Resolution.which('sshd')
+    sshd = Facter::Core::Execution.which('sshd')
     if sshd
       full_version = Facter::Core::Execution.execute("#{sshd} -. 2>&1", on_fail: :failed)
 

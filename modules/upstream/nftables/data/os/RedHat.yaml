@@ -1,0 +1,4 @@
+---
+nftables::nft_path: /usr/sbin/nft
+nftables::echo: /usr/bin/echo
+nftables::default_config_mode: '0600'

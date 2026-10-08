@@ -39,7 +39,6 @@ function simplib::module_metadata::os_blacklisted (
     release_match => Enum['none','full','major']
   }]] $options = undef
 ) >> Boolean {
-
   $_default_options = { 'release_match' => 'none' }
 
   if $options {

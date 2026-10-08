@@ -1,12 +1,12 @@
 {
   "name": "simp-simplib",
-  "version": "5.0.3",
+  "version": "7.1.0",
   "author": "SIMP Team",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",
-  "source": "https://github.com/simp/pupmod-simp-simplib",
+  "source": "https://github.com/Obmondo/pupmod-simp-simplib",
   "project_page": "https://github.com/simp/pupmod-simp-simplib",
-  "issues_url": "https://simp-project.atlassian.net",
+  "issues_url": "https://github.com/simp/pupmod-simp-simplib/issues",
   "tags": [
     "simp",
     "functions",
@@ -18,85 +18,58 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 8.0.0 < 10.0.0"
+      "version_requirement": ">= 8.0.0 < 11.0.0"
     },
     {
       "name": "simp/simpkv",
-      "version_requirement": ">= 0.7.0 < 1.0.0"
+      "version_requirement": ">= 0.7.0 < 2.0.0"
     }
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "AlmaLinux"
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "Amazon"
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "Archlinux"
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "CentOS"
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     },
     {
-      "operatingsystem": "Darwin"
-    },
-    {
-      "operatingsystem": "Debian"
-    },
-    {
-      "operatingsystem": "Fedora"
-    },
-    {
-      "operatingsystem": "FreeBSD"
-    },
-    {
-      "operatingsystem": "Gentoo"
-    },
-    {
-      "operatingsystem": "LinuxMint"
-    },
-    {
-      "operatingsystem": "OpenBSD"
-    },
-    {
-      "operatingsystem": "OpenSUSE"
-    },
-    {
-      "operatingsystem": "OracleLinux"
-    },
-    {
-      "operatingsystem": "RedHat"
-    },
-    {
-      "operatingsystem": "Pop!_OS"
-    },
-    {
-      "operatingsystem": "Rocky"
-    },
-    {
-      "operatingsystem": "SLES"
-    },
-    {
-      "operatingsystem": "Scientific"
-    },
-    {
-      "operatingsystem": "Solaris"
-    },
-    {
-      "operatingsystem": "Ubuntu"
-    },
-    {
-      "operatingsystem": "VirtuozzoLinux"
-    },
-    {
-      "operatingsystem": "Windows"
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
     }
   ],
   "requirements": [
     {
-      "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "name": "openvox",
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "package_release_version": "0"

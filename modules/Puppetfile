@@ -2,15 +2,11 @@ forge "https://forgeapi.puppetlabs.com"
 
 mod 'simp/simplib',
     :git => "https://github.com/Obmondo/pupmod-simp-simplib.git",
-    :ref => 'fix-tmp_mounts-nil-mountpoints'
+    :ref => 'fix/tmp_mounts-nil-mountpoints'
 
 mod 'simp/auditd',
     :git => "https://github.com/simp/pupmod-simp-auditd.git",
     :ref => '8.14.5'
-
-mod 'puppetlabs/hocon',
-    :git => "https://github.com/puppetlabs/puppetlabs-hocon.git",
-    :ref => 'v2.0.0'
 
 mod 'voxpupuli/nodejs',
     :git => "https://github.com/voxpupuli/puppet-nodejs.git",
@@ -75,7 +71,7 @@ mod 'puppet/extlib',
 
 mod 'puppetlabs/firewall',
     :git => "https://github.com/puppetlabs/puppetlabs-firewall.git",
-    :ref => 'v8.2.0'
+    :ref => 'v8.6.0'
 
 mod 'alexharvey/firewall_multi',
     :git => "https://github.com/alexharv074/puppet-firewall_multi.git",
@@ -177,7 +173,7 @@ mod 'saz/memcached',
 
 mod 'saz/sudo',
     :git => 'https://github.com/saz/puppet-sudo.git',
-    :ref => 'v10.0.0'
+    :ref => 'feat/add-openwrt-support'
 
 mod 'saz/limits',
     :git => 'https://github.com/saz/puppet-limits.git',
@@ -504,3 +500,7 @@ mod 'obmondo/rustfs',
 mod 'obmondo/puppetlabs-zfs_core',
     :git => 'https://github.com/OpenVoxProject/puppetlabs-zfs_core.git',
     :ref => 'v2.0.1'
+
+mod 'obmondo/nftables',
+    :git => 'https://github.com/voxpupuli/puppet-nftables.git',
+    :ref => 'v7.5.0'

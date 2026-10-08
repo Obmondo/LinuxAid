@@ -29,7 +29,7 @@ common::system::openvox::linuxaid_cli::checksums:
   1.10.0: 1a4eb3a93ea066b72dbb705e7c499beab1131e098a02afc0a3f88706ce51e5ad
   1.9.1: d4d93423b6f3b660c7443f9463aa8fec719fbb64fcc36031f896f71c076e844a
 
-common::system::obmondo_admin::manage: false
+common::system::obmondo_admin::manage: true
 common::system::updates::enable: false
 common::system::updates::manage: false
 

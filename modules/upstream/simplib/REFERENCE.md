@@ -36,6 +36,7 @@
 * [`simplib::debug::stacktrace`](#simplib--debug--stacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
 * [`simplib::deprecation`](#simplib--deprecation): Function to print deprecation warnings, logging a warning once for a given key.
 * [`simplib::dlookup`](#simplib--dlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
+* [`simplib::error`](#simplib--error)
 * [`simplib::filtered`](#simplib--filtered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplib--gen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplib--hash_to_opts): Turn a hash into a options string, for use in a shell command
@@ -111,8 +112,8 @@
 * [`Simplib::EmailAddress`](#Simplib--EmailAddress): Matches valid email addresses
 * [`Simplib::Host`](#Simplib--Host): Matches a single IP Address or Hostname
 * [`Simplib::Host::Port`](#Simplib--Host--Port): Matches a single IP Address or Hostname with a Port
-* [`Simplib::Hostname`](#Simplib--Hostname): Valid Hostnames - May not match Unicode and does not validate against TLD registry
-* [`Simplib::Hostname::Port`](#Simplib--Hostname--Port): Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
+* [`Simplib::Hostname`](#Simplib--Hostname): Valid Hostnames  Complies with the host name restrictions of RFC 1123, Section 2.1:   * only ASCII alpha + numbers + hyphens are allowed  * l
+* [`Simplib::Hostname::Port`](#Simplib--Hostname--Port): Valid Hostnames with ports  The host name portion complies with the host name restrictions of RFC 1123, Section 2.1. See Simplib::Hostname fo
 * [`Simplib::IP`](#Simplib--IP): Matches a single IP Address
 * [`Simplib::IP::CIDR`](#Simplib--IP--CIDR): Matches valid CIDR IP addresses
 * [`Simplib::IP::Port`](#Simplib--IP--Port): Matches valid IP addresses with Ports
@@ -129,7 +130,7 @@
 * [`Simplib::Libcrypt::Bcrypt`](#Simplib--Libcrypt--Bcrypt): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::Bigcrypt`](#Simplib--Libcrypt--Bigcrypt): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::DES`](#Simplib--Libcrypt--DES): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::MD5_FreeBSD`](#Simplib--Libcrypt--MD5_FreeBSD): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::MD5_FreeBSD`](#Simplib--Libcrypt--MD5_FreeBSD): Regular expression pulled from the crypt(5) man page  The salt is a negated character class, which matches a newline even when the pattern is
 * [`Simplib::Libcrypt::MD5_Sun`](#Simplib--Libcrypt--MD5_Sun): Regular expression pulled from the crypt(5) man page lint:ignore:single_quote_string_with_variables
 * [`Simplib::Libcrypt::NTHASH`](#Simplib--Libcrypt--NTHASH): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::SHA1`](#Simplib--Libcrypt--SHA1): Regular expression pulled from the crypt(5) man page
@@ -754,15 +755,28 @@ NOTE: New capabilities will be added to the simplib::module_metadata::assert
 function instead of here but this will remain to preserve backwards
 compatibility
 
-#### `simplib::assert_metadata(String[1] $module_name, Optional[Struct[{
-    enable    => Optional[Boolean],
-    os        => Optional[Struct[{
-      validate => Optional[Boolean],
-      options  => Optional[Struct[{
-        release_match => Enum['none','full','major']
-      }]]
-    }]]
-  }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
+#### `simplib::assert_metadata(String[1] $module_name, Optional[
+    Struct[
+      {
+        enable => Optional[Boolean],
+        fatal  => Optional[Boolean],
+        os     => Optional[
+          Struct[
+            {
+              validate => Optional[Boolean],
+              options  => Optional[
+                Struct[
+                  {
+                    release_match => Enum['none', 'full', 'major']
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
 
 Fails a compile if the client system is not compatible with the module's
 `metadata.json`
@@ -784,15 +798,28 @@ The name of the module that should be checked
 Data type:
 
 ```puppet
-Optional[Struct[{
-    enable    => Optional[Boolean],
-    os        => Optional[Struct[{
-      validate => Optional[Boolean],
-      options  => Optional[Struct[{
-        release_match => Enum['none','full','major']
-      }]]
-    }]]
-  }]]
+Optional[
+    Struct[
+      {
+        enable => Optional[Boolean],
+        fatal  => Optional[Boolean],
+        os     => Optional[
+          Struct[
+            {
+              validate => Optional[Boolean],
+              options  => Optional[
+                Struct[
+                  {
+                    release_match => Enum['none', 'full', 'major']
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ]
 ```
 
 Behavior modifiers for the function
@@ -1362,6 +1389,30 @@ Hash of options for regular ``lookup()``
 Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
 * No other formats are supported!
 
+### <a name="simplib--error"></a>`simplib::error`
+
+Type: Puppet Language
+
+The simplib::error function.
+
+#### `simplib::error(String $message, Optional[Boolean] $fatal = false)`
+
+The simplib::error function.
+
+Returns: `Any`
+
+##### `message`
+
+Data type: `String`
+
+
+
+##### `fatal`
+
+Data type: `Optional[Boolean]`
+
+
+
 ### <a name="simplib--filtered"></a>`simplib::filtered`
 
 Type: Ruby 4.x API
@@ -1385,14 +1436,14 @@ defaults:  # Used for any hierarchy level that omits these keys.
   data_hash: "yaml_data"  # Use the built-in YAML backend.
 hierarchy: # Each hierarchy consists of multiple levels
   - name: "OSFamily"
-    path: "osfamily/%{facts.osfamily}.yaml"
+    path: "osfamily/%{facts.os.family}.yaml"
   - name: "datamodules"
     data_hash: simplib::filtered
     datadir: "delegated-data"
     paths:
-      - "%{facts.sitename}/osfamily/%{facts.osfamily}.yaml"
-      - "%{facts.sitename}/os/%{facts.operatingsystem}.yaml"
-      - "%{facts.sitename}/host/%{facts.fqdn}.yaml"
+      - "%{facts.sitename}/osfamily/%{facts.os.family}.yaml"
+      - "%{facts.sitename}/os/%{facts.os.name}.yaml"
+      - "%{facts.sitename}/host/%{facts.networking.fqdn}.yaml"
       - "%{facts.sitename}/common.yaml"
     options:
       function: yaml_data
@@ -1926,7 +1977,7 @@ hosts do not have linearly-assigned IP addresses.
 Data type: `Optional[Simplib::IP]`
 
 The IP address to use as the basis for the generated values.
-When `nil`, the 'ipaddress' fact (IPv4) is used.
+When `nil`, the 'networking.ip' fact (IPv4) is used.
 
 ### <a name="simplib--ipaddresses"></a>`simplib::ipaddresses`
 
@@ -2262,6 +2313,7 @@ Fails a compile if the client system is not compatible with the module's
 
 #### `simplib::module_metadata::assert(String[1] $module_name, Optional[Struct[{
     enable => Optional[Boolean],
+    fatal  => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
@@ -2295,6 +2347,7 @@ Data type:
 ```puppet
 Optional[Struct[{
     enable => Optional[Boolean],
+    fatal  => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
@@ -5717,10 +5770,9 @@ Complies with TLD restrictions from Section 2 of RFC 3696:
  * TLDs cannot be all-numeric
  * TLDs must be able to end with a period
  * A DNS label may be no more than 63 octets long
+ * A domain name may be no more than 253 octets long
 
-RegEx developed and tested at http://rubular.com/r/4yZ7R8v42f
-
-Alias of `Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
+Alias of `Pattern['\A(?i-mx:(?=.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?\z)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
 
 ### <a name="Simplib--Domainlist"></a>`Simplib::Domainlist`
 
@@ -5732,7 +5784,7 @@ Alias of `Array[Simplib::Domain]`
 
 Matches valid email addresses
 
-Alias of `Pattern['^.+@.+$']`
+Alias of `Pattern['\A.+@.+\z']`
 
 ### <a name="Simplib--Host"></a>`Simplib::Host`
 
@@ -5748,15 +5800,32 @@ Alias of `Variant[Simplib::IP::Port, Simplib::Hostname::Port]`
 
 ### <a name="Simplib--Hostname"></a>`Simplib::Hostname`
 
-Valid Hostnames - May not match Unicode and does not validate against TLD registry
+Valid Hostnames
 
-Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?)$']`
+Complies with the host name restrictions of RFC 1123, Section 2.1:
+
+ * only ASCII alpha + numbers + hyphens are allowed
+ * labels can't begin or end with hyphens
+ * the highest-level label cannot be all-numeric, so that a host name can
+   never be confused with a dotted-decimal IP address
+ * a DNS label may be no more than 63 octets long
+ * a host name may be no more than 253 octets long
+ * host names may end with a period
+
+May not match Unicode and does not validate against the TLD registry
+
+Alias of `Pattern['\A(?i-mx:(?=.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?\z)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
 
 ### <a name="Simplib--Hostname--Port"></a>`Simplib::Hostname::Port`
 
-Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
+Valid Hostnames with ports
 
-Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$']`
+The host name portion complies with the host name restrictions of RFC 1123,
+Section 2.1. See Simplib::Hostname for the full list.
+
+May not match Unicode and does not validate against the TLD registry
+
+Alias of `Pattern['\A(?i-mx:(?=[^:]{1,253}:)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?:)([a-z0-9-]{1,63})(?<!-)\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z']`
 
 ### <a name="Simplib--IP"></a>`Simplib::IP`
 
@@ -5889,80 +5958,83 @@ Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^_[./0-9A-Za-z]{19}$']`
+Alias of `Pattern['\A_[./0-9A-Za-z]{19}\z']`
 
 ### <a name="Simplib--Libcrypt--Bcrypt"></a>`Simplib::Libcrypt::Bcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}$']`
+Alias of `Pattern['\A\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}\z']`
 
 ### <a name="Simplib--Libcrypt--Bigcrypt"></a>`Simplib::Libcrypt::Bigcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^[./0-9A-Za-z]{13,178}$']`
+Alias of `Pattern['\A[./0-9A-Za-z]{13,178}\z']`
 
 ### <a name="Simplib--Libcrypt--DES"></a>`Simplib::Libcrypt::DES`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^[./0-9A-Za-z]{13}$']`
+Alias of `Pattern['\A[./0-9A-Za-z]{13}\z']`
 
 ### <a name="Simplib--Libcrypt--MD5_FreeBSD"></a>`Simplib::Libcrypt::MD5_FreeBSD`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$1\$[^$]{1,8}\$[./0-9A-Za-z]{22}$']`
+The salt is a negated character class, which matches a newline even when the
+pattern is anchored to the whole string, so newlines are excluded explicitly
+
+Alias of `Pattern['\A\$1\$[^$\n]{1,8}\$[./0-9A-Za-z]{22}\z']`
 
 ### <a name="Simplib--Libcrypt--MD5_Sun"></a>`Simplib::Libcrypt::MD5_Sun`
 
 Regular expression pulled from the crypt(5) man page
 lint:ignore:single_quote_string_with_variables
 
-Alias of `Pattern['^\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}$']`
+Alias of `Pattern['\A\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}\z']`
 
 ### <a name="Simplib--Libcrypt--NTHASH"></a>`Simplib::Libcrypt::NTHASH`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$3\$\$[0-9a-f]{32}$']`
+Alias of `Pattern['\A\$3\$\$[0-9a-f]{32}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA1"></a>`Simplib::Libcrypt::SHA1`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}$']`
+Alias of `Pattern['\A\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA2_256"></a>`Simplib::Libcrypt::SHA2_256`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}$']`
+Alias of `Pattern['\A\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA2_512"></a>`Simplib::Libcrypt::SHA2_512`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$']`
+Alias of `Pattern['\A\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}\z']`
 
 ### <a name="Simplib--Libcrypt--Scrypt"></a>`Simplib::Libcrypt::Scrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}$']`
+Alias of `Pattern['\A\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}\z']`
 
 ### <a name="Simplib--Libcrypt--Yescrypt"></a>`Simplib::Libcrypt::Yescrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}$']`
+Alias of `Pattern['\A\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}\z']`
 
 ### <a name="Simplib--Macaddress"></a>`Simplib::Macaddress`
 
 Matches MAC addresses
 
-Alias of `Pattern['^[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}$']`
+Alias of `Pattern['\A[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}\z']`
 
 ### <a name="Simplib--Netlist"></a>`Simplib::Netlist`
 
@@ -6102,7 +6174,7 @@ They are ordered of most to least commonly used for optimization.
 
 Just because they are allowed, does not mean that you should use them....
 
-Alias of `Variant[Enum['*','!','!!'], Pattern['^!.*'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]`
+Alias of `Variant[Enum['*','!','!!'], Pattern['\A!.*\z'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]`
 
 ### <a name="Simplib--Syslog--CFacility"></a>`Simplib::Syslog::CFacility`
 
@@ -6294,17 +6366,17 @@ Variant[Integer[0,7], Enum[
 
 Valid systemd service names
 
-Alias of `Pattern['^(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}$']`
+Alias of `Pattern['\A(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}\z']`
 
 ### <a name="Simplib--URI"></a>`Simplib::URI`
 
 Matches URI strings
 
-Alias of `Pattern['^[a-zA-Z][a-zA-Z0-9+-.]*://.*$']`
+Alias of `Pattern['\A[a-zA-Z][a-zA-Z0-9+-.]*://.*\z']`
 
 ### <a name="Simplib--Umask"></a>`Simplib::Umask`
 
 Matches umask patterns
 
-Alias of `Pattern['^[0-7]{3,4}$']`
+Alias of `Pattern['\A[0-7]{3,4}\z']`
 

@@ -1,0 +1,3 @@
+---
+nftables::default_config_mode: '0640'
+nftables::configuration_path: '/etc/sysconfig/nftables.conf'

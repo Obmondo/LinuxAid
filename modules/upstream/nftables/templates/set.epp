@@ -1,0 +1,34 @@
+<%- | String                  $name,
+      String                  $type,
+      Array                   $flags,
+      Optional[Integer]       $timeout,
+      Optional[Integer]       $gc_interval,
+      Optional[Array[String]] $elements,
+      Optional[Integer]       $size,
+      Optional[String]        $policy,
+      Boolean                 $auto_merge,
+| -%>
+  set <%= $name %> {
+    type <%= $type %>
+    <%- if $flags and length($flags) > 0 { -%>
+    flags <%= $flags.join(', ') %>
+    <%- } -%>
+    <%- if $timeout { -%>
+    timeout <%= $timeout %>s
+    <%- } -%>
+    <%- if $gc_interval { -%>
+    gc-interval <%= $gc_interval %>s
+    <%- } -%>
+    <%- if $elements and length($elements) > 0 { -%>
+    elements = { <%= $elements.join(', ') %> }
+    <%- } -%>
+    <%- if $size { -%>
+    size <%= $size %>
+    <%- } -%>
+    <%- if $policy { -%>
+    policy <%= $policy %>
+    <%- } -%>
+    <%- if $auto_merge { -%>
+    auto-merge
+    <%- } -%>
+  }

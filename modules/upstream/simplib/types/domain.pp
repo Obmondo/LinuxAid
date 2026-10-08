@@ -7,7 +7,6 @@
 #  * TLDs cannot be all-numeric
 #  * TLDs must be able to end with a period
 #  * A DNS label may be no more than 63 octets long
+#  * A domain name may be no more than 253 octets long
 #
-# RegEx developed and tested at http://rubular.com/r/4yZ7R8v42f
-#
-type Simplib::Domain = Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']
+type Simplib::Domain = Pattern['\A(?i-mx:(?=.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?\z)([a-z0-9-]{1,63})(?<!-)\.?)\z']
