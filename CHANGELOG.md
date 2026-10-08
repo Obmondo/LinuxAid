@@ -2,6 +2,72 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.9
+
+### Features
+- c188a0e2 feat(turrisos): run prometheus and node exporter under procd
+- c98bc313 feat(prometheus): move the prometheus agent to 3.15.0
+- b175612c feat(haproxy): make the ACME renewal threshold configurable
+- 787702dd feat(systemd): manage the systemd-networkd service on Ubuntu 26.04
+- f7d8d878 feat(haproxy): renew native ACME certificates one at a time
+- f4dc5f0c feat(zfs): allow sanoid snapshots without a replication
+- abfa7526 feat(zfs): allowing to set attributes (like acltype: posix) for ZFS datasets
+- db7f6241 feat(smtprelay): optional submission on port 587
+- 8129ab0b feat(role): load authentication for role::kubeaid
+- 9e8f7f2b feat(role): load common for role::kubeaid with subsystems off by default
+
+### Bug Fixes
+- 27c57260 fix: prevent re-download linuxaid-cli if current exists and is latest
+- 1a75e516 fix: install sudo package required for obmondo-admin user creation
+- 61b7818f fix: enable obmondo_admin users login for turris routers
+- 0542f026 fix: add wireguard port firewall using nftables
+- 93bc7d8a fix: remove firewall configs for netbird client which was meant for netbird server
+- f4d1b098 fix: replace hocon_setting with tojson
+- 9143e489 fix: add lscpu as default_packages for turris routers
+- c7ea6d6a fix(openvox): raise the default agent version to 8.28.1
+- 66d5e320 fix(common): always create the obmondo group and directories
+- d191910d fix(openvox): pin a version that exists for Ubuntu 26.04
+- 2eef4293 fix(common): disable the dns and mtail exporters on Ubuntu 26.04
+- 094e27af fix(repository): allow resolute in mirror types
+- 085418ac fix(zfs): shifting from Puppetlabs to OpenVox maintained ZFS core module
+- 30c103c0 fix(haproxy): speed up catalog compile on large haproxy nodes
+- 0eb5ac32 fix(wireguard-exporter): Added a bin_name field to match constructed service file ExecStart field to correct binary name
+- 7bb695f4 fix: remove version handling for rustdesk client and server
+- 66a91bc5 fix: remove version handling for rustfs
+- 51dba52e fix(splunk): stop forwarder app config drifting on long-lived hosts
+- e39f4f35 fix(common): declare sudoers.d in common::system when sudo is managed
+- 675bc646 fix(manifests): move defaults.pp into site.pp
+- 6090cddb fix(role): switch off role::kubeaid's default classes one by one
+
+### Configuration Changes
+- 96090f3f chore: added puppet-sudo module @feat/add-openwrt-support
+- d859c36f chore: added puppet-nftables module v7.5.0
+- bc7b3c39 chore: updated puppet-firewall module v8.2.0 -> v8.6.0
+- 897cd2ea chore: updated puppet-simplib module @fix/tmp_mounts-nil-mountpoints
+- ac64f480 chore: update module versioning script to prevent sed from crashing when a branch contains /
+- 4e8c755b chore: add os hiera for ubuntu raccoon
+- 50e73e8d chore: update turris setup doc with dns configs
+- c438b6ec chore: updated puppet-rustdesk module v1.1.4 -> v1.1.5
+- ff882f06 chore: updated puppet-rustfs module v1.0.0 -> v1.1.0
+- 64712331 chore: updated puppet-sudo module v9.0.2 -> v10.0.0
+- 8f2c8eb1 chore: added puppet-puppetlabs-zfs_core module v2.0.1
+- fa9c1c47 chore: mask cusomer id in the turrisos setup doc
+- bb479563 chore: updated puppet-rustdesk module v1.1.3 -> v1.1.4
+- 776de823 chore: updated puppet-rustdesk module v1.1.2 -> v1.1.3
+- a4212944 chore: updated puppet-rustdesk module v1.1.1 -> v1.1.2
+- 20e7140f chore: updated puppet-rustdesk module v1.1.0 -> v1.1.1
+- 5f6963da chore: updated puppet-rustdesk module v1.0.3 -> v1.1.0
+- 4d183d56 chore: update linuxaid installation for turrisos docs
+- a9efc743 chore: update rustfs container image to stable version 1.0.0
+- 6562c857 chore: updated puppet-rustfs module v0.1.2 -> v1.0.0
+
+### Other Changes
+- 6dbb4561 rustfs: let the role pin the publish address
+- 4a359414 eit_repos: serve Dell GPG keys from module files
+- af57ea84 docs: add SECURITY.md
+- e0074e67 Revert "Revert "feat: add the fail2ban""
+- 9c967064 Add optional myorigin support to common::system::mail and role::mail::smtprelay
+
 ## LinuxAid Release Version v1.8.8
 
 ### Features
