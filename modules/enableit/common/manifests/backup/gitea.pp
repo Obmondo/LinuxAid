@@ -12,7 +12,10 @@
 #
 # @param access_key_id S3 access key the upload authenticates with.
 #
-# @param secret_access_key S3 secret for that key. Keep it in eyaml.
+# @param secret_access_key S3 secret for that key. Keep it in eyaml. Typed as a
+#   plain String because that is what an eyaml-decrypted hiera value is; the
+#   file content below is wrapped in Sensitive, so it stays out of diffs and
+#   reports either way.
 #
 # @param min_dump_bytes A dump smaller than this is treated as failed rather
 #   than uploaded. Guards against a truncated dump evicting good backups. This
@@ -26,14 +29,14 @@
 # @groups credentials access_key_id, secret_access_key
 #
 class common::backup::gitea (
-  Pattern[/\As3:\/\/[a-z0-9][a-z0-9.\-]*\/\z/] $s3_bucket,
-  Stdlib::HTTPUrl                              $s3_endpoint,
-  Boolean                                      $enable            = false,
-  Stdlib::Absolutepath                         $backup_dir        = '/opt/gitea/backup',
-  Stdlib::Absolutepath                         $source_dir        = '/opt/gitea/data/git',
-  Optional[String[1]]                          $access_key_id     = undef,
-  Optional[Sensitive[String[1]]]               $secret_access_key = undef,
-  Integer[1]                                   $min_dump_bytes    = 1073741824,
+  Pattern[/\As3:\/\/[a-z0-9][a-z0-9.\-]*\/\z/]       $s3_bucket,
+  Stdlib::HTTPUrl                                    $s3_endpoint,
+  Boolean                                            $enable            = false,
+  Stdlib::Absolutepath                               $backup_dir        = '/opt/gitea/backup',
+  Stdlib::Absolutepath                               $source_dir        = '/opt/gitea/data/git',
+  Optional[String[1]]                                $access_key_id     = undef,
+  Optional[String[1]]                                $secret_access_key = undef,
+  Integer[1]                                         $min_dump_bytes    = 1073741824,
 ) {
 
   # verify_dump checks the archive's CRCs before the dump is uploaded or allowed
@@ -81,7 +84,7 @@ class common::backup::gitea (
                    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
                    [default]
                    aws_access_key_id = ${access_key_id}
-                   aws_secret_access_key = ${secret_access_key.unwrap}
+                   aws_secret_access_key = ${secret_access_key}
                    | EOT
       require   => File['/root/.aws'],
     }
