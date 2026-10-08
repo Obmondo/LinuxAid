@@ -1,26 +1,23 @@
-# @summary Class for managing the common monitoring exporter DNS
+# @summary Removes the DNS exporter (obmondo-dns-exporter) from hosts that still have it
 #
-# @param enable Enable the DNS exporter monitor. Defaults to true.
+# The DNS exporter has been dropped: its package source is gone from
+# obmondo-custom-scripts and nothing consumes its metrics. This class only
+# stops and purges the exporter on hosts that still run it, removes its user,
+# group, unit and environment file, and exports the scrape job with
+# ensure => absent so the Prometheus side drops it too.
 #
-# @param noop_value The value to use for noop mode. Defaults to false.
+# NOTE: delete this class and its include in common::monitor::exporter once
+# every host has applied it (one release is enough).
 #
-# @param domains Array of domain names to monitor. Defaults to ['nrk.no', 'vg.no', 'example.com'].
+# @param noop_value The value to use for noop mode. Defaults to the monitoring exporter noop value.
 #
-# @groups settings enable, noop_value
-#
-# @groups configuration domains
+# @groups settings noop_value
 #
 class common::monitor::exporter::dns (
-  Boolean                    $enable     = $common::monitor::exporter::enable,
-  Eit_types::Noop_Value      $noop_value = $common::monitor::exporter::noop_value,
-  Array[Eit_types::Hostname] $domains    = [
-    'nrk.no',
-    'vg.no',
-    'example.com',
-  ],
+  Eit_types::Noop_Value $noop_value = $common::monitor::exporter::noop_value,
 ) {
-  unless $enable { return() }
-
+  # Same port and scrape job name as the old daemon, so the exported scrape
+  # job title matches the one still collected on the Prometheus side.
   $listen_address = '127.254.254.254:63395'
 
   File {
@@ -38,18 +35,13 @@ class common::monitor::exporter::dns (
   Group {
     noop => $noop_value,
   }
-  $_domains = $domains
-  $_options = [
-    "-listen-address=${listen_address}",
-    "-test-hosts ${_domains.join(',')}",
-    '-test-interval-seconds 120',
-  ]
+
   prometheus::daemon { 'dns_exporter':
+    ensure            => 'absent',
     package_name      => 'obmondo-dns-exporter',
     version           => '1.0.13',
-    service_enable    => $enable,
-    service_ensure    => ensure_service($enable),
-    package_ensure    => ensure_latest($enable),
+    service_enable    => false,
+    service_ensure    => 'stopped',
     init_style        => $facts['service_provider'],
     install_method    => 'package',
     tag               => $::trusted['certname'],
@@ -57,17 +49,15 @@ class common::monitor::exporter::dns (
     group             => 'dns_exporter',
     notify_service    => Service['dns_exporter'],
     real_download_url => 'https://github.com/anton-yurchenko/dns-exporter',
-    export_scrape_job => $enable,
-    options           => $_options.join(' '),
+    export_scrape_job => true,
     scrape_port       => Integer($listen_address.split(':')[1]),
     scrape_host       => $trusted['certname'],
     scrape_job_name   => 'dns',
     scrape_job_labels => { 'certname' => $::trusted['certname'] },
   }
-  # NOTE: This is a daemon-reload, which will do a daemon-reload in noop mode.
-  # upstream module cant handle noop. (which is correct)
+
+  # NOTE: the upstream module's daemon-reload cannot handle noop itself.
   Exec <| tag == 'systemd-dns_exporter.service-systemctl-daemon-reload' |> {
-    noop        => $noop_value,
-    subscribe   => File['/etc/systemd/system/dns_exporter.service'],
-  } ~> Service['dns_exporter']
+    noop => $noop_value,
+  }
 }

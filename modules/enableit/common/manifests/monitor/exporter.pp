@@ -21,6 +21,7 @@ class common::monitor::exporter (
   include common::monitor::exporter::node
 
   if $enable and $facts['init_system'] == 'systemd' {
+    # NOTE: dns only cleans up the removed exporter, drop the include after one release
     include common::monitor::exporter::dns
     include common::monitor::exporter::dellhw
     include common::monitor::exporter::iptables
