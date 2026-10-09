@@ -53,16 +53,17 @@ class profile::system::sshd (
   if $manage {
 
     $_semver_version = case $facts['ssh_server_version_full'] {
-      /^(\d\.\d\.\d).+/: {
+      # OpenSSH 10+ has a two-digit major version, e.g. '10.2p1' on Ubuntu 26.04
+      /^(\d+\.\d+\.\d+)/: {
         regsubst(
           $facts['ssh_server_version_full'],
-          '^(\d\.\d\.\d).+',
+          '^(\d+\.\d+\.\d+).*',
           '\1')
       }
-      /^(\d\.\d).+/: {
+      /^(\d+\.\d+)/: {
         regsubst(
           $facts['ssh_server_version_full'],
-          '^(\d\.\d).+',
+          '^(\d+\.\d+).*',
           '\1.0')
       }
       undef: {
