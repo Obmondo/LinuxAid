@@ -267,3 +267,23 @@ Once the TurrisOS router gateway is configured and connected to Netbird, you can
         <source media="(prefers-color-scheme: light)" srcset="../images/netbird-advanced-view.png">
         <img alt="Netbird Advanced View" src="../images/netbird-advanced-view.png" width="320">
     </picture>
+
+## Reaching Netbird Peers from Devices without the Netbird Client
+
+Devices behind the router that cannot run the Netbird client can still reach the mesh through the router.
+
+1. In your `linuxaid-config` repository, set this for the router, or for its tag (for example `netbird-hq`):
+
+    ```yaml
+    common::network::netbird::lan_masquerade: true
+    ```
+
+2. Run the puppet agent on the router:
+
+    ```sh
+    puppet agent -t --no-noop
+    ```
+
+The router then masquerades traffic from its LAN into the mesh. Those devices appear to Netbird as the router itself, so they get exactly the access the router's Netbird policies allow.
+
+> NOTE: This applies to every device behind the router. The router's firewall must also forward from the LAN to the mesh: in LuCI, **Network** → **Firewall** → **General Settings** needs `Forward` set to `accept`.
