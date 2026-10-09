@@ -23,6 +23,13 @@ class profile::network::firewall (
     default => [],
   }
 
+  # Cilium owns its CILIUM_* chains and tags every jump it inserts into the
+  # built-in chains with `cilium-feeder:`. It reconciles only its own rules, so
+  # purging them breaks pod networking and service NAT. Match the chain prefix
+  # rather than each name, so a Cilium upgrade that adds or renames a chain
+  # cannot silently reintroduce that.
+  $_cilium_ignore = ['CILIUM_', 'cilium-feeder:']
+
   class { 'firewall':
     ensure    => $enable.ensure_service,
     ensure_v6 => $enable_ipv6.ensure_service,
@@ -76,44 +83,40 @@ class profile::network::firewall (
     $_input = [
       if $allow_k8s { [
         'KUBE-EXTERNAL-SERVICES',
-        'cali-INPUT',
         'KUBE-PROXY-FIREWALL',
         'KUBE-NODEPORTS',
-      ] },
+      ] + $_cilium_ignore },
       $_fail2ban_ignore,
     ].flatten.delete_undef_values
 
     $_output = [
       if $allow_k8s { [
-        'cali-OUTPUT',
         'KUBE-SERVICES',
         'CNI-HOSTPORT-DNAT',
         'KUBE-PROXY-FIREWALL',
         'KUBE-NODEPORTS',
-      ] }
+      ] + $_cilium_ignore },
     ].flatten.delete_undef_values
 
     $_forward = [
       if $allow_docker { ['DOCKER', 'docker0', '-o br-'] },
       if $allow_k8s { [
-        'cali-FORWARD',
         'KUBE-FORWARD',
         'KUBE-SERVICES',
         'KUBE-EXTERNAL-SERVICES',
         'KUBE-PROXY-FIREWALL',
-        '--comment "cali:*',
-      ] },
+      ] + $_cilium_ignore },
       if $_allow_netbird { [ 'NETBIRD-RT-FWD' ] },
     ].flatten.delete_undef_values
 
     $_prerouting = [
       if $allow_docker { ['DOCKER'] },
-      if $allow_k8s { ['cali-PREROUTING', 'KUBE-SERVICES', 'CNI-HOSTPORT-DNAT'] },
+      if $allow_k8s { ['KUBE-SERVICES', 'CNI-HOSTPORT-DNAT'] + $_cilium_ignore },
     ].flatten.delete_undef_values
 
     $_postrouting = [
       if $allow_docker { ['docker', '172', '-o br-', '192.168'] },
-      if $allow_k8s { ['cali-POSTROUTING', 'CNI-HOSTPORT-MASQ', 'KUBE-POSTROUTING'] },
+      if $allow_k8s { ['CNI-HOSTPORT-MASQ', 'KUBE-POSTROUTING'] + $_cilium_ignore },
       if $_allow_netbird { [ 'NETBIRD-RT-NAT' ] },
     ].flatten.delete_undef_values
 
