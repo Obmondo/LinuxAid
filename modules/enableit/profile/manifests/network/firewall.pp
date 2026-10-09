@@ -6,7 +6,7 @@ class profile::network::firewall (
   Boolean             $drop_all          = $common::network::firewall::drop_all,
   Std_fw::Action      $drop_action       = $common::network::firewall::drop_action,
   Boolean             $allow_docker      = $common::network::firewall::allow_docker,
-  Boolean             $allow_k8s         = $common::network::firewall::allow_docker,
+  Boolean             $allow_k8s         = $common::network::firewall::allow_k8s,
   Boolean             $allow_azure       = $common::network::firewall::allow_azure,
   Boolean             $block_bogons      = $common::network::firewall::block_bogons,
 

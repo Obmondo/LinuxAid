@@ -12,3 +12,7 @@ common::system::kernel::modules: {}
 # ZFS is usually installed by KubeAid StorageCTL; overrides facts/zfs_present=true.yaml,
 # which would install it (dkms + repo) on any host that has it.
 common::storage::zfs::enable: false
+# KubeAid clusters run Cilium. If firewall management is ever switched on for
+# these nodes, the chain purge has to skip Cilium's rules or pod networking and
+# service NAT break on every Puppet run.
+common::network::firewall::allow_k8s: true
