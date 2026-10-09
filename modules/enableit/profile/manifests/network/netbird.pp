@@ -21,6 +21,9 @@
 # @param wireguard_port
 #   Optional UDP port for mesh WireGuard firewall rule; undef skips the rule (see common::network::netbird).
 #
+# @param lan_masquerade
+#   TurrisOS only. Masquerade the router's LAN into the mesh (see common::network::netbird).
+#
 class profile::network::netbird (
   Boolean                 $enable         = $common::network::netbird::enable,
   Eit_types::Noop_Value   $noop_value     = $common::network::netbird::noop_value,
@@ -28,6 +31,7 @@ class profile::network::netbird (
   Stdlib::HTTPSUrl        $server         = $common::network::netbird::server,
   Eit_types::Version      $version        = $common::network::netbird::version,
   Optional[Stdlib::Port]  $wireguard_port = $common::network::netbird::wireguard_port,
+  Boolean                 $lan_masquerade = $common::network::netbird::lan_masquerade,
 ) {
   # Include archive module for download capabilities
   include archive
@@ -130,6 +134,44 @@ class profile::network::netbird (
   if $wireguard_port and $_os_name != 'TurrisOS' {
     class { 'nftables::rules::wireguard':
       ports => [$wireguard_port],
+    }
+  }
+
+  # fw4 loads /etc/nftables.d/*.nft into its own table on every start and reload
+  if $_os_name == 'TurrisOS' {
+    $_nft_chains = @(EOT)
+      chain netbird_srcnat {
+        type nat hook postrouting priority srcnat; policy accept;
+        oifname "wt0" meta nfproto ipv4 masquerade
+      }
+
+      chain netbird_mssfix {
+        type filter hook forward priority mangle; policy accept;
+        iifname "wt0" tcp flags syn tcp option maxseg size set rt mtu
+        oifname "wt0" tcp flags syn tcp option maxseg size set rt mtu
+      }
+      | EOT
+
+    # A broken include would stop fw4 from loading at boot
+    $_nft_check = @(EOT)
+      /bin/sh -c '{ echo "table inet netbird_check {"; echo "include \"%\""; echo "}"; } | /usr/sbin/nft -c -f /dev/stdin'
+      |- EOT
+
+    file { '/etc/nftables.d/20-netbird-masquerade.nft':
+      ensure       => ensure_file($enable and $lan_masquerade),
+      owner        => 'root',
+      group        => 'root',
+      mode         => '0644',
+      content      => $_nft_chains,
+      validate_cmd => $_nft_check,
+      noop         => $noop_value,
+      notify       => Service['firewall'],
+    }
+
+    # A reload swaps the ruleset in place, the default restart flushes it first
+    service { 'firewall':
+      restart => '/etc/init.d/firewall reload',
+      noop    => $noop_value,
     }
   }
 }
