@@ -1,2 +1,0 @@
----
-common::user_management::security::selinux::enable: false
