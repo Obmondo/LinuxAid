@@ -1,2 +1,0 @@
----
-kubernetes::cgroup_driver: systemd

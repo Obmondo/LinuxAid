@@ -373,10 +373,6 @@ mod 'voxpupuli/augeasproviders_grub',
     :git => 'https://github.com/voxpupuli/augeasproviders_grub.git',
     :ref => 'v5.1.2'
 
-mod 'puppetlabs/kubernetes',
-    :git => 'https://github.com/puppetlabs/puppetlabs-kubernetes.git',
-    :ref => 'v8.1.0'
-
 mod 'puppetlabs/cron_core',
     :git => 'https://github.com/puppetlabs/puppetlabs-cron_core.git',
     :ref => 'v1.3.0'
