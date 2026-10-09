@@ -162,7 +162,6 @@ class eit_haproxy::native_acme (
   $_dump_timer = @(EOT)
     [Unit]
     Description=Dump HAProxy in-memory certificates to disk
-    Requires=haproxy-dump-certs.service
     [Timer]
     OnCalendar=*:0/30
     RandomizedDelaySec=5m
