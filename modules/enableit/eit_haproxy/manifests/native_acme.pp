@@ -166,6 +166,8 @@ class eit_haproxy::native_acme (
     [Timer]
     OnCalendar=*:0/30
     RandomizedDelaySec=5m
+    [Install]
+    WantedBy=timers.target
     | EOT
 
   # No cert-name args → dump-certs.sh iterates every cert from
