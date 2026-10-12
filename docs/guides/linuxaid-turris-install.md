@@ -79,7 +79,15 @@ Before starting, ensure you have:
             <img alt="Turris Firewall" src="../images/turris-firewall.png" width="240">
         </picture>
 
-    4. Go to the **Traffic Rules** tab and search for `port 22`. Ensure that the `Enabled` checkbox is ticked.
+    4. [Optional] If clientless devices (such as cinema workstations) behind your router need to access Netbird peers or HQ without running the Netbird client locally, stay on **General Settings** (which is default), locate the `Forward` policy, and toggle it to `accept`. This allows forwarding traffic from your local LAN out to the Netbird mesh tunnel. Click **Save & Apply** at the bottom.
+
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="../images/turris-enable-forward.png">
+            <source media="(prefers-color-scheme: light)" srcset="../images/turris-enable-forward-light.png">
+            <img alt="Turris Firewall General Settings Forward Accept" src="../images/turris-enable-forward.png" width="640">
+        </picture>
+
+    5. Go to the **Traffic Rules** tab and search for `port 22`. Ensure that the `Enabled` checkbox is ticked.
 
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="../images/turris-traffic-rules.png">
@@ -93,7 +101,7 @@ Before starting, ensure you have:
             <img alt="Turris Enable Port 22 for SSH" src="../images/turris-enable-ssh.png" width="720">
         </picture>
 
-    5. Click **Save and Apply** at the bottom of the page. The router will probably restart to apply the changes. Let it restart.
+    6. Click **Save and Apply** at the bottom of the page. The router will probably restart to apply the changes. Let it restart.
 
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="../images/turris-apply-changes.png">
@@ -179,6 +187,19 @@ Before starting, ensure you have:
             <img alt="Configure Netbird Tags" src="../images/obmondo-configure-netbird-tags-dark.png" width="720">
         </picture>
     </a>
+
+    > NOTE: Once a new config tag is created, just like in Step 5, you need to open your Git hosting platform, open your `linuxaid-config` repository, and merge the newly created config branch for the tag by creating a pull request into your `default` (or `main`) branch.
+    >
+    > The `netbird-hq` or `netbird-cinema` config tags contain the following Hiera configurations:
+    >
+    > ```yaml
+    > # Netbird configurations with cinema/hq setup
+    > common::network::netbird::enable: true
+    > common::network::netbird::setup_key: <encrypted setup key via eyaml>
+    > common::network::netbird::lan_masquerade: true # Optional: enables NAT masquerade for local LAN subnets (requires firewall forwarding enabled in Turris LuCI)
+    > ```
+    >
+    > Refer to the [Eyaml documentation](eyaml.md) for instructions on how to encrypt your setup key securely.
 
 7. Wait a couple of minutes for the cache to refresh, then return to your TurrisOS router via SSH and run the puppet agent in no-noop mode. This applies all necessary configurations and installs/configures Netbird:
 

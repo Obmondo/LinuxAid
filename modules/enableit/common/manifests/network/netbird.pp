@@ -20,6 +20,10 @@
 #   to skip the mesh firewall rule when direct mesh/WG ingress is not required or policy forbids opening it.
 #   If set, do not duplicate the same port via common::network::wireguard::tunnels for NetBird-owned interfaces; see profile::network::netbird.
 #
+# @param lan_masquerade
+#   TurrisOS only. Masquerade the router's LAN into the mesh, so devices without a NetBird client
+#   reach NetBird peers as the router itself.
+#
 # @groups authentication setup_key, enable, noop_value.
 #
 # @groups server_details server, version.
@@ -31,6 +35,7 @@ class common::network::netbird (
   String                   $setup_key,
   Eit_types::Noop_Value    $noop_value =  undef,
   Optional[Stdlib::Port]   $wireguard_port = 51820,
+  Boolean                  $lan_masquerade = false,
 ) {
   include profile::network::netbird
 }
