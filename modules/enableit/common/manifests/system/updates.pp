@@ -45,10 +45,12 @@ class common::system::updates (
       },
     ]): ensure => 'absent', }
 
-    # Ensure the service is stopped and disabled
-    service { 'yum-system-upgrade.service':
-      ensure => 'stopped',
-      enable => false,
+    # Ensure the service is stopped and disabled on RedHat systems
+    if $_os_family == 'RedHat' {
+      service { 'yum-system-upgrade.service':
+        ensure => 'stopped',
+        enable => false,
+      }
     }
 
     package { 'obmondo-system-update':
