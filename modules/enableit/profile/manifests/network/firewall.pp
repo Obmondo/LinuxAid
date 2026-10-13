@@ -15,6 +15,10 @@ class profile::network::firewall (
 
   $_allow_netbird = lookup('common::network::netbird::enable', Boolean, undef, false)
 
+  # A NAT gateway (see common::network::nat_gateway) has to forward, so it does
+  # not need enable_forwarding set as well
+  $_enable_forwarding = $enable_forwarding or lookup('common::network::nat_gateway::enable', Boolean, undef, false)
+
   # fail2ban (see common::network::fail2ban) inserts its own jump rules into
   # the INPUT chain at runtime. Keep the purge logic from fighting them.
   $_fail2ban_enabled = lookup('common::network::fail2ban::enable', Boolean, undef, false)
@@ -50,7 +54,7 @@ class profile::network::firewall (
     'iptables',
     if $enable_ipv6 { 'ip6tables' },
   ].delete_undef_values.each |$_protocol| {
-    $_title = if $enable_forwarding { 'enable' } else { 'disable' }
+    $_title = if $_enable_forwarding { 'enable' } else { 'disable' }
     $_ip_version = $_protocol ? {
       'iptables' => 'IPv4',
       'ip6tables' => 'IPv6',
@@ -59,9 +63,9 @@ class profile::network::firewall (
     firewall {"100 forwarding ${_title} ${_ip_version}":
       ensure   => 'present',
       chain    => 'FORWARD',
-      jump     => if $enable_forwarding { 'accept' } else { 'reject' },
+      jump     => if $_enable_forwarding { 'accept' } else { 'reject' },
       proto    => 'all',
-      reject   => if $drop_action == 'reject' and !$enable_forwarding {
+      reject   => if $drop_action == 'reject' and !$_enable_forwarding {
         $_protocol ? {
           'iptables'  => 'icmp-host-prohibited',
           'ip6tables' => 'icmp6-adm-prohibited',

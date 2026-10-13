@@ -296,6 +296,7 @@ To connect your Git hosting platform to your Obmondo environment, see the [Git S
 |---|---|
 | [Git Setup](./docs/setup/git_setup.md) | Connect your Git hosting platform to your Obmondo environment |
 | [Netbird VPN](./docs/guides/netbird-install.md) | Secure node mesh VPN setup |
+| [NAT Gateway](./docs/guides/nat-gateway.md) | Turning a host into a NAT gateway for a private network |
 | [Eyaml Secrets](./docs/guides/eyaml.md) | Encrypted Hiera data management |
 | [Updates](./docs/guides/updates.md) | Updating Puppet modules and the Puppetfile |
 | [Release Process](./docs/guides/release.md) | Tagging and publishing a LinuxAid release |

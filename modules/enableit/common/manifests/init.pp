@@ -80,5 +80,12 @@ class common (
       contain common::system
       contain common::user_management
     }
+
+    # NOTE: a NAT gateway is often a host without full host management, so the
+    # switch is read here and not in common::network. Keep it below the block
+    # above: the class checks what that block has already put in the catalog.
+    if lookup('common::network::nat_gateway::enable', Boolean, undef, false) {
+      contain common::network::nat_gateway
+    }
   }
 }

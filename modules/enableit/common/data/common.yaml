@@ -452,6 +452,7 @@ common::backup::db::pgsql::backup_retention: 30
 # Network
 common::network::firewall::enable: false
 common::network::wireguard::enable: false
+common::network::nat_gateway::enable: false
 
 ## Netbird
 common::network::netbird::enable: false
