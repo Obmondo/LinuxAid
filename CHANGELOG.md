@@ -2,6 +2,34 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.10
+
+### Features
+- 85b4f2eb feat: add turris service window support
+- fd4a8eb2 feat(netbird): masquerade the LAN into the mesh on TurrisOS
+
+### Bug Fixes
+- 6a164bee fix(dns): ship both root trust anchors to systemd-resolved before 258
+- 5bcc7b64 fix: wrap yum-system-upgrade.service resource in RedHat os_family condition
+- 6852b965 fix: Ubuntu 26.04 support for pam and sshd
+- 7bce6f28 fix(firewall): read allow_k8s from its own parameter, not allow_docker
+- cb045450 fix(firewall): ignore Cilium chains instead of Calico in the purge lists
+- c431d90f fix: remove redundant requires param from haproxy dump certs timer
+- daa9d358 fix: rectify missing install section wanted by for haproxy dump certs timer
+
+### Configuration Changes
+- 71971fa6 chore: update the netbird setup for turris docs with traffic forwarding
+
+### Other Changes
+- 31f73d37 Bump linuxaid-cli to 1.11.4
+- cd30ee19 refactor(dns): write the root trust anchors as a heredoc
+- 186be0cf refactor(role): remove the retired Kubernetes roles and vendored module
+- d1d2ab23 gitea backup: type the eyaml secret as a plain String
+- 641d3c5c gitea backup: close two gaps the 7 October loss exposed
+- d83aa82f gitea backup: correct the cause of the upload stalls
+- e1e38749 gitea backup: use the upload settings that actually measured best
+- a3826b80 gitea backup: verify the upload landed, stop trusting exit status
+
 ## LinuxAid Release Version v1.8.9
 
 ### Features
