@@ -15,7 +15,8 @@ common::default::classes:
   - common::network
   - common::system::hosts
 
-common::role_basic::classes: []
+common::role_basic::classes:
+  - common::system::updates
 
 common::full_host_management: false
 
@@ -42,8 +43,8 @@ common::network::service_name: "network"
 common::network::ipaddress_package: "rubygem-ipaddress"
 common::network::ipaddress_provider: "gem"
 
-common::system::updates::enable: false
-common::system::updates::manage: false
+common::system::updates::enable: true
+common::system::updates::manage: true
 
 common::monitor::exporter::node::lsof::enable: false
 common::monitor::exporter::node::topprocesses::enable: false

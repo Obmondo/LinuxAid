@@ -19,11 +19,12 @@ class common::system::updates (
   Eit_types::Noop_Value $noop_value             = undef,
 ) {
   if $manage {
-    # NOTE: We will only install updates when purge is true, so that gives us some
-    # confidence that we will not install updates from unwanted sources.
+    $repo_managed = lookup('common::system::repo::manage', Boolean, undef, true)
     $purge_settings = lookup('common::system::repo::purge', Boolean, undef, false)
 
-    confine($enable, !$purge_settings, 'Automatic update is disabled, since all the repos are not managed by puppet, you can enable it via common::system::repo::purge: true') #lint:ignore:140chars
+    if $repo_managed {
+      confine($enable, !$purge_settings, 'Automatic update is disabled, since all the repos are not managed by puppet, you can enable it via common::system::repo::purge: true') #lint:ignore:140chars
+    }
 
     $_os_family = $facts['os']['family']
 
@@ -62,11 +63,10 @@ class common::system::updates (
 
     if $facts['init_system'] == 'sysvinit' {
       cron { 'obmondo-system-update':
-        # NOTE: We're disabling the system update cron for older init systems (in this case turrisos)
-        # because we still need to test how it will work out. For now, we'll see how the mechanism working
-        # for latest OS, and then maybe later  we'll add this cron back again.
-        ensure  => false, # ensure_present($enable),
-        command => '/opt/obmondo/bin/linuxaid-cli obmondo-system-update',
+        # NOTE: We're enabling the system update cron for sysvinit systems (like turrisos)
+        # when $enable is true.
+        ensure  => ensure_present($enable),
+        command => '/opt/obmondo/bin/linuxaid-cli system-update',
         user    => 'root',
         minute  => fqdn_rand(59, $facts['networking']['hostname']),
         hour    => '*',

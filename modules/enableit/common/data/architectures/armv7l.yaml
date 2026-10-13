@@ -10,7 +10,8 @@ common::logging::manage: false
 common::default::classes:
   - common::network
 
-common::role_basic::classes: []
+common::role_basic::classes:
+  - common::system::updates
 
 common::full_host_management: false
 
@@ -30,8 +31,8 @@ common::system::openvox::linuxaid_cli::checksums:
   1.9.1: d4d93423b6f3b660c7443f9463aa8fec719fbb64fcc36031f896f71c076e844a
 
 common::system::obmondo_admin::manage: true
-common::system::updates::enable: false
-common::system::updates::manage: false
+common::system::updates::enable: true
+common::system::updates::manage: true
 
 common::system::nsswitch::ethers: []
 common::system::nsswitch::group: []
