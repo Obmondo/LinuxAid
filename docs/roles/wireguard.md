@@ -16,27 +16,15 @@
    wg genkey | sudo tee /etc/wireguard/privatekey | wg pubkey | sudo tee /etc/wireguard/publickey
    ```
 
-3. Access your wireguard server instance via ssh.
+3. Add the peer to the server's tunnel in hiera (see the example in step 8).
+   The server's `allowed_ips` for a peer lists only what sits behind that
+   peer: its tunnel address, plus any network it routes for. Do not copy the
+   client's own `AllowedIPs` here. WireGuard hands a range to one peer only
+   (the last one listed wins).
 
-   ```sh
-   # ssh username@wg.<domain-name>
-
-   # sudo -i
-
-   # vim /etc/wireguard/wg0.conf
-
-   # Add the peer block like this
-   [Peer]
-   # friendly name of the peer
-   Publickey = <Public Key from above command>
-   AllowedIPs = <IP Address of the client>/<Subnet which you would like the wg-client can access to>
-   ```
-
-4. Restart wg interface when we setup for first time on any server
-
-   ```sh
-   systemctl restart wg-quick@wg0.service
-   ```
+4. Run puppet on the server. systemd-networkd owns the tunnel interface;
+   puppet recreates it from the new config, so connected clients drop for a
+   few seconds and reconnect. There is nothing to restart by hand.
 
 5. On your workstation
 
@@ -62,19 +50,13 @@
    sudo wg-quick up wg0
    ```
 
-7. Reload wg when we add a new peer
-
-   ```sh
-   wg syncconf wg0 <(wg-quick strip wg0)
-   ```
-
-8. Check if wg is working
+7. Check if wg is working
 
     ```sh
     sudo wg
     ```
 
-9. Example hiera setup
+8. Example hiera setup
 
   ```yaml
   common::network::wireguard::enable: true
