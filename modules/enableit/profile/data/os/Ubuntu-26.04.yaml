@@ -1,3 +1,9 @@
 ---
 profile::system::openvox::package_version_suffix: '-1+ubuntu26.04'
 profile::logging::logrotate::__scheduling_method: 'service'
+
+# sssd runs as the sssd user and its unit chowns /etc/sssd to root:sssd with
+# group read on every start. Match that, or every puppet run changes
+# sssd.conf back and restarts sssd.
+profile::system::authentication::sssd::config_group: 'sssd'
+profile::system::authentication::sssd::config_mode: '0640'
