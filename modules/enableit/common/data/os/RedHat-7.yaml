@@ -53,3 +53,11 @@ common::monitor::exporter::enable: true
 # TODO: Have raised the PR for adding the support for REdHat-7
 # Will remove this once the PR is merged https://github.com/gibbs/puppet-systemd_journal_remote/pull/8
 common::logging::journal::package_name: 'systemd-journal-gateway'
+
+common::user_management::authentication::pam::password_lines:
+  - - 10
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
+
+common::user_management::authentication::pam::password_password_lines:
+  - - 20
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
