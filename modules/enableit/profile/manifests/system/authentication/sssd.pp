@@ -16,6 +16,9 @@ class profile::system::authentication::sssd (
   Hash                                        $override_config       = $common::user_management::authentication::sssd::override_config,
   Eit_types::Noop_Value                       $noop_value            = $common::user_management::authentication::sssd::noop_value,
   Array                                       $required_packages     = $common::user_management::authentication::sssd::required_packages,
+  # variable in hiera as it may depend on distribution
+  String                                      $config_group,
+  Stdlib::Filemode                            $config_mode,
 ) {
 
   confine($enable, !lookup('common::user_management::authentication::manage_pam', Boolean),
@@ -115,6 +118,8 @@ class profile::system::authentication::sssd (
       manage_oddjobd        => ($manage_oddjobd and $_enable),
       service_ensure        => ensure_service($_enable),
       config                => $_config,
+      config_group          => $config_group,
+      config_mode           => $config_mode,
     }
 
     if $_is_systemd {

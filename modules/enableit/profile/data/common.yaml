@@ -30,6 +30,10 @@ rofile::mongodb::monitor_password: 'ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQ
 profile::virtualization::lxc::network: 10.0.3.0
 profile::virtualization::lxc::bridge: lxcbr0
 
+# SSSD
+profile::system::authentication::sssd::config_group: 'root'
+profile::system::authentication::sssd::config_mode: '0600'
+
 # PHP
 profile::appeng::php::default_modules:
   json: {}

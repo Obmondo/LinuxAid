@@ -24,6 +24,12 @@
 #
 # @param config_template Defines the template used for the sssd config.
 #
+# @param config_owner Owner of the sssd config file.
+#
+# @param config_group Group of the sssd config file.
+#
+# @param config_mode Mode of the sssd config file.
+#
 # @param mkhomedir Whether or not to manage auto-creation of home directories on
 #   user login.
 #
@@ -66,6 +72,9 @@ class sssd (
   String $extra_packages_ensure = 'present',
   Stdlib::Absolutepath $config_file = '/etc/sssd/sssd.conf',
   String $config_template = 'sssd/sssd.conf.erb',
+  String $config_owner = 'root',
+  String $config_group = 'root',
+  Stdlib::Filemode $config_mode = '0600',
   Boolean $mkhomedir = true,
   Boolean $manage_oddjobd = false,
   Variant[Boolean, Enum['running', 'stopped']] $service_ensure = 'running',
@@ -178,9 +187,9 @@ class sssd (
   file { 'sssd.conf':
     ensure  => $file_ensure,
     path    => $config_file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0600',
+    owner   => $config_owner,
+    group   => $config_group,
+    mode    => $config_mode,
     content => template($config_template),
   }
 
