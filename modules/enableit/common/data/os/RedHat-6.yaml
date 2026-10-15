@@ -86,3 +86,11 @@ common::monitor::exporter::mysql::enable: false
 common::monitor::exporter::node::enable: false
 
 common::system::time::ntp::ntp_client: 'ntpd'
+
+common::user_management::authentication::pam::password_lines:
+  - - 10
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
+
+common::user_management::authentication::pam::password_password_lines:
+  - - 20
+    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='

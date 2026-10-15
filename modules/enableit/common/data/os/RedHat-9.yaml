@@ -41,3 +41,11 @@ common::system::nsswitch::aliases:
 
 common::system::dns::resolver: systemd-resolved
 common::network::service_name: systemd-networkd
+
+common::user_management::authentication::pam::password_lines:
+  - - 10
+    - 'requisite     pam_pwquality.so try_first_pass retry=3 type='
+
+common::user_management::authentication::pam::password_password_lines:
+  - - 20
+    - 'requisite     pam_pwquality.so try_first_pass retry=3 type='

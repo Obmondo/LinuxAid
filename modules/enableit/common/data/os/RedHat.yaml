@@ -51,8 +51,6 @@ common::user_management::authentication::pam::account_lines:
     - 'required      pam_permit.so'
 
 common::user_management::authentication::pam::password_lines:
-  - - 10
-    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
   - - 20
     - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
   - - 30
@@ -138,8 +136,6 @@ common::user_management::authentication::pam::password_account_lines:
     - 'required      pam_permit.so'
 
 common::user_management::authentication::pam::password_password_lines:
-  - - 20
-    - 'requisite     pam_cracklib.so try_first_pass retry=3 type='
   - - 30
     - 'sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok'
   - - 40
