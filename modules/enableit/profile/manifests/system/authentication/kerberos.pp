@@ -91,6 +91,8 @@ class profile::system::authentication::kerberos (
         manage_sssd_service       => false,
         manage_krb_config         => false,
         manage_krb_client_package => false,
+        # the join exec runs klist, which comes from the client package mit_krb5 installs
+        require                   => Class['mit_krb5'],
         before                    => Class['sssd'],
         notify                    => Service['sssd'],
       }
