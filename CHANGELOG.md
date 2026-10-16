@@ -2,6 +2,15 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.11
+
+### Bug Fixes
+- 2dbe6a73 fix(pam): use pam_pwquality instead of pam_cracklib on RedHat 9
+- cf67fef1 fix(sssd): use root:sssd 0640 for sssd.conf on Ubuntu 26.04
+
+### Other Changes
+- ba0b07be ldap.conf: drop sasl_secprops maxssf=0
+
 ## LinuxAid Release Version v1.8.10
 
 ### Features
