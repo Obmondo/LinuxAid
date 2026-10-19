@@ -21,8 +21,30 @@ define profile::system::sudoers::conf (
     fail("Broken sudoers rule; content is empty! as well as no source file has been provided name: ${name}")
   }
 
+  # sudo-rs (default sudo on e.g. Ubuntu 26.04) rejects rules with wildcards
+  # (`*`, `?`, `[`) in command arguments and the `requiretty` setting, and
+  # prints a parse error for them on every sudo call. Such rules never take
+  # effect there, so remove them on sudo-rs hosts.
+  $_sudo_rs_incompatible = $facts.dig('sudo', 'kind') == 'sudo-rs' and $content and $content.split("\n").any |$line| {
+    if $line =~ /^\s*Defaults/ {
+      $line =~ /\brequiretty\b/
+    } elsif $line =~ /^\s*(#|$)/ {
+      false
+    } else {
+      # Strip `user host=(runas) TAGS:` and check each command's arguments
+      $line.regsubst(/^[^=]*=\s*(\([^)]*\)\s*)?([A-Z_]+:\s*)*/, '').split(/,\s*(?=\/)/).any |$command| {
+        $command.strip =~ /^\S+\s+.*[*?\[]/
+      }
+    }
+  }
+
+  $_ensure = $_sudo_rs_incompatible ? {
+    true    => 'absent',
+    default => $ensure,
+  }
+
   sudo::conf { $_sudo_conf_name:
-    ensure          => $ensure,
+    ensure          => $_ensure,
     sudo_config_dir => $sudoers_d_dir,
     sudo_file_name  => $filename,
     content         => $content,
