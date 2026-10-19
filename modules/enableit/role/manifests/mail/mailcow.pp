@@ -11,6 +11,12 @@
 #
 # @param backup_dir The directory for backups. Defaults to '/opt/backup'.
 #
+# @param s3_backup Offsite S3 bucket the backups in backup_dir are pushed to
+#   with restic once mailcow-backup.service has completed. Keys: endpoint,
+#   bucket, access_key_id, secret_access_key, password (the restic repository
+#   password, needed for restores) and optionally keep_daily, keep_weekly and
+#   keep_monthly. Defaults to undef, which keeps the backups local only.
+#
 # @param manage Flag to manage the service. Defaults to true.
 #
 # @param letsencrypt Flag to manage Let's Encrypt certificates. Defaults to false.
@@ -33,7 +39,7 @@
 #
 # @groups install version.
 #
-# @groups backup backup_dir.
+# @groups backup backup_dir, s3_backup.
 #
 # @groups management manage, letsencrypt, skip_unbound_healthcheck.
 #
@@ -41,7 +47,7 @@
 #
 # @groups other timezone, extra_settings, encrypt_params.
 #
-# @encrypt_params dbroot, dbpass, redispass, exporter_api_key.
+# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, s3_backup.secret_access_key, s3_backup.password.
 #
 class role::mail::mailcow (
   String                      $dbroot,
@@ -56,12 +62,15 @@ class role::mail::mailcow (
   Optional[Hash]              $extra_settings           = {},
   Optional[Boolean]           $skip_unbound_healthcheck = false,
   String                      $exporter_api_key,
+  Optional[Eit_types::Mailcow::S3backup] $s3_backup     = undef,
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
     'dbpass',
     'redispass',
     'exporter_api_key',
+    's3_backup.secret_access_key',
+    's3_backup.password',
   ]
 
 ) {

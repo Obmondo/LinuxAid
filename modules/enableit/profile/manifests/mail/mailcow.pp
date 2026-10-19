@@ -13,10 +13,13 @@ class profile::mail::mailcow (
   Stdlib::Fqdn                $domain                   = $role::mail::mailcow::domain,
   String                      $exporter_api_key         = $role::mail::mailcow::exporter_api_key,
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
+  Optional[Eit_types::Mailcow::S3backup] $s3_backup     = $role::mail::mailcow::s3_backup,
 ) {
   $install_dir              = '/opt/mailcow'
   $http_bind                = '0.0.0.0'
   $exporter_listen_address  = '127.254.254.254:63382'
+  $_s3_backup               = $manage and $s3_backup =~ NotUndef
+  $_backup_on_success       = if $_s3_backup { 'OnSuccess=mailcow-backup-s3.service' } else { '' }
 
   confine($letsencrypt,
     !$acme_contact,
@@ -52,6 +55,7 @@ class profile::mail::mailcow (
     [Unit]
     Description=Mailcow backup script service
     Wants=mailcow-backup.timer
+    ${_backup_on_success}
 
     [Service]
     Type=simple
@@ -68,6 +72,88 @@ class profile::mail::mailcow (
     active          => $manage,
     enable          => $manage,
     require         => Vcsrepo[$install_dir],
+  }
+
+  # Push the local backups offsite once mailcow-backup.service has completed,
+  # started through its OnSuccess= so the upload never races the backup.
+  # restic encrypts on the host, dedups against earlier snapshots and prunes.
+  $_restic_env      = '/etc/obmondo/restic/mailcow.env'
+  $_restic_password = '/etc/obmondo/restic/mailcow.password'
+  $_s3_script       = '/opt/obmondo/bin/mailcow-backup-s3'
+
+  if $_s3_backup {
+    stdlib::ensure_packages(['restic'])
+  }
+
+  file { '/etc/obmondo/restic':
+    ensure => ensure_dir($_s3_backup),
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+    force  => true,
+  }
+
+  file { $_restic_env:
+    ensure    => ensure_file($_s3_backup),
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0600',
+    show_diff => false,
+    content   => if $_s3_backup {
+      Sensitive(@("EOT"))
+        # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+        export RESTIC_REPOSITORY='s3:${s3_backup['endpoint'].regsubst('/+\z', '')}/${s3_backup['bucket']}'
+        export RESTIC_PASSWORD_FILE='${_restic_password}'
+        export RESTIC_CACHE_DIR='/var/cache/restic/mailcow'
+        export AWS_ACCESS_KEY_ID='${s3_backup['access_key_id']}'
+        export AWS_SECRET_ACCESS_KEY='${s3_backup['secret_access_key']}'
+        | EOT
+    },
+  }
+
+  # A file of its own, so the password is used verbatim whatever it contains
+  file { $_restic_password:
+    ensure    => ensure_file($_s3_backup),
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0600',
+    show_diff => false,
+    content   => if $_s3_backup { Sensitive($s3_backup['password']) },
+  }
+
+  file { $_s3_script:
+    ensure  => ensure_file($_s3_backup),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    content => if $_s3_backup {
+      epp('profile/mail/mailcow/restic-s3.sh.epp', {
+        env_file     => $_restic_env,
+        paths        => [$backup_dir],
+        keep_daily   => pick($s3_backup['keep_daily'], 7),
+        keep_weekly  => pick($s3_backup['keep_weekly'], 4),
+        keep_monthly => pick($s3_backup['keep_monthly'], 6),
+      })
+    },
+  }
+
+  systemd::unit_file { 'mailcow-backup-s3.service':
+    ensure  => ensure_present($_s3_backup),
+    content => @("EOT"/$n),
+      # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+      [Unit]
+      Description=Push the mailcow backups to S3
+      Wants=network-online.target
+      After=network-online.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=${_s3_script}
+      Nice=10
+      IOSchedulingClass=idle
+      TimeoutStartSec=6h
+      | EOT
+    require => File[$_s3_script, $_restic_env, $_restic_password],
   }
 
   # Firewall
