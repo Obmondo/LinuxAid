@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.1 - 2026-10-19
+#### Miscellaneous Chores
+- update rustfs container image version to 1.0.3 - (184e324) - Sidharth Jawale
+
+- - -
+
 ## v1.1.0 - 2026-10-05
 #### Features
 - publish the container on a configurable address - (f5344d4) - aman
