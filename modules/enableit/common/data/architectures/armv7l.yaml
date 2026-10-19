@@ -25,10 +25,10 @@ common::system::openvox::package_name: "openvox"
 common::system::openvox::version: "8.24.1"
 common::system::openvox::linuxaid_cli::install_method: archive
 common::system::openvox::linuxaid_cli::checksums:
+  1.11.5: 609e3efa0da4505a73c47b91e3ca646e00357ee26ba1be07532e916cf570a07e
   1.11.4: 2a2f27b13dd24fa490f6cfa332a8343dfb7824e677de413c99fa10278a75284d
   1.11.3: d9cef493e5fc22def010d6db1e50fa61e9fa01bd90a61e91e5f5f090b6e383ee
   1.11.0: ccb191f04dba77964be58c65a7880d276eaa5c259ac06b3b9e2fafdb30dc9625
-  1.10.0: 1a4eb3a93ea066b72dbb705e7c499beab1131e098a02afc0a3f88706ce51e5ad
 
 common::system::obmondo_admin::manage: true
 common::system::updates::enable: true
