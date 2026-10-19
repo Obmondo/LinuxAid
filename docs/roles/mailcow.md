@@ -72,7 +72,7 @@ This you can do by logging as admin in mailcow and then `Email -> Configuration 
 #### Backup
 
 Mailcow role already creates a service `mailcow-backup.service` and timer which takes the complete backup of mailcow daily at 2:15 AM.
-By default the backup location is `/opt/mailcow` unless `role::mail::mailcow::backup_dir` is defined as some other location.
+By default the backup location is `/opt/backup` unless `role::mail::mailcow::backup_dir` is defined as some other location.
 
 Backup directory will look something like
 
@@ -87,6 +87,40 @@ You can even run a manual backup if necessary
 ```bash
 MAILCOW_BACKUP_LOCATION=/opt/backup CREATE_BACKUP_LOCATION=yes /opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all
 ```
+
+#### Offsite backup to S3
+
+The local backups sit on the same disk as the mail. To also push them to an offsite S3 bucket, add a
+`common::backup::s3::repos` entry for the backup directory and trigger it after `mailcow-backup.service`.
+It uses [restic](https://restic.net/), so the data is encrypted on the server before upload, deduplicated
+against earlier snapshots and pruned per the `keep_*` settings.
+
+```yaml
+common::backup::s3::repos:
+  mailcow:
+    paths:
+      - /opt/backup                         # same as role::mail::mailcow::backup_dir
+    endpoint: https://s3.obmondo.com
+    bucket: mailcow-backup
+    access_key_id: ops+kbm+mailcow-backup
+    secret_access_key: ENC[PKCS7,...]
+    password: ENC[PKCS7,...]                # restic repository password, needed for restores
+    trigger_after: mailcow-backup.service
+    keep_daily: 7
+    keep_weekly: 4
+    keep_monthly: 6
+```
+
+Check the last run with `journalctl -u obmondo-backup-s3-mailcow.service`. The
+`/opt/obmondo/bin/restic-s3-mailcow` wrapper passes its arguments to restic with the repository credentials
+loaded, so to get a backup back from S3:
+
+```bash
+/opt/obmondo/bin/restic-s3-mailcow snapshots
+/opt/obmondo/bin/restic-s3-mailcow restore latest --target /opt/restore
+```
+
+then restore from `/opt/restore/opt/backup` as described below.
 
 #### Restore
 

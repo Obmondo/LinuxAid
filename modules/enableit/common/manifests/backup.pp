@@ -39,6 +39,9 @@ class common::backup (
     unless lookup('common::backup::borg::repos', Hash, undef, {}).empty {
       common::backup::borg.contain
     }
+    unless lookup('common::backup::s3::repos', Hash, undef, {}).empty {
+      common::backup::s3.contain
+    }
     if lookup('common::backup::netbackup::enable', Boolean, undef, false) {
       common::backup::netbackup.contain
     }

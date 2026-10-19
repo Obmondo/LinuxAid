@@ -1,0 +1,45 @@
+<%- |
+  Stdlib::Absolutepath        $env_file,
+  Array[Stdlib::Absolutepath] $paths,
+  Integer                     $keep_daily,
+  Integer                     $keep_weekly,
+  Integer                     $keep_monthly,
+| -%>
+#!/bin/bash
+# THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+#
+# Without arguments: back up the configured paths to S3 and prune old snapshots.
+# With arguments: run restic with them against the same repository, e.g.
+#   $0 snapshots
+#   $0 restore latest --target /tmp/restore
+
+set -euo pipefail
+
+# shellcheck source=/dev/null
+source '<%= $env_file %>'
+
+if [ "$#" -gt 0 ]; then
+  exec restic "$@"
+fi
+
+log() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $*"
+}
+
+# `cat config` also fails on a network error, init then refuses to overwrite
+# an existing repository, so this never clobbers one
+if ! restic cat config >/dev/null 2>&1; then
+  log "Initialising restic repository ${RESTIC_REPOSITORY}"
+  restic init
+fi
+
+log "Backing up <%= $paths.join(' ') %>"
+restic backup --tag obmondo<% $paths.each |$path| { %> '<%= $path %>'<% } %>
+
+log "Pruning old snapshots"
+restic forget --prune --tag obmondo \
+  --keep-daily <%= $keep_daily %> \
+  --keep-weekly <%= $keep_weekly %> \
+  --keep-monthly <%= $keep_monthly %>
+
+log "Backup done"
