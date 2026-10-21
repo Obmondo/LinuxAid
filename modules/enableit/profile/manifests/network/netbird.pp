@@ -131,9 +131,25 @@ class profile::network::netbird (
     notify => Exec['netbird_up'],
   }
 
-  if $wireguard_port and $_os_name != 'TurrisOS' {
-    class { 'nftables::rules::wireguard':
-      ports => [$wireguard_port],
+  if $_os_name != 'TurrisOS' {
+    if $wireguard_port {
+      firewall { '100 allow netbird wireguard inbound':
+        ensure => ensure_present($enable),
+        chain  => 'INPUT',
+        proto  => 'udp',
+        dport  => $wireguard_port,
+        jump   => 'ACCEPT',
+        noop   => $noop_value,
+      }
+    }
+
+    firewall { '100 netbird postrouting masquerade':
+      ensure   => ensure_present($enable and $lan_masquerade),
+      chain    => 'POSTROUTING',
+      table    => 'nat',
+      outiface => 'wt0',
+      jump     => 'MASQUERADE',
+      noop     => $noop_value,
     }
   }
 
