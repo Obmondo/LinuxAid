@@ -92,11 +92,33 @@ class eit_repos (
         ],
       }
 
+      # Keep only 2 kernels when /boot is a separate partition under 1G, so
+      # kernel updates don't fill it. yum::config_options in hiera still wins.
+      $_boot_size = $facts.dig('mountpoints', '/boot', 'size_bytes')
+      $_installonly_limit = ($_boot_size =~ Integer and $_boot_size < 1073741824) ? {
+        true    => 2,
+        default => 3,
+      }
+      $_yum_params = {
+        'config_options' => { 'installonly_limit' => $_installonly_limit } + lookup('yum::config_options', Hash, 'hash', {}),
+      } + ($distro_id in ['CentOS', 'Rocky'] ? {
+        true    => { 'manage_os_default_repos' => $upstream },
+        default => {},
+      })
+
+      # Other modules (slurm, opensearch_dashboards) also include yum, don't
+      # fail with a duplicate declaration if one of them got there first
+      if defined(Class['yum']) {
+        include yum
+      } else {
+        class { 'yum':
+          * => $_yum_params,
+        }
+      }
+
       # Add Upstream repo
       case $distro_id {
         'RedHat': {
-          include yum
-
           lookup('eit_repos::upstream::repos').each |$repo| {
             rh_repo { $repo:
               ensure => present,
@@ -104,23 +126,12 @@ class eit_repos (
             }
           }
         }
-        'CentOS': {
-          class { 'yum':
-            manage_os_default_repos => $upstream,
-          }
-        }
+        'CentOS', 'Rocky': {}
         'OracleLinux': {
-          include yum
-
           if $upstream {
             eit_repos::yum::oracle.include
           }
 
-        }
-        'Rocky': {
-          class { 'yum':
-            manage_os_default_repos => $upstream,
-          }
         }
         default: {
           fail("This ${distro_id} is not supported for upstream repos")
