@@ -7,7 +7,7 @@
 #
 class profile::computing::slurm (
   Boolean                        $enable                  = $::role::computing::slurm::enable,
-  Boolean                        $noop_value              = true,
+  Eit_types::Noop_Value          $noop_value              = $::role::computing::slurm::noop_value,
   Eit_types::SimpleString        $interface               = $::role::computing::slurm::interface,
   Array[Eit_types::IPCIDR]       $node_cidrs              = $::role::computing::slurm::node_cidrs,
   Eit_types::Version             $slurm_version           = $::role::computing::slurm::slurm_version,
@@ -97,7 +97,7 @@ class profile::computing::slurm (
     with_slurmd               => false,
     with_slurmctld            => false,
     with_slurmdbd             => false,
-    service_manage            => true,
+    service_manage            => false,
     authtype                  => 'munge',
 
     uid                       => 64030,
@@ -144,6 +144,15 @@ class profile::computing::slurm (
     *                         => $_munge_key,
   }
 
+  if $enable {
+    service { 'munge':
+      ensure  => ensure_service($enable),
+      enable  => true,
+      noop    => $noop_value,
+      require => Class['slurm'],
+    }
+  }
+
   if $enable and $slurmctld {
     package::install ('slurm-slurmctld', {
       ensure => $slurm_version,
@@ -155,6 +164,7 @@ class profile::computing::slurm (
       metrics       => $metrics,
       slurm_version => $slurm_version,
       slurmctldport => $slurmctldport,
+      noop_value    => $noop_value,
     }
   }
 
@@ -168,6 +178,7 @@ class profile::computing::slurm (
       node_cidrs          => $node_cidrs,
       db_buffer_pool_size => $db_buffer_pool_size,
       db_log_file_size    => $db_log_file_size,
+      noop_value          => $noop_value,
     }
   }
 
@@ -179,6 +190,7 @@ class profile::computing::slurm (
     class { '::profile::computing::slurm::slurmd':
       interface  => $interface,
       node_cidrs => $node_cidrs,
+      noop_value => $noop_value,
     }
   }
 

@@ -77,7 +77,7 @@ class role::computing::slurm (
   ]]                                  $munge_key               = undef,
   Optional[Eit_Files::Source]         $jwt_key                 = undef,
   Boolean                             $enable                  = false,
-  Boolean                             $noop_value              = true,
+  Eit_types::Noop_Value               $noop_value              = false,
   Eit_types::SimpleString             $interface               = undef,
   Array[Eit_types::IPCIDR]            $node_cidrs              = [],
   Eit_types::Version                  $slurm_version           = '18.08.7',

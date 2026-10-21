@@ -2,6 +2,7 @@
 class profile::computing::slurm::slurmd (
   Eit_types::SimpleString  $interface,
   Array[Eit_types::IPCIDR] $node_cidrs,
+  Eit_types::Noop_Value    $noop_value = false,
 ) {
 
   firewall_multi {
@@ -34,4 +35,15 @@ class profile::computing::slurm::slurmd (
   }
 
   include ::slurm::slurmd
+
+  service { 'slurmd':
+    ensure  => ensure_service(true),
+    enable  => true,
+    noop    => $noop_value,
+    require => Class['slurm::slurmd'],
+  }
+
+  if defined(Service['slurmctld']) {
+    Service['slurmctld'] -> Service['slurmd']
+  }
 }
