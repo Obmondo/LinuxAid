@@ -18,7 +18,7 @@ class common::monitor (
       include common::monitor::splunk::forwarder
     }
     if lookup('common::monitor::scom::manage', Boolean, undef, false) {
-      include common::monitoring::scom
+      include common::monitor::scom
     }
   }
 }
