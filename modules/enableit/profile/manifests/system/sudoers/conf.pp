@@ -22,9 +22,10 @@ define profile::system::sudoers::conf (
   }
 
   # sudo-rs (default sudo on e.g. Ubuntu 26.04) rejects rules with wildcards
-  # (`*`, `?`, `[`) in command arguments and the `requiretty` setting, and
-  # prints a parse error for them on every sudo call. Such rules never take
-  # effect there, so remove them on sudo-rs hosts.
+  # (`*`, `?`) in command arguments and the `requiretty` setting, and prints a
+  # parse error for them on every sudo call. Such rules never take effect
+  # there, so remove them on sudo-rs hosts. A lone `*` as the last argument
+  # (`/usr/sbin/nginx *`) and `[` are accepted by sudo-rs, so keep those.
   $_sudo_rs_incompatible = $facts.dig('sudo', 'kind') == 'sudo-rs' and $content and $content.split("\n").any |$line| {
     if $line =~ /^\s*Defaults/ {
       $line =~ /\brequiretty\b/
@@ -33,7 +34,7 @@ define profile::system::sudoers::conf (
     } else {
       # Strip `user host=(runas) TAGS:` and check each command's arguments
       $line.regsubst(/^[^=]*=\s*(\([^)]*\)\s*)?([A-Z_]+:\s*)*/, '').split(/,\s*(?=\/)/).any |$command| {
-        $command.strip =~ /^\S+\s+.*[*?\[]/
+        $command.strip.regsubst(/\s+\*$/, '') =~ /^\S+\s+.*[*?]/
       }
     }
   }
