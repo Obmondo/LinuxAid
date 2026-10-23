@@ -2,6 +2,24 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.12
+
+### Bug Fixes
+- b36a3db4 fix: restart docker compose services upon system restart
+- 544393ff fix(eit_repos): keep 2 kernels when /boot is under 1G
+
+### Configuration Changes
+- 18df863d chore: updated puppet-rustfs module v1.1.0 -> v1.1.1
+
+### Other Changes
+- 67f890bd Revert "profile::system::sudoers::conf: drop rules sudo-rs can't parse" (#172)
+- f8c4d935 common::monitor::scom: remove SCOM rules when enable is false
+- b25fc0ef common::monitor: fix SCOM class name in include
+- 3d95779c profile::system::sudoers::conf: match sudo-rs wildcard rules exactly
+- 1b222a06 role::package_management::repo: bump repository-snapshot image to v3.1.7 (snapshot at 10:00 UTC Sunday)
+- 04223b66 profile::system::sudoers::conf: drop rules sudo-rs can't parse
+- f45f5520 Bump linuxaid-cli to 1.11.5
+
 ## LinuxAid Release Version v1.8.11
 
 ### Bug Fixes
