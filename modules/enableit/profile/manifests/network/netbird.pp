@@ -159,6 +159,7 @@ class profile::network::netbird (
       chain netbird_srcnat {
         type nat hook postrouting priority srcnat; policy accept;
         oifname "wt0" meta nfproto ipv4 masquerade
+        iifname "wt0" meta nfproto ipv4 masquerade
       }
 
       chain netbird_mssfix {
