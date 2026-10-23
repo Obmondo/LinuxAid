@@ -5,6 +5,7 @@ class profile::computing::slurm::slurmdbd (
   String                   $db_buffer_pool_size,
   String                   $db_log_file_size,
   String                   $storagehost = '127.0.0.1',
+  Eit_types::Noop_Value    $noop_value  = false,
 ) {
 
   firewall_multi {'100 allow slurmdbd':
@@ -27,5 +28,12 @@ class profile::computing::slurm::slurmdbd (
     storagecollate          => 'utf8_general_ci',
     innodb_buffer_pool_size => $db_buffer_pool_size,
     innodb_log_file_size    => $db_log_file_size,
+  }
+
+  service { 'slurmdbd':
+    ensure  => ensure_service(true),
+    enable  => true,
+    noop    => $noop_value,
+    require => Class['slurm::slurmdbd'],
   }
 }

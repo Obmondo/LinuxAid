@@ -5,6 +5,7 @@ class profile::computing::slurm::slurmctld (
   Stdlib::Port              $slurmctldport,
   Eit_types::Slurm::Metrics $metrics,
   Eit_types::Version        $slurm_version,
+  Eit_types::Noop_Value     $noop_value = false,
 ) {
 
   $scrape_host = $::trusted['certname']
@@ -27,6 +28,17 @@ class profile::computing::slurm::slurmctld (
   }
 
   include ::slurm::slurmctld
+
+  service { 'slurmctld':
+    ensure  => ensure_service(true),
+    enable  => true,
+    noop    => $noop_value,
+    require => Class['slurm::slurmctld'],
+  }
+
+  if defined(Service['slurmdbd']) {
+    Service['slurmdbd'] -> Service['slurmctld']
+  }
 
   if versioncmp($slurm_version, '25.11.1') >= 0 {
     $metrics.each |$metric| {
