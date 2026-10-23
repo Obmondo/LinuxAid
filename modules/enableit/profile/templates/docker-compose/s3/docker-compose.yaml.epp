@@ -19,6 +19,7 @@ services:
           - <%= $endpoint %>
     ports:
       - '127.0.0.1:8000:8000'
+    restart: always
 
   s3-policy-init:
     image: amazon/aws-cli
