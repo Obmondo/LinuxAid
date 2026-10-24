@@ -50,8 +50,11 @@ create_backup_directory() {
 # 3. Dump Gitea data (Generates the NEW backup)
 dump_gitea_data() {
     log "Dumping Gitea data..."
+    # The bleve issue indexer merges and deletes its .zap segments while gitea
+    # runs, so packing it live fails with "stat ...zap: no such file". The index
+    # is rebuilt from the database on restore, so leave it out.
     docker exec -u "$GITEA_USER" "$GITEA_CONTAINER" bash -c \
-        "cd ~ && /app/gitea/gitea dump -c /data/gitea/conf/app.ini"
+        "cd ~ && /app/gitea/gitea dump -c /data/gitea/conf/app.ini --skip-index"
 }
 
 # 4. Move the NEW dump into the local backup directory
