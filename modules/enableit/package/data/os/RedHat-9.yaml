@@ -1,3 +1,2 @@
 ---
 package::mailx: 's-nail'
-package::netcat: 'nmap-ncat'
