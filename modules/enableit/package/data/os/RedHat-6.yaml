@@ -1,4 +1,5 @@
 ---
 package::libpam-systemd: null
+package::netcat: 'nc'
 package::samba-common-tools: 'samba4-common'
 package::realmd: 'adcli'

@@ -13,7 +13,7 @@ class profile::software::pycharm (
   Eit_types::Noop_Value $noop_value = $common::software::pycharm::noop_value,
 ){
 
-  $package_url   = "https://download-cdn.jetbrains.com/python/pycharm-${version}.tar.gz"
+  $package_url   = "https://download.jetbrains.com/python/pycharm-${version}.tar.gz"
   $package_name  = "pycharm-${version}.tar.gz"
   $download_path = "/tmp/${package_name}"
   $install_dir   = "/opt/pycharm-${version}"
