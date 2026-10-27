@@ -90,10 +90,14 @@ class common::backup::gitea (
     }
   }
 
+  # No Requires=gitea-backup.service in the timer: a timer starts its
+  # dependencies along with itself, so that ran a backup on every boot outside
+  # the schedule. Being a oneshot, the run was part of the boot transaction,
+  # and a dump that hung on a not-yet-ready container held the host in
+  # "starting" for over a day. Unit= is all the timer needs.
   $_timer = @("EOT"/$n)
 # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
 [Unit]
-Requires=gitea-backup.service
 Description=Run gitea backup
 
 [Install]
@@ -110,7 +114,6 @@ RandomizedDelaySec=1h
 # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
 [Unit]
 Description=Run Gitea backup based on timer
-Wants=gitea-backup.timer
 
 [Service]
 Type=oneshot
