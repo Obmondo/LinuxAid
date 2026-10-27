@@ -121,6 +121,6 @@ ExecStart=/opt/obmondo/bin/gitea-backup
     timer_content   => $_timer,
     service_content => $_service,
     active          => true,
-    enable          => true,
+    enable          => false,
   }
 }
