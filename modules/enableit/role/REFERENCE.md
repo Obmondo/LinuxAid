@@ -3557,7 +3557,6 @@ The following parameters are available in the `role::projectmanagement::gitlab` 
 * [`time_zone`](#-role--projectmanagement--gitlab--time_zone)
 * [`registry`](#-role--projectmanagement--gitlab--registry)
 * [`prometheus`](#-role--projectmanagement--gitlab--prometheus)
-* [`puma_bug`](#-role--projectmanagement--gitlab--puma_bug)
 * [`mattermost`](#-role--projectmanagement--gitlab--mattermost)
 * [`default_theme`](#-role--projectmanagement--gitlab--default_theme)
 * [`terminate_https`](#-role--projectmanagement--gitlab--terminate_https)
@@ -3632,14 +3631,6 @@ Data type: `Boolean`
 Whether to enable Prometheus integration. Defaults to true.
 
 Default value: `true`
-
-##### <a name="-role--projectmanagement--gitlab--puma_bug"></a>`puma_bug`
-
-Data type: `Boolean`
-
-Whether to apply the Puma bug workaround. Defaults to false.
-
-Default value: `false`
 
 ##### <a name="-role--projectmanagement--gitlab--mattermost"></a>`mattermost`
 

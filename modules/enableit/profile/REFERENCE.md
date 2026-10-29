@@ -4668,7 +4668,6 @@ The following parameters are available in the `profile::projectmanagement::gitla
 * [`email_enabled`](#-profile--projectmanagement--gitlab--email_enabled)
 * [`email_display_name`](#-profile--projectmanagement--gitlab--email_display_name)
 * [`registry`](#-profile--projectmanagement--gitlab--registry)
-* [`puma_bug`](#-profile--projectmanagement--gitlab--puma_bug)
 * [`mattermost`](#-profile--projectmanagement--gitlab--mattermost)
 * [`prometheus`](#-profile--projectmanagement--gitlab--prometheus)
 * [`default_theme`](#-profile--projectmanagement--gitlab--default_theme)
@@ -4742,14 +4741,6 @@ Data type: `Boolean`
 
 
 Default value: `$role::projectmanagement::gitlab::registry`
-
-##### <a name="-profile--projectmanagement--gitlab--puma_bug"></a>`puma_bug`
-
-Data type: `Boolean`
-
-
-
-Default value: `$role::projectmanagement::gitlab::puma_bug`
 
 ##### <a name="-profile--projectmanagement--gitlab--mattermost"></a>`mattermost`
 
