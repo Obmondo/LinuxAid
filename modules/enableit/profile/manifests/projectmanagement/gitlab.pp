@@ -7,7 +7,6 @@ class profile::projectmanagement::gitlab (
   Boolean                              $email_enabled          = $role::projectmanagement::gitlab::email_enabled,
   String                               $email_display_name     = $role::projectmanagement::gitlab::email_display_name,
   Boolean                              $registry               = $role::projectmanagement::gitlab::registry,
-  Boolean                              $puma_bug               = $role::projectmanagement::gitlab::puma_bug,
   Boolean                              $mattermost             = $role::projectmanagement::gitlab::mattermost,
   Boolean                              $prometheus             = $role::projectmanagement::gitlab::prometheus,
   Eit_types::Gitlab::Theme             $default_theme          = $role::projectmanagement::gitlab::default_theme,
@@ -145,43 +144,6 @@ class profile::projectmanagement::gitlab (
       Package['obmondo-gitlab-update-check-collector'],
       File["${textfile_directory}/gitlab.prom"],
     ],
-  }
-
-  ## The puma_worker is using high cpu to to restart th puma_worker need to restart the gitlab service
-  $_puma_bug_timer = @("EOT"/)
-    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-    [Unit]
-    Description=Puma worker using high cpu so restarting the gitlab service
-    Requires=gitlab-puma-bug.service
-
-    [Timer]
-    OnCalendar=Tue *-*-* 05:00:00
-    Unit=gitlab-puma-bug.service
-
-    [Install]
-    WantedBy=timers.target
-    | EOT
-
-  $_puma_bug_service = @("EOT"/)
-    # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-    [Unit]
-    Description=Puma worker using high cpu so restarting the gitlab service
-    Wants=gitlab-puma-bug.timer
-
-    [Service]
-    Type=oneshot
-    ExecStart=/usr/bin/gitlab-ctl restart
-
-    [Install]
-    WantedBy=multi-user.target
-    | EOT
-
-  systemd::timer { 'gitlab-puma-bug.timer':
-    ensure          => present,
-    active          => true,
-    enable          => true,
-    timer_content   => $_puma_bug_timer,
-    service_content => $_puma_bug_service,
   }
 
   $bind_ports = [

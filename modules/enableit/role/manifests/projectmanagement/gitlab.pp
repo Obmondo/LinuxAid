@@ -13,8 +13,6 @@
 #
 # @param prometheus Whether to enable Prometheus integration. Defaults to true.
 #
-# @param puma_bug Whether to apply the Puma bug workaround. Defaults to false.
-#
 # @param mattermost Whether to enable Mattermost integration. Defaults to false.
 #
 # @param default_theme The default theme for GitLab. Defaults to 'black'.
@@ -63,7 +61,7 @@
 #
 # @groups git_config gitlab_rails, git_config
 #
-# @groups others time_zone, puma_bug, default_theme, package_version, encrypt_params, enable_pages
+# @groups others time_zone, default_theme, package_version, encrypt_params, enable_pages
 #
 # @encrypt_params  ssl_cert, ssl_key
 #
@@ -74,7 +72,6 @@ class role::projectmanagement::gitlab (
   Eit_types::Timezone                  $time_zone                = $common::system::time::timezone,
   Boolean                              $registry                 = true,
   Boolean                              $prometheus               = true,
-  Boolean                              $puma_bug                 = false,
   Boolean                              $mattermost               = false,
   Eit_types::Gitlab::Theme             $default_theme            = 'black',
   Boolean                              $terminate_https          = false,
