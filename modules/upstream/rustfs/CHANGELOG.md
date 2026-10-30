@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v1.1.2 - 2026-10-30
+#### Miscellaneous Chores
+- update rustfs container image version to 1.0.4 - (fa2378c) - Sidharth Jawale
+
+- - -
+
 ## v1.1.1 - 2026-10-19
 #### Miscellaneous Chores
 - update rustfs container image version to 1.0.3 - (184e324) - Sidharth Jawale

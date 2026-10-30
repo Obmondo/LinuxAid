@@ -491,7 +491,7 @@ mod 'obmondo/openvas',
 
 mod 'obmondo/rustfs',
     :git => 'https://github.com/Obmondo/puppet-rustfs.git',
-    :ref => 'v1.1.1'
+    :ref => 'v1.1.2'
 
 mod 'obmondo/puppetlabs-zfs_core',
     :git => 'https://github.com/OpenVoxProject/puppetlabs-zfs_core.git',
