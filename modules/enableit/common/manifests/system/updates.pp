@@ -45,6 +45,22 @@ class common::system::updates (
       },
     ]): ensure => 'absent', }
 
+    # Disable APT periodic package list updates and unattended upgrades, system
+    # updates are handled by linuxaid-cli (obmondo-system-update) instead.
+    if $_os_family == 'Debian' {
+      $_auto_upgrades_content = @(EOT)
+        APT::Periodic::Update-Package-Lists "0";
+        APT::Periodic::Unattended-Upgrade "0";
+        | EOT
+
+      apt::conf { 'auto-upgrades':
+        ensure        => present,
+        priority      => 20,
+        content       => $_auto_upgrades_content,
+        notify_update => false,
+      }
+    }
+
     # Ensure the service is stopped and disabled on RedHat systems
     if $_os_family == 'RedHat' {
       service { 'yum-system-upgrade.service':
