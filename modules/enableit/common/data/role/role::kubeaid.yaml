@@ -12,6 +12,10 @@ common::system::kernel::modules: {}
 # ZFS is usually installed by KubeAid StorageCTL; overrides facts/zfs_present=true.yaml,
 # which would install it (dkms + repo) on any host that has it.
 common::storage::zfs::enable: false
+# Overrides common.yaml's enable: true, so manage: true only removes unattended-upgrades and
+# doesn't install the obmondo-system-update timer.
+common::system::updates::manage: false
+common::system::updates::enable: false
 # KubeAid clusters run Cilium. If firewall management is ever switched on for
 # these nodes, the chain purge has to skip Cilium's rules or pod networking and
 # service NAT break on every Puppet run.
