@@ -6,17 +6,23 @@
 #
 # @param snapshot Boolean indicating whether snapshots should be taken before updates. Defaults to true.
 #
+# @param manage_unattended_upgrades Boolean to leave APT periodic updates and unattended upgrades
+#   unmanaged on Debian based systems. When false, /etc/apt/apt.conf.d/20auto-upgrades is managed
+#   with APT::Periodic::Update-Package-Lists and APT::Periodic::Unattended-Upgrade set to "0".
+#   Defaults to false.
+#
 # @param noop_value Optional Boolean to perform no-op runs for testing. Defaults to false.
 #
-# @groups general manage, enable, snapshot
+# @groups general manage, enable, snapshot, manage_unattended_upgrades
 #
 # @groups noop noop_value
 #
 class common::system::updates (
-  Boolean               $manage                 = false,
-  Boolean               $enable                 = false,
-  Boolean               $snapshot               = true,
-  Eit_types::Noop_Value $noop_value             = undef,
+  Boolean               $manage                     = false,
+  Boolean               $enable                     = false,
+  Boolean               $snapshot                   = true,
+  Boolean               $manage_unattended_upgrades = false,
+  Eit_types::Noop_Value $noop_value                 = undef,
 ) {
   if $manage {
     $repo_managed = lookup('common::system::repo::manage', Boolean, undef, true)
@@ -44,6 +50,22 @@ class common::system::updates (
         'yum-cron'
       },
     ]): ensure => 'absent', }
+
+    # Disable APT periodic package list updates and unattended upgrades, system
+    # updates are handled by linuxaid-cli (obmondo-system-update) instead.
+    if $_os_family == 'Debian' and !$manage_unattended_upgrades {
+      $_auto_upgrades_content = @(EOT)
+        APT::Periodic::Update-Package-Lists "0";
+        APT::Periodic::Unattended-Upgrade "0";
+        | EOT
+
+      apt::conf { 'auto-upgrades':
+        ensure        => present,
+        priority      => 20,
+        content       => $_auto_upgrades_content,
+        notify_update => false,
+      }
+    }
 
     # Ensure the service is stopped and disabled on RedHat systems
     if $_os_family == 'RedHat' {
