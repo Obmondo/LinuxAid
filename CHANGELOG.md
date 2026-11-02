@@ -2,6 +2,23 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.13
+
+### Features
+- 9cb09939 feat: add request for masquerading and forwarding for non turris
+
+### Bug Fixes
+- a313bed2 fix: add the inbound masquerade rule for turris router peers
+- 12506177 fix(gitlab): remove gitlab-puma-bug service and timer
+
+### Configuration Changes
+- e0762184 chore: updated puppet-rustfs module v1.1.1 -> v1.1.2
+
+### Other Changes
+- ae0453d2 Fix PyCharm download URL and RHEL netcat package name
+- ef45a93c gitea backup: don't enable the timer into timers.target
+- 57786d64 gitea backup: skip the bleve index in the dump
+
 ## LinuxAid Release Version v1.8.12
 
 ### Bug Fixes
