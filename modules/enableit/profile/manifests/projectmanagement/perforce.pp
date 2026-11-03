@@ -31,7 +31,7 @@ class profile::projectmanagement::perforce (
   yum::versionlock { $helix_packages:
     ensure  => present,
     version => $versionrelease[0],
-    release => "${versionrelease[1]}${_version_suffix}.*",
+    release => "${versionrelease[1]}${_version_suffix}",
     epoch   => 0,
     arch    => 'x86_64',
   }

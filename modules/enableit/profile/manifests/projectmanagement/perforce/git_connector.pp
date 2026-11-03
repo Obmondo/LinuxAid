@@ -19,7 +19,7 @@ class profile::projectmanagement::perforce::git_connector (
   yum::versionlock { 'helix-git-connector':
     ensure  => present,
     version => $versionrelease[0],
-    release => "${versionrelease[1]}${_version_suffix}.*",
+    release => "${versionrelease[1]}${_version_suffix}",
     epoch   => 0,
     arch    => 'x86_64',
   }
