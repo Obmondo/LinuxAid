@@ -31,6 +31,11 @@ class profile::projectmanagement::perforce::git_connector (
     arch    => 'x86_64',
   }
 
+  package { $_package:
+    ensure  => installed,
+    require => Yumrepo['perforce'],
+  }
+
   ssh::server::match_block { 'git':
     options => {
       'AuthorizedKeysCommand'     => '/usr/bin/gconn-ssh-auth.sh %t %k',
@@ -98,7 +103,10 @@ class profile::projectmanagement::perforce::git_connector (
     }.stdlib::to_json_pretty(true, {
       indent => '    ',
     }),
-    require => Group['gconn-auth'],
+    require => [
+      Group['gconn-auth'],
+      Package[$_package],
+    ],
   }
 
   file { $repos_dir:
@@ -109,6 +117,7 @@ class profile::projectmanagement::perforce::git_connector (
     require => [
       User['git'],
       Group['gconn-auth'],
+      Package[$_package],
     ],
   }
 
