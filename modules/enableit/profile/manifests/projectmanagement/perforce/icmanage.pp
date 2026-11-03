@@ -25,8 +25,9 @@ class profile::projectmanagement::perforce::icmanage (
   if $manage_db {
 
     class { '::profile::db::mysql' :
-      backup         => $db_backup,
-      package_ensure => $mysql_version,
+      backup            => $db_backup,
+      package_ensure    => $mysql_version,
+      access_mysql_from => $access_mysql_from,
     }
 
     mysql_user { "${db_admin_user}@%":
