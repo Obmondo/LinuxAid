@@ -17,4 +17,9 @@ class role::kubeaid inherits ::role {
   # Likewise for ZFS dataset properties (common::storage::zfs::datasets); ZFS itself is usually
   # installed by KubeAid StorageCTL, so common::storage::zfs::enable stays off by default.
   include common::storage::zfs
+
+  # Likewise for automatic updates, so a cluster can remove unattended-upgrades
+  # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
+  # leave a node's DHCP lease unrenewed until the address expires.
+  include common::system::updates
 }
