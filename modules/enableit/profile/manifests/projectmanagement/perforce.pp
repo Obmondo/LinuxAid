@@ -55,6 +55,7 @@ class profile::projectmanagement::perforce (
       'helix-cli',
       'helix-p4d',
     ],
+    server_name       => $facts['networking']['hostname'],
     install_root      => '/opt/perforce',
     var_dir           => '/var/lib/perforce',
   }
