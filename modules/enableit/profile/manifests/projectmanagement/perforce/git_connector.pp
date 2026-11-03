@@ -16,7 +16,14 @@ class profile::projectmanagement::perforce::git_connector (
 
   $versionrelease = $version.split('-')
 
-  yum::versionlock { 'helix-git-connector':
+  # The helix-git-connector package was renamed to p4-git-connector in 2025.1
+  $_package = if versioncmp($versionrelease[0], '2025.1') >= 0 {
+    'p4-git-connector'
+  } else {
+    'helix-git-connector'
+  }
+
+  yum::versionlock { $_package:
     ensure  => present,
     version => $versionrelease[0],
     release => "${versionrelease[1]}${_version_suffix}",

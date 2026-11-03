@@ -48,4 +48,14 @@ profile::projectmanagement::perforce::helix_packages:
   - 'helix-cli-base'
   - 'helix-broker-base'
   - 'helix-proxy-base'
-  - 'helix-p4d-base-24.1'
+
+profile::projectmanagement::perforce::p4_packages:
+  - 'p4-server-control'
+  - 'p4-proxy'
+  - 'p4-broker'
+  - 'p4-cli'
+  - 'p4-server'
+  - 'p4-server-base'
+  - 'p4-cli-base'
+  - 'p4-broker-base'
+  - 'p4-proxy-base'
