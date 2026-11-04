@@ -179,6 +179,7 @@ repository::mirror::default_configurations:
           - "BaseOS"
           - "AppStream"
           - "extras"
+          - "CRB"
         dists: ["8", "9"]
         exclude:
           - "EFI"
