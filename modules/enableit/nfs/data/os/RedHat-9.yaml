@@ -1,0 +1,8 @@
+---
+nfs::nobody_username: 'nobody'
+nfs::nobody_groupname: 'nobody'
+nfs::nobody_gecos: 'Kernel Overflow User'
+nfs::nobody_uid: 65534
+nfs::nobody_gid: 65534
+nfs::nobody_shell: '/sbin/nologin'
+nfs::nobody_home: '/'

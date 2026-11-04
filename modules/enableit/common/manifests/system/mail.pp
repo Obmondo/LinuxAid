@@ -93,6 +93,10 @@ class common::system::mail (
           smtp_connection_cache_destinations    => [],
         }, $_extra_main_parameters),
       }
+      # postfix::server installs the package that provides newaliases and the
+      # postfix/postdrop users and groups, so it has to be applied first.
+      Class['postfix::server'] -> Exec['/usr/bin/newaliases']
+      Class['postfix::server'] -> File['/var/spool/postfix', '/var/spool/postfix/maildrop']
     }
     exec { '/usr/bin/newaliases':
       onlyif => '/usr/bin/test \( ! -f /etc/aliases.db \) -o \( /etc/aliases.db -ot /etc/aliases \)',
