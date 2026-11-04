@@ -256,7 +256,13 @@ class common::system::repo (
             }
           }
           if $_os['name'] == 'Rocky' {
-            ['BaseOS', 'AppStream', 'extras'].each |$repo| {
+            # CRB carries dependencies of many EPEL packages. It is only mirrored
+            # for EL9 and later (EL8 names it PowerTools, which is not mirrored).
+            $_rocky_repos = Integer($_os_major) >= 9 ? {
+              true    => ['BaseOS', 'AppStream', 'extras', 'CRB'],
+              default => ['BaseOS', 'AppStream', 'extras'],
+            }
+            $_rocky_repos.each |$repo| {
               yumrepo { $repo:
                 ensure   => present,
                 noop     => $noop_value,
