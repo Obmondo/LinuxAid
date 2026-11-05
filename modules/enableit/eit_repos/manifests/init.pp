@@ -53,7 +53,6 @@ class eit_repos (
       if $upstream {
         eit_repos::apt::upstream.include
       }
-      eit_repos::apt::proposed.include
 
       Class[$_defined_apt_classes] -> Package<| provider == 'apt' |>
     }

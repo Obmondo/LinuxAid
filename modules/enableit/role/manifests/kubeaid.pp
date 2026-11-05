@@ -22,8 +22,4 @@ class role::kubeaid inherits ::role {
   # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
   # leave a node's DHCP lease unrenewed until the address expires.
   include common::system::updates
-
-  # Likewise for the Ubuntu -proposed pocket (eit_repos::apt::proposed::enable and ::packages),
-  # for a fix that is only in -proposed so far, e.g. a kernel security fix.
-  include eit_repos::apt::proposed
 }
