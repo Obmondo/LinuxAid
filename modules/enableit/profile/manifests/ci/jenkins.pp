@@ -1,16 +1,35 @@
 # jenkins profile
 class profile::ci::jenkins (
-  String                      $ssl_combined_pem,
   Eit_types::Version          $version     = 'installed',
   Hash                        $config_hash = {},
   Eit_types::Jenkins::Plugins $plugins     = {},
   Stdlib::Port                $port        = 8080,
+  Hash                        $casc_config = {},
 ) inherits ::profile {
+
+  # The Jenkins repo and its signing key are managed by eit_repos, since
+  # puppet/jenkins still ships the expired jenkins.io-2023.key.
+  eit_repos::repo { 'jenkins': }
+
+  Yumrepo <| title == 'jenkins' |> -> Class['jenkins']
+  Apt::Source <| title == 'jenkins' |> -> Class['jenkins']
+
+  # Current Jenkins LTS needs Java 17+, but puppet/jenkins' java module would
+  # install Java 8 on EL. Install Java 21 here instead (install_java => false).
+  case $facts['os']['family'] {
+    'Debian': {
+      package::install('openjdk-21-jre-headless', { before => Class['jenkins'] })
+    }
+    default: {
+      package::install('java-21-openjdk-headless', { before => Class['jenkins'] })
+    }
+  }
 
   class { 'jenkins':
     version        => $version,
     lts            => true,
-    repo           => true,
+    repo           => false,
+    install_java   => false,
     port           => $port,
     service_enable => true,
     config_hash    => $config_hash,
@@ -19,6 +38,7 @@ class profile::ci::jenkins (
     manage_user    => true,
     group          => 'jenkins',
     manage_group   => true,
+    casc_config    => $casc_config,
   }
 
   $plugins.each |$_plugin, $_settings| {
@@ -26,58 +46,4 @@ class profile::ci::jenkins (
       * => $_settings,
     }
   }
-
-  # Setup haproxy https
-  file {
-    '/etc/ssl/private/jenkins':
-      ensure => directory,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0500',
-      ;
-
-    '/etc/ssl/private/jenkins/combined.pem':
-      ensure  => present,
-      content => $ssl_combined_pem,
-      mode    => '0400',
-      before  => Class['haproxy'],
-      require => File['/etc/ssl/private/jenkins'],
-      ;
-  }
-
-  class { '::eit_haproxy::auto_config' :
-    encryption_ciphers => 'strict',
-    redirect_http      => true,
-    proxies            => {
-      jenkins_http => {
-        letsencrypt   => false,
-        mode          => 'http',
-        binds         => {
-          https_0_0_0_0_80  => {
-            'ports'     => [80],
-            'ssl'       => false,
-            'ipaddress' => '0.0.0.0',
-          },
-          https_0_0_0_0_443 => {
-            'ports'     => [443],
-            'ssl'       => true,
-            'options'   => 'crt /etc/ssl/private/jenkins/combined.pem',
-            'ipaddress' => '0.0.0.0',
-          },
-        },
-        sites         => {
-          jenkins_http => {
-            servers         => [
-              "127.0.0.1:${port}",
-            ],
-            default_backend => true,
-          },
-        },
-        extra_options => {
-          option => ['forwardfor'],
-        }
-      }
-    },
-  }
-
 }

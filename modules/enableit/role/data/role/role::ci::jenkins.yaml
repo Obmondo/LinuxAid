@@ -1,0 +1,30 @@
+---
+# Customer plugins are merged on top of these defaults instead of replacing them
+lookup_options:
+  role::ci::jenkins::plugins:
+    merge: hash
+
+# Baseline plugins for the LinuxAid Jenkins setup: Configuration as Code
+# (role::ci::jenkins::casc_config) and matrix-based authorization, plus all
+# their required dependencies (Jenkins 2.580.2). puppet/jenkins installs only
+# the listed plugins, not their dependencies. Plugins from jenkins'
+# default_plugins (credentials, structs, ...) must not be listed here, as that
+# would declare them twice.
+role::ci::jenkins::plugins:
+  antisamy-markup-formatter: {}
+  asm-api: {}
+  bootstrap5-api: {}
+  caffeine-api: {}
+  configuration-as-code: {}
+  font-awesome-api: {}
+  ionicons-api: {}
+  json-api: {}
+  matrix-auth: {}
+  plugin-util-api: {}
+  prism-api: {}
+  scm-api: {}
+  script-security: {}
+  snakeyaml-api: {}
+  workflow-api: {}
+  workflow-step-api: {}
+  workflow-support: {}
