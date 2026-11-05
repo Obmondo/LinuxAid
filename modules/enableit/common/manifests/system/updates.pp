@@ -47,21 +47,17 @@ class common::system::updates (
 
     # Disable APT periodic package list updates and unattended upgrades, system
     # updates are handled by linuxaid-cli (obmondo-system-update) instead.
-    # A plain file rather than apt::conf: apt::conf reads $apt::config_files, so it
-    # needs Class['apt'], which role::kubeaid never declares (with strict variables
-    # the whole catalog fails), and including apt here would clash with the
-    # resource-style declaration in eit_repos.
     if $_os_family == 'Debian' {
-      file { '/etc/apt/apt.conf.d/20auto-upgrades':
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => @(EOT),
-          # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-          APT::Periodic::Update-Package-Lists "0";
-          APT::Periodic::Unattended-Upgrade "0";
-          | EOT
+      $_auto_upgrades_content = @(EOT)
+        APT::Periodic::Update-Package-Lists "0";
+        APT::Periodic::Unattended-Upgrade "0";
+        | EOT
+
+      apt::conf { 'auto-upgrades':
+        ensure        => present,
+        priority      => 20,
+        content       => $_auto_upgrades_content,
+        notify_update => false,
       }
     }
 

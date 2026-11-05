@@ -18,20 +18,18 @@ class role::kubeaid inherits ::role {
   # installed by KubeAid StorageCTL, so common::storage::zfs::enable stays off by default.
   include common::storage::zfs
 
-  # Likewise for automatic updates, so a cluster can remove unattended-upgrades
-  # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
-  # leave a node's DHCP lease unrenewed until the address expires.
-  include common::system::updates
-
-  # Ubuntu -proposed pocket (eit_repos::apt::upstream::proposed and ::proposed_packages), for a fix
-  # that is only in -proposed so far, e.g. a kernel security fix. common::system::repo is not loaded
-  # on KubeAid nodes, so eit_repos is declared here, without purging the node's own sources and pins.
-  # Set proposed to false (not just remove the key) to take the source and the pin off again.
-  if lookup('eit_repos::apt::upstream::proposed', Optional[Boolean], undef, undef) =~ Boolean {
+  # common::system::repo is not loaded on KubeAid nodes either, so eit_repos (and with it the apt
+  # class that apt::conf and apt::source need) is declared here, without purging the node's own
+  # sources and pins. Upstream repos and -proposed are switched on in hiera (eit_repos::upstream).
+  if $facts['os']['family'] == 'Debian' {
     class { 'eit_repos':
-      upstream   => true,
       purge      => false,
       purge_pins => false,
     }
   }
+
+  # Likewise for automatic updates, so a cluster can remove unattended-upgrades
+  # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
+  # leave a node's DHCP lease unrenewed until the address expires.
+  include common::system::updates
 }
