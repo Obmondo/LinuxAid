@@ -20,7 +20,7 @@ class role::kubeaid inherits ::role {
 
   # common::system::repo is not loaded on KubeAid nodes either, so eit_repos (and with it the apt
   # class that apt::conf and apt::source need) is declared here, without purging the node's own
-  # sources and pins. Upstream repos and -proposed are switched on in hiera (eit_repos::upstream).
+  # sources and pins. Upstream repos can be switched on in hiera (eit_repos::upstream).
   if $facts['os']['family'] == 'Debian' {
     class { 'eit_repos':
       purge      => false,
