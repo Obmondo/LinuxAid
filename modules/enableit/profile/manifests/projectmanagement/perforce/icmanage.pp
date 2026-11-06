@@ -24,15 +24,16 @@ class profile::projectmanagement::perforce::icmanage (
   # Monitoring
   if $manage_db {
 
-    class { '::profile::mysql' :
-      backup         => $db_backup,
-      package_ensure => $mysql_version,
+    class { '::profile::db::mysql' :
+      backup            => $db_backup,
+      package_ensure    => $mysql_version,
+      access_mysql_from => $access_mysql_from,
     }
 
     mysql_user { "${db_admin_user}@%":
       ensure        => present,
       password_hash => mysql::password($db_admin_password),
-      require       => Class['profile::mysql'],
+      require       => Class['profile::db::mysql'],
     }
 
     mysql::db { 'bugs':

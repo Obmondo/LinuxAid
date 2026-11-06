@@ -2,9 +2,9 @@
 #
 # @param enable Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 #
-# @param username The MySQL monitor username. Defaults to the value of $profile::mysql::mysql_monitor_username.
+# @param username The MySQL monitor username. Defaults to the value of $profile::db::mysql::mysql_monitor_username.
 #
-# @param password The MySQL monitor password. Defaults to the value of $profile::mysql::mysql_monitor_password.
+# @param password The MySQL monitor password. Defaults to the value of $profile::db::mysql::mysql_monitor_password.
 #
 # @param noop_value Whether to run in noop mode. Defaults to false.
 #
@@ -18,8 +18,8 @@
 #
 class common::monitor::exporter::mysql (
   Boolean             $enable   = $common::monitor::exporter::enable,
-  String              $username = $profile::mysql::mysql_monitor_username,
-  Eit_types::Password $password = $profile::mysql::mysql_monitor_password,
+  String              $username = $profile::db::mysql::mysql_monitor_username,
+  Eit_types::Password $password = $profile::db::mysql::mysql_monitor_password,
 
   Eit_types::Noop_Value      $noop_value     = $common::monitor::exporter::noop_value,
   Eit_types::Encrypt::Params $encrypt_params = ['password'],

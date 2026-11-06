@@ -70,7 +70,7 @@ class perforce::configure {
     group  => 'root',
   }
 
-  file { "/etc/perforce/p4dctl.conf.d/${facts['hostname']}.conf":
+  file { "/etc/perforce/p4dctl.conf.d/${facts['networking']['hostname']}.conf":
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
