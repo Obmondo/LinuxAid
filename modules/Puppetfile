@@ -317,9 +317,9 @@ mod 'deric/beegfs',
     :git => 'https://github.com/deric/puppet-beegfs.git',
     :ref => 'v1.0.0'
 
-mod 'voxpupuli/jenkins',
-    :git => 'https://github.com/voxpupuli/puppet-jenkins.git',
-    :ref => 'v7.0.0'
+mod 'obmondo/jenkins',
+    :git => 'https://github.com/Obmondo/puppet-jenkins.git',
+    :ref => 'feat/casc'
 
 mod 'puppetlabs/motd',
     :git => 'https://github.com/puppetlabs/puppetlabs-motd.git',
