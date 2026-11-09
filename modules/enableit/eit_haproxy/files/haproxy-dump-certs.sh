@@ -113,8 +113,8 @@ else
   echo "----------------------------------------------------------------------------------"
   echo "Analyzing for unused certificates which can be removed..."
   LC_ALL=C comm -23 \
-      <(ls /etc/haproxy/certs/*.pem 2>/dev/null | sort) \
-      <(sort /tmp/cert_list.txt) | while read -r unused_cert; do
+      <(ls /etc/haproxy/certs/*.pem 2>/dev/null | LC_ALL=C sort) \
+      <(LC_ALL=C sort /tmp/cert_list.txt) | while read -r unused_cert; do
           echo "$unused_cert"
   done
 
