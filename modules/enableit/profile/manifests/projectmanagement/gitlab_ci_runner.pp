@@ -58,6 +58,7 @@ class profile::projectmanagement::gitlab_ci_runner (
         'privileged'    => $merged['privileged'],
         'disable_cache' => $merged['disable_cache'],
         'volumes'       => $merged['volumes'],
+        'devices'       => $merged['devices'],
       }),
     })]
   })

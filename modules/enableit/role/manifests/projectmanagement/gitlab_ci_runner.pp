@@ -19,6 +19,9 @@
 #       privileged: false
 #       volumes:
 #         - '/cache'
+#       # host devices exposed to the job containers (e.g. DUT serial ports)
+#       devices:
+#         - '/dev/ttyUSB0'
 #
 # @param docker_runners
 #   A hash of docker runners keyed by runner name. Each entry creates a [[runners]]
