@@ -54,18 +54,14 @@ define profile::system::certs::manual (
     }
   }
 
-  $_cert_combined_parts = [
-    $_cert_key,
-    $_cert_file,
-    if $ca {
-      $_cert_ca
-    },
-  ].delete_undef_values
-
-  $key_and_cert = join([$key, $cert], "\n")
+  # Key, certificate and (when given) the CA chain, so HAProxy and other
+  # services using the combined file also send the intermediate CA.
+  $_combined_content = [$key, $cert, $ca].delete_undef_values.map |$_part| {
+    $_part.rstrip
+  }.join("\n")
 
   file { $_cert_combined:
-    content => $key_and_cert,
+    content => "${_combined_content}\n",
   }
 
   $_domain = extract_common_name($cert)
