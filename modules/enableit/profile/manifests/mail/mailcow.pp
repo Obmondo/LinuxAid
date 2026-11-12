@@ -239,9 +239,12 @@ class profile::mail::mailcow (
     require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
   }
 
-  # NOTE: lets stop postfix on the host
+  # NOTE: lets stop postfix on the host. Disable it too: if it starts at boot
+  # it binds port 25 before docker, and postfix-mailcow comes up without its
+  # network and never gets past waiting for DNS.
   service { 'postfix':
     ensure => stopped,
+    enable => false,
   }
 
   $host = $::trusted['certname']
