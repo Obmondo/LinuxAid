@@ -39,6 +39,22 @@
 #         working_directory: '/local'
 #       build: {}
 #
+#   For the default 'gitlab-runner' user (upstream gitlab-runner service),
+#   `runners` defines one [[runners]] entry per key with optional per-runner
+#   `token` (glrt- authentication token; otherwise registration_token is used),
+#   `environment` and `limit`. When `working_directory` is set, builds and
+#   cache go to <working_directory>/builds and <working_directory>/cache.
+#   Example (Hiera):
+#     role::projectmanagement::gitlab_ci_runner::shell_runners:
+#       gitlab-runner:
+#         working_directory: '/var/lib/gitlab-runner'
+#         ca_file: '/etc/pki/tls/certs/ca-bundle.crt'
+#         runners:
+#           dut-a:
+#             limit: 1
+#             environment:
+#               - 'FOO=bar'
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @param __blendable An internal parameter.
