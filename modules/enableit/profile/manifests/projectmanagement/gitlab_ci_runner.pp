@@ -39,6 +39,7 @@ class profile::projectmanagement::gitlab_ci_runner (
       registration_token => $registration_token,
       working_directory  => $settings['working_directory'],
       concurrent_runners => pick($settings['concurrent_runners'], 1),
+      environment        => $settings['environment'],
     }
   }
 
@@ -52,6 +53,7 @@ class profile::projectmanagement::gitlab_ci_runner (
       'registration-token' => $registration_token,
       'executor'           => 'docker',
       'ca_file'            => $merged['ca_file'],
+      'environment'        => $merged['environment'],
       'docker'             => delete_undef_values({
         'image'         => $merged['image'],
         'tls_verify'    => $merged['tls_verify'],
@@ -62,12 +64,13 @@ class profile::projectmanagement::gitlab_ci_runner (
     })]
   })
 
-  $shell_upstream = Hash($default_shell_runners.map |$run_as_user, $_| {
-    ["shell-${run_as_user}", {
+  $shell_upstream = Hash($default_shell_runners.map |$run_as_user, $settings| {
+    ["shell-${run_as_user}", delete_undef_values({
       'url'                => $url,
       'registration-token' => $registration_token,
       'executor'           => 'shell',
-    }]
+      'environment'        => $settings['environment'],
+    })]
   })
 
   class { '::gitlab_ci_runner':

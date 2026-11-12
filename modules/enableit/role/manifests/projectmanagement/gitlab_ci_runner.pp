@@ -28,15 +28,22 @@
 #       runner01: {}           # uses all docker_defaults
 #       runner02:
 #         image: 'alpine:3.18' # overrides just the image
+#         environment:         # job environment variables (KEY=value)
+#           - 'AGENT_NAME=4WAY'
 #
 # @param shell_runners
 #   A hash of shell runners keyed by the Linux user they should run as.
 #   Each entry configures a dedicated systemd service and config file for
 #   that user so that shell jobs run with the correct OS identity.
+#   An optional environment list (KEY=value) is set on every runner of
+#   that user, including already registered ones.
 #   Example (Hiera):
 #     role::projectmanagement::gitlab_ci_runner::shell_runners:
 #       deploy:
 #         working_directory: '/local'
+#         environment:
+#           - 'MI51_ENVIRONMENT_FILE=/path/to/environments/agent-4way.yaml'
+#           - 'AGENT_NAME=4WAY'
 #       build: {}
 #
 # @param encrypt_params The list of params, which needs to be encrypted

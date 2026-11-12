@@ -5,4 +5,5 @@ type Eit_types::Gitlab::Runner::Docker::Defaults = Struct[{
   'privileged'    => Optional[Boolean],
   'disable_cache' => Optional[Boolean],
   'volumes'       => Optional[Array[Stdlib::Unixpath]],
+  'environment'   => Optional[Eit_types::Gitlab::Runner::Environment],
 }]

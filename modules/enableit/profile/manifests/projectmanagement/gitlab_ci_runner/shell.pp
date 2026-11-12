@@ -21,6 +21,7 @@ define profile::projectmanagement::gitlab_ci_runner::shell (
   String                     $registration_token,
   Optional[Stdlib::Unixpath] $working_directory  = undef,
   Integer[1]                 $concurrent_runners = 1,
+  Optional[Eit_types::Gitlab::Runner::Environment] $environment = undef,
 ) {
   $run_as_user        = $title
   $config_path        = "/etc/gitlab-runner/config-${run_as_user}.toml"
@@ -105,5 +106,25 @@ define profile::projectmanagement::gitlab_ci_runner::shell (
     enable    => true,
     subscribe => Systemd::Unit_file["${service_name}-register.service"],
     require   => Systemd::Unit_file["${service_name}.service"],
+  }
+
+  # The runners are registered once and the config file is not managed
+  # afterwards, so set "environment" in every runner block of this user's
+  # config (also for already registered runners). Left untouched when unset.
+  if $environment {
+    $_env_line   = "  environment = [${environment.map |$e| { "\"${e}\"" }.join(', ')}]"
+    $_executor   = '  executor = "shell"'
+    $_runners    = "grep -cxF '${_executor}' ${config_path}"
+    $_configured = "grep -cxF '${_env_line}' ${config_path}"
+
+    exec { "gitlab-runner-${run_as_user}-environment":
+      command  => "sed -i -e '/^  environment = /d' -e 's|^${_executor}\$|&\\n${_env_line}|' ${config_path}",
+      unless   => "test \"\$(${_runners})\" = \"\$(${_configured})\" && test \"\$(grep -c '^  environment = ' ${config_path})\" = \"\$(${_configured})\"",
+      onlyif   => "grep -qxF '${_executor}' ${config_path}",
+      provider => 'shell',
+      path     => ['/usr/bin', '/bin'],
+      require  => File[$config_path],
+      notify   => Service[$service_name],
+    }
   }
 }
