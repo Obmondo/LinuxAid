@@ -22,4 +22,16 @@ class role::kubeaid inherits ::role {
   # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
   # leave a node's DHCP lease unrenewed until the address expires.
   include common::system::updates
+
+  # Ubuntu -proposed pocket (eit_repos::apt::upstream::proposed and ::proposed_packages), for a fix
+  # that is only in -proposed so far, e.g. a kernel security fix. common::system::repo is not loaded
+  # on KubeAid nodes, so eit_repos is declared here, without purging the node's own sources and pins.
+  # Set proposed to false (not just remove the key) to take the source and the pin off again.
+  if lookup('eit_repos::apt::upstream::proposed', Optional[Boolean], undef, undef) =~ Boolean {
+    class { 'eit_repos':
+      upstream   => true,
+      purge      => false,
+      purge_pins => false,
+    }
+  }
 }
