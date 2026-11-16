@@ -62,13 +62,51 @@ class profile::projectmanagement::gitlab_ci_runner (
     })]
   })
 
-  $shell_upstream = Hash($default_shell_runners.map |$run_as_user, $_| {
-    ["shell-${run_as_user}", {
-      'url'                => $url,
-      'registration-token' => $registration_token,
-      'executor'           => 'shell',
-    }]
-  })
+  # Default-user shell runners. Without `runners`, a single runner named
+  # shell-gitlab-runner is registered with the role's registration_token.
+  # With `runners`, one [[runners]] entry is created per key; a runner with
+  # its own `token` (a glrt- authentication token created in GitLab) is used
+  # as-is, otherwise it is registered with the registration_token.
+  # builds_dir/cache_dir are placed under working_directory when it is set.
+  # ca_file is used by the upstream module to verify GitLab while registering.
+  $shell_upstream = $default_shell_runners.reduce({}) |$memo, $entry| {
+    $settings = $entry[1]
+    $_workdir = $settings['working_directory']
+
+    if $_workdir {
+      file { [$_workdir, "${_workdir}/builds", "${_workdir}/cache"]:
+        ensure  => directory,
+        owner   => 'gitlab-runner',
+        group   => 'gitlab-runner',
+        mode    => '0750',
+        require => Class['gitlab_ci_runner::install'],
+      }
+    }
+
+    $_dirs = $_workdir ? {
+      undef   => {},
+      default => {
+        'builds_dir' => "${_workdir}/builds",
+        'cache_dir'  => "${_workdir}/cache",
+      },
+    }
+
+    $_runners = pick($settings['runners'], { 'shell-gitlab-runner' => {} })
+
+    $memo + Hash($_runners.map |$runner_name, $runner| {
+      $_auth = $runner['token'] ? {
+        undef   => { 'registration-token' => $registration_token },
+        default => { 'token' => $runner['token'] },
+      }
+      [$runner_name, delete_undef_values({
+        'url'         => $url,
+        'executor'    => 'shell',
+        'ca_file'     => $settings['ca_file'],
+        'environment' => $runner['environment'],
+        'limit'       => $runner['limit'],
+      }) + $_dirs + $_auth]
+    })
+  }
 
   class { '::gitlab_ci_runner':
     concurrent     => $concurrent,
