@@ -26,12 +26,23 @@ class profile::projectmanagement::perforce (
 
   $versionrelease = $version.split('-')
 
-  $helix_packages = lookup('profile::projectmanagement::perforce::helix_packages')
+  # The helix-* packages were renamed to p4-* in 2025.1
+  if versioncmp($versionrelease[0], '2025.1') >= 0 {
+    $_packages = lookup('profile::projectmanagement::perforce::p4_packages')
+    $_server_base_package = 'p4-server-base'
+  } else {
+    $_packages = lookup('profile::projectmanagement::perforce::helix_packages')
+    $_server_base_package = 'helix-p4d-base'
+  }
 
-  yum::versionlock { $helix_packages:
+  # The package holding the p4d binary has the release in its name, e.g. p4-server-base-26.1
+  $_release = $version.regsubst(/^20([0-9]{2}\.[0-9]+)-[0-9]+$/, '\1')
+  $_versionlock_packages = $_packages + ["${_server_base_package}-${_release}"]
+
+  yum::versionlock { $_versionlock_packages:
     ensure  => present,
     version => $versionrelease[0],
-    release => "${versionrelease[1]}${_version_suffix}.*",
+    release => "${versionrelease[1]}${_version_suffix}",
     epoch   => 0,
     arch    => 'x86_64',
   }
@@ -47,14 +58,9 @@ class profile::projectmanagement::perforce (
     service_log       => $log_file,
     service_log_level => 1,
     version           => $version,
-    # FIXME: remove this
-    packages          => [
-      'helix-p4dctl',
-      'helix-proxy',
-      'helix-broker',
-      'helix-cli',
-      'helix-p4d',
-    ],
+    # The *-base packages are pulled in as dependencies
+    packages          => $_packages.filter |$_package| { $_package !~ /-base$/ },
+    server_name       => $facts['networking']['hostname'],
     install_root      => '/opt/perforce',
     var_dir           => '/var/lib/perforce',
   }

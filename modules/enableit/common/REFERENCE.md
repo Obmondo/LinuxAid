@@ -2995,13 +2995,13 @@ Default value: `"${common::monitor::exporter::config_dir}/mtail"`
 
 Whether to enable the exporter. Defaults to the value of $common::monitor::exporter::enable.
 
-The MySQL monitor username. Defaults to the value of $profile::mysql::mysql_monitor_username.
+The MySQL monitor username. Defaults to the value of $profile::db::mysql::mysql_monitor_username.
 
-The MySQL monitor password. Defaults to the value of $profile::mysql::mysql_monitor_password.
+The MySQL monitor password. Defaults to the value of $profile::db::mysql::mysql_monitor_password.
 
-The port used by MySQL. Defaults to the value of $profile::mysql::mysql_port.
+The port used by MySQL. Defaults to the value of $profile::db::mysql::mysql_port.
 
-The hostname for MySQL monitoring. Defaults to the value of $profile::mysql::mysql_monitor_hostname.
+The hostname for MySQL monitoring. Defaults to the value of $profile::db::mysql::mysql_monitor_hostname.
 
 The port for Prometheus to scrape metrics. Defaults to 9104.
 
@@ -3034,7 +3034,7 @@ Data type: `String`
 
 
 
-Default value: `$profile::mysql::mysql_monitor_username`
+Default value: `$profile::db::mysql::mysql_monitor_username`
 
 ##### <a name="-common--monitor--exporter--mysql--password"></a>`password`
 
@@ -3042,7 +3042,7 @@ Data type: `Eit_types::Password`
 
 
 
-Default value: `$profile::mysql::mysql_monitor_password`
+Default value: `$profile::db::mysql::mysql_monitor_password`
 
 ##### <a name="-common--monitor--exporter--mysql--mysql_port"></a>`mysql_port`
 
@@ -3050,7 +3050,7 @@ Data type: `Stdlib::Port`
 
 
 
-Default value: `$profile::mysql::mysql_port`
+Default value: `$profile::db::mysql::mysql_port`
 
 ##### <a name="-common--monitor--exporter--mysql--mysql_monitor_hostname"></a>`mysql_monitor_hostname`
 
@@ -3058,7 +3058,7 @@ Data type: `String`
 
 
 
-Default value: `$profile::mysql::mysql_monitor_hostname`
+Default value: `$profile::db::mysql::mysql_monitor_hostname`
 
 ##### <a name="-common--monitor--exporter--mysql--listen_port"></a>`listen_port`
 

@@ -20,7 +20,7 @@ class perforce (
   Perforce::LogLevel             $service_log_level = 1,
   Perforce::Version              $version,
   Array[String]                  $packages,
-  Perforce::Host                 $server_name = $facts['hostname'],
+  Perforce::Host                 $server_name = $facts['networking']['hostname'],
 ){
 
   contain perforce::repository
