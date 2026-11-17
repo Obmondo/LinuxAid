@@ -2,6 +2,39 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.14
+
+### Features
+- c7ec1647 feat(repo): mirror and configure Rocky CRB repo
+- c627d439 feat(perforce): support the p4-* packages used from 2025.1
+- 81a1c8a3 feat(role): load common::system::updates for role::kubeaid
+
+### Bug Fixes
+- 1f9cba72 fix(perforce): refresh the Perforce package signing key
+- 9328f5d8 fix(perforce): stop p4dctl.service from starting p4d at boot
+- 20e466d2 fix(perforce): keep a hand-installed license when no content is set
+- 91db2246 fix(certs): include the CA chain in the combined manual cert file
+- ce685c44 fix: force the sort commands to use the C locale
+- c474570d fix: add lc all to comm command in haproxy-dump-certs.sh
+- 112036c2 fix: update openvox-agent version to 8.32.0
+- 106a2417 fix: trigger certificate update upon san mismatch
+- 57ab289e fix(jenkins): compile, install, start and secure current Jenkins LTS
+- 62f3c31a fix(perforce): install the Git Connector package
+- c86c35a0 fix(perforce): remove the trailing glob from the versionlock release
+- f145fa86 fix(perforce): apply access_mysql_from to the ICManage database
+- 6ceec6b2 fix(mysql): use profile::db::mysql in icmanage and the mysql exporter
+- acc51877 fix(perforce): replace the legacy hostname fact
+
+### Configuration Changes
+- 2761232f chore: updated puppet-docker module v10.3.0 -> v10.5.0
+- 212d66f2 chore: updated puppet-jenkins module v6.1.0 -> v7.0.0
+
+### Other Changes
+- e6a013fe refactor(eit_haproxy): tidy haproxy-acme-renew.sh for readability
+- 219d275b gitlab_ci_runner: support multiple shell runners for the gitlab-runner user
+- 0786df2e Bump linuxaid-cli to 1.11.6
+- 5a655dfd Disable APT unattended upgrades and manage system updates on kubeaid
+
 ## LinuxAid Release Version v1.8.13
 
 ### Features
