@@ -14,14 +14,27 @@ SOCKET="${SOCKET:-/var/run/haproxy.sock}"
 CRT_LIST=/etc/haproxy/crt-list.txt
 
 while read -r line; do
-  cert=$(echo "$line" | awk '{print $1}')
+  # The first token in crt-list.txt line is the certificate file path
+  cert="${line%% *}"
   [ -f "$cert" ] || continue
 
-  expected_raw=$(echo "$line" | sed -n 's/.*\[acme LE domains \([^]]*\)\].*/\1/p')
+  # Extract expected LE domains from comment tag [acme LE domains domain1,domain2,...]
+  if [[ "$line" =~ \[acme[[:space:]]+LE[[:space:]]+domains[[:space:]]+([^]]+)\] ]]; then
+    expected_raw="${BASH_REMATCH[1]}"
+  else
+    continue
+  fi
   [ -n "$expected_raw" ] || continue
 
-  sorted_expected=$(echo "$expected_raw" | tr ',' '\n' | sort | tr '\n' ',' | sed 's/,$//')
-  actual_domains=$(openssl x509 -in "$cert" -noout -ext subjectAltName 2>/dev/null | grep -oE 'DNS:[^ ,]+' | cut -d: -f2 | sort | tr '\n' ',' | sed 's/,$//')
+  # Normalize and sort expected domains alphabetically for comparison
+  sorted_expected=$(echo "$expected_raw" | tr ',' '\n' | sort | paste -sd,)
+
+  # Extract actual Subject Alternative Name (SAN) DNS entries from the certificate
+  actual_domains=$(openssl x509 -in "$cert" -noout -ext subjectAltName 2>/dev/null |
+    grep -oE 'DNS:[^ ,]+' |
+    cut -d: -f2 |
+    sort |
+    paste -sd,)
 
   needs_renewal=false
 
@@ -37,10 +50,10 @@ while read -r line; do
     echo "renewing ${cert}"
     echo "acme renew ${cert}" | socat - "UNIX-CONNECT:${SOCKET}" || exit 1
 
-    # one certificate a minute, which also gives this one time to be issued
+    # One certificate a minute, which also gives this one time to be issued
     sleep 60
 
-    # a failed dump is picked up by haproxy-dump-certs.timer
+    # A failed dump is picked up by haproxy-dump-certs.timer
     /opt/obmondo/bin/haproxy-dump-certs.sh -s "$SOCKET" "$cert" < /dev/null || true
   fi
 done < <(grep -F '[acme ' "$CRT_LIST")
