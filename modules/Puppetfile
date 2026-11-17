@@ -221,7 +221,7 @@ mod 'voxpupuli/letsencrypt',
 
 mod 'puppetlabs/docker',
     :git => 'https://github.com/puppetlabs/puppetlabs-docker.git',
-    :ref => 'v10.3.0'
+    :ref => 'v10.5.0'
 
 mod 'tpdownes/sysctl',
     :git => 'https://github.com/tpdownes/puppet-sysctl.git',

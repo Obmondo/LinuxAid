@@ -20,7 +20,6 @@ Puppet::Type.type(:docker_compose).provide(:ruby) do
 
   def exists?
     Puppet.info("Checking for compose project #{name}")
-    compose_services = {}
     compose_containers = []
 
     set_tmpdir
@@ -39,6 +38,9 @@ Puppet::Type.type(:docker_compose).provide(:ruby) do
     compose_containers.push(*containers)
 
     compose_services = compose_output['services']
+
+    # Remove services with restart: 'no' from the compose_services list as they are not expected to be running.
+    compose_services.reject! { |_k, v| v['restart'] == 'no' }
 
     return false if compose_services.count != compose_containers.uniq.count
 
@@ -74,7 +76,7 @@ Puppet::Type.type(:docker_compose).provide(:ruby) do
 
   def create
     Puppet.info("Running compose project #{name}")
-    args = ['compose', compose_files, '-p', name, 'up', '-d', '--remove-orphans'].insert(3, resource[:options]).insert(5, resource[:up_args]).compact
+    args = ['compose', compose_files, '-p', resource[:options], name, 'up', resource[:up_args], '-d', '--remove-orphans'].compact
     docker(args)
     return unless resource[:scale]
 
