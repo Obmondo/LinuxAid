@@ -57,6 +57,21 @@ class profile::system::systemd (
     manage_logind     => false,
   }
 
+  # common::system::dns::noop_value has to reach the nameservers on systemd-resolved
+  # too, as they are set here and not in profile::system::dns. Only the DNS setting
+  # and the service restart that loads it follow it, the rest of the class does not.
+  $_dns_noop_value = lookup('common::system::dns::noop_value', Eit_types::Noop_Value, undef, undef)
+
+  if $_resolved_settings['dns'] and $_dns_noop_value =~ Boolean {
+    Ini_setting <| title == 'dns' and path == '/etc/systemd/resolved.conf' |> {
+      noop => $_dns_noop_value,
+    }
+
+    Service <| title == 'systemd-resolved' |> {
+      noop => $_dns_noop_value,
+    }
+  }
+
   # systemd before 258 only has the 2017 root key (KSK 20326) built in. The root
   # zone is signed with KSK 38696 since 2026-10-11, so with DNSSEC validation on
   # systemd-resolved rejects every answer: "DNSSEC validation failed: missing-key".
