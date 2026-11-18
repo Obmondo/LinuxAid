@@ -28,6 +28,8 @@
 #
 # @param manage_pwquality Boolean to manage password quality. Defaults to false.
 #
+# @param manage_limits_conf Boolean to manage /etc/security/limits.conf. Defaults to true.
+#
 class common::user_management::authentication::pam (
   Array[Tuple[Integer[0,99], String]] $auth_lines,
   Array[Tuple[Integer[0,99], String]] $account_lines,
@@ -44,6 +46,7 @@ class common::user_management::authentication::pam (
 
   Boolean                             $manage                = $common::user_management::authentication::manage_pam,
   Boolean                             $manage_pwquality      = false,
+  Boolean                             $manage_limits_conf    = true,
 
 ) {
   if $manage {

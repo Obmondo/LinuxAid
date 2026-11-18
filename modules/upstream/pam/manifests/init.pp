@@ -21,6 +21,10 @@
 #   Control module to be used for pam_access.so for sshd. Valid values are
 #   'required', 'requisite', 'sufficient', 'optional' and 'absent'.
 #
+# @param limits_manage_config_file
+#   Passed to pam::limits manage_config_file. Set to false to leave
+#   limits.conf unmanaged.
+#
 # @param limits_fragments
 #   Hash of fragments to pass to pam::limits::fragments
 #
@@ -207,6 +211,7 @@ class pam (
   Optional[Variant[Array, String]] $package_name            = undef,
   Stdlib::Absolutepath $pam_conf_file                       = '/etc/pam.conf',
   Optional[Hash] $services                                  = undef,
+  Boolean $limits_manage_config_file                        = true,
   Optional[Hash] $limits_fragments                          = undef,
   Boolean $limits_fragments_hiera_merge                     = false,
   Boolean $manage_faillock                                  = false,
@@ -274,7 +279,9 @@ class pam (
     if $manage_accesslogin {
       include pam::accesslogin
     }
-    include pam::limits
+    class { 'pam::limits':
+      manage_config_file => $limits_manage_config_file,
+    }
 
     package { $package_name:
       ensure => installed,

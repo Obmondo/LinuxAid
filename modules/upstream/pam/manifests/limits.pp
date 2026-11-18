@@ -3,6 +3,10 @@
 # @example
 #   This class is included by the pam class for platforms which use it.
 #
+# @param manage_config_file
+#   Whether to manage config_file (limits.conf). Set to false to leave
+#   limits.conf untouched while still managing limits.d fragments.
+#
 # @param config_file
 #   Path to limits.conf.
 #
@@ -29,6 +33,7 @@
 #   A glob or array of file names to ignore when purging limits.d
 #
 class pam::limits (
+  Boolean $manage_config_file          = true,
   Stdlib::Absolutepath $config_file    = '/etc/security/limits.conf',
   Optional[Array] $config_file_lines   = undef,
   Optional[String] $config_file_source = undef,
@@ -78,14 +83,16 @@ class pam::limits (
     }
   }
 
-  file { 'limits_conf':
-    ensure  => file,
-    path    => $config_file,
-    source  => $config_file_source_real,
-    content => $content,
-    owner   => 'root',
-    group   => 'root',
-    mode    => $config_file_mode,
-    require => Package[$pam::package_name],
+  if $manage_config_file {
+    file { 'limits_conf':
+      ensure  => file,
+      path    => $config_file,
+      source  => $config_file_source_real,
+      content => $content,
+      owner   => 'root',
+      group   => 'root',
+      mode    => $config_file_mode,
+      require => Package[$pam::package_name],
+    }
   }
 }
