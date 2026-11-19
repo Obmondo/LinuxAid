@@ -59,22 +59,17 @@ define eit_users::user (
     default => $gid,
   }
 
-  if $ensure == 'present' {
+  # A departed user's home goes too, with any SSH keys in it, so no later account with the same
+  # name or uid inherits them. A custom home may be shared, so only /home/<name> is removed.
+  if $ensure == 'present' or $_homedir == "/home/${name}" {
     file { $_homedir:
-      ensure  => 'directory',
+      ensure  => ensure_dir($ensure),
       owner   => $name,
       group   => $file_group,
       mode    => '0700',
+      force   => true,
+      noop    => $noop_value,
       require => User[$title],
-    }
-  } elsif $_homedir == "/home/${name}" {
-    # A departed user's home goes, with any SSH keys in it, so no later account with the same name
-    # or uid inherits them. It doesn't wait for the account removal, so the keys go even if that
-    # fails. A custom home may be shared, so it is left alone.
-    file { $_homedir:
-      ensure => 'absent',
-      force  => true,
-      noop   => $noop_value,
     }
   }
 
