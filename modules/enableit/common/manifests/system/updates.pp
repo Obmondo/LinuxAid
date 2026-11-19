@@ -53,6 +53,14 @@ class common::system::updates (
         APT::Periodic::Unattended-Upgrade "0";
         | EOT
 
+      # apt::conf reads $apt::config_files, so Class['apt'] has to be in the catalog.
+      # With repo management on, eit_repos declares it with its own parameters, and
+      # including it here as well can come first (basic subscriptions list this class
+      # before common::system::repo), which fails as a duplicate declaration.
+      unless $repo_managed {
+        include apt
+      }
+
       apt::conf { 'auto-upgrades':
         ensure        => present,
         priority      => 20,
