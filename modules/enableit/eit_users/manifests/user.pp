@@ -28,6 +28,12 @@ define eit_users::user (
     default   => false,
   }
 
+  # An absent user's keys aren't managed; its home directory is handled below
+  $_ssh_authorized_keys = $ensure ? {
+    'present' => $ssh_authorized_keys,
+    default   => [],
+  }
+
   user { $title:
     ensure         => $ensure,
     noop           => $noop_value,
@@ -53,12 +59,18 @@ define eit_users::user (
     default => $gid,
   }
 
-  file { $_homedir:
-    ensure  => 'directory',
-    owner   => $name,
-    group   => $file_group,
-    mode    => '0700',
-    require => User[$title],
+  # A departed user's home goes too, with any SSH keys in it, so no later account with the same
+  # name or uid inherits them. A custom home may be shared, so only /home/<name> is removed.
+  if $ensure == 'present' or $_homedir == "/home/${name}" {
+    file { $_homedir:
+      ensure  => ensure_dir($ensure),
+      owner   => $name,
+      group   => $file_group,
+      mode    => '0700',
+      force   => true,
+      noop    => $noop_value,
+      require => User[$title],
+    }
   }
 
   if $sudoroot {
@@ -75,7 +87,7 @@ define eit_users::user (
     }
   }
 
-  $ssh_authorized_keys.each |$x| {
+  $_ssh_authorized_keys.each |$x| {
     $sshkey = $x ? {
       String  => $x,
       default => $x['key'],
