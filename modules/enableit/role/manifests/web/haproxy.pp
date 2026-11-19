@@ -3,6 +3,10 @@
 # @param manual_config Optional manual configuration for the haproxy. Defaults to undef.
 #
 # @param domains The domains to be managed by haproxy. Defaults to an empty hash.
+#   A domain's optional bearer_tokens (client name => token, encrypted with hiera-eyaml)
+#   makes HAProxy answer 401 to any request without one of those tokens in
+#   "Authorization: Bearer <token>". The matched name is logged and sent on in the
+#   X-Authenticated-Client header.
 #
 # @param listens The listening configurations for haproxy. Defaults to an empty hash.
 #
