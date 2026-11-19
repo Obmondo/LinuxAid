@@ -21,7 +21,8 @@ class profile::software::nvidia_driver (
         architecture => 'amd64',
         release      => '/',
         key          => {
-          'name'   => 'cuda.gpg',
+          # The vendored key is ASCII-armored, and apt reads an armored keyring only from a *.asc file
+          'name'   => 'cuda.asc',
           'source' => 'puppet:///modules/eit_repos/apt/cuda-apt-keyring.gpg',
         },
       }
