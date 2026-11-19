@@ -28,6 +28,12 @@ define eit_users::user (
     default   => false,
   }
 
+  # An absent user's keys are left alone, like its home directory below
+  $_ssh_authorized_keys = $ensure ? {
+    'present' => $ssh_authorized_keys,
+    default   => [],
+  }
+
   user { $title:
     ensure         => $ensure,
     noop           => $noop_value,
@@ -53,12 +59,15 @@ define eit_users::user (
     default => $gid,
   }
 
-  file { $_homedir:
-    ensure  => 'directory',
-    owner   => $name,
-    group   => $file_group,
-    mode    => '0700',
-    require => User[$title],
+  # Only a present user gets its home managed: it can't be owned by a user that was removed
+  if $ensure == 'present' {
+    file { $_homedir:
+      ensure  => 'directory',
+      owner   => $name,
+      group   => $file_group,
+      mode    => '0700',
+      require => User[$title],
+    }
   }
 
   if $sudoroot {
@@ -75,7 +84,7 @@ define eit_users::user (
     }
   }
 
-  $ssh_authorized_keys.each |$x| {
+  $_ssh_authorized_keys.each |$x| {
     $sshkey = $x ? {
       String  => $x,
       default => $x['key'],
