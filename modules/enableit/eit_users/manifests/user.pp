@@ -28,7 +28,7 @@ define eit_users::user (
     default   => false,
   }
 
-  # An absent user's keys are left alone, like its home directory below
+  # An absent user's keys aren't managed; its home directory is handled below
   $_ssh_authorized_keys = $ensure ? {
     'present' => $ssh_authorized_keys,
     default   => [],
@@ -59,7 +59,6 @@ define eit_users::user (
     default => $gid,
   }
 
-  # Only a present user gets its home managed: it can't be owned by a user that was removed
   if $ensure == 'present' {
     file { $_homedir:
       ensure  => 'directory',
@@ -67,6 +66,15 @@ define eit_users::user (
       group   => $file_group,
       mode    => '0700',
       require => User[$title],
+    }
+  } elsif $_homedir == "/home/${name}" {
+    # A departed user's home goes, with any SSH keys in it, so no later account with the same name
+    # or uid inherits them. It doesn't wait for the account removal, so the keys go even if that
+    # fails. A custom home may be shared, so it is left alone.
+    file { $_homedir:
+      ensure => 'absent',
+      force  => true,
+      noop   => $noop_value,
     }
   }
 
