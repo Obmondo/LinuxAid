@@ -324,11 +324,26 @@ class eit_haproxy::basic_config (
         { 'http-request'  => 'deny deny_status 429 if !is_priority ww_rl_reached' },
       ]
 
+      $_bearer_auth = $domains.any |$_domain, $_opts| { $_opts['bearer_tokens'] =~ NotUndef }
+
+      # Stock HAProxy on Ubuntu 22.04 and RHEL 9 is 2.4, which has no http_auth_bearer
+      if $_bearer_auth {
+        $facts.dig('haproxy_version').then |$_installed| {
+          if versioncmp($_installed, '2.6') < 0 {
+            fail("bearer_tokens needs HAProxy 2.6 or newer, but ${_installed} is installed. Raise role::web::haproxy::version or remove bearer_tokens.")
+          }
+        }
+      }
+
       haproxy::frontend { 'web':
         mode    => $mode,
         bind    => $binds,
         options => [
           { 'option' => "${mode}log" },
+          # Capture slot 0 holds the client name a bearer_tokens backend matched, for the log
+          if $_bearer_auth {
+            { 'declare capture' => 'request len 32' }
+          },
           if $https and $use_lets_encrypt and !$_use_native_acme {
             { 'acl is_letsencrypt' => 'path_beg /.well-known/acme-challenge/' }
           },
@@ -386,11 +401,45 @@ class eit_haproxy::basic_config (
       $domains.each | $domain, $opts | {
         $domain_backend = regsubst($domain, /\./, '_', 'G')
         $extra_options = pick($opts['extra_opts'], 'check')
+        $_bearer_tokens = pick($opts['bearer_tokens'], {})
+        $_tokens_map = "/etc/haproxy/bearer-tokens-${domain_backend}.map"
+
+        unless $_bearer_tokens.empty {
+          $_token_lines = $_bearer_tokens.keys.sort.map |$_client| {
+            "${_bearer_tokens[$_client]} ${_client}\n"
+          }
+
+          # Sensitive keeps the tokens out of Puppet reports and diffs
+          file { $_tokens_map:
+            ensure  => file,
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0600',
+            content => Sensitive($_token_lines.join),
+            before  => Concat[$haproxy::config_file],
+            notify  => Service['haproxy'],
+          }
+        }
+
+        $_bearer_options = $_bearer_tokens.empty ? {
+          true  => [],
+          false => [
+            { 'http-request' => "set-var(txn.bearer_client) http_auth_bearer,map(${_tokens_map})" },
+            { 'http-request' => [
+                'return status 401 content-type application/json',
+                'string \'{"error":{"message":"missing or invalid API token"}}\'',
+                'hdr WWW-Authenticate Bearer unless { var(txn.bearer_client) -m found }',
+              ].join(' '),
+            },
+            { 'http-request' => 'capture var(txn.bearer_client) id 0' },
+            { 'http-request' => 'set-header X-Authenticated-Client %[var(txn.bearer_client)]' },
+          ],
+        }
 
         # Setup the Backend
         haproxy::backend { $domain_backend:
           mode             => $mode,
-          options          => $opts['servers'].map |$index, $endpoint| {
+          options          => $_bearer_options + $opts['servers'].map |$index, $endpoint| {
             { "server ${domain_backend}_${index}" => "${endpoint} ${extra_options}" }
           },
           collect_exported => false,
