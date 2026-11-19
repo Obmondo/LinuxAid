@@ -1,5 +1,6 @@
 ---
 common::software::nvidia_driver::packages:
+  - 'linux-headers-amd64'
   - 'nvidia-driver'
   - 'cuda-drivers'
 

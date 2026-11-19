@@ -1,5 +1,6 @@
 ---
 common::software::nvidia_driver::packages:
+  - 'linux-headers-generic'
   - 'nvidia-driver-570'
   - 'cuda-drivers-570'
 common::monitor::exporter::enable: true

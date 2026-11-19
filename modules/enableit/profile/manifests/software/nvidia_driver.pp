@@ -26,15 +26,6 @@ class profile::software::nvidia_driver (
           'source' => 'puppet:///modules/eit_repos/apt/cuda-apt-keyring.gpg',
         },
       }
-
-      # DKMS builds the driver's module for each kernel from that kernel's headers.
-      # The flavour's headers package (linux-headers-generic, -aws, ...) brings each
-      # new kernel's headers along, and the running kernel's own let it build now.
-      if $enable {
-        $_kernel = $facts['kernelrelease']
-        $_flavour = $_kernel.regsubst(/^[0-9.]+-[0-9]+-/, '')
-        stdlib::ensure_packages(["linux-headers-${_flavour}", "linux-headers-${_kernel}"].unique)
-      }
     }
     'RedHat': {
       $distro = $facts['os']['release']['major']
