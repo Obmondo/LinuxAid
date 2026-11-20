@@ -3,6 +3,7 @@ class eit_repos (
   Boolean               $purge           = false,
   Boolean               $upstream        = false,
   Boolean               $purge_pins      = true,
+  Boolean               $manage_auth_conf = true,
   Eit_types::Noop_Value $noop_value      = undef,
   Enum['http', 'https'] $source_protocol = 'https',
 ) {
@@ -24,11 +25,11 @@ class eit_repos (
     'Debian': {
       class { 'apt':
         # https://forge.puppet.com/puppetlabs/apt#update-the-list-of-packages
-        update => {
+        update           => {
           'frequency' => 'always',
           'loglevel'  => 'debug',
         },
-        purge  => {
+        purge            => {
           'sources.list'   => $purge,
           'sources.list.d' => $purge,
           # NOTE: This might purge too much, but since it can't remove just pins
@@ -36,6 +37,7 @@ class eit_repos (
           'preferences'    => $purge_pins,
           'preferences.d'  => $purge_pins,
         },
+        manage_auth_conf => $manage_auth_conf,
       }
       # Ensure that all Apt resources are handled before Package resources
       $_defined_apt_classes = [

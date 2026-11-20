@@ -22,3 +22,7 @@ common::system::updates::enable: false
 # these nodes, the chain purge has to skip Cilium's rules or pod networking and
 # service NAT break on every Puppet run.
 common::network::firewall::allow_k8s: true
+# common::system::repo runs here for the snapshot pin only: keep apt from deleting pin files
+# and /etc/apt/auth.conf that it didn't write.
+common::system::repo::purge_pins: false
+common::system::repo::manage_auth_conf: false

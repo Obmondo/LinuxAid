@@ -29,6 +29,12 @@
 #
 # @param upstream Boolean - If true, will set up upstream repositories. Defaults to false.
 #
+# @param purge_pins Boolean - If true, apt removes pin files (/etc/apt/preferences and
+# preferences.d) that Puppet didn't write. Defaults to true.
+#
+# @param manage_auth_conf Boolean - If true, apt manages /etc/apt/auth.conf and removes it
+# when no credentials are configured. Defaults to true.
+#
 # @param source_protocol Enum['http', 'https']
 # The protocol to use for sources. Defaults to 'https'.
 #
@@ -37,12 +43,14 @@
 # @param domain Optional[Stdlib::Fqdn] - The domain for local or remote repositories. Defaults to undef.
 #
 # @param snapshot Optional[Eit_types::Date] - Date for snapshot repositories. Defaults to undef.
+# Without the local mirror, Ubuntu 23.10 and later is pinned to the same date through
+# Ubuntu's snapshot service.
 #
 # @groups configuration manage, noop_value
 #
 # @groups repositories repos, rhrepos, yumrepos, zypprepos, aptrepos
 #
-# @groups operations purge, upstream
+# @groups operations purge, upstream, purge_pins, manage_auth_conf
 #
 # @groups connection source_protocol, local, domain
 #
@@ -69,6 +77,8 @@ class common::system::repo (
     }]]                     $aptrepos        = {},
   Boolean                   $purge           = false,
   Boolean                   $upstream        = false,
+  Boolean                   $purge_pins      = true,
+  Boolean                   $manage_auth_conf = true,
   Enum['http', 'https']     $source_protocol = 'https',
   Boolean                   $local           = false,
   Optional[Stdlib::Fqdn]    $domain          = undef,
@@ -89,10 +99,12 @@ class common::system::repo (
 
   if $manage {
     class { 'eit_repos':
-      purge           => $purge,
-      upstream        => $upstream,
-      source_protocol => $source_protocol,
-      noop_value      => $noop_value,
+      purge            => $purge,
+      upstream         => $upstream,
+      purge_pins       => $purge_pins,
+      manage_auth_conf => $manage_auth_conf,
+      source_protocol  => $source_protocol,
+      noop_value       => $noop_value,
     }
     $repos.each |$repo| {
       if type($repo) =~ Type[Hash] {
@@ -117,6 +129,24 @@ class common::system::repo (
           if Integer($snapshot.split('-').join) > $facts['install_date'] {
             "snapshots/${snapshot}/"
           }
+        }
+      }
+    }
+
+    # Without the local mirror, apt reads Ubuntu's own archive: pin it to the same date
+    # through Ubuntu's snapshot service (https://snapshot.ubuntu.com).
+    if $facts['os']['name'] == 'Ubuntu' and !$local {
+      if $_snapshot_uri_fragment {
+        $_snapshot_id = Timestamp($snapshot, '%Y-%m-%d', 'UTC').strftime('%Y%m%dT%H%M%SZ', 'UTC')
+
+        apt::conf { 'snapshot':
+          priority => 50,
+          content  => "APT::Snapshot \"${_snapshot_id}\";\n",
+        }
+      } else {
+        apt::conf { 'snapshot':
+          ensure   => absent,
+          priority => 50,
         }
       }
     }
