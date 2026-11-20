@@ -1,21 +1,21 @@
 # @summary Class for managing system updates
 #
-# @param manage Boolean determines if the system updates service is managed. Defaults to true.
+# @param manage Boolean - If true, removes unattended-upgrades (and yum-cron on RedHat) and turns
+# off APT's periodic upgrades, so only linuxaid-cli updates the system. Defaults to false.
 #
-# @param enable Boolean indicating whether automatic updates are enabled. Defaults to true.
-#
-# @param snapshot Boolean indicating whether snapshots should be taken before updates. Defaults to true.
+# @param enable Boolean - If true, together with manage, sets up the obmondo-system-update timer
+# (a cron job on sysvinit) that runs linuxaid-cli system-update. If false, the timer is never set
+# up or touched. Defaults to false.
 #
 # @param noop_value Optional Boolean to perform no-op runs for testing. Defaults to false.
 #
-# @groups general manage, enable, snapshot
+# @groups general manage, enable
 #
 # @groups noop noop_value
 #
 class common::system::updates (
   Boolean               $manage                 = false,
   Boolean               $enable                 = false,
-  Boolean               $snapshot               = true,
   Eit_types::Noop_Value $noop_value             = undef,
 ) {
   if $manage {
@@ -79,51 +79,55 @@ class common::system::updates (
       noop   => $noop_value,
     }
 
-    if $facts['init_system'] == 'sysvinit' {
-      cron { 'obmondo-system-update':
-        # NOTE: We're enabling the system update cron for sysvinit systems (like turrisos)
-        # when $enable is true.
-        ensure  => ensure_present($enable),
-        command => '/opt/obmondo/bin/linuxaid-cli system-update',
-        user    => 'root',
-        minute  => fqdn_rand(59, $facts['networking']['hostname']),
-        hour    => '*',
-        noop    => $noop_value,
+    # Set up the obmondo-system-update timer only with enable: true. With enable: false an
+    # existing timer is left alone, e.g. on KubeAid nodes, where kubeaid-agent runs the
+    # system updates.
+    if $enable {
+      if $facts['init_system'] == 'sysvinit' {
+        # NOTE: sysvinit systems (like turrisos) get a cron job instead of a timer.
+        cron { 'obmondo-system-update':
+          ensure  => present,
+          command => '/opt/obmondo/bin/linuxaid-cli system-update',
+          user    => 'root',
+          minute  => fqdn_rand(59, $facts['networking']['hostname']),
+          hour    => '*',
+          noop    => $noop_value,
+        }
       }
-    }
 
-    if $facts['init_system'] == 'systemd' {
-      # Change the upgrade service timer timing.
-      $_minutes = fqdn_rand(30, $facts['networking']['hostname'])
+      if $facts['init_system'] == 'systemd' {
+        # Change the upgrade service timer timing.
+        $_minutes = fqdn_rand(30, $facts['networking']['hostname'])
 
-      $_timer = @("EOT"/$n)
-        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-        [Unit]
-        Description=Obmondo System Update Timer
-        Requires=obmondo-system-update.service
-        [Timer]
-        OnCalendar=*-*-* *:0/30:00
-        RandomizedDelaySec=${_minutes}m
-        | EOT
+        $_timer = @("EOT"/$n)
+          # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+          [Unit]
+          Description=Obmondo System Update Timer
+          Requires=obmondo-system-update.service
+          [Timer]
+          OnCalendar=*-*-* *:0/30:00
+          RandomizedDelaySec=${_minutes}m
+          | EOT
 
-      $_service = @(EOT)
-        # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
-        [Unit]
-        Description=Obmondo System Update Service
-        Wants=obmondo-system-update.timer
-        [Service]
-        Type=oneshot
-        EnvironmentFile=-/etc/default/linuxaid-cli
-        Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
-        ExecStart=/opt/obmondo/bin/linuxaid-cli system-update
-        | EOT
+        $_service = @(EOT)
+          # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
+          [Unit]
+          Description=Obmondo System Update Service
+          Wants=obmondo-system-update.timer
+          [Service]
+          Type=oneshot
+          EnvironmentFile=-/etc/default/linuxaid-cli
+          Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/puppetlabs/bin:/opt/obmondo/bin"
+          ExecStart=/opt/obmondo/bin/linuxaid-cli system-update
+          | EOT
 
-      systemd::timer { 'obmondo-system-update.timer':
-        ensure          => ensure_present($enable),
-        timer_content   => $_timer,
-        service_content => $_service,
-        active          => $enable,
-        enable          => $enable,
+        systemd::timer { 'obmondo-system-update.timer':
+          ensure          => present,
+          timer_content   => $_timer,
+          service_content => $_service,
+          active          => true,
+          enable          => true,
+        }
       }
     }
   }
