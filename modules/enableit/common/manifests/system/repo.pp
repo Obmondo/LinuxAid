@@ -32,9 +32,6 @@
 # @param purge_pins Boolean - If true, apt removes pin files (/etc/apt/preferences and
 # preferences.d) that Puppet didn't write. Defaults to true.
 #
-# @param manage_auth_conf Boolean - If true, apt manages /etc/apt/auth.conf and removes it
-# when no credentials are configured. Defaults to true.
-#
 # @param source_protocol Enum['http', 'https']
 # The protocol to use for sources. Defaults to 'https'.
 #
@@ -50,7 +47,7 @@
 #
 # @groups repositories repos, rhrepos, yumrepos, zypprepos, aptrepos
 #
-# @groups operations purge, upstream, purge_pins, manage_auth_conf
+# @groups operations purge, upstream, purge_pins
 #
 # @groups connection source_protocol, local, domain
 #
@@ -78,7 +75,6 @@ class common::system::repo (
   Boolean                   $purge           = false,
   Boolean                   $upstream        = false,
   Boolean                   $purge_pins      = true,
-  Boolean                   $manage_auth_conf = true,
   Enum['http', 'https']     $source_protocol = 'https',
   Boolean                   $local           = false,
   Optional[Stdlib::Fqdn]    $domain          = undef,
@@ -99,12 +95,11 @@ class common::system::repo (
 
   if $manage {
     class { 'eit_repos':
-      purge            => $purge,
-      upstream         => $upstream,
-      purge_pins       => $purge_pins,
-      manage_auth_conf => $manage_auth_conf,
-      source_protocol  => $source_protocol,
-      noop_value       => $noop_value,
+      purge           => $purge,
+      upstream        => $upstream,
+      purge_pins      => $purge_pins,
+      source_protocol => $source_protocol,
+      noop_value      => $noop_value,
     }
     $repos.each |$repo| {
       if type($repo) =~ Type[Hash] {
