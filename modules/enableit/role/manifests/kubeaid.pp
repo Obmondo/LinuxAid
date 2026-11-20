@@ -14,6 +14,10 @@ class role::kubeaid inherits ::role {
   # cluster can set common::system::kernel::sysctl (e.g. inotify limits) in hiera.
   include common::system::kernel
 
+  # Likewise for repos, so a cluster can pin apt to a snapshot date
+  # (common::system::repo::snapshot). role::kubeaid's data turns off what would delete files.
+  include common::system::repo
+
   # Likewise for ZFS dataset properties (common::storage::zfs::datasets); ZFS itself is usually
   # installed by KubeAid StorageCTL, so common::storage::zfs::enable stays off by default.
   include common::storage::zfs

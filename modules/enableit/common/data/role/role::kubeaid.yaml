@@ -14,11 +14,14 @@ common::system::kernel::modules: {}
 common::storage::zfs::enable: false
 # manage: true removes unattended-upgrades and sets APT::Periodic::Update-Package-Lists and
 # APT::Periodic::Unattended-Upgrade to "0" in /etc/apt/apt.conf.d/20auto-upgrades.
-# enable: false overrides common.yaml's enable: true, so the obmondo-system-update timer
-# isn't installed.
+# enable: false overrides common.yaml's enable: true, so the obmondo-system-update timer is
+# never set up: kubeaid-agent runs the system updates on these nodes.
 common::system::updates::manage: true
 common::system::updates::enable: false
 # KubeAid clusters run Cilium. If firewall management is ever switched on for
 # these nodes, the chain purge has to skip Cilium's rules or pod networking and
 # service NAT break on every Puppet run.
 common::network::firewall::allow_k8s: true
+# common::system::repo runs here for the snapshot pin only: keep apt from deleting pin files
+# that it didn't write.
+common::system::repo::purge_pins: false
