@@ -1,7 +1,8 @@
 # @summary Class for managing system updates
 #
-# @param manage Boolean - If true, removes unattended-upgrades (and yum-cron on RedHat) and turns
-# off APT's periodic upgrades, so only linuxaid-cli updates the system. Defaults to false.
+# @param manage Boolean - If true, purges unattended-upgrades (and yum-cron on RedHat), so only
+# linuxaid-cli updates the system. Purging also removes /etc/apt/apt.conf.d/20auto-upgrades, which
+# makes apt's own daily job refresh the package lists. Defaults to false.
 #
 # @param enable Boolean - If true, together with manage, sets up the obmondo-system-update timer
 # (a cron job on sysvinit) that runs linuxaid-cli system-update. If false, the timer is never set
@@ -43,23 +44,7 @@ class common::system::updates (
       if $_os_family == 'RedHat' {
         'yum-cron'
       },
-    ]): ensure => 'absent', }
-
-    # Disable APT periodic package list updates and unattended upgrades, system
-    # updates are handled by linuxaid-cli (obmondo-system-update) instead.
-    if $_os_family == 'Debian' {
-      $_auto_upgrades_content = @(EOT)
-        APT::Periodic::Update-Package-Lists "0";
-        APT::Periodic::Unattended-Upgrade "0";
-        | EOT
-
-      apt::conf { 'auto-upgrades':
-        ensure        => present,
-        priority      => 20,
-        content       => $_auto_upgrades_content,
-        notify_update => false,
-      }
-    }
+    ]): ensure => 'purged', }
 
     # Ensure the service is stopped and disabled on RedHat systems
     if $_os_family == 'RedHat' {
