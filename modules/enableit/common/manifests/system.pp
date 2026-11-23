@@ -239,16 +239,17 @@ class common::system (
     },
   }
 
-  file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
-    ensure  => file,
-    content => stdlib::to_yaml($_obmondo_system_facts),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    noop    => false,
-  }
-
   if $::obmondo_classes.grep('::kubeaid').empty {
+    # KubeAid nodes don't use the obmondo_system facts.
+    file { "${_puppet_dir}/facter/facts.d/obmondo_system.yaml":
+      ensure  => file,
+      content => stdlib::to_yaml($_obmondo_system_facts),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      noop    => false,
+    }
+
     # load subclasses
 
     # NOTE: includes all these system profile, but some are set to enable
