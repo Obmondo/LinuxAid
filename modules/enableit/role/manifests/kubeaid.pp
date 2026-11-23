@@ -26,4 +26,12 @@ class role::kubeaid inherits ::role {
   # (common::system::updates::manage: true). Its 06:00 runs restart systemd-networkd, which can
   # leave a node's DHCP lease unrenewed until the address expires.
   include common::system::updates
+
+  # Masterless nodes never pluginsync: facts cached by an earlier puppet agent run are stale
+  # and load next to the modules' own (old sudoversion, runlevel, a second publicip).
+  file { "${settings::libdir}/facter":
+    ensure => absent,
+    force  => true,
+    backup => false,
+  }
 }
