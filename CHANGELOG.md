@@ -2,6 +2,27 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.15
+
+### Features
+- 1648bc42 feat(updates): set up the timer only with enable, drop snapshot
+- cb218bc0 feat(repo): pin Ubuntu to the snapshot date through snapshot.ubuntu.com
+- 297bb408 feat(functions): let ensure_dir map 'present' to 'directory'
+- c300f9ff feat(haproxy): let a domain require a bearer token
+
+### Bug Fixes
+- f5a2707a fix(updates): purge unattended-upgrades instead of writing 20auto-upgrades
+- 2258d9cf fix(nvidia): list each OS's kernel headers package instead of deriving it
+- a512eaa2 fix(nvidia): install kernel headers so DKMS builds the driver for each kernel
+- 7bad3b1d fix(eit_users): delete a departed user's home so its SSH keys go too
+- c0e0eead fix(eit_users): leave an absent user's home and keys alone
+- 4afae9a1 fix(nvidia): name the armored CUDA apt key cuda.asc so apt can read it
+- 3879f8ae fix(dns): apply noop_value to systemd-resolved nameservers
+
+### Other Changes
+- 51bac347 refactor(repo): drop the manage_auth_conf switch
+- f0693fd4 refactor(eit_users): manage the home with one resource via ensure_dir
+
 ## LinuxAid Release Version v1.8.14
 
 ### Features
