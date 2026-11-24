@@ -85,4 +85,21 @@ define repository::mirror::repo (
     noop_value => false,
   }
 
+  # upstream mirror can be mid-sync, retry in an hour
+  systemd::dropin_file { "repository_mirror_sync_${name}-retry.conf":
+    ensure         => ensure_present($enable),
+    unit           => "repository_mirror_sync_${name}.service",
+    notify_service => false,
+    noop           => false,
+    content        => @(EOF),
+      [Unit]
+      StartLimitIntervalSec=6h
+      StartLimitBurst=3
+
+      [Service]
+      Restart=on-failure
+      RestartSec=1h
+      | EOF
+  }
+
 }
