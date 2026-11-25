@@ -29,6 +29,7 @@ Everything is **declarative** and **version-controlled**: infrastructure is defi
 - [How It Works](#how-it-works)
   - [Add a Server in 3 Steps](#add-a-server-in-3-steps)
   - [Architecture](#architecture)
+- [Quick Start](#quick-start)
 - [Managed Responsibilities](#managed-responsibilities)
 - [Configuration Options](#configuration-options)
 - [Proven at Enterprise Scale](#proven-at-enterprise-scale)
@@ -153,6 +154,57 @@ graph TB
 
 ---
 
+## Quick Start
+
+Try LinuxAid on one server, with no OpenVox server and no Obmondo account. You describe the server in Hiera data, a directory of YAML files that you own, and OpenVox makes the server match it.
+
+Use a [fresh server](./docs/getting-started/prerequisites.md#a-fresh-server), because even a report-only run adds Obmondo's apt repository and an `obmondo` group. Run the steps as root on Ubuntu 22.04, 24.04 or 26.04, and see [Prerequisites](./docs/getting-started/prerequisites.md) for other systems.
+
+1. Install `linuxaid-install` and `linuxaid-cli`:
+
+   ```sh
+   apt-get update && apt-get install -y ca-certificates curl git jq
+   curl -fsSL https://raw.githubusercontent.com/Obmondo/linuxaid-cli/main/install.sh | bash
+   ```
+
+2. Install the OpenVox agent. Replace `web01.example` with a lowercase name for this server, here and in step 3:
+
+   ```sh
+   linuxaid-install --certname web01.example --masterless
+   ```
+
+3. Clone LinuxAid and write the server's settings file, which gives it `role::basic`. A role says what a server is for, and this one adds no services:
+
+   ```sh
+   git clone https://github.com/Obmondo/LinuxAid.git /opt/obmondo/openvox/code/environments/master
+   mkdir -p /opt/obmondo/openvox/code/hiera-data/main/agents
+   cat > /opt/obmondo/openvox/code/hiera-data/main/agents/web01.example.yaml <<'EOF'
+   classes:
+     - role::basic
+   common::system::openvox::manage: false
+   common::monitor::enable: false
+   EOF
+   ```
+
+4. Do a report-only run, which prints what LinuxAid would change. Lines that end in `(noop)` are the changes step 5 makes:
+
+   ```sh
+   cd /opt/obmondo/openvox/code/environments/master
+   linuxaid-cli run-openvox --apply --hiera-config ''
+   ```
+
+   On a masterless server, expect a Facter error about `clientcert_pem`.
+
+5. Apply the changes. A clean run prints a line like `Notice: Applied catalog in 1.06 seconds` and no `level=ERROR` or `puppet run succeeded, but with failures` line:
+
+   ```sh
+   linuxaid-cli run-openvox --apply --hiera-config '' --enforce
+   ```
+
+The [Getting Started guide](./docs/getting-started/README.md) explains each step and covers installing with Obmondo, what your own OpenVox server needs, giving the server more to do, and keeping LinuxAid up to date.
+
+---
+
 ## Managed Responsibilities
 
 The detailed feature breakdown and managed-responsibilities checklist — deployment patterns, subscription tiers, operational modes, security/compliance coverage, and the full responsibilities matrix — live in [`docs/features-and-responsibilities.md`](./docs/features-and-responsibilities.md).
@@ -274,6 +326,8 @@ LinuxAid includes built-in supply chain protection and package repository manage
 ---
 
 ## Getting Started
+
+The [Getting Started guide](./docs/getting-started/README.md) covers installing LinuxAid on one server or with Obmondo, what your own OpenVox server needs, and what to configure afterwards.
 
 ### Adding a New Node
 
