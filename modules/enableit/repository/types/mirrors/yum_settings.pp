@@ -11,6 +11,7 @@ type Repository::Mirrors::Yum_Settings = Struct[{
     'BaseOS',
     'AppStream',
     'extras',
+    'CRB',
   ]]],
   key_id         => Optional[String],
   key_source     => Optional[String],
