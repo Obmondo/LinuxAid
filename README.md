@@ -49,7 +49,7 @@ Everything is **declarative** and **version-controlled**: infrastructure is defi
 | ✅ Hierarchical data model (Hiera) | ✅ 11+ Prometheus exporters | ✅ GDPR-ready configurations | ✅ GitOps change preview | ✅ Any Linux distro supported by OpenVox/Puppet |
 | ✅ Role-based abstractions | ✅ Auto hardware detection | ✅ CIS benchmark configurations | ✅ Automated system updates with safety checks | ✅ Single-host or multi-node HA (Kubernetes) |
 | ✅ [60+ pre-configured applications](#60-supported-applications) | ✅ SSL certificate monitoring | ✅ NIS2 compliance | ✅ Staged, hardlink-based repo rollouts | ✅ Cloud, on-prem, or air-gapped |
-| ✅ Multi-customer, isolated configs | ✅ Pre-built Grafana dashboards | ✅ GPG-signed packages | ✅ Agents pull config on a configurable interval | ✅ Subscription-tiered feature management |
+| ✅ Multi-customer, isolated configs | ✅ Pre-built Grafana dashboards | ✅ GPG-signed packages | ✅ Agents pull config hourly | ✅ Subscription-tiered feature management |
 | ✅ Data ownership, no vendor lock-in | ✅ AlertManager, tier-based routing | ✅ GPG-verified Git releases | ✅ Auto-deployed exporters based on role/facts | ✅ Secure mesh VPN access (no exposed SSH) |
 
 **Scale**: LinuxAid is designed to manage from dozens to thousands of nodes, on architecture proven to support 20,000+ servers.
@@ -61,6 +61,8 @@ Everything is **declarative** and **version-controlled**: infrastructure is defi
 A lightweight **LinuxAid-Agent** runs on each of your servers. It applies the configuration and security policy you've chosen, then continuously reports health and metrics back to a central monitoring stack. You build your application; LinuxAid handles the rest.
 
 ### Add a Server in 3 Steps
+
+This is the path where Obmondo runs the OpenVox server for you. To run LinuxAid yourself, see [Quick Start](#quick-start).
 
 | | Step | What happens |
 |---|---|---|
@@ -141,7 +143,7 @@ graph TB
 - **monitor** — observability layer: service health checks and metrics
 
 **Managed infrastructure**
-- Agents pull configuration every 30 minutes (configurable)
+- Agents pull configuration once every hour
 - Services are deployed and managed declaratively
 - Prometheus exporters are deployed automatically based on roles and system facts
 
@@ -244,7 +246,7 @@ Every module used by LinuxAid documents its parameters in a `REFERENCE.md` file,
 Options can be applied at different scopes:
 
 - **Tags** — groups defined by the OpenVox ENC
-- **Facts** — over 7,000 available facts (OS/distribution/software versions, location, hardware configuration, etc.). See [Facts documentation](./docs/facts) for details.
+- **Facts** — over 7,000 available facts (OS/distribution/software versions, location, hardware configuration, etc.). See [Facts documentation](./docs/facts/fact-location.md) for details.
 
 ### Hierarchical Data Management with Hiera
 
@@ -329,17 +331,6 @@ LinuxAid includes built-in supply chain protection and package repository manage
 
 The [Getting Started guide](./docs/getting-started/README.md) covers installing LinuxAid on one server or with Obmondo, what your own OpenVox server needs, and what to configure afterwards.
 
-### Adding a New Node
-
-1. **Set certname** to `hostname.customer_id` format
-2. **Create node file** in `agents/<certname>.yaml` in the customer's hiera-data repository
-3. **Assign role(s)** via the `classes:` parameter
-4. **Run the Puppet agent**: `puppet agent -t` to apply the initial configuration
-
-Node classification is handled by the External Node Classifier (see [`puppet_enc.rb`](./puppet_enc.rb)), which resolves the certname and facts into the classes and Hiera data for that node.
-
-To connect your Git hosting platform to your Obmondo environment, see the [Git Setup guide](./docs/setup/git_setup.md).
-
 ---
 
 ## Documentation
@@ -368,8 +359,8 @@ To connect your Git hosting platform to your Obmondo environment, see the [Git S
 
 | Reference | Description |
 |---|---|
-| [Roles](./docs/roles) | Pre-configured application roles |
-| [Facts](./docs/facts) | Fact-based configuration targeting |
+| [Roles](./docs/roles/README.md) | Pre-configured application roles |
+| [Facts](./docs/facts/fact-location.md) | Fact-based configuration targeting |
 | [Features & Responsibilities](./docs/features-and-responsibilities.md) | Feature matrix and operational scope |
 | [IaC Comparisons](./docs/comparisons.md) | Architectural comparison vs. Ansible, Terraform, Puppet |
 | [Generating Docs](./docs/guides/generate-docs.md) | Regenerating module REFERENCE.md with Puppet Strings |
