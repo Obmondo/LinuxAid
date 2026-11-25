@@ -2,6 +2,16 @@
 
 All releases and the changes included in them (pulled from git commits added since last release) will be detailed in this file.
 
+## LinuxAid Release Version v1.8.16
+
+### Bug Fixes
+- 37eadb63 fix(hiera): expand tags with mapped_paths, not obmondo_tag_0..9
+- a1b5bc36 fix(role): drop the stale pluginsync fact cache on KubeAid nodes
+- f406541b fix(system): don't write the obmondo_system facts on KubeAid nodes
+
+### Other Changes
+- d4ad0ec5 Bump linuxaid-cli to 1.12.0
+
 ## LinuxAid Release Version v1.8.15
 
 ### Features
