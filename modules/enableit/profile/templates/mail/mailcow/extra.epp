@@ -1,5 +1,6 @@
-# Managed by LinuxAid
 myhostname = <%= $myhostname %>
-<% $extra_settings.map |$key, $value| { %>
+# Managed by LinuxAid
+<% $extra_settings.each |$key, $value| { -%>
+
 <%= $key %> = <%= $value %>
-<% } %>
+<% } -%>

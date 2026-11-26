@@ -167,7 +167,7 @@ class profile::mail::mailcow (
       content => epp('profile/mail/mailcow/docker-compose.override.yml.epp', {
         'letsencrypt'    => $letsencrypt,
         'exporter_image' => 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
-        'ipv6nat_image'  => 'docker.io/robbertkl/ipv6nat',
+        'ipv6nat_image'  => 'robbertkl/ipv6nat',
       }),
     ;
   }
