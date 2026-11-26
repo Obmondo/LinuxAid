@@ -1,0 +1,65 @@
+<%- |
+  Boolean $letsencrypt,
+  String  $exporter_image,
+  String  $ipv6nat_image,
+| -%>
+# THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+#
+# Layered on top of the docker-compose.yml shipped with the checked out mailcow
+# tag, so images, environment and cron jobs always follow the mailcow version.
+# Only Obmondo specific additions belong here.
+services:
+<% unless $letsencrypt { -%>
+  # Internal setup: no ACME, no netfilter (the host firewall is managed by
+  # LinuxAid) and no ClamAV. Scaled to zero instead of removed, so the
+  # depends_on entries of the upstream services stay valid. restart "no" keeps
+  # the docker_compose provider from expecting a running container.
+  acme-mailcow:
+    scale: 0
+    restart: "no"
+
+  netfilter-mailcow:
+    scale: 0
+    restart: "no"
+
+  clamd-mailcow:
+    scale: 0
+    restart: "no"
+
+<% } -%>
+  mailcow-exporter:
+    image: <%= $exporter_image %>
+    restart: always
+    environment:
+      - MAILCOW_EXPORTER_HOST=${MAILCOW_HOSTNAME}
+      - MAILCOW_EXPORTER_API_KEY=${MAILCOW_EXPORTER_API_KEY}
+    ports:
+      - "${EXPORTER_LISTEN_ADDRESS:-127.254.254.254:63382}:9099"
+    networks:
+      mailcow-network:
+        aliases:
+          - mailcow-exporter
+
+  ipv6nat-mailcow:
+    depends_on:
+      - unbound-mailcow
+      - mysql-mailcow
+      - redis-mailcow
+      - rspamd-mailcow
+      - php-fpm-mailcow
+      - sogo-mailcow
+      - dovecot-mailcow
+      - postfix-mailcow
+      - memcached-mailcow
+      - nginx-mailcow
+      - watchdog-mailcow
+      - dockerapi-mailcow
+    environment:
+      - TZ=${TZ}
+    image: <%= $ipv6nat_image %>
+    restart: always
+    privileged: true
+    network_mode: "host"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /lib/modules:/lib/modules:ro

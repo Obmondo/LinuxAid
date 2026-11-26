@@ -2445,9 +2445,9 @@ Default value: `undef`
 
 Data type: `Eit_types::Mailcow::Version`
 
-The version of Mailcow to install. Defaults to '2024-08a'.
+The mailcow release tag to install, e.g. '2026-11b'. Images and compose settings follow the upstream docker-compose.yml of that tag.
 
-Default value: `'2024-08a'`
+Default value: `'2026-11b'`
 
 ##### <a name="-role--mail--mailcow--install_dir"></a>`install_dir`
 
