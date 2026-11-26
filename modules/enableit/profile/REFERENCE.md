@@ -8823,6 +8823,7 @@ The following parameters are available in the `profile::system::sudoers` class:
 * [`purge`](#-profile--system--sudoers--purge)
 * [`sudoers`](#-profile--system--sudoers--sudoers)
 * [`sudoers_d_dir`](#-profile--system--sudoers--sudoers_d_dir)
+* [`noop_value`](#-profile--system--sudoers--noop_value)
 
 ##### <a name="-profile--system--sudoers--purge"></a>`purge`
 
@@ -8847,6 +8848,14 @@ Data type: `Stdlib::Absolutepath`
 
 
 Default value: `$common::user_management::authentication::sudo::sudoers_d_dir`
+
+##### <a name="-profile--system--sudoers--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+
+
+Default value: `$common::user_management::authentication::sudo::noop_value`
 
 ### <a name="profile--system--systemd"></a>`profile::system::systemd`
 

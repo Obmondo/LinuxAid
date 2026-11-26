@@ -6947,6 +6947,7 @@ The following parameters are available in the `common::user_management::authenti
 * [`ssh_agent_auth`](#-common--system--authentication--sudo--ssh_agent_auth)
 * [`sudoers`](#-common--system--authentication--sudo--sudoers)
 * [`sudoers_d_dir`](#-common--system--authentication--sudo--sudoers_d_dir)
+* [`noop_value`](#-common--system--authentication--sudo--noop_value)
 
 ##### <a name="-common--system--authentication--sudo--manage"></a>`manage`
 
@@ -6987,6 +6988,16 @@ Data type: `Stdlib::Absolutepath`
 The absolute path to the sudoers.d directory. Defaults to '/etc/obmondo/sudoers.d'.
 
 Default value: `'/etc/obmondo/sudoers.d'`
+
+##### <a name="-common--system--authentication--sudo--noop_value"></a>`noop_value`
+
+Data type: `Eit_types::Noop_Value`
+
+Noop value for the sudoers rules from `sudoers`. Set it to
+false to apply sudo rule changes even when the agent runs in noop mode.
+Defaults to undef (follow the agent's noop setting).
+
+Default value: `undef`
 
 ### <a name="common--system--cloud_init"></a>`common::system::cloud_init`
 

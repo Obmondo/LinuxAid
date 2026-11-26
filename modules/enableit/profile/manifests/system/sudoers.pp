@@ -1,8 +1,9 @@
 # Sudoers
 class profile::system::sudoers (
-  Boolean              $purge         = $common::user_management::authentication::sudo::purge,
-  Eit_types::Sudoers   $sudoers       = $common::user_management::authentication::sudo::sudoers,
-  Stdlib::Absolutepath $sudoers_d_dir = $common::user_management::authentication::sudo::sudoers_d_dir,
+  Boolean               $purge         = $common::user_management::authentication::sudo::purge,
+  Eit_types::Sudoers    $sudoers       = $common::user_management::authentication::sudo::sudoers,
+  Stdlib::Absolutepath  $sudoers_d_dir = $common::user_management::authentication::sudo::sudoers_d_dir,
+  Eit_types::Noop_Value $noop_value    = $common::user_management::authentication::sudo::noop_value,
 ) {
   contain sudo::params
 
@@ -61,7 +62,8 @@ class profile::system::sudoers (
 
   $sudoers.each |$name, $v| {
     profile::system::sudoers::conf { $name:
-      * => $v,
+      noop_value => $noop_value,
+      *          => $v,
     }
   }
 
