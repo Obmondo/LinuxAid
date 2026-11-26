@@ -2383,6 +2383,7 @@ The following parameters are available in the `role::mail::mailcow` class:
 * [`exporter_listen_address`](#-role--mail--mailcow--exporter_listen_address)
 * [`exporter_api_key`](#-role--mail--mailcow--exporter_api_key)
 * [`sogo_url_encryption_key`](#-role--mail--mailcow--sogo_url_encryption_key)
+* [`rspamd_ip_whitelist`](#-role--mail--mailcow--rspamd_ip_whitelist)
 * [`http_bind`](#-role--mail--mailcow--http_bind)
 * [`encrypt_params`](#-role--mail--mailcow--encrypt_params)
 
@@ -2520,6 +2521,15 @@ Key SOGo uses to encrypt email addresses in its URLs, exactly 16 characters
 A-Z, a-z, 0-9. Without it mailcow falls back to its public default key.
 
 Default value: `undef`
+
+##### <a name="-role--mail--mailcow--rspamd_ip_whitelist"></a>`rspamd_ip_whitelist`
+
+Data type: `Array[Stdlib::IP::Address]`
+
+IPs or networks rspamd never scores as spam, written to
+data/conf/rspamd/custom/ip_wl.map. Empty keeps the upstream file.
+
+Default value: `[]`
 
 ##### <a name="-role--mail--mailcow--http_bind"></a>`http_bind`
 

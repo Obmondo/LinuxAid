@@ -30,6 +30,9 @@
 #   URLs, exactly 16 characters A-Z, a-z, 0-9. Without it mailcow falls back to
 #   its public default key.
 #
+# @param rspamd_ip_whitelist IPs or networks rspamd never scores as spam,
+#   written to data/conf/rspamd/custom/ip_wl.map. Empty keeps the upstream file.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups database dbroot, dbpass, redispass, sogo_url_encryption_key.
@@ -40,7 +43,7 @@
 #
 # @groups backup backup_dir.
 #
-# @groups management manage, letsencrypt, skip_unbound_healthcheck.
+# @groups management manage, letsencrypt, skip_unbound_healthcheck, rspamd_ip_whitelist.
 #
 # @groups exporter exporter_api_key.
 #
@@ -62,6 +65,7 @@ class role::mail::mailcow (
   Optional[Boolean]           $skip_unbound_healthcheck = false,
   String                      $exporter_api_key,
   Optional[Pattern[/\A[A-Za-z0-9]{16}\z/]] $sogo_url_encryption_key = undef,
+  Array[Stdlib::IP::Address]  $rspamd_ip_whitelist      = [],
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
