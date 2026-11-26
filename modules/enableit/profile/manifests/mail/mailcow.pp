@@ -14,6 +14,7 @@ class profile::mail::mailcow (
   String                      $exporter_api_key         = $role::mail::mailcow::exporter_api_key,
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
   Optional[String]            $sogo_url_encryption_key  = $role::mail::mailcow::sogo_url_encryption_key,
+  Array[Stdlib::IP::Address]  $rspamd_ip_whitelist      = $role::mail::mailcow::rspamd_ip_whitelist,
 ) {
   $install_dir              = '/opt/mailcow'
   $http_bind                = '0.0.0.0'
@@ -211,6 +212,16 @@ class profile::mail::mailcow (
       myhostname     => $domain,
       extra_settings => $extra_settings,
     })
+  }
+
+  # ip_wl.map is tracked upstream, so the vcsrepo checkout resets it on every
+  # upgrade; write it again right after. rspamd reloads the map on change.
+  unless $rspamd_ip_whitelist.empty {
+    file { "${install_dir}/data/conf/rspamd/custom/ip_wl.map":
+      ensure  => ensure_present($manage),
+      content => (['# THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.'] + $rspamd_ip_whitelist + ['']).join("\n"),
+      require => Vcsrepo[$install_dir],
+    }
   }
 
   docker_compose { 'mailcow':
