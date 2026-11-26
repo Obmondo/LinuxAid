@@ -15,7 +15,8 @@
 #
 # @param letsencrypt Flag to manage Let's Encrypt certificates. Defaults to false.
 #
-# @param version The version of Mailcow to install. Defaults to '2024-08a'.
+# @param version The mailcow release tag to install, e.g. '2026-11b'. Images and
+#   compose settings follow the upstream docker-compose.yml of that tag.
 #
 # @param timezone The timezone for the installation. Defaults to 'Europe/Copenhagen'.
 #
@@ -51,7 +52,7 @@ class role::mail::mailcow (
   Stdlib::Unixpath            $backup_dir               = '/opt/backup',
   Boolean                     $manage                   = true,
   Boolean                     $letsencrypt              = false,
-  Eit_types::Mailcow::Version $version                  = '2024-08a',
+  Eit_types::Mailcow::Version $version                  = '2026-11b',
   Eit_types::Timezone         $timezone                 = 'Europe/Copenhagen',
   Optional[Hash]              $extra_settings           = {},
   Optional[Boolean]           $skip_unbound_healthcheck = false,

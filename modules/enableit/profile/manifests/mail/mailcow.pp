@@ -23,6 +23,9 @@ class profile::mail::mailcow (
     'Need **acme_contact** parameter, if letsencrypt is enabled'
   )
 
+  # The checked out tag drives the whole setup: the upstream docker-compose.yml
+  # in this repo defines images, environment and cron jobs for that version, so
+  # bumping $version is all an upgrade needs.
   vcsrepo { $install_dir:
     ensure   => ensure_present($manage),
     provider => 'git',
@@ -30,8 +33,6 @@ class profile::mail::mailcow (
     revision => $version,
   }
 
-  # NOTE: we are creating a symlink to the original backup script since our compose file is at diff location, then the expected path
-  # in the script. mailcow is working an improvment here https://github.com/mailcow/mailcow-dockerized/pull/6030
   $_timer = @("EOT"/$n)
     # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
     [Unit]
@@ -58,7 +59,7 @@ class profile::mail::mailcow (
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
     Environment="BACKUP_LOCATION=${backup_dir}"
     Environment="CREATE_BACKUP_LOCATION=yes"
-    ExecStart=/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh backup all --delete-days 5
+    ExecStart=${install_dir}/helper-scripts/backup_and_restore.sh backup all --delete-days 5
     | EOT
 
   systemd::timer { 'mailcow-backup.timer':
@@ -89,26 +90,29 @@ class profile::mail::mailcow (
     jump  => 'accept',
   }
 
+  # Pre 2026-11b setups kept their compose files here, the project now runs
+  # from ${install_dir} so mailcow's own helper scripts find everything.
+  file { '/opt/obmondo/docker-compose/mailcow':
+    ensure  => absent,
+    force   => true,
+    recurse => true,
+    require => Docker_compose['mailcow'],
+  }
+
   file { default:
-    ensure => ensure_dir($manage),
+    ensure  => ensure_present($manage),
+    require => Vcsrepo[$install_dir],
     ;
-    [
-      '/opt/obmondo/docker-compose/mailcow',
-      '/opt/obmondo/docker-compose/mailcow/helper-scripts',
-      "${install_dir}/data/assets/ssl",
-    ]:
-    # TODO: remove this, when the backup PR is merged upstream.
+    "${install_dir}/data/assets/ssl":
+      ensure => ensure_dir($manage),
     ;
-    '/opt/obmondo/docker-compose/mailcow/helper-scripts/backup_and_restore.sh':
-      ensure => link,
-      target => "${install_dir}/helper-scripts/backup_and_restore.sh",
+    # mailcow reads mailcow.conf, docker compose reads .env from the project
+    # directory; upstream links them the same way.
+    "${install_dir}/.env":
+      ensure => ensure_present($manage, 'link'),
+      target => 'mailcow.conf',
     ;
-    '/opt/obmondo/docker-compose/mailcow/mailcow.conf':
-      ensure => link,
-      target => '/opt/obmondo/docker-compose/mailcow/.env',
-    ;
-    '/opt/obmondo/docker-compose/mailcow/.env':
-      ensure  => present,
+    "${install_dir}/mailcow.conf":
       content => anything_to_ini({
         'MAILCOW_HOSTNAME'              => $domain,
         'MAILCOW_PASS_SCHEME'           => 'BLF-CRYPT',
@@ -129,7 +133,8 @@ class profile::mail::mailcow (
         'ACL_ANYONE'                    => 'disallow',
         'MAILDIR_GC_TIME'               => 7200,
         'SKIP_LETS_ENCRYPT'             => to_yn(!$letsencrypt),
-        'ACME_CONTACT'                  => $acme_contact,
+        'ACME_ACCOUNT_EMAIL'            => $acme_contact,
+        'AUTODISCOVER_SAN'              => 'n',
         'ENABLE_SSL_SNI'                => 'n',
         'SKIP_IP_CHECK'                 => 'n',
         'SKIP_HTTP_VERIFICATION'        => 'y',
@@ -155,37 +160,12 @@ class profile::mail::mailcow (
         'MAILCOW_EXPORTER_API_KEY'      => $exporter_api_key,
       }).node_encrypt::secret,
     ;
-    # NOTE: These container tag are manually maintained to have a better control
-    # on release, based on last commit 75f18df1435b72cb827af1f114f58de92c498f5e
-    '/opt/obmondo/docker-compose/mailcow/docker-compose.yml':
-      ensure  => ensure_present($manage),
-      content => epp('profile/mail/mailcow/docker-compose.yml.epp', {
-        'install_dir'     => $install_dir,
-        'letsencrypt'     => $letsencrypt,
-        'unbound_image'        => 'ghcr.io/mailcow/unbound:1.25',
-        'mysql_image'          => 'docker.io/mariadb:10.11',
-        'redis_image'          => 'docker.io/redis:7.4.6-alpine',
-        'clamd_image'          => 'ghcr.io/mailcow/clamd:1.71',
-        'rspamd_image'         => 'ghcr.io/mailcow/rspamd:3.14.3-1',
-        'php_fpm_image'        => 'ghcr.io/mailcow/phpfpm:8.2.29-2',
-        'sogo_image'           => 'ghcr.io/mailcow/sogo:5.12.5-3',
-        'dovecot_image'        => 'ghcr.io/mailcow/dovecot:2.3.21.1-2',
-        'postfix_image'        => 'ghcr.io/mailcow/postfix:3.7.11-2',
-        'postfix_tlspol_image' => 'ghcr.io/mailcow/postfix-tlspol:1.8.23',
-        'memcached_image'      => 'docker.io/memcached:alpine',
-        'nginx_image'          => 'ghcr.io/mailcow/nginx:1.06',
-        'acme_image'           => 'ghcr.io/mailcow/acme:1.97',
-        'netfilter_image'      => 'ghcr.io/mailcow/netfilter:1.64',
-        'watchdog_image'       => 'ghcr.io/mailcow/watchdog:2.11',
-        'dockerapi_image'      => 'ghcr.io/mailcow/dockerapi:2.12',
-        'olefy_image'          => 'ghcr.io/mailcow/olefy:1.15',
-        'olefia_image'         => 'docker.io/mcuadros/ofelia:latest',
-        'ipv6nat_image'        => 'docker.io/robbertkl/ipv6nat',
-        'exporter_image'  => 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
+    "${install_dir}/docker-compose.override.yml":
+      content => epp('profile/mail/mailcow/docker-compose.override.yml.epp', {
+        'letsencrypt'    => $letsencrypt,
+        'exporter_image' => 'ghcr.io/obmondo/dockerfiles/mailcow-exporter:1.4.0',
+        'ipv6nat_image'  => 'docker.io/robbertkl/ipv6nat',
       }),
-      require => [
-        File['/opt/obmondo/docker-compose/mailcow'],
-      ],
     ;
   }
 
@@ -234,9 +214,13 @@ class profile::mail::mailcow (
   docker_compose { 'mailcow':
     ensure        => ensure_present($manage),
     compose_files => [
-      '/opt/obmondo/docker-compose/mailcow/docker-compose.yml',
+      "${install_dir}/docker-compose.yml",
+      "${install_dir}/docker-compose.override.yml",
     ],
-    require       => File['/opt/obmondo/docker-compose/mailcow/docker-compose.yml'],
+    require       => [
+      Vcsrepo[$install_dir],
+      File["${install_dir}/.env", "${install_dir}/mailcow.conf", "${install_dir}/docker-compose.override.yml"],
+    ],
   }
 
   # NOTE: lets stop postfix on the host
