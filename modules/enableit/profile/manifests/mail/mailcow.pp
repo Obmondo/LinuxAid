@@ -13,6 +13,7 @@ class profile::mail::mailcow (
   Stdlib::Fqdn                $domain                   = $role::mail::mailcow::domain,
   String                      $exporter_api_key         = $role::mail::mailcow::exporter_api_key,
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
+  Optional[String]            $sogo_url_encryption_key  = $role::mail::mailcow::sogo_url_encryption_key,
 ) {
   $install_dir              = '/opt/mailcow'
   $http_bind                = '0.0.0.0'
@@ -158,7 +159,8 @@ class profile::mail::mailcow (
         'EXPORTER_LISTEN_ADDRESS'       => $exporter_listen_address,
         'MAILCOW_EXPORTER_HOST'         => $domain,
         'MAILCOW_EXPORTER_API_KEY'      => $exporter_api_key,
-      }).node_encrypt::secret,
+        'SOGO_URL_ENCRYPTION_KEY'       => $sogo_url_encryption_key,
+      }.delete_undef_values).node_encrypt::secret,
     ;
     "${install_dir}/docker-compose.override.yml":
       content => epp('profile/mail/mailcow/docker-compose.override.yml.epp', {
