@@ -2382,6 +2382,7 @@ The following parameters are available in the `role::mail::mailcow` class:
 * [`exporter_image`](#-role--mail--mailcow--exporter_image)
 * [`exporter_listen_address`](#-role--mail--mailcow--exporter_listen_address)
 * [`exporter_api_key`](#-role--mail--mailcow--exporter_api_key)
+* [`sogo_url_encryption_key`](#-role--mail--mailcow--sogo_url_encryption_key)
 * [`http_bind`](#-role--mail--mailcow--http_bind)
 * [`encrypt_params`](#-role--mail--mailcow--encrypt_params)
 
@@ -2511,6 +2512,15 @@ Data type: `String`
 
 The API Key to use when accessing the mailcow API
 
+##### <a name="-role--mail--mailcow--sogo_url_encryption_key"></a>`sogo_url_encryption_key`
+
+Data type: `Optional[Pattern[/\A[A-Za-z0-9]{16}\z/]]`
+
+Key SOGo uses to encrypt email addresses in its URLs, exactly 16 characters
+A-Z, a-z, 0-9. Without it mailcow falls back to its public default key.
+
+Default value: `undef`
+
 ##### <a name="-role--mail--mailcow--http_bind"></a>`http_bind`
 
 Data type: `Stdlib::IP::Address::V4::Nosubnet`
@@ -2533,6 +2543,7 @@ Default value:
     'dbpass',
     'redispass',
     'exporter_api_key',
+    'sogo_url_encryption_key',
   ]
 ```
 

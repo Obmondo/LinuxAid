@@ -26,9 +26,13 @@
 #
 # @param exporter_api_key The API Key to use when accessing the mailcow API
 #
+# @param sogo_url_encryption_key Key SOGo uses to encrypt email addresses in its
+#   URLs, exactly 16 characters A-Z, a-z, 0-9. Without it mailcow falls back to
+#   its public default key.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
-# @groups database dbroot, dbpass, redispass.
+# @groups database dbroot, dbpass, redispass, sogo_url_encryption_key.
 #
 # @groups domain domain.
 #
@@ -42,7 +46,7 @@
 #
 # @groups other timezone, extra_settings, encrypt_params.
 #
-# @encrypt_params dbroot, dbpass, redispass, exporter_api_key.
+# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, sogo_url_encryption_key.
 #
 class role::mail::mailcow (
   String                      $dbroot,
@@ -57,12 +61,14 @@ class role::mail::mailcow (
   Optional[Hash]              $extra_settings           = {},
   Optional[Boolean]           $skip_unbound_healthcheck = false,
   String                      $exporter_api_key,
+  Optional[Pattern[/\A[A-Za-z0-9]{16}\z/]] $sogo_url_encryption_key = undef,
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
     'dbpass',
     'redispass',
     'exporter_api_key',
+    'sogo_url_encryption_key',
   ]
 
 ) {
