@@ -224,6 +224,37 @@ class profile::mail::mailcow (
     }
   }
 
+  # The UI reads its version from app_info.inc.php. update.sh writes it, it is
+  # not tracked in git, so write it here the same way after a checkout.
+  if $manage {
+    $_app_info = "${install_dir}/data/web/inc/app_info.inc.php"
+    exec { 'mailcow app_info.inc.php':
+      command     => @(CMD),
+        c=$(git rev-parse HEAD)
+        d=$(git log -1 --format=%ci HEAD)
+        cat > data/web/inc/app_info.inc.php <<EOF
+        <?php
+          \$MAILCOW_GIT_VERSION="${MAILCOW_VERSION}";
+          \$MAILCOW_LAST_GIT_VERSION="";
+          \$MAILCOW_GIT_OWNER="mailcow";
+          \$MAILCOW_GIT_REPO="mailcow-dockerized";
+          \$MAILCOW_GIT_URL="https://github.com/mailcow/mailcow-dockerized";
+          \$MAILCOW_GIT_COMMIT="${c}";
+          \$MAILCOW_GIT_COMMIT_DATE="${d}";
+          \$MAILCOW_BRANCH="master";
+          \$MAILCOW_UPDATEDAT=$(date +%s);
+        ?>
+        EOF
+        | CMD
+      environment => ["MAILCOW_VERSION=${version}"],
+      cwd         => $install_dir,
+      provider    => 'shell',
+      path        => ['/usr/bin', '/bin'],
+      unless      => "grep -qF '\$MAILCOW_GIT_VERSION=\"${version}\";' ${_app_info}",
+      require     => Vcsrepo[$install_dir],
+    }
+  }
+
   docker_compose { 'mailcow':
     ensure        => ensure_present($manage),
     compose_files => [
