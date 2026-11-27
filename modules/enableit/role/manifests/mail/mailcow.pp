@@ -33,6 +33,20 @@
 # @param rspamd_ip_whitelist IPs or networks rspamd never scores as spam,
 #   written to data/conf/rspamd/custom/ip_wl.map. Empty keeps the upstream file.
 #
+# @param backup_keep_days Days of local backups kept in backup_dir. Defaults to 5.
+#
+# @param offsite_s3_bucket S3 bucket the nightly backup is copied to, e.g.
+#   's3://mailcow-backup/'. No offsite copy is made when unset.
+#
+# @param offsite_s3_endpoint S3 endpoint for the offsite copy.
+#   Defaults to 'https://offsite.obmondo.com'.
+#
+# @param offsite_access_key_id Access key for the offsite bucket.
+#
+# @param offsite_secret_access_key Secret key for the offsite bucket.
+#
+# @param offsite_keep Number of complete backups kept in the offsite bucket. Defaults to 3.
+#
 # @param encrypt_params The list of params, which needs to be encrypted
 #
 # @groups database dbroot, dbpass, redispass, sogo_url_encryption_key.
@@ -41,7 +55,7 @@
 #
 # @groups install version.
 #
-# @groups backup backup_dir.
+# @groups backup backup_dir, backup_keep_days, offsite_s3_bucket, offsite_s3_endpoint, offsite_access_key_id, offsite_secret_access_key, offsite_keep.
 #
 # @groups management manage, letsencrypt, skip_unbound_healthcheck, rspamd_ip_whitelist.
 #
@@ -49,7 +63,7 @@
 #
 # @groups other timezone, extra_settings, encrypt_params.
 #
-# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, sogo_url_encryption_key.
+# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, sogo_url_encryption_key, offsite_secret_access_key.
 #
 class role::mail::mailcow (
   String                      $dbroot,
@@ -66,6 +80,12 @@ class role::mail::mailcow (
   String                      $exporter_api_key,
   Optional[Pattern[/\A[A-Za-z0-9]{16}\z/]] $sogo_url_encryption_key = undef,
   Array[Stdlib::IP::Address]  $rspamd_ip_whitelist      = [],
+  Integer[1]                  $backup_keep_days          = 5,
+  Optional[Pattern[/\As3:\/\/[a-z0-9][a-z0-9.\-]*\/\z/]] $offsite_s3_bucket = undef,
+  Stdlib::HTTPUrl             $offsite_s3_endpoint       = 'https://offsite.obmondo.com',
+  Optional[String[1]]         $offsite_access_key_id     = undef,
+  Optional[String[1]]         $offsite_secret_access_key = undef,
+  Integer[1]                  $offsite_keep              = 3,
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
@@ -73,6 +93,7 @@ class role::mail::mailcow (
     'redispass',
     'exporter_api_key',
     'sogo_url_encryption_key',
+    'offsite_secret_access_key',
   ]
 
 ) {

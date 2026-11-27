@@ -15,10 +15,23 @@ class profile::mail::mailcow (
   Optional[Boolean]           $skip_unbound_healthcheck = $role::mail::mailcow::skip_unbound_healthcheck,
   Optional[String]            $sogo_url_encryption_key  = $role::mail::mailcow::sogo_url_encryption_key,
   Array[Stdlib::IP::Address]  $rspamd_ip_whitelist      = $role::mail::mailcow::rspamd_ip_whitelist,
+  Integer[1]                  $backup_keep_days          = $role::mail::mailcow::backup_keep_days,
+  Optional[String]            $offsite_s3_bucket         = $role::mail::mailcow::offsite_s3_bucket,
+  Stdlib::HTTPUrl             $offsite_s3_endpoint       = $role::mail::mailcow::offsite_s3_endpoint,
+  Optional[String]            $offsite_access_key_id     = $role::mail::mailcow::offsite_access_key_id,
+  Optional[String]            $offsite_secret_access_key = $role::mail::mailcow::offsite_secret_access_key,
+  Integer[1]                  $offsite_keep              = $role::mail::mailcow::offsite_keep,
 ) {
   $install_dir              = '/opt/mailcow'
   $http_bind                = '0.0.0.0'
   $exporter_listen_address  = '127.254.254.254:63382'
+  $_offsite                 = $manage and $offsite_s3_bucket =~ NotUndef
+  $_credentials_file        = '/etc/obmondo/mailcow-backup/aws-credentials'
+
+  confine($_offsite,
+    !($offsite_access_key_id and $offsite_secret_access_key),
+    'Need **offsite_access_key_id** and **offsite_secret_access_key** when offsite_s3_bucket is set'
+  )
 
   confine($letsencrypt,
     !$acme_contact,
@@ -62,10 +75,55 @@ class profile::mail::mailcow (
     # one until it ends.
     TimeoutStartSec=6h
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
-    Environment="BACKUP_LOCATION=${backup_dir}"
-    Environment="CREATE_BACKUP_LOCATION=yes"
-    ExecStart=${install_dir}/helper-scripts/backup_and_restore.sh backup all --delete-days 5
+    ExecStart=/opt/obmondo/bin/mailcow-backup
     | EOT
+
+  # zstd checks the archives before they are uploaded; the upload itself is
+  # done by obmondo-offsite-upload (common::backup::offsite_upload).
+  stdlib::ensure_packages(['zstd'])
+
+  file { '/opt/obmondo/bin/mailcow-backup':
+    ensure  => ensure_file($manage),
+    mode    => '0755',
+    content => epp('profile/mail/mailcow/mailcow-backup.sh.epp', {
+      install_dir      => $install_dir,
+      backup_dir       => $backup_dir,
+      local_keep_days  => $backup_keep_days,
+      s3_bucket        => if $_offsite { $offsite_s3_bucket },
+      s3_endpoint      => $offsite_s3_endpoint,
+      s3_keep          => $offsite_keep,
+      credentials_file => $_credentials_file,
+    }),
+  }
+
+  if $_offsite {
+    include common::backup::offsite_upload
+  }
+
+  # Own file instead of /root/.aws/credentials, which common::backup::gitea
+  # manages on hosts that run it.
+  file { '/etc/obmondo/mailcow-backup':
+    ensure => ensure_dir($_offsite),
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+    force  => true,
+  }
+
+  file { $_credentials_file:
+    ensure    => ensure_file($_offsite),
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0600',
+    show_diff => false,
+    content   => if $_offsite {
+      @("EOT").node_encrypt::secret
+        [default]
+        aws_access_key_id = ${offsite_access_key_id}
+        aws_secret_access_key = ${offsite_secret_access_key}
+        | EOT
+    },
+  }
 
   systemd::timer { 'mailcow-backup.timer':
     ensure          => ensure_present($manage),
@@ -73,7 +131,7 @@ class profile::mail::mailcow (
     service_content => $_service,
     active          => $manage,
     enable          => $manage,
-    require         => Vcsrepo[$install_dir],
+    require         => [Vcsrepo[$install_dir], File['/opt/obmondo/bin/mailcow-backup']],
   }
 
   # Firewall

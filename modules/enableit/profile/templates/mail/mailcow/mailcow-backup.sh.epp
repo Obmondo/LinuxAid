@@ -1,0 +1,128 @@
+<%- |
+  Stdlib::Absolutepath $install_dir,
+  Stdlib::Absolutepath $backup_dir,
+  Integer[1]           $local_keep_days,
+  Optional[String]     $s3_bucket,
+  Optional[String]     $s3_endpoint,
+  Integer[1]           $s3_keep,
+  Stdlib::Absolutepath $credentials_file,
+| -%>
+#!/bin/bash
+# THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+#
+# Runs mailcow's own backup, checks the result and copies it offsite with
+# obmondo-offsite-upload (common::backup::offsite_upload).
+set -euo pipefail
+
+INSTALL_DIR='<%= $install_dir %>'
+BACKUP_DIR='<%= $backup_dir %>'
+LOCAL_KEEP_DAYS=<%= $local_keep_days %>
+# Empty when no offsite copy is configured.
+S3_BUCKET='<%= $s3_bucket %>'
+S3_ENDPOINT='<%= $s3_endpoint %>'
+S3_KEEP=<%= $s3_keep %>
+CREDENTIALS_FILE='<%= $credentials_file %>'
+METRICS_FILE=/var/lib/node_exporter/textfile_collector/mailcow_backup.prom
+# mailcow's tar runs with -v and lists every mail file it archives. That goes
+# here, kept for the last run only, instead of into the journal.
+UPSTREAM_LOG=/var/log/mailcow-backup-upstream.log
+
+# Without these a backup cannot be restored: vmail holds the mail, crypt the
+# key the mail is encrypted with, mariadb the mailboxes and aliases.
+REQUIRED_FILES=(mailcow.conf backup_vmail.tar.zst backup_crypt.tar.zst backup_mariadb.tar.zst)
+
+# Under systemd stdout already lands in the journal; logger only for runs by
+# hand, or every line is logged twice.
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+  [ -n "${INVOCATION_ID:-}" ] || logger -t mailcow-backup "$1"
+}
+
+# Newest backup directory; with an argument, the newest one holding that file.
+# Empty when there is none, which must not trip set -e/pipefail.
+latest_backup() {
+  local has=()
+  [ -z "${1:-}" ] || has=(-exec test -f "{}/$1" \;)
+  find "$BACKUP_DIR" -mindepth 1 -maxdepth 1 -type d -name 'mailcow-*' "${has[@]}" \
+    -print 2>/dev/null | sort | tail -n 1 || true
+}
+
+# node_exporter picks these up, so a backup that silently stops running shows
+# up as a stale timestamp. A failed run keeps the last success values.
+write_metrics() {
+  local ok=$1 new=${2:-} tmp
+  [ -d "$(dirname "$METRICS_FILE")" ] || return 0
+  tmp=$(mktemp "$METRICS_FILE.XXXXXX")
+  {
+    if [ -n "$new" ]; then
+      echo "mailcow_backup_local_last_success_timestamp_seconds $(date +%s)"
+      echo "mailcow_backup_local_last_size_bytes $(du -sb "$new" | cut -f1)"
+    elif [ -f "$METRICS_FILE" ]; then
+      grep '^mailcow_backup_local_' "$METRICS_FILE" || true
+    fi
+    echo "mailcow_backup_last_run_success $ok"
+  } > "$tmp"
+  chmod 0644 "$tmp"
+  mv "$tmp" "$METRICS_FILE"
+}
+
+# A truncated or empty backup is still a directory full of files. Check it
+# before it is uploaded and allowed to push a good copy out of the bucket.
+verify_backup() {
+  local dir=$1 prev=$2 f size prev_size
+
+  for f in "${REQUIRED_FILES[@]}"; do
+    [ -s "$dir/$f" ] || { log "Error: $dir/$f is missing or empty."; return 1; }
+  done
+
+  # Mail only grows slowly, so a vmail archive under half the last good one
+  # means the backup broke off.
+  if [ -n "$prev" ]; then
+    size=$(stat -c %s "$dir/backup_vmail.tar.zst")
+    prev_size=$(stat -c %s "$prev/backup_vmail.tar.zst")
+    if [ "$size" -lt "$(( prev_size / 2 ))" ]; then
+      log "Error: vmail archive is ${size} bytes, less than half the previous ${prev_size} bytes."
+      return 1
+    fi
+  fi
+
+  for f in "$dir"/*.tar.zst; do
+    zstd -q -t "$f" || { log "Error: $f failed the zstd integrity check."; return 1; }
+  done
+
+  # The next run compares its size against this one, not against a later
+  # backup that failed verification.
+  : > "$dir/.verified"
+  log "Backup $(basename "$dir") verified."
+}
+
+exec 9>/run/mailcow-backup.lock
+flock -n 9 || { log "Another mailcow-backup run is in progress, exiting."; exit 0; }
+
+rc=0 good=''
+before=$(latest_backup)
+prev=$(latest_backup .verified)
+log "Running mailcow backup into $BACKUP_DIR (file list in $UPSTREAM_LOG)"
+BACKUP_LOCATION="$BACKUP_DIR" CREATE_BACKUP_LOCATION=yes \
+  "$INSTALL_DIR/helper-scripts/backup_and_restore.sh" backup all --delete-days "$LOCAL_KEEP_DAYS" \
+  > "$UPSTREAM_LOG" || log "backup_and_restore.sh exited non-zero, checking what it left."
+new=$(latest_backup)
+
+if [ -z "$new" ] || [ "$new" = "$before" ]; then
+  log "Error: no new backup directory was created in $BACKUP_DIR."
+  rc=1
+elif ! verify_backup "$new" "$prev"; then
+  rc=1
+else
+  good=$new
+  if [ -n "$S3_BUCKET" ]; then
+    mapfile -t files < <(find "$new" -maxdepth 1 -type f ! -name .verified | sort)
+    /opt/obmondo/bin/obmondo-offsite-upload --job mailcow --name "$(basename "$new")" \
+      --rotate-prefix mailcow- --bucket "$S3_BUCKET" --endpoint "$S3_ENDPOINT" \
+      --credentials "$CREDENTIALS_FILE" --keep "$S3_KEEP" "${files[@]}" || rc=1
+  fi
+fi
+
+write_metrics "$(( rc == 0 ? 1 : 0 ))" "$good"
+log "Backup finished$([ "$rc" -eq 0 ] || echo ' with errors')."
+exit "$rc"
