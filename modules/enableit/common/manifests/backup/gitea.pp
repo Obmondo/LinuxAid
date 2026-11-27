@@ -122,10 +122,16 @@ ExecStart=/opt/obmondo/bin/gitea-backup
   # Only OnCalendar starts a backup: the timer has no Requires= on the
   # service and no Persistent=, so enabling it into timers.target does not
   # run a dump while the host is still booting.
+  #
+  # noop => false: hosts like bantha run puppet in noop mode on schedule, and
+  # a backup timer left stopped there goes unnoticed (it did for two weeks
+  # after a reboot). The unit files and the timer's state are enforced even in
+  # noop runs; nothing else in this class is.
   systemd::timer { 'gitea-backup.timer':
     timer_content   => $_timer,
     service_content => $_service,
     active          => $enable,
     enable          => $enable,
+    noop            => false,
   }
 }
