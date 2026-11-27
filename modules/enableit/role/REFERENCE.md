@@ -2389,9 +2389,7 @@ The following parameters are available in the `role::mail::mailcow` class:
 * [`offsite_s3_endpoint`](#-role--mail--mailcow--offsite_s3_endpoint)
 * [`offsite_access_key_id`](#-role--mail--mailcow--offsite_access_key_id)
 * [`offsite_secret_access_key`](#-role--mail--mailcow--offsite_secret_access_key)
-* [`offsite_restic_password`](#-role--mail--mailcow--offsite_restic_password)
-* [`offsite_keep_daily`](#-role--mail--mailcow--offsite_keep_daily)
-* [`offsite_keep_weekly`](#-role--mail--mailcow--offsite_keep_weekly)
+* [`offsite_keep`](#-role--mail--mailcow--offsite_keep)
 * [`http_bind`](#-role--mail--mailcow--http_bind)
 * [`encrypt_params`](#-role--mail--mailcow--encrypt_params)
 
@@ -2581,31 +2579,13 @@ Secret key for the offsite bucket.
 
 Default value: `undef`
 
-##### <a name="-role--mail--mailcow--offsite_restic_password"></a>`offsite_restic_password`
-
-Data type: `Optional[String[1]]`
-
-Password of the restic repository the offsite copy is stored in
-(s3:<endpoint>/<bucket>/restic). Without it the offsite backups cannot be
-read, so keep a copy outside this host.
-
-Default value: `undef`
-
-##### <a name="-role--mail--mailcow--offsite_keep_daily"></a>`offsite_keep_daily`
+##### <a name="-role--mail--mailcow--offsite_keep"></a>`offsite_keep`
 
 Data type: `Integer[1]`
 
-Daily offsite snapshots kept. Defaults to 7.
+Number of complete backups kept in the offsite bucket. Defaults to 3.
 
-Default value: `7`
-
-##### <a name="-role--mail--mailcow--offsite_keep_weekly"></a>`offsite_keep_weekly`
-
-Data type: `Integer[0]`
-
-Weekly offsite snapshots kept on top of the daily ones. Defaults to 4.
-
-Default value: `4`
+Default value: `3`
 
 ##### <a name="-role--mail--mailcow--http_bind"></a>`http_bind`
 
@@ -2631,7 +2611,6 @@ Default value:
     'exporter_api_key',
     'sogo_url_encryption_key',
     'offsite_secret_access_key',
-    'offsite_restic_password',
   ]
 ```
 

@@ -45,14 +45,7 @@
 #
 # @param offsite_secret_access_key Secret key for the offsite bucket.
 #
-# @param offsite_restic_password Password of the restic repository the offsite
-#   copy is stored in (s3:<endpoint>/<bucket>/restic). Without it the offsite
-#   backups cannot be read, so keep a copy outside this host.
-#
-# @param offsite_keep_daily Daily offsite snapshots kept. Defaults to 7.
-#
-# @param offsite_keep_weekly Weekly offsite snapshots kept on top of the daily
-#   ones. Defaults to 4.
+# @param offsite_keep Number of complete backups kept in the offsite bucket. Defaults to 3.
 #
 # @param encrypt_params The list of params, which needs to be encrypted
 #
@@ -62,7 +55,7 @@
 #
 # @groups install version.
 #
-# @groups backup backup_dir, backup_keep_days, offsite_s3_bucket, offsite_s3_endpoint, offsite_access_key_id, offsite_secret_access_key, offsite_restic_password, offsite_keep_daily, offsite_keep_weekly.
+# @groups backup backup_dir, backup_keep_days, offsite_s3_bucket, offsite_s3_endpoint, offsite_access_key_id, offsite_secret_access_key, offsite_keep.
 #
 # @groups management manage, letsencrypt, skip_unbound_healthcheck, rspamd_ip_whitelist.
 #
@@ -70,7 +63,7 @@
 #
 # @groups other timezone, extra_settings, encrypt_params.
 #
-# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, sogo_url_encryption_key, offsite_secret_access_key, offsite_restic_password.
+# @encrypt_params dbroot, dbpass, redispass, exporter_api_key, sogo_url_encryption_key, offsite_secret_access_key.
 #
 class role::mail::mailcow (
   String                      $dbroot,
@@ -92,9 +85,7 @@ class role::mail::mailcow (
   Stdlib::HTTPUrl             $offsite_s3_endpoint       = 'https://offsite.obmondo.com',
   Optional[String[1]]         $offsite_access_key_id     = undef,
   Optional[String[1]]         $offsite_secret_access_key = undef,
-  Optional[String[1]]         $offsite_restic_password   = undef,
-  Integer[1]                  $offsite_keep_daily        = 7,
-  Integer[0]                  $offsite_keep_weekly       = 4,
+  Integer[1]                  $offsite_keep              = 3,
 
   Eit_types::Encrypt::Params $encrypt_params = [
     'dbroot',
@@ -103,7 +94,6 @@ class role::mail::mailcow (
     'exporter_api_key',
     'sogo_url_encryption_key',
     'offsite_secret_access_key',
-    'offsite_restic_password',
   ]
 
 ) {
