@@ -38,7 +38,6 @@ class profile::mail::mailcow (
   $_timer = @("EOT"/$n)
     # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
     [Unit]
-    Requires=mailcow-backup.service
     Description=Mailcow backup script timer
 
     [Install]
@@ -54,10 +53,14 @@ class profile::mail::mailcow (
     # THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
     [Unit]
     Description=Mailcow backup script service
-    Wants=mailcow-backup.timer
+    Requires=docker.service
+    After=docker.service
 
     [Service]
-    Type=simple
+    Type=oneshot
+    # A hung run keeps the unit activating, and the timer cannot start the next
+    # one until it ends.
+    TimeoutStartSec=6h
     Environment="PATH=/usr/sbin:/usr/bin:/sbin:/bin"
     Environment="BACKUP_LOCATION=${backup_dir}"
     Environment="CREATE_BACKUP_LOCATION=yes"
