@@ -93,7 +93,6 @@ class common::backup::gitea (
   $_timer = @("EOT"/$n)
 # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
 [Unit]
-Requires=gitea-backup.service
 Description=Run gitea backup
 
 [Install]
@@ -101,7 +100,6 @@ WantedBy=timers.target
 
 [Timer]
 OnCalendar=*-*-* 05:00:00
-Persistent=true
 Unit=gitea-backup.service
 RandomizedDelaySec=1h
 | EOT
@@ -110,17 +108,30 @@ RandomizedDelaySec=1h
 # THIS FILE IS MANAGED BY OBMONDO. CHANGES WILL BE LOST.
 [Unit]
 Description=Run Gitea backup based on timer
-Wants=gitea-backup.timer
+Requires=docker.service
+After=docker.service
 
 [Service]
 Type=oneshot
+# A hung run keeps the unit activating, and the timer cannot start the next
+# one until it ends.
+TimeoutStartSec=6h
 ExecStart=/opt/obmondo/bin/gitea-backup
 | EOT
 
+  # Only OnCalendar starts a backup: the timer has no Requires= on the
+  # service and no Persistent=, so enabling it into timers.target does not
+  # run a dump while the host is still booting.
+  #
+  # noop => false: hosts like bantha run puppet in noop mode on schedule, and
+  # a backup timer left stopped there goes unnoticed (it did for two weeks
+  # after a reboot). The unit files and the timer's state are enforced even in
+  # noop runs; nothing else in this class is.
   systemd::timer { 'gitea-backup.timer':
     timer_content   => $_timer,
     service_content => $_service,
-    active          => true,
-    enable          => false,
+    active          => $enable,
+    enable          => $enable,
+    noop            => false,
   }
 }
