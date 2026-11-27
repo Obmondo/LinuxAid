@@ -33,9 +33,11 @@ S3_BUCKET_NAME="${S3_BUCKET_NAME%/}"
 # key the mail is encrypted with, mariadb the mailboxes and aliases.
 REQUIRED_FILES=(mailcow.conf backup_vmail.tar.zst backup_crypt.tar.zst backup_mariadb.tar.zst)
 
+# Under systemd stdout already lands in the journal; logger only for runs by
+# hand, or every line is logged twice.
 log() {
   echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
-  logger -t mailcow-backup "$1"
+  [ -n "${INVOCATION_ID:-}" ] || logger -t mailcow-backup "$1"
 }
 
 # node_exporter picks these up, so a backup that silently stops running shows
