@@ -6,6 +6,7 @@
 # @param env_vars Additional hash of environment variables for the container.
 # @param enable Whether to enable and manage the rustfs component.
 # @param listen_address Address the container publishes its ports on.
+# @param version The rustfs/rustfs image tag to run.
 #
 class profile::storage::rustfs (
   String[1]            $access_key    = $role::storage::rustfs::access_key,
@@ -14,6 +15,7 @@ class profile::storage::rustfs (
   Stdlib::Unixpath     $data_dir      = $role::storage::rustfs::data_dir,
   Hash                 $env_vars      = {},
   String[1]            $listen_address = $role::storage::rustfs::listen_address,
+  Eit_types::Rustfs::Version $version  = $role::storage::rustfs::version,
 ) {
   # 1. Manage RustFS
   class { 'rustfs':
@@ -23,5 +25,6 @@ class profile::storage::rustfs (
     data_dir       => $data_dir,
     env_vars       => $env_vars,
     listen_address => $listen_address,
+    version        => $version,
   }
 }
