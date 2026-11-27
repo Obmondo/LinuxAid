@@ -67,6 +67,20 @@ class profile::logging::rsyslog (
           mode   => '0700',
         }
 
+        # Ubuntu 24.04 apparmor profile for rsyslogd does not allow the
+        # imjournal state file under /var/lib/rsyslog. The profile pulls in
+        # rsyslog.d snippets and the unit reloads it on start.
+        if $facts['os']['name'] == 'Ubuntu' {
+          file { '/etc/apparmor.d/rsyslog.d/linuxaid-imjournal':
+            ensure  => 'file',
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0644',
+            content => "  ${_rsyslog_lib_dir}/ r,\n  ${_rsyslog_lib_dir}/** rwk,\n",
+            notify  => Service['rsyslog'],
+          }
+        }
+
         File {
           ensure => 'file',
           group => $rsyslog_group,
