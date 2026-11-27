@@ -13,31 +13,69 @@ class profile::network::wireguard (
   }
   $_unmanaged_tunnels = $tunnels - $_managed_tunnels
 
+  $primary_iface = $facts['networking']['primary']
+
+  # `networkctl reload` (below) reconfigures every link on systemd < 256, which
+  # drops and re-acquires the primary interface's DHCP lease. This drop-in makes
+  # networkd keep its address, lease and routes. The file name follows netplan.
+  if !empty($_managed_tunnels) {
+    file { "/etc/systemd/network/10-netplan-${primary_iface}.network.d":
+      ensure => directory,
+    }
+
+    file { "/etc/systemd/network/10-netplan-${primary_iface}.network.d/keep.conf":
+      ensure  => file,
+      content => "[Network]\nKeepConfiguration=yes\n",
+    }
+  }
+
   $_managed_tunnels.each | $key, $value | {
+    $_ensure = pick($value['ensure'], 'present')
 
-    # 1. Dynamically figure out the public interface for this specific server
-    $primary_iface = $facts['networking']['primary']
+    # networkd adds no routes for the peers' AllowedIPs, render one per range
+    $_routes = $value['peers'].map |$_peer| {
+      pick($_peer['allowed_ips'], [])
+    }.flatten.unique.map |$_range| {
+      { 'Destination' => $_range }
+    }
 
-    # 2. Define the default NAT/Routing commands 
-    $default_postup = [
-      "iptables -A FORWARD -i ${key} -j ACCEPT",
-      "iptables -t nat -A POSTROUTING -o ${primary_iface} -j MASQUERADE"
-    ]
-
-    $default_postdown = [
-      "iptables -D FORWARD -i ${key} -j ACCEPT",
-      "iptables -t nat -D POSTROUTING -o ${primary_iface} -j MASQUERADE"
-    ]
-
-    wireguard::interface  { $key :
-      ensure      => pick($value['ensure'], 'present'),
+    wireguard::interface { $key :
+      ensure      => $_ensure,
       private_key => $value['private_key'],
       dport       => $value['listen_port'],
-      addresses   => [{'address' => $value['address']}],
+      addresses   => [{ 'Address' => $value['address'] }],
+      routes      => $_routes,
       peers       => $value['peers'],
-      provider    => pick($value['provider'], 'wgquick'),
-      postup_cmds   => pick($value['postup_cmds'], $default_postup),
-      postdown_cmds => pick($value['postdown_cmds'], $default_postdown),
+    }
+
+    # The module never reloads networkd (needs systemd::manage_networkd), and
+    # networkd ignores changes to an existing wireguard interface, so recreate it
+    exec { "recreate wireguard interface ${key}":
+      command     => "ip link delete dev ${key} 2>/dev/null; networkctl reload",
+      path        => ['/usr/sbin', '/usr/bin', '/sbin', '/bin'],
+      provider    => shell,
+      refreshonly => true,
+      subscribe   => Wireguard::Interface[$key],
+      require     => File["/etc/systemd/network/10-netplan-${primary_iface}.network.d/keep.conf"],
+    }
+
+    # Clients reach what sits behind this host with its primary address
+    firewall { "100 forward from ${key}":
+      ensure  => $_ensure,
+      chain   => 'FORWARD',
+      proto   => 'all',
+      iniface => $key,
+      jump    => 'accept',
+    }
+
+    firewall { "100 nat postrouting ${key}":
+      ensure   => $_ensure,
+      table    => 'nat',
+      chain    => 'POSTROUTING',
+      proto    => 'all',
+      source   => $value['address'],
+      outiface => $primary_iface,
+      jump     => 'MASQUERADE',
     }
   }
 
