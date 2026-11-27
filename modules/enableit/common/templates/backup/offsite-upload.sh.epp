@@ -1,0 +1,244 @@
+<%- |
+  String $aws_image,
+| -%>
+#!/bin/bash
+# THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+#
+# Copies one backup to S3 and keeps the newest N copies there. Shared by the
+# gitea and mailcow backups, which make and check their own local backup and
+# then hand the files to this script.
+#
+# Each backup is stored as a set under <bucket>/<name>/:
+#   <the files>   the backup itself
+#   SHA256SUMS    checksums of the files, so a download can be checked with
+#                 'sha256sum -c SHA256SUMS'
+#   .complete     written last; only sets that have it count as backups
+#
+# Usage:
+#   obmondo-offsite-upload --job JOB --name NAME --rotate-prefix PREFIX \
+#     --bucket s3://BUCKET/ --endpoint URL --credentials FILE --keep N FILE...
+#
+#   --job            label for the metrics, e.g. mailcow
+#   --name           name of this set, e.g. mailcow-2026-11-27-02-15-04
+#   --rotate-prefix  sets whose name starts with this take part in rotation
+#   --credentials    aws credentials file with a [default] profile
+#   --keep           complete sets kept in the bucket
+#   --read-timeout   seconds aws-cli waits on a stalled request (default 900)
+set -euo pipefail
+
+AWS_IMAGE='<%= $aws_image %>'
+METRICS_DIR=/var/lib/node_exporter/textfile_collector
+
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+  [ -n "${INVOCATION_ID:-}" ] || logger -t obmondo-offsite-upload "$1"
+}
+
+usage() {
+  sed -n '/^# Usage:/,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//' >&2
+  exit 2
+}
+
+JOB='' NAME='' PREFIX='' BUCKET='' ENDPOINT='' CREDENTIALS='' KEEP='' READ_TIMEOUT=900
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --job)           JOB=$2; shift 2 ;;
+    --name)          NAME=$2; shift 2 ;;
+    --rotate-prefix) PREFIX=$2; shift 2 ;;
+    --bucket)        BUCKET=$2; shift 2 ;;
+    --endpoint)      ENDPOINT=$2; shift 2 ;;
+    --credentials)   CREDENTIALS=$2; shift 2 ;;
+    --keep)          KEEP=$2; shift 2 ;;
+    --read-timeout)  READ_TIMEOUT=$2; shift 2 ;;
+    --)              shift; break ;;
+    -*)              usage ;;
+    *)               break ;;
+  esac
+done
+FILES=("$@")
+
+[ -n "$JOB" ] && [ -n "$NAME" ] && [ -n "$PREFIX" ] && [ -n "$BUCKET" ] && [ -n "$ENDPOINT" ] \
+  && [ -n "$CREDENTIALS" ] && [ -n "$KEEP" ] && [ "${#FILES[@]}" -gt 0 ] || usage
+case "$NAME" in "$PREFIX"*) ;; *) echo "--name must start with --rotate-prefix" >&2; exit 2 ;; esac
+BUCKET_NAME=${BUCKET#s3://}
+BUCKET_NAME=${BUCKET_NAME%/}
+
+# node_exporter picks these up. A backup that stops running shows up as a
+# stale last_success timestamp.
+write_metrics() {
+  local ok=$1 size=${2:-} file="$METRICS_DIR/offsite_backup_${JOB}.prom" tmp
+  [ -d "$METRICS_DIR" ] || return 0
+  tmp=$(mktemp "$METRICS_DIR/.offsite_backup.XXXXXX")
+  {
+    if [ "$ok" = 1 ]; then
+      echo "offsite_backup_last_success_timestamp_seconds{job=\"${JOB}\"} $(date +%s)"
+      echo "offsite_backup_last_size_bytes{job=\"${JOB}\"} ${size}"
+    elif [ -f "$file" ]; then
+      grep -E '^offsite_backup_last_(success_timestamp_seconds|size_bytes)\{' "$file" || true
+    fi
+    echo "offsite_backup_last_run_success{job=\"${JOB}\"} ${ok}"
+  } > "$tmp"
+  chmod 0644 "$tmp"
+  mv "$tmp" "$file"
+}
+
+# aws-cli from a pinned image, so the host needs no package. The directories
+# of the files are mounted at the same path, so local paths work as they are.
+WORK=$(mktemp -d)
+trap 'rm -rf "$WORK"' EXIT
+MOUNTS=(-v "$CREDENTIALS:/aws/credentials:ro" -v "$WORK:$WORK:ro")
+for d in $(for f in "${FILES[@]}"; do dirname "$(readlink -f "$f")"; done | sort -u); do
+  MOUNTS+=(-v "$d:$d:ro")
+done
+
+aws() {
+  docker run --rm -i --network host \
+    -e AWS_SHARED_CREDENTIALS_FILE=/aws/credentials \
+    -e AWS_CONFIG_FILE="$WORK/aws-config" \
+    "${MOUNTS[@]}" \
+    "$AWS_IMAGE" "$@" --endpoint-url "$ENDPOINT"
+}
+
+# The S3 endpoint stalls intermittently on UploadPart, so a multi-hundred
+# part upload reliably trips over it. Measured on the offsite host with 25
+# sequential 16MB PUTs against the same rustfs build, varying only the
+# filesystem under its data directory:
+#
+#   ext4   min=739  median=1031  p90=2308  max=3711   ms
+#   ZFS    min=455  median=803   p90=9237  max=120096 ms
+#
+# Medians match; only the tail differs, by a factor of 32. The ZFS pool is
+# a raidz1 at 86% capacity and 38% fragmentation, where the write allocator
+# starts searching for contiguous space - which is why requests stall for
+# minutes while the disks sit idle, and why restarting the server appears to
+# help for a while without changing anything. This is a storage problem to
+# fix on the host, not a client problem and not an S3 server bug.
+#
+# Part size is not a factor: 64MB, 16MB and 8MB all fail, and the same 16MB
+# request that stalled for 180s completed in 298ms minutes later.
+#
+# What the settings below can do is survive the stalls rather than avoid
+# them. Parts completed per minute against the 21GB dump: concurrency 1 ->
+# 1.5, 4 -> 2.2, 8 -> 3.8. max_attempts matters more than concurrency -
+# aws-cli defaults to 2 and every run died on "reached max retries: 2".
+#
+# None of this makes the upload reliable while the pool stays full, which is
+# why the size check below is load-bearing rather than belt-and-braces.
+#
+# aws-cli 2.23+ also sends CRC checksums by default, which not every S3
+# implementation accepts, so checksums are only sent where S3 requires them.
+cat > "$WORK/aws-config" <<EOF
+[default]
+region = us-east-1
+retry_mode = adaptive
+max_attempts = 10
+request_checksum_calculation = when_required
+response_checksum_validation = when_required
+s3 =
+    multipart_chunksize = 32MB
+    multipart_threshold = 32MB
+    max_concurrent_requests = 8
+EOF
+
+s3_size() {
+  aws s3api head-object --bucket "$BUCKET_NAME" --key "$1" \
+    --query ContentLength --output text 2>/dev/null
+}
+
+abort_stale_multipart_upload() {
+  local key=$1 upload_id
+  upload_id=$(aws s3api list-multipart-uploads --bucket "$BUCKET_NAME" \
+    --query "Uploads[?Key=='$key'].UploadId | [0]" --output text 2>/dev/null) || return 0
+  if [ -n "$upload_id" ] && [ "$upload_id" != "None" ]; then
+    aws s3api abort-multipart-upload --bucket "$BUCKET_NAME" --key "$key" \
+      --upload-id "$upload_id" >/dev/null || true
+    log "Aborted incomplete multipart upload for $key"
+  fi
+}
+
+# aws-cli's exit status is not reliable in either direction: it has exited 0
+# with nothing stored, and non-zero with the object complete. The size of the
+# stored object decides, not the exit code.
+upload_file() {
+  local file=$1 key=$2 local_size attempt
+  local_size=$(stat -c %s "$file")
+  for attempt in 1 2 3; do
+    aws s3 cp "$file" "s3://$BUCKET_NAME/$key" --cli-read-timeout "$READ_TIMEOUT" \
+      --only-show-errors || log "aws s3 cp exited non-zero for $key (attempt $attempt)."
+    if [ "$(s3_size "$key")" = "$local_size" ]; then
+      log "Uploaded $key (${local_size} bytes)."
+      return 0
+    fi
+    log "Upload attempt $attempt for $key left no complete object."
+    abort_stale_multipart_upload "$key"
+  done
+  return 1
+}
+
+upload_set() {
+  local f base
+  for f in "${FILES[@]}"; do
+    [ -f "$f" ] || { log "Error: $f is not a file."; return 1; }
+  done
+
+  log "Checksumming ${#FILES[@]} file(s) for $NAME"
+  for f in "${FILES[@]}"; do
+    printf '%s  %s\n' "$(sha256sum "$f" | cut -d' ' -f1)" "$(basename "$f")"
+  done > "$WORK/SHA256SUMS"
+
+  log "Copying $NAME to s3://$BUCKET_NAME/"
+  for f in "${FILES[@]}"; do
+    base=$(basename "$f")
+    upload_file "$f" "$NAME/$base" || return 1
+  done
+  upload_file "$WORK/SHA256SUMS" "$NAME/SHA256SUMS" || return 1
+
+  : > "$WORK/.complete"
+  upload_file "$WORK/.complete" "$NAME/.complete" || return 1
+  log "Offsite copy of $NAME complete."
+}
+
+# Keep the newest KEEP complete sets. Older sets go, complete or not; an
+# incomplete set newer than that stays until it ages out, so a run that is
+# still uploading is never removed from under itself.
+rotate() {
+  local listing prefixes complete keep_from p
+  if ! listing=$(aws s3 ls "s3://$BUCKET_NAME/"); then
+    log "Error: could not list s3://$BUCKET_NAME/, skipping rotation."
+    return 1
+  fi
+  prefixes=$(echo "$listing" | awk -v pre="$PREFIX" '$1 == "PRE" && index($2, pre) == 1 {sub("/$", "", $2); print $2}' | sort)
+  [ -n "$prefixes" ] || return 0
+
+  complete=""
+  for p in $prefixes; do
+    if s3_size "$p/.complete" >/dev/null; then
+      complete="$complete $p"
+    fi
+  done
+
+  keep_from=$(echo $complete | tr ' ' '\n' | sort | tail -n "$KEEP" | head -n 1)
+  [ -n "$keep_from" ] || return 0
+
+  for p in $prefixes; do
+    if [[ "$p" < "$keep_from" ]]; then
+      aws s3 rm "s3://$BUCKET_NAME/$p/" --recursive --only-show-errors
+      log "Removed old offsite backup $p"
+    fi
+  done
+}
+
+rc=0
+if upload_set; then
+  write_metrics 1 "$(du -cb "${FILES[@]}" | tail -n1 | cut -f1)"
+else
+  log "Error: offsite copy of $NAME failed."
+  write_metrics 0
+  rc=1
+fi
+
+# Rotation runs after a failed upload too, or a run of failures grows the
+# bucket without bound. It only counts complete sets, so it cannot remove the
+# last good one.
+rotate || rc=1
+exit "$rc"

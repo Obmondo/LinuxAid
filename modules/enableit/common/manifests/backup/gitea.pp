@@ -43,6 +43,8 @@ class common::backup::gitea (
   # to evict an older one, so the tool has to be present rather than assumed.
   if $enable {
     stdlib::ensure_packages(['unzip'])
+    # The offsite copy is made by obmondo-offsite-upload.
+    include common::backup::offsite_upload
   }
 
   file { '/opt/obmondo/bin/gitea-backup':

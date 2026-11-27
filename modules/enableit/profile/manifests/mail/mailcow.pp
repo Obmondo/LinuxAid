@@ -78,8 +78,8 @@ class profile::mail::mailcow (
     ExecStart=/opt/obmondo/bin/mailcow-backup
     | EOT
 
-  # zstd checks the archives before they are uploaded. aws-cli runs from a
-  # pinned container, Ubuntu 24.04 and later no longer ship it as a package.
+  # zstd checks the archives before they are uploaded; the upload itself is
+  # done by obmondo-offsite-upload (common::backup::offsite_upload).
   stdlib::ensure_packages(['zstd'])
 
   file { '/opt/obmondo/bin/mailcow-backup':
@@ -93,8 +93,11 @@ class profile::mail::mailcow (
       s3_endpoint      => $offsite_s3_endpoint,
       s3_keep          => $offsite_keep,
       credentials_file => $_credentials_file,
-      aws_image        => 'docker.io/amazon/aws-cli:2.27.50',
     }),
+  }
+
+  if $_offsite {
+    include common::backup::offsite_upload
   }
 
   # Own file instead of /root/.aws/credentials, which common::backup::gitea

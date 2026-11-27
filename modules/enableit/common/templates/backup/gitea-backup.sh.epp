@@ -16,8 +16,6 @@ UPLOAD_TIMEOUT=<%= $upload_timeout %> # Read timeout in seconds for the S3 uploa
 MIN_DUMP_BYTES=<%= $min_dump_bytes %> # A dump smaller than this is treated as failed
 
 LOCK_FILE="/run/gitea-backup.lock"
-S3_BUCKET_NAME="${S3_BUCKET#s3://}"
-S3_BUCKET_NAME="${S3_BUCKET_NAME%/}"
 LATEST_DUMP=""
 
 # Logging function
@@ -25,7 +23,8 @@ log() {
     local timestamp
     timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     echo "[$timestamp] $1"
-    logger -t gitea-backup "$1"  # Send message to syslog
+    # Under systemd stdout already lands in the journal.
+    [ -n "${INVOCATION_ID:-}" ] || logger -t gitea-backup "$1"
 }
 
 # 1. Clean disk before creating a new backup
@@ -74,42 +73,6 @@ move_latest_dump() {
     log "Latest dump moved to $BACKUP_DIR: $(basename "$LATEST_DUMP")"
 }
 
-# 5. Confirm an object of the expected size exists in S3
-s3_object_matches_local() {
-    local local_size remote_size
-
-    local_size=$(stat -c %s "$LATEST_DUMP")
-    remote_size=$(aws s3api head-object \
-        --bucket "$S3_BUCKET_NAME" \
-        --key "$(basename "$LATEST_DUMP")" \
-        --endpoint-url="$S3_ENDPOINT" \
-        --query ContentLength --output text 2>/dev/null) || return 1
-
-    [ "$remote_size" = "$local_size" ]
-}
-
-# 6. Drop the parts a failed upload leaves behind, they stay billed and are
-# invisible to `aws s3 ls`
-abort_stale_multipart_upload() {
-    local key upload_id
-
-    key=$(basename "$LATEST_DUMP")
-    upload_id=$(aws s3api list-multipart-uploads \
-        --bucket "$S3_BUCKET_NAME" \
-        --endpoint-url="$S3_ENDPOINT" \
-        --query "Uploads[?Key=='$key'].UploadId | [0]" \
-        --output text 2>/dev/null) || return 0
-
-    if [ -n "$upload_id" ] && [ "$upload_id" != "None" ]; then
-        aws s3api abort-multipart-upload \
-            --bucket "$S3_BUCKET_NAME" \
-            --key "$key" \
-            --upload-id "$upload_id" \
-            --endpoint-url="$S3_ENDPOINT"
-        log "Aborted incomplete multipart upload for $key"
-    fi
-}
-
 # 7. Verify the dump before anything is allowed to rely on it
 #
 # A dump that is truncated or corrupt is still a file, and with
@@ -149,112 +112,15 @@ verify_dump() {
     log "Dump verified: ${size} bytes, archive intact."
 }
 
-# 8. Upload the dump to S3
-upload_to_s3() {
-    local attempt aws_config
-
-    aws_config=$(mktemp)
-    # The S3 endpoint stalls intermittently on UploadPart, so a multi-hundred
-    # part upload reliably trips over it. Measured on the offsite host with 25
-    # sequential 16MB PUTs against the same rustfs build, varying only the
-    # filesystem under its data directory:
-    #
-    #   ext4   min=739  median=1031  p90=2308  max=3711   ms
-    #   ZFS    min=455  median=803   p90=9237  max=120096 ms
-    #
-    # Medians match; only the tail differs, by a factor of 32. The ZFS pool is
-    # a raidz1 at 86% capacity and 38% fragmentation, where the write allocator
-    # starts searching for contiguous space - which is why requests stall for
-    # minutes while the disks sit idle, and why restarting the server appears to
-    # help for a while without changing anything. This is a storage problem to
-    # fix on the host, not a client problem and not an S3 server bug.
-    #
-    # Part size is not a factor: 64MB, 16MB and 8MB all fail, and the same 16MB
-    # request that stalled for 180s completed in 298ms minutes later.
-    #
-    # What the settings below can do is survive the stalls rather than avoid
-    # them. Parts completed per minute against the 21GB dump: concurrency 1 ->
-    # 1.5, 4 -> 2.2, 8 -> 3.8. max_attempts matters more than concurrency -
-    # aws-cli defaults to 2 and every run died on "reached max retries: 2".
-    #
-    # None of this makes the upload reliable while the pool stays full, which is
-    # why the size check below is load-bearing rather than belt-and-braces.
-    cat > "$aws_config" <<EOF
-[default]
-retry_mode = adaptive
-max_attempts = 10
-s3 =
-    multipart_chunksize = 32MB
-    multipart_threshold = 32MB
-    max_concurrent_requests = 8
-EOF
-    trap 'rm -f "$aws_config"' RETURN
-
-    log "Moving backup to S3..."
-
-    for attempt in 1 2 3; do
-        # The exit status is not trustworthy in either direction, so it only
-        # decides what to log - s3_object_matches_local decides the outcome.
-        #
-        # Exit 0 with no object stored: seen on 3 of 4 failing runs. aws-cli
-        # crashes formatting the error ("AttributeError: 'NoneType' object has
-        # no attribute 'get'" in awscli/customizations/s3/results.py) and the
-        # failure never reaches the exit path, so a 21GB dump reported success
-        # with nothing in the bucket.
-        #
-        # Exit non-zero with the object intact: a CompleteMultipartUpload slower
-        # than the read timeout gets retried by botocore and reports InvalidPart
-        # even though the object landed.
-        if AWS_CONFIG_FILE="$aws_config" aws s3 cp "$LATEST_DUMP" "$S3_BUCKET" \
-            --endpoint-url="$S3_ENDPOINT" \
-            --cli-read-timeout "$UPLOAD_TIMEOUT" \
-            --only-show-errors; then
-            if s3_object_matches_local; then
-                log "Uploaded $(basename "$LATEST_DUMP") to $S3_BUCKET"
-                return 0
-            fi
-            log "Upload attempt $attempt reported success but no complete object is in S3."
-        else
-            if s3_object_matches_local; then
-                log "Upload reported failure but the object is complete in S3."
-                return 0
-            fi
-            log "Upload attempt $attempt failed."
-        fi
-
-        abort_stale_multipart_upload
-    done
-
-    return 1
-}
-
-# 9. Rotate S3 backups
-perform_s3_backup_rotation() {
-    local s3_backups num_s3_backups num_s3_to_remove older_s3_backups older_backup
-
-    log "Performing S3 backup rotation: Deleting older backups..."
-    # Only our own dumps are eligible. Listing the whole bucket would let any
-    # other object - a test upload, something a colleague parked here - be
-    # treated as an old backup and deleted in its place.
-    s3_backups=$(aws s3 ls "$S3_BUCKET" --recursive --endpoint-url="$S3_ENDPOINT" \
-        | sort -k1,2 \
-        | awk -v prefix="$GITEA_DUMP_FILENAME-" '$4 ~ "^" prefix {print $4}')
-
-    if [ -z "$s3_backups" ]; then
-        return 0
-    fi
-
-    num_s3_backups=$(echo "$s3_backups" | wc -l)
-
-    if [ "$num_s3_backups" -gt "$MAX_S3_BACKUPS" ]; then
-        num_s3_to_remove=$((num_s3_backups - MAX_S3_BACKUPS))
-        older_s3_backups=$(echo "$s3_backups" | head -n "$num_s3_to_remove")
-
-        for older_backup in $older_s3_backups; do
-            aws s3 rm "$S3_BUCKET$older_backup" --endpoint-url="$S3_ENDPOINT"
-            log "Removed old S3 backup: $older_backup"
-        done
-    fi
+# Copy the dump offsite. obmondo-offsite-upload (common::backup::offsite_upload)
+# stores it as <bucket>/<dump name>/ with SHA256SUMS and a .complete marker,
+# retries stalled uploads, checks the stored size and keeps the newest
+# MAX_S3_BACKUPS complete copies.
+offsite_upload() {
+    /opt/obmondo/bin/obmondo-offsite-upload --job gitea \
+        --name "$(basename "$LATEST_DUMP" .zip)" --rotate-prefix "${GITEA_DUMP_FILENAME}-" \
+        --bucket "$S3_BUCKET" --endpoint "$S3_ENDPOINT" --credentials /root/.aws/credentials \
+        --keep "$MAX_S3_BACKUPS" --read-timeout "$UPLOAD_TIMEOUT" "$LATEST_DUMP"
 }
 
 # Function to perform local backup rotation
@@ -293,14 +159,10 @@ perform_local_backup_rotation
 dump_gitea_data
 
 if move_latest_dump && verify_dump; then
-    upload_to_s3 || rc=1
+    offsite_upload || rc=1
 else
     rc=1
 fi
-
-# S3 rotation runs either way, otherwise a run of failures leaves the bucket
-# growing without bound.
-perform_s3_backup_rotation
 
 # Local rotation is different. With max_local_backups=1 it prunes the previous
 # dump, and if this run's upload failed that previous dump may be the only copy
@@ -311,7 +173,7 @@ perform_s3_backup_rotation
 if [ "$rc" -eq 0 ]; then
     perform_local_backup_rotation
 else
-    log "Upload failed, keeping one extra local dump."
+    log "Backup failed, keeping one extra local dump."
     MAX_LOCAL_BACKUPS=$((MAX_LOCAL_BACKUPS + 1))
     perform_local_backup_rotation
 fi
