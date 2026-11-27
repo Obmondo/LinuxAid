@@ -90,10 +90,16 @@ latest_local_backup() {
   find "$BACKUP_DIR" -mindepth 1 -maxdepth 1 -type d -name 'mailcow-*' 2>/dev/null | sort | tail -n 1 || true
 }
 
+# mailcow's tar runs with -v and prints every mail file it archives, which
+# would put hundreds of thousands of lines into the journal each night. Its
+# stdout goes to a file kept for the last run only; errors stay on stderr.
+UPSTREAM_LOG=/var/log/mailcow-backup-upstream.log
+
 run_backup() {
-  log "Running mailcow backup into $BACKUP_DIR"
+  log "Running mailcow backup into $BACKUP_DIR (file list in $UPSTREAM_LOG)"
   BACKUP_LOCATION="$BACKUP_DIR" CREATE_BACKUP_LOCATION=yes \
-    "$INSTALL_DIR/helper-scripts/backup_and_restore.sh" backup all --delete-days "$LOCAL_KEEP_DAYS"
+    "$INSTALL_DIR/helper-scripts/backup_and_restore.sh" backup all --delete-days "$LOCAL_KEEP_DAYS" \
+    > "$UPSTREAM_LOG"
 }
 
 # A truncated or empty backup is still a directory full of files. Check it
