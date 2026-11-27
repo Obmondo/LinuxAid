@@ -20,17 +20,25 @@ class profile::mail::mailcow (
   Stdlib::HTTPUrl             $offsite_s3_endpoint       = $role::mail::mailcow::offsite_s3_endpoint,
   Optional[String]            $offsite_access_key_id     = $role::mail::mailcow::offsite_access_key_id,
   Optional[String]            $offsite_secret_access_key = $role::mail::mailcow::offsite_secret_access_key,
-  Integer[1]                  $offsite_keep              = $role::mail::mailcow::offsite_keep,
+  Optional[String]            $offsite_restic_password   = $role::mail::mailcow::offsite_restic_password,
+  Integer[1]                  $offsite_keep_daily        = $role::mail::mailcow::offsite_keep_daily,
+  Integer[0]                  $offsite_keep_weekly       = $role::mail::mailcow::offsite_keep_weekly,
 ) {
   $install_dir              = '/opt/mailcow'
   $http_bind                = '0.0.0.0'
   $exporter_listen_address  = '127.254.254.254:63382'
   $_offsite                 = $manage and $offsite_s3_bucket =~ NotUndef
-  $_credentials_file        = '/etc/obmondo/mailcow-backup/aws-credentials'
+  $_restic_env_file         = '/etc/obmondo/mailcow-backup/restic.env'
+  # s3://mailcow-backup/ on https://offsite.obmondo.com becomes
+  # s3:https://offsite.obmondo.com/mailcow-backup/restic
+  $_restic_repository       = if $_offsite {
+    $_bucket = regsubst($offsite_s3_bucket, '\As3://([^/]+)/\z', '\1')
+    "s3:${regsubst($offsite_s3_endpoint, '/+\z', '')}/${_bucket}/restic"
+  }
 
   confine($_offsite,
-    !($offsite_access_key_id and $offsite_secret_access_key),
-    'Need **offsite_access_key_id** and **offsite_secret_access_key** when offsite_s3_bucket is set'
+    !($offsite_access_key_id and $offsite_secret_access_key and $offsite_restic_password),
+    'Need **offsite_access_key_id**, **offsite_secret_access_key** and **offsite_restic_password** when offsite_s3_bucket is set'
   )
 
   confine($letsencrypt,
@@ -78,27 +86,28 @@ class profile::mail::mailcow (
     ExecStart=/opt/obmondo/bin/mailcow-backup
     | EOT
 
-  # zstd checks the archives before they are uploaded. aws-cli runs from a
-  # pinned container, Ubuntu 24.04 and later no longer ship it as a package.
+  # zstd checks the archives before they are copied offsite. restic runs from
+  # a pinned container, so it needs no package on the host.
   stdlib::ensure_packages(['zstd'])
 
   file { '/opt/obmondo/bin/mailcow-backup':
     ensure  => ensure_file($manage),
     mode    => '0755',
     content => epp('profile/mail/mailcow/mailcow-backup.sh.epp', {
-      install_dir      => $install_dir,
-      backup_dir       => $backup_dir,
-      local_keep_days  => $backup_keep_days,
-      s3_bucket        => if $_offsite { $offsite_s3_bucket },
-      s3_endpoint      => $offsite_s3_endpoint,
-      s3_keep          => $offsite_keep,
-      credentials_file => $_credentials_file,
-      aws_image        => 'docker.io/amazon/aws-cli:2.27.50',
+      install_dir       => $install_dir,
+      backup_dir        => $backup_dir,
+      local_keep_days   => $backup_keep_days,
+      restic_repository => $_restic_repository,
+      restic_env_file   => $_restic_env_file,
+      restic_image      => 'docker.io/restic/restic:0.19.1',
+      restic_host       => $facts['networking']['fqdn'],
+      keep_daily        => $offsite_keep_daily,
+      keep_weekly       => $offsite_keep_weekly,
     }),
   }
 
-  # Own file instead of /root/.aws/credentials, which common::backup::gitea
-  # manages on hosts that run it.
+  # S3 credentials and the restic repository password, read by the restic
+  # container with --env-file.
   file { '/etc/obmondo/mailcow-backup':
     ensure => ensure_dir($_offsite),
     owner  => 'root',
@@ -107,7 +116,7 @@ class profile::mail::mailcow (
     force  => true,
   }
 
-  file { $_credentials_file:
+  file { $_restic_env_file:
     ensure    => ensure_file($_offsite),
     owner     => 'root',
     group     => 'root',
@@ -115,9 +124,9 @@ class profile::mail::mailcow (
     show_diff => false,
     content   => if $_offsite {
       @("EOT").node_encrypt::secret
-        [default]
-        aws_access_key_id = ${offsite_access_key_id}
-        aws_secret_access_key = ${offsite_secret_access_key}
+        AWS_ACCESS_KEY_ID=${offsite_access_key_id}
+        AWS_SECRET_ACCESS_KEY=${offsite_secret_access_key}
+        RESTIC_PASSWORD=${offsite_restic_password}
         | EOT
     },
   }
