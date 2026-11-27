@@ -2384,6 +2384,12 @@ The following parameters are available in the `role::mail::mailcow` class:
 * [`exporter_api_key`](#-role--mail--mailcow--exporter_api_key)
 * [`sogo_url_encryption_key`](#-role--mail--mailcow--sogo_url_encryption_key)
 * [`rspamd_ip_whitelist`](#-role--mail--mailcow--rspamd_ip_whitelist)
+* [`backup_keep_days`](#-role--mail--mailcow--backup_keep_days)
+* [`offsite_s3_bucket`](#-role--mail--mailcow--offsite_s3_bucket)
+* [`offsite_s3_endpoint`](#-role--mail--mailcow--offsite_s3_endpoint)
+* [`offsite_access_key_id`](#-role--mail--mailcow--offsite_access_key_id)
+* [`offsite_secret_access_key`](#-role--mail--mailcow--offsite_secret_access_key)
+* [`offsite_keep`](#-role--mail--mailcow--offsite_keep)
 * [`http_bind`](#-role--mail--mailcow--http_bind)
 * [`encrypt_params`](#-role--mail--mailcow--encrypt_params)
 
@@ -2531,6 +2537,56 @@ data/conf/rspamd/custom/ip_wl.map. Empty keeps the upstream file.
 
 Default value: `[]`
 
+##### <a name="-role--mail--mailcow--backup_keep_days"></a>`backup_keep_days`
+
+Data type: `Integer[1]`
+
+Days of local backups kept in backup_dir. Defaults to 5.
+
+Default value: `5`
+
+##### <a name="-role--mail--mailcow--offsite_s3_bucket"></a>`offsite_s3_bucket`
+
+Data type: `Optional[Pattern[/\As3:\/\/[a-z0-9][a-z0-9.\-]*\/\z/]]`
+
+S3 bucket the nightly backup is copied to, e.g.
+'s3://mailcow-backup/'. No offsite copy is made when unset.
+
+Default value: `undef`
+
+##### <a name="-role--mail--mailcow--offsite_s3_endpoint"></a>`offsite_s3_endpoint`
+
+Data type: `Stdlib::HTTPUrl`
+
+S3 endpoint for the offsite copy.
+Defaults to 'https://offsite.obmondo.com'.
+
+Default value: `'https://offsite.obmondo.com'`
+
+##### <a name="-role--mail--mailcow--offsite_access_key_id"></a>`offsite_access_key_id`
+
+Data type: `Optional[String[1]]`
+
+Access key for the offsite bucket.
+
+Default value: `undef`
+
+##### <a name="-role--mail--mailcow--offsite_secret_access_key"></a>`offsite_secret_access_key`
+
+Data type: `Optional[String[1]]`
+
+Secret key for the offsite bucket.
+
+Default value: `undef`
+
+##### <a name="-role--mail--mailcow--offsite_keep"></a>`offsite_keep`
+
+Data type: `Integer[1]`
+
+Number of complete backups kept in the offsite bucket. Defaults to 3.
+
+Default value: `3`
+
 ##### <a name="-role--mail--mailcow--http_bind"></a>`http_bind`
 
 Data type: `Stdlib::IP::Address::V4::Nosubnet`
@@ -2554,6 +2610,7 @@ Default value:
     'redispass',
     'exporter_api_key',
     'sogo_url_encryption_key',
+    'offsite_secret_access_key',
   ]
 ```
 

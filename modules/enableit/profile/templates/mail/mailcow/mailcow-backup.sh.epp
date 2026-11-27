@@ -1,0 +1,269 @@
+<%- |
+  Stdlib::Absolutepath $install_dir,
+  Stdlib::Absolutepath $backup_dir,
+  Integer[1]           $local_keep_days,
+  Optional[String]     $s3_bucket,
+  Optional[String]     $s3_endpoint,
+  Integer[1]           $s3_keep,
+  Stdlib::Absolutepath $credentials_file,
+  String               $aws_image,
+| -%>
+#!/bin/bash
+# THIS FILE IS MANAGED BY LINUXAID. CHANGES WILL BE LOST.
+#
+# Runs mailcow's own backup, checks the result and copies it offsite.
+set -euo pipefail
+
+INSTALL_DIR='<%= $install_dir %>'
+BACKUP_DIR='<%= $backup_dir %>'
+LOCAL_KEEP_DAYS=<%= $local_keep_days %>
+S3_BUCKET='<%= $s3_bucket %>'
+S3_ENDPOINT='<%= $s3_endpoint %>'
+S3_KEEP=<%= $s3_keep %>
+UPLOAD_TIMEOUT=900
+METRICS_DIR=/var/lib/node_exporter/textfile_collector
+
+CREDENTIALS_FILE='<%= $credentials_file %>'
+AWS_IMAGE='<%= $aws_image %>'
+LOCK_FILE=/run/mailcow-backup.lock
+S3_BUCKET_NAME="${S3_BUCKET#s3://}"
+S3_BUCKET_NAME="${S3_BUCKET_NAME%/}"
+
+# Without these a backup cannot be restored: vmail holds the mail, crypt the
+# key the mail is encrypted with, mariadb the mailboxes and aliases.
+REQUIRED_FILES=(mailcow.conf backup_vmail.tar.zst backup_crypt.tar.zst backup_mariadb.tar.zst)
+
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+  logger -t mailcow-backup "$1"
+}
+
+# node_exporter picks these up, so a backup that silently stops running shows
+# up as a stale timestamp instead of going unnoticed.
+write_metric() {
+  local name=$1 value=$2 tmp
+  [ -d "$METRICS_DIR" ] || return 0
+  tmp=$(mktemp "$METRICS_DIR/.mailcow_backup.XXXXXX")
+  {
+    [ -f "$METRICS_DIR/mailcow_backup.prom" ] && grep -v "^${name} " "$METRICS_DIR/mailcow_backup.prom" || true
+    echo "${name} ${value}"
+  } > "$tmp"
+  chmod 0644 "$tmp"
+  mv "$tmp" "$METRICS_DIR/mailcow_backup.prom"
+}
+
+# aws-cli from a pinned image: Ubuntu 24.04 and later no longer package it,
+# and a fixed version keeps its S3 behaviour from changing under us. The
+# backup directory is mounted at the same path, so local paths work as is.
+aws() {
+  docker run --rm -i --network host \
+    -e AWS_SHARED_CREDENTIALS_FILE=/aws/credentials \
+    -e AWS_CONFIG_FILE=/aws/config \
+    -v "$CREDENTIALS_FILE:/aws/credentials:ro" \
+    -v "$AWS_CONFIG:/aws/config:ro" \
+    -v "$BACKUP_DIR:$BACKUP_DIR:ro" \
+    "$AWS_IMAGE" "$@"
+}
+
+# Retries for the stalls seen on the offsite rustfs (aws-cli gives up after 2
+# by default), and checksums only where S3 requires them: aws-cli 2.23+ sends
+# CRC checksums by default, which not every S3 implementation accepts.
+write_aws_config() {
+  AWS_CONFIG=$(mktemp)
+  chmod 0644 "$AWS_CONFIG"
+  cat > "$AWS_CONFIG" <<EOF
+[default]
+region = us-east-1
+retry_mode = adaptive
+max_attempts = 10
+request_checksum_calculation = when_required
+response_checksum_validation = when_required
+s3 =
+    multipart_chunksize = 32MB
+    multipart_threshold = 32MB
+    max_concurrent_requests = 8
+EOF
+}
+
+# Empty when there is no backup yet, which must not trip set -e/pipefail.
+latest_local_backup() {
+  find "$BACKUP_DIR" -mindepth 1 -maxdepth 1 -type d -name 'mailcow-*' 2>/dev/null | sort | tail -n 1 || true
+}
+
+run_backup() {
+  log "Running mailcow backup into $BACKUP_DIR"
+  BACKUP_LOCATION="$BACKUP_DIR" CREATE_BACKUP_LOCATION=yes \
+    "$INSTALL_DIR/helper-scripts/backup_and_restore.sh" backup all --delete-days "$LOCAL_KEEP_DAYS"
+}
+
+# A truncated or empty backup is still a directory full of files. Check it
+# before it is uploaded and allowed to push a good copy out of the bucket.
+verify_backup() {
+  local dir=$1 prev=$2 f size prev_size
+
+  for f in "${REQUIRED_FILES[@]}"; do
+    if [ ! -s "$dir/$f" ]; then
+      log "Error: $dir/$f is missing or empty."
+      return 1
+    fi
+  done
+
+  # Mail only grows slowly, so a vmail archive under half the previous one
+  # means the backup broke off.
+  if [ -n "$prev" ] && [ -s "$prev/backup_vmail.tar.zst" ]; then
+    size=$(stat -c %s "$dir/backup_vmail.tar.zst")
+    prev_size=$(stat -c %s "$prev/backup_vmail.tar.zst")
+    if [ "$size" -lt "$(( prev_size / 2 ))" ]; then
+      log "Error: vmail archive is ${size} bytes, less than half the previous ${prev_size} bytes."
+      return 1
+    fi
+  fi
+
+  for f in "$dir"/*.tar.zst; do
+    if ! zstd -q -t "$f"; then
+      log "Error: $f failed the zstd integrity check."
+      return 1
+    fi
+  done
+
+  log "Backup $(basename "$dir") verified."
+}
+
+s3_size() {
+  aws s3api head-object --bucket "$S3_BUCKET_NAME" --key "$1" \
+    --endpoint-url="$S3_ENDPOINT" --query ContentLength --output text 2>/dev/null
+}
+
+abort_stale_multipart_upload() {
+  local key=$1 upload_id
+  upload_id=$(aws s3api list-multipart-uploads --bucket "$S3_BUCKET_NAME" \
+    --endpoint-url="$S3_ENDPOINT" \
+    --query "Uploads[?Key=='$key'].UploadId | [0]" --output text 2>/dev/null) || return 0
+  if [ -n "$upload_id" ] && [ "$upload_id" != "None" ]; then
+    aws s3api abort-multipart-upload --bucket "$S3_BUCKET_NAME" --key "$key" \
+      --upload-id "$upload_id" --endpoint-url="$S3_ENDPOINT" || true
+    log "Aborted incomplete multipart upload for $key"
+  fi
+}
+
+# The offsite rustfs stalls on UploadPart now and then, and aws-cli's exit
+# status is not reliable in either direction: it has exited 0 with nothing
+# stored, and non-zero with the object complete. See common::backup::gitea for
+# the measurements. The size of the stored object decides, not the exit code.
+upload_file() {
+  local file=$1 key=$2 local_size attempt
+  local_size=$(stat -c %s "$file")
+
+  for attempt in 1 2 3; do
+    aws s3 cp "$file" "s3://$S3_BUCKET_NAME/$key" \
+      --endpoint-url="$S3_ENDPOINT" --cli-read-timeout "$UPLOAD_TIMEOUT" \
+      --only-show-errors || log "aws s3 cp exited non-zero for $key (attempt $attempt)."
+
+    if [ "$(s3_size "$key")" = "$local_size" ]; then
+      log "Uploaded $key (${local_size} bytes)."
+      return 0
+    fi
+    log "Upload attempt $attempt for $key left no complete object."
+    abort_stale_multipart_upload "$key"
+  done
+
+  return 1
+}
+
+# Objects go under <backup name>/, and a .complete marker is written last.
+# Rotation and restores only trust a backup that has the marker.
+upload_backup() {
+  local dir=$1 name f
+  name=$(basename "$dir")
+
+  log "Copying $name to $S3_BUCKET"
+  for f in "$dir"/* "$dir"/.[!.]*; do
+    [ -f "$f" ] || continue
+    upload_file "$f" "$name/$(basename "$f")" || return 1
+  done
+
+  : | aws s3 cp - "s3://$S3_BUCKET_NAME/$name/.complete" --endpoint-url="$S3_ENDPOINT" --only-show-errors
+  s3_size "$name/.complete" >/dev/null || { log "Error: could not write the .complete marker for $name."; return 1; }
+  log "Offsite copy of $name complete."
+}
+
+# Keep the newest S3_KEEP complete backups. Anything older, complete or not,
+# goes; incomplete uploads newer than that stay until they age out, so a run
+# that is still uploading is never removed from under itself.
+rotate_s3() {
+  local prefixes complete keep_from p
+
+  local listing
+  if ! listing=$(aws s3 ls "s3://$S3_BUCKET_NAME/" --endpoint-url="$S3_ENDPOINT"); then
+    log "Error: could not list $S3_BUCKET, skipping offsite rotation."
+    return 1
+  fi
+  prefixes=$(echo "$listing" | awk '$1 == "PRE" && $2 ~ /^mailcow-/ {sub("/$", "", $2); print $2}' | sort)
+  [ -n "$prefixes" ] || return 0
+
+  complete=""
+  for p in $prefixes; do
+    if s3_size "$p/.complete" >/dev/null; then
+      complete="$complete $p"
+    fi
+  done
+
+  keep_from=$(echo $complete | tr ' ' '\n' | sort | tail -n "$S3_KEEP" | head -n 1)
+  [ -n "$keep_from" ] || return 0
+
+  for p in $prefixes; do
+    if [[ "$p" < "$keep_from" ]]; then
+      aws s3 rm "s3://$S3_BUCKET_NAME/$p/" --recursive --endpoint-url="$S3_ENDPOINT" --only-show-errors
+      log "Removed old offsite backup $p"
+    fi
+  done
+}
+
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  log "Another mailcow-backup run is in progress, exiting."
+  exit 0
+fi
+
+if [ -n "$S3_BUCKET_NAME" ]; then
+  write_aws_config
+  trap 'rm -f "$AWS_CONFIG"' EXIT
+fi
+
+rc=0
+before=$(latest_local_backup)
+run_backup || log "backup_and_restore.sh exited non-zero, checking what it left."
+new=$(latest_local_backup)
+
+if [ -z "$new" ] || [ "$new" = "$before" ]; then
+  log "Error: no new backup directory was created in $BACKUP_DIR."
+  rc=1
+elif ! verify_backup "$new" "$before"; then
+  rc=1
+else
+  write_metric mailcow_backup_local_last_success_timestamp_seconds "$(date +%s)"
+  write_metric mailcow_backup_local_last_size_bytes "$(du -sb "$new" | cut -f1)"
+
+  if [ -n "$S3_BUCKET_NAME" ]; then
+    if upload_backup "$new"; then
+      write_metric mailcow_backup_offsite_last_success_timestamp_seconds "$(date +%s)"
+    else
+      rc=1
+    fi
+  fi
+fi
+
+# Rotation runs after failures too, or a run of failures grows the bucket
+# without bound. It only counts complete backups, so it cannot remove the last
+# good one.
+if [ -n "$S3_BUCKET_NAME" ]; then
+  rotate_s3 || rc=1
+fi
+
+write_metric mailcow_backup_last_run_success "$(( rc == 0 ? 1 : 0 ))"
+if [ "$rc" -ne 0 ]; then
+  log "Backup finished with errors."
+else
+  log "Backup finished."
+fi
+exit "$rc"
